@@ -1,0 +1,88 @@
+<?php
+
+interface SensorHelperFactoryInterface
+{
+    /**
+     * @param eZContentObject $contentObject
+     *
+     * @return SensorPostObjectHelperInterface
+     */
+    public function getSensorPostObjectHelper( eZContentObject $contentObject );
+
+    /**
+     * @param SensorUserInfo $user
+     * @param $data
+     *
+     * @return eZContentObject
+     */
+    public function sensorPostObjectFactory( SensorUserInfo $user, $data, eZContentObject $update = null );
+
+    /**
+     * @return string
+     */
+    public function getSensorCollaborationHandlerTypeString();
+
+    /**
+     * @return array
+     */
+    public static function getSensorConfigParams();
+
+    /**
+     * @return int
+     */
+    public function getWhatsAppUserId();
+
+    public static function executeWorkflow( $parameters, $process, $event );
+
+    /**
+     * @return eZContentObjectTreeNode
+     */
+    public static function rootNode();
+
+    /**
+     * @return eZContentClass
+     */
+    public static function postContentClass();
+
+    /**
+     * @return eZContentObjectTreeNode
+     */
+    public static function postContainerNode();
+
+    /**
+     * @return eZContentObjectTreeNode
+     */
+    public static function postCategoriesNode();
+
+    /**
+     * @param $identifier
+     * @return bool
+     */
+    public static function rootNodeHasAttribute( $identifier );
+
+    /**
+     * @return array
+     */
+    public static function areas();
+
+    /**
+     * @return array
+     */
+    public static function operators();
+
+    /**
+     * @return array
+     */
+    public static function categories();
+
+    /**
+     * @return SensorGeoJsonFeatureCollection
+     */
+    public static function fetchSensorGeoJsonFeatureCollection();
+
+    /**
+     * @return string
+     */
+    public function siteUrl();
+
+}

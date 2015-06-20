@@ -1,0 +1,1 @@
+{$collab_item|attribute(show,2)}
