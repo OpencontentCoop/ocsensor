@@ -446,29 +446,29 @@ class SensorNotificationHelper
         }
         $languagesNotificationTypes = array();
         /** @var eZContentLanguage[] $languages */
-        $languages = eZContentLanguage::prioritizedLanguages();
-        $defaultLanguageCode = $userInfo->attribute( 'default_notification_language' );
-        if ( count( $languages ) > 1 )
-        {
-            foreach( self::postNotificationTypes() as $type )
-            {
-                foreach ( $languages as $language )
-                {
-                    $languagesNotificationTypes[] = array(
-                        'name' => $language->attribute( 'name' ),
-                        'identifier' => $type['identifier'] . ':' . $language->attribute( 'locale' ),
-                        'description' => ezpI18n::tr(
-                            'sensor/notification',
-                            'In che lingua vuoi ricevere le notifiche?'
-                        ),
-                        'language_code' => $language->attribute( 'locale' ),
-                        'default_language_code' => $defaultLanguageCode,
-                        'parent' => $type['identifier'],
-                        'group' => 'language'
-                    );
-                }
-            }
-        }
+        //$languages = eZContentLanguage::prioritizedLanguages();
+        //$defaultLanguageCode = $userInfo->attribute( 'default_notification_language' );
+        //if ( count( $languages ) > 1 )
+        //{
+        //    foreach( self::postNotificationTypes() as $type )
+        //    {
+        //        foreach ( $languages as $language )
+        //        {
+        //            $languagesNotificationTypes[] = array(
+        //                'name' => $language->attribute( 'name' ),
+        //                'identifier' => $type['identifier'] . ':' . $language->attribute( 'locale' ),
+        //                'description' => ezpI18n::tr(
+        //                    'sensor/notification',
+        //                    'In che lingua vuoi ricevere le notifiche?'
+        //                ),
+        //                'language_code' => $language->attribute( 'locale' ),
+        //                'default_language_code' => $defaultLanguageCode,
+        //                'parent' => $type['identifier'],
+        //                'group' => 'language'
+        //            );
+        //        }
+        //    }
+        //}
         return $languagesNotificationTypes;
     }
 
@@ -496,7 +496,7 @@ class SensorNotificationHelper
                 'enabled' => $defaultTransport == 'ezmail'
             );
 
-            if ( class_exists( 'OCWhatsAppConnector' ) )
+            if ( class_exists( 'OCWhatsAppConnector' ) && $userInfo->whatsAppId() )
             {
                 $transportNotificationTypes[] = array(
                     'name' => 'WhatsApp',
