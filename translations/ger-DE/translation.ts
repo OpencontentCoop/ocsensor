@@ -1,105 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE" sourcelanguage="en">
+<TS version="2.0">
 <context>
-    <name>openpa/workflow/event</name>
+    <name>sensor/add</name>
     <message>
-        <location filename="openpasensortype.php" line="12"/>
-        <source>Workflow Sensor</source>
-        <translation>Workflow Sensor</translation>
-    </message>
-</context>
-<context>
-    <name>openpa_sensor</name>
-    <message>
-        <source>Nome e cognome</source>
-        <translation>Vor- und Nachname</translation>
-    </message>
-    <message>
-        <source>Indirizzo Email</source>
-        <translation>E-Mail-Adresse</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Passwort</translation>
-    </message>
-    <message>
-        <source>Iscriviti</source>
-        <translation>Registrierung</translation>
-    </message>
-    <message>
-        <source>Prosegui</source>
-        <translation>Weiter</translation>
-    </message>
-    <message>
-        <source>Sensorcivico - progetto di riuso del Consorzio dei Comuni Trentini - realizzato da Opencontent con ComunWeb</source>
-        <translation>StadtSensor (SensorCivico) in Zusammenarbeit mit dem Gemeindenverband des Trentino. Technische Umsetzung: Opencontent mit ComunWeb</translation>
-    </message>
-</context>
-<context>
-    <name>openpa_sensor/collaboration</name>
-    <message>
-        <location filename="openpasensorcollaborationhandler.php" line="14"/>
-        <location filename="openpasensorcollaborationhandler.php" line="29"/>
-        <source>Sensor</source>
-        <translation>Sensor</translation>
-    </message>
-</context>
-<context>
-    <name>openpa_sensor/add</name>
-    <message>        
-        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la &lt;a target="_blank" href="%privacy_link"&gt;privacy&lt;/a&gt;</source>
+        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la &lt;a target=&quot;_blank&quot; href=&quot;%privacy_link&quot;&gt;privacy&lt;/a&gt;</source>
         <translation>Texte und Bilder entsprechen den &lt;a target="_blank" href="%privacy_link"&gt;Datenschutzbestimmungen/Privacy/Netiquette&lt;/a&gt;</translation>
-    </message>
-    <message>
-        <source>Annulla</source>
-        <translation>Löschen</translation>
     </message>
     <message>
         <source>Salva</source>
         <translation>Speichern</translation>
     </message>
     <message>
+        <source>Annulla</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
         <source>Rileva la mia posizione</source>
         <translation>Mein Standort</translation>
-    </message>    
+    </message>
 </context>
 <context>
-    <name>openpa_sensor/user_edit</name>
-    <message>        
-        <source>Profilo utente</source>
-        <translation>Benutzerprofil</translation>
+    <name>sensor/config</name>
+    <message>
+        <source>Moderazione attivata</source>
+        <translation>Moderation aktiviert</translation>
     </message>
-    <message>        
-        <source>Modifica profilo</source>
-        <translation>Benutzerprofil erstellen</translation>
+    <message>
+        <source>Impostazioni</source>
+        <translation>Einstellungen</translation>
     </message>
-    <message>        
-        <source>Cambia la password</source>
-        <translation>Passwort ändern</translation>
+    <message>
+        <source>Modifica impostazioni generali</source>
+        <translation>Ändere allgemeine Einstellungen</translation>
     </message>
-</context>    
+    <message>
+        <source>Modifica informazioni Sensor</source>
+        <translation>Ändere Sensor Einstellungen</translation>
+    </message>
+    <message>
+        <source>Utenti</source>
+        <translation>Nutzer</translation>
+    </message>
+    <message>
+        <source>Operatori</source>
+        <translation>Sachbearbeiter</translation>
+    </message>
+    <message>
+        <source>Aree tematiche</source>
+        <translation>Themenbereiche</translation>
+    </message>
+    <message>
+        <source>Punti sulla mappa</source>
+        <translation>Mappenpunkte POI</translation>
+    </message>
+    <message>
+        <source>Cerca</source>
+        <translation>Suche</translation>
+    </message>
+    <message>
+        <source>Esporta in CSV</source>
+        <translation>Export nach CSV</translation>
+    </message>
+    <message>
+        <source>Aggiungi</source>
+        <translation>Hinzufügen</translation>
+    </message>
+    <message>
+        <source>L&apos;utente può inserire segnalazioni per conto di altri</source>
+        <translation>Der Benutzer kann Benachrichtigung im Auftrag Dritter eingeben</translation>
+    </message>
+    <message>
+        <source>Blocca</source>
+        <translation>Block</translation>
+    </message>
+    <message>
+        <source>Sblocca</source>
+        <translation>Block entfernen</translation>
+    </message>
+    <message>
+        <source>Aggiungi %classname</source>
+        <translation>Hinzufügen %classname</translation>
+    </message>
+</context>
 <context>
-    <name>openpa_sensor/dashboard</name>
+    <name>sensor/dashboard</name>
+    <message>
+        <location filename="helper.php" line="305"/>
+        <source>Da leggere</source>
+        <translation>Lesen</translation>
+    </message>
+    <message>
+        <location filename="helper.php" line="311"/>
+        <source>In corso</source>
+        <translation>Offen</translation>
+    </message>
+    <message>
+        <location filename="helper.php" line="317"/>
+        <source>Chiuse</source>
+        <translation>Abgeschlossen</translation>
+    </message>
     <message>
         <source>Le mie segnalazioni</source>
         <translation>Meine Meldungen</translation>
     </message>
     <message>
-        <source>Creata</source>
-        <translation>Eingabe</translation>
+        <source>Segnalazioni da leggere, in corso e chiuse</source>
+        <translation>Meldung lesen, bearbeiten oder beenden</translation>
     </message>
     <message>
-        <source>Modificata</source>
-        <translation>Ändere</translation>
+        <source>Legenda:</source>
+        <translation>Legende:</translation>
     </message>
     <message>
-        <source>Tipo</source>
-        <translation>Kategorie</translation>
+        <source>indica la presenza di commenti</source>
+        <translation>Anwesenheit von Kommentaren</translation>
     </message>
     <message>
-        <source>Stato</source>
-        <translation>Status</translation>
+        <source>indica la presenza di messaggi privati</source>
+        <translation>Präsenz privater Nachrichten</translation>
+    </message>
+    <message>
+        <source>indica la presenza di variazioni in cronologia non lette</source>
+        <translation>Ungelesene Änderungen im Verlauf</translation>
+    </message>
+    <message>
+        <source>Esporta CSV</source>
+        <translation>Export CSV</translation>
+    </message>
+    <message>
+        <source>Esporta risultati CSV</source>
+        <translation>Export CSV Ergebnisse</translation>
+    </message>
+    <message>
+        <source>Dettagli</source>
+        <translation>Details</translation>
     </message>
     <message>
         <source>Oggetto</source>
@@ -111,54 +146,195 @@
     </message>
     <message>
         <source>In carico a</source>
-        <translation>Angenommen</translation>
+        <translation>Verantwortlich</translation>
     </message>
     <message>
-        <source>Legenda:</source>
-        <translation>Legende:</translation>
+        <source>Creata</source>
+        <translation>Eingabe</translation>
     </message>
     <message>
-        <source>Dettagli</source>
-        <translation>Details</translation>
-    </message>    
-    <message>
-        <source>Segnalazioni da leggere, in corso e chiuse</source>
-        <translation>Meldung lesen, bearbeiten oder beenden</translation>
+        <source>Modificata</source>
+        <translation>Ändere</translation>
     </message>
     <message>
-        <source>indica la presenza di messaggi</source>
-        <translation>Eingegangene Nachrichten</translation>
+        <source>Scadenza</source>
+        <translation>Stichtag</translation>
     </message>
     <message>
-        <source>indica la presenza di messaggi non letti</source>
-        <translation>Ungelesene Nachrichten</translation>
-    </message>
-    <message>
-        <source>indica la presenza di variazioni in cronologia non lette</source>
-        <translation>Ungelesene Änderungen im Verlauf</translation>
-    </message>
-    <message>
-        <source>Da leggere</source>
-        <translation>Lesen</translation>
-    </message>
-    <message>
-        <source>In corso</source>
-        <translation>Offen</translation>
-    </message>
-    <message>
-        <source>Chiuse</source>
-        <translation>Abgeschlossen</translation>
+        <source>Autore</source>
+        <translation>Autor</translation>
     </message>
 </context>
 <context>
-    <name>openpa_sensor/mail/post</name>
+    <name>sensor/expiring</name>
+    <message>
+        <location filename="post.php" line="318"/>
+        <source>Scade fra</source>
+        <translation>Verbleibende Zeit</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="321"/>
+        <source>Scaduto da</source>
+        <translation>abgelaufen</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="641"/>
+        <source>anno</source>
+        <translation>anno</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="644"/>
+        <source>anni</source>
+        <translation>Jahre</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="647"/>
+        <source>mese</source>
+        <translation>Monat</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="650"/>
+        <source>mesi</source>
+        <translation>Monate</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="653"/>
+        <source>giorno</source>
+        <translation>Tag</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="656"/>
+        <source>giorni</source>
+        <translation>Tage</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="659"/>
+        <source>ora</source>
+        <translation>Stunde</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="662"/>
+        <source>ore</source>
+        <translation>Stunden</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="665"/>
+        <source>minuto</source>
+        <translation>Minute</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="668"/>
+        <source>minuti</source>
+        <translation>Minuten</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="671"/>
+        <source>secondo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="post.php" line="674"/>
+        <source>secondi</source>
+        <translation>Sekunden</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="705"/>
+        <source>meno di un minuto</source>
+        <translation>weniger als einer Minute</translation>
+    </message>
+    <message>
+        <location filename="post.php" line="716"/>
+        <source>e</source>
+        <translation>und</translation>
+    </message>
+</context>
+<context>
+    <name>sensor/export</name>
+    <message>
+        <location filename="csv.php" line="21"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="22"/>
+        <source>Privacy</source>
+        <translation>Privatleben</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="23"/>
+        <source>Moderazione</source>
+        <translation>Mäßigung</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="24"/>
+        <source>Tipo</source>
+        <translation>Typologie</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="25"/>
+        <source>Stato corrente</source>
+        <translation>aktueller Status</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="26"/>
+        <source>Creato il</source>
+        <translation>erstellt am</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="27"/>
+        <source>Ultima modifica del</source>
+        <translation>Zuletzt geändert</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="28"/>
+        <source>Scadenza</source>
+        <translation>Stichtag</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="29"/>
+        <source>Data risoluzione</source>
+        <translation>Auflösung</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="30"/>
+        <source>Tempo di risoluzione</source>
+        <translation>Auflösung</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="31"/>
+        <source>Titolo</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="32"/>
+        <source>Autore</source>
+        <translation>Autor</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="33"/>
+        <source>Area tematica</source>
+        <translation>Themenbereiche</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="34"/>
+        <source>Assegnatario</source>
+        <translation>Empfänger</translation>
+    </message>
+    <message>
+        <location filename="csv.php" line="35"/>
+        <source>Commenti</source>
+        <translation>Kommentare</translation>
+    </message>
+</context>
+<context>
+    <name>sensor/mail/post</name>
     <message>
         <source>Nuova segnalazione</source>
         <translation>Neue Meldung</translation>
     </message>
     <message>
         <source>E&apos; stata registrata una nuova segnalazione</source>
-        <translation>E&apos; neue Meldung registriert</translation>
+        <translation>neue Meldung registriert</translation>
     </message>
     <message>
         <source>Dettagli della segnalazione</source>
@@ -178,15 +354,15 @@
     </message>
     <message>
         <source>Segnalazione chiusa da operatore</source>
-        <translation>Meldungsstatus vom Betreiber abgeschlossen </translation>
+        <translation>Meldungsstatus vom Betreiber abgeschlossen</translation>
     </message>
     <message>
         <source>La segnalazione è stata chiusa dall&apos;operatore</source>
-        <translation>Meldungsstatus abgeschlossen durch&apos;Betreiber</translation>
+        <translation>Meldungsstatus abgeschlossen durch Betreiber</translation>
     </message>
     <message>
         <source>Puoi decidere se chiudere la segnalazione o assegnarla a un altro operatore</source>
-        <translation>Meldung als abgeschlossen betrachten, oder einem anderen Betreiber zuweisen </translation>
+        <translation>Meldung als abgeschlossen betrachten, oder einem anderen Betreiber zuweisen</translation>
     </message>
     <message>
         <source>Vai alla seganalazione</source>
@@ -194,15 +370,15 @@
     </message>
     <message>
         <source>La tua segnalazione è stata registrata</source>
-        <translation>Deine Meldung wurde registriert</translation>
+        <translation></translation>
     </message>
     <message>
         <source>La tua segnalazione sarà presa in carico da un operatore al più presto</source>
-        <translation>Deine Meldung wird in Kürze bearbeitet</translation>
+        <translation>Deine Meldung wurde registriert</translation>
     </message>
     <message>
         <source>Controlla l&apos;andamento della risoluzione</source>
-        <translation>Kontrolle l&apos;Verlauf</translation>
+        <translation>Kontrolle Verlauf</translation>
     </message>
     <message>
         <source>La tua segnalazione è stata presa in carico</source>
@@ -214,7 +390,7 @@
     </message>
     <message>
         <source>La tua segnalazione è stata risolta</source>
-        <translation>Deine Meldung wurde als „erledigt“ gekennzeichnet</translation>
+        <translation>Ihre Empfehlung wurde geschlossen</translation>
     </message>
     <message>
         <source>Visualizza la storia della tua segnalazione</source>
@@ -246,7 +422,7 @@
     </message>
 </context>
 <context>
-    <name>openpa_sensor/mail/registration</name>
+    <name>sensor/mail/registration</name>
     <message>
         <source>%privacy_link_start%Informazioni sulla privacy%privacy_link_end%</source>
         <translation>%privacy_link_start%Informationen zu Datenschutz und Privacy%privacy_link_end%</translation>
@@ -255,108 +431,40 @@
         <source>%terms_link_start%Termini di utilizzo%terms_link_end%</source>
         <translation>%terms_link_start%Nutzungsbedingungen%terms_link_end%</translation>
     </message>
-    <message>
-        <source>Benvenuto in %1</source>
-        <translation>Willkommen in %1</translation>
-    </message>
-    <message>
-        <source>Grazie di voler partecipare!</source>
-        <translation>Vielen Dank für die Teilnahme</translation>
-    </message>
-    <message>
-        <source>Ecco le informazione del tuo account Sensor</source>
-        <translation>Informationen zu deinem Sensor-Benutzerkonto</translation>
-    </message>
-    <message>
-        <source>Nome</source>
-        <translation>Vorname</translation>
-    </message>
-    <message>
-        <source>Indirizzo e-mail</source>
-        <translation>E-Mail-Adresse</translation>
-    </message>
-    <message>
-        <source>Invia la tua prima segnalazione</source>
-        <translation>Sende uns deine erste Meldung</translation>
-    </message>
-    <message>
-        <source>Se desideri cambiare le impostazioni del tuo profilo clicca %profile_link_start%qui%profile_link_end%</source>
-        <translation>Profil bearbeiten - hier klicken %profile_link_start%qui%profile_link_end%</translation>
-    </message>
-    <message>
-        <source>Per abilitare o disabilitare le notifiche email clicca %notification_link_start%qui%notification_link_end%</source>
-        <translation>E-Mail-Benachrichtigungen aktivieren oder abmelden – hier klicken %notification_link_start%qui%notification_link_end%</translation>
-    </message>
 </context>
 <context>
-    <name>openpa_sensor/menu</name>
+    <name>sensor/menu</name>
     <message>
-        <source>Contatti</source>
-        <translation>Kontakte</translation>
-    </message>
-    <message>
-        <source>Privacy</source>
-        <translation>Datenschutz und Privacy</translation>
-    </message>
-    <message>
-        <source>SensorCivico</source>
-        <translation>SensorCivico</translation>
-    </message>
-    <message>
-        <source>Informazioni</source>
-        <translation>Informationen</translation>
-    </message>
-    <message>
-        <source>Faq</source>
-        <translation>FAQ – häufig gestellte Fragen</translation>
-    </message>
-    <message>
-        <source>Termini di utilizzo</source>
-        <translation>Nutzungsbedingungen</translation>
-    </message>
-    <message>
-        <source>Segnalazioni</source>
-        <translation>Meldungen</translation>
+        <source>Settings</source>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>Accedi</source>
         <translation>Einloggen</translation>
     </message>
     <message>
-        <source>Tutte le segnalazioni</source>
-        <translation>Alle Meldungen</translation>
-    </message>
-    <message>
-        <source>Le mie segnalazioni</source>
-        <translation>Meine Meldungen</translation>
-    </message>
-    <message>
         <source>Segnala</source>
-        <translation>Melde</translation>
+        <translation>Meldung</translation>
     </message>
-    <message>
-        <source>Profilo</source>
-        <translation>Profil</translation>
-    </message>
-    <message>
-        <source>Notifiche</source>
-        <translation>Benachrichtigungseinstellungen</translation>
-    </message>
-    <message>
-        <source>Esci</source>
-        <translation>Abmelden</translation>
-    </message>
-    <message>
-        <source>Le mie attività</source>
-        <translation>Meine Tätigkeit</translation>
-    </message>
-    <message>
-        <source>Settings</source>
-        <translation>Einstellungen</translation>
-    </message>    
 </context>
 <context>
-    <name>openpa_sensor/messages</name>
+    <name>sensor/messages</name>
+    <message>
+        <source>Da:</source>
+        <translation>von:</translation>
+    </message>
+    <message>
+        <source>a:</source>
+        <translation>zu:</translation>
+    </message>
+    <message>
+        <source>Salva</source>
+        <translation>Speichern</translation>
+    </message>
+    <message>
+        <source>RISPOSTA DEL RESPONSABILE</source>
+        <translation>offizielle Antwort</translation>
+    </message>
     <message>
         <source>Commenti</source>
         <translation>Kommentare</translation>
@@ -370,24 +478,104 @@
         <translation>Kommentar veröffentlichen</translation>
     </message>
     <message>
-        <source>Visibile solo a</source>
-        <translation>Sichtbar für</translation>
+        <source>Risposte ufficiali</source>
+        <translation>offizielle Antworten</translation>
     </message>
     <message>
-        <source>Visibile a tutti</source>
-        <translation>Sichtbar</translation>
+        <source>Aggiungi risposta ufficiale</source>
+        <translation>Fügen Sie eine offizielle Antwort</translation>
     </message>
     <message>
         <source>Risposta ufficiale</source>
-        <translation></translation>
+        <translation>offizielle Antwort</translation>
     </message>
     <message>
         <source>Pubblica la risposta ufficiale</source>
-        <translation></translation>
+        <translation>Fügen Sie eine offizielle Antwort</translation>
+    </message>
+    <message>
+        <source>Messaggi privati</source>
+        <translation>Private Nachrichten</translation>
+    </message>
+    <message>
+        <source>Aggiungi messaggio</source>
+        <translation>Nachricht hinzufügen</translation>
+    </message>
+    <message>
+        <source>Invia messaggio</source>
+        <translation>Eine Nachricht schicken</translation>
+    </message>
+    <message>
+        <source>Chi può leggere questo messaggio?</source>
+        <translation>Wer diese Nachricht lesen können?</translation>
+    </message>
+    <message>
+        <source>Solo te stesso</source>
+        <translation>nur du</translation>
     </message>
 </context>
 <context>
-    <name>openpa_sensor/post</name>
+    <name>sensor/notification</name>
+    <message>
+        <location filename="notificationhelper.php" line="358"/>
+        <source>Creazione di una segnalazione</source>
+        <translation>Erstellen eines Berichts</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="362"/>
+        <source>Ricevi una notifica alla creazione di una segnalazione</source>
+        <translation>Werde benachrichtigt die Schaffung einer Benachrichtigung</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="371"/>
+        <source>Assegnazione di una segnalazione</source>
+        <translation>Zuweisen eines Bericht</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="375"/>
+        <source>Ricevi una notifica quando una tua segnalazione è assegnata a un responsabile</source>
+        <translation>Werde benachrichtigt wenn einer Ihrer Berichterstattung zu einem verantwortungsvollen zugeordnet</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="410"/>
+        <source>Chiusura di una segnalazione</source>
+        <translation>Schließung</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="414"/>
+        <source>Ricevi una notifica quando una tua segnalazione è stata chiusa</source>
+        <translation>Erhalten eine Benachrichtigung, wenn ein Ihre Empfehlung wurde geschlossen</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="426"/>
+        <source>Riapertura di una segnalazione</source>
+        <translation>Wiedereröffnung</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="430"/>
+        <source>Ricevi una notifica alla riapertura di una tua segnalazione</source>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="488"/>
+        <source>Ricevi la notifica via mail</source>
+        <translation>Erhalten einer Benachrichtigung per E-Mail</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="504"/>
+        <source>Ricevi la notifica via WhatsApp</source>
+        <translation>Erhalten einer Benachrichtigung per WhatsApp</translation>
+    </message>
+</context>
+<context>
+    <name>sensor/post</name>
+    <message>
+        <source>Cerca per area tematica</source>
+        <translation>Suche nach Themenbereiche</translation>
+    </message>
+    <message>
+        <source>Cerca per assegnatario</source>
+        <translation>Suche nach Zugewiesen</translation>
+    </message>
     <message>
         <source>Quartiere/Zona</source>
         <translation>Stadtviertel/Satdtteil</translation>
@@ -397,12 +585,8 @@
         <translation>Stadtviertel/Satdtteil</translation>
     </message>
     <message>
-        <source>commenti</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>risposte ufficiali</source>
-        <translation></translation>
+        <source>Associa</source>
+        <translation>Bestätige</translation>
     </message>
     <message>
         <source>Area tematica</source>
@@ -413,28 +597,72 @@
         <translation>Themenbereiche</translation>
     </message>
     <message>
+        <source>Assegna al responsabile dell&apos;area selezionata</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Scadenza</source>
+        <translation>Stichtag</translation>
+    </message>
+    <message>
+        <source>in giorni</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Imposta</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Azioni</source>
+        <translation>Maßnahmen</translation>
+    </message>
+    <message>
         <source>Seleziona operatore</source>
         <translation>Betreiber</translation>
     </message>
     <message>
-        <source>Assegna al responsabile dell'area selezionata</source>
-        <translation></translation>
+        <source>Assegna</source>
+        <translation>Übermittle</translation>
+    </message>
+    <message>
+        <source>Riassegna</source>
+        <translation>ändere Zuweisung</translation>
     </message>
     <message>
         <source>Aggiungi cc</source>
-        <translation></translation>
+        <translation>cc hinzufügen</translation>
     </message>
     <message>
         <source>Intervento terminato</source>
-        <translation></translation>
+        <translation>Intervention beendet</translation>
+    </message>
+    <message>
+        <source>Forza chiusura</source>
+        <translation>Sofort beenden</translation>
+    </message>
+    <message>
+        <source>Chiudi</source>
+        <translation>Abmelden</translation>
     </message>
     <message>
         <source>Rendi la segnalazione privata</source>
-        <translation>Meldung nicht öffentlich</translation>
-    </message>    
+        <translation>Machen Privat</translation>
+    </message>
     <message>
-        <source>Associa</source>
-        <translation>Bestätige</translation>
+        <source>Rendi la segnalazione pubblica</source>
+        <translation>Machen Publik</translation>
+    </message>
+    <message>
+        <source>Approva</source>
+        <translation>genehmigen</translation>
+    </message>
+    <message>
+        <source>Rifiuta</source>
+        <translation>ablehnen</translation>
+    </message>
+    <message>
+        <source>Elimina moderazione</source>
+        <translation>Moderation löschen</translation>
     </message>
     <message>
         <source>Pubblicata il</source>
@@ -449,354 +677,160 @@
         <translation>Verantwortlich</translation>
     </message>
     <message>
+        <source>commenti</source>
+        <translation>Kommentare</translation>
+    </message>
+    <message>
+        <source>risposte ufficiali</source>
+        <translation>offizielle Antworten</translation>
+    </message>
+    <message>
         <source>Soggetti coinvolti</source>
         <translation>Beteiligte Personen</translation>
     </message>
     <message>
-        <source>Timeline</source>
-        <translation>Frist/timeline</translation>
-    </message>
-    <message>
-        <source>Azioni</source>
-        <translation>Maßnahmen</translation>
-    </message>
-    <message>
-        <source>Riassegna</source>
-        <translation>ändere Zuweisung</translation>
-    </message>
-    <message>
-        <source>Assegna</source>
-        <translation>Übermittle</translation>
-    </message>
-    <message>
-        <source>Aggiungi cc</source>
-        <translation>cc hinzufügen</translation>
-    </message>
-    <message>
-        <source>Chiudi</source>
-        <translation>Abmelden</translation>
-    </message>
-    <message>
         <source>Cronologia</source>
-        <translation>Verlauf</translation>
+        <translation>Frist/timeline</translation>
     </message>
 </context>
 <context>
-    <name>openpa_sensor/robot message</name>
+    <name>sensor/robot message</name>
     <message>
-        <location filename="openpasensoroperator.php" line="65"/>
+        <location filename="timelinehelper.php" line="249"/>
         <source>Completata da %name</source>
         <translation>Abgeschlossen von %name</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="69"/>
+        <location filename="timelinehelper.php" line="258"/>
         <source>Letta da %name</source>
         <translation>Kontrolliert von %name</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="73"/>
+        <location filename="timelinehelper.php" line="267"/>
         <source>Chiusa da %name</source>
         <translation>Abmelden von %name</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="77"/>
+        <location filename="timelinehelper.php" line="276"/>
         <source>Assegnata a %name</source>
         <translation>Zugewiesen an %name</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="81"/>
+        <location filename="timelinehelper.php" line="285"/>
         <source>Riaperta da %name</source>
         <translation>Geöffnet von %name</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="90"/>
-        <source>Completata</source>
+        <location filename="timelinehelper.php" line="299"/>
         <translation>Vervollständigt</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="94"/>
+        <location filename="timelinehelper.php" line="303"/>
         <source>Letta</source>
         <translation>Kontrolliert</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="98"/>
+        <location filename="timelinehelper.php" line="307"/>
         <source>Chiusa</source>
         <translation>Abgemelden</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="102"/>
+        <location filename="timelinehelper.php" line="311"/>
         <source>Assegnata</source>
         <translation>Zugewiesen</translation>
     </message>
     <message>
-        <location filename="openpasensoroperator.php" line="106"/>
+        <location filename="timelinehelper.php" line="315"/>
         <source>Riaperta</source>
         <translation>Geöffnet</translation>
     </message>
 </context>
 <context>
-    <name>openpa_sensor/role_name</name>
+    <name>sensor/role_name</name>
     <message>
-        <location filename="sensorhelper.php" line="816"/>
+        <location filename="post.php" line="783"/>
         <source>Standard</source>
-        <translation>Standard</translation>
+        <translation>Standard</translation>c
     </message>
     <message>
-        <location filename="sensorhelper.php" line="817"/>
+        <location filename="post.php" line="784"/>
         <source>Osservatore</source>
         <translation>Beobachter</translation>
     </message>
     <message>
-        <location filename="sensorhelper.php" line="818"/>
-        <source>Assegnatario</source>
-        <translation>Empfänger</translation>
-    </message>
-    <message>
-        <location filename="sensorhelper.php" line="819"/>
-        <source>Responsabile</source>
-        <translation>Verantwortliche/r</translation>
-    </message>
-    <message>
-        <location filename="sensorhelper.php" line="820"/>
-        <source>Autore</source>
-        <translation>Autor</translation>
-    </message>
-    <message>        
-        <source>Riferimento per il cittadino</source>
-        <translation>Bezugstelle</translation>
-    </message>
-    <message>        
+        <location filename="post.php" line="785"/>
         <source>In carico a</source>
         <translation>Sachbearbeiter/in</translation>
     </message>
-</context>
-<context>
-    <name>openpa_sensor/signin</name>
     <message>
-        <source>Accedi con il tuo account social</source>
-        <translation>Einloggen mit sozialem Netzwerk</translation>
+        <location filename="post.php" line="786"/>
+        <source>Riferimento per il cittadino</source>
+        <translation>Bezugstelle</translation>
     </message>
     <message>
-        <source>oppure</source>
-        <translation>oder</translation>
-    </message>
-    <message>
-        <source>Accedi con il tuo account SensorCivico</source>
-        <translation>Einloggen mit Bürger Sensor-Konto</translation>
-    </message>
-    <message>
-        <source>Indirizzo Email</source>
-        <translation>Email Adresse</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Password</translation>
-    </message>
-    <message>
-        <source>Resta collegato</source>
-        <translation>Eingeloggt bleiben</translation>
-    </message>
-    <message>
-        <source>Hai dimenticato la password?</source>
-        <translation>Password vergessen?</translation>
-    </message>
-    <message>
-        <source>Accedi</source>
-        <translation>Einloggen</translation>
-    </message>
-    <message>
-        <source>Per partecipare devi iscriverti!</source>
-        <translation>Zuerst registrieren, dann mitmachen!</translation>
-    </message>
-    <message>
-        <source>Sei già iscritto?</source>
-        <translation>Bereits registriert?</translation>
-    </message>
-    <message>
-        <source>Accedi subito!</source>
-        <translation>Sofort einloggen!</translation>
-    </message>
-    <message>
-        <source>Non sei ancora iscritto?</source>
-        <translation>Noch nicht registriert?</translation>
-    </message>
-    <message>
-        <source>Bastano 5 secondi per registrarsi!</source>
-        <translation>In 5 Sekunden bist du mit dabei!</translation>
+        <location filename="post.php" line="787"/>
+        <source>Autore</source>
+        <translation>Autor</translation>
     </message>
 </context>
 <context>
-    <name>openpa_sensor/signup</name>
+    <name>sensor/settings</name>
     <message>
-        <source>Non sei ancora iscritto?</source>
-        <translation>Noch nicht registriert?</translation>
-    </message>
-    <message>
-	<source>Bastano 5 secondi per registrarsi!</source>
-        <translation>In 5 Sekunden bist du mit dabei!</translation>
+        <location filename="sensorcollaborationhandler.php" line="12"/>
+        <location filename="sensorcollaborationhandler.php" line="27"/>
+        <source>Notifiche Sensor</source>
+        <translation>Benachrichtigung StadtSensor</translation>
     </message>
     <message>
-        <source>MESSAGGIO PRIVATO</source>
-        <translation>PRIVATNACHRICHT</translation>
-    </message>
-    <message>
-        <source>Non hai un account?</source>
-        <translation>Noch kein Benutzerkonto?</translation>
-    </message>
-    <message>
-        <source>Crealo subito: &amp;egrave facile e gratuito!</source>
-        <translation>Schnell: Kostenlos registriert!</translation>
-    </message>
-    <message>
-        <source>Nome e cognome</source>
-        <translation>Vor- und Nachnahme</translation>
-    </message>
-    <message>
-        <source>Indirizzo Email</source>
-        <translation>Email Adresse</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Password</translation>
-    </message>
-    <message>
-        <source>Cliccando sul bottone Iscriviti accetti &lt;a href=%term_url&gt;le condizioni di utilizzo&lt;/a&gt; e confermi di aver letto la nostra &lt;a href=%privacy_url&gt;Normativa sull&apos;utilizzo dei dati&lt;/a&gt;.</source>
-        <translation>Klicke auf "Registrierung" und bestätige die &lt;a href=%term_url>Nutzungsbestimmungen&lt;/a&gt;. Bestätige die Datenschutzbestimmungen gelesen zu haben &lt;a href=%privacy_url>Privacy_URL&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>Iscriviti</source>
-        <translation>Registrierung</translation>
-    </message>
-    <message>
-        <source>Codice di sicurezza</source>
-        <translation>Sicherheitscode</translation>
-    </message>
-    <message>
-        <source>reCAPTCHA API key non trovata</source>
-        <translation>reCAPTCHA API key du kannst nicht entzipfern</translation>
-    </message>
-    <message>
-        <source>Inserisci il codice di sicurezza</source>
-        <translation>Sicherheitscode eingeben</translation>
-    </message>
-    <message>
-        <source>Clicca qui per ottenere un nuovo codice</source>
-        <translation>Zeige einen neuen Code an</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="43"/>
-        <source>Indirizzo email non valido</source>
-        <translation>Email Adresse nicht gültig</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="51"/>
-        <source>Email già  in uso</source>
-        <translation>Email  bereits in Verwendung</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="66"/>
-        <source>La password deve essere lunga almeno %1 caratteri</source>
-        <translation>Das Password muss mindestens %1 Zeichen lang sein</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="77"/>
-        <source>La password non può essere &quot;password&quot;.</source>
-        <translation>Das Password darf nicht “Password” lauten</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="90"/>
-        <source>Inserire tutti i dati richiesti</source>
-        <translation>Nutzerdaten vollständig ausfüllen</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="107"/>
-        <source>Il nodo (%1) specificato in [UserSettings].DefaultUserPlacement setting in site.ini non esiste!</source>
-        <translation>Il nodo (%1) specificato in [UserSettings].DefaultUserPlacement setting in site.ini non esiste!
-</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="181"/>
-        <source>Il codice inserito non Ã¨ corretto.</source>
-        <translation>Eingegebener Code falsch.</translation>
-    </message>
-    <message>
-        <location filename="signup.php" line="187"/>
-        <source>Errore nella configurazione del Captcha.</source>
-        <translation>Fehler in der Captcha eingabe.</translation>
-    </message>
-</context>
-<context>
-    <name>openpa_sensor/type</name>
-    <message>
-        <location filename="control_sensor.php" line="189"/>
-        <source>Segnalazione</source>
-        <translation>Meldung</translation>
-    </message>
-    <message>
-        <location filename="control_sensor.php" line="197"/>
-        <source>Suggerimento</source>
-        <translation>Anregung</translation>
-    </message>
-    <message>
-        <location filename="control_sensor.php" line="205"/>
-        <source>Reclamo</source>
-        <translation>Beschwerde</translation>
-    </message>
-</context>
-<context>
-    <name>openpa_sensor/settings</name>
-    <message>        
-        <source>Impostazioni delle notifiche</source>
-        <translation>Benachrichtigungseinstellungen</translation>
-    </message>
-    <message>        
-        <source>Salva le impostazioni</source>
-        <translation>Speichern</translation>
-    </message>
-    <message>        
         <source>Notifiche aggiornamento segnalazioni</source>
         <translation>Benachrichtigung bei Veränderung des Meldungsstatus</translation>
     </message>
-    <message>        
-        <source>Notifiche SensorCivico</source>
-        <translation>Benachrichtigung StadtSensor</translation>
-    </message>    
+    <message>
+        <source>Azione</source>
+        <translation>Aktion</translation>
+    </message>
+    <message>
+        <source>Salva le impostazioni</source>
+        <translation>Speichern</translation>
+    </message>
+    <message>
+        <source>Impostazioni delle notifiche</source>
+        <translation>Benachrichtigungseinstellungen</translation>
+    </message>
 </context>
 <context>
-    <name>openpa_sensor/config</name>    
+    <name>sensor/whatsapp/post</name>
     <message>
-        <source>Aggiungi</source>
-        <translation>Hinzufügen</translation>
+        <source>Nuova segnalazione</source>
+        <translation>Neue Meldung</translation>
     </message>
     <message>
-        <source>Aggiungi %classname</source>
-        <translation>Hinzufügen %classname</translation>
+        <source>Segnalazione chiusa da operatore</source>
+        <translation></translation>
     </message>
-    <message>        
-        <source>Impostazioni</source>
-        <translation>Einstellungen</translation>
+    <message>
+        <source>La tua segnalazione è stata presa in carico</source>
+        <translation>Deine Meldung wurde angenommen</translation>
     </message>
-    <message>        
-        <source>Modifica impostazioni generali</source>
-        <translation>Ändere allgemeine Einstellungen</translation>
-    </message>    
-    <message>        
-        <source>Utenti</source>
-        <translation>Nutzer</translation>
+    <message>
+        <source>La tua segnalazione è stata risolta</source>
+        <translation>Die Meldung erfolgreich abgeschlossen</translation>
     </message>
-    <message>        
-        <source>Operatori</source>
-        <translation>Sachbearbeiter</translation>
+    <message>
+        <source>Segnalazione risolta</source>
+        <translation>Die Meldung erfolgreich abgeschlossen</translation>
     </message>
-    <message>        
-        <source>Aree tematiche</source>
-        <translation>Themenbereiche</translation>
+    <message>
+        <source>Ti è stata assegnata una segnalazione</source>
+        <translation>Es wurde dir eine Meldung zugewiesen</translation>
     </message>
-    <message>        
-        <source>Punti sulla mappa</source>
-        <translation>Mappenpunkte POI</translation>
-    </message>    
+</context>
+<context>
+    <name>sensor/workflow/event</name>
+    <message>
+        <location filename="sensortype.php" line="12"/>
+        <source>Workflow Sensor</source>
+        <translation>Workflow Sensor</translation>
+    </message>
 </context>
 </TS>
-
- 

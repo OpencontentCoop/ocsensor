@@ -3,3 +3,5 @@
 [ClassAttributeSettings]
 CategoryList[moderation]=Moderazione
 CategoryList[controls]=Abilitazioni
+
+*/ ?>
