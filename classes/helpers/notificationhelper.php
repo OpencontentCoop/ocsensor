@@ -392,18 +392,18 @@ class SensorNotificationHelper
         //    'group' => 'standard'
         //);
 
-        $postNotificationTypes[] = array(
-            'identifier' => 'on_fix',
-            'name' => ezpI18n::tr(
-                'sensor/notification',
-                'Intervento terminato'
-            ),
-            'description' => ezpI18n::tr(
-                'sensor/notification',
-                "Ricevi una notifica quando un responsabile ha completato l'attività che riguarda una tua segnalazione"
-            ),
-            'group' => 'standard'
-        );
+        //$postNotificationTypes[] = array(
+        //    'identifier' => 'on_fix',
+        //    'name' => ezpI18n::tr(
+        //        'sensor/notification',
+        //        'Intervento terminato'
+        //    ),
+        //    'description' => ezpI18n::tr(
+        //        'sensor/notification',
+        //        "Ricevi una notifica quando un responsabile ha completato l'attività che riguarda una tua segnalazione"
+        //    ),
+        //    'group' => 'standard'
+        //);
 
         $postNotificationTypes[] = array(
             'identifier' => 'on_close',
