@@ -9,7 +9,7 @@
                 {if $is_read|not}<strong>{/if}{$item.created|l10n(shortdatetime)}{if $is_read|not}</strong>{/if}
             </li>
             {if $message.creator_id|eq($current_user.contentobject_id)|not()}
-                <li>{'Da:'|i18n('sensor/messages')} {$participant.name|wash()}</li>
+                <li><small>{'Da:'|i18n('sensor/messages')} {$participant.name|wash()}</small></li>
             {/if}
             {def $receiversIds = cond(  $message.data_text2|ne(''), $message.data_text2|explode(','), array() )}
             {if count($receiversIds)|gt(0)}
@@ -18,7 +18,7 @@
                     {if $item_link.participant_id|ne($receiversId)}
                         {def $obj = fetch( content, object, hash( object_id, $receiversId, load_data_map, false() ))}
                         {if $obj}
-                            <li>{if $index|eq(0)}{'a:'|i18n('sensor/messages')}{set $index = $index|inc()} {/if}{$obj.name|wash()}</li>
+                            <li><small>{if $index|eq(0)}{'a:'|i18n('sensor/messages')}{set $index = $index|inc()} {/if}{$obj.name|wash()}</small></li>
                         {/if}
                         {undef $obj}
                     {/if}
