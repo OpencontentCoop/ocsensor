@@ -200,7 +200,7 @@ class SensorNotificationHelper
             {
                 $tpl->setVariable( 'title', $subject );
                 $tpl->setVariable( 'content', $body );
-                $templateResult = $tpl->fetch( 'design:sensor/mail/mail_pagelayout.tpl' );
+                $templateResult = $tpl->fetch( 'design:mail/mail_pagelayout.tpl' );
 
                 if ( $tpl->hasVariable( 'message_id' ) )
                 {
@@ -379,18 +379,18 @@ class SensorNotificationHelper
             'group' => 'standard'
         );
 
-        $postNotificationTypes[] = array(
-            'identifier' => 'on_add_comment',
-            'name' => ezpI18n::tr(
-                'sensor/notification',
-                'Commento pubblico a una segnalazione'
-            ),
-            'description' => ezpI18n::tr(
-                'sensor/notification',
-                'Ricevi una notifica quando è aggiunto un commento pubblico ad una tua segnalazione'
-            ),
-            'group' => 'standard'
-        );
+        //$postNotificationTypes[] = array(
+        //    'identifier' => 'on_add_comment',
+        //    'name' => ezpI18n::tr(
+        //        'sensor/notification',
+        //        'Commento pubblico a una segnalazione'
+        //    ),
+        //    'description' => ezpI18n::tr(
+        //        'sensor/notification',
+        //        'Ricevi una notifica quando è aggiunto un commento pubblico ad una tua segnalazione'
+        //    ),
+        //    'group' => 'standard'
+        //);
 
         $postNotificationTypes[] = array(
             'identifier' => 'on_fix',
@@ -526,7 +526,7 @@ class SensorNotificationHelper
 
             $transport = $userInfo->attribute( 'default_notification_transport' );
             $language = $userInfo->attribute( 'default_notification_language' );
-            $rules = array( 'on_create', 'on_assign', 'on_close' );
+            $rules = array( 'on_assign', 'on_close' );
 
             $db = eZDB::instance();
             $db->begin();
