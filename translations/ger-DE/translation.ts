@@ -554,6 +554,7 @@
     <message>
         <location filename="notificationhelper.php" line="430"/>
         <source>Ricevi una notifica alla riapertura di una tua segnalazione</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="488"/>
@@ -722,6 +723,7 @@
     </message>
     <message>
         <location filename="timelinehelper.php" line="299"/>
+        <source>Completata</source>
         <translation>Vervollständigt</translation>
     </message>
     <message>
@@ -750,7 +752,7 @@
     <message>
         <location filename="post.php" line="783"/>
         <source>Standard</source>
-        <translation>Standard</translation>c
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="post.php" line="784"/>
