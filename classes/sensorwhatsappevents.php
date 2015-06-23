@@ -126,11 +126,11 @@ class SensorWhatsAppEvents extends AllEvents
     public function onGetMessage( $mynumber, $from, $id, $type, $time, $name, $body )
     {
         $user = $this->getUser( $from, $name );
-        if ( strpos( $body, '#help' ) !== false )
+        if ( strpos( strtolower( $body ), '#help' ) !== false )
         {
             $this->sendHelp( $user );
         }
-        elseif ( strpos( $body, '#password' ) !== false )
+        elseif ( strpos( strtolower( $body ), '#password' ) !== false )
         {
             $this->setPassword( $user, $body );
         }
@@ -191,7 +191,7 @@ class SensorWhatsAppEvents extends AllEvents
     protected function sendHelp( SensorUserInfo $user )
     {
         $url = SensorHelper::factory()->siteUrl();
-        $message = "Per accedere al sistema da web cai su {$url} e usa come username {$user->user()->attribute( 'login' )}. Per impostare la password manda un messaggio con scritto #password, spazio e la password che vuoi impostare. Ad esempio \"#password 122345\"";
+        $message = "Per accedere al sistema da web vai su {$url} e usa come username {$user->user()->attribute( 'login' )}. Per impostare la password manda un messaggio con scritto #password, spazio e la password che vuoi impostare. Ad esempio \"#password 122345\"";
         $this->whatsProt->sendMessage( $user->whatsAppId(), $message );
     }
 
@@ -297,8 +297,8 @@ class SensorWhatsAppEvents extends AllEvents
                 $user = SensorUserInfo::instance( eZUser::fetch( $contentObject->attribute( 'id' ) ) );
                 $user->setModerationMode( true );
                 $user->setDenyCommentMode( true );
-                $message = 'Benvenut@! Per avere informazioni sul tuo account invia un messaggio con scritto "#help"';
-                $this->whatsProt->sendMessage( $user->whatsAppId(), $message );
+                //$message = 'Benvenut@! Per avere informazioni sul tuo account invia un messaggio con scritto "#help"';
+                //$this->whatsProt->sendMessage( $user->whatsAppId(), $message );
             }
         }
         else
