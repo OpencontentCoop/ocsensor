@@ -150,7 +150,8 @@ class SensorWhatsAppEvents extends AllEvents
         $user = $this->getUser( $from, $name );
         $imageFile = self::getRemoteFile( $url );
         $data = array(
-            'image' => $imageFile . '|' . $caption
+            'image' => $imageFile . '|' . $caption,
+            'subject' => 'Nuova segnalazione'
         );
         if ( !empty( $caption ) )
         {
@@ -183,7 +184,8 @@ class SensorWhatsAppEvents extends AllEvents
     {
         $user = $this->getUser( $from, $name );
         $data = array(
-            'geo' => "1|#$latitude|#$longitude|#"
+            'geo' => "1|#$latitude|#$longitude|#",
+            'subject' => 'Nuova segnalazione'
         );
         $this->createPost( $user, $data, $time );
     }
