@@ -1,5 +1,5 @@
 {def $sensor = sensor_root_handler()
-     $social_pagedata = social_pagedata( 'sensor' )}}
+     $social_pagedata = social_pagedata( 'sensor' )}
 
 <script type="text/javascript">
   {if and( $edit_version|gt(1), $object.data_map.geo.has_content )}
