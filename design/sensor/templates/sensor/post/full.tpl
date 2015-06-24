@@ -114,39 +114,42 @@ $(document).ready(function() {
 });
 var actionStarted = false;
 $(document).on("click", ":submit", function(e){
-    if( actionStarted == false ) {
-        actionStarted = true;
-        var currentPostId = $('#current-post-id').html();
-        var form =  $('#sensor-post');
-        var currentAction = $(this).attr('name');
-        var data = form.serializeArray();
-        data.push({name:currentAction,value:''});
-        $('body').css({'opacity':'0.3'});
-        $.ajax({
-            type: "POST",
-            url: form.attr('action'),
-            data: data,
-            dataType: "html",
-            success: function (response) {
-                $.get("{/literal}{'sensor/posts'|ezurl(no)}{literal}/"+currentPostId, function(post){
-                    var $post = $(post);
-                    $('#current-post-detail').html($post.find('#current-post-detail').html());
-                    $('#current-post-breadcrumb').html($post.find('#current-post-breadcrumb').html());
-                    $('#current-post-messages').html($post.find('#current-post-messages').html());
-                    $('#sidebar').html($post.find('#sidebar').html()).find('select.chosen').chosen({width:'100%'});
-                    if(Cookies.get('collapseConversation') == 1) $('#collapseConversation').addClass( 'in' );
-                    $('body').css({'opacity':'1' });
-                    actionStarted = false
-                });
-                $.get({/literal}{'social_user/alert'|ezurl()}{literal}, function(data){
-                    var header = $('header');
-                    header.find('#social_user_alerts').remove();
-                    header.prepend(data);
-                });
-            }
-        });
+    var currentAction = $(this).attr('name');
+    if ( currentAction != 'LoginButton' && currentAction != 'RegisterButton' )
+    {
+        if( actionStarted == false ) {
+            actionStarted = true;
+            var currentPostId = $('#current-post-id').html();
+            var form =  $('#sensor-post');
+            var data = form.serializeArray();
+            data.push({name:currentAction,value:''});
+            $('body').css({'opacity':'0.3'});
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: data,
+                dataType: "html",
+                success: function (response) {
+                    $.get("{/literal}{'sensor/posts'|ezurl(no)}{literal}/"+currentPostId, function(post){
+                        var $post = $(post);
+                        $('#current-post-detail').html($post.find('#current-post-detail').html());
+                        $('#current-post-breadcrumb').html($post.find('#current-post-breadcrumb').html());
+                        $('#current-post-messages').html($post.find('#current-post-messages').html());
+                        $('#sidebar').html($post.find('#sidebar').html()).find('select.chosen').chosen({width:'100%'});
+                        if(Cookies.get('collapseConversation') == 1) $('#collapseConversation').addClass( 'in' );
+                        $('body').css({'opacity':'1' });
+                        actionStarted = false
+                    });
+                    $.get({/literal}{'social_user/alert'|ezurl()}{literal}, function(data){
+                        var header = $('header');
+                        header.find('#social_user_alerts').remove();
+                        header.prepend(data);
+                    });
+                }
+            });
+        }
+        e.preventDefault();
     }
-    e.preventDefault();
 });
 </script>{/literal}
 

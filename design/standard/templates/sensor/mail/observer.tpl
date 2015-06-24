@@ -1,4 +1,4 @@
-{def $social_pagedata = social_pagedata()}
+{def $social_pagedata = social_pagedata('sensor')}
 {set-block scope=root variable=message_id}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
 {if $collaboration_item_status|eq(4)} {* FIXED *}
 {set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {'Segnalazione chiusa da operatore'|i18n('sensor/mail/post')}{/set-block}
