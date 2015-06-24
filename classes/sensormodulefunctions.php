@@ -75,10 +75,11 @@ class SensorModuleFunctions
         $Result['node_id'] = 0;
         
         $contentInfoArray = array( 'url_alias' => 'sensor/home' );
-        $contentInfoArray['persistent_variable'] = false;
+        $contentInfoArray['persistent_variable'] = array( 'sensor_home' => true );
         if ( $tpl->variable( 'persistent_variable' ) !== false )
         {
             $contentInfoArray['persistent_variable'] = $tpl->variable( 'persistent_variable' );
+            $contentInfoArray['persistent_variable']['sensor_home'] = true;
         }
         $Result['content_info'] = $contentInfoArray;
         $Result['path'] = array();
