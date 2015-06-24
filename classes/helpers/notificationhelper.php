@@ -193,10 +193,10 @@ class SensorNotificationHelper
 
             $tpl->fetch( $templatePath );
 
-            $body = $tpl->variable( 'body' );
+            $body = trim( $tpl->variable( 'body' ) );
             $subject = $tpl->variable( 'subject' );
 
-            if ( !empty( $body ) )
+            if ( $body != '' )
             {
                 $tpl->setVariable( 'title', $subject );
                 $tpl->setVariable( 'content', $body );
