@@ -50,7 +50,7 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
             $className = eZINI::instance( 'ocsensor.ini' )->variable( 'PHPCLasses', 'EventHelper' );
         }
         if ( $className && class_exists( $className ) )
-        {
+        {            
             return new $className( $post );
         }
         return new SensorPostEventHelper( $post );

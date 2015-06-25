@@ -114,11 +114,12 @@ $(document).ready(function() {
 });
 var actionStarted = false;
 $(document).on("click", ":submit", function(e){
-    var currentAction = $(this).attr('name');
-    if ( currentAction != 'LoginButton' && currentAction != 'RegisterButton' )
+    var currentFormId = $(this).parents('form').attr('id');    
+    if ( currentFormId == 'sensor-post' )
     {
         if( actionStarted == false ) {
             actionStarted = true;
+            var currentAction = $(this).attr('name');
             var currentPostId = $('#current-post-id').html();
             var form =  $('#sensor-post');
             var data = form.serializeArray();
