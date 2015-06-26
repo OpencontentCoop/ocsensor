@@ -122,12 +122,23 @@ class SensorApiController extends ezpRestMvcController
         }
 
         $result = new ezpRestMvcResult();
-        $result->variables = array(
-            'data' => array(
-                'result' => 'Successfully updated post ' . $id,
-                'actions' => $actions
-            )
-        );
+        if ( count( $actions ) > 0 )
+        {
+            $result->variables = array(
+                'data' => array(
+                    'result' => 'Successfully updated post ' . $id,
+                    'actions' => $actions
+                )
+            );
+        }
+        else
+        {
+            $result->variables = array(
+                'data' => array(
+                    'result' => 'No action required for post ' . $id,
+                )
+            );
+        }
         return $result;
     }
 
