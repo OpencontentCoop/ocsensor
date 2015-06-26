@@ -1,4 +1,4 @@
-{if or( $sensor_post.message_count, and( $sensor_post.can_comment, $sensor_post.can_send_private_message ) )}
+{if or( $sensor_post.message_count, $sensor_post.can_send_private_message )}
 <p>
     <a class="btn btn-info btn-lg btn-block" data-toggle="collapse" href="#collapseConversation" aria-expanded="false" aria-controls="collapseConversation">
         {'Messaggi privati'|i18n('sensor/messages')}
@@ -15,7 +15,7 @@
         {/foreach}
     </div>
     {/if}
-    {if and( $sensor_post.can_comment, $sensor_post.can_send_private_message )}
+    {if $sensor_post.can_send_private_message}
         <div class="new_comment">
             <p>
                 <textarea name="Collaboration_SensorItemPrivateMessage" class="form-control" placeholder="{'Aggiungi messaggio'|i18n('sensor/messages')}" rows="4"></textarea>
