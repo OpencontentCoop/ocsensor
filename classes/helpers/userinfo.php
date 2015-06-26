@@ -7,6 +7,9 @@ class SensorUserInfo extends SocialUser
 
     private static $_cache = array();
 
+    /**
+     * @return SensorUserInfo
+     */
     public static function current()
     {
        if ( !isset( self::$_cache[eZUser::currentUserID()] ) )
@@ -16,6 +19,9 @@ class SensorUserInfo extends SocialUser
        return self::$_cache[eZUser::currentUserID()];
     }
 
+    /**
+     * @return SensorUserInfo
+     */
     public static function instance( eZUser $user )
     {
        if ( !$user instanceof eZUser )
