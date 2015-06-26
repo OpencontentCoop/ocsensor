@@ -97,6 +97,13 @@ interface SensorPostObjectHelperInterface
     public function getPostGeoJsArray();
 
     /**
+     * Ritorna array( 'latitude, longitude, street )
+     * es: "[45.123,25.674]"
+     * @return bool|string
+     */
+    public function getPostGeoArray();
+
+    /**
      * Restituisce l'owner_id dell'oggetto corrente
      * @return int|null
      */
