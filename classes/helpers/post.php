@@ -735,7 +735,7 @@ class SensorPost
         $resolutionTime = $this->getResolutionTime();
         if ( $resolutionTime['timestamp'] && $this->configParameters['CloseCommentsAfterSeconds'] )
         {
-            return ($now < ( $resolutionTime['timestamp'] + $this->configParameters['CloseCommentsAfterSeconds'] ) );
+            return ( $now - $resolutionTime['timestamp'] ) < $this->configParameters['CloseCommentsAfterSeconds'];
         }
         return true;
     }

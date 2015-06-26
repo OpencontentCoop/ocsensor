@@ -102,8 +102,6 @@ class SensorApiController extends ezpRestMvcController
                 $actions['close'] = array();
                 $actions['make_private'] = array();
                 break;
-            default:
-                throw new Exception( "administration-status ($administrationStatus) not handled" );
         }
 
         // dry run to check errors
