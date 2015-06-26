@@ -34,13 +34,20 @@ class SensorApiController extends ezpRestMvcController
 
     public function doViewDetail()
     {
-        if ( !SensorApiModel::hasDetail( $this->Detail ) )
+        $apiPost = SensorApiPost::fromId( $this->Id );
+        if ( $apiPost->hasAttribute( $this->Detail ) )
         {
-            throw new Exception( "Not found" );
+            $result = new ezpRestMvcResult();
+            $result->variables[$this->Detail] = $apiPost->attribute( $this->Detail );
+            return $result;
         }
-        $result = new ezpRestMvcResult();
-        $result->variables['todo'] = 'coming soon...';
-        return $result;
+        elseif ( SensorApiModel::hasDetail( $this->Detail ) )
+        {
+            $result = new ezpRestMvcResult();
+            $result->variables['todo'] = 'coming soon...';
+            return $result;   
+        }        
+        throw new Exception( "Not found" );
     }
 
     // api che rispondono alla maniera del vecchio SensorCivico, utilizzate dal Comune di Trento

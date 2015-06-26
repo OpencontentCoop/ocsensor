@@ -1,10 +1,10 @@
 <?php
 
-class SensorApiPost implements ArrayAccess, Iterator
+class SensorApiPost
 {
+    protected $post = array();
+    
     protected $data = array();
-
-    protected $iteratorPointer = null;
 
     public static function fromId( $id, $checkAccess = true )
     {
@@ -21,99 +21,137 @@ class SensorApiPost implements ArrayAccess, Iterator
 
     protected function __construct( $id )
     {
-        $post = SensorHelper::instanceFromContentObjectId( $id );
-
-        $this->data['id'] = (int)$post->attribute( 'id' );
-        $this->data['url'] = $post->attribute( 'post_url' );
-
-        $this->data['author'] = array(
-            'id' => $post->attribute( 'author_id' ),
-            'name' => $post->attribute( 'author_name' )
-        );
-
-        $this->data['created'] = (int)$post->currentSensorPost->objectHelper->getContentObject()->attribute( 'published' );
-        $this->data['modified'] = (int)$post->currentSensorPost->objectHelper->getContentObject()->attribute( 'modified' );
-
-        $this->data['subject'] = $post->currentSensorPost->objectHelper->getContentObjectAttribute( 'subject' )->toString();
-        $this->data['description'] = $post->currentSensorPost->objectHelper->getContentObjectAttribute( 'description' )->toString();
-        $this->data['geo'] = $post->currentSensorPost->objectHelper->getPostGeoArray();
-        $this->data['internal_status'] = (int)$post->attribute( 'current_status' );
-
-        $imageAttribute = $post->currentSensorPost->objectHelper->getContentObjectAttribute( 'image' );
-        $this->data['image'] = $imageAttribute->hasContent() ? $imageAttribute->content()->attribute( 'original' ) : '';
-
-        $type = $post->attribute( 'type' );
-        $this->data['type'] = $type['identifier'];
-
-        $state = $post->attribute( 'current_object_state' );
-        $this->data['state'] = $state['identifier'];
-
-        $state = $post->attribute( 'current_privacy_state' );
-        $this->data['privacy'] = $state['identifier'];
-
-        $state = $post->attribute( 'current_moderation_state' );
-        $this->data['moderation'] = $state['identifier'];
-
-        $this->data['expiring_date'] = $post->attribute( 'expiring_date' );
-        $this->data['resolution_time'] = $post->attribute( 'resolution_time' );
-
-        $this->data['comment_count'] = (int)$post->attribute( 'comment_count' );
-        $this->data['comment_unread_count'] = (int)$post->attribute( 'comment_unread_count' );
-        $this->data['message_count'] = (int)$post->attribute( 'message_count' );
-        $this->data['message_unread_count'] = (int)$post->attribute( 'message_unread_count' );
-        $this->data['response_count'] = (int)$post->attribute( 'response_count' );
-        $this->data['response_unread_count'] = (int)$post->attribute( 'response_unread_count' );
-
-        $this->iteratorPointer = array_keys( $this->data );
+        $this->post = SensorHelper::instanceFromContentObjectId( $id );
     }
 
     public function toHash()
     {
+        foreach( $this->attributes() as $identifier )
+            $this->attribute( $identifier );
         return $this->data;
     }
 
-    public function current()
+    public function attributes()
     {
-        return $this->data[current( $this->iteratorPointer )];
+        return array(
+            "id",
+            "url",
+            "author",
+            "created",
+            "modified",
+            "subject",
+            "description",
+            "geo",
+            "internal_status",
+            "image",
+            "type",
+            "state",
+            "privacy",
+            "moderation",
+            "expiring_date",
+            "resolution_time",
+            "comment_count",
+            "comment_unread_count",
+            "message_count",
+            "message_unread_count",
+            "response_count",
+            "response_unread_count"
+        );
     }
-
-    public function next()
+    
+    public function hasAttribute( $identifier )
     {
-        next( $this->iteratorPointer );
+        return in_array( $identifier, $this->attributes() );
     }
-
-    public function key()
+    
+    public function attribute( $identifier )
     {
-        return current( $this->iteratorPointer );
-    }
-
-    public function valid()
-    {
-        return isset( $this->data[current( $this->iteratorPointer )] );
-    }
-
-    public function rewind()
-    {
-        reset( $this->iteratorPointer );
-    }
-
-    public function offsetExists( $offset )
-    {
-        return isset( $this->data[$offset] );
-    }
-
-    public function offsetGet( $offset )
-    {
-        return $this->data[$offset];
-    }
-
-    public function offsetSet( $offset, $value )
-    {
-        $this->data[$offset] = $value;
-    }
-
-    public function offsetUnset( $offset )
-    {
-        unset( $this->data[$offset] );
+        if ( !isset( $this->data[$identifier] ) )
+        {
+            if ( $identifier == 'id' )
+                $this->data['id'] = (int)$this->post->attribute( 'id' );
+            
+            if ( $identifier == 'url' )
+                $this->data['url'] = $this->post->attribute( 'post_url' );
+    
+            if ( $identifier == 'author' )
+                $this->data['author'] = array(
+                    'id' => $this->post->attribute( 'author_id' ),
+                    'name' => $this->post->attribute( 'author_name' )
+                );
+    
+            if ( $identifier == 'created' )
+                $this->data['created'] = (int)$this->post->currentSensorPost->objectHelper->getContentObject()->attribute( 'published' );
+            
+            if ( $identifier == 'modified' )
+                $this->data['modified'] = (int)$this->post->currentSensorPost->objectHelper->getContentObject()->attribute( 'modified' );
+    
+            if ( $identifier == 'subject' )
+                $this->data['subject'] = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'subject' )->toString();
+            
+            if ( $identifier == 'description' )
+                $this->data['description'] = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'description' )->toString();
+            
+            if ( $identifier == 'geo' )
+                $this->data['geo'] = $this->post->currentSensorPost->objectHelper->getPostGeoArray();
+            
+            if ( $identifier == 'internal_status' )
+                $this->data['internal_status'] = (int)$this->post->attribute( 'current_status' );
+    
+            if ( $identifier == 'image' )
+            {
+                $imageAttribute = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'image' );
+                $this->data['image'] = $imageAttribute->hasContent() ? $imageAttribute->content()->attribute( 'original' ) : '';    
+            }
+            
+            if ( $identifier == 'type' )
+            {
+                $type = $this->post->attribute( 'type' );
+                $this->data['type'] = $type['identifier'];
+            }
+    
+            if ( $identifier == 'state' )
+            {
+                $state = $this->post->attribute( 'current_object_state' );
+                $this->data['state'] = $state['identifier'];
+            }
+    
+            if ( $identifier == 'privacy' )
+            {
+                $state = $this->post->attribute( 'current_privacy_state' );
+                $this->data['privacy'] = $state['identifier'];
+            }
+    
+            if ( $identifier == 'moderation' )
+            {
+                $state = $this->post->attribute( 'current_moderation_state' );
+                $this->data['moderation'] = $state['identifier'];
+            }
+    
+            if ( $identifier == 'expiring_date' )
+                $this->data['expiring_date'] = $this->post->attribute( 'expiring_date' );
+            
+            if ( $identifier == 'resolution_time' )
+                $this->data['resolution_time'] = $this->post->attribute( 'resolution_time' );
+    
+            if ( $identifier == 'comment_count' )
+                $this->data['comment_count'] = (int)$this->post->attribute( 'comment_count' );
+            
+            if ( $identifier == 'comment_unread_count' )
+                $this->data['comment_unread_count'] = (int)$this->post->attribute( 'comment_unread_count' );
+            
+            if ( $identifier == 'message_count' )
+                $this->data['message_count'] = (int)$this->post->attribute( 'message_count' );
+            
+            if ( $identifier == 'message_unread_count' )
+                $this->data['message_unread_count'] = (int)$this->post->attribute( 'message_unread_count' );
+            
+            if ( $identifier == 'response_count' )
+                $this->data['response_count'] = (int)$this->post->attribute( 'response_count' );
+            
+            if ( $identifier == 'response_unread_count' )
+                $this->data['response_unread_count'] = (int)$this->post->attribute( 'response_unread_count' );
+        }
+        return $this->data[$identifier];
     }
 }

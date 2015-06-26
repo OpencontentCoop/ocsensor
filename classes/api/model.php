@@ -21,6 +21,9 @@ class SensorApiModel extends ezpRestModel
         $baseUri = $currentRequest->getBaseURI();
         $contentQueryString = $currentRequest->getContentQueryString( true );
 
+        foreach( $post->attributes() as $identifier )
+            $links[$identifier] = $baseUri . '/' . $identifier . $contentQueryString;
+        
         foreach( self::$availableDetails as $identifier )
             $links[$identifier] = $baseUri . '/' . $identifier . $contentQueryString;
 
