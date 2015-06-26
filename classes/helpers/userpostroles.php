@@ -211,7 +211,9 @@ class SensorUserPostRoles
 
     public function canComment()
     {
-        return !(bool)$this->userInfo->hasDenyCommentMode() && $this->post->commentsIsOpen();
+        return !(bool)$this->userInfo->hasDenyCommentMode()
+               && !(bool)$this->userInfo->hasModerationMode()
+               && $this->post->commentsIsOpen();
 
     }
 
