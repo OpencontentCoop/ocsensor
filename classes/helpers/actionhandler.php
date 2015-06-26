@@ -168,7 +168,7 @@ class SensorPostActionHandler
         return new SensorPostActionHandler( $userPostRoles );
     }
 
-    final public function handleAction( $actionName, $actionParameters )
+    final public function checkAction( $actionName, $actionParameters )
     {
         if ( array_key_exists( $actionName, $this->actions ) )
         {
@@ -181,7 +181,7 @@ class SensorPostActionHandler
                 {
                     if ( !$this->userPostRoles->attribute( $role ) )
                     {
-                        throw new Exception( "$role role required" );
+                        throw new Exception( "Current user does not have '$role' role" );
                     }
                 }
             }
@@ -204,14 +204,20 @@ class SensorPostActionHandler
                     $arguments[] = $argument;
                 }
             }
-            eZDebugSetting::writeNotice( 'sensor', "Call {$action['call_function']} with arguments " . var_export( $arguments, 1 ), __METHOD__ );
-            $reflectionMethod = new ReflectionMethod( $this, $action['call_function'] );
-            return $reflectionMethod->invokeArgs( $this, $arguments );
+            return array( $action['call_function'], $arguments );
         }
         else
         {
             throw new BadFunctionCallException( "$actionName action not available" );
         }
+    }
+
+    final public function handleAction( $actionName, $actionParameters )
+    {
+        list( $method, $arguments ) = $this->checkAction( $actionName, $actionParameters );
+        eZDebugSetting::writeNotice( 'sensor', "Call {$method} with arguments " . var_export( $arguments, 1 ), __METHOD__ );
+        $reflectionMethod = new ReflectionMethod( $this, $method );
+        return $reflectionMethod->invokeArgs( $this, $arguments );
     }
 
     public function read()
