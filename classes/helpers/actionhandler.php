@@ -168,6 +168,13 @@ class SensorPostActionHandler
         return new SensorPostActionHandler( $userPostRoles );
     }
 
+    /**
+     * @param $actionName
+     * @param $actionParameters
+     *
+     * @return array
+     * @throws Exception
+     */
     final public function checkAction( $actionName, $actionParameters )
     {
         if ( array_key_exists( $actionName, $this->actions ) )
