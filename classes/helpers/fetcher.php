@@ -587,5 +587,24 @@ class SensorPostFetcher
         }
         return false;
     }
+    
+    public static function fetchUserLastActivePost( SensorUserInfo $userInfo )
+    {
+        $filters = array( 'creator_id' => $userInfo->user()->id() );
+        $itemParameters = array(
+            'is_active' => true,
+            'offset' => 0,
+            'limit' => 1,
+            'sort_by' => array( 'created', false ),
+            'parent_group_id' => $userInfo->sensorCollaborationGroup()->attribute( 'id' ),
+            'status' => false
+        );
+        $data = self::fetchList( $itemParameters, false, $filters, $userInfo->user() );
+        if ( count( $data ) > 0 )
+        {
+           return $data[0];
+        }
+        return false;
+    }
 
 }

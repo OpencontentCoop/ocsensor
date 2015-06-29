@@ -125,69 +125,109 @@ class SensorWhatsAppEvents extends AllEvents
 
     public function onGetMessage( $mynumber, $from, $id, $type, $time, $name, $body )
     {
-        $user = $this->getUser( $from, $name );
-        if ( strpos( strtolower( $body ), '#help' ) !== false )
+        try
         {
-            $this->sendHelp( $user );
+            $user = $this->getUser( $from, $name );
+            if ( strpos( strtolower( $body ), '#help' ) !== false )
+            {
+                $this->sendHelp( $user );
+            }
+            elseif ( strpos( strtolower( $body ), '#password' ) !== false )
+            {
+                $this->setPassword( $user, $body );
+            }
+            else
+            {
+                $data = array(
+                    'type' => 'segnalazione',
+                    'subject' => substr( $body, 0, 20 ) . '...',
+                    'description' => $body
+                );
+                $this->createPost( $user, $data, $time );
+            }
         }
-        elseif ( strpos( strtolower( $body ), '#password' ) !== false )
+        catch( Exception $e )
         {
-            $this->setPassword( $user, $body );
-        }
-        else
-        {
-            $data = array(
-                'type' => 'segnalazione',
-                'subject' => substr( $body, 0, 20 ) . '...',
-                'description' => $body
-            );
-            $this->createPost( $user, $data, $time );
+            $this->cli->error( $e->getMessage() );
+            eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
         }
     }
 
     public function onGetImage($mynumber, $from, $id, $type, $time, $name, $size, $url, $file, $mimeType, $fileHash, $width, $height, $preview, $caption)
     {
-        $user = $this->getUser( $from, $name );
-        $imageFile = self::getRemoteFile( $url );
-        $data = array(
-            'image' => $imageFile . '|' . $caption,
-            'subject' => 'Nuova segnalazione'
-        );
-        if ( !empty( $caption ) )
+        try
         {
-            $data['subject'] = $caption;
+            $user = $this->getUser( $from, $name );
+            $imageFile = self::getRemoteFile( $url );
+            $data = array(
+                'image' => $imageFile . '|' . $caption,
+                'subject' => 'Nuova segnalazione'
+            );
+            if ( !empty( $caption ) )
+            {
+                $data['subject'] = $caption;
+            }
+            $this->createPost( $user, $data, $time );
         }
-        $this->createPost( $user, $data, $time );
+        catch( Exception $e )
+        {
+            $this->cli->error( $e->getMessage() );
+            eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
+        }
     }
 
     public function onGetAudio($mynumber, $from, $id, $type, $time, $name, $size, $url, $file, $mimeType, $fileHash, $duration, $acodec, $fromJID_ifGroup = null)
     {
-        $user = $this->getUser( $from, $name );
-        $this->cli->warning( "Audio ($time) from $name:\n$file\n" );
-        if ( $user instanceof SensorUserInfo )
+        try
         {
-            $this->whatsProt->sendMessage( $user->whatsAppId(), 'Al momento i file audio non sono supportati da SensorCivico' );
+            $user = $this->getUser( $from, $name );
+            $this->cli->warning( "Audio ($time) from $name:\n$file\n" );
+            if ( $user instanceof SensorUserInfo )
+            {
+                $this->whatsProt->sendMessage( $user->whatsAppId(), 'Al momento i file audio non sono supportati da SensorCivico' );
+            }
+        }
+        catch( Exception $e )
+        {
+            $this->cli->error( $e->getMessage() );
+            eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
         }
     }
 
     public function onGetVideo($mynumber, $from, $id, $type, $time, $name, $url, $file, $size, $mimeType, $fileHash, $duration, $vcodec, $acodec, $preview, $caption)
     {
-        $user = $this->getUser( $from, $name );
-        $this->cli->warning( "Video ($time) from $name:\n$file\n" );
-        if ( $user instanceof SensorUserInfo )
+        try
         {
-            $this->whatsProt->sendMessage( $user->whatsAppId(), 'Al momento i file video non sono supportati da SensorCivico' );
+            $user = $this->getUser( $from, $name );
+            $this->cli->warning( "Video ($time) from $name:\n$file\n" );
+            if ( $user instanceof SensorUserInfo )
+            {
+                $this->whatsProt->sendMessage( $user->whatsAppId(), 'Al momento i file video non sono supportati da SensorCivico' );
+            }
+        }
+        catch( Exception $e )
+        {
+            $this->cli->error( $e->getMessage() );
+            eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
         }
     }
 
     public function onGetLocation($mynumber, $from, $id, $type, $time, $name, $author, $longitude, $latitude, $url, $preview, $fromJID_ifGroup = null)
     {
-        $user = $this->getUser( $from, $name );
-        $data = array(
-            'geo' => "1|#$latitude|#$longitude|#",
-            'subject' => 'Nuova segnalazione'
-        );
-        $this->createPost( $user, $data, $time );
+        try
+        {
+            $user = $this->getUser( $from, $name );
+            $data = array(
+                'geo' => "1|#$latitude|#$longitude|#",
+                'subject' => 'Nuova segnalazione'
+            );
+            $this->createPost( $user, $data, $time );
+        }
+        catch( Exception $e )
+        {
+            $this->cli->error( $e->getMessage() );
+            eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
+        }
     }
 
     protected function sendHelp( SensorUserInfo $user )
@@ -235,7 +275,7 @@ class SensorWhatsAppEvents extends AllEvents
             $message = '';
             $updateLimitSeconds = self::UPDATE_LIMIT_SECONDS;
             $timeLeft = $updateLimitSeconds;
-            $lastPost = SensorPostFetcher::fetchUserLastPost( $user );
+            $lastPost = SensorPostFetcher::fetchUserLastActivePost( $user );
             if ( $lastPost instanceof SensorHelper )
             {
                 /** @var eZContentObject $lastObject */

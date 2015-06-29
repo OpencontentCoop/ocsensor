@@ -298,10 +298,12 @@ class SensorNotificationHelper
                     try
                     {
                         $wa = OCWhatsAppConnector::instanceFromContentObjectId( $waUserId );
-                        $wa->connectAndLogin();
-                        foreach ( $collectionItems as $collectionItem )
+                        if ( $wa instanceof OCWhatsAppConnector )
                         {
-                            $wa->whatsProt->sendMessage( $collectionItem['whatsapp'], $message );
+                            foreach ( $collectionItems as $collectionItem )
+                            {
+                                $wa->sendMessage( $collectionItem['whatsapp'], $message );
+                            }
                         }
                     }
                     catch ( Exception $e )
