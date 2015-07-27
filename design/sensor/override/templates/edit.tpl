@@ -57,7 +57,11 @@
   {def $content_attributes_extra = hash()}
   {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )}
     {def $behalf = $content_attributes_grouped_data_map['hidden']['on_behalf_of']}    
-    {set $content_attributes_extra = hash( 'on_behalf_of', $behalf )}
+    {set $content_attributes_extra = hash('on_behalf_of', $behalf)}
+    {def $behalf_detail = $content_attributes_grouped_data_map['hidden']['on_behalf_of_detail']}
+    {if $behalf_detail}
+      {set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_detail', $behalf_detail ) )}
+    {/if}
   {/if}
   
 	<div class="tab-content">
@@ -132,15 +136,15 @@
 								</div>
 							{else}
 								<div class="col-md-3">
-									{if $contentclass_attribute.data_type_string|ne('ezboolean')}
-                                    <p{if $attribute.has_validation_error} class="message-error"{/if}>
-                                        <span style="white-space: nowrap">{first_set( $contentclass_attribute.nameList[$content_language], $contentclass_attribute.name )|wash}{if $attribute.is_required} <span class="required" title="{'required'|i18n( 'design/admin/content/edit_attribute' )}">*</span>{/if}</span>
-                                        {if $attribute.is_information_collector} <span class="collector">({'information collector'|i18n( 'design/admin/content/edit_attribute' )})</span>{/if}
-									</p>
+									{if and( $contentclass_attribute.data_type_string|ne('ezboolean'), $contentclass_attribute.identifier|ne('privacy'), $contentclass_attribute.identifier|ne('on_behalf_of_detail') )}
+                    <p{if $attribute.has_validation_error} class="message-error"{/if}>
+                      <span style="white-space: nowrap">{first_set( $contentclass_attribute.nameList[$content_language], $contentclass_attribute.name )|wash}{if $attribute.is_required} <span class="required" title="{'required'|i18n( 'design/admin/content/edit_attribute' )}">*</span>{/if}</span>
+                      {if $attribute.is_information_collector} <span class="collector">({'information collector'|i18n( 'design/admin/content/edit_attribute' )})</span>{/if}
+                    </p>
 										{if $attribute.contentclass_attribute_identifier|eq('description')}
 											<small id="{$attribute.contentclassattribute_id}-counter"><span>{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}</span>/{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}</small>
 										{/if}
-                                    {/if}
+                  {/if}
 								</div>
 								<div class="col-md-9">
 									{if $contentclass_attribute.description} <span class="classattribute-description">{first_set( $contentclass_attribute.descriptionList[$content_language], $contentclass_attribute.description)|wash}</span>{/if}
@@ -194,7 +198,7 @@
 	
 			{section show=$validation_log}
 				<div class="alert alert-warning alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 					{section var=ValidationLogs loop=$validation_log}
 						<p>{$ValidationLogs.item.name|wash}:</p>
 						<ul>

@@ -155,9 +155,13 @@ class SensorHelper
 
         /** @var eZContentObjectAttribute[] $dataMap */
         $dataMap = $object->attribute( 'data_map' );
-        if ( isset( $dataMap['privacy'] ) &&  $dataMap['privacy']->attribute( 'data_int' ) == 0 )
-        {
-            $struct->privacy = 'private';
+        if ( isset( $dataMap['privacy'] ) )
+        {            
+            if ( ( $dataMap['privacy']->attribute( 'data_type_string' ) == 'ezboolean' && $dataMap['privacy']->attribute( 'data_int' ) == 0 )
+                 || ( $dataMap['privacy']->attribute( 'data_type_string' ) == 'ezselection' && strtolower( $dataMap['privacy']->attribute( 'data_text' ) ) == 'no' ) )
+            {
+                $struct->privacy = 'private';
+            }
         }
 
         $struct->moderation = $objectHelper->defaultModerationStateIdentifier( $authorInfo );
@@ -242,6 +246,22 @@ class SensorHelper
             throw new Exception( "Object not found" );
         }
         $helper = self::instanceFromContentObjectId( $object->attribute( 'id' ) );
+        
+        /** @var eZContentObjectAttribute[] $dataMap */
+        $dataMap = $object->attribute( 'data_map' );        
+        if ( isset( $dataMap['privacy'] ) )
+        {            
+            if ( ( $dataMap['privacy']->attribute( 'data_type_string' ) == 'ezboolean' && $dataMap['privacy']->attribute( 'data_int' ) == 0 )
+                 || ( $dataMap['privacy']->attribute( 'data_type_string' ) == 'ezselection' && strtolower( $dataMap['privacy']->attribute( 'data_text' ) ) == 'no' ) )
+            {
+                $helper->currentSensorUserRoles->actionHandler->makePrivate();
+            }
+            else
+            {
+                $helper->currentSensorUserRoles->actionHandler->makePublic();
+            }
+        }
+        
         $helper->collaborationItem->setAttribute( 'modified', $object->attribute( 'modified' ) );
         $helper->collaborationItem->sync();
         $post = $helper->currentSensorPost;

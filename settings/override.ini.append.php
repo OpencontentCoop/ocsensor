@@ -34,5 +34,33 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=area
 
+[post_edit_area]
+Source=content/datatype/edit/ezobjectrelationlist.tpl
+MatchFile=edit_area.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=area
+
+[post_edit_privacy]
+Source=content/datatype/edit/ezselection.tpl
+MatchFile=edit_privacy.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=privacy
+
+[post_edit_behalf_of]
+Source=content/datatype/edit/ezstring.tpl
+MatchFile=edit_behalf_of.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=on_behalf_of
+
+[post_edit_behalf_of_detail]
+Source=content/datatype/edit/eztext.tpl
+MatchFile=edit_behalf_of_detail.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=on_behalf_of_detail
+
 
  */ ?>
