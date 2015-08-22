@@ -80,9 +80,4 @@ interface SensorHelperFactoryInterface
      */
     public static function fetchSensorGeoJsonFeatureCollection();
 
-    /**
-     * @return string
-     */
-    public function siteUrl();
-
 }

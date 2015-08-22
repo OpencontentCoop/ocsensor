@@ -232,7 +232,7 @@ class SensorWhatsAppEvents extends AllEvents
 
     protected function sendHelp( SensorUserInfo $user )
     {
-        $url = SensorHelper::factory()->siteUrl();
+        $url = OCSocialPageDataBase::instance( 'sensor' )->siteUrl();
         $message = "Per accedere al sistema da web vai su {$url} e usa come username {$user->user()->attribute( 'login' )}. Per impostare la password manda un messaggio con scritto #password, spazio e la password che vuoi impostare. Ad esempio \"#password 122345\"";
         $this->whatsProt->sendMessage( $user->whatsAppId(), $message );
     }
