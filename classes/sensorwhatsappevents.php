@@ -279,8 +279,7 @@ class SensorWhatsAppEvents extends AllEvents
             if ( $lastPost instanceof SensorHelper )
             {
                 /** @var eZContentObject $lastObject */
-                $lastObject = $lastPost->attribute( 'object' );
-
+                $lastObject = $lastPost->attribute( 'object' );                                
                 $lastPostCreationDate = $lastObject->attribute( 'published' );
                 $timeLeftCount = $time - $lastPostCreationDate;
                 if ( $timeLeftCount <= $updateLimitSeconds )
@@ -304,7 +303,7 @@ class SensorWhatsAppEvents extends AllEvents
                 $object->attribute( 'id' ),
                 $user
             );
-            $message .= ' ' . $helper->attribute( 'post_url' );
+            //$message .= ' ' . $helper->attribute( 'post_url' );
             if ( $timeLeft > 0 )
             {
                 $message .= " (hai ancora $timeLeft secondi per aggiungere informazioni alla segnalazione)";

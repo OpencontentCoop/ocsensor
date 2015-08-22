@@ -32,6 +32,25 @@
 			 $attribute_categorys        = ezini( 'ClassAttributeSettings', 'CategoryList', 'content.ini' )
 			 $attribute_default_category = ezini( 'ClassAttributeSettings', 'DefaultCategory', 'content.ini' )}
 
+	{def $content_attributes_extra = hash()}
+	{if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )}
+	  {def $behalf = $content_attributes_grouped_data_map['hidden']['on_behalf_of']}    
+	  {set $content_attributes_extra = hash('on_behalf_of', $behalf)}
+	  {def $behalf_detail = $content_attributes_grouped_data_map['hidden']['on_behalf_of_detail']}	
+	  {if $behalf_detail}
+		{set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_detail', $behalf_detail ) )}
+	  {/if}
+	  {if is_set( $content_attributes_grouped_data_map['hidden']['on_behalf_of_mode'] )}
+		{def $behalf_mode = $content_attributes_grouped_data_map['hidden']['on_behalf_of_mode']}
+		{set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_mode', $behalf_mode ) )}
+	  {/if}
+	{/if}
+	
+	{if count( $content_attributes_extra )|gt(0)}
+	  {set $content_attributes_grouped_data_map = $content_attributes_grouped_data_map|merge( hash( 'segnalatore', $content_attributes_extra ) )}
+	  {set $attribute_categorys = $attribute_categorys|merge( hash( 'segnalatore', 'Segnalatore' ) )}
+	{/if}
+	
 	{def $count = 0}
 	{foreach $content_attributes_grouped_data_map as $attribute_group => $content_attributes_grouped}
 	  {if $attribute_group|ne('hidden')}
@@ -53,16 +72,6 @@
 		{/foreach}
 	  </ul>
 	{/if}
-
-  {def $content_attributes_extra = hash()}
-  {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )}
-    {def $behalf = $content_attributes_grouped_data_map['hidden']['on_behalf_of']}    
-    {set $content_attributes_extra = hash('on_behalf_of', $behalf)}
-    {def $behalf_detail = $content_attributes_grouped_data_map['hidden']['on_behalf_of_detail']}
-    {if $behalf_detail}
-      {set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_detail', $behalf_detail ) )}
-    {/if}
-  {/if}
   
 	<div class="tab-content">
 	  {set $count = 0}
@@ -70,7 +79,7 @@
 		
     {if $attribute_group|eq('hidden')}{skip}{/if}
     
-    {if $attribute_group|eq('content')}{set $content_attributes_grouped = $content_attributes_grouped|merge($content_attributes_extra)}{/if}
+    {*if $attribute_group|eq('content')}{set $content_attributes_grouped = $content_attributes_grouped|merge($content_attributes_extra)}{/if*}
     
     <div class="clearfix attribute-edit tab-pane{if $count|eq(0)} active{/if}" id="attribute-group-{$attribute_group}">
 			{set $count = $count|inc()}

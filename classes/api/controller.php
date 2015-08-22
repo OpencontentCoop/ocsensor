@@ -93,6 +93,7 @@ class SensorApiController extends ezpRestMvcController
                 $actions['moderate'] = array( 'status' => 'accepted' );
                 break;
             case 4:
+                $actions['ws_read'] = array();
                 $actions['read'] = array();
                 break;
             case 6:

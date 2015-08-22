@@ -54,7 +54,13 @@
     </p>
     <ul class="list-unstyled">      
         {if $item.object.owner}
-          <li><small><strong>{"Autore"|i18n('sensor/dashboard')}</strong> {$item.object.owner.name|wash()} {if $item.object|has_attribute('on_behalf_of')}[{$item.object|attribute('on_behalf_of').contentclass_attribute_name|wash()} {$item.object|attribute('on_behalf_of').content|wash()}]{/if}</small></li>
+          <li><small><strong>{"Autore"|i18n('sensor/dashboard')}</strong>
+		{if $item.object|has_attribute('on_behalf_of')}
+			{$item.object|attribute('on_behalf_of').content|wash()}
+		{else}
+			{$item.object.owner.name|wash()}
+		{/if}
+		</small></li>
         {/if}
         {if $item.object.data_map.category.has_content}
           <li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$item.object.data_map.category href=no-link} </small></li>

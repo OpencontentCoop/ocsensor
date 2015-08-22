@@ -165,6 +165,15 @@ class SensorPostActionHandler
 
     final public static function instance( SensorUserPostRoles $userPostRoles )
     {
+        $className = false;
+        if ( eZINI::instance( 'ocsensor.ini' )->hasVariable( 'PHPCLasses', 'ActionHandler' ) )
+        {
+            $className = eZINI::instance( 'ocsensor.ini' )->variable( 'PHPCLasses', 'ActionHandler' );
+        }
+        if ( $className && class_exists( $className ) )
+        {            
+            return new $className( $userPostRoles );
+        }                
         return new SensorPostActionHandler( $userPostRoles );
     }
 
