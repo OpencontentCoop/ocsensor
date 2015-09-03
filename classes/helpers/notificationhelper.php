@@ -176,6 +176,8 @@ class SensorNotificationHelper
 
         foreach( $userCollection as $participantRole => $collectionItems )
         {
+            $tpl->setVariable( 'subject', '' );
+            $tpl->setVariable( 'body', '' );
             $templateName = self::notificationMailTemplate( $participantRole );
 
             if ( !$templateName ) continue;
