@@ -519,7 +519,7 @@ class SensorNotificationHelper
         return $transportNotificationTypes;
     }
 
-    public function storeDefaultNotificationRules( $userId )
+    public function storeNotificationRules( $userId, $typeIdentifiersFilters = null )
     {
         try
         {
@@ -528,34 +528,42 @@ class SensorNotificationHelper
 
             $transport = $userInfo->attribute( 'default_notification_transport' );
             $language = $userInfo->attribute( 'default_notification_language' );
-            $rules = array( 'on_assign', 'on_close' );
+            $postNotificationTypes = SensorNotificationHelper::instance()->postNotificationTypes();
 
-            $db = eZDB::instance();
-            $db->begin();
-            foreach ( $rules as $rule )
+            $notificationRules = array();
+            foreach ( $postNotificationTypes as $notificationType )
             {
-                $notificationRule = eZCollaborationNotificationRule::create(
-                    $prefix . $rule,
-                    $userId
-                );
-                $notificationRule->store();
-                $notificationRule = eZCollaborationNotificationRule::create(
-                    $prefix . $rule . ':' . $transport,
-                    $userId
-                );
-                $notificationRule->store();
-                $notificationRule = eZCollaborationNotificationRule::create(
-                    $prefix . $rule . ':' . $language,
-                    $userId
-                );
-                $notificationRule->store();
+                if ( is_array( $typeIdentifiersFilters ) && !in_array( $notificationType['identifier'], $typeIdentifiersFilters ) )
+                {
+                    continue;
+                }
+
+                $notificationRules[] = $prefix . $notificationType['identifier'];
+                $notificationRules[] = $prefix . $notificationType['identifier'] . ':' . $transport;
+                $notificationRules[] = $prefix . $notificationType['identifier'] . ':' . $language;
             }
-            $db->commit();
+
+            if ( !empty( $notificationRules ) )
+            {
+                $db = eZDB::instance();
+                $db->begin();
+                foreach( $notificationRules as $rule )
+                {
+                    eZCollaborationNotificationRule::create( $rule, $userId )->store();
+                }
+
+                $db->commit();
+            }
         }
         catch( Exception $e )
         {
             eZDebug::writeError( $e->getMessage(), __METHOD__ );
         }
+    }
+
+    public function storeDefaultNotificationRules( $userId )
+    {
+        $this->storeNotificationRules( $userId, array( 'on_assign', 'on_close' ) );
     }
 
     public static function onSocialUserSignup( $userId )
