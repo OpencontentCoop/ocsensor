@@ -9,7 +9,7 @@
 <section class="hgroup">
   <h1>
     <span class="label label-primary" id="current-post-id">{$sensor_post.object.id}</span>
-    {$sensor_post.object.name|wash()} <small> {if $sensor_post.object|has_attribute('on_behalf_of')} {$sensor_post.object|attribute('on_behalf_of').content|wash()}{/if}</small>
+    {$sensor_post.object.name|wash()} <small> {if $sensor_post.object|has_attribute('on_behalf_of')} {$sensor_post.object|attribute('on_behalf_of').content|wash()}{else}{$sensor_post.object.owner.name|wash()}{/if}</small>
     {if $sensor_post.object.can_edit}
       <a class="btn btn-warning btn-sm" href="{concat('sensor/edit/',$sensor_post.object.id)|ezurl(no)}"><i class="fa fa-edit"></i></a>
     {/if}
