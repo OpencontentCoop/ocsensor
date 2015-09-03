@@ -115,7 +115,7 @@
                 <tr>
                     <td align='center' valign='top'>
                         <h2>{"La tua segnalazione è stata chiusa dall'operatore "|i18n('sensor/mail/post')}</h2>
-                        <p>{"La seganalzione è tornata in carico al responsabile"|i18n('sensor/mail/post')}</p>
+                        <p>{"La segnalazione è tornata in carico al responsabile"|i18n('sensor/mail/post')}</p>
                     </td>
                 </tr>
                 <tr>
