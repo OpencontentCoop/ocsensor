@@ -145,8 +145,6 @@ class SensorNotificationHelper
                 }
             }
 
-            eZDebug::writeNotice( var_export( $ruleList, 1 ), __METHOD__ );
-
             foreach ( $ruleList as $transport => $userList )
             {
                 if ( $transport == 'ezmail' )
