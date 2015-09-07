@@ -217,8 +217,9 @@ class SensorWhatsAppEvents extends AllEvents
         try
         {
             $user = $this->getUser( $from, $name );
+            $address = self::reverseGeoCode( $latitude, $longitude );
             $data = array(
-                'geo' => "1|#$latitude|#$longitude|#",
+                'geo' => "1|#$latitude|#$longitude|#$address",
                 'subject' => 'Nuova segnalazione'
             );
             $this->createPost( $user, $data, $time );
@@ -228,6 +229,21 @@ class SensorWhatsAppEvents extends AllEvents
             $this->cli->error( $e->getMessage() );
             eZLog::write( $from . ' ' . $e->getMessage(), 'sensor_poll_message.log' );
         }
+    }
+
+    public static function reverseGeoCode( $latitude, $longitude )
+    {
+        $serviceUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
+        $key = eZINI::instance( 'ocsensor.ini' )->variable( 'GeoCoderSettings', 'GoogleApiKey');
+        $queryParams = http_build_query( array( 'latlng' => "$latitude,$longitude", 'key' => $key ) );
+        $url = $serviceUrl . '?' . $queryParams;
+        $data = eZHTTPTool::getDataByURL( $url );
+        $dataArray = json_decode( $data, true );
+        if ( isset( $dataArray['results'][0]['formatted_address'] ) )
+        {
+            return $dataArray['results'][0]['formatted_address'];
+        }
+        return null;
     }
 
     protected function sendHelp( SensorUserInfo $user )
