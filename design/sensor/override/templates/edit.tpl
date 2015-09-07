@@ -2,8 +2,8 @@
      $social_pagedata = social_pagedata( 'sensor' )}
 
 <script type="text/javascript">
-  {if and( $edit_version|gt(1), $object.data_map.geo.has_content )}
-	var PointsOfInterest = [{ldelim}"id":"{$object.id}","coords":["{$object.data_map.geo.content.latitude|explode(',')|implode('.')}","{$object.data_map.geo.content.longitude|explode(',')|implode('.')}"]{rdelim}];
+  {if $object.data_map.geo.has_content}
+	var PointsOfInterest = [{ldelim}"id":"{$object.id}","coords":["{$object.data_map.geo.content.latitude|explode(',')|implode('.')}","{$object.data_map.geo.content.longitude|explode(',')|implode('.')}"],"address":"{$object.data_map.geo.content.address}"{rdelim}];
   {else}
     var PointsOfInterest = {$sensor.areas.coords_json};
   {/if}

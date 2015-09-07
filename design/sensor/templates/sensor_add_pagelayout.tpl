@@ -146,6 +146,7 @@
         });
         if (PointsOfInterest.length > 0) {
             var CenterMap = new L.latLng(PointsOfInterest[0].coords[0], PointsOfInterest[0].coords[1]);
+            var CenterMapAddress = PointsOfInterest[0].address || null;
             var control = new L.Control.Geocoder({geocoder: null});
 
             if (window.XDomainRequest) {
@@ -185,8 +186,8 @@
             var setContent = function (latlng, name) {
                 $('input#latitude').val(latlng.lat);
                 $('input#longitude').val(latlng.lng);
-                if (typeof name == 'undefined') {
-                    var name = latlng.toString();
+                if (typeof name == 'undefined' || name === null) {
+                    name = latlng.toString();
                     map.loadingControl.addLoader('sc');
                     control.options.geocoder.reverse(latlng, 0, function (result) {
                         if (result.length > 0) name = result[0].name;
@@ -203,7 +204,7 @@
                     userMarker.bindPopup(name).openPopup();
                 }
             };
-            setUserMarker(CenterMap);
+            setUserMarker(CenterMap,CenterMapAddress);
             /*if ( typeof PointsOfInterest != 'undefined' ) {
              $.each(PointsOfInterest, function (i,element) {
              var customIcon = L.MakiMarkers.icon({icon: "heart", color: "#b0b", size: "m"});
