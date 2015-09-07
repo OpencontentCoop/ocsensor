@@ -5,20 +5,13 @@
 
 <table class="table" cellspacing="0">
 <tr>
-    <th class="tight">{'Preview'|i18n( 'design/standard/content/datatype' )}</th>
-    <th>{'Filename'|i18n( 'design/standard/content/datatype' )}</th>
-    <th>{'MIME type'|i18n( 'design/standard/content/datatype' )}</th>
-    <th>{'Size'|i18n( 'design/standard/content/datatype' )}</th>
-    <th></th>
-</tr>
-<tr>
-    <td>{attribute_view_gui image_class=ezini( 'ImageSettings', 'DefaultEditAlias', 'content.ini' ) attribute=$attribute}</td>
-    <td>{$attribute.content.original.original_filename|wash( xhtml )}</td>
-    <td>{$attribute.content.original.mime_type|wash( xhtml )}</td>
-    <td>{$attribute.content.original.filesize|si( byte )}</td>
-    <td>
+    <td style="vertical-align: middle;width: 100px">
+        <div style="background-image: url({$attribute.content[ezini( 'ImageSettings', 'DefaultEditAlias', 'content.ini' )].full_path|ezroot(no)}); background-repeat:no-repeat; background-size: contain; background-position: center; height: 100px; width: 100px"></div>
+    </td>
+    <td style="vertical-align: middle">
+        <p>{$attribute.content.original.original_filename|wash( xhtml )} <br /><small>{$attribute.content.original.mime_type|wash( xhtml )} ({$attribute.content.original.filesize|si( byte )})</small></p>
         {if $attribute_content.original.is_valid}
-        <button class="button btn" type="submit" name="CustomActionButton[{$attribute.id}_delete_image]" title="{'Remove image'|i18n( 'design/standard/content/datatype' )}"><span class="glyphicon glyphicon-trash"></span></button>
+        <p><button class="button btn" type="submit" name="CustomActionButton[{$attribute.id}_delete_image]" title="{'Remove image'|i18n( 'design/standard/content/datatype' )}"><span class="glyphicon glyphicon-trash"></span> Rimuovi</button></p>
         {*else}
         <input class="button-disabled" type="submit" name="CustomActionButton[{$attribute.id}_delete_image]" value="{'Remove image'|i18n( 'design/standard/content/datatype' )}" disabled="disabled" />*}
         {/if}
