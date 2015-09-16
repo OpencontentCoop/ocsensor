@@ -54,6 +54,7 @@ class SensorApiController extends ezpRestMvcController
     public function doCompatUpdatePost()
     {
         $postData = $this->request->post;
+        eZLog::write( var_export( $postData, 1 ), 'sensor_api.trento.log' );
         if ( !isset( $postData['data']['Marker'] ) )
         {
             throw new Exception( "Data not found" );
