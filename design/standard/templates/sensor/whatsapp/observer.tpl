@@ -1,7 +1,7 @@
 {if $collaboration_item_status|eq(4)} {* FIXED *}
-{'Segnalazione chiusa da operatore'|i18n('sensor/whatsapp/post')} #{$node.contentobject_id}{$post_url}
+{'Segnalazione chiusa da operatore'|i18n('sensor/whatsapp/post')} #{$node.contentobject_id} {*$post_url*}
 
 {elseif $collaboration_item_status|eq(3)} {* CLOSED *}
-{'Segnalazione risolta'|i18n('sensor/whatsapp/post')} #{$node.contentobject_id}{$post_url}
+{'Segnalazione risolta'|i18n('sensor/whatsapp/post')} #{$node.contentobject_id} {*$post_url*}
 
 {/if}
