@@ -341,7 +341,7 @@ class SensorWhatsAppEvents extends AllEvents
             $sensorUserRegister->setEmail( $from );
             $contentObject = $sensorUserRegister->store();
             $module = new eZModule( null, null, 'sensor', false );
-            SocialUserRegister::finish( $module, $contentObject );
+            SocialUserRegister::finish( $module, $contentObject, true );
             if ( $contentObject instanceof eZContentObject )
             {
                 /** @var eZContentObjectAttribute[] $contentObjectDataMap */
