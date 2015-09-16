@@ -306,13 +306,13 @@ class SensorWhatsAppEvents extends AllEvents
                         $data,
                         $lastObject
                     );
-                    $message .= "Segnalazione aggiornata";
+                    $message .= "Segnalazione aggiornata #" . $lastObject->attribute( 'id' );
                 }
             }
             if ( !$object )
             {
                 $object = SensorHelper::factory()->sensorPostObjectFactory( $user, $data );
-                $message .= "Creata nuova segnalazione";
+                $message .= "Creata nuova segnalazione #" . $object->attribute( 'id' );
             }
 
             $helper = SensorHelper::instanceFromContentObjectId(
