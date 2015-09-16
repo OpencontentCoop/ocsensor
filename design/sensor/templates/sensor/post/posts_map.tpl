@@ -10,17 +10,25 @@
 <div class="full_page_photo"><div id="map"></div></div>
 </div>
 
+
+  <script type="text/javascript">
+    var PointsOfInterest = {sensor_root_handler().areas.coords_json};
+    var CenterMap = new L.latLng(PointsOfInterest[0].coords[0], PointsOfInterest[0].coords[1]);    
 {literal}
-  <script type="text/javascript">	  		
 		var tiles = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
 		var map = L.map('map').addLayer(tiles);
     map.scrollWheelZoom.disable();
 		var markers = L.markerClusterGroup();     
 		$.getJSON("{/literal}{'/sensor/data'|ezurl(no)}{literal}?contentType=geojson", function(data) {
-      var geoJsonLayer = L.geoJson(data);
-      markers.addLayer(geoJsonLayer);
-      map.addLayer(markers);
-      map.fitBounds(markers.getBounds());
+      console.log(data);
+      if (data !== null) {
+        var geoJsonLayer = L.geoJson(data);
+        markers.addLayer(geoJsonLayer);
+        map.addLayer(markers);
+        map.fitBounds(markers.getBounds());
+      }else{
+        map.setView(CenterMap, 13);
+      }
     });    
     markers.on('click', function (a) {
       $.getJSON("{/literal}{'/sensor/data'|ezurl(no)}{literal}?contentType=marker&id="+a.layer.feature.id, function(data) {
@@ -30,5 +38,6 @@
         map.openPopup(popup); 
       });        
     });
+{/literal}    
   </script>
-{/literal}
+
