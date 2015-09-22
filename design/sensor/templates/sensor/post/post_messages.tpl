@@ -11,6 +11,9 @@
     {if $sensor_post.can_comment}
         <div class="new_comment">
             <h4>{'Aggiungi un commento'|i18n('sensor/messages')}</h4>
+            {if $sensor_post.can_send_private_message}
+            <small class="text-muted"><i class="fa fa-warning"></i> {'Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".'|i18n('sensor/messages')}</small>
+            {/if}
             <div class="row">
                 <div class="col-sm-8 col-md-8"><br>
                     <textarea name="Collaboration_SensorItemComment" class="form-control" placeholder="{'Commenti'|i18n('sensor/messages')}" rows="7"></textarea>
@@ -18,7 +21,12 @@
             </div>
             <div class="row">
                 <div class="col-sm-8 col-md-8">
-                    <input class="btn send btn-primary btn-lg btn-block" type="submit" name="CollaborationAction_Comment" value="{'Pubblica il commento'|i18n('sensor/messages')}" />
+                    <input class="btn send btn-primary btn-lg btn-block"
+                           type="submit" name="CollaborationAction_Comment"
+                           value="{'Pubblica il commento'|i18n('sensor/messages')}"
+                           {if $sensor_post.can_send_private_message}
+                               data-confirmation="{'Sei sicuro di voler aggiungere un commento visibile a tutti?'|i18n( 'sensor/messages' )|wash(javascript)}"
+                           {/if} />
                 </div>
             </div>
         </div>

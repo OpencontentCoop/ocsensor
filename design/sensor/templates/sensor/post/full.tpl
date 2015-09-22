@@ -114,10 +114,13 @@ $(document).ready(function() {
 });
 var actionStarted = false;
 $(document).on("click", ":submit", function(e){
-    var currentFormId = $(this).parents('form').attr('id');    
-    if ( currentFormId == 'sensor-post' )
-    {
-        if( actionStarted == false ) {
+    var currentFormId = $(this).parents('form').attr('id');
+    if ( currentFormId == 'sensor-post' ) {
+        var confirmation = true;
+        if($(this).data('confirmation')){
+            confirmation = confirm( $(this).data('confirmation') );
+        }
+        if( actionStarted == false && confirmation ) {
             actionStarted = true;
             var currentAction = $(this).attr('name');
             var currentPostId = $('#current-post-id').html();
