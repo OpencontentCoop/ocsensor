@@ -285,6 +285,7 @@ class SensorWhatsAppEvents extends AllEvents
 
     protected function createPost( SensorUserInfo $user, $data, $time )
     {
+        $data['on_behalf_of_mode'] = 'WhatsApp';
         if ( !$user->hasBlockMode() )
         {
             $object = false;
