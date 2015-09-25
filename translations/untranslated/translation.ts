@@ -1115,6 +1115,34 @@
         <source>Ti è stata assegnata una segnalazione</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Nuova segnalazione #%post_id% clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La segnalazione #%post_id% è stata chiusa da operatore; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La tua segnalazione #%post_id% è stata presa in carico; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La tua segnalazione #%post_id% è stata risolta; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La segnalazione #%post_id% è stata chiusa da operatore; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La segnalazione #%post_id% è stata risolta; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ti è stata assegnata la segnalazione #%post_id%, clicca sul seguente link: %post_url%</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>sensor/workflow/event</name>
