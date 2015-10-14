@@ -53,6 +53,14 @@ class SensorApiController extends ezpRestMvcController
     // api che rispondono alla maniera del vecchio SensorCivico, utilizzate dal Comune di Trento
     public function doCompatUpdatePost()
     {
+        $currentUserHasAccess = eZUser::currentUser()->hasAccessTo( 'sensor', 'ws_user' );
+        if ( $currentUserHasAccess['accessWord'] == 'no' )
+        {
+            throw new Exception( "Current user does not have access to policy sensor/ws_user" );
+        }
+        $urpUser = eZUser::fetchByName( 'urp' ); //@todo calcolare l'utente corretto
+        $urpSensorUser = SensorUserInfo::instance( $urpUser );
+
         $postData = $this->request->post;
         eZLog::write( var_export( $postData, 1 ), 'sensor_api.trento.log' );
         if ( !isset( $postData['data']['Marker'] ) )
@@ -66,7 +74,7 @@ class SensorApiController extends ezpRestMvcController
         $public = isset( $data['public'] ) ? intval( $data['public'] ) == 1 : false;
         $notify = isset( $data['notify'] ) ? $data['notify'] : false; //yet not handled
 
-        $post = SensorHelper::instanceFromContentObjectId( $id );
+        $post = SensorHelper::instanceFromContentObjectId( $id, $urpSensorUser );
 
         $actions = array();
 
