@@ -58,8 +58,8 @@ elseif ( $test == 'post' )
 
     $tpl->setVariable( 'title', $subject );
     $tpl->setVariable( 'content', $body );
-    $templateResult = $tpl->fetch( 'design:mail/mail_pagelayout.tpl' );
-    
+    $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
+
 }
 
 echo $templateResult;
