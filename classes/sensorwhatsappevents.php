@@ -248,7 +248,7 @@ class SensorWhatsAppEvents extends AllEvents
 
     protected function sendHelp( SensorUserInfo $user )
     {
-        $url = OCSocialPageDataBase::instance( 'sensor' )->siteUrl();
+        $url = OCSocialPageDataBase::instance( 'sensor' )->attribute( 'site_url' );
         $message = "Per accedere al sistema da web vai su {$url} e usa come username {$user->user()->attribute( 'login' )}. Per impostare la password manda un messaggio con scritto #password, spazio e la password che vuoi impostare. Ad esempio \"#password 122345\"";
         $this->whatsProt->sendMessage( $user->whatsAppId(), $message );
     }
@@ -286,6 +286,8 @@ class SensorWhatsAppEvents extends AllEvents
     protected function createPost( SensorUserInfo $user, $data, $time )
     {
         $data['on_behalf_of_mode'] = 'WhatsApp';
+        $data['type'] = 'segnalazione';
+
         if ( !$user->hasBlockMode() )
         {
             $object = false;
@@ -332,6 +334,8 @@ class SensorWhatsAppEvents extends AllEvents
 
     protected function getUser( $from, $nickname )
     {
+        $config = (array) SensorHelper::factory()->getSensorConfigParams();
+        $moderateNewUser = isset( $config['ModerateNewWhatsAppUser'] ) ? $config['ModerateNewWhatsAppUser'] : true;
         $user = false;
         $username = str_replace( array( "@s.whatsapp.net", "@g.us" ), "", $from );
         $contentObject = OCWhatsAppType::fetchContentObjectByUsername( $username );
@@ -353,8 +357,11 @@ class SensorWhatsAppEvents extends AllEvents
                     $contentObjectDataMap['wa_user']->store();
                 }
                 $user = SensorUserInfo::instance( eZUser::fetch( $contentObject->attribute( 'id' ) ) );
-                $user->setModerationMode( true );
-                $user->setDenyCommentMode( true );
+                if ( $moderateNewUser )
+                {
+                    $user->setModerationMode( true );
+                    $user->setDenyCommentMode( true );
+                }
                 //$message = 'Benvenut@! Per avere informazioni sul tuo account invia un messaggio con scritto "#help"';
                 //$this->whatsProt->sendMessage( $user->whatsAppId(), $message );
             }
