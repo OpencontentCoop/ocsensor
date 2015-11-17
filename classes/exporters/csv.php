@@ -31,6 +31,7 @@ class SensorPostCsvExporter
             'title'             => ezpI18n::tr( 'sensor/export', 'Titolo' ),
             'author'            => ezpI18n::tr( 'sensor/export', 'Autore' ),
             'category'          => ezpI18n::tr( 'sensor/export', 'Area tematica' ),
+            'category_child'    => ezpI18n::tr( 'sensor/export', 'Area tematica (descrittore)' ),
             'current_owner'     => ezpI18n::tr( 'sensor/export', 'Assegnatario' ),
             'comment'           => ezpI18n::tr( 'sensor/export', 'Commenti' )
         );
@@ -108,8 +109,35 @@ class SensorPostCsvExporter
         $data['title'] = $object->attribute( 'name' );
         
         $data['author'] = $item->attribute( 'author_name' );
-        $data['category'] = $item->attribute( 'category_name' );
-        $data['current_owner'] = $item->attribute( 'current_owner' ) ? $item->attribute( 'current_owner' ) : '';
+
+        /** @var eZContentObject[] $categories */
+        $categories = $item->attribute( 'post_categories' );
+        $parentCategoryList = array();
+        $childCategoryList = array();
+        foreach( $categories as $category )
+        {
+            if ( intval( $category->attribute( 'main_node_id' ) ) > 0 )
+            {
+                /** @var eZContentObjectTreeNode $mainNode */
+                $mainNode = $category->attribute( 'main_node' );
+                /** @var eZContentObjectTreeNode $mainNodeParent */
+                $mainNodeParent = $mainNode->attribute( 'parent' );
+                if ( $mainNodeParent->attribute( 'class_identifier' ) == $mainNode->attribute( 'class_identifier' ) )
+                {
+                    $parentCategoryList[] = $mainNodeParent->attribute( 'name' );
+                    $childCategoryList[] = $mainNode->attribute( 'name' );
+                }
+                else
+                {
+                    $parentCategoryList[] = $mainNode->attribute( 'name' );
+                }
+            }
+
+        }
+        $data['category'] = implode( ', ', $parentCategoryList );
+        $data['category_child'] = implode( ', ', $childCategoryList );
+
+        $data['current_owner'] = $item->attribute( 'current_owner' ) ? str_replace( "\n", '', $item->attribute( 'current_owner' ) ): '';
         $data['comment'] = $item->attribute( 'comment_count' );
         
         return $data;

@@ -392,6 +392,7 @@ class SensorHelper
                 'current_moderation_state',
                 'author_id',
                 'author_name',
+                'post_categories',
                 'areas',
                 'categories',
                 'observers',
@@ -564,6 +565,10 @@ class SensorHelper
 
             case 'author_name':
                 return $this->currentSensorPost->objectHelper->getPostAuthorName();
+                break;
+
+            case 'post_categories':
+                return $this->currentSensorPost->objectHelper->getPostCategories();
                 break;
 
             case 'areas':

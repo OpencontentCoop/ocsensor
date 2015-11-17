@@ -116,10 +116,10 @@ interface SensorPostObjectHelperInterface
     public function getPostAuthorName();
 
     /**
-     * Restituisce il name delle categorie assegnate all'oggetto corrente
-     * @return string
+     * Restituisce le categorie assegnate all'oggetto corrente
+     * @return eZContentObject[]
      */
-    public function getPostCategoryName();
+    public function getPostCategories();
 
     /**
      * Restituisce l'url completo del post
