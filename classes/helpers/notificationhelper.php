@@ -563,7 +563,7 @@ class SensorNotificationHelper
 
     public function storeDefaultNotificationRules( $userId )
     {
-        $this->storeNotificationRules( $userId, array( 'on_assign', 'on_close' ) );
+        $this->storeNotificationRules( $userId, array( 'on_create', 'on_assign', 'on_close' ) );
     }
 
     public static function onSocialUserSignup( $userId )
