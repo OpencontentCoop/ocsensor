@@ -259,7 +259,7 @@ class SensorUserPostRoles
 
     public function canAddObserver()
     {
-        return !$this->post->isClosed() && $this->isApprover();
+        return !$this->post->isClosed() && ( $this->isApprover() || $this->isOwner() );
     }
 
 }

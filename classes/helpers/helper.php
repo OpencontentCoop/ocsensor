@@ -394,7 +394,7 @@ class SensorHelper
                 'author_name',
                 'areas',
                 'categories',
-                'post_operators',
+                'observers',
                 'operators',
                 'post_geo_array_js',
                 'post_url'
@@ -574,12 +574,12 @@ class SensorHelper
                 return self::categories();
                 break;
 
-            case 'post_operators':
-                return self::operators( $this->currentSensorPost );
+            case 'observers':
+                return self::observers( $this->currentSensorPost );
                 break;
 
             case 'operators':
-                return self::operators();
+                return self::operators( $this->currentSensorPost );
                 break;
 
             case 'post_geo_array_js':
@@ -659,11 +659,25 @@ class SensorHelper
     }
 
     /**
+     * @param SensorPost|null $post
+     *
      * @return array
+     * @throws Exception
      */
     public static function operators( SensorPost $post = null )
     {
         return self::factory()->operators( $post );
+    }
+
+    /**
+     * @param SensorPost|null $post
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function observers( SensorPost $post = null )
+    {
+        return self::factory()->observers( $post );
     }
 
     /**

@@ -73,6 +73,13 @@ interface SensorHelperFactoryInterface
     public static function operators( SensorPost $post = null );
 
     /**
+     * @param SensorPost|null $post
+     *
+     * @return array
+     */
+    public static function observers( SensorPost $post = null );
+
+    /**
      * @return array
      */
     public static function categories();
