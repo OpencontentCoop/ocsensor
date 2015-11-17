@@ -1,11 +1,15 @@
 <?php
 
 $Module = $Params['Module'];
+$Http = eZHTTPTool::instance();
 $Offset = $Params['Offset'] ? $Params['Offset'] : 0;
 $Part = $Params['Part'] ? $Params['Part'] : 'users';
 $tpl = eZTemplate::factory();
 $viewParameters = array( 'offset' => $Offset );
 $currentUser = eZUser::currentUser();
+
+if ( $Http->hasVariable( 's' ) )
+    $viewParameters['query'] = $Http->variable( 's' );
 
 $root = SensorHelper::rootNode();
 
