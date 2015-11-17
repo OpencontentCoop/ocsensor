@@ -66,9 +66,11 @@ interface SensorHelperFactoryInterface
     public static function areas();
 
     /**
+     * @param SensorPost|null $post
+     *
      * @return array
      */
-    public static function operators();
+    public static function operators( SensorPost $post = null );
 
     /**
      * @return array

@@ -78,12 +78,14 @@
         {/if}
 
         {if $sensor_post.can_assign}
+            {def $post_operators = $sensor_post.post_operators}
+            {if count( $post_operators )|gt(0)}
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
                         <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="chosen form-control">
                             <option></option>
-                            {foreach $sensor_post.operators as $user}
+                            {foreach $post_operators as $user}
                                 <option value="{$user.contentobject_id}">{include uri='design:content/view/sensor_person.tpl' sensor_person=$user.object}</option>
                             {/foreach}
                         </select>
@@ -93,6 +95,8 @@
                     </div>
                 </div>
             </div>
+            {/if}
+            {undef $post_operators}
         {/if}
 
         {if $sensor_post.can_add_observer}

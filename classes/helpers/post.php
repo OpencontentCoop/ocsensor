@@ -265,16 +265,7 @@ class SensorPost
             $ownerIds = $this->getParticipants( SensorUserPostRoles::ROLE_OWNER );
             if ( $asObject )
             {
-                $owners = array();
-                foreach( $ownerIds as $ownerId )
-                {
-                    $owner = eZContentObject::fetch( $ownerId );
-                    if ( $owner instanceof eZContentObject )
-                    {
-                        $owners[] = $owner;
-                    }
-                }
-                return $owners;
+                return eZContentObject::fetchIDArray( $ownerIds );
             }
             return $ownerIds;
         }
