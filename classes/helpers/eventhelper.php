@@ -2,6 +2,12 @@
 
 class SensorPostEventHelper implements SensorPostEventHelperInterface
 {
+    const EVENT_CREATOR_FIELD = 'data_int2';
+
+    const EVENT_TIMESTAMP_FIELD = 'data_int3';
+
+    const EVENT_DETAILS_FIELD = 'data_text2';
+
     /**
      * @var SensorPost
      */
@@ -42,7 +48,7 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
         $this->notificationHelper = SensorNotificationHelper::instance( $this->post );
     }
 
-    public static function instance( SensorPost $post )
+    final public static function instance( SensorPost $post )
     {
         $className = false;
         if ( eZINI::instance( 'ocsensor.ini' )->hasVariable( 'PHPCLasses', 'EventHelper' ) )
@@ -56,13 +62,17 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
         return new SensorPostEventHelper( $post );
     }
 
-    public function createEvent( $eventName )
+    public function createEvent( $eventName, $eventDetails = array() )
     {
         foreach( $this->notificationHelper->postNotificationTypes() as $type )
         {
             if ( $type['identifier'] ==  $eventName )
             {
-                $this->post->getCollaborationItem()->createNotificationEvent( $eventName );
+                $event = $this->post->getCollaborationItem()->createNotificationEvent( $eventName );
+                $event->setAttribute( self::EVENT_CREATOR_FIELD, eZUser::currentUserID() );
+                $event->setAttribute( self::EVENT_TIMESTAMP_FIELD, time() );
+                $event->setAttribute( self::EVENT_DETAILS_FIELD, json_encode( $eventDetails ) );
+                $event->store();
             }
         }
     }

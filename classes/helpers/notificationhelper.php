@@ -149,12 +149,12 @@ class SensorNotificationHelper
             {
                 if ( $transport == 'ezmail' )
                 {
-                    $this->createMailNotificationCollections( $event, $userList, $parameters );
+                    $this->createMailNotificationCollections( $eventIdentifier, $event, $userList, $parameters );
                 }
 
                 if ( $transport == 'ezwhatsapp' )
                 {
-                    $this->createWhatsAppNotificationCollections( $event, $userList, $parameters );
+                    $this->createWhatsAppNotificationCollections( $eventIdentifier, $event, $userList, $parameters );
                 }
             }
             return eZNotificationEventHandler::EVENT_HANDLED;
@@ -166,13 +166,22 @@ class SensorNotificationHelper
         }
     }
 
-    protected function createMailNotificationCollections( eZNotificationEvent $event, $userCollection, &$parameters )
+    protected function createMailNotificationCollections( $eventIdentifier, eZNotificationEvent $event, $userCollection, &$parameters )
     {
         $db = eZDB::instance();
         $db->begin();
 
+        $eventCreator = $event->attribute( SensorPostEventHelper::EVENT_CREATOR_FIELD );
+        $eventTimestamp = $event->attribute( SensorPostEventHelper::EVENT_TIMESTAMP_FIELD );
+        $eventDetails = json_decode( $event->attribute( SensorPostEventHelper::EVENT_DETAILS_FIELD ), true );
+
         $tpl = eZTemplate::factory();
         $tpl->resetVariables();
+
+        $tpl->setVariable( 'event_identifier', $eventIdentifier );
+        $tpl->setVariable( 'event_details', $eventDetails );
+        $tpl->setVariable( 'event_creator', $eventCreator );
+        $tpl->setVariable( 'event_timestamp', $eventTimestamp );
 
         foreach( $userCollection as $participantRole => $collectionItems )
         {
@@ -182,7 +191,7 @@ class SensorNotificationHelper
 
             if ( !$templateName ) continue;
 
-            $templatePath = 'design:sensor/mail/' . $templateName;
+            $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
 
             $tpl->setVariable( 'collaboration_item', $this->post->getCollaborationItem() );
             $tpl->setVariable( 'collaboration_participant_role', $participantRole );
@@ -246,7 +255,7 @@ class SensorNotificationHelper
         $db->commit();
     }
 
-    protected function createWhatsAppNotificationCollections( eZNotificationEvent $event, $userCollection, &$parameters )
+    protected function createWhatsAppNotificationCollections( $eventIdentifier, eZNotificationEvent $event, $userCollection, &$parameters )
     {
         if ( class_exists( 'OCWhatsAppConnector' ) )
         {
@@ -381,18 +390,31 @@ class SensorNotificationHelper
             'group' => 'standard'
         );
 
-        //$postNotificationTypes[] = array(
-        //    'identifier' => 'on_add_comment',
-        //    'name' => ezpI18n::tr(
-        //        'sensor/notification',
-        //        'Commento pubblico a una segnalazione'
-        //    ),
-        //    'description' => ezpI18n::tr(
-        //        'sensor/notification',
-        //        'Ricevi una notifica quando è aggiunto un commento pubblico ad una tua segnalazione'
-        //    ),
-        //    'group' => 'standard'
-        //);
+        $postNotificationTypes[] = array(
+            'identifier' => 'on_add_observer',
+            'name' => ezpI18n::tr(
+                'sensor/notification',
+                'Coinvolgimento di un osservatore'
+            ),
+            'description' => ezpI18n::tr(
+                'sensor/notification',
+                'Ricevi una notifica quando un osservatore viene coinvolto in una segnalazione'
+            ),
+            'group' => 'standard'
+        );
+
+        $postNotificationTypes[] = array(
+            'identifier' => 'on_add_comment',
+            'name' => ezpI18n::tr(
+                'sensor/notification',
+                'Commento a una segnalazione'
+            ),
+            'description' => ezpI18n::tr(
+                'sensor/notification',
+                'Ricevi una notifica quando viene aggiunto un commento ad una tua segnalazione'
+            ),
+            'group' => 'standard'
+        );
 
         $postNotificationTypes[] = array(
             'identifier' => 'on_fix',

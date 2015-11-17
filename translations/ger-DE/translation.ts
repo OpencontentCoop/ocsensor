@@ -365,7 +365,7 @@
         <translation>Meldung als abgeschlossen betrachten, oder einem anderen Betreiber zuweisen</translation>
     </message>
     <message>
-        <source>Vai alla seganalazione</source>
+        <source>Vai alla segnalazione</source>
         <translation>Zurück zur Meldung</translation>
     </message>
     <message>

@@ -285,7 +285,9 @@ class SensorPostActionHandler
             }
             $this->post->setStatus( SensorPost::STATUS_ASSIGNED );
             $this->post->timelineHelper->add( SensorPost::STATUS_ASSIGNED, $makeOwnerIds )->store();
-            $this->post->eventHelper->createEvent( 'on_assign' );
+            $this->post->eventHelper->createEvent( 'on_assign', array( 'owners', $makeOwnerIds ) );
+            if ( !empty( $makeObserverIds ) )
+                $this->post->eventHelper->createEvent( 'on_add_observer', array( 'observers', $makeObserverIds ) );
         }
     }
 
@@ -380,7 +382,7 @@ class SensorPostActionHandler
         }
         if ( $isChanged )
         {
-            $this->post->eventHelper->createEvent( 'on_add_observer' );
+            $this->post->eventHelper->createEvent( 'on_add_observer', array( 'observers', $makeObserverIds ) );
             $this->post->touch();
         }
     }
@@ -398,7 +400,7 @@ class SensorPostActionHandler
             $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_categories',  $categoryIdList );
             $categoryString = implode( '-', $categoryIdList );
             $this->post->objectHelper->setContentObjectAttribute( 'category', $categoryString );
-            $this->post->eventHelper->createEvent( 'on_add_category' );
+            $this->post->eventHelper->createEvent( 'on_add_category', array( 'categories', $categoryIdList ) );
 
             if ( $this->post->configParameters['CategoryAutomaticAssign'] )
             {
@@ -420,10 +422,10 @@ class SensorPostActionHandler
     {
         if ( !empty( $areaIdList ) )
         {
-            $areaIdList = ezpEvent::getInstance()->filter( 'sensor/set_areas',  $areaIdList );
+            $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_areas',  $areaIdList );
             $areasString = implode( '-', $areaIdList );
             $this->post->objectHelper->setContentObjectAttribute( 'area', $areasString );
-            $this->post->eventHelper->createEvent( 'on_add_area' );
+            $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas', $categoryIdList ) );
             $this->post->touch();
         }
     }
@@ -434,7 +436,7 @@ class SensorPostActionHandler
         if ( $value > 0 )
         {
             $this->post->setExpiry( $value );
-            $this->post->eventHelper->createEvent( 'on_set_expiry' );
+            $this->post->eventHelper->createEvent( 'on_set_expiry', array( 'expiry' => $value ) );
             $this->post->touch();
         }
     }

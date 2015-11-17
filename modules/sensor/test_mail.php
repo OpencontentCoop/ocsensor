@@ -8,6 +8,7 @@ $templateResult = false;
 $test = $Params['Type'];
 $objectId = $Params['Id'];
 $participantRole = $Params['Param'];
+$eventIdentifier = $Params['Param2'];
 
 $siteUrl = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );
 $parts = explode( '/', $siteUrl );
@@ -16,7 +17,7 @@ if ( count( $parts ) >= 2 )
     $suffix = array_shift( $parts );
     $siteUrl = implode( '/', $parts );
 }
-echo rtrim( $siteUrl, '/' );
+echo '<pre>' . rtrim( $siteUrl, '/' ) . '</pre>';
 
 if ( $test == 'registration' )
 {
@@ -40,9 +41,20 @@ elseif ( $test == 'post' )
     }
     /** @var SensorCollaborationHandler $itemHandler */
     $itemHandler = $item->attribute( 'handler' );
+
+    $tpl->setVariable( 'event_identifier', $eventIdentifier );
+    $tpl->setVariable( 'event_details', array(
+        'observers' =>  array( 14 ),
+        'owners' =>  array( 14 ),
+        'categories'  =>  array( 57 ),
+        'areas'  =>  array( 57 ),
+        'expiry'  =>  15,
+    ));
+    $tpl->setVariable( 'event_creator', 14 );
+    $tpl->setVariable( 'event_timestamp', time() );
     
     $templateName = SensorNotificationHelper::notificationMailTemplate( $participantRole );
-    $templatePath = 'design:sensor/mail/' . $templateName;
+    $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
 
     $tpl->setVariable( 'collaboration_item', $item );
     $tpl->setVariable( 'collaboration_participant_role', $participantRole );
@@ -58,7 +70,9 @@ elseif ( $test == 'post' )
 
     $tpl->setVariable( 'title', $subject );
     $tpl->setVariable( 'content', $body );
-    $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
+
+    $templateResult = "<pre>{$subject}</pre>";
+    $templateResult .= $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
 
 }
 

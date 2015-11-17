@@ -89,7 +89,7 @@
                     </tr>
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
-                            <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla seganalazione"|i18n('sensor/mail/post')}</a></h3>
+                            <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla segnalazione"|i18n('sensor/mail/post')}</a></h3>
                         </td>
                     </tr>
                     <tr>
@@ -137,7 +137,7 @@
                 </tr>                
                 <tr>
                     <td align='center' bgcolor='#f90f00' valign='top'>
-                        <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla seganalazione"|i18n('sensor/mail/post')}</a></h3>
+                        <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla segnalazione"|i18n('sensor/mail/post')}</a></h3>
                     </td>
                 </tr>
                 <tr>

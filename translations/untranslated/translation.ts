@@ -654,7 +654,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Vai alla seganalazione</source>
+        <source>Vai alla segnalazione</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

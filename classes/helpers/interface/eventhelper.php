@@ -4,10 +4,11 @@ interface SensorPostEventHelperInterface
 {
     /**
      * @param string $eventName
+     * @param array $eventDetails
      *
      * @return void
      */
-    public function createEvent( $eventName );
+    public function createEvent( $eventName, $eventDetails = array() );
 
     /**
      * @param eZNotificationEvent $event
