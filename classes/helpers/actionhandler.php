@@ -285,9 +285,7 @@ class SensorPostActionHandler
             }
             $this->post->setStatus( SensorPost::STATUS_ASSIGNED );
             $this->post->timelineHelper->add( SensorPost::STATUS_ASSIGNED, $makeOwnerIds )->store();
-            $this->post->eventHelper->createEvent( 'on_assign', array( 'owners', $makeOwnerIds ) );
-            if ( !empty( $makeObserverIds ) )
-                $this->post->eventHelper->createEvent( 'on_add_observer', array( 'observers', $makeObserverIds ) );
+            $this->post->eventHelper->createEvent( 'on_assign', array( 'owners' => $makeOwnerIds ) );            
         }
     }
 
@@ -382,7 +380,7 @@ class SensorPostActionHandler
         }
         if ( $isChanged )
         {
-            $this->post->eventHelper->createEvent( 'on_add_observer', array( 'observers', $makeObserverIds ) );
+            $this->post->eventHelper->createEvent( 'on_add_observer', array( 'observers' => $makeObserverIds ) );
             $this->post->touch();
         }
     }
@@ -400,7 +398,7 @@ class SensorPostActionHandler
             $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_categories',  $categoryIdList );
             $categoryString = implode( '-', $categoryIdList );
             $this->post->objectHelper->setContentObjectAttribute( 'category', $categoryString );
-            $this->post->eventHelper->createEvent( 'on_add_category', array( 'categories', $categoryIdList ) );
+            $this->post->eventHelper->createEvent( 'on_add_category', array( 'categories' => $categoryIdList ) );
 
             if ( $this->post->configParameters['CategoryAutomaticAssign'] )
             {
@@ -425,7 +423,7 @@ class SensorPostActionHandler
             $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_areas',  $areaIdList );
             $areasString = implode( '-', $areaIdList );
             $this->post->objectHelper->setContentObjectAttribute( 'area', $areasString );
-            $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas', $categoryIdList ) );
+            $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas' => $categoryIdList ) );
             $this->post->touch();
         }
     }
@@ -444,7 +442,7 @@ class SensorPostActionHandler
     public function addComment( $text )
     {
         $this->post->commentHelper->add( $text )->store();
-        $this->post->eventHelper->createEvent( 'on_add_comment' );
+        $this->post->eventHelper->createEvent( 'on_add_comment', array( 'text' => $text ) );
         if ( $this->post->isClosed() && $this->userPostRoles->isAuthor() && $this->post->configParameters['AuthorCanReopen'] )
         {
             $this->post->setStatus( SensorPost::STATUS_REOPENED );

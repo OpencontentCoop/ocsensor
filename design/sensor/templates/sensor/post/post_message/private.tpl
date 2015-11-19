@@ -14,15 +14,19 @@
             {def $receiversIds = cond(  $message.data_text2|ne(''), $message.data_text2|explode(','), array() )}
             {if count($receiversIds)|gt(0)}
                 {def $index = 0}
-                {foreach $receiversIds as $receiversId}
-                    {if $item_link.participant_id|ne($receiversId)}
-                        {def $obj = fetch( content, object, hash( object_id, $receiversId, load_data_map, false() ))}
-                        {if $obj}
-                            <li><small>{if $index|eq(0)}{'a:'|i18n('sensor/messages')}{set $index = $index|inc()} {/if}{$obj.name|wash()}</small></li>
-                        {/if}
-                        {undef $obj}
-                    {/if}
-                {/foreach}
+                <li>
+                  <ul class="list-inline">
+                  {foreach $receiversIds as $receiversId}
+                      {if $item_link.participant_id|ne($receiversId)}
+                          {def $obj = fetch( content, object, hash( object_id, $receiversId, load_data_map, false() ))}
+                          {if $obj}
+                              <li><small>{if $index|eq(0)}{'a:'|i18n('sensor/messages')}{set $index = $index|inc()} {/if}{$obj.name|wash()}</small></li>
+                          {/if}
+                          {undef $obj}
+                      {/if}
+                  {/foreach}
+                  </ul>
+                </li>
             {/if}
             {undef $receiversIds}
         </ul>

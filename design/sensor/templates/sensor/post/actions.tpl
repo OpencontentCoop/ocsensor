@@ -12,7 +12,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona Quartiere/Zona'|i18n('sensor/post')}" name="Collaboration_SensorItemArea[]" class="chosen form-control">
+                        <select data-placeholder="{'Seleziona Quartiere/Zona'|i18n('sensor/post')}" name="Collaboration_SensorItemArea[]" class="select form-control">
                             <option></option>
                             {foreach $sensor_post.areas.tree as $area}
                                 {include name=area uri='design:tools/walk_item_option.tpl' item=$area recursion=0 attribute=$sensor_post.object.data_map.area}
@@ -31,7 +31,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona area tematica'|i18n('sensor/post')}" name="Collaboration_SensorItemCategory[]" class="chosen form-control">
+                        <select data-placeholder="{'Seleziona area tematica'|i18n('sensor/post')}" name="Collaboration_SensorItemCategory[]" class="select form-control">
                             <option></option>
                             {foreach $sensor_post.categories.tree as $category}
                                 {include name=cattree uri='design:tools/walk_item_option.tpl' item=$category recursion=0 attribute=$sensor_post.object.data_map.category}
@@ -121,7 +121,11 @@
 
         {if $sensor_post.can_close}
             <div class="form-group">
-                <input class="btn btn-success btn-lg btn-block" type="submit" name="CollaborationAction_Close" value="{'Chiudi'|i18n('sensor/post')}" />
+                <input class="btn btn-success btn-lg btn-block"
+                       type="submit"
+                       {if $sensor_post.response_count|eq(0)} data-confirmation="{'Non ci sono risposte ufficiali inserite: sei sicuro di voler chiudere la segnalazione?'|i18n( 'sensor/messages' )|wash(javascript)}"{/if}
+                       name="CollaborationAction_Close"
+                       value="{'Chiudi'|i18n('sensor/post')}" />
             </div>
         {/if}
 
@@ -160,6 +164,12 @@
     var RemoteSelectUrl = {'sensor/data?contentType=operators'|ezurl()};
     {literal}
     $(document).ready(function(){
+        $(".select").select2({
+          templateResult: function (item) {
+            var style = item.element ? $(item.element).attr('style') : '';
+            return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
+          }          
+        });
         $(".remote-select").each(function(){
             var that = $(this);
             that.select2({
