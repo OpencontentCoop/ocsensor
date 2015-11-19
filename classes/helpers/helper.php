@@ -673,24 +673,26 @@ class SensorHelper
 
     /**
      * @param SensorPost|null $post
+     * @param array $queryParams
      *
      * @return array
      * @throws Exception
      */
-    public static function operators( SensorPost $post = null )
+    public static function operators( SensorPost $post = null, $queryParams = null )
     {
-        return self::factory()->operators( $post );
+        return self::factory()->operators( $post, $queryParams );
     }
 
     /**
      * @param SensorPost|null $post
+     * @param array $queryParams
      *
      * @return array
      * @throws Exception
      */
-    public static function observers( SensorPost $post = null )
+    public static function observers( SensorPost $post = null, $queryParams = null )
     {
-        return self::factory()->observers( $post );
+        return self::factory()->observers( $post, $queryParams );
     }
 
     /**

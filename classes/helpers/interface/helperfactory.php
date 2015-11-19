@@ -72,17 +72,18 @@ interface SensorHelperFactoryInterface
 
     /**
      * @param SensorPost|null $post
+     * @param array $queryParams
      *
      * @return array
      */
-    public static function operators( SensorPost $post = null );
+    public static function operators( SensorPost $post = null, $queryParams = null );
 
     /**
      * @param SensorPost|null $post
      *
      * @return array
      */
-    public static function observers( SensorPost $post = null );
+    public static function observers( SensorPost $post = null, $query = null );
 
     /**
      * @return array

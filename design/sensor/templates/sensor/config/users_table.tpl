@@ -1,5 +1,10 @@
 {def $item_limit=30}
-{def $search = fetch( ezfind, search, hash( query, $view_parameters.query, subtree_array, array( $user_parent_node.node_id ), limit, $item_limit, offset, $view_parameters.offset, sort_by, hash( 'name', 'asc' ) ) )}
+{def $query = false()}
+{if $view_parameters.query}
+    {set $query = concat('(*',$view_parameters.query|downcase(),'*) OR ',$view_parameters.query|downcase())}
+{/if}
+
+{def $search = fetch( ezfind, search, hash( query, $query, subtree_array, array( $user_parent_node.node_id ), limit, $item_limit, offset, $view_parameters.offset, sort_by, hash( 'name', 'asc' ) ) )}
 
 {def $users_count = $search.SearchCount
      $users = $search.SearchResult}

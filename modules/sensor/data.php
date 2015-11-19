@@ -32,6 +32,50 @@ try
         }
         $data = array( 'content' => $Result );
     }
+    elseif ( $contentType == 'operators' )
+    {
+        $query = eZHTTPTool::instance()->getVariable( 'q', null );
+        $postId = eZHTTPTool::instance()->getVariable( 'post_id', 0 );
+        $value = eZHTTPTool::instance()->getVariable( 'value', null );
+        $offset = eZHTTPTool::instance()->getVariable( 'page', 0 ) * 30;
+
+        $params = array(
+            'raw_result' => true,
+            'limit' => 30,
+            'offset' => $offset
+        );
+        if ( $query )
+            $params['query'] = strtolower( $query ) . ' OR *' . strtolower( $query ) . '*';
+
+        $result = array(
+            'SearchCount' => 0,
+            'SearchResult' => array()
+        );
+        try
+        {
+            $post = SensorHelper::instanceFromContentObjectId( $postId );
+            if ( $value == 'operators' )
+                $result = $post->operators( $post->currentSensorPost, $params );
+            else
+                $result = $post->observers( $post->currentSensorPost, $params );
+        }
+        catch( Exception $e )
+        {
+            $data['error'] = $e->getMessage();
+        }
+
+        $data['total_count'] = $result['SearchCount'];
+        $data['items'] = array();
+
+        /** @var eZFindResultNode $operator */
+        foreach( $result['SearchResult'] as $operator )
+        {
+            $data['items'][] = array(
+                'id' => $operator->attribute( 'contentobject_id' ),
+                'text' => $operator->attribute( 'name' )
+            );
+        }
+    }
 
     header( 'HTTP/1.1 200 OK' );
     echo json_encode( $data );

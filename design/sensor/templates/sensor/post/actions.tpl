@@ -77,19 +77,12 @@
             <strong>{'Azioni'|i18n('sensor/post')}</strong>
         {/if}
 
-        {def $post_operators = $sensor_post.operators
-             $post_observers = $sensor_post.observers}
-
-
-        {if and( $sensor_post.can_assign, count( $post_operators )|gt(0) )}
+        {if $sensor_post.can_assign}
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="chosen form-control">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="operators">
                             <option></option>
-                            {foreach $post_operators as $user}
-                                <option value="{$user.contentobject_id}">{include uri='design:content/view/sensor_person.tpl' sensor_person=$user.object}</option>
-                            {/foreach}
                         </select>
                     </div>
                     <div class="col-xs-4">
@@ -99,15 +92,12 @@
             </div>
         {/if}
 
-        {if and( $sensor_post.can_add_observer, count( $post_observers )|gt(0) )}
+        {if $sensor_post.can_add_observer}
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="chosen form-control">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="observers">
                             <option></option>
-                            {foreach $post_observers as $user}
-                                <option value="{$user.contentobject_id}">{include uri='design:content/view/sensor_person.tpl' sensor_person=$user.object}</option>
-                            {/foreach}
                         </select>
                     </div>
                     <div class="col-xs-4">
@@ -162,4 +152,44 @@
         {include uri='design:sensor/post/private_conversation.tpl'}
 
     </aside>
+
+
+    {ezscript_require( array('ezjsc::jquery', 'select2.full.min.js') )}
+    {ezcss_require(array('select2.min.css'))}
+    <script type="application/javascript">
+    var RemoteSelectUrl = {'sensor/data?contentType=operators'|ezurl()};
+    {literal}
+    $(document).ready(function(){
+        $(".remote-select").each(function(){
+            var that = $(this);
+            that.select2({
+                ajax: {
+                    url: RemoteSelectUrl,
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page,
+                            post_id: that.data( 'post_id' ),
+                            value: that.data( 'value' )
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1
+            });
+        });
+    });
+    {/literal}</script>
+
 {/if}
