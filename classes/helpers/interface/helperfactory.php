@@ -55,6 +55,11 @@ interface SensorHelperFactoryInterface
     public static function postCategoriesNode();
 
     /**
+     * @return eZContentObjectTreeNode
+     */
+    public static function operatorsNode();
+
+    /**
      * @param $identifier
      * @return bool
      */

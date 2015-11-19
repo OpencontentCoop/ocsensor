@@ -1,12 +1,8 @@
-{def $filters = hash()}
-{if is_set( $view_parameters.query )}
-    {set $filters = hash( 'objectname_filter', $view_parameters.query )}
-{/if}
-
 {def $item_limit=30}
+{def $search = fetch( ezfind, search, hash( query, $view_parameters.query, subtree_array, array( $user_parent_node.node_id ), limit, $item_limit, offset, $view_parameters.offset, sort_by, hash( 'name', 'asc' ) ) )}
 
-{def $users_count = fetch( content, list_count, hash( parent_node_id, $user_parent_node.node_id )|merge($filters) )
-     $users = fetch( content, list, hash( parent_node_id, $user_parent_node.node_id, limit, $item_limit, offset, $view_parameters.offset, sort_by, array( 'name', 'asc' ) )|merge($filters) )}
+{def $users_count = $search.SearchCount
+     $users = $search.SearchResult}
 
 <table class="table table-hover">
     {foreach $users as $user}

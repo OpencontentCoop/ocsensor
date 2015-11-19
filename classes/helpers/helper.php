@@ -639,6 +639,14 @@ class SensorHelper
     }
 
     /**
+     * @return eZContentObjectTreeNode
+     */
+    public static function operatorsNode()
+    {
+        return self::factory()->operatorsNode();
+    }
+
+    /**
      * @param $identifier
      * @return bool
      */

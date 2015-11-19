@@ -71,54 +71,15 @@ $(document).ready(function(){
       
       {if $current_part|eq('operators')}
       <div class="tab-pane active" id="operators">
-        <form action="#">
-          <fieldset>
-            <input type="text" name="search" value="" class="quick_search form-control" placeholder="{'Cerca'|i18n('sensor/config')}" autofocus />
-          </fieldset>
+        <form class="form-inline" action="{'sensor/config/operators'|ezurl(no)}">
+          <div class="form-group">
+            <input type="text" class="form-control" name="s" placeholder="{'Cerca'|i18n('sensor/config')}" value="{$view_parameters.query|wash()}" autofocus>
+          </div>
+          <button type="submit" class="btn btn-success"><i class="fa fa-search"></i></button>
         </form>
-        <table class="table table-hover">
-          {foreach $operators as $operator}
-            {def $userSetting = $operator|user_settings()}
-            <tr>
-              <td>
-                {if $userSetting.is_enabled|not()}<span style="text-decoration: line-through">{/if}
-                  {*<a href="{$operator.url_alias|ezurl(no)}">{$operator.name|wash()}</a>*}{$operator.name|wash()}
-                  {if $userSetting.is_enabled|not()}</span>{/if}
-              </td>
-              <td width="1">
-                {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf', 'user_id', $operator.contentobject_id ) )}
-                  <span title="{"L'utente può inserire segnalazioni per conto di altri"|i18n('sensor/config')}"><i class="fa fa-life-ring"></i></span>
-                {/if}
-              </td>
-              <td>
-                {foreach $operator.object.available_languages as $language}
-                  {foreach $locales as $locale}
-                    {if $locale.locale_code|eq($language)}
-                      <img src="{$locale.locale_code|flag_icon()}" />
-                    {/if}
-                  {/foreach}
-                {/foreach}
-              </td>
-              <td width="1">
-                <a href="{concat('social_user/setting/',$operator.contentobject_id)|ezurl(no)}"><i class="fa fa-user"></i></a>
-              </td>
-              <td width="1">{include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$operator redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators'}</td>
-              <td width="1">{include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$operator redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}</td>
-              {*<td width="1">
-                {if fetch( 'user', 'has_access_to', hash( 'module', 'user', 'function', 'setting' ))}
-                  <form name="Setting" method="post" action={concat( 'user/setting/', $operator.contentobject_id )|ezurl}>
-                    <input type="hidden" name="is_enabled" value={if $userSetting.is_enabled|not()}"1"{else}""{/if} />
-                    <button class="btn-link btn-xs" type="submit" name="UpdateSettingButton" title="{if $userSetting.is_enabled}{'Blocca'|i18n('sensor/config')}{else}{'Sblocca'|i18n('sensor/config')}{/if}">{if $userSetting.is_enabled}<i class="fa fa-ban"></i>{else}<i class="fa fa-check-circle"></i>{/if}</button>
-
-                  </form>
-                {/if}
-              </td>*}
-            </tr>
-            {undef $userSetting}
-          {/foreach}
-        </table>
-		<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operators[0].parent_node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-        <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operators[0].parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operators[0].class_name}</a></div>
+        {include name=users_table uri='design:sensor/config/operators_table.tpl' view_parameters=$view_parameters operator_parent_node=$operator_parent_node operators_class_names=$operators_class_names}
+		<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operators_parent_node.node__id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+        <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a></div>
       </div>
       {/if}
       

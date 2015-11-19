@@ -5,7 +5,7 @@ $Http = eZHTTPTool::instance();
 $Offset = $Params['Offset'] ? $Params['Offset'] : 0;
 $Part = $Params['Part'] ? $Params['Part'] : 'users';
 $tpl = eZTemplate::factory();
-$viewParameters = array( 'offset' => $Offset );
+$viewParameters = array( 'offset' => $Offset, 'query' => null );
 $currentUser = eZUser::currentUser();
 
 if ( $Http->hasVariable( 's' ) )
@@ -33,8 +33,8 @@ elseif ( $Part == 'categories' )
 
 elseif ( $Part == 'operators' )
 {
-    $operators = SensorHelper::operators();
-    $tpl->setVariable( 'operators', $operators );
+    $tpl->setVariable( 'operator_parent_node', SensorHelper::operatorsNode() );
+    $tpl->setVariable( 'operator_class', eZContentClass::fetchByIdentifier( 'sensor_operator' ) );
 }
 
 $data = array();
