@@ -98,7 +98,6 @@ interface SensorPostObjectHelperInterface
 
     /**
      * Ritorna array( 'latitude, longitude, street )
-     * es: "[45.123,25.674]"
      * @return bool|string
      */
     public function getPostGeoArray();

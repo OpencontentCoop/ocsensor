@@ -336,21 +336,21 @@ class SensorPostActionHandler
 
     public function makePrivate()
     {
-        $this->post->objectHelper->makePrivate();
+        $this->post->makePrivate();
         $this->post->eventHelper->createEvent( 'on_make_private' );
         $this->post->touch();
     }
 
     public function makePublic()
     {
-        $this->post->objectHelper->makePublic();
+        $this->post->makePublic();
         $this->post->eventHelper->createEvent( 'on_make_public' );
         $this->post->touch();
     }
 
     public function moderate( $status )
     {
-        $this->post->objectHelper->moderate( $status );
+        $this->post->moderate( $status );
         $this->post->eventHelper->createEvent( 'on_moderate' );
         $this->post->touch();
     }
@@ -397,12 +397,12 @@ class SensorPostActionHandler
 
             $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_categories',  $categoryIdList );
             $categoryString = implode( '-', $categoryIdList );
-            $this->post->objectHelper->setContentObjectAttribute( 'category', $categoryString );
+            $this->post->setContentObjectAttribute( 'category', $categoryString );
             $this->post->eventHelper->createEvent( 'on_add_category', array( 'categories' => $categoryIdList ) );
 
             if ( $this->post->configParameters['CategoryAutomaticAssign'] )
             {
-                $userIds = $this->post->objectHelper->getApproverIdsByCategory();
+                $userIds = $this->post->getApproverIdsByCategory();
                 $userIds = ezpEvent::getInstance()->filter(
                     'sensor/user_by_categories',
                     $userIds
@@ -422,7 +422,7 @@ class SensorPostActionHandler
         {
             $categoryIdList = ezpEvent::getInstance()->filter( 'sensor/set_areas',  $areaIdList );
             $areasString = implode( '-', $areaIdList );
-            $this->post->objectHelper->setContentObjectAttribute( 'area', $areasString );
+            $this->post->setContentObjectAttribute( 'area', $areasString );
             $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas' => $categoryIdList ) );
             $this->post->touch();
         }

@@ -197,8 +197,8 @@ class SensorNotificationHelper
             $tpl->setVariable( 'collaboration_participant_role', $participantRole );
             $tpl->setVariable( 'collaboration_item_status', $this->post->getCollaborationItem()->attribute( SensorPost::COLLABORATION_FIELD_STATUS ) );
             $tpl->setVariable( 'sensor_post', $this->post );
-            $tpl->setVariable( 'object', $this->post->objectHelper->getContentObject() );
-            $tpl->setVariable( 'node', $this->post->objectHelper->getContentObject()->attribute( 'main_node' ) );
+            $tpl->setVariable( 'object', $this->post->getContentObject() );
+            $tpl->setVariable( 'node', $this->post->getContentObject()->attribute( 'main_node' ) );
 
             $tpl->fetch( $templatePath );
 
@@ -279,11 +279,11 @@ class SensorNotificationHelper
                         SensorPost::COLLABORATION_FIELD_STATUS
                     )
                 );
-                $tpl->setVariable( 'post_url', $this->post->objectHelper->getPostUrl() );
-                $tpl->setVariable( 'object', $this->post->objectHelper->getContentObject() );
+                $tpl->setVariable( 'post_url', $this->post->getPostUrl() );
+                $tpl->setVariable( 'object', $this->post->getContentObject() );
                 $tpl->setVariable(
                     'node',
-                    $this->post->objectHelper->getContentObject()->attribute( 'main_node' )
+                    $this->post->getContentObject()->attribute( 'main_node' )
                 );
 
                 $message = trim( $tpl->fetch( $templatePath ) );

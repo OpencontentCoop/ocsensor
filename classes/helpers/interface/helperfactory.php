@@ -12,6 +12,7 @@ interface SensorHelperFactoryInterface
     /**
      * @param SensorUserInfo $user
      * @param $data
+     * @param eZContentObject|null $update
      *
      * @return eZContentObject
      */

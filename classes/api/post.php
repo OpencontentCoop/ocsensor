@@ -81,26 +81,26 @@ class SensorApiPost
                 );
     
             if ( $identifier == 'created' )
-                $this->data['created'] = (int)$this->post->currentSensorPost->objectHelper->getContentObject()->attribute( 'published' );
+                $this->data['created'] = (int)$this->post->currentSensorPost->getContentObject()->attribute( 'published' );
             
             if ( $identifier == 'modified' )
-                $this->data['modified'] = (int)$this->post->currentSensorPost->objectHelper->getContentObject()->attribute( 'modified' );
+                $this->data['modified'] = (int)$this->post->currentSensorPost->getContentObject()->attribute( 'modified' );
     
             if ( $identifier == 'subject' )
-                $this->data['subject'] = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'subject' )->toString();
+                $this->data['subject'] = $this->post->currentSensorPost->getContentObjectAttribute( 'subject' )->toString();
             
             if ( $identifier == 'description' )
-                $this->data['description'] = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'description' )->toString();
+                $this->data['description'] = $this->post->currentSensorPost->getContentObjectAttribute( 'description' )->toString();
             
             if ( $identifier == 'geo' )
-                $this->data['geo'] = $this->post->currentSensorPost->objectHelper->getPostGeoArray();
+                $this->data['geo'] = $this->post->currentSensorPost->getPostGeoArray();
             
             if ( $identifier == 'internal_status' )
                 $this->data['internal_status'] = (int)$this->post->attribute( 'current_status' );
     
             if ( $identifier == 'image' )
             {
-                $imageAttribute = $this->post->currentSensorPost->objectHelper->getContentObjectAttribute( 'image' );
+                $imageAttribute = $this->post->currentSensorPost->getContentObjectAttribute( 'image' );
                 $this->data['image'] = $imageAttribute->hasContent() ? $imageAttribute->content()->attribute( 'original' ) : '';    
             }
             

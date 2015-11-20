@@ -418,7 +418,7 @@ class SensorHelper
         switch( $key )
         {
             case 'id':
-                return $this->currentSensorPost->objectHelper->getContentObject()->attribute( 'id' );
+                return $this->currentSensorPost->id();
                 break;
 
             case 'collaboration_item':
@@ -426,7 +426,7 @@ class SensorHelper
                 break;
 
             case 'object':
-                return $this->currentSensorPost->objectHelper->getContentObject();
+                return $this->currentSensorPost->getContentObject();
                 break;
 
             case 'current_status':
@@ -544,31 +544,31 @@ class SensorHelper
 
 
             case 'type':
-                return $this->currentSensorPost->objectHelper->getType();
+                return $this->currentSensorPost->getType();
                 break;
 
             case 'current_object_state':
-                return $this->currentSensorPost->objectHelper->getCurrentState();
+                return $this->currentSensorPost->getCurrentState();
                 break;
 
             case 'current_privacy_state':
-                return $this->currentSensorPost->objectHelper->getCurrentPrivacyState();
+                return $this->currentSensorPost->getCurrentPrivacyState();
                 break;
 
             case 'current_moderation_state':
-                return $this->currentSensorPost->objectHelper->getCurrentModerationState();
+                return $this->currentSensorPost->getCurrentModerationState();
                 break;
 
             case 'author_id':
-                return $this->currentSensorPost->objectHelper->getPostAuthorId();
+                return $this->currentSensorPost->getPostAuthorId();
                 break;
 
             case 'author_name':
-                return $this->currentSensorPost->objectHelper->getPostAuthorName();
+                return $this->currentSensorPost->getPostAuthorName();
                 break;
 
             case 'post_categories':
-                return $this->currentSensorPost->objectHelper->getPostCategories();
+                return $this->currentSensorPost->getPostCategories();
                 break;
 
             case 'areas':
@@ -588,11 +588,11 @@ class SensorHelper
                 break;
 
             case 'post_geo_array_js':
-                return $this->currentSensorPost->objectHelper->getPostGeoJsArray();
+                return $this->currentSensorPost->getPostGeoJsArray();
                 break;
 
             case 'post_url':
-                return $this->currentSensorPost->objectHelper->getPostUrl();
+                return $this->currentSensorPost->getPostUrl();
                 break;
 
         }

@@ -37,6 +37,11 @@ class SensorPost
     protected $participantList;
 
     /**
+     * @var SensorPostObjectHelperInterface
+     */
+    protected $objectHelper;
+
+    /**
      * @var array
      */
     public $configParameters;
@@ -65,11 +70,6 @@ class SensorPost
      * @var SensorPostResponseHelper
      */
     public $responseHelper;
-
-    /**
-     * @var SensorPostObjectHelperInterface
-     */
-    public $objectHelper;
 
     protected function __construct( eZCollaborationItem $collaborationItem, SensorPostObjectHelperInterface $objectHelper, array $configParameters )
     {
@@ -104,6 +104,66 @@ class SensorPost
         {
             $this->trashParticipant( $participantID );
         }
+    }
+
+    public function id()
+    {
+        return $this->objectHelper->getContentObject()->attribute( 'id' );
+    }
+
+    public function getContentObject()
+    {
+        return $this->objectHelper->getContentObject();
+    }
+
+    public function getType()
+    {
+        return $this->objectHelper->getType();
+    }
+
+    public function getCurrentState()
+    {
+        return $this->objectHelper->getCurrentState();
+    }
+
+    public function getCurrentPrivacyState()
+    {
+        return $this->objectHelper->getCurrentPrivacyState();
+    }
+
+    public function getCurrentModerationState()
+    {
+        return $this->objectHelper->getCurrentModerationState();
+    }
+
+    public function getPostAuthorId()
+    {
+        return $this->objectHelper->getPostAuthorId();
+    }
+
+    public function getPostAuthorName()
+    {
+        return $this->objectHelper->getPostAuthorName();
+    }
+
+    public function getPostGeoJsArray()
+    {
+        return $this->objectHelper->getPostGeoJsArray();
+    }
+
+    public function getPostGeoArray()
+    {
+        return $this->objectHelper->getPostGeoArray();
+    }
+
+    public function getPostUrl()
+    {
+        return $this->objectHelper->getPostUrl();
+    }
+
+    public function getPostCategories()
+    {
+        return $this->objectHelper->getPostCategories();
     }
 
     public function getCollaborationItem()
@@ -795,6 +855,36 @@ class SensorPost
             eZCollaborationItemParticipantLink::ROLE_AUTHOR => 1
         );
         return isset( $sorter[$roleID] ) ? $sorter[$roleID] : 1000;
+    }
+
+    public function makePrivate()
+    {
+        $this->objectHelper->makePrivate();
+    }
+
+    public function makePublic()
+    {
+        $this->objectHelper->makePublic();
+    }
+
+    public function moderate( $status )
+    {
+        $this->objectHelper->moderate( $status );
+    }
+
+    public function getContentObjectAttribute( $identifier )
+    {
+        return $this->objectHelper->getContentObjectAttribute( $identifier );
+    }
+
+    public function setContentObjectAttribute( $identifier, $stringValue )
+    {
+        $this->objectHelper->setContentObjectAttribute( $identifier, $stringValue );
+    }
+
+    public function getApproverIdsByCategory()
+    {
+        return $this->objectHelper->getApproverIdsByCategory();
     }
 
 }
