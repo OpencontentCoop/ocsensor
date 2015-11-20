@@ -82,13 +82,16 @@ try
         /** @var eZFindResultNode $operator */
         foreach( $result['SearchResult'] as $operator )
         {
-            $tpl = eZTemplate::factory();
-            $tpl->resetVariables();
-            $tpl->setVariable( 'sensor_person', $operator->attribute( 'object') );
-            $data['items'][] = array(
-                'id' => $operator->attribute( 'contentobject_id' ),
-                'text' => $tpl->fetch( 'design:content/view/sensor_person.tpl' )
-            );
+            if ( intval( $operator->attribute( 'contentobject_id' ) ) > 0 )
+            {
+                $tpl = eZTemplate::factory();
+                $tpl->resetVariables();
+                $tpl->setVariable( 'sensor_person', $operator->attribute( 'object' ) );
+                $data['items'][] = array(
+                    'id' => $operator->attribute( 'contentobject_id' ),
+                    'text' => $tpl->fetch( 'design:content/view/sensor_person.tpl' )
+                );
+            }
         }
     }
 
