@@ -157,15 +157,17 @@
 
     </aside>
 
-
-    {ezscript_require( array('ezjsc::jquery', 'select2.full.min.js') )}
+    {def $locale = fetch( 'content', 'locale' ).country_code|downcase}
+    {ezscript_require( array('ezjsc::jquery', 'select2.full.min.js', concat('select2-i18n/', $locale, '.js') ))}
     {ezcss_require(array('select2.min.css'))}
     <script type="application/javascript">
     var RemoteSelectUrl = {'sensor/data?contentType=operators'|ezurl()};
+    var Locale = '{$locale}';
     {literal}
     $(document).ready(function(){
         $(".select").select2({
-          templateResult: function (item) {
+        language: Locale,
+        templateResult: function (item) {
             var style = item.element ? $(item.element).attr('style') : '';
             return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
           }          
@@ -173,6 +175,7 @@
         $(".remote-select").each(function(){
             var that = $(this);
             that.select2({
+                language: Locale,
                 ajax: {
                     url: RemoteSelectUrl,
                     dataType: 'json',
