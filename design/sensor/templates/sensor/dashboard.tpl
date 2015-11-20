@@ -141,8 +141,8 @@
           <ul class="media-list">
           {foreach $expiring_items as $item}              
             <li class="media">
-              <a class="media-date" href={concat('sensor/posts/',$item.id)|ezurl()} style="opacity: 1">
-                {$item.expiring_date.timestamp|datetime('custom', '%j')}<span>{$item.expiring_date.timestamp|datetime('custom', '%M')}
+              <a class="media-date" href="{concat('sensor/posts/',$item.id)|ezurl(no)}" style="opacity: 1">
+                {$item.expiring_date.timestamp|datetime('custom', '%j')}<span>{$item.expiring_date.timestamp|datetime('custom', '%M')}</span>
               </a>
               <h5>
                 <a href={concat('sensor/posts/',$item.id)|ezurl()}>
