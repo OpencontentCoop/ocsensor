@@ -89,7 +89,7 @@ try
                 $tpl->setVariable( 'sensor_person', $operator->attribute( 'object' ) );
                 $data['items'][] = array(
                     'id' => $operator->attribute( 'contentobject_id' ),
-                    'text' => $tpl->fetch( 'design:content/view/sensor_person.tpl' )
+                    'text' => strip_tags( $tpl->fetch( 'design:content/view/sensor_person.tpl' ) )
                 );
             }
         }
