@@ -129,6 +129,15 @@
             </div>
         {/if}
 
+        {if $sensor_post.can_reopen}
+            <div class="form-group">
+                <input class="btn btn-success btn-lg btn-block"
+                       type="submit"
+                       name="CollaborationAction_Reopen"
+                       value="{'Riapri'|i18n('sensor/post')}" />
+            </div>
+        {/if}
+
         {if $sensor_post.can_change_privacy}
             {if $sensor_post.current_privacy_state.identifier|eq('public')}
                 <div class="form-group">

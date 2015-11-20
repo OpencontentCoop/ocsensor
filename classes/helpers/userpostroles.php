@@ -55,7 +55,8 @@ class SensorUserPostRoles
             'can_force_fix',
             'can_send_private_message',
             'can_add_observer',
-            'can_set_expiry'
+            'can_set_expiry',
+            'can_reopen'
         );
     }
 
@@ -122,6 +123,10 @@ class SensorUserPostRoles
 
             case 'can_set_expiry':
                 return $this->canSetExpiry();
+                break;
+
+            case 'can_reopen':
+                return $this->canReopen();
                 break;
 
         }
@@ -260,6 +265,11 @@ class SensorUserPostRoles
     public function canAddObserver()
     {
         return !$this->post->isClosed() && ( $this->isApprover() || $this->isOwner() );
+    }
+
+    public function canReopen()
+    {
+        return $this->post->isClosed() && $this->isApprover();
     }
 
 }

@@ -54,6 +54,11 @@ class SensorPostActionHandler
                 'check_role' => array( 'can_close' ),
                 'parameters' => array()
             ),
+            'reopen' => array(
+                'call_function' => 'reopen',
+                'check_role' => array( 'can_reopen' ),
+                'parameters' => array()
+            ),
             'make_private' => array(
                 'call_function' => 'makePrivate',
                 'check_role' => array( 'can_change_privacy' ),
@@ -332,6 +337,13 @@ class SensorPostActionHandler
         $this->post->setStatus( SensorPost::STATUS_CLOSED );
         $this->post->timelineHelper->add( SensorPost::STATUS_CLOSED, eZUser::currentUserID() )->store();
         $this->post->eventHelper->createEvent( 'on_close' );
+    }
+
+    public function reopen()
+    {
+        $this->post->setStatus( SensorPost::STATUS_REOPENED );
+        $this->post->timelineHelper->add( SensorPost::STATUS_REOPENED, eZUser::currentUserID() )->store();
+        $this->post->eventHelper->createEvent( 'on_reopen' );
     }
 
     public function makePrivate()

@@ -31,6 +31,9 @@ class SensorHttpActionHelper
             'Close' => array(
                 'action_name' => 'close'
             ),
+            'Reopen' => array(
+                'action_name' => 'reopen'
+            ),
             'MakePrivate' => array(
                 'action_name' => 'make_private'
             ),
