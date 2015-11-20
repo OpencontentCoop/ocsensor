@@ -186,6 +186,7 @@ class SensorUserPostRoles
             || $this->canModerate()
             || $this->canSetExpiry()
             || $this->canForceFix()
+            || $this->canReopen()
         );
     }
 
