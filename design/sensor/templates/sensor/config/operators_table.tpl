@@ -1,4 +1,4 @@
-{def $item_limit=30}
+{def $item_limit=20}
 {def $query = false()}
 {if $view_parameters.query}
     {set $query = concat('(*',$view_parameters.query|downcase(),'*) OR ',$view_parameters.query|downcase())}
@@ -14,7 +14,7 @@
         <tr>
             <td>
                 {if $userSetting.is_enabled|not()}<span style="text-decoration: line-through">{/if}
-                    {*<a href="{$operator.url_alias|ezurl(no)}">{$operator.name|wash()}</a>*}{$operator.name|wash()}
+                    {*<a href="{$operator.url_alias|ezurl(no)}">{$operator.name|wash()}</a>*}{include uri='design:content/view/sensor_person.tpl' sensor_person=$operator.object}
                     {if $userSetting.is_enabled|not()}</span>{/if}
             </td>
             <td width="1">
