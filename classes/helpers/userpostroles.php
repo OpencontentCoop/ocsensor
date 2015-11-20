@@ -269,7 +269,7 @@ class SensorUserPostRoles
 
     public function canReopen()
     {
-        return $this->post->isClosed() && $this->isApprover();
+        return $this->post->configParameters['ApproverCanReopen'] && $this->post->isClosed() && $this->isApprover();
     }
 
 }
