@@ -82,9 +82,12 @@ try
         /** @var eZFindResultNode $operator */
         foreach( $result['SearchResult'] as $operator )
         {
+            $tpl = eZTemplate::factory();
+            $tpl->resetVariables();
+            $tpl->setVariable( 'sensor_person', $operator->attribute( 'object') );
             $data['items'][] = array(
                 'id' => $operator->attribute( 'contentobject_id' ),
-                'text' => $operator->attribute( 'name' )
+                'text' => $tpl->fetch( 'design:content/view/sensor_person.tpl' )
             );
         }
     }
