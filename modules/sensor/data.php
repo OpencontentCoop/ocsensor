@@ -51,17 +51,29 @@ try
             'SearchCount' => 0,
             'SearchResult' => array()
         );
-        try
+
+        if ( $postId > 0 )
         {
-            $post = SensorHelper::instanceFromContentObjectId( $postId );
-            if ( $value == 'operators' )
-                $result = $post->operators( $post->currentSensorPost, $params );
-            else
-                $result = $post->observers( $post->currentSensorPost, $params );
+            try
+            {
+                $post = SensorHelper::instanceFromContentObjectId( $postId );
+                if ( $value == 'operators' )
+                {
+                    $result = $post->operators( $post->currentSensorPost, $params );
+                }
+                else
+                {
+                    $result = $post->observers( $post->currentSensorPost, $params );
+                }
+            }
+            catch ( Exception $e )
+            {
+                $data['error'] = $e->getMessage();
+            }
         }
-        catch( Exception $e )
+        else
         {
-            $data['error'] = $e->getMessage();
+            $result = SensorHelper::operators( null, $params );
         }
 
         $data['total_count'] = $result['SearchCount'];

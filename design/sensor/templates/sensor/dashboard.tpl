@@ -106,7 +106,7 @@
           {def $fake_attribute = hash( 'content', hash( 'relation_list', $fake_relation_list ) )}      
           <div class="form-group">
             <label class="" for="searchCategory">Cerca per area tematica</label>
-            <select data-placeholder="{'Cerca per area tematica'|i18n('sensor/post')}" name="filters[category][]" class="chosen form-control" id='searchCategory'>
+            <select data-placeholder="{'Cerca per area tematica'|i18n('sensor/post')}" name="filters[category][]" class="select form-control" id='searchCategory'>
               <option value="">{'Cerca per area tematica'|i18n('sensor/post')}</option>
               {foreach sensor_root_handler().categories.tree as $category}
                 {include name=cattree uri='design:tools/walk_item_option.tpl' item=$category recursion=0 attribute=$fake_attribute}
@@ -115,11 +115,12 @@
           </div>          
           <div class="form-group">
             <label class="" for="searchowner">Cerca per assegnatario</label>
-            <select data-placeholder="{'Cerca per assegnatario'|i18n('sensor/post')}" name="filters[owner]" class="chosen form-control" id='searchowner'>
-              <option value="">{'Cerca per assegnatario'|i18n('sensor/post')}</option>
-              {foreach sensor_root_handler().operators as $user}                
-                <option value="{$user.contentobject_id}" {if and( is_set( $filters.owner ), $user.contentobject_id|eq( $filters.owner ) )} selected="selected"{/if}>{include uri='design:content/view/sensor_person.tpl' sensor_person=$user.object}</option>                
-              {/foreach}              
+            <select data-placeholder="{'Cerca per assegnatario'|i18n('sensor/post')}" name="filters[owner]" class="remote-select form-control" id='searchowner' data-value="operators">
+              {if is_set( $filters.owner )}
+               <option value="{$filters.owner}" selected="selected">{include uri='design:content/view/sensor_person.tpl' sensor_person=fetch( content, object, hash(object_id, $filters.owner) )}</option>
+              {else}
+                <option value="">{'Cerca per assegnatario'|i18n('sensor/post')}</option>
+              {/if}
             </select>
           </div>
           <div class="form-group">
@@ -158,4 +159,48 @@
       
     </div>    
   </div>
+
+  {ezscript_require( array('ezjsc::jquery', 'select2.full.min.js') )}
+  {ezcss_require(array('select2.min.css'))}
+  <script type="application/javascript">
+    var RemoteSelectUrl = {'sensor/data?contentType=operators'|ezurl()};
+    {literal}
+    $(document).ready(function(){
+      $(".select").select2({
+        templateResult: function (item) {
+          var style = item.element ? $(item.element).attr('style') : '';
+          return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
+        }
+      });
+      $(".remote-select").each(function(){
+        var that = $(this);
+        that.select2({
+          ajax: {
+            url: RemoteSelectUrl,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                q: params.term, // search term
+                page: params.page,
+                value: that.data( 'value' )
+              };
+            },
+            processResults: function (data, params) {
+              params.page = params.page || 1;
+              return {
+                results: data.items,
+                pagination: {
+                  more: (params.page * 30) < data.total_count
+                }
+              };
+            },
+            cache: true
+          },
+          minimumInputLength: 1
+        });
+      });
+    });
+    {/literal}</script>
+
 {/if}
