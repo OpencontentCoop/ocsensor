@@ -12,5 +12,5 @@ use OpenContent\Sensor\Api\Values\Message;
 
 class PrivateMessage extends Message
 {
-
+    public $receivers;
 }

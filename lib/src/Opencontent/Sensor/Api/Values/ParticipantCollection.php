@@ -10,7 +10,7 @@ class ParticipantCollection implements \IteratorAggregate
     /**
      * @var Participant
      */
-    protected $participants;
+    public $participants;
 
     public function getParticipantById( $id )
     {

@@ -5,14 +5,9 @@ namespace OpenContent\Sensor\Core;
 use OpenContent\Sensor\Api\Repository as RepositoryInterface;
 use OpenContent\Sensor\Api\Action\ActionDefinition;
 use OpenContent\Sensor\Api\Permission\PermissionDefinition;
+use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
-use OpenContent\Sensor\Core\ActionService;
-use OpenContent\Sensor\Core\MessageService;
-use OpenContent\Sensor\Core\ParticipantService;
-use OpenContent\Sensor\Core\PermissionService;
-use OpenContent\Sensor\Core\PostService;
-use OpenContent\Sensor\Core\SearchService;
 
 abstract class Repository implements RepositoryInterface
 {
@@ -76,6 +71,26 @@ abstract class Repository implements RepositoryInterface
      */
     abstract public function setPermissionDefinitions( $permissionDefinitions );
 
+    /**
+     * @return PostService
+     */
+    abstract public function getPostService();
+
+    /**
+     * @return MessageService
+     */
+    abstract public function getMessageService();
+
+    /**
+     * @return SearchService
+     */
+    abstract public function getSearchService();
+
+    /**
+     * @return ParticipantService
+     */
+    abstract public function getParticipantService();
+
     public function getCurrentUser()
     {
         return $this->user;
@@ -89,42 +104,6 @@ abstract class Repository implements RepositoryInterface
     public function isUserParticipant( Post $post )
     {
         return $post->participants->getParticipantById( $this->user->id );
-    }
-
-    public function getPostService()
-    {
-        if ( $this->postService === null )
-        {
-            //@todo
-        }
-        return $this->postService;
-    }
-
-    public function getMessageService()
-    {
-        if ( $this->messageService === null )
-        {
-            //@todo
-        }
-        return $this->messageService;
-    }
-
-    public function getSearchService()
-    {
-        if ( $this->searchService === null )
-        {
-            //@todo
-        }
-        return $this->searchService;
-    }
-
-    public function getParticipantService()
-    {
-        if ( $this->participantService === null )
-        {
-            //@todo
-        }
-        return $this->participantService;
     }
 
     public function getPermissionService()

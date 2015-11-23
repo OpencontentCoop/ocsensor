@@ -1,4 +1,15 @@
 <?php
+
+$repository = new OpenPaSensorRepository();
+$post = $repository->getPostService()->loadPost( 2162 );
+
+
+echo '<pre>';
+print_r( $post );
+
+eZDisplayDebug();
+eZExecution::cleanExit();
+
 $module = $Params['Module'];
 $tpl = eZTemplate::factory();
 $ini = eZINI::instance();

@@ -11,5 +11,9 @@ namespace OpenContent\Sensor\Api\Values\Post;
 
 class Status
 {
+    public $identifier;
 
+    public $name;
+
+    public $label;
 }

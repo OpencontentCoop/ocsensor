@@ -9,6 +9,7 @@
 namespace OpenContent\Sensor\Api\Values;
 
 use OpenContent\Sensor\Api\Values\Message;
+use DateTime;
 
 class MessageCollection
 {
@@ -18,11 +19,6 @@ class MessageCollection
     public $count;
 
     /**
-     * @var int
-     */
-    public $unreadCount;
-
-    /**
      * @var Message
      */
     public $lastMessage;
@@ -30,5 +26,18 @@ class MessageCollection
     /**
      * @var Message[]
      */
-    public $message;
+    public $messages;
+
+    public function unreadMessages( DateTime $lastAccessDateTime )
+    {
+        $unreadMessages = array();
+        foreach ( $this->messages as $message )
+        {
+            if ( $message->modified > $lastAccessDateTime )
+            {
+                $unreadMessages[] = $message;
+            }
+        }
+        return $unreadMessages;
+    }
 }

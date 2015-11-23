@@ -11,5 +11,9 @@ namespace OpenContent\Sensor\Api\Values\Post;
 
 class Type
 {
+    public $identifier;
 
+    public $label;
+
+    public $name;
 }

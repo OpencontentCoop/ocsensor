@@ -8,8 +8,32 @@
 
 namespace OpenContent\Sensor\Api\Values\Post;
 
+use \DateTime;
 
 class ResolutionInfo
 {
+    /**
+     * @var DateTime
+     */
+    public $resolutionDateTime;
 
+    /**
+     * @var DateTime
+     */
+    public $creationDateTime;
+
+    /**
+     * @var string
+     */
+    public $label;
+
+    /**
+     * @var string
+     */
+    public $text;
+
+    /**
+     * @var int
+     */
+    public $days;
 }

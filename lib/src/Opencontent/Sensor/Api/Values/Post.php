@@ -28,12 +28,12 @@ class Post
     /**
      * @var Post\ExpirationInfo
      */
-    public $expiringDate;
+    public $expiringInfo;
 
     /**
      * @var Post\ResolutionInfo
      */
-    public $resolution;
+    public $resolutionInfo;
 
     /**
      * @var string
@@ -116,7 +116,7 @@ class Post
     public $comments;
 
     /**
-     * @var Post\Field\Image
+     * @var Post\Field\Image[]
      */
     public $images;
 

@@ -8,9 +8,30 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
+use DateTime;
 
 abstract class Message
 {
     public $id;
+
+    /**
+     * @var DateTime
+     */
+    public $published;
+
+    /**
+     * @var DateTime
+     */
+    public $modified;
+
+    /**
+     * @var User
+     */
+    public $creator;
+
+    /**
+     * @var string
+     */
+    public $text;
 
 }

@@ -6,5 +6,9 @@ use OpenContent\Sensor\Api\Values\Post\Field;
 
 class Image extends Field
 {
+    public $fileName;
 
+    public $original;
+
+    public $thumbnail;
 }
