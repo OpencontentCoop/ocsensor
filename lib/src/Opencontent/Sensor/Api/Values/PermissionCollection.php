@@ -3,8 +3,9 @@
 namespace OpenContent\Sensor\Api\Values;
 
 use OpenContent\Sensor\Api\Values\Permission;
+use OpenContent\Sensor\Api\Exportable;
 
-class PermissionCollection implements \IteratorAggregate
+class PermissionCollection extends Exportable implements \IteratorAggregate
 {
     /**
      * @var Permission[]

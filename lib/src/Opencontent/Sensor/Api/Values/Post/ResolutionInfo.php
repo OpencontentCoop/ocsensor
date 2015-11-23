@@ -9,8 +9,9 @@
 namespace OpenContent\Sensor\Api\Values\Post;
 
 use \DateTime;
+use OpenContent\Sensor\Api\Exportable;
 
-class ResolutionInfo
+class ResolutionInfo extends Exportable
 {
     /**
      * @var DateTime

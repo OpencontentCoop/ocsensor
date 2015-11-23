@@ -2,6 +2,7 @@
 
 namespace OpenContent\Sensor\Legacy;
 
+use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Core\PostService as PostServiceBase;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\PostCreateStruct;
@@ -128,13 +129,29 @@ class PostService extends PostServiceBase
         $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
 
         $post->participants = $this->repository->getParticipantService()->loadPostParticipants( $post );
-        $post->author = $this->repository->getParticipantService()->loadPostAuthor( $post );
-        $post->reporter = $this->repository->getParticipantService()->loadPostReporters( $post );
+        $post->reporter = $this->repository->getParticipantService()->loadPostReporter( $post );
         $post->approvers = $this->repository->getParticipantService()->loadPostApprovers( $post );
         $post->owners = $this->repository->getParticipantService()->loadPostOwners( $post );
         $post->observers = $this->repository->getParticipantService()->loadPostObservers( $post );
 
+        $post->author = clone $post->reporter;
+        $authorName = $this->getPostAuthorName();
+        if ( $authorName )
+            $post->author->name = $authorName;
+
         return $post;
+    }
+
+    protected function getPostAuthorName()
+    {
+        $authorName = false;
+        if ( isset( $this->contentObjectDataMap['on_behalf_of'] ) && $this->contentObjectDataMap['on_behalf_of']->hasContent() )
+        {
+            $authorName = $this->contentObjectDataMap['on_behalf_of']->toString();
+            if ( isset( $this->contentObjectDataMap['on_behalf_of_detail'] ) && $this->contentObjectDataMap['on_behalf_of_detail']->hasContent() )
+                $authorName .= ', ' . $this->contentObjectDataMap['on_behalf_of_detail']->toString();
+        }
+        return $authorName;
     }
 
     protected function getPostWorkflowStatus()

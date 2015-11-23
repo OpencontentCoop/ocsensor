@@ -15,13 +15,6 @@ interface ParticipantService
     /**
      * @param Post $post
      *
-     * @return Participant
-     */
-    public function loadPostAuthor( Post $post );
-
-    /**
-     * @param Post $post
-     *
      * @return ParticipantCollection
      */
     public function loadPostParticipants( Post $post );
@@ -50,9 +43,9 @@ interface ParticipantService
     /**
      * @param Post $post
      *
-     * @return ReporterCollection
+     * @return Participant
      */
-    public function loadPostReporters( Post $post );
+    public function loadPostReporter( Post $post );
 
     /**
      * @param Post $post

@@ -1,11 +1,11 @@
 <?php
 
 $repository = new OpenPaSensorRepository();
-$post = $repository->getPostService()->loadPost( 2162 );
-
+$post = $repository->getPostService()->loadPost( 2166 );
 
 echo '<pre>';
 print_r( $post );
+
 
 eZDisplayDebug();
 eZExecution::cleanExit();

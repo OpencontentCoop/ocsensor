@@ -9,8 +9,9 @@
 namespace OpenContent\Sensor\Api\Values;
 
 use DateTime;
+use OpenContent\Sensor\Api\Exportable;
 
-abstract class Message
+abstract class Message extends Exportable
 {
     public $id;
 

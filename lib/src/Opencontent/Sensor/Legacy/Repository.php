@@ -98,7 +98,7 @@ abstract class Repository extends CoreRepository
     {
         if ( $this->postService === null )
         {
-            $this->postService = new PostService( $this, $this->permissionDefinitions );
+            $this->postService = new CachePostService( $this, $this->permissionDefinitions );
         }
         return $this->postService;
     }

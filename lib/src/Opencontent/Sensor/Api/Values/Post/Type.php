@@ -8,8 +8,9 @@
 
 namespace OpenContent\Sensor\Api\Values\Post;
 
+use OpenContent\Sensor\Api\Exportable;
 
-class Type
+class Type extends Exportable
 {
     public $identifier;
 

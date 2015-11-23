@@ -10,8 +10,9 @@ namespace OpenContent\Sensor\Api\Values;
 
 use OpenContent\Sensor\Api\Values\Message;
 use DateTime;
+use OpenContent\Sensor\Api\Exportable;
 
-class MessageCollection
+class MessageCollection extends Exportable
 {
     /**
      * @var int

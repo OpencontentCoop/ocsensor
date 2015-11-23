@@ -2,8 +2,9 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
+use OpenContent\Sensor\Api\Exportable;
 
-class Permission
+class Permission extends Exportable
 {
     /**
      * @var string

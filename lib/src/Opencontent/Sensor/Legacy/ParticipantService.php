@@ -65,6 +65,16 @@ class ParticipantService extends ParticipantServiceBase
                 array( 'contentobject_id' => array( $participantIdList ) )
             );
 
+            /** @var eZCollaborationItemStatus[] $userStatuses */
+            $userStatuses = eZCollaborationItemStatus::fetchObjectList(
+                eZCollaborationItemStatus::definition(),
+                null,
+                array(
+                    'collaboration_id' => $postInternalId,
+                    'user_id' => array( $participantIdList )
+                )
+            );
+
             foreach( $participantLinks as $participantLink )
             {
                 $participant = new Participant();
@@ -72,17 +82,18 @@ class ParticipantService extends ParticipantServiceBase
                 $participant->roleIdentifier = $participantLink->attribute( 'participant_role' );
                 $participant->roleName = $this->getParticipantRoleName( $participantLink->attribute( 'participant_role' ) );
 
-                /** @var eZCollaborationItemStatus $userStatus */
-                $userStatus = eZCollaborationItemStatus::fetch( $postInternalId, $participantLink->attribute( 'participant_id' ) );
-                if ( $userStatus instanceof eZCollaborationItemStatus )
-                    $participant->lastAccessDateTime = Utils::getDateTimeFromTimestamp( $userStatus->attribute( 'last_read' ) );
-                else
-                    $participant->lastAccessDateTime = $participantLink->attribute( 'created' );
+                $participant->lastAccessDateTime = $participantLink->attribute( 'created' );
+                foreach( $userStatuses as $userStatus )
+                {
+                    if ( $userStatus->attribute( 'user_id' ) ==  $participant->id )
+                        $participant->lastAccessDateTime = Utils::getDateTimeFromTimestamp( $userStatus->attribute( 'last_read' ) );
+                }
 
                 if ( isset( $objects[$participant->id] ) )
                 {
                     $participant->name = $objects[$participant->id]->attribute( 'name' );
                 }
+
                 foreach( $users as $user )
                 {
                     if ( $user->attribute( 'contentobject_id' ) == $participant->id )
@@ -99,16 +110,10 @@ class ParticipantService extends ParticipantServiceBase
                 elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_OBSERVER )
                     $this->participantsByPost[$postInternalId]['observers']->addParticipant( $participant );
                 elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_AUTHOR )
-                    $this->participantsByPost[$postInternalId]['reporters']->addParticipant( $participant );
+                    $this->participantsByPost[$postInternalId]['reporter'] = $participant;
             }
         }
         return $this->participantsByPost[$postInternalId];
-    }
-
-
-    public function loadPostAuthor( Post $post )
-    {
-        // TODO: Implement loadPostAuthor() method.
     }
 
     public function loadPostParticipants( Post $post )
@@ -135,10 +140,10 @@ class ParticipantService extends ParticipantServiceBase
         return $participants['observers'];
     }
 
-    public function loadPostReporters( Post $post )
+    public function loadPostReporter( Post $post )
     {
         $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['reporters'];
+        return $participants['reporter'];
     }
 
     public function addPostParticipant( Post $post, Participant $participant )

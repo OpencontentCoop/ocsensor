@@ -9,6 +9,8 @@
 namespace OpenContent\Sensor\Legacy;
 
 use OpenContent\Sensor\Api\Values\Message;
+use OpenContent\Sensor\Api\Values\Participant;
+use OpenContent\Sensor\Api\Values\User;
 use OpenContent\Sensor\Core\MessageService as MessageServiceBase;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Exception\BaseException;
@@ -115,7 +117,7 @@ class MessageService extends MessageServiceBase
                     {
                         $message = new Message\TimelineItem();
                         $type = 'timeline';
-                        $message->text = $this->getTimelineItemText( $simpleMessage );
+                        $message->text = $this->getTimelineItemText( $simpleMessage, $post );
                     }
                     else
                     {
@@ -127,12 +129,22 @@ class MessageService extends MessageServiceBase
                         /** @var eZCollaborationItemMessageLink $link */
                         foreach( $messageItem['links'] as $link )
                         {
-                            //@todo
-                            $message->receivers[] = $link->attribute( 'participant_id' );
+                            $message->receivers[] = $this->repository->getParticipantService()
+                                ->loadPostParticipants( $post )
+                                ->getParticipantById( $link->attribute( 'participant_id' ) );
                         }
                     }
                     $message->id = $simpleMessage->attribute( 'id' );
-                    $message->creator = $simpleMessage->attribute( 'creator_id' );
+                    $creator = new User();
+                    $creator->id = $simpleMessage->attribute( 'id' );
+                    $creatorParticipant = $this->repository->getParticipantService()
+                                                           ->loadPostParticipants( $post )
+                                                           ->getParticipantById( $simpleMessage->attribute( 'creator_id' ) );
+                    if ( $creatorParticipant instanceof Participant )
+                        $message->creator = $creatorParticipant;
+                    else
+                        $message->creator = User::createUserFromId( $simpleMessage->attribute( 'creator_id' ) );
+
                     $message->published = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'created' ) );
                     $message->modified = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'modified' ) );
 
@@ -183,7 +195,7 @@ class MessageService extends MessageServiceBase
         return $collection;
     }
 
-    protected function getTimelineItemText( eZCollaborationSimpleMessage $simpleMessage )
+    protected function getTimelineItemText( eZCollaborationSimpleMessage $simpleMessage, Post $post )
     {
         $result = '';
         if ( $simpleMessage instanceof eZCollaborationSimpleMessage )
@@ -202,8 +214,10 @@ class MessageService extends MessageServiceBase
                 {
                     if ( is_numeric( $namePart ) )
                     {
-                        //@todo
-                        $nameString[] = $namePart;
+                        $participant = $this->repository->getParticipantService()
+                                         ->loadPostParticipants( $post )
+                                         ->getParticipantById( intval( $namePart ) );
+                        $nameString[] = $participant->name;
                     }
                     else
                     {

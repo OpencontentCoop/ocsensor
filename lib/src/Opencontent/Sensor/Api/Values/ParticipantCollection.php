@@ -2,16 +2,22 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
+use OpenContent\Sensor\Api\Exportable;
 use Traversable;
 
-class ParticipantCollection implements \IteratorAggregate
+class ParticipantCollection extends Exportable implements \IteratorAggregate
 {
 
     /**
-     * @var Participant
+     * @var Participant[]
      */
     public $participants;
 
+    /**
+     * @param $id
+     *
+     * @return Participant
+     */
     public function getParticipantById( $id )
     {
         return isset( $this->participants[$id] ) ? $this->participants[$id] : false;

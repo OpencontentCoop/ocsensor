@@ -2,8 +2,9 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
+use OpenContent\Sensor\Api\Exportable;
 
-class Post
+class Post extends Exportable
 {
     /**
      * @var int
@@ -81,7 +82,7 @@ class Post
     public $author;
 
     /**
-     * @var Participant\ReporterCollection
+     * @var Participant
      */
     public $reporter;
 

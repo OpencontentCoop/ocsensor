@@ -8,8 +8,9 @@
 
 namespace OpenContent\Sensor\Api\Values\Post;
 
+use OpenContent\Sensor\Api\Exportable;
 
-class Field
+class Field extends Exportable
 {
 
 }
