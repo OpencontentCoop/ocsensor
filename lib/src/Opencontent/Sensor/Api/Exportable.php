@@ -20,4 +20,20 @@ abstract class Exportable
         }
         return $object;
     }
+
+    public function attributes()
+    {
+        $reflection = new \ReflectionClass( $this );
+        return $reflection->getProperties();
+    }
+
+    public function hasAttribute( $key )
+    {
+        return in_array( $key, $this->attributes() );
+    }
+
+    public function attribute( $key )
+    {
+        return $this->{$key};
+    }
 }
