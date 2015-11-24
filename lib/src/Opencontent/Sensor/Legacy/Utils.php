@@ -6,6 +6,7 @@ use OpenContent\Sensor\Api\Exception\BaseException;
 use DateTime;
 use DateInterval;
 use ezpI18n;
+use OpenContent\Sensor\Api\Values\User;
 use OpenContent\Sensor\Utils\DateDiffResult;
 use eZUser;
 
@@ -13,7 +14,7 @@ class Utils
 {
     public static function createUserFromId( $id, $language )
     {
-        $user = new static();
+        $user = new User();
         $user->id = $id;
         $ezUser = eZUser::fetch( $id );
         if ( $ezUser instanceof eZUser )
