@@ -16,12 +16,14 @@ use eZDir;
 use eZSys;
 use eZClusterFileHandler;
 use eZINI;
+use eZLocale;
+use eZContentLanguage;
 
 class CachePostService extends PostService
 {
     public function loadPost( $postId )
     {
-        return self::cacheFileHandler( $postId )->processCache(
+        return $this->cacheFileHandler( $postId )->processCache(
             array( 'OpenContent\Sensor\Legacy\CachePostService', 'cacheRetrieve' ),
             array( 'OpenContent\Sensor\Legacy\CachePostService', 'cacheGenerate' ),
             null,
@@ -54,38 +56,24 @@ class CachePostService extends PostService
 
     }
 
-    public static function clearCache( $postId )
+    public function clearCache( $postId )
     {
-        $ini = eZINI::instance();
-        if ( $ini->hasVariable( 'SiteAccessSettings', 'RelatedSiteAccessList' ) &&
-             $relatedSiteAccessList = $ini->variable( 'SiteAccessSettings', 'RelatedSiteAccessList' ) )
-        {
-            if ( !is_array( $relatedSiteAccessList ) )
-            {
-                $relatedSiteAccessList = array( $relatedSiteAccessList );
-            }
-            $relatedSiteAccessList[] = $GLOBALS['eZCurrentAccess']['name'];
-            $siteAccesses = array_unique( $relatedSiteAccessList );
-        }
-        else
-        {
-            $siteAccesses = $ini->variable( 'SiteAccessSettings', 'AvailableSiteAccessList' );
-        }
-        if ( !empty( $siteAccesses ) )
+        $languages = eZContentLanguage::fetchLocaleList();
+        if ( !empty( $languages ) )
         {
             $commonPath = eZDir::path( array( eZSys::cacheDirectory(), 'sensor' ) );
             $fileHandler = eZClusterFileHandler::instance();
             $commonSuffix = "post-object/" . eZDir::filenamePath( $postId );
-            $fileHandler->fileDeleteByDirList( $siteAccesses, $commonPath, $commonSuffix );
+            $fileHandler->fileDeleteByDirList( $languages, $commonPath, $commonSuffix );
         }
     }
 
-    public static function cacheFileHandler( $postId )
+    public function cacheFileHandler( $postId )
     {
         $cacheFile = $postId . '.cache';
-        $currentSiteAccess = $GLOBALS['eZCurrentAccess']['name'];
+        $language = $this->repository->getCurrentLanguage();
         $extraPath = eZDir::filenamePath( $postId );
-        $cacheFilePath = eZDir::path( array( eZSys::cacheDirectory(), 'sensor', $currentSiteAccess, 'post-object', $extraPath, $cacheFile ) );
+        $cacheFilePath = eZDir::path( array( eZSys::cacheDirectory(), 'sensor', $language, 'post-object', $extraPath, $cacheFile ) );
         return eZClusterFileHandler::instance( $cacheFilePath );
     }
 }

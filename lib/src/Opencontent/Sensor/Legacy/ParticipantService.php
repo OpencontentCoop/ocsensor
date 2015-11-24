@@ -91,7 +91,7 @@ class ParticipantService extends ParticipantServiceBase
 
                 if ( isset( $objects[$participant->id] ) )
                 {
-                    $participant->name = $objects[$participant->id]->attribute( 'name' );
+                    $participant->name = $objects[$participant->id]->name( false, $this->repository->getCurrentLanguage() );
                 }
 
                 foreach( $users as $user )

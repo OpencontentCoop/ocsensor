@@ -97,7 +97,7 @@ class PostService extends PostServiceBase
     {
         $this->collaborationItem = $collaborationItem;
         $this->contentObject = $contentObject;
-        $this->contentObjectDataMap = $contentObject->attribute( 'data_map' );
+        $this->contentObjectDataMap = $contentObject->fetchDataMap( false, $this->repository->getCurrentLanguage() );
 
         $post = new Post();
         $post->id = $this->contentObject->attribute( 'id' );
@@ -109,7 +109,7 @@ class PostService extends PostServiceBase
         $post->expiringInfo = $this->getPostExpirationInfo();
         $post->resolutionInfo = $this->getPostResolutionInfo( $post );
 
-        $post->subject = $this->contentObject->attribute( 'name' );
+        $post->subject = $this->contentObject->name( false, $this->repository->getCurrentLanguage() );
         $post->description = $this->getPostDescription();
         $post->type = $this->getPostType();
 
@@ -282,6 +282,7 @@ class PostService extends PostServiceBase
         $state = $this->getPostCurrentStatusByGroupIdentifier( 'privacy' );
         if ( $state instanceof eZContentObjectState )
         {
+            $state->setCurrentLanguage( $this->repository->getCurrentLanguage() );
             $status->identifier = $state->attribute( 'identifier' );
             $status->name = $state->currentTranslation()->attribute( 'name' );
             $status->label = 'info';
@@ -356,7 +357,7 @@ class PostService extends PostServiceBase
             {
                 $category = new Post\Field\Category();
                 $category->id = $object->attribute( 'id' );
-                $category->name = $object->attribute( 'name' );
+                $category->name = $object->name( false, $this->repository->getCurrentLanguage() );
                 $data[] = $category;
             }
         }
@@ -375,7 +376,7 @@ class PostService extends PostServiceBase
             {
                 $area = new Post\Field\Area();
                 $area->id = $object->attribute( 'id' );
-                $area->name = $object->attribute( 'name' );
+                $area->name = $object->name( false, $this->repository->getCurrentLanguage() );
                 $data[] = $area;
             }
         }

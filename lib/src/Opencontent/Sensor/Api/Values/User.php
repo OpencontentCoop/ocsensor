@@ -17,17 +17,4 @@ class User extends Exportable
      */
     public $permissions;
 
-    public static function createUserFromId( $id )
-    {
-        $user = new static();
-        $user->id = $id;
-        $ezUser = \eZUser::fetch( $id );
-        if ( $ezUser instanceof \eZUser )
-        {
-            $user->email = $ezUser->Email;
-            $user->name = $ezUser->contentObject()->attribute( 'name' );
-        }
-        return $user;
-    }
-
 }

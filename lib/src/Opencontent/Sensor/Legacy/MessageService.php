@@ -143,7 +143,7 @@ class MessageService extends MessageServiceBase
                     if ( $creatorParticipant instanceof Participant )
                         $message->creator = $creatorParticipant;
                     else
-                        $message->creator = User::createUserFromId( $simpleMessage->attribute( 'creator_id' ) );
+                        $message->creator = Utils::createUserFromId( $simpleMessage->attribute( 'creator_id' ), $this->repository->getCurrentLanguage() );
 
                     $message->published = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'created' ) );
                     $message->modified = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'modified' ) );

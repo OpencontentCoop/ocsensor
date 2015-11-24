@@ -25,6 +25,24 @@ class OpenPaSensorRepository extends Repository
         return $this->user;
     }
 
+    public function setCurrentLanguage( $language )
+    {
+        $this->language = $language;
+        if ( $this->language != eZLocale::currentLocaleCode() )
+        {
+            $GLOBALS["eZLocaleStringDefault"] = $this->language;
+            //@ svuotare cahce translations?
+        }
+    }
+
+    public function getCurrentLanguage()
+    {
+        if ( $this->language === null )
+            return eZLocale::currentLocaleCode();
+
+        return $this->language;
+    }
+
     public function getRootNode()
     {
         return eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() )->attribute( 'main_node' );
