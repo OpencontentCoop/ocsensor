@@ -30,33 +30,64 @@ class MessageService extends MessageServiceBase
     const COMMENT = 1;
 
     /**
-     * @var Message[]
-     */
-    protected $messagesByPost = array();
-
-    /**
      * @var Repository
      */
     protected $repository;
 
-    protected function loadMessagesByPost( Post $post )
+    /**
+     * @var int
+     */
+    protected $countMessagesByPost = array();
+
+    /**
+     * @var Message\CommentCollection[]
+     */
+    protected $commentsByPost = array();
+
+    /**
+     * @var Message\PrivateMessageCollection[]
+     */
+    protected $privateMessagesByPost = array();
+
+    /**
+     * @var Message\TimelineItemCollection[]
+     */
+    protected $timelineItemsByPost = array();
+
+    public function loadCommentCollectionByPost( Post $post )
+    {
+        $this->internalLoadMessagesByPost( $post );
+        return $this->commentsByPost[$post->internalId];
+    }
+
+    public function loadPrivateMessageCollectionByPost( Post $post )
+    {
+        $this->internalLoadMessagesByPost( $post );
+        return $this->privateMessagesByPost[$post->internalId];
+    }
+
+    public function loadTimelineItemCollectionByPost( Post $post )
+    {
+        $this->internalLoadMessagesByPost( $post );
+        return $this->timelineItemsByPost[$post->internalId];
+    }
+
+    protected function internalLoadMessagesByPost( Post $post )
     {
         $postInternalId = $post->internalId;
-        if ( !isset( $this->messagesByPost[$postInternalId] ) )
+        if ( !isset( $this->countMessagesByPost[$postInternalId] ) )
         {
-            $this->messagesByPost[$postInternalId] = array(
-                'comment' => array(),
-                'timeline' => array(),
-                'private' => array()
-            );
+            $this->countMessagesByPost[$postInternalId] = 0;
+            $this->commentsByPost[$postInternalId] = new Message\CommentCollection();
+            $this->privateMessagesByPost[$postInternalId] = new Message\PrivateMessageCollection();
+            $this->timelineItemsByPost[$postInternalId] = new Message\TimelineItemCollection();
+
 
             /** @var eZCollaborationItemMessageLink[] $messageLinks */
             $messageLinks = eZPersistentObject::fetchObjectList(
                 eZCollaborationItemMessageLink::definition(),
                 null,
-                array(
-                    'collaboration_id' => $postInternalId,
-                ),
+                array( 'collaboration_id' => $postInternalId ),
                 array( 'created' => 'asc' ),
                 null,
                 true
@@ -72,9 +103,7 @@ class MessageService extends MessageServiceBase
             $simpleMessages = eZPersistentObject::fetchObjectList(
                 eZCollaborationSimpleMessage::definition(),
                 null,
-                array(
-                    'id' => array( $simpleMessageIdList ),
-                ),
+                array( 'id' => array( $simpleMessageIdList ) ),
                 array( 'created' => 'asc' ),
                 null,
                 true
@@ -117,7 +146,7 @@ class MessageService extends MessageServiceBase
                     {
                         $message = new Message\TimelineItem();
                         $type = 'timeline';
-                        $message->text = $this->getTimelineItemText( $simpleMessage, $post );
+                        $message->text = $this->formatTimelineItemText( $simpleMessage, $post );
                     }
                     else
                     {
@@ -130,72 +159,42 @@ class MessageService extends MessageServiceBase
                         foreach( $messageItem['links'] as $link )
                         {
                             $message->receivers[] = $this->repository->getParticipantService()
-                                ->loadPostParticipants( $post )
-                                ->getParticipantById( $link->attribute( 'participant_id' ) );
+                                                                     ->loadPostParticipants( $post )
+                                                                     ->getUserById( $link->attribute( 'participant_id' ) );
                         }
                     }
                     $message->id = $simpleMessage->attribute( 'id' );
                     $creator = new User();
                     $creator->id = $simpleMessage->attribute( 'id' );
-                    $creatorParticipant = $this->repository->getParticipantService()
+                    $creator = $this->repository->getParticipantService()
                                                            ->loadPostParticipants( $post )
-                                                           ->getParticipantById( $simpleMessage->attribute( 'creator_id' ) );
-                    if ( $creatorParticipant instanceof Participant )
-                        $message->creator = $creatorParticipant;
+                                                           ->getUserById( $simpleMessage->attribute( 'creator_id' ) );
+                    if ( $creator instanceof User )
+                        $message->creator = $creator;
                     else
-                        $message->creator = Utils::createUserFromId( $simpleMessage->attribute( 'creator_id' ), $this->repository->getCurrentLanguage() );
+                        $message->creator = $this->repository->getUserService()->loadUser(
+                            $simpleMessage->attribute( 'creator_id' )
+                        );
 
                     $message->published = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'created' ) );
                     $message->modified = Utils::getDateTimeFromTimestamp( $simpleMessage->attribute( 'modified' ) );
 
-                    $this->messagesByPost[$postInternalId][$type][] = $message;
+                    if ( $type == 'comment' )
+                        $this->commentsByPost[$postInternalId]->addMessage( $message );
+
+                    elseif ( $type == 'timeline' )
+                        $this->timelineItemsByPost[$postInternalId]->addMessage( $message );
+
+                    elseif ( $type == 'private' )
+                        $this->privateMessagesByPost[$postInternalId]->addMessage( $message );
+
+                    $this->countMessagesByPost[$postInternalId]++;
                 }
             }
         }
-
-        return $this->messagesByPost[$postInternalId];
     }
 
-    public function loadCommentCollectionByPost( Post $post )
-    {
-        $allMessages = $this->loadMessagesByPost( $post );
-        /** @var Message[] $messages */
-        $messages = $allMessages['comment'];
-
-        $collection = new Message\CommentCollection();
-        $collection->count = count( $messages );
-        $collection->messages = $messages;
-        $collection->lastMessage = array_pop( $messages );
-        return $collection;
-    }
-
-    public function loadPrivateMessageCollectionByPost( Post $post )
-    {
-        $allMessages = $this->loadMessagesByPost( $post );
-        /** @var Message[] $messages */
-        $messages = $allMessages['private'];
-
-        $collection = new Message\CommentCollection();
-        $collection->count = count( $messages );
-        $collection->messages = $messages;
-        $collection->lastMessage = array_pop( $messages );
-        return $collection;
-    }
-
-    public function loadTimelineItemCollectionByPost( Post $post )
-    {
-        $allMessages = $this->loadMessagesByPost( $post );
-        /** @var Message[] $messages */
-        $messages = $allMessages['timeline'];
-
-        $collection = new Message\CommentCollection();
-        $collection->count = count( $messages );
-        $collection->messages = $messages;
-        $collection->lastMessage = array_pop( $messages );
-        return $collection;
-    }
-
-    protected function getTimelineItemText( eZCollaborationSimpleMessage $simpleMessage, Post $post )
+    protected function formatTimelineItemText( eZCollaborationSimpleMessage $simpleMessage, Post $post )
     {
         $result = '';
         if ( $simpleMessage instanceof eZCollaborationSimpleMessage )
@@ -216,7 +215,7 @@ class MessageService extends MessageServiceBase
                     {
                         $participant = $this->repository->getParticipantService()
                                          ->loadPostParticipants( $post )
-                                         ->getParticipantById( intval( $namePart ) );
+                                         ->getUserById( intval( $namePart ) );
                         $nameString[] = $participant->name;
                     }
                     else

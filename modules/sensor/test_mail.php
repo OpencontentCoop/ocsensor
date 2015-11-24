@@ -1,25 +1,39 @@
 <?php
 
-$repository = new OpenPaSensorRepository();
-$post = $repository->getPostService()->loadPost( 2166 );
+$module = $Params['Module'];
+$tpl = eZTemplate::factory();
+$ini = eZINI::instance();
+$http = eZHTTPTool::instance();
+$test = $Params['Type'];
+$objectId = $Params['Id'];
+$participantRole = $Params['Param'];
+$eventIdentifier = $Params['Param2'];
 
 echo '<pre>';
-print_r( $post );
+
+try
+{
+    $repository = new OpenPaSensorRepository();
+
+    if ( $test == 'test' )
+        $post = $repository->getPostService()->loadPost( $objectId );
+    else
+        $post = $repository->getPostService()->loadPostByInternalId( $objectId );
+
+    print_r( $post );
+}
+catch( Exception $e )
+{
+    print_r( $e->getTrace() );
+}
 
 
 eZDisplayDebug();
 eZExecution::cleanExit();
 
-$module = $Params['Module'];
-$tpl = eZTemplate::factory();
-$ini = eZINI::instance();
-$http = eZHTTPTool::instance();
 $templateResult = false;
 
-$test = $Params['Type'];
-$objectId = $Params['Id'];
-$participantRole = $Params['Param'];
-$eventIdentifier = $Params['Param2'];
+
 
 $siteUrl = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );
 $parts = explode( '/', $siteUrl );

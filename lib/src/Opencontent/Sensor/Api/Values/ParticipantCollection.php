@@ -23,6 +23,22 @@ class ParticipantCollection extends Exportable implements \IteratorAggregate
         return isset( $this->participants[$id] ) ? $this->participants[$id] : false;
     }
 
+    /**
+     * @param $id
+     *
+     * @return User
+     */
+    public function getUserById( $id )
+    {
+        foreach( $this->participants as $participant )
+        {
+            $user = $participant->getUserById( $id );
+            if ( $user )
+                return $user;
+        }
+        return false;
+    }
+
     public function addParticipant( Participant $participant )
     {
         $this->participants[$participant->id] = $participant;

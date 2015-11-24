@@ -109,36 +109,40 @@ class PostService extends PostServiceBase
         $post->expiringInfo = $this->getPostExpirationInfo();
         $post->resolutionInfo = $this->getPostResolutionInfo( $post );
 
-        $post->subject = $this->contentObject->name( false, $this->repository->getCurrentLanguage() );
-        $post->description = $this->getPostDescription();
-        $post->type = $this->getPostType();
-
         $post->privacy = $this->getPostPrivacyCurrentStatus();
         $post->status = $this->getPostCurrentStatus();
         $post->moderation = $this->getPostModerationCurrentStatus();
         $post->workflowStatus = $this->getPostWorkflowStatus();
 
+        $post->subject = $this->contentObject->name( false, $this->repository->getCurrentLanguage() );
+        $post->description = $this->getPostDescription();
+        $post->type = $this->getPostType();
         $post->images = $this->getPostImages();
         $post->attachments = $this->getPostAttachments();
         $post->categories = $this->getPostCategories();
         $post->areas = $this->getPostAreas();
         $post->geoLocation = $this->getPostGeoLocation();
 
-        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost( $post );
-        $post->privateMessages = $this->repository->getMessageService()->loadPrivateMessageCollectionByPost( $post );
-        $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
-
         $post->participants = $this->repository->getParticipantService()->loadPostParticipants( $post );
         $post->reporter = $this->repository->getParticipantService()->loadPostReporter( $post );
         $post->approvers = $this->repository->getParticipantService()->loadPostApprovers( $post );
         $post->owners = $this->repository->getParticipantService()->loadPostOwners( $post );
         $post->observers = $this->repository->getParticipantService()->loadPostObservers( $post );
-
         $post->author = clone $post->reporter;
         $authorName = $this->getPostAuthorName();
-        if ( $authorName )
-            $post->author->name = $authorName;
+        if ( $authorName ) $post->author->name = $authorName;
 
+        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost( $post );
+        $post->privateMessages = $this->repository->getMessageService()->loadPrivateMessageCollectionByPost( $post );
+        $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
+
+        foreach( $post->participants as $participant )
+            foreach( $participant as $user )
+            {
+                $this->repository->getUserService()->loadUserPostAware( $user, $post );
+            }
+
+        $post->internalStatus = 'miss';
         return $post;
     }
 

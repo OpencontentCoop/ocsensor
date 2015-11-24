@@ -14,6 +14,14 @@ interface ParticipantService
 {
     /**
      * @param Post $post
+     * @param $id
+     *
+     * @return Participant
+     */
+    public function loadPostParticipantById( Post $post, $id );
+
+    /**
+     * @param Post $post
      *
      * @return ParticipantCollection
      */

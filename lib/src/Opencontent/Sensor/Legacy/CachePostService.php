@@ -18,6 +18,8 @@ use eZClusterFileHandler;
 use eZINI;
 use eZLocale;
 use eZContentLanguage;
+use eZPersistentObject;
+use OpenContent\Sensor\Api\Exception\BaseException;
 
 class CachePostService extends PostService
 {
@@ -32,15 +34,34 @@ class CachePostService extends PostService
         );
     }
 
+    public function loadPostByInternalId( $postInternalId )
+    {
+        $type = $this->repository->getSensorCollaborationHandlerTypeString();
+        $collaborationItem = eZPersistentObject::fetchObject(
+            eZCollaborationItem::definition(),
+            null,
+            array(
+                'type_identifier' => $type,
+                'id' => intval( $postInternalId )
+            )
+        );
+        if ( $collaborationItem instanceof eZCollaborationItem )
+        {
+            return $this->loadPost( $collaborationItem->attribute( 'data_int1' ) );
+        }
+        throw new BaseException( "eZCollaborationItem $type not found for id $postInternalId" );
+    }
+
     public function refreshPost( Post $post )
     {
+        parent::refreshPost( $post );
         self::clearCache( $post->id );
     }
 
     public static function cacheRetrieve( $file, $mtime, $args )
     {
-        $result = include( $file );
-        return $result;
+        $post = include( $file );
+        return $post;
     }
 
     public static function cacheGenerate( $file, $args )

@@ -3,6 +3,7 @@
 namespace OpenContent\Sensor\Api\Values;
 use OpenContent\Sensor\Api\Values\PermissionCollection;
 use OpenContent\Sensor\Api\Exportable;
+use DateTime;
 
 class User extends Exportable
 {
@@ -16,5 +17,10 @@ class User extends Exportable
      * @var PermissionCollection
      */
     public $permissions;
+
+    /**
+     * @var DateTime
+     */
+    public $lastAccessDateTime;
 
 }

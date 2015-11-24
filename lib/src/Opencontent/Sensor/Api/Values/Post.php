@@ -141,4 +141,17 @@ class Post extends Exportable
      */
     public $areas;
 
+    /**
+     * @var mixed
+     */
+    public $internalStatus;
+
+    public static function __set_state( $array )
+    {
+        /** @var Post $object */
+        $object = parent::__set_state( $array );
+        $object->internalStatus = 'hit';
+        return $object;
+    }
+
 }

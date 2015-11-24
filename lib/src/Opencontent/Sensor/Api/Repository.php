@@ -10,6 +10,7 @@ use OpenContent\Sensor\Api\SearchService;
 use OpenContent\Sensor\Api\ParticipantService;
 use OpenContent\Sensor\Api\PermissionService;
 use OpenContent\Sensor\Api\ActionService;
+use OpenContent\Sensor\Api\UserService;
 
 interface Repository
 {
@@ -56,4 +57,9 @@ interface Repository
      * @return ActionService
      */
     public function getActionService();
+
+    /**
+     * @return UserService
+     */
+    public function getUserService();
 }

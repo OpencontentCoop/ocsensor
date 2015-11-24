@@ -50,6 +50,11 @@ abstract class Repository implements RepositoryInterface
     protected $actionService;
 
     /**
+     * @var UserService
+     */
+    protected $userService;
+
+    /**
      * @var PermissionDefinition[]
      */
     protected $permissionDefinitions;
@@ -89,6 +94,11 @@ abstract class Repository implements RepositoryInterface
     abstract public function getSearchService();
 
     /**
+     * @return UserService
+     */
+    abstract public function getUserService();
+
+    /**
      * @return ParticipantService
      */
     abstract public function getParticipantService();
@@ -115,14 +125,14 @@ abstract class Repository implements RepositoryInterface
 
     public function isUserParticipant( Post $post )
     {
-        return $post->participants->getParticipantById( $this->user->id );
+        return $post->participants->getUserById( $this->user->id );
     }
 
     public function getPermissionService()
     {
         if ( $this->permissionService === null )
         {
-            $this->permissionService = new PermissionService( $this, $this->permissionDefinitions );
+            $this->permissionService = new PermissionService( $this, array( new \OpenContent\Sensor\Core\PermissionDefinitions\Test() ) );
         }
         return $this->permissionService;
     }
@@ -135,4 +145,5 @@ abstract class Repository implements RepositoryInterface
         }
         return $this->actionService;
     }
+
 }

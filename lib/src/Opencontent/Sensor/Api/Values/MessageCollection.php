@@ -17,7 +17,7 @@ class MessageCollection extends Exportable
     /**
      * @var int
      */
-    public $count;
+    public $count = 0;
 
     /**
      * @var Message
@@ -40,5 +40,12 @@ class MessageCollection extends Exportable
             }
         }
         return $unreadMessages;
+    }
+
+    public function addMessage( Message $message )
+    {
+        $this->messages[] = $message;
+        $this->lastMessage = $message;
+        $this->count++;
     }
 }

@@ -12,15 +12,11 @@ use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Api\Values\Participant\ApproverCollection;
 use OpenContent\Sensor\Api\Values\Participant\ObserverCollection;
 use OpenContent\Sensor\Api\Values\Participant\OwnerCollection;
-use OpenContent\Sensor\Api\Values\Participant\ReporterCollection;
 use OpenContent\Sensor\Api\Values\ParticipantCollection;
-use OpenContent\Sensor\Api\Values\PermissionCollection;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Core\ParticipantService as ParticipantServiceBase;
-use eZUser;
 use eZContentObject;
 use eZCollaborationItemParticipantLink;
-use eZCollaborationItemStatus;
 use ezpI18n;
 
 class ParticipantService extends ParticipantServiceBase
@@ -31,119 +27,60 @@ class ParticipantService extends ParticipantServiceBase
      */
     protected $participantsByPost = array();
 
-    protected function internalLoadPostParticipants( Post $post )
+    /**
+     * @var ParticipantCollection[]
+     */
+    protected $approversByPost = array();
+
+    /**
+     * @var ParticipantCollection[]
+     */
+    protected $ownersByPost = array();
+
+    /**
+     * @var ParticipantCollection[]
+     */
+    protected $observerByPost = array();
+
+    /**
+     * @var Participant[]
+     */
+    protected $reporterByPost = array();
+
+    public function loadPostParticipantById( Post $post, $id )
     {
-        $postInternalId = $post->internalId;
-        if ( !isset( $this->participantsByPost[$postInternalId] ) )
-        {
-            $this->participantsByPost[$postInternalId] = array(
-                'all' => new ParticipantCollection(),
-                'approvers' => new ApproverCollection(),
-                'owners' => new OwnerCollection(),
-                'observers' => new ObserverCollection(),
-                'reporters' => new ReporterCollection()
-            );
-            /** @var eZCollaborationItemParticipantLink[] $participantLinks */
-            $participantLinks = eZCollaborationItemParticipantLink::fetchParticipantList(
-                array(
-                    'item_id' => $postInternalId,
-                    'limit' => 1000 // avoid ez cache
-                )
-            );
-            $participantIdList = array();
-            foreach( $participantLinks as $participantLink )
-            {
-                $participantIdList[] = $participantLink->attribute( 'participant_id' );
-            }
-            /** @var eZContentObject[] $objects */
-            $objects = eZContentObject::fetchIDArray( $participantIdList );
-
-            /** @var eZUser[] $users */
-            $users = eZUser::fetchObjectList(
-                eZUser::definition(),
-                null,
-                array( 'contentobject_id' => array( $participantIdList ) )
-            );
-
-            /** @var eZCollaborationItemStatus[] $userStatuses */
-            $userStatuses = eZCollaborationItemStatus::fetchObjectList(
-                eZCollaborationItemStatus::definition(),
-                null,
-                array(
-                    'collaboration_id' => $postInternalId,
-                    'user_id' => array( $participantIdList )
-                )
-            );
-
-            foreach( $participantLinks as $participantLink )
-            {
-                $participant = new Participant();
-                $participant->id = $participantLink->attribute( 'participant_id' );
-                $participant->roleIdentifier = $participantLink->attribute( 'participant_role' );
-                $participant->roleName = $this->getParticipantRoleName( $participantLink->attribute( 'participant_role' ) );
-
-                $participant->lastAccessDateTime = $participantLink->attribute( 'created' );
-                foreach( $userStatuses as $userStatus )
-                {
-                    if ( $userStatus->attribute( 'user_id' ) ==  $participant->id )
-                        $participant->lastAccessDateTime = Utils::getDateTimeFromTimestamp( $userStatus->attribute( 'last_read' ) );
-                }
-
-                if ( isset( $objects[$participant->id] ) )
-                {
-                    $participant->name = $objects[$participant->id]->name( false, $this->repository->getCurrentLanguage() );
-                }
-
-                foreach( $users as $user )
-                {
-                    if ( $user->attribute( 'contentobject_id' ) == $participant->id )
-                    {
-                        $participant->email = $user->Email;
-                    }
-                }
-
-                $this->participantsByPost[$postInternalId]['all']->addParticipant( $participant );
-                if ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_APPROVER )
-                    $this->participantsByPost[$postInternalId]['approvers']->addParticipant( $participant );
-                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_OWNER )
-                    $this->participantsByPost[$postInternalId]['owners']->addParticipant( $participant );
-                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_OBSERVER )
-                    $this->participantsByPost[$postInternalId]['observers']->addParticipant( $participant );
-                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_AUTHOR )
-                    $this->participantsByPost[$postInternalId]['reporter'] = $participant;
-            }
-        }
-        return $this->participantsByPost[$postInternalId];
+        $this->internalLoadPostParticipants( $post );
+        return $this->participantsByPost[$post->internalId]->getParticipantById( $id );
     }
 
     public function loadPostParticipants( Post $post )
     {
-        $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['all'];
+        $this->internalLoadPostParticipants( $post );
+        return $this->participantsByPost[$post->internalId];
     }
 
     public function loadPostApprovers( Post $post )
     {
-        $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['approvers'];
+        $this->internalLoadPostParticipants( $post );
+        return $this->approversByPost[$post->internalId];
     }
 
     public function loadPostOwners( Post $post )
     {
-        $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['owners'];
+        $this->internalLoadPostParticipants( $post );
+        return $this->ownersByPost[$post->internalId];
     }
 
     public function loadPostObservers( Post $post )
     {
-        $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['observers'];
+        $this->internalLoadPostParticipants( $post );
+        return $this->observerByPost[$post->internalId];
     }
 
     public function loadPostReporter( Post $post )
     {
-        $participants = $this->internalLoadPostParticipants( $post );
-        return $participants['reporter'];
+        $this->internalLoadPostParticipants( $post );
+        return $this->reporterByPost[$post->internalId];
     }
 
     public function addPostParticipant( Post $post, Participant $participant )
@@ -159,6 +96,92 @@ class ParticipantService extends ParticipantServiceBase
     public function restorePostParticipant( Post $post, Participant $participant )
     {
         // TODO: Implement restorePostParticipant() method.
+    }
+
+    protected function internalLoadPostParticipants( Post $post )
+    {
+        $postInternalId = $post->internalId;
+        if ( !isset( $this->participantsByPost[$postInternalId] ) )
+        {
+            $this->participantsByPost[$postInternalId] = new ParticipantCollection();
+            $this->approversByPost[$postInternalId] = new ApproverCollection();
+            $this->ownersByPost[$postInternalId] = new OwnerCollection();
+            $this->observerByPost[$postInternalId] = new ObserverCollection();
+
+            /** @var eZCollaborationItemParticipantLink[] $participantLinks */
+            $participantLinks = eZCollaborationItemParticipantLink::fetchParticipantList(
+                array(
+                    'item_id' => $postInternalId,
+                    'limit' => 1000 // avoid ez cache
+                )
+            );
+            $participantIdList = array();
+            foreach( $participantLinks as $participantLink )
+            {
+                $participantIdList[] = $participantLink->attribute( 'participant_id' );
+            }
+            /** @var eZContentObject[] $objects */
+            $objects = eZContentObject::fetchIDArray( $participantIdList );
+
+            foreach( $participantLinks as $participantLink )
+            {
+                $id = $participantLink->attribute( 'participant_id' );
+                $object = isset( $objects[$id] ) ? $objects[$id] : null;
+                $participant = $this->internalLoadParticipant(
+                    $participantLink,
+                    $object
+                );
+
+                $this->participantsByPost[$postInternalId]->addParticipant( $participant );
+
+                if ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_APPROVER )
+                    $this->approversByPost[$postInternalId]->addParticipant( $participant );
+
+                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_OWNER )
+                    $this->ownersByPost[$postInternalId]->addParticipant( $participant );
+
+                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_OBSERVER )
+                    $this->observerByPost[$postInternalId]->addParticipant( $participant );
+
+                elseif ( $participant->roleIdentifier == eZCollaborationItemParticipantLink::ROLE_AUTHOR )
+                    $this->reporterByPost[$postInternalId] = $participant;
+            }
+        }
+        return $this->participantsByPost[$postInternalId];
+    }
+
+    protected function internalLoadParticipant(
+        eZCollaborationItemParticipantLink $participantLink,
+        eZContentObject $contentObject = null
+    ) {
+        $participant = new Participant();
+        $participant->id = $participantLink->attribute( 'participant_id' );
+        $participant->roleIdentifier = $participantLink->attribute( 'participant_role' );
+        $participant->roleName = $this->getParticipantRoleName( $participantLink->attribute( 'participant_role' ) );
+        $participant->lastAccessDateTime = Utils::getDateTimeFromTimestamp( $participantLink->attribute( 'last_read' ) );
+
+        if ( $contentObject instanceof eZContentObject )
+        {
+            $participant->name = $contentObject->name( false, $this->repository->getCurrentLanguage() );
+            if ( $participantLink->attribute( 'participant_type' ) == eZCollaborationItemParticipantLink::TYPE_USER )
+            {
+                $participant->addUser(
+                    $this->repository->getUserService()->loadUser( $contentObject->attribute( 'id' ) )
+                );
+            }
+            elseif ( $participantLink->attribute( 'participant_type' ) == eZCollaborationItemParticipantLink::TYPE_USERGROUP )
+            {
+                /** @var \eZContentObjectTreeNode $child */
+                foreach( $contentObject->mainNode()->children() as $child )
+                {
+                    $participant->addUser(
+                        $this->repository->getUserService()->loadUser( $child->attribute( 'contentobject_id' ) )
+                    );
+                }
+            }
+        }
+
+        return $participant;
     }
 
     protected static function getParticipantRoleName( $roleID )
