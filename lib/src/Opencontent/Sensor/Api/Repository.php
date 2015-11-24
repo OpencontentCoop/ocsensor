@@ -21,6 +21,10 @@ interface Repository
 
     public function setCurrentUser( User $user );
 
+    public function getCurrentLanguage();
+
+    public function setCurrentLanguage( $language );
+
     public function isUserParticipant( Post $post );
 
     /**

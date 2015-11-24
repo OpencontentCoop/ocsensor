@@ -17,6 +17,8 @@ abstract class Repository implements RepositoryInterface
      */
     protected $user;
 
+    protected $language;
+
     /**
      * @var PostService
      */
@@ -99,6 +101,16 @@ abstract class Repository implements RepositoryInterface
     public function setCurrentUser( User $user )
     {
         $this->user = $user;
+    }
+
+    public function getCurrentLanguage()
+    {
+        return $this->language;
+    }
+
+    public function setCurrentLanguage( $language )
+    {
+        $this->language = $language;
     }
 
     public function isUserParticipant( Post $post )
