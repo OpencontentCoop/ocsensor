@@ -38,7 +38,7 @@ class UserService extends UserServiceBase
         return $this->users[$id];
     }
 
-    public function loadUserPostAware( $user, Post $post )
+    public function setUserPostAware( $user, Post $post )
     {
         if ( is_numeric( $user ) )
             $user = $this->loadUser( $user );
@@ -48,7 +48,7 @@ class UserService extends UserServiceBase
         {
             $user->lastAccessDateTime = Utils::getDateTimeFromTimestamp( $itemStatus->attribute( 'last_read' ) );
         }
-        $this->repository->getPermissionService()->loadUserPostPermissionCollection( $user, $post );
+        $user->permissions = $this->repository->getPermissionService()->loadUserPostPermissionCollection( $user, $post );
         return $user;
     }
 }

@@ -26,5 +26,5 @@ interface UserService
      *
      * @return User
      */
-    public function loadUserPostAware( $id, Post $post );
+    public function setUserPostAware( $id, Post $post );
 }

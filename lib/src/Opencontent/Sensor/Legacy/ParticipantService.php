@@ -188,7 +188,6 @@ class ParticipantService extends ParticipantServiceBase
     {
         if ( empty( $GLOBALS['SensorParticipantRoleNameMap'] ) )
         {
-
             $GLOBALS['SensorParticipantRoleNameMap'] =
                 array( eZCollaborationItemParticipantLink::ROLE_STANDARD => ezpI18n::tr( 'sensor/role_name', 'Standard' ),
                        eZCollaborationItemParticipantLink::ROLE_OBSERVER => ezpI18n::tr( 'sensor/role_name', 'Osservatore' ),

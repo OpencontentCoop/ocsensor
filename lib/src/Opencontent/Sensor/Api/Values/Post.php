@@ -29,7 +29,7 @@ class Post extends Exportable
     /**
      * @var Post\ExpirationInfo
      */
-    public $expiringInfo;
+    public $expirationInfo;
 
     /**
      * @var Post\ResolutionInfo

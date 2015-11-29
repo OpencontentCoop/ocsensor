@@ -53,6 +53,6 @@ class PermissionService implements PermissionServiceInterface
             $permission->grant = (bool) $permissionDefinition->userHasPermission( $user, $post );
             $permissionCollection->addPermission( $permission );
         }
-        $user->permissions = $permissionCollection;
+        return $permissionCollection;
     }
 }

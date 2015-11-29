@@ -50,7 +50,7 @@ class ActionService implements ActionServiceInterface
             if ( $actionDefinition->identifier == $identifier )
                 return $actionDefinition;
         }
-        throw new BaseException( "Action $identifier not found" );
+        throw new BaseException( "Action $identifier not defined" );
     }
 
     public function dryRunAction( Action $action )

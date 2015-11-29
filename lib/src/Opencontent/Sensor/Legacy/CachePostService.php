@@ -25,9 +25,9 @@ class CachePostService extends PostService
 {
     public function loadPost( $postId )
     {
-        return $this->cacheFileHandler( $postId )->processCache(
-            array( 'OpenContent\Sensor\Legacy\CachePostService', 'cacheRetrieve' ),
-            array( 'OpenContent\Sensor\Legacy\CachePostService', 'cacheGenerate' ),
+        return $this->getCacheManager( $postId )->processCache(
+            array( 'OpenContent\Sensor\Legacy\CachePostService', 'retrieveCache' ),
+            array( 'OpenContent\Sensor\Legacy\CachePostService', 'generateCache' ),
             null,
             null,
             array( $postId, get_class( $this->repository ) )
@@ -58,13 +58,13 @@ class CachePostService extends PostService
         self::clearCache( $post->id );
     }
 
-    public static function cacheRetrieve( $file, $mtime, $args )
+    public static function retrieveCache( $file, $mtime, $args )
     {
         $post = include( $file );
         return $post;
     }
 
-    public static function cacheGenerate( $file, $args )
+    public static function generateCache( $file, $args )
     {
         list( $postId, $repositoryClassName ) = $args;
         $repository = new $repositoryClassName();
@@ -89,7 +89,7 @@ class CachePostService extends PostService
         }
     }
 
-    public function cacheFileHandler( $postId )
+    public function getCacheManager( $postId )
     {
         $cacheFile = $postId . '.cache';
         $language = $this->repository->getCurrentLanguage();

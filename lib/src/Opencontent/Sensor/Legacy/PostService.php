@@ -106,7 +106,7 @@ class PostService extends PostServiceBase
         $post->published = Utils::getDateTimeFromTimestamp( $this->contentObject->attribute( 'published' ) );
         $post->modified = Utils::getDateTimeFromTimestamp( $this->contentObject->attribute( 'modified' ) );;
 
-        $post->expiringInfo = $this->getPostExpirationInfo();
+        $post->expirationInfo = $this->getPostExpirationInfo();
         $post->resolutionInfo = $this->getPostResolutionInfo( $post );
 
         $post->privacy = $this->getPostPrivacyCurrentStatus();
@@ -128,6 +128,7 @@ class PostService extends PostServiceBase
         $post->approvers = $this->repository->getParticipantService()->loadPostApprovers( $post );
         $post->owners = $this->repository->getParticipantService()->loadPostOwners( $post );
         $post->observers = $this->repository->getParticipantService()->loadPostObservers( $post );
+
         $post->author = clone $post->reporter;
         $authorName = $this->getPostAuthorName();
         if ( $authorName ) $post->author->name = $authorName;
@@ -139,7 +140,7 @@ class PostService extends PostServiceBase
         foreach( $post->participants as $participant )
             foreach( $participant as $user )
             {
-                $this->repository->getUserService()->loadUserPostAware( $user, $post );
+                $this->repository->getUserService()->setUserPostAware( $user, $post );
             }
 
         $post->internalStatus = 'miss';
