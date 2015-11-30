@@ -12,24 +12,27 @@ class OpenPaSensorRepository extends CoreRepository
 
     public function __construct()
     {
-        $permissions = array();
-        $permissions[] = new PermissionDefinitions\CanAddArea();
-        $permissions[] = new PermissionDefinitions\CanAddCategory();
-        $permissions[] = new PermissionDefinitions\CanAddObserver();
-        $permissions[] = new PermissionDefinitions\CanAssign();
-        $permissions[] = new PermissionDefinitions\CanChangePrivacy();
-        $permissions[] = new PermissionDefinitions\CanClose();
-        $permissions[] = new PermissionDefinitions\CanComment();
-        $permissions[] = new PermissionDefinitions\CanFix();
-        $permissions[] = new PermissionDefinitions\CanForceFix();
-        $permissions[] = new PermissionDefinitions\CanModerate();
+        $permissionDefinitions = array();
+        $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
+        $permissionDefinitions[] = new PermissionDefinitions\CanAddCategory();
+        $permissionDefinitions[] = new PermissionDefinitions\CanAddObserver();
+        $permissionDefinitions[] = new PermissionDefinitions\CanAssign();
+        $permissionDefinitions[] = new PermissionDefinitions\CanChangePrivacy();
+        $permissionDefinitions[] = new PermissionDefinitions\CanClose();
+        $permissionDefinitions[] = new PermissionDefinitions\CanComment();
+        $permissionDefinitions[] = new PermissionDefinitions\CanFix();
+        $permissionDefinitions[] = new PermissionDefinitions\CanForceFix();
+        $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
         if ( $this->getSensorSettings()->offsetGet('ApproverCanReopen') )
-            $permissions[] = new PermissionDefinitions\CanReopen();
-        $permissions[] = new PermissionDefinitions\CanRespond();
-        $permissions[] = new PermissionDefinitions\CanSendPrivateMessage();
-        $permissions[] = new PermissionDefinitions\CanSetExpiryDays();
+            $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
+        $permissionDefinitions[] = new PermissionDefinitions\CanRespond();
+        $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
+        $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
 
-        $this->setPermissionDefinitions( $permissions );
+        $this->setPermissionDefinitions( $permissionDefinitions );
+
+        $actionDefinitions = array();
+        $this->setActionDefinitions( $actionDefinitions );
     }
 
     public static function sensorRootRemoteId()
