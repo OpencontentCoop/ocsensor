@@ -15,12 +15,13 @@ use OpenContent\Sensor\Utils\TreeNodeItem;
 use eZContentObjectTreeNode;
 use eZContentClass;
 use eZContentObjectState;
+use ArrayAccess;
 
 abstract class Repository extends CoreRepository
 {
 
     /**
-     * @return array
+     * @return ArrayAccess
      */
     abstract public function getSensorSettings();
 
@@ -93,7 +94,7 @@ abstract class Repository extends CoreRepository
     }
 
     /**
-     * @return \OpenContent\Sensor\Legacy\PostService
+     * @return \OpenContent\Sensor\Legacy\CachePostService
      */
     public function getPostService()
     {

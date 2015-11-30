@@ -7,6 +7,7 @@ use OpenContent\Sensor\Core\PostService as PostServiceBase;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\PostCreateStruct;
 use OpenContent\Sensor\Api\Values\PostUpdateStruct;
+use OpenContent\Sensor\Api\Values\ParticipantRole;
 use OpenContent\Sensor\Api\Exception\BaseException;
 use eZPersistentObject;
 use eZCollaborationItem;
@@ -14,7 +15,6 @@ use eZContentObject;
 use eZContentObjectAttribute;
 use eZContentObjectState;
 use eZImageAliasHandler;
-use DateTime;
 use DateInterval;
 use ezpI18n;
 
@@ -124,10 +124,11 @@ class PostService extends PostServiceBase
         $post->geoLocation = $this->getPostGeoLocation();
 
         $post->participants = $this->repository->getParticipantService()->loadPostParticipants( $post );
-        $post->reporter = $this->repository->getParticipantService()->loadPostReporter( $post );
-        $post->approvers = $this->repository->getParticipantService()->loadPostApprovers( $post );
-        $post->owners = $this->repository->getParticipantService()->loadPostOwners( $post );
-        $post->observers = $this->repository->getParticipantService()->loadPostObservers( $post );
+        $authors = $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_AUTHOR);
+        $post->reporter = $authors->first();
+        $post->approvers = Participant\ApproverCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_APPROVER ) );
+        $post->owners = Participant\OwnerCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_OWNER ) );
+        $post->observers = Participant\ObserverCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_OBSERVER ) );
 
         $post->author = clone $post->reporter;
         $authorName = $this->getPostAuthorName();
@@ -137,14 +138,29 @@ class PostService extends PostServiceBase
         $post->privateMessages = $this->repository->getMessageService()->loadPrivateMessageCollectionByPost( $post );
         $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
 
+        $post->commentsIsOpen = $this->getCommentsIsOpen($post);
+
         foreach( $post->participants as $participant )
-            foreach( $participant as $user )
+        {
+            foreach ( $participant as $user )
             {
                 $this->repository->getUserService()->setUserPostAware( $user, $post );
             }
+        }
 
         $post->internalStatus = 'miss';
         return $post;
+    }
+
+    protected function getCommentsIsOpen(Post $post)
+    {
+        $now = time();
+        $resolutionInfo = $this->getPostResolutionInfo($post);
+        if ( $resolutionInfo instanceof Post\ResolutionInfo && $this->repository->getSensorSettings()->offsetExists( 'CloseCommentsAfterSeconds' ) )
+        {
+            return ( $now - $resolutionInfo->resolutionDateTime->getTimestamp() ) < $this->repository->getSensorSettings()->offsetGet( 'CloseCommentsAfterSeconds' );
+        }
+        return true;
     }
 
     protected function getPostAuthorName()

@@ -57,26 +57,12 @@ abstract class Repository implements RepositoryInterface
     /**
      * @var PermissionDefinition[]
      */
-    protected $permissionDefinitions;
+    protected $permissionDefinitions = array();
 
     /**
      * @var ActionDefinition[]
      */
-    protected $actionDefinitions;
-
-    /**
-     * @param ActionDefinition[] $actionDefinitions
-     *
-     * @return void
-     */
-    abstract public function setActionDefinitions( $actionDefinitions );
-
-    /**
-     * @param PermissionDefinition[] $permissionDefinitions
-     *
-     * @return void
-     */
-    abstract public function setPermissionDefinitions( $permissionDefinitions );
+    protected $actionDefinitions = array();
 
     /**
      * @return PostService
@@ -132,7 +118,7 @@ abstract class Repository implements RepositoryInterface
     {
         if ( $this->permissionService === null )
         {
-            $this->permissionService = new PermissionService( $this, array( new \OpenContent\Sensor\Core\PermissionDefinitions\Test() ) );
+            $this->permissionService = new PermissionService( $this, $this->permissionDefinitions );
         }
         return $this->permissionService;
     }
@@ -146,4 +132,25 @@ abstract class Repository implements RepositoryInterface
         return $this->actionService;
     }
 
+    /**
+     * @param ActionDefinition[] $actionDefinitions
+     *
+     * @return void
+     */
+    public function setActionDefinitions( $actionDefinitions )
+    {
+        $this->actionDefinitions = $actionDefinitions;
+        $this->actionService = null;
+    }
+
+    /**
+     * @param PermissionDefinition[] $permissionDefinitions
+     *
+     * @return void
+     */
+    public function setPermissionDefinitions( $permissionDefinitions )
+    {
+        $this->permissionDefinitions = $permissionDefinitions;
+        $this->participantService = null;
+    }
 }

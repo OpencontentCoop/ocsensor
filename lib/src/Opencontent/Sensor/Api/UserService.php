@@ -27,4 +27,15 @@ interface UserService
      * @return User
      */
     public function setUserPostAware( $id, Post $post );
+
+    public function setBlockMode( User $user, $enable = true );
+
+    public function setCommentMode( User $user, $enable = true );
+
+    public function setBehalfOfMode( User $user, $enable = true );
+
+    public function getAlerts( User $user );
+
+    public function addAlerts( User $user, $message, $level );
+
 }

@@ -9,9 +9,15 @@ use OpenContent\Sensor\Api\Values\Participant\ApproverCollection;
 use OpenContent\Sensor\Api\Values\Participant\OwnerCollection;
 use OpenContent\Sensor\Api\Values\Participant\ObserverCollection;
 use OpenContent\Sensor\Api\Values\Participant\ReporterCollection;
+use OpenContent\Sensor\Api\Values\ParticipantRoleCollection;
 
 interface ParticipantService
 {
+    /**
+     * @return ParticipantRoleCollection
+     */
+    public function loadParticipantRoleCollection();
+
     /**
      * @param Post $post
      * @param $id
@@ -22,38 +28,18 @@ interface ParticipantService
 
     /**
      * @param Post $post
+     * @param $role
+     *
+     * @return ParticipantCollection
+     */
+    public function loadPostParticipantsByRole( Post $post, $role );
+
+    /**
+     * @param Post $post
      *
      * @return ParticipantCollection
      */
     public function loadPostParticipants( Post $post );
-
-    /**
-     * @param Post $post
-     *
-     * @return ApproverCollection
-     */
-    public function loadPostApprovers( Post $post );
-
-    /**
-     * @param Post $post
-     *
-     * @return OwnerCollection
-     */
-    public function loadPostOwners( Post $post );
-
-    /**
-     * @param Post $post
-     *
-     * @return ObserverCollection
-     */
-    public function loadPostObservers( Post $post );
-
-    /**
-     * @param Post $post
-     *
-     * @return Participant
-     */
-    public function loadPostReporter( Post $post );
 
     /**
      * @param Post $post

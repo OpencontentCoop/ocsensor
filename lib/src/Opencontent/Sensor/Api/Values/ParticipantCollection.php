@@ -2,16 +2,16 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
-use OpenContent\Sensor\Api\Exportable;
+use OpenContent\Sensor\Api\Collection;
 use Traversable;
 
-class ParticipantCollection extends Exportable implements \IteratorAggregate
+class ParticipantCollection extends Collection
 {
 
     /**
      * @var Participant[]
      */
-    public $participants;
+    public $participants = array();
 
     /**
      * @param $id
@@ -21,6 +21,22 @@ class ParticipantCollection extends Exportable implements \IteratorAggregate
     public function getParticipantById( $id )
     {
         return isset( $this->participants[$id] ) ? $this->participants[$id] : false;
+    }
+
+    /**
+     * @param $role
+     *
+     * @return Participant
+     */
+    public function getParticipantsByRole( $role )
+    {
+        $collection = new ParticipantCollection();
+        foreach( $this->participants as $participant ){
+            if ($participant->roleIdentifier == $role || $participant->roleName == $role){
+                $collection->addParticipant( $participant );
+            }
+        }
+        return $collection;
     }
 
     /**
@@ -44,8 +60,21 @@ class ParticipantCollection extends Exportable implements \IteratorAggregate
         $this->participants[$participant->id] = $participant;
     }
 
-    public function getIterator()
+    /**
+     * @param Participant[] $participants
+     */
+    public function addParticipants( $participants ){
+        foreach( $participants as $participant )
+            $this->addParticipant( $participant );
+    }
+
+    protected function toArray()
     {
-        return new \ArrayIterator( $this->participants );
+        return (array) $this->participants;
+    }
+
+    protected function fromArray( array $data )
+    {
+        $this->participants = $data;
     }
 }

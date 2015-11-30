@@ -10,9 +10,9 @@ namespace OpenContent\Sensor\Api\Values;
 
 use OpenContent\Sensor\Api\Values\Message;
 use DateTime;
-use OpenContent\Sensor\Api\Exportable;
+use OpenContent\Sensor\Api\Collection;
 
-class MessageCollection extends Exportable
+class MessageCollection extends Collection
 {
     /**
      * @var int
@@ -27,7 +27,7 @@ class MessageCollection extends Exportable
     /**
      * @var Message[]
      */
-    public $messages;
+    public $messages = array();
 
     public function unreadMessages( DateTime $lastAccessDateTime )
     {
@@ -39,6 +39,7 @@ class MessageCollection extends Exportable
                 $unreadMessages[] = $message;
             }
         }
+
         return $unreadMessages;
     }
 
@@ -47,5 +48,15 @@ class MessageCollection extends Exportable
         $this->messages[] = $message;
         $this->lastMessage = $message;
         $this->count++;
+    }
+
+    protected function toArray()
+    {
+        return (array) $this->messages;
+    }
+
+    protected function fromArray( array $data )
+    {
+        $this->messages = $data;
     }
 }

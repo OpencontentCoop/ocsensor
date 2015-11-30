@@ -1,12 +1,36 @@
 <?php
 
-use OpenContent\Sensor\Legacy\Repository;
+use OpenContent\Sensor\Legacy\Repository as CoreRepository;
 use OpenContent\Sensor\Utils\TreeNode;
 use OpenContent\Sensor\Api\Exception\BaseException;
+use OpenContent\Sensor\Core\PermissionDefinitions;
+use OpenContent\Sensor\Legacy\Values\Settings;
 
-class OpenPaSensorRepository extends Repository
+class OpenPaSensorRepository extends CoreRepository
 {
     protected $statesByIdentifier = array();
+
+    public function __construct()
+    {
+        $permissions = array();
+        $permissions[] = new PermissionDefinitions\CanAddArea();
+        $permissions[] = new PermissionDefinitions\CanAddCategory();
+        $permissions[] = new PermissionDefinitions\CanAddObserver();
+        $permissions[] = new PermissionDefinitions\CanAssign();
+        $permissions[] = new PermissionDefinitions\CanChangePrivacy();
+        $permissions[] = new PermissionDefinitions\CanClose();
+        $permissions[] = new PermissionDefinitions\CanComment();
+        $permissions[] = new PermissionDefinitions\CanFix();
+        $permissions[] = new PermissionDefinitions\CanForceFix();
+        $permissions[] = new PermissionDefinitions\CanModerate();
+        if ( $this->getSensorSettings()->offsetGet('ApproverCanReopen') )
+            $permissions[] = new PermissionDefinitions\CanReopen();
+        $permissions[] = new PermissionDefinitions\CanRespond();
+        $permissions[] = new PermissionDefinitions\CanSendPrivateMessage();
+        $permissions[] = new PermissionDefinitions\CanSetExpiryDays();
+
+        $this->setPermissionDefinitions( $permissions );
+    }
 
     public static function sensorRootRemoteId()
     {
@@ -16,12 +40,13 @@ class OpenPaSensorRepository extends Repository
     public function getSensorSettings()
     {
         //@todo
-        return array();
+        return new Settings( array() );
     }
 
     public function getCurrentUser()
     {
-        //@todo
+        if ( $this->user === null )
+            $this->user = $this->getUserService()->loadUser( eZUser::currentUserID() );
         return $this->user;
     }
 
@@ -30,7 +55,8 @@ class OpenPaSensorRepository extends Repository
         $this->language = $language;
         if ( $this->language != eZLocale::currentLocaleCode() )
         {
-            $GLOBALS["eZLocaleStringDefault"] = $this->language;
+            //@todo
+            //$GLOBALS["eZLocaleStringDefault"] = $this->language;
             //@ svuotare cahce translations?
         }
     }
@@ -133,13 +159,4 @@ class OpenPaSensorRepository extends Repository
         return $this->statesByIdentifier[$identifier];
     }
 
-    public function setActionDefinitions( $actionDefinitions )
-    {
-        // TODO: Implement setActionDefinitions() method.
-    }
-
-    public function setPermissionDefinitions( $permissionDefinitions )
-    {
-        // TODO: Implement setPermissionDefinitions() method.
-    }
 }

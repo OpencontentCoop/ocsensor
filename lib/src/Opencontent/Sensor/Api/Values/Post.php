@@ -117,6 +117,11 @@ class Post extends Exportable
     public $comments;
 
     /**
+     * @var bool
+     */
+    public $commentsIsOpen;
+
+    /**
      * @var Post\Field\Image[]
      */
     public $images;

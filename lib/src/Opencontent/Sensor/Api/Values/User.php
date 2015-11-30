@@ -23,4 +23,12 @@ class User extends Exportable
      */
     public $lastAccessDateTime;
 
+    public $moderationMode;
+
+    public $commentMode;
+
+    public $behalfOfMode;
+
+    public $isEnabled;
+
 }

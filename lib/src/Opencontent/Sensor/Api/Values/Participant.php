@@ -9,6 +9,8 @@ use DateTime;
 
 class Participant extends Exportable implements \IteratorAggregate
 {
+    public $id;
+
     public $roleIdentifier;
 
     public $roleName;

@@ -16,7 +16,10 @@ try
     $repository = new OpenPaSensorRepository();
 
     if ( $test == 'test' )
+    {
+        $repository->getPostService()->clearCache( $objectId );
         $post = $repository->getPostService()->loadPost( $objectId );
+    }
     else
         $post = $repository->getPostService()->loadPostByInternalId( $objectId );
 
@@ -24,6 +27,7 @@ try
 }
 catch( Exception $e )
 {
+    print_r( $e->getMessage() );
     print_r( $e->getTrace() );
 }
 

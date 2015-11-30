@@ -2,15 +2,15 @@
 
 namespace OpenContent\Sensor\Api\Values;
 
+use OpenContent\Sensor\Api\Collection;
 use OpenContent\Sensor\Api\Values\Permission;
-use OpenContent\Sensor\Api\Exportable;
 
-class PermissionCollection extends Exportable implements \IteratorAggregate
+class PermissionCollection extends Collection implements \IteratorAggregate
 {
     /**
      * @var Permission[]
      */
-    protected $permissions;
+    protected $permissions = array();
 
     public function hasPermission( $identifier )
     {
@@ -22,8 +22,13 @@ class PermissionCollection extends Exportable implements \IteratorAggregate
         $this->permissions[$permission->identifier] = $permission->grant;
     }
 
-    public function getIterator()
+    protected function toArray()
     {
-        return new \ArrayIterator( $this->permissions );
+        return (array) $this->permissions;
+    }
+
+    protected function fromArray( array $data )
+    {
+        $this->permissions = $data;
     }
 }

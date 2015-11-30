@@ -3,15 +3,17 @@
 namespace OpenContent\Sensor\Core\PermissionDefinitions;
 
 use OpenContent\Sensor\Api\Permission\PermissionDefinition;
+use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
+use OpenContent\Sensor\Api\Values\ParticipantRole;
 
-class Test extends PermissionDefinition
+class CanAddArea extends UserIs
 {
-    public $identifier = 'can_test';
+    public $identifier = 'can_add_area';
 
     public function userHasPermission( User $user, Post $post )
     {
-        return true;
+        return $this->userIs( ParticipantRole::ROLE_APPROVER, $user, $post );
     }
 }
