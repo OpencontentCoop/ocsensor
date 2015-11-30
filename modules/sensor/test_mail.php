@@ -17,7 +17,7 @@ try
 
     if ( $test == 'test' )
     {
-        $repository->getPostService()->clearCache( $objectId );
+        //$repository->getPostService()->clearCache( $objectId );
         $post = $repository->getPostService()->loadPost( $objectId );
     }
     else

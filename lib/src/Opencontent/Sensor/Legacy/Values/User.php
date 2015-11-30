@@ -16,11 +16,6 @@ class User extends BaseUser
     public $whatsAppId;
 
     /**
-     * @var eZUser
-     */
-    public $ezUser;
-
-    /**
      * @return eZCollaborationGroup
      */
     public function getMainCollaborationGroup()
