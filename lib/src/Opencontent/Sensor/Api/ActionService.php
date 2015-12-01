@@ -11,8 +11,11 @@ use OpenContent\Sensor\Api\Exception\InvalidParameterException;
 
 interface ActionService
 {
-    public function setPost( Post $post );
-
+    /**
+     * @param User $user
+     *
+     * @return ActionService
+     */
     public function setUser( User $user );
 
     /**
@@ -25,17 +28,21 @@ interface ActionService
     /**
      * @param Action $action
      *
-     * @throws PermissionException
-     * @throws InvalidParameterException
-     */
-    public function dryRunAction( Action $action );
-
-    /**
-     * @param Action $action
+     * @return Action
+     * @param Post $post
      *
      * @throws PermissionException
      * @throws InvalidParameterException
      */
-    public function runAction( Action $action );
+    public function dryRunAction( Action $action, Post $post );
+
+    /**
+     * @param Action $action
+     * @param Post $post
+     *
+     * @throws PermissionException
+     * @throws InvalidParameterException
+     */
+    public function runAction( Action $action, Post $post );
 
 }

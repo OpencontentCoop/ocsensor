@@ -8,7 +8,7 @@ class InvalidParameterException extends BaseException
 {
     public function __construct( ActionDefinitionParameter $actionDefinitionParameter )
     {
-        $message = "Parameter {$actionDefinitionParameter->identifier} is required";
+        $message = "Parameter ({$actionDefinitionParameter->type}) {$actionDefinitionParameter->identifier} is required";
         parent::__construct( $message );
     }
 }

@@ -8,6 +8,7 @@ use OpenContent\Sensor\Legacy\Values\User as User;
 use eZUser;
 use eZCollaborationItemStatus;
 use SocialUser;
+use eZCollaborationItemParticipantLink;
 
 class UserService extends UserServiceBase
 {
@@ -89,5 +90,12 @@ class UserService extends UserServiceBase
         if ( !$user instanceof eZUser )
             $user = new eZUser( array() );
         return $user;
+    }
+
+    public function setLastAccessDateTime( \OpenContent\Sensor\Api\Values\User $user, Post $post )
+    {
+        $timestamp = time();
+        eZCollaborationItemStatus::setLastRead( $post->internalId, $user->id, $timestamp );
+        eZCollaborationItemParticipantLink::setLastRead( $post->internalId, $user->id, $timestamp );
     }
 }

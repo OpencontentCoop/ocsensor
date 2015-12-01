@@ -26,7 +26,7 @@ class ParticipantCollection extends Collection
     /**
      * @param $role
      *
-     * @return Participant
+     * @return ParticipantCollection
      */
     public function getParticipantsByRole( $role )
     {

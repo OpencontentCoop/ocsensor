@@ -2,11 +2,9 @@
 
 namespace OpenContent\Sensor\Api\Action;
 
-use OpenContent\Sensor\Api\Action\ActionDefinitionParameter;
-use OpenContent\Sensor\Api\Action\Action;
 use OpenContent\Sensor\Api\Exception\InvalidParameterException;
 use OpenContent\Sensor\Api\Exception\PermissionException;
-use OpenContent\Sensor\Api\Permission\PermissionDefinition;
+use OpenContent\Sensor\Api\Repository;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
 
@@ -27,20 +25,31 @@ abstract class ActionDefinition
     public $permissionDefinitionIdentifiers = array();
 
     /**
+     * @param Repository $repository
      * @param \OpenContent\Sensor\Api\Action\Action $action
      * @param Post $post
      * @param User $user
      *
+     * @return Action
+     *
      * @throws InvalidParameterException
      * @throws PermissionException
      */
-    public function dryRun( Action $action, Post $post, User $user )
+    public function dryRun( Repository $repository, Action $action, Post $post, User $user )
     {
         $this->checkPermission( $post, $user );
-        $this->checkParameters( $action );
+        return $this->checkParameters( $action );
     }
 
-    abstract public function run( Action $action, Post $post, User $user );
+    /**
+     * @param Repository $repository
+     * @param Action $action
+     * @param Post $post
+     * @param User $user
+     *
+     * @return mixed
+     */
+    abstract public function run( Repository $repository, Action $action, Post $post, User $user );
 
     protected function checkPermission( Post $post, User $user )
     {

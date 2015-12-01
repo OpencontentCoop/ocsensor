@@ -4,13 +4,14 @@ use OpenContent\Sensor\Legacy\Repository as CoreRepository;
 use OpenContent\Sensor\Utils\TreeNode;
 use OpenContent\Sensor\Api\Exception\BaseException;
 use OpenContent\Sensor\Core\PermissionDefinitions;
+use OpenContent\Sensor\Core\ActionDefinitions;
 use OpenContent\Sensor\Legacy\Values\Settings;
 
 class OpenPaSensorRepository extends CoreRepository
 {
-    protected $statesByIdentifier = array();
+    protected $data = array();
 
-    public function __construct()
+    protected function __construct()
     {
         $permissionDefinitions = array();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
@@ -23,15 +24,19 @@ class OpenPaSensorRepository extends CoreRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanFix();
         $permissionDefinitions[] = new PermissionDefinitions\CanForceFix();
         $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
-        if ( $this->getSensorSettings()->offsetGet('ApproverCanReopen') )
-            $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
+        $permissionDefinitions[] = new PermissionDefinitions\CanRead();
         $permissionDefinitions[] = new PermissionDefinitions\CanRespond();
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
 
+        if ( $this->getSensorSettings()->offsetGet('ApproverCanReopen') )
+            $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
+
         $this->setPermissionDefinitions( $permissionDefinitions );
 
         $actionDefinitions = array();
+        $actionDefinitions[] = new ActionDefinitions\ReadAction();
+        $actionDefinitions[] = new ActionDefinitions\AssignAction();
         $this->setActionDefinitions( $actionDefinitions );
     }
 
@@ -60,7 +65,7 @@ class OpenPaSensorRepository extends CoreRepository
         {
             //@todo
             //$GLOBALS["eZLocaleStringDefault"] = $this->language;
-            //@ svuotare cahce translations?
+            //@ svuotare cachce translations?
         }
     }
 
@@ -74,27 +79,37 @@ class OpenPaSensorRepository extends CoreRepository
 
     public function getRootNode()
     {
-        return eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() )->attribute( 'main_node' );
+        if ( !isset($this->data['root']) )
+            $this->data['root'] = eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() )->attribute( 'main_node' );
+        return $this->data['root'];
     }
 
     public function getOperatorsRootNode()
     {
-        return eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_operators' )->attribute( 'main_node' );
+        if ( !isset($this->data['operators']) )
+            $this->data['operators'] = eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_operators' )->attribute( 'main_node' );
+        return $this->data['operators'];
     }
 
     public function getCategoriesRootNode()
     {
-        return eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_postcategories' )->attribute( 'main_node' );
+        if ( !isset($this->data['categories']) )
+            $this->data['categories'] = eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_postcategories' )->attribute( 'main_node' );
+        return $this->data['categories'];
     }
 
     public function getAreasRootNode()
     {
-        return $this->getRootNode();
+        if ( !isset($this->data['areas']) )
+            $this->data['areas'] = $this->getRootNode();
+        return $this->data['areas'];
     }
 
     public function getOperatorContentClass()
     {
-        return eZContentClass::fetchByIdentifier( 'sensor_operator' );
+        if ( !isset($this->data['operator_class']) )
+            $this->data['operator_class'] = eZContentClass::fetchByIdentifier( 'sensor_operator' );
+        return $this->data['operator_class'];
     }
 
     public function getSensorCollaborationHandlerTypeString()
@@ -104,26 +119,32 @@ class OpenPaSensorRepository extends CoreRepository
 
     public function getPostRootNode()
     {
-        return eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_postcontainer' )->attribute( 'main_node' );
+        if ( !isset($this->data['posts']) )
+            $this->data['posts'] = eZContentObject::fetchByRemoteID( self::sensorRootRemoteId() . '_postcontainer' )->attribute( 'main_node' );
+        return $this->data['posts'];
     }
 
     public function getPostContentClass()
     {
-        return eZContentClass::fetchByIdentifier( 'sensor_post' );
+        if ( !isset($this->data['post_class']) )
+            $this->data['post_class'] = eZContentClass::fetchByIdentifier( 'sensor_post' );
+        return $this->data['post_class'];
     }
 
     public function getUserRootNode()
     {
-        return eZContentObjectTreeNode::fetch( intval( eZINI::instance()->variable( "UserSettings", "DefaultUserPlacement" ) ) );
+        if ( !isset($this->data['users']) )
+            $this->data['users'] = eZContentObjectTreeNode::fetch( intval( eZINI::instance()->variable( "UserSettings", "DefaultUserPlacement" ) ) );
+        return $this->data['users'];
     }
 
     public function getSensorPostStates( $identifier )
     {
-        if ( !isset( $this->statesByIdentifier[$identifier] ) )
+        if ( !isset( $this->data['states_' . $identifier] ) )
         {
             if ( $identifier == 'sensor' )
             {
-                $this->statesByIdentifier['sensor'] = OpenPABase::initStateGroup(
+                $this->data['states_sensor'] = OpenPABase::initStateGroup(
                     'sensor',
                     array(
                         'pending' => "Inviato",
@@ -134,7 +155,7 @@ class OpenPaSensorRepository extends CoreRepository
             }
             elseif ( $identifier == 'privacy' )
             {
-                $this->statesByIdentifier['privacy'] = OpenPABase::initStateGroup(
+                $this->data['states_privacy'] = OpenPABase::initStateGroup(
                     'privacy',
                     array(
                         'public' => "Pubblico",
@@ -144,7 +165,7 @@ class OpenPaSensorRepository extends CoreRepository
             }
             elseif ( $identifier == 'moderation' )
             {
-                $this->statesByIdentifier['moderation'] = OpenPABase::initStateGroup(
+                $this->data['states_moderation'] = OpenPABase::initStateGroup(
                     'moderation',
                     array(
                         'skipped' => "Non necessita di moderazione",
@@ -159,7 +180,7 @@ class OpenPaSensorRepository extends CoreRepository
                 throw new BaseException( "Status $identifier not handled" );
             }
         }
-        return $this->statesByIdentifier[$identifier];
+        return $this->data['states_' . $identifier];
     }
 
 }

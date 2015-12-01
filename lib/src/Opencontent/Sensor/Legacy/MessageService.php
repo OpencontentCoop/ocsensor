@@ -277,4 +277,19 @@ class MessageService extends MessageServiceBase
         return $result;
     }
 
+    public function createTimelineItem( Message\TimelineItemStruct $struct )
+    {
+        //@todo
+    }
+
+    public function createPrivateMessage( Message\PrivateMessageStruct $struct )
+    {
+        //@todo
+    }
+
+    public function createComment( Message\CommentStruct $struct )
+    {
+        //@todo
+    }
+
 }

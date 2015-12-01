@@ -11,6 +11,18 @@ use OpenContent\Sensor\Api\Values\User;
 
 abstract class Repository implements RepositoryInterface
 {
+    private static $instance;
+
+    public static function instance()
+    {
+        if (self::$instance === null)
+            self::$instance = new static();
+        return self::$instance;
+    }
+
+    protected function __construct()
+    {
+    }
 
     /**
      * @var User
@@ -53,6 +65,11 @@ abstract class Repository implements RepositoryInterface
      * @var UserService
      */
     protected $userService;
+
+    /**
+     * @var EventService
+     */
+    protected $eventService;
 
     /**
      * @var PermissionDefinition[]

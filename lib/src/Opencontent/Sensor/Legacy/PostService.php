@@ -17,6 +17,7 @@ use eZContentObjectState;
 use eZImageAliasHandler;
 use DateInterval;
 use ezpI18n;
+use OpenContent\Sensor\Api\Values\Message\TimelineItemStruct;
 
 
 class PostService extends PostServiceBase
@@ -140,6 +141,14 @@ class PostService extends PostServiceBase
 
         $post->commentsIsOpen = $this->getCommentsIsOpen($post);
 
+        $this->setUserPostAware( $post );
+
+        $post->internalStatus = 'miss';
+        return $post;
+    }
+
+    public function setUserPostAware( $post )
+    {
         foreach( $post->participants as $participant )
         {
             foreach ( $participant as $user )
@@ -147,9 +156,7 @@ class PostService extends PostServiceBase
                 $this->repository->getUserService()->setUserPostAware( $user, $post );
             }
         }
-
-        $post->internalStatus = 'miss';
-        return $post;
+        $this->repository->getUserService()->setUserPostAware( $this->repository->getCurrentUser(), $post );
     }
 
     protected function getCommentsIsOpen(Post $post)
@@ -454,14 +461,27 @@ class PostService extends PostServiceBase
         // TODO: Implement refreshPost() method.
     }
 
-    public function setPostStatus( Post $post, Post\Status $status )
+    public function setPostStatus( Post $post, $status )
     {
         // TODO: Implement setPostStatus() method.
     }
 
-    public function setPostWorkflowStatus( Post $post, Post\WorkflowStatus $status )
+    public function setPostWorkflowStatus( Post $post, $status )
     {
         // TODO: Implement setPostWorkflowStatus() method.
+
+        $this->addTimelineItem( $post, $status );
+
+    }
+
+    protected function addTimelineItem( Post $post, $status )
+    {
+        $struct = new TimelineItemStruct();
+        $struct->post = $post;
+        $struct->creator = $this->repository->getCurrentUser();
+        $struct->status = $status;
+        $struct->createdDateTime = new \DateTime();
+        $this->repository->getMessageService()->createTimelineItem( $struct );
     }
 
     public function setPostExpirationInfo( Post $post, Post\ExpirationInfo $expiry )

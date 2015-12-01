@@ -13,8 +13,7 @@ echo '<pre>';
 
 try
 {
-    $repository = new OpenPaSensorRepository();
-
+    $repository = OpenPaSensorRepository::instance();
     if ( $test == 'test' )
     {
         //$repository->getPostService()->clearCache( $objectId );
@@ -23,7 +22,11 @@ try
     else
         $post = $repository->getPostService()->loadPostByInternalId( $objectId );
 
-    print_r( $post );
+    $action = new \OpenContent\Sensor\Api\Action\Action();
+    $action->identifier = 'assign';
+    $repository->getActionService()->runAction( $action, $post );
+
+    //print_r( $post );
 }
 catch( Exception $e )
 {

@@ -5,7 +5,6 @@ namespace OpenContent\Sensor\Core;
 use OpenContent\Sensor\Api\Action\ActionDefinition;
 use OpenContent\Sensor\Api\Action\Action;
 use OpenContent\Sensor\Api\ActionService as ActionServiceInterface;
-use OpenContent\Sensor\Api\Repository;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
 use OpenContent\Sensor\Api\Exception\BaseException;
@@ -21,7 +20,7 @@ class ActionService implements ActionServiceInterface
     /**
      * @var ActionDefinition[]
      */
-    protected $actionDefinitions;
+    protected $actionDefinitions = array();
 
     /**
      * @var Post
@@ -40,36 +39,56 @@ class ActionService implements ActionServiceInterface
     public function __construct( Repository $repository, $actionDefinitions )
     {
         $this->repository = $repository;
-        $this->actionDefinitions = $actionDefinitions;
+        foreach( $actionDefinitions as $actionDefinition )
+        {
+            $this->actionDefinitions[$actionDefinition->identifier] = $actionDefinition;
+        }
+        $this->setUser( $this->repository->getCurrentUser() );
     }
 
     public function loadActionDefinitionByIdentifier( $identifier )
     {
-        foreach( $this->actionDefinitions as $actionDefinition )
-        {
-            if ( $actionDefinition->identifier == $identifier )
-                return $actionDefinition;
-        }
+        if (isset($this->actionDefinitions[$identifier]))
+            return $this->actionDefinitions[$identifier];
         throw new BaseException( "Action $identifier not defined" );
     }
 
-    public function dryRunAction( Action $action )
+    /**
+     * @param Action $action
+     * @param Post $post
+     *
+     * @return Action
+     * @throws BaseException
+     */
+    public function dryRunAction( Action $action, Post $post )
     {
-        $this->loadActionDefinitionByIdentifier( $action->identifier )->dryRun( $action, $this->post, $this->user );
+        return $this->loadActionDefinitionByIdentifier( $action->identifier )->dryRun(
+            $this->repository,
+            $action,
+            $post,
+            $this->user
+        );
     }
 
-    public function runAction( Action $action )
+    /**
+     * @param Action $action
+     * @param Post $post
+     *
+     * @throws BaseException
+     */
+    public function runAction( Action $action, Post $post )
     {
-        $this->loadActionDefinitionByIdentifier( $action->identifier )->run( $action, $this->post, $this->user );
-    }
-
-    public function setPost( Post $post )
-    {
-        $this->post = $post;
+        $this->loadActionDefinitionByIdentifier( $action->identifier )->run(
+            $this->repository,
+            $this->dryRunAction( $action, $post ),
+            $post,
+            $this->user
+        );
     }
 
     public function setUser( User $user )
     {
         $this->user = $user;
+        return $this;
     }
 }

@@ -11,9 +11,12 @@ use OpenContent\Sensor\Api\ParticipantService;
 use OpenContent\Sensor\Api\PermissionService;
 use OpenContent\Sensor\Api\ActionService;
 use OpenContent\Sensor\Api\UserService;
+use OpenContent\Sensor\Api\EventService;
 
 interface Repository
 {
+
+    public static function instance();
 
     /**
      * @return User
@@ -62,4 +65,9 @@ interface Repository
      * @return UserService
      */
     public function getUserService();
+
+    /**
+     * @return EventService
+     */
+    public function getEventService();
 }

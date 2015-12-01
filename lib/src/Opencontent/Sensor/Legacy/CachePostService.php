@@ -61,13 +61,21 @@ class CachePostService extends PostService
     public static function retrieveCache( $file, $mtime, $args )
     {
         $post = include( $file );
+        list( $postId, $repositoryClassName ) = $args;
+        if ( !class_implements( $repositoryClassName, 'OpenContent\Sensor\Api\Repository' ) )
+            throw new BaseException( "$repositoryClassName not valid repository class" );
+        $repository = $repositoryClassName::instance();
+        $service = new PostService( $repository );
+        $service->setUserPostAware( $post );
         return $post;
     }
 
     public static function generateCache( $file, $args )
     {
         list( $postId, $repositoryClassName ) = $args;
-        $repository = new $repositoryClassName();
+        if ( !class_implements( $repositoryClassName, 'OpenContent\Sensor\Api\Repository' ) )
+            throw new BaseException( "$repositoryClassName not valid repository class" );
+        $repository = $repositoryClassName::instance();
         $service = new PostService( $repository );
         $post = $service->loadPost( $postId );
         return array( 'content'  => $post,

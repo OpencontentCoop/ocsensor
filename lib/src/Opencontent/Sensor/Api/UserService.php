@@ -38,4 +38,6 @@ interface UserService
 
     public function addAlerts( User $user, $message, $level );
 
+    public function setLastAccessDateTime( User $user, Post $post );
+
 }

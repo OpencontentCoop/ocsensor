@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: luca
- * Date: 23/11/15
- * Time: 09:17
- */
 
 namespace OpenContent\Sensor\Api;
 
@@ -35,5 +29,11 @@ interface MessageService
      * @return Message/TimelineItemCollection
      */
     public function loadTimelineItemCollectionByPost( Post $post );
+
+    public function createTimelineItem( Message\TimelineItemStruct $struct );
+
+    public function createPrivateMessage( Message\PrivateMessageStruct $struct );
+
+    public function createComment( Message\CommentStruct $struct );
 
 }

@@ -72,11 +72,22 @@ class ParticipantService extends ParticipantServiceBase
         return $this->internalLoadPostParticipants( $post )->getParticipantById( $id );
     }
 
+    /**
+     * @param Post $post
+     * @param $role
+     *
+     * @return ParticipantCollection
+     */
     public function loadPostParticipantsByRole( Post $post, $role )
     {
         return $this->internalLoadPostParticipants( $post )->getParticipantsByRole( $role );
     }
 
+    /**
+     * @param Post $post
+     *
+     * @return ParticipantCollection
+     */
     public function loadPostParticipants( Post $post )
     {
         return $this->internalLoadPostParticipants( $post );

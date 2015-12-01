@@ -1,0 +1,34 @@
+<?php
+
+namespace OpenContent\Sensor\Core\ActionDefinitions;
+
+use OpenContent\Sensor\Api\Action\Action;
+use OpenContent\Sensor\Api\Action\ActionDefinition;
+use OpenContent\Sensor\Api\Repository;
+use OpenContent\Sensor\Api\Values\Event;
+use OpenContent\Sensor\Api\Values\Post;
+use OpenContent\Sensor\Api\Values\User;
+
+class ReadAction extends ActionDefinition
+{
+    public $identifier = 'read';
+
+    public $permissionDefinitionIdentifiers = array( 'can_read' );
+
+    public function run( Repository $repository, Action $action, Post $post, User $user )
+    {
+        $repository->getUserService()->setLastAccessDateTime( $user, $post );
+        if ( $post->approvers->getUserById( $user->id ) instanceof User
+             && ( $post->workflowStatus->identifier == Post\WorkflowStatus::WAITING
+                  || $post->workflowStatus->identifier == Post\WorkflowStatus::REOPENED ) )
+        {
+            $repository->getPostService()->setPostWorkflowStatus( $post, Post\WorkflowStatus::READ );
+
+            $event = new Event();
+            $event->identifier = 'on_' . $action->identifier;
+            $event->post = $post;
+            $event->user = $user;
+            $repository->getEventService()->fire( $event );
+        }
+    }
+}

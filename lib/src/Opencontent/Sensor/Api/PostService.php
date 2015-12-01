@@ -73,17 +73,17 @@ interface PostService
 
     /**
      * @param Post $post
-     * @param Post\Status $status
+     * @param string $status
      * @throw \Exception
      */
-    public function setPostStatus( Post $post, Post\Status $status );
+    public function setPostStatus( Post $post, $status );
 
     /**
      * @param Post $post
-     * @param Post\WorkflowStatus $status
+     * @param string $status
      * @throw \Exception
      */
-    public function setPostWorkflowStatus( Post $post, Post\WorkflowStatus $status );
+    public function setPostWorkflowStatus( Post $post, $status );
 
     /**
      * @param Post $post
