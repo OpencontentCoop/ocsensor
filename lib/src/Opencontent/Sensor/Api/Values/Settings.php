@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenContent\Sensor\Legacy\Values;
+namespace OpenContent\Sensor\Api\Values;
 
 use ArrayAccess;
 
@@ -39,5 +39,20 @@ class Settings implements ArrayAccess
     public function offsetUnset( $offset )
     {
         unset( $this->container[$offset] );
+    }
+
+    public function has( $offset )
+    {
+        return $this->offsetExists( $offset );
+    }
+
+    public function get( $offset )
+    {
+        return $this->offsetGet( $offset );
+    }
+
+    public function set( $offset, $value )
+    {
+        $this->offsetSet( $offset, $value );
     }
 }

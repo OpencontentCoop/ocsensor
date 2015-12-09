@@ -7,6 +7,5 @@ use OpenContent\Sensor\Core\EventService as BaseEventService;
 class EventService extends BaseEventService
 {
     public function fire( $event ){
-        print_r($event);
     }
 }

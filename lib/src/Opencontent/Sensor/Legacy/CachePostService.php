@@ -11,7 +11,6 @@ namespace OpenContent\Sensor\Legacy;
 use OpenContent\Sensor\Legacy\PostService;
 use OpenContent\Sensor\Api\Values\Post;
 use eZCollaborationItem;
-use eZContentObject;
 use eZDir;
 use eZSys;
 use eZClusterFileHandler;
@@ -36,20 +35,12 @@ class CachePostService extends PostService
 
     public function loadPostByInternalId( $postInternalId )
     {
-        $type = $this->repository->getSensorCollaborationHandlerTypeString();
-        $collaborationItem = eZPersistentObject::fetchObject(
-            eZCollaborationItem::definition(),
-            null,
-            array(
-                'type_identifier' => $type,
-                'id' => intval( $postInternalId )
-            )
-        );
-        if ( $collaborationItem instanceof eZCollaborationItem )
+        $this->getCollaborationItem( $postInternalId );
+        if ( $this->collaborationItem instanceof eZCollaborationItem )
         {
-            return $this->loadPost( $collaborationItem->attribute( 'data_int1' ) );
+            return $this->loadPost( $this->collaborationItem->attribute( 'data_int1' ) );
         }
-        throw new BaseException( "eZCollaborationItem $type not found for id $postInternalId" );
+        throw new BaseException( "eZCollaborationItem not found for id $postInternalId" );
     }
 
     public function refreshPost( Post $post )

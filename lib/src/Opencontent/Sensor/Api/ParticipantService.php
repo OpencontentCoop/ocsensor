@@ -3,6 +3,7 @@
 namespace OpenContent\Sensor\Api;
 
 use OpenContent\Sensor\Api\Values\Post;
+use OpenContent\Sensor\Api\Values\User;
 use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Api\Values\ParticipantCollection;
 use OpenContent\Sensor\Api\Values\Participant\ApproverCollection;
@@ -10,6 +11,7 @@ use OpenContent\Sensor\Api\Values\Participant\OwnerCollection;
 use OpenContent\Sensor\Api\Values\Participant\ObserverCollection;
 use OpenContent\Sensor\Api\Values\Participant\ReporterCollection;
 use OpenContent\Sensor\Api\Values\ParticipantRoleCollection;
+use OpenContent\Sensor\Api\Values\ParticipantRole;
 
 interface ParticipantService
 {
@@ -43,22 +45,26 @@ interface ParticipantService
 
     /**
      * @param Post $post
-     * @param Participant $participant
+     * @param int $id
      *
      */
-    public function addPostParticipant( Post $post, Participant $participant );
+    public function addPostParticipant( Post $post, $id, ParticipantRole $role );
 
     /**
      * @param Post $post
-     * @param Participant $participant
+     * @param int $id
      *
      */
-    public function trashPostParticipant( Post $post, Participant $participant );
+    public function trashPostParticipant( Post $post, $id );
 
     /**
      * @param Post $post
-     * @param Participant $participant
+     * @param int $id
      *
      */
-    public function restorePostParticipant( Post $post, Participant $participant );
+    public function restorePostParticipant( Post $post, $id );
+
+    public function activatePostParticipants( Post $post );
+
+    public function deactivatePostParticipants( Post $post );
 }

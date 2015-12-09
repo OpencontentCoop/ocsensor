@@ -12,6 +12,7 @@ use OpenContent\Sensor\Api\PermissionService;
 use OpenContent\Sensor\Api\ActionService;
 use OpenContent\Sensor\Api\UserService;
 use OpenContent\Sensor\Api\EventService;
+use OpenContent\Sensor\Api\Values\Settings;
 
 interface Repository
 {
@@ -30,6 +31,11 @@ interface Repository
     public function setCurrentLanguage( $language );
 
     public function isUserParticipant( Post $post );
+
+    /**
+     * @return Settings
+     */
+    public function getSensorSettings();
 
     /**
      * @return PostService

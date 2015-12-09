@@ -14,6 +14,7 @@ echo '<pre>';
 try
 {
     $repository = OpenPaSensorRepository::instance();
+
     if ( $test == 'test' )
     {
         //$repository->getPostService()->clearCache( $objectId );
@@ -22,15 +23,22 @@ try
     else
         $post = $repository->getPostService()->loadPostByInternalId( $objectId );
 
-    $action = new \OpenContent\Sensor\Api\Action\Action();
-    $action->identifier = 'assign';
-    $repository->getActionService()->runAction( $action, $post );
+    $user = $repository->getUserService()->loadUser($post->approvers->first()->id);
+    $repository->getUserService()->setUserPostAware( $user, $post );
+    $repository->setCurrentUser($user);
 
-    //print_r( $post );
+    $action = new \OpenContent\Sensor\Api\Action\Action();
+    $action->identifier = 'fix';
+//    $action->setParameter( 'participant_ids', array(1924,1922) );
+    $repository->getActionService()->runAction( $action, $post );
+//
+    $post = $repository->getPostService()->loadPost( $objectId );
+    print_r( $post );
 }
 catch( Exception $e )
 {
     print_r( $e->getMessage() );
+    echo '<hr>';
     print_r( $e->getTrace() );
 }
 

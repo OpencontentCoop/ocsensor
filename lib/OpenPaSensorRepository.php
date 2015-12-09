@@ -5,11 +5,21 @@ use OpenContent\Sensor\Utils\TreeNode;
 use OpenContent\Sensor\Api\Exception\BaseException;
 use OpenContent\Sensor\Core\PermissionDefinitions;
 use OpenContent\Sensor\Core\ActionDefinitions;
-use OpenContent\Sensor\Legacy\Values\Settings;
+use OpenContent\Sensor\Api\Values\Settings;
 
 class OpenPaSensorRepository extends CoreRepository
 {
     protected $data = array();
+
+    private static $instance;
+
+    public static function instance()
+    {
+        //@todo
+        if (self::$instance === null)
+            self::$instance = new static();
+        return self::$instance;
+    }
 
     protected function __construct()
     {
@@ -29,7 +39,7 @@ class OpenPaSensorRepository extends CoreRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
 
-        if ( $this->getSensorSettings()->offsetGet('ApproverCanReopen') )
+        if ( $this->getSensorSettings()->get('ApproverCanReopen') )
             $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
 
         $this->setPermissionDefinitions( $permissionDefinitions );
@@ -37,6 +47,7 @@ class OpenPaSensorRepository extends CoreRepository
         $actionDefinitions = array();
         $actionDefinitions[] = new ActionDefinitions\ReadAction();
         $actionDefinitions[] = new ActionDefinitions\AssignAction();
+        $actionDefinitions[] = new ActionDefinitions\FixAction();
         $this->setActionDefinitions( $actionDefinitions );
     }
 
@@ -48,7 +59,21 @@ class OpenPaSensorRepository extends CoreRepository
     public function getSensorSettings()
     {
         //@todo
-        return new Settings( array() );
+        return new Settings( array(
+            'AllowMultipleOwner' => false,
+            'AuthorCanReopen' => false,
+            'ApproverCanReopen' => false,
+            'CategoryCount' => 'unique',
+            'CategoryAutomaticAssign' => false,
+            'DefaultPostExpirationDaysInterval' => 15,
+            'DefaultPostExpirationDaysLimit' => 7,
+            'TextMaxLength' => 800,
+            'UseShortUrl' => false,
+            'ModerateNewWhatsAppUser' => true,
+            'FilterOperatorsByOwner' => true,
+            'FilterObserversByOwner' => true,
+            'CloseCommentsAfterSeconds' => 1814400
+        ) );
     }
 
     public function getCurrentUser()

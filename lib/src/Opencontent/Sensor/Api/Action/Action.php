@@ -11,7 +11,7 @@ class Action
     /**
      * @var ActionParameter[]
      */
-    public $parameters;
+    public $parameters = array();
 
     public function hasParameter( $name )
     {
@@ -23,6 +23,23 @@ class Action
             }
         }
         return false;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return mixed|null
+     */
+    public function getParameterValue( $name )
+    {
+        foreach( $this->parameters as $parameter )
+        {
+            if ( $parameter->identifier == $name && $parameter->value !== null )
+            {
+                return $parameter->value;
+            }
+        }
+        return null;
     }
 
     public function setParameter( $identifier, $value )

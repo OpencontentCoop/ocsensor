@@ -30,6 +30,8 @@ interface MessageService
      */
     public function loadTimelineItemCollectionByPost( Post $post );
 
+    public function addTimelineItemByWorkflowStatus( Post $post, $status, $parameters = null );
+
     public function createTimelineItem( Message\TimelineItemStruct $struct );
 
     public function createPrivateMessage( Message\PrivateMessageStruct $struct );

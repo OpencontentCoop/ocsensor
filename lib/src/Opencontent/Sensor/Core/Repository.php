@@ -8,6 +8,7 @@ use OpenContent\Sensor\Api\Permission\PermissionDefinition;
 use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
+use OpenContent\Sensor\Api\Values\Settings;
 
 abstract class Repository implements RepositoryInterface
 {
@@ -80,6 +81,11 @@ abstract class Repository implements RepositoryInterface
      * @var ActionDefinition[]
      */
     protected $actionDefinitions = array();
+
+    /**
+     * @return Settings
+     */
+    abstract public function getSensorSettings();
 
     /**
      * @return PostService

@@ -7,6 +7,7 @@ use OpenContent\Sensor\Api\Exception\PermissionException;
 use OpenContent\Sensor\Api\Repository;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
+use OpenContent\Sensor\Api\Values\Event;
 
 abstract class ActionDefinition
 {
@@ -74,5 +75,15 @@ abstract class ActionDefinition
 
         }
         return $action;
+    }
+
+    protected function fireEvent( Repository $repository, Post $post, User $user, $eventParameters = array() )
+    {
+        $event = new Event();
+        $event->identifier = 'on_' . $this->identifier;
+        $event->post = $post;
+        $event->user = $user;
+        $event->parameters = $eventParameters;
+        $repository->getEventService()->fire( $event );
     }
 }

@@ -5,7 +5,6 @@ namespace OpenContent\Sensor\Core\ActionDefinitions;
 use OpenContent\Sensor\Api\Action\Action;
 use OpenContent\Sensor\Api\Action\ActionDefinition;
 use OpenContent\Sensor\Api\Repository;
-use OpenContent\Sensor\Api\Values\Event;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
 
@@ -23,12 +22,9 @@ class ReadAction extends ActionDefinition
                   || $post->workflowStatus->identifier == Post\WorkflowStatus::REOPENED ) )
         {
             $repository->getPostService()->setPostWorkflowStatus( $post, Post\WorkflowStatus::READ );
-
-            $event = new Event();
-            $event->identifier = 'on_' . $action->identifier;
-            $event->post = $post;
-            $event->user = $user;
-            $repository->getEventService()->fire( $event );
+            $repository->getMessageService()->addTimelineItemByWorkflowStatus( $post, Post\WorkflowStatus::READ );
+            $this->fireEvent( $repository, $post, $user );
         }
     }
 }
+

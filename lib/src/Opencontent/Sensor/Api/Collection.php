@@ -21,6 +21,11 @@ abstract class Collection extends Exportable implements \IteratorAggregate
         return array_pop( $items );
     }
 
+    public function count()
+    {
+        return count( $this->toArray() );
+    }
+
     public static function fromCollection( Collection $collection )
     {
         $newCollection = new static();

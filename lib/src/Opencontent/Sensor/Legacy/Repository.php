@@ -20,12 +20,6 @@ use ArrayAccess;
 
 abstract class Repository extends CoreRepository
 {
-
-    /**
-     * @return ArrayAccess
-     */
-    abstract public function getSensorSettings();
-
     /**
      * @return string
      */

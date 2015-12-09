@@ -20,4 +20,6 @@ class MessageStruct
      * @var User
      */
     public $creator;
+
+    public $text;
 }

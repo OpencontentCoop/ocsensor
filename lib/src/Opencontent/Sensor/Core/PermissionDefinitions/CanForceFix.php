@@ -9,7 +9,7 @@ use OpenContent\Sensor\Api\Values\ParticipantRole;
 
 class CanForceFix extends UserIs
 {
-    public $identifier = 'can_fix';
+    public $identifier = 'can_force_fix';
 
     public function userHasPermission( User $user, Post $post )
     {

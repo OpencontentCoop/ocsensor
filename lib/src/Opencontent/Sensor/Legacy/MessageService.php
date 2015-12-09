@@ -21,6 +21,7 @@ use eZCollaborationItemMessageLink;
 use ezpI18n;
 use eZUser;
 use eZTemplate;
+use OpenContent\Sensor\Utils\TimelineTools;
 
 class MessageService extends MessageServiceBase
 {
@@ -146,7 +147,10 @@ class MessageService extends MessageServiceBase
                     {
                         $message = new Message\TimelineItem();
                         $type = 'timeline';
-                        $message->text = $this->formatTimelineItemText( $simpleMessage, $post );
+                        $message->text = TimelineTools::getText(
+                            $simpleMessage->attribute( 'data_text1' ),
+                            $this->repository->getParticipantService()->loadPostParticipants( $post )
+                        );
                     }
                     else
                     {
@@ -194,92 +198,36 @@ class MessageService extends MessageServiceBase
         }
     }
 
-    protected function formatTimelineItemText( eZCollaborationSimpleMessage $simpleMessage, Post $post )
+    public function addTimelineItemByWorkflowStatus( Post $post, $status, $parameters = null )
     {
-        $result = '';
-        if ( $simpleMessage instanceof eZCollaborationSimpleMessage )
-        {
-            $text = $simpleMessage->attribute( 'data_text1' );
-            $parts = explode( ' by ', $text );
-            if ( !isset( $parts[1] ) )
-            {
-                $parts = explode( ' to ', $text );
-            }
-            if ( isset( $parts[1] ) )
-            {
-                $nameParts = explode( '::', $parts[1] );
-                $nameString = array();
-                foreach ( $nameParts as $namePart )
-                {
-                    if ( is_numeric( $namePart ) )
-                    {
-                        $participant = $this->repository->getParticipantService()
-                                         ->loadPostParticipants( $post )
-                                         ->getUserById( intval( $namePart ) );
-                        $nameString[] = $participant->name;
-                    }
-                    else
-                    {
-                        $nameString[] = $namePart;
-                    }
-                }
-                $name = implode( ', ', $nameString );
-
-                switch ( $parts[0] )
-                {
-                    case '_fixed':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Completata da %name', false, array( '%name' => $name ) );
-                        break;
-
-                    case '_read':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Letta da %name', false, array( '%name' => $name ) );
-                        break;
-
-                    case '_closed':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Chiusa da %name', false, array( '%name' => $name ) );
-                        break;
-
-                    case '_assigned':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Assegnata a %name', false, array( '%name' => $name ) );
-                        break;
-
-                    case '_reopened':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Riaperta da %name', false, array( '%name' => $name ) );
-                        break;
-                }
-            }
-            else
-            {
-                switch ( $parts[0] )
-                {
-                    case '_fixed':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Completata' );
-                        break;
-
-                    case '_read':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Letta' );
-                        break;
-
-                    case '_closed':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Chiusa' );
-                        break;
-
-                    case '_assigned':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Assegnata' );
-                        break;
-
-                    case '_reopened':
-                        $result = ezpI18n::tr( 'sensor/robot message', 'Riaperta' );
-                        break;
-                }
-            }
-        }
-        return $result;
+        $struct = new Message\TimelineItemStruct();
+        $struct->post = $post;
+        $struct->creator = $this->repository->getCurrentUser();
+        $struct->status = $status;
+        $struct->createdDateTime = new \DateTime();
+        if ( $parameters === null )
+            $parameters = $struct->creator->id;
+        $struct->text = TimelineTools::setText( $status, $parameters );
+        $this->repository->getMessageService()->createTimelineItem( $struct );
     }
+
 
     public function createTimelineItem( Message\TimelineItemStruct $struct )
     {
-        //@todo
+        $message = eZCollaborationSimpleMessage::create(
+            $this->repository->getSensorCollaborationHandlerTypeString() . '_comment',
+            $struct->text,
+            $struct->creator->id
+        );
+        $message->store();
+
+        $db = \eZDB::instance();
+        $db->begin();
+        $messageLink = eZCollaborationItemMessageLink::create( $struct->post->internalId, $message->ID, 0, $struct->creator->id );
+        $messageLink->store();
+        $db->commit();
+
+        $this->repository->getUserService()->setLastAccessDateTime( $struct->creator, $struct->post );
     }
 
     public function createPrivateMessage( Message\PrivateMessageStruct $struct )

@@ -18,6 +18,7 @@ use eZImageAliasHandler;
 use DateInterval;
 use ezpI18n;
 use OpenContent\Sensor\Api\Values\Message\TimelineItemStruct;
+use eZContentCacheManager;
 
 
 class PostService extends PostServiceBase
@@ -58,7 +59,7 @@ class PostService extends PostServiceBase
     public function loadPost( $postId )
     {
         $type = $this->repository->getSensorCollaborationHandlerTypeString();
-        $collaborationItem = eZPersistentObject::fetchObject(
+        $this->collaborationItem = eZPersistentObject::fetchObject(
             eZCollaborationItem::definition(),
             null,
             array(
@@ -66,46 +67,73 @@ class PostService extends PostServiceBase
                 'data_int1' => intval( $postId )
             )
         );
-        $contentObject = eZContentObject::fetch( $postId );
-        if ( $collaborationItem instanceof eZCollaborationItem && $contentObject instanceof eZContentObject )
+        $this->getContentObject( $postId );
+        if ( $this->collaborationItem instanceof eZCollaborationItem && $this->contentObject instanceof eZContentObject )
         {
-            return $this->internalLoadPost( $collaborationItem, $contentObject );
+            return $this->internalLoadPost();
         }
         throw new BaseException( "eZCollaborationItem $type not found for object $postId" );
     }
 
     public function loadPostByInternalId( $postInternalId )
     {
-        $type = $this->repository->getSensorCollaborationHandlerTypeString();
-        $collaborationItem = eZPersistentObject::fetchObject(
-            eZCollaborationItem::definition(),
-            null,
-            array(
-                'type_identifier' => $type,
-                'id' => intval( $postInternalId )
-            )
-        );
-        if ( $collaborationItem instanceof eZCollaborationItem )
+        $this->getCollaborationItem( $postInternalId );
+        if ( $this->collaborationItem instanceof eZCollaborationItem )
         {
-            $contentObject = eZContentObject::fetch( $collaborationItem->attribute( 'data_int1' ) );
-            if ( $contentObject instanceof eZContentObject )
-                return $this->internalLoadPost( $collaborationItem, $contentObject );
+            $this->getContentObject( $this->collaborationItem->attribute( 'data_int1' ) );
+            if ( $this->contentObject instanceof eZContentObject )
+            {
+                return $this->internalLoadPost();
+            }
         }
-        throw new BaseException( "eZCollaborationItem $type not found for id $postInternalId" );
+        throw new BaseException( "eZCollaborationItem not found for id $postInternalId" );
     }
 
-    protected function internalLoadPost( eZCollaborationItem $collaborationItem, eZContentObject $contentObject )
+    protected function getContentObject( $postId )
     {
-        $this->collaborationItem = $collaborationItem;
-        $this->contentObject = $contentObject;
-        $this->contentObjectDataMap = $contentObject->fetchDataMap( false, $this->repository->getCurrentLanguage() );
+        if ( $this->contentObject === null )
+        {
+            $this->contentObject = eZContentObject::fetch( intval( $postId ) );
+        }
+
+        return $this->contentObject;
+    }
+
+    protected function getCollaborationItem( $postInternalId )
+    {
+        if ( $this->collaborationItem === null )
+        {
+            $type = $this->repository->getSensorCollaborationHandlerTypeString();
+            $this->collaborationItem = eZPersistentObject::fetchObject(
+                eZCollaborationItem::definition(),
+                null,
+                array(
+                    'type_identifier' => $type,
+                    'id' => intval( $postInternalId )
+                )
+            );
+        }
+
+        return $this->collaborationItem;
+    }
+
+    protected function internalLoadPost()
+    {
+        $this->contentObjectDataMap = $this->contentObject->fetchDataMap(
+            false,
+            $this->repository->getCurrentLanguage()
+        );
 
         $post = new Post();
         $post->id = $this->contentObject->attribute( 'id' );
         $post->internalId = $this->collaborationItem->attribute( 'id' );
 
-        $post->published = Utils::getDateTimeFromTimestamp( $this->contentObject->attribute( 'published' ) );
-        $post->modified = Utils::getDateTimeFromTimestamp( $this->contentObject->attribute( 'modified' ) );;
+        $post->published = Utils::getDateTimeFromTimestamp(
+            $this->contentObject->attribute( 'published' )
+        );
+        $post->modified = Utils::getDateTimeFromTimestamp(
+            $this->contentObject->attribute( 'modified' )
+        );;
 
         $post->expirationInfo = $this->getPostExpirationInfo();
         $post->resolutionInfo = $this->getPostResolutionInfo( $post );
@@ -115,7 +143,10 @@ class PostService extends PostServiceBase
         $post->moderation = $this->getPostModerationCurrentStatus();
         $post->workflowStatus = $this->getPostWorkflowStatus();
 
-        $post->subject = $this->contentObject->name( false, $this->repository->getCurrentLanguage() );
+        $post->subject = $this->contentObject->name(
+            false,
+            $this->repository->getCurrentLanguage()
+        );
         $post->description = $this->getPostDescription();
         $post->type = $this->getPostType();
         $post->images = $this->getPostImages();
@@ -124,73 +155,121 @@ class PostService extends PostServiceBase
         $post->areas = $this->getPostAreas();
         $post->geoLocation = $this->getPostGeoLocation();
 
-        $post->participants = $this->repository->getParticipantService()->loadPostParticipants( $post );
-        $authors = $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_AUTHOR);
+        $post->participants = $this->repository->getParticipantService()->loadPostParticipants(
+            $post
+        );
+        $authors = $this->repository->getParticipantService()->loadPostParticipantsByRole(
+            $post,
+            ParticipantRole::ROLE_AUTHOR
+        );
         $post->reporter = $authors->first();
-        $post->approvers = Participant\ApproverCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_APPROVER ) );
-        $post->owners = Participant\OwnerCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_OWNER ) );
-        $post->observers = Participant\ObserverCollection::fromCollection( $this->repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_OBSERVER ) );
+        $post->approvers = Participant\ApproverCollection::fromCollection(
+            $this->repository->getParticipantService()->loadPostParticipantsByRole(
+                $post,
+                ParticipantRole::ROLE_APPROVER
+            )
+        );
+        $post->owners = Participant\OwnerCollection::fromCollection(
+            $this->repository->getParticipantService()->loadPostParticipantsByRole(
+                $post,
+                ParticipantRole::ROLE_OWNER
+            )
+        );
+        $post->observers = Participant\ObserverCollection::fromCollection(
+            $this->repository->getParticipantService()->loadPostParticipantsByRole(
+                $post,
+                ParticipantRole::ROLE_OBSERVER
+            )
+        );
 
         $post->author = clone $post->reporter;
         $authorName = $this->getPostAuthorName();
-        if ( $authorName ) $post->author->name = $authorName;
+        if ( $authorName )
+        {
+            $post->author->name = $authorName;
+        }
 
-        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost( $post );
-        $post->privateMessages = $this->repository->getMessageService()->loadPrivateMessageCollectionByPost( $post );
-        $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
+        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost(
+            $post
+        );
+        $post->privateMessages = $this->repository->getMessageService(
+        )->loadPrivateMessageCollectionByPost( $post );
+        $post->timelineItems = $this->repository->getMessageService(
+        )->loadTimelineItemCollectionByPost( $post );
 
-        $post->commentsIsOpen = $this->getCommentsIsOpen($post);
+        $post->commentsIsOpen = $this->getCommentsIsOpen( $post );
 
         $this->setUserPostAware( $post );
 
         $post->internalStatus = 'miss';
+
         return $post;
     }
 
     public function setUserPostAware( $post )
     {
-        foreach( $post->participants as $participant )
+        foreach ( $post->participants as $participant )
         {
             foreach ( $participant as $user )
             {
                 $this->repository->getUserService()->setUserPostAware( $user, $post );
             }
         }
-        $this->repository->getUserService()->setUserPostAware( $this->repository->getCurrentUser(), $post );
+        $this->repository->getUserService()->setUserPostAware(
+            $this->repository->getCurrentUser(),
+            $post
+        );
     }
 
-    protected function getCommentsIsOpen(Post $post)
+    protected function getCommentsIsOpen( Post $post )
     {
         $now = time();
-        $resolutionInfo = $this->getPostResolutionInfo($post);
-        if ( $resolutionInfo instanceof Post\ResolutionInfo && $this->repository->getSensorSettings()->offsetExists( 'CloseCommentsAfterSeconds' ) )
+        $resolutionInfo = $this->getPostResolutionInfo( $post );
+        if ( $resolutionInfo instanceof Post\ResolutionInfo
+             && $this->repository->getSensorSettings()->has( 'CloseCommentsAfterSeconds' )
+        )
         {
-            return ( $now - $resolutionInfo->resolutionDateTime->getTimestamp() ) < $this->repository->getSensorSettings()->offsetGet( 'CloseCommentsAfterSeconds' );
+            $time = $now - $resolutionInfo->resolutionDateTime->getTimestamp();
+            return $time < $this->repository->getSensorSettings()->get( 'CloseCommentsAfterSeconds' );
         }
+
         return true;
     }
 
     protected function getPostAuthorName()
     {
         $authorName = false;
-        if ( isset( $this->contentObjectDataMap['on_behalf_of'] ) && $this->contentObjectDataMap['on_behalf_of']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['on_behalf_of'] )
+             && $this->contentObjectDataMap['on_behalf_of']->hasContent()
+        )
         {
             $authorName = $this->contentObjectDataMap['on_behalf_of']->toString();
-            if ( isset( $this->contentObjectDataMap['on_behalf_of_detail'] ) && $this->contentObjectDataMap['on_behalf_of_detail']->hasContent() )
+            if ( isset( $this->contentObjectDataMap['on_behalf_of_detail'] )
+                 && $this->contentObjectDataMap['on_behalf_of_detail']->hasContent()
+            )
+            {
                 $authorName .= ', ' . $this->contentObjectDataMap['on_behalf_of_detail']->toString();
+            }
         }
+
         return $authorName;
     }
 
     protected function getPostWorkflowStatus()
     {
-        return Post\WorkflowStatus::instanceByCode( $this->collaborationItem->attribute( self::COLLABORATION_FIELD_STATUS ) );
+        return Post\WorkflowStatus::instanceByCode(
+            $this->collaborationItem->attribute( self::COLLABORATION_FIELD_STATUS )
+        );
     }
 
     protected function getPostExpirationInfo()
     {
-        $publishedDateTime = Utils::getDateTimeFromTimestamp( $this->contentObject->attribute( 'published' ) );
-        $expirationDateTime = Utils::getDateTimeFromTimestamp( intval( $this->collaborationItem->attribute( self::COLLABORATION_FIELD_EXPIRY ) ) );
+        $publishedDateTime = Utils::getDateTimeFromTimestamp(
+            $this->contentObject->attribute( 'published' )
+        );
+        $expirationDateTime = Utils::getDateTimeFromTimestamp(
+            intval( $this->collaborationItem->attribute( self::COLLABORATION_FIELD_EXPIRY ) )
+        );
 
         $diffResult = Utils::getDateDiff( $expirationDateTime );
         if ( $diffResult->interval->invert )
@@ -215,6 +294,7 @@ class PostService extends PostServiceBase
         {
             $expirationInfo->days = $diff->days;
         }
+
         return $expirationInfo;
     }
 
@@ -223,13 +303,15 @@ class PostService extends PostServiceBase
         $resolutionInfo = null;
         if ( $this->getPostWorkflowStatus()->code == Post\WorkflowStatus::CLOSED )
         {
-            $lastTimelineItem = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post )->lastMessage;
+            $lastTimelineItem = $this->repository->getMessageService(
+            )->loadTimelineItemCollectionByPost( $post )->lastMessage;
             $diffResult = Utils::getDateDiff( $post->published, $lastTimelineItem->published );
             $resolutionInfo = new Post\ResolutionInfo();
             $resolutionInfo->resolutionDateTime = $lastTimelineItem->published;
             $resolutionInfo->creationDateTime = $post->published;
             $resolutionInfo->text = $diffResult->getText();
         }
+
         return $resolutionInfo;
     }
 
@@ -263,18 +345,23 @@ class PostService extends PostServiceBase
                     $type->label = 'info';
             }
         }
+
         return $type;
     }
 
     protected function getPostCurrentStatusByGroupIdentifier( $identifier )
     {
-        foreach( $this->repository->getSensorPostStates( $identifier ) as $state )
+        foreach ( $this->repository->getSensorPostStates( $identifier ) as $state )
         {
-            if ( in_array( $state->attribute( 'id' ), $this->contentObject->attribute( 'state_id_array' ) ) )
+            if ( in_array(
+                $state->attribute( 'id' ),
+                $this->contentObject->attribute( 'state_id_array' )
+            ) )
             {
                 return $state;
             }
         }
+
         return null;
     }
 
@@ -301,6 +388,7 @@ class PostService extends PostServiceBase
             }
 
         }
+
         return $status;
     }
 
@@ -319,6 +407,7 @@ class PostService extends PostServiceBase
                 $status->label = 'default';
             }
         }
+
         return $status;
     }
 
@@ -332,13 +421,16 @@ class PostService extends PostServiceBase
             $status->name = $state->currentTranslation()->attribute( 'name' );
             $status->label = 'danger';
         }
+
         return $status;
     }
 
     protected function getPostImages()
     {
         $data = array();
-        if ( isset( $this->contentObjectDataMap['image'] ) && $this->contentObjectDataMap['image']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['image'] )
+             && $this->contentObjectDataMap['image']->hasContent()
+        )
         {
             /** @var eZImageAliasHandler $content */
             $content = $this->contentObjectDataMap['image']->content();
@@ -359,29 +451,35 @@ class PostService extends PostServiceBase
             $image->thumbnail = $small;
             $data[] = $image;
         }
+
         return $data;
     }
 
     protected function getPostAttachments()
     {
         $data = array();
-        if ( isset( $this->contentObjectDataMap['attachment'] ) && $this->contentObjectDataMap['attachment']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['attachment'] )
+             && $this->contentObjectDataMap['attachment']->hasContent()
+        )
         {
             $attachment = new Post\Field\Attachment();
             $data[] = $attachment;
         }
+
         return $data;
     }
 
     protected function getPostCategories()
     {
         $data = array();
-        if ( isset( $this->contentObjectDataMap['category'] ) && $this->contentObjectDataMap['category']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['category'] )
+             && $this->contentObjectDataMap['category']->hasContent()
+        )
         {
-            $relationIds = explode( '-',  $this->contentObjectDataMap['category']->toString() );
+            $relationIds = explode( '-', $this->contentObjectDataMap['category']->toString() );
             /** @var eZContentObject[] $objects */
             $objects = eZContentObject::fetchIDArray( $relationIds );
-            foreach( $objects as $object )
+            foreach ( $objects as $object )
             {
                 $category = new Post\Field\Category();
                 $category->id = $object->attribute( 'id' );
@@ -389,18 +487,21 @@ class PostService extends PostServiceBase
                 $data[] = $category;
             }
         }
+
         return $data;
     }
 
     protected function getPostAreas()
     {
         $data = array();
-        if ( isset( $this->contentObjectDataMap['area'] ) && $this->contentObjectDataMap['area']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['area'] )
+             && $this->contentObjectDataMap['area']->hasContent()
+        )
         {
-            $relationIds = explode( '-',  $this->contentObjectDataMap['area']->toString() );
+            $relationIds = explode( '-', $this->contentObjectDataMap['area']->toString() );
             /** @var eZContentObject[] $objects */
             $objects = eZContentObject::fetchIDArray( $relationIds );
-            foreach( $objects as $object )
+            foreach ( $objects as $object )
             {
                 $area = new Post\Field\Area();
                 $area->id = $object->attribute( 'id' );
@@ -408,26 +509,33 @@ class PostService extends PostServiceBase
                 $data[] = $area;
             }
         }
+
         return $data;
     }
 
     protected function getPostGeoLocation()
     {
         $geo = new Post\Field\GeoLocation();
-        if ( isset( $this->contentObjectDataMap['geo'] ) && $this->contentObjectDataMap['geo']->hasContent() )
+        if ( isset( $this->contentObjectDataMap['geo'] )
+             && $this->contentObjectDataMap['geo']->hasContent()
+        )
         {
             /** @var \eZGmapLocation $content */
             $content = $this->contentObjectDataMap['geo']->content();
             $geo->latitude = $content->attribute( 'latitude' );
             $geo->longitude = $content->attribute( 'longitude' );
         }
+
         return $geo;
     }
 
     protected function getPostDescription()
     {
         if ( isset( $this->contentObjectDataMap['description'] ) )
+        {
             return $this->contentObjectDataMap['description']->toString();
+        }
+
         return false;
     }
 
@@ -458,30 +566,69 @@ class PostService extends PostServiceBase
 
     public function refreshPost( Post $post )
     {
-        // TODO: Implement refreshPost() method.
+        $timestamp = time();
+        $this->getContentObject( $post->id );
+        if ( !$this->contentObject instanceof eZContentObject )
+        {
+            throw new BaseException( "eZContentObject not found for id {$post->id}" );
+        }
+
+        $this->contentObject->setAttribute( 'modified', $timestamp );
+        $this->contentObject->store();
+        eZContentCacheManager::clearContentCacheIfNeeded( $this->contentObject->attribute( 'id' ) );
     }
 
     public function setPostStatus( Post $post, $status )
     {
-        // TODO: Implement setPostStatus() method.
+        $this->getContentObject( $post->id );
+        if ( !$this->contentObject instanceof eZContentObject )
+        {
+            throw new BaseException( "eZContentObject not found for id {$post->id}" );
+        }
+
+        if ( $status instanceof eZContentObjectState )
+            $this->contentObject->assignState( $status );
     }
 
     public function setPostWorkflowStatus( Post $post, $status )
     {
-        // TODO: Implement setPostWorkflowStatus() method.
+        $states = $this->repository->getSensorPostStates( 'sensor' );
+        $this->getCollaborationItem( $post->internalId );
+        if ( !$this->collaborationItem instanceof eZCollaborationItem )
+        {
+            throw new BaseException( "eZCollaborationItem not found for id {$post->internalId}" );
+        }
 
-        $this->addTimelineItem( $post, $status );
+        $timestamp = time();
 
-    }
+        $this->collaborationItem->setAttribute( self::COLLABORATION_FIELD_STATUS, $status );
+        $this->collaborationItem->setAttribute( 'modified', $timestamp );
+        $this->collaborationItem->setAttribute( self::COLLABORATION_FIELD_LAST_CHANGE, $timestamp );
 
-    protected function addTimelineItem( Post $post, $status )
-    {
-        $struct = new TimelineItemStruct();
-        $struct->post = $post;
-        $struct->creator = $this->repository->getCurrentUser();
-        $struct->status = $status;
-        $struct->createdDateTime = new \DateTime();
-        $this->repository->getMessageService()->createTimelineItem( $struct );
+        if ( $status == Post\WorkflowStatus::READ )
+        {
+            $this->setPostStatus( $post, $states['sensor.open'] );
+        }
+        elseif ( $status == Post\WorkflowStatus::CLOSED )
+        {
+            $this->collaborationItem->setAttribute( 'status', eZCollaborationItem::STATUS_INACTIVE );
+            $this->repository->getParticipantService()->deactivatePostParticipants( $post );
+            $this->setPostStatus( $post, $states['sensor.close'] );
+        }
+        elseif ( $status == Post\WorkflowStatus::WAITING )
+        {
+            $this->collaborationItem->setAttribute( 'status', eZCollaborationItem::STATUS_ACTIVE );
+            $this->repository->getParticipantService()->activatePostParticipants( $post );
+        }
+        elseif ( $status == Post\WorkflowStatus::REOPENED )
+        {
+            $this->collaborationItem->setAttribute( 'status', eZCollaborationItem::STATUS_ACTIVE );
+            $this->repository->getParticipantService()->activatePostParticipants( $post );
+            $this->setPostStatus( $post, $states['sensor.pending'] );
+        }
+        $this->collaborationItem->sync();
+
+        $this->refreshPost( $post );
     }
 
     public function setPostExpirationInfo( Post $post, Post\ExpirationInfo $expiry )

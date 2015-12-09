@@ -39,6 +39,11 @@ class ParticipantCollection extends Collection
         return $collection;
     }
 
+    public function getParticipantIdList()
+    {
+        return array_keys( $this->participants );
+    }
+
     /**
      * @param $id
      *
