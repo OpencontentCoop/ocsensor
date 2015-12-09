@@ -179,11 +179,10 @@ class MessageService extends MessageServiceBase
                         $type = 'private';
                         $message->text = $simpleMessage->attribute( 'data_text1' );
 
-                        $message->receivers = array( $firstLink->attribute( 'participant_id' ) );
                         /** @var eZCollaborationItemMessageLink $link */
                         foreach( $messageItem['links'] as $link )
                         {
-                            $message->receivers[] = $this->repository->getParticipantService()
+                            $message->receivers[$link->attribute( 'participant_id' )] = $this->repository->getParticipantService()
                                                                      ->loadPostParticipants( $post )
                                                                      ->getUserById( $link->attribute( 'participant_id' ) );
                         }

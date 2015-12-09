@@ -18,8 +18,8 @@ class ReadAction extends ActionDefinition
     {
         $repository->getUserService()->setLastAccessDateTime( $user, $post );
         if ( $post->approvers->getUserById( $user->id ) instanceof User
-             && ( $post->workflowStatus->identifier == Post\WorkflowStatus::WAITING
-                  || $post->workflowStatus->identifier == Post\WorkflowStatus::REOPENED ) )
+             && ( $post->workflowStatus->is( Post\WorkflowStatus::WAITING )
+                  || $post->workflowStatus->is( Post\WorkflowStatus::REOPENED ) ) )
         {
             $repository->getPostService()->setPostWorkflowStatus( $post, Post\WorkflowStatus::READ );
             $repository->getMessageService()->addTimelineItemByWorkflowStatus( $post, Post\WorkflowStatus::READ );

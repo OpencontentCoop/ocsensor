@@ -33,7 +33,13 @@ try
 //    $repository->getActionService()->runAction( $action, $post );
 ////
 //    $post = $repository->getPostService()->loadPost( $objectId );
-    print_r( $post );
+//    print_r( $repository->getCurrentUser() );
+//    print_r( $post );
+
+    $action = new \OpenContent\Sensor\Api\Action\Action();
+    $action->identifier = 'read';
+    $repository->getActionService()->runAction( $action, $post );
+
 }
 catch( Exception $e )
 {

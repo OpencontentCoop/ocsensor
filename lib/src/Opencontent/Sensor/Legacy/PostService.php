@@ -2,6 +2,7 @@
 
 namespace OpenContent\Sensor\Legacy;
 
+use OpenContent\Sensor\Api\Values\Message\PrivateMessageCollection;
 use OpenContent\Sensor\Api\Values\Participant;
 use OpenContent\Sensor\Core\PostService as PostServiceBase;
 use OpenContent\Sensor\Api\Values\Post;
@@ -218,7 +219,7 @@ class PostService extends PostServiceBase
         return $post;
     }
 
-    public function setUserPostAware( $post )
+    public function setUserPostAware( Post $post )
     {
         foreach ( $post->participants as $participant )
         {
@@ -231,6 +232,17 @@ class PostService extends PostServiceBase
             $this->repository->getCurrentUser(),
             $post
         );
+
+        $messageUserPostAware = new PrivateMessageCollection();
+        foreach( $post->privateMessages->messages as $message )
+        {
+            if ( $message->getReceiverById( $this->repository->getCurrentUser()->id )
+                 || $message->creator->id == $this->repository->getCurrentUser()->id )
+            {
+                $messageUserPostAware->addMessage( $message );
+            }
+        }
+        $post->privateMessages = $messageUserPostAware;
     }
 
     protected function getCommentsIsOpen( Post $post )
@@ -542,6 +554,7 @@ class PostService extends PostServiceBase
             $content = $this->contentObjectDataMap['geo']->content();
             $geo->latitude = $content->attribute( 'latitude' );
             $geo->longitude = $content->attribute( 'longitude' );
+            $geo->address = $content->attribute( 'address' );
         }
 
         return $geo;

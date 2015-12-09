@@ -59,6 +59,6 @@ class WorkflowStatus extends Exportable
 
     public function is( $identifier )
     {
-        return $this->identifier == $identifier || $this->code == $identifier;
+        return $this->identifier === $identifier || $this->code === $identifier;
     }
 }

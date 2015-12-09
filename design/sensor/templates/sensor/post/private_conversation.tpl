@@ -1,21 +1,21 @@
-{if or( $sensor_post.message_count, $sensor_post.can_send_private_message )}
+{if or( $post.privateMessages.count|gt(0), $user.permissions.can_send_private_message )}
 <p>
     <a class="btn btn-info btn-lg btn-block" data-toggle="collapse" href="#collapseConversation" aria-expanded="false" aria-controls="collapseConversation">
         {'Messaggi privati'|i18n('sensor/messages')}
-        {if $sensor_post.message_count|gt(0)}<span class="badge">{$sensor_post.message_count}</span>{/if}
+        {if $post.privateMessages.count|gt(0)}<span class="badge">{$post.privateMessages.count}</span>{/if}
     </a>
 </p>
 <div class="collapse" id="collapseConversation">
-    {if $sensor_post.message_count}
+    {if $post.privateMessages.count|gt(0)}
     <div class="comment">
-        {foreach $sensor_post.message_items as $item}
+        {foreach $post.privateMessages.message as $message}
             <p>
-                {include uri='design:sensor/post/post_message/private.tpl' is_read=cond( $sensor_post.current_participant, $sensor_post.current_participant.last_read|gt($item.modified), true()) item_link=$item message=$item.simple_message}
+                {include uri='design:sensor/post/post_message/private.tpl' message=$message}
             </p>
         {/foreach}
     </div>
     {/if}
-    {if $sensor_post.can_send_private_message}
+    {if $user.permissions.can_send_private_message}
         <div class="new_comment">
             <p>
                 <textarea name="Collaboration_SensorItemPrivateMessage" class="form-control" placeholder="{'Aggiungi messaggio'|i18n('sensor/messages')}" rows="4"></textarea>

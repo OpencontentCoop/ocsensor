@@ -76,7 +76,7 @@ abstract class Repository extends CoreRepository
      */
     public function getAreasTree()
     {
-        return TreeNode::walk( $this->getAreasRootNode() );
+        return TreeNode::walk( $this->getAreasRootNode(), array( 'classes' => array( 'sensor_area' )) );
     }
 
     /**

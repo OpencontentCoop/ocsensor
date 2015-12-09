@@ -22,29 +22,37 @@ if ( !is_numeric( $postId ) )
 else
 {
     eZPreferences::sessionCleanup();
-    
-    $viewParameters = array(
-        'offset' => $Offset
-    );
-    $user = eZUser::currentUser();
-    $cacheFilePath = SensorModuleFunctions::sensorPostCacheFilePath( $user, $postId, $viewParameters );    
-    $localVars = array( "cacheFilePath", "postId", "module", "tpl", 'viewParameters' );        
-    $cacheFile = eZClusterFileHandler::instance( $cacheFilePath );
-    $args = compact( $localVars );
-    $ini = eZINI::instance();
-    $viewCacheEnabled = ( $ini->variable( 'ContentSettings', 'ViewCaching' ) == 'enabled' );    
-    if ( $viewCacheEnabled )
+
+    try
     {
-        $Result = $cacheFile->processCache( array( 'SensorModuleFunctions', 'sensorCacheRetrieve' ),
-                                            array( 'SensorModuleFunctions', 'sensorPostGenerate' ),
-                                            null,
-                                            null,
-                                            $args );
+        $repository = OpenPaSensorRepository::instance();
+        $post = $repository->getPostService()->loadPost( $postId );
+
+        $action = new \OpenContent\Sensor\Api\Action\Action();
+        $action->identifier = 'read';
+        $repository->getActionService()->runAction( $action, $post );
+
+        $tpl->setVariable( 'view_parameters', isset( $viewParameters ) ? $viewParameters : array() );
+        $tpl->setVariable( 'post', $post );
+        $tpl->setVariable( 'user', $repository->getCurrentUser() );
     }
-    else
-    {    
-        $data = SensorModuleFunctions::sensorPostGenerate( false, $args );
-        $Result = $data['content']; 
+    catch( Exception $e )
+    {
+        $tpl->setVariable( 'error', $e->getMessage() );
     }
+
+    $Result = array();
+    $Result['persistent_variable'] = $tpl->variable( 'persistent_variable' );
+    $Result['content'] = $tpl->fetch( 'design:sensor/post/full.tpl' );
+    $Result['node_id'] = 0;
+
+    $contentInfoArray = array( 'url_alias' => 'sensor/post/' . $postId );
+    $contentInfoArray['persistent_variable'] = false;
+    if ( $tpl->variable( 'persistent_variable' ) !== false )
+    {
+        $contentInfoArray['persistent_variable'] = $tpl->variable( 'persistent_variable' );
+    }
+    $Result['content_info'] = $contentInfoArray;
+    $Result['path'] = array();
     return $Result;
 }

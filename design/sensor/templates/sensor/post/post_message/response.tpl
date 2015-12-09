@@ -3,10 +3,10 @@
       <div class="well">
         <div class="comment_name"> <small>{'RISPOSTA DEL RESPONSABILE'|i18n('sensor/messages')}</small></div>
         <div class="comment_date"><i class="fa-time"></i>
-            {if $is_read|not}<strong>{/if}{$item.created|l10n(shortdatetime)}{if $is_read|not}</strong>{/if}
+            {$message.published|sensor_datetime('format', 'shortdatetime')}
         </div>
         <div class="the_comment">
-            <p>{$message.data_text1}</p>
+            <p>{$message.text|nl2br|autolink()}</p>
         </div>
       </div>
     </div>

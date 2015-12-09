@@ -37,9 +37,11 @@ class OpenPaSensorRepository extends CoreRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanRespond();
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
+        $permissionDefinitions[] = new PermissionDefinitions\CanReopen( $this->getSensorSettings()->get('ApproverCanReopen') );
 
-        if ( $this->getSensorSettings()->get('ApproverCanReopen') )
-            $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
+        $permissionDefinitions[] = new \OpenContent\Sensor\Legacy\PermissionDefinitions\CanEdit();
+        $permissionDefinitions[] = new \OpenContent\Sensor\Legacy\PermissionDefinitions\CanRemove();
+
 
         $this->setPermissionDefinitions( $permissionDefinitions );
 

@@ -24,7 +24,11 @@ abstract class Exportable
     public function attributes()
     {
         $reflection = new \ReflectionClass( $this );
-        return $reflection->getProperties( \ReflectionProperty::IS_PUBLIC );
+        $properties = $reflection->getProperties( \ReflectionProperty::IS_PUBLIC );
+        $attributes = array();
+        foreach( $properties as $property )
+            $attributes[] = $property->getName();
+        return $attributes;
     }
 
     public function hasAttribute( $key )

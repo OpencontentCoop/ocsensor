@@ -10,6 +10,10 @@ class SensorOperator
             'sensor_post',
             'sensor_postcontainer',
             'sensor_categorycontainer',
+
+            'sensor_datetime',
+            'sensor_areas',
+            'sensor_categories'
         );
     }
 
@@ -20,13 +24,73 @@ class SensorOperator
 
     function namedParameterList()
     {
-        return array();
+        return array(
+            'sensor_datetime' => array(
+                'action' => array( 'type' => 'string', 'required' => true ),
+                'value' => array( 'type' => 'mixed', 'required' => true ),
+            ),
+        );
     }
 
     function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace, $currentNamespace, &$operatorValue, $namedParameters )
     {
         switch ( $operatorName )
         {
+            case 'sensor_datetime':
+            {
+                $date = $operatorValue;
+                if ( $date instanceof DateTime )
+                {
+                    $action = $namedParameters['action'];
+                    $value = $namedParameters['value'];
+
+                    if ( $action == 'format' )
+                    {
+                        $locale = eZLocale::instance();
+                        $function = $locale->getFormattingFunction( $value );
+                        if ( $function )
+                        {
+                            $operatorValue = $locale->{$function}( $date->format( 'U' ) );
+                        }
+                        else
+                        {
+                            $operatorValue = $date->format( 'U' );
+                        }
+
+                    }
+                    elseif( $action = 'gt' && $value instanceof DateTime )
+                    {
+                        $operatorValue = $date > $value;
+                    }
+                    elseif( $action = 'ge' && $value instanceof DateTime )
+                    {
+                        $operatorValue = $date >= $value;
+                    }
+                    elseif( $action = 'lt' && $value instanceof DateTime )
+                    {
+                        $operatorValue = $date < $value;
+                    }
+                    elseif( $action = 'le' && $value instanceof DateTime )
+                    {
+                        $operatorValue = $date <= $value;
+                    }
+                    elseif( $action = 'eq' && $value instanceof DateTime )
+                    {
+                        $operatorValue = $date == $value;
+                    }
+                }
+            } break;
+
+            case 'sensor_areas':
+            {
+                return $operatorValue = OpenPaSensorRepository::instance()->getAreasTree();
+            } break;
+
+            case 'sensor_categories':
+            {
+                return $operatorValue = OpenPaSensorRepository::instance()->getCategoriesTree();
+            } break;
+
             case 'sensor_collaboration_identifier':
             {
                 return $operatorValue = SensorHelper::factory()->getSensorCollaborationHandlerTypeString();

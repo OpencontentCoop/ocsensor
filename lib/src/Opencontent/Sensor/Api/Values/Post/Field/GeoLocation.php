@@ -15,4 +15,6 @@ class GeoLocation extends Field
     public $latitude;
 
     public $longitude;
+
+    public $address;
 }

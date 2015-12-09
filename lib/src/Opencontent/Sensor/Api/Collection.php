@@ -33,6 +33,20 @@ abstract class Collection extends Exportable implements \IteratorAggregate
         return $newCollection;
     }
 
+    public function attributes()
+    {
+        $attributes = parent::attributes();
+        return array_merge( $attributes, array_keys( $this->toArray() ) );
+    }
+
+    public function attribute( $key )
+    {
+        $items = $this->toArray();
+        if ( isset( $items[$key] ) )
+            return $items[$key];
+        return parent::attribute( $key );
+    }
+
     abstract protected function toArray();
 
     abstract protected function fromArray(array $data);

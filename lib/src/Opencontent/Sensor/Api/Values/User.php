@@ -31,4 +31,6 @@ class User extends Exportable
 
     public $isEnabled;
 
+    public $image;
+
 }
