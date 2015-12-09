@@ -24,10 +24,7 @@ class AssignAction extends ActionDefinition
         $parameter->isRequired = true;
         $parameter->type = 'array';
         $parameter->inputName = 'SensorItemAssignTo';
-
-        $this->parameterDefinitions = array(
-            $parameter
-        );
+        $this->parameterDefinitions[] = $parameter;
     }
 
     public function run( Repository $repository, Action $action, Post $post, User $user )

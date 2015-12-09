@@ -15,4 +15,6 @@ class Category extends Field
     public $id;
 
     public $name;
+
+    public $userIdList = array();
 }

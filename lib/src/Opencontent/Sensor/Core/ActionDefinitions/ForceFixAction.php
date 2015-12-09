@@ -9,31 +9,29 @@ use OpenContent\Sensor\Api\Values\ParticipantRole;
 use OpenContent\Sensor\Api\Values\Post;
 use OpenContent\Sensor\Api\Values\User;
 
-class FixAction extends ActionDefinition
+class ForceFixAction extends ActionDefinition
 {
-    public $identifier = 'fix';
+    public $identifier = 'force_fix';
 
-    public $permissionDefinitionIdentifiers = array( 'can_read', 'can_fix' );
+    public $permissionDefinitionIdentifiers = array( 'can_read', 'can_force_fix' );
 
-    public $inputName = 'Fix';
+    public $inputName = 'ForceFix';
 
     public function run( Repository $repository, Action $action, Post $post, User $user )
     {
-        if ( $post->owners->getParticipantById( $user->id ) )
+        $roles = $repository->getParticipantService()->loadParticipantRoleCollection();
+        $roleObserver = $roles->getParticipantRoleById( ParticipantRole::ROLE_OBSERVER );
+        foreach( $post->owners as $owner )
         {
-            $roles = $repository->getParticipantService()->loadParticipantRoleCollection();
-            $roleObserver = $roles->getParticipantRoleById( ParticipantRole::ROLE_OBSERVER );
             $repository->getParticipantService()->addPostParticipant(
                 $post,
-                $user->id,
+                $owner->id,
                 $roleObserver
             );
         }
+
+        $repository->getPostService()->setPostWorkflowStatus( $post, Post\WorkflowStatus::FIXED );
         $repository->getMessageService()->addTimelineItemByWorkflowStatus( $post, Post\WorkflowStatus::FIXED );
-        if ( $repository->getParticipantService()->loadPostParticipantsByRole( $post, ParticipantRole::ROLE_OWNER )->count() == 0 )
-        {
-            $repository->getPostService()->setPostWorkflowStatus( $post, Post\WorkflowStatus::FIXED );
-        }
         $this->fireEvent( $repository, $post, $user );
     }
 }

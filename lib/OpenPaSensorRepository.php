@@ -15,7 +15,7 @@ class OpenPaSensorRepository extends CoreRepository
 
     public static function instance()
     {
-        //@todo
+        //@todo load from ini
         if (self::$instance === null)
             self::$instance = new static();
         return self::$instance;
@@ -45,9 +45,23 @@ class OpenPaSensorRepository extends CoreRepository
         $this->setPermissionDefinitions( $permissionDefinitions );
 
         $actionDefinitions = array();
-        $actionDefinitions[] = new ActionDefinitions\ReadAction();
+        $actionDefinitions[] = new ActionDefinitions\AddAreaAction();
+        $actionDefinitions[] = new ActionDefinitions\AddCategoryAction();
+        $actionDefinitions[] = new ActionDefinitions\AddCommentAction();
+        $actionDefinitions[] = new ActionDefinitions\AddObserverAction();
         $actionDefinitions[] = new ActionDefinitions\AssignAction();
+        $actionDefinitions[] = new ActionDefinitions\CloseAction();
+        $actionDefinitions[] = new ActionDefinitions\EditCommentAction();
+        $actionDefinitions[] = new ActionDefinitions\EditPrivateMessageAction();
         $actionDefinitions[] = new ActionDefinitions\FixAction();
+        $actionDefinitions[] = new ActionDefinitions\ForceFixAction();
+        $actionDefinitions[] = new ActionDefinitions\MakePrivateAction();
+        $actionDefinitions[] = new ActionDefinitions\MakePublicAction();
+        $actionDefinitions[] = new ActionDefinitions\ModerateAction();
+        $actionDefinitions[] = new ActionDefinitions\ReadAction();
+        $actionDefinitions[] = new ActionDefinitions\ReopenAction();
+        $actionDefinitions[] = new ActionDefinitions\SendPrivateMessageAction();
+        $actionDefinitions[] = new ActionDefinitions\SetExpiryAction();
         $this->setActionDefinitions( $actionDefinitions );
     }
 
@@ -63,7 +77,7 @@ class OpenPaSensorRepository extends CoreRepository
             'AllowMultipleOwner' => false,
             'AuthorCanReopen' => false,
             'ApproverCanReopen' => false,
-            'CategoryCount' => 'unique',
+            'UniqueCategoryCount' => true,
             'CategoryAutomaticAssign' => false,
             'DefaultPostExpirationDaysInterval' => 15,
             'DefaultPostExpirationDaysLimit' => 7,
@@ -90,7 +104,7 @@ class OpenPaSensorRepository extends CoreRepository
         {
             //@todo
             //$GLOBALS["eZLocaleStringDefault"] = $this->language;
-            //@ svuotare cachce translations?
+            //@todo svuotare cachce translations?
         }
     }
 

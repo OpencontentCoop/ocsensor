@@ -22,4 +22,6 @@ class MessageStruct
     public $creator;
 
     public $text;
+
+    public $id;
 }

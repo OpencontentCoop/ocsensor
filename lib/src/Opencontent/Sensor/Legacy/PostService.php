@@ -19,7 +19,8 @@ use DateInterval;
 use ezpI18n;
 use OpenContent\Sensor\Api\Values\Message\TimelineItemStruct;
 use eZContentCacheManager;
-
+use eZSearch;
+use OpenContent\Sensor\Utils\ExpiryTools;
 
 class PostService extends PostServiceBase
 {
@@ -70,6 +71,7 @@ class PostService extends PostServiceBase
         $this->getContentObject( $postId );
         if ( $this->collaborationItem instanceof eZCollaborationItem && $this->contentObject instanceof eZContentObject )
         {
+            $this->getContentObjectDataMap( $postId );
             return $this->internalLoadPost();
         }
         throw new BaseException( "eZCollaborationItem $type not found for object $postId" );
@@ -80,9 +82,11 @@ class PostService extends PostServiceBase
         $this->getCollaborationItem( $postInternalId );
         if ( $this->collaborationItem instanceof eZCollaborationItem )
         {
-            $this->getContentObject( $this->collaborationItem->attribute( 'data_int1' ) );
+            $postId = $this->collaborationItem->attribute( 'data_int1' );
+            $this->getContentObject( $postId );
             if ( $this->contentObject instanceof eZContentObject )
             {
+                $this->getContentObjectDataMap( $postId );
                 return $this->internalLoadPost();
             }
         }
@@ -95,8 +99,24 @@ class PostService extends PostServiceBase
         {
             $this->contentObject = eZContentObject::fetch( intval( $postId ) );
         }
-
         return $this->contentObject;
+    }
+
+    protected function getContentObjectDataMap( $postId )
+    {
+        if ( $this->contentObjectDataMap === null )
+        {
+            $this->getContentObject( $postId );
+            if ( !$this->contentObject instanceof eZContentObject )
+            {
+                throw new BaseException( "eZContentObject not found for id {$postId}" );
+            }
+            $this->contentObjectDataMap = $this->contentObject->fetchDataMap(
+                false,
+                $this->repository->getCurrentLanguage()
+            );
+        }
+        return $this->contentObjectDataMap;
     }
 
     protected function getCollaborationItem( $postInternalId )
@@ -119,11 +139,6 @@ class PostService extends PostServiceBase
 
     protected function internalLoadPost()
     {
-        $this->contentObjectDataMap = $this->contentObject->fetchDataMap(
-            false,
-            $this->repository->getCurrentLanguage()
-        );
-
         $post = new Post();
         $post->id = $this->contentObject->attribute( 'id' );
         $post->internalId = $this->collaborationItem->attribute( 'id' );
@@ -189,13 +204,10 @@ class PostService extends PostServiceBase
             $post->author->name = $authorName;
         }
 
-        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost(
-            $post
-        );
-        $post->privateMessages = $this->repository->getMessageService(
-        )->loadPrivateMessageCollectionByPost( $post );
-        $post->timelineItems = $this->repository->getMessageService(
-        )->loadTimelineItemCollectionByPost( $post );
+        $post->comments = $this->repository->getMessageService()->loadCommentCollectionByPost( $post );
+        $post->privateMessages = $this->repository->getMessageService()->loadPrivateMessageCollectionByPost( $post );
+        $post->timelineItems = $this->repository->getMessageService()->loadTimelineItemCollectionByPost( $post );
+        $post->responses = $this->repository->getMessageService()->loadResponseCollectionByPost( $post );
 
         $post->commentsIsOpen = $this->getCommentsIsOpen( $post );
 
@@ -484,6 +496,12 @@ class PostService extends PostServiceBase
                 $category = new Post\Field\Category();
                 $category->id = $object->attribute( 'id' );
                 $category->name = $object->name( false, $this->repository->getCurrentLanguage() );
+                /** @var eZContentObjectAttribute[] $categoryDataMap */
+                $categoryDataMap = $object->fetchDataMap( false, $this->repository->getCurrentLanguage() );
+                if ( isset( $categoryDataMap['approver'] ) )
+                {
+                    $category->userIdList =  explode( '-', $categoryDataMap['approver']->toString() );
+                }
                 $data[] = $category;
             }
         }
@@ -576,6 +594,7 @@ class PostService extends PostServiceBase
         $this->contentObject->setAttribute( 'modified', $timestamp );
         $this->contentObject->store();
         eZContentCacheManager::clearContentCacheIfNeeded( $this->contentObject->attribute( 'id' ) );
+        eZSearch::addObject( $this->contentObject, true );
     }
 
     public function setPostStatus( Post $post, $status )
@@ -584,6 +603,13 @@ class PostService extends PostServiceBase
         if ( !$this->contentObject instanceof eZContentObject )
         {
             throw new BaseException( "eZContentObject not found for id {$post->id}" );
+        }
+
+        if ( !$status instanceof eZContentObjectState )
+        {
+            list( $group, $identifier ) = explode( '.', $status );
+            $states = $this->repository->getSensorPostStates( $group );
+            $status = $states["{$group}.{$identifier}"];
         }
 
         if ( $status instanceof eZContentObjectState )
@@ -631,9 +657,37 @@ class PostService extends PostServiceBase
         $this->refreshPost( $post );
     }
 
-    public function setPostExpirationInfo( Post $post, Post\ExpirationInfo $expiry )
+    public function setPostExpirationInfo( Post $post, $expiryDays )
     {
-        // TODO: Implement setPostExpirationInfo() method.
+        $this->getCollaborationItem( $post->internalId );
+        $this->collaborationItem->setAttribute(
+            self::COLLABORATION_FIELD_EXPIRY,
+            ExpiryTools::addDaysToTimestamp( $this->collaborationItem->attribute( 'created' ), $expiryDays )
+        );
+        $this->collaborationItem->store();
+        $this->refreshPost( $post );
+    }
+
+    public function setPostCategory( Post $post, $category )
+    {
+        $this->getContentObjectDataMap( $post->id );
+        if ( isset( $this->contentObjectDataMap['category'] ) )
+        {
+            $this->contentObjectDataMap['category']->fromString( $category );
+            $this->contentObjectDataMap['category']->store();
+            $this->refreshPost( $post );
+        }
+    }
+
+    public function setPostArea( Post $post, $area )
+    {
+        $this->getContentObjectDataMap( $post->id );
+        if ( isset( $this->contentObjectDataMap['area'] ) )
+        {
+            $this->contentObjectDataMap['area']->fromString( $area );
+            $this->contentObjectDataMap['area']->store();
+            $this->refreshPost( $post );
+        }
     }
 
 }

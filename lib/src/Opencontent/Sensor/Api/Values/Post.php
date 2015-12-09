@@ -117,6 +117,11 @@ class Post extends Exportable
     public $comments;
 
     /**
+     * @var Message\ResponseCollection
+     */
+    public $responses;
+
+    /**
      * @var bool
      */
     public $commentsIsOpen;

@@ -87,8 +87,23 @@ interface PostService
 
     /**
      * @param Post $post
-     * @param Post\ExpirationInfo $expiry
+     * @param int $expiryDays
      * @throw \Exception
      */
-    public function setPostExpirationInfo( Post $post, Post\ExpirationInfo $expiry );
+    public function setPostExpirationInfo( Post $post, $expiryDays );
+
+    /**
+     * @param Post $post
+     * @param string $category
+     * @throw \Exception
+     */
+    public function setPostCategory( Post $post, $category );
+
+    /**
+     * @param Post $post
+     * @param string $area
+     * @throw \Exception
+     */
+    public function setPostArea( Post $post, $area );
+
 }
