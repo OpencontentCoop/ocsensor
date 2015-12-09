@@ -1,7 +1,6 @@
 <?php
 
 use OpenContent\Sensor\Legacy\Repository as CoreRepository;
-use OpenContent\Sensor\Utils\TreeNode;
 use OpenContent\Sensor\Api\Exception\BaseException;
 use OpenContent\Sensor\Core\PermissionDefinitions;
 use OpenContent\Sensor\Core\ActionDefinitions;

@@ -31,6 +31,11 @@ class ParticipantService extends ParticipantServiceBase
     const TRASH_COLLABORATION_GROUP_NAME = 'Trash';
 
     /**
+     * @var Repository
+     */
+    protected $repository;
+
+    /**
      * @var ParticipantCollection[]
      */
     protected $participantsByPost = array();

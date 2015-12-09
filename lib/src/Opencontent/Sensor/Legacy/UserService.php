@@ -38,6 +38,11 @@ class UserService extends UserServiceBase
         return $this->users[$id];
     }
 
+    public function refreshUser( \OpenContent\Sensor\Api\Values\User $user )
+    {
+
+    }
+
     public function setUserPostAware( $user, Post $post )
     {
         if ( is_numeric( $user ) )
@@ -57,6 +62,7 @@ class UserService extends UserServiceBase
         $socialUser = SocialUser::instance($this->loadUser($user->id)->ezUser);
         $socialUser->setBlockMode($enable);
         $user->isEnabled = $enable;
+        $this->refreshUser( $user );
     }
 
     public function setCommentMode( \OpenContent\Sensor\Api\Values\User $user, $enable = true )
@@ -64,6 +70,7 @@ class UserService extends UserServiceBase
         $socialUser = SocialUser::instance($this->getEzUser($user->id));
         $socialUser->setDenyCommentMode(!$enable);
         $user->commentMode = $enable;
+        $this->refreshUser( $user );
     }
 
     public function setBehalfOfMode( \OpenContent\Sensor\Api\Values\User $user, $enable = true )
@@ -71,6 +78,7 @@ class UserService extends UserServiceBase
         $socialUser = SocialUser::instance($this->getEzUser($user->id));
         $socialUser->setCanBehalfOfMode($enable);
         $user->behalfOfMode = $enable;
+        $this->refreshUser( $user );
     }
 
     public function getAlerts( \OpenContent\Sensor\Api\Values\User $user )

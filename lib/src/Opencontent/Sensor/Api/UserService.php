@@ -40,4 +40,6 @@ interface UserService
 
     public function setLastAccessDateTime( User $user, Post $post );
 
+    public function refreshUser( User $user );
+
 }

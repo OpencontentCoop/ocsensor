@@ -8,7 +8,6 @@ use OpenContent\Sensor\Api\Permission\PermissionDefinition;
 use OpenContent\Sensor\Legacy\PostService;
 use OpenContent\Sensor\Legacy\MessageService;
 use OpenContent\Sensor\Legacy\ParticipantService;
-use OpenContent\Sensor\Legacy\UserService;
 use OpenContent\Sensor\Legacy\EventService;
 use OpenContent\Sensor\Api\SearchService;
 use OpenContent\Sensor\Utils\TreeNode;
@@ -130,13 +129,13 @@ abstract class Repository extends CoreRepository
     }
 
     /**
-     * @return \OpenContent\Sensor\Legacy\UserService
+     * @return \OpenContent\Sensor\Legacy\CachedUserService
      */
     public function getUserService()
     {
         if ( $this->userService === null )
         {
-            $this->userService = new UserService( $this, $this->permissionDefinitions );
+            $this->userService = new CachedUserService( $this, $this->permissionDefinitions );
         }
         return $this->userService;
     }
