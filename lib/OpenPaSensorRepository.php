@@ -10,7 +10,7 @@ class OpenPaSensorRepository extends CoreRepository
 {
     protected $data = array();
 
-    private static $instance;
+    protected static $instance;
 
     public static function instance()
     {
@@ -38,11 +38,8 @@ class OpenPaSensorRepository extends CoreRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
         $permissionDefinitions[] = new PermissionDefinitions\CanReopen( $this->getSensorSettings()->get('ApproverCanReopen') );
-
         $permissionDefinitions[] = new \OpenContent\Sensor\Legacy\PermissionDefinitions\CanEdit();
         $permissionDefinitions[] = new \OpenContent\Sensor\Legacy\PermissionDefinitions\CanRemove();
-
-
         $this->setPermissionDefinitions( $permissionDefinitions );
 
         $actionDefinitions = array();
@@ -73,21 +70,22 @@ class OpenPaSensorRepository extends CoreRepository
 
     public function getSensorSettings()
     {
-        //@todo
+        $sensorIni = eZINI::instance( 'ocsensor.ini' )->group( 'SensorConfig' );
         return new Settings( array(
-            'AllowMultipleOwner' => false,
-            'AuthorCanReopen' => false,
-            'ApproverCanReopen' => false,
-            'UniqueCategoryCount' => true,
-            'CategoryAutomaticAssign' => false,
-            'DefaultPostExpirationDaysInterval' => 15,
-            'DefaultPostExpirationDaysLimit' => 7,
-            'TextMaxLength' => 800,
-            'UseShortUrl' => false,
-            'ModerateNewWhatsAppUser' => true,
-            'FilterOperatorsByOwner' => true,
-            'FilterObserversByOwner' => true,
-            'CloseCommentsAfterSeconds' => 1814400
+            'AllowMultipleOwner' => isset( $sensorIni['AllowMultipleOwner'] ) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
+            'AuthorCanReopen' => isset( $sensorIni['AuthorCanReopen'] ) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
+            'ApproverCanReopen' => isset( $sensorIni['ApproverCanReopen'] ) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
+            'UniqueCategoryCount' => isset( $sensorIni['CategoryCount'] ) ? $sensorIni['CategoryCount'] == 'unique' : true,
+            'CategoryAutomaticAssign' => isset( $sensorIni['CategoryAutomaticAssign'] ) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
+            'DefaultPostExpirationDaysInterval' => isset( $sensorIni['DefaultPostExpirationDaysInterval'] ) ? intval( $sensorIni['DefaultPostExpirationDaysInterval'] ) : 15,
+            'DefaultPostExpirationDaysLimit' => isset( $sensorIni['DefaultPostExpirationDaysLimit'] ) ? intval( $sensorIni['DefaultPostExpirationDaysLimit']) : 7,
+            'TextMaxLength' => isset( $sensorIni['TextMaxLength'] ) ? intval( $sensorIni['TextMaxLength'] ) : 800,
+            'UseShortUrl' => isset( $sensorIni['UseShortUrl'] ) ? $sensorIni['UseShortUrl'] == 'enabled' : false,
+            'ModerateNewWhatsAppUser' => isset( $sensorIni['ModerateNewWhatsAppUser'] ) ? $sensorIni['ModerateNewWhatsAppUser'] == 'enabled' : true,
+            'FilterOperatorsByOwner' => isset( $sensorIni['FilterOperatorsByOwner'] ) ? $sensorIni['FilterOperatorsByOwner'] == 'enabled' : true,
+            'FilterObserversByOwner' => isset( $sensorIni['FilterObserversByOwner'] ) ? $sensorIni['FilterObserversByOwner'] == 'enabled' : true,
+            'CloseCommentsAfterSeconds' => isset( $sensorIni['CloseCommentsAfterSeconds'] ) ? intval( $sensorIni['CloseCommentsAfterSeconds'] ) : 1814400,
+            'MoveMarkerOnSelectArea' => isset( $sensorIni['MoveMarkerOnSelectArea'] ) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true
         ) );
     }
 
