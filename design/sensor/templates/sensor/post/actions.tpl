@@ -83,8 +83,8 @@
             $user.permissions.can_add_observer,
             $user.permissions.can_fix,
             $user.permissions.can_close,
-            and( $sensor_post.current_privacy_state.identifier|ne('private'), $user.permissions.can_change_privacy ),
-            and( $sensor_post.current_moderation_state.identifier|eq('waiting'), $user.permissions.can_moderate )
+            and( $post.privacy.identifier|ne('private'), $user.permissions.can_change_privacy ),
+            and( $post.moderation.identifier|eq('waiting'), $user.permissions.can_moderate )
         )}
             <strong>{'Azioni'|i18n('sensor/post')}</strong>
         {/if}
@@ -93,12 +93,12 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="operators">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="form-control remote-select" data-post_id="{$post.id}" data-value="operators">
                             <option></option>
                         </select>
                     </div>
                     <div class="col-xs-4">
-                        <input class="btn btn-info btn-block" type="submit" name="CollaborationAction_Assign" value="{if $sensor_post.has_owner|not()}{'Assegna'|i18n('sensor/post')}{else}{'Riassegna'|i18n('sensor/post')}{/if}" />
+                        <input class="btn btn-info btn-block" type="submit" name="CollaborationAction_Assign" value="{if $post.owners.participants|count()|eq(0)}{'Assegna'|i18n('sensor/post')}{else}{'Riassegna'|i18n('sensor/post')}{/if}" />
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="observers">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="form-control remote-select" data-post_id="{$post.id}" data-value="observers">
                             <option></option>
                         </select>
                     </div>

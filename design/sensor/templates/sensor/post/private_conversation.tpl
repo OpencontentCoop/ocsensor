@@ -8,7 +8,7 @@
 <div class="collapse" id="collapseConversation">
     {if $post.privateMessages.count|gt(0)}
     <div class="comment">
-        {foreach $post.privateMessages.message as $message}
+        {foreach $post.privateMessages.messages as $message}
             <p>
                 {include uri='design:sensor/post/post_message/private.tpl' message=$message}
             </p>
@@ -22,29 +22,25 @@
                 <input class="btn send btn-info btn-sm btn-block" type="submit" name="CollaborationAction_PrivateMessage" value="{'Invia messaggio'|i18n('sensor/messages')}" />
             </p>
             <strong>{'Chi può leggere questo messaggio?'|i18n('sensor/messages')} </strong>
-            {foreach $sensor_post.participants as $participant_role}
-                {if $participant_role.role_id|eq(5)}{skip}{/if}
-                {foreach $participant_role.items as $participant}
-                    {if $participant.contentobject}
-                        {if fetch(user,current_user).contentobject_id|eq($participant.contentobject.id)}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" checked="checked" disabled="disabled" />
-                                    {*<small>{$participant.contentobject.name|wash()}</small>*}
-                                    <small>{'Solo te stesso'|i18n('sensor/messages')}</small>
-                                    <input name="Collaboration_SensorItemPrivateMessageReceiver[]" type="hidden" value="{$participant.contentobject.id}" />
-                                </label>
-                            </div>
-                        {else}
-                            <div class="checkbox">
-                                <label>
-                                    <input name="Collaboration_SensorItemPrivateMessageReceiver[]" checked="checked" type="checkbox" value="{$participant.contentobject.id}" />
-                                    <small>{$participant.contentobject.name|wash()}</small>
-                                </label>
-                            </div>
-                        {/if}
-                    {/if}
-                {/foreach}
+            {foreach $post.participants.participants as $participant}
+                {if $participant.roleIdentifier|eq(5)}{skip}{/if}
+                {if $user.id|eq($participant.id)}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" checked="checked" disabled="disabled" />
+                            {*<small>{$participant.contentobject.name|wash()}</small>*}
+                            <small>{'Solo te stesso'|i18n('sensor/messages')}</small>
+                            <input name="Collaboration_SensorItemPrivateMessageReceiver[]" type="hidden" value="{$participant.id}" />
+                        </label>
+                    </div>
+                {else}
+                    <div class="checkbox">
+                        <label>
+                            <input name="Collaboration_SensorItemPrivateMessageReceiver[]" checked="checked" type="checkbox" value="{$participant.id}" />
+                            <small>{$participant.name|wash()}</small>
+                        </label>
+                    </div>
+                {/if}
             {/foreach}
 
         </div>

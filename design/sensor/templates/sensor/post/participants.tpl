@@ -1,24 +1,54 @@
 <aside class="widget" id="current-post-participants">
     <h4>{'Soggetti coinvolti'|i18n('sensor/post')}</h4>
     <dl class="dl">
-        {foreach $sensor_post.participants as $participant_role}
-            <dt>{$participant_role.role_name|wash}:</dt>
+
+        <dt>{$post.author.roleName|wash}:</dt>
+        <dd>
+            <ul class="list-unstyled">
+                <li><small>{$post.author.name|wash()}</small></li>
+            </ul>
+        </dd>
+
+        {if count($post.approvers.participants)|gt(0)}
+            {foreach $post.approvers.participants as $participant}
+                <dt>{$participant.roleName|wash}:</dt>
+                {break}
+            {/foreach}
             <dd><ul class="list-unstyled">
-                    {foreach $participant_role.items as $participant}
-                        {if $participant.contentobject}
-                            <li>
-                                <small>
-                                    {include uri='design:content/view/sensor_person.tpl' sensor_person=$participant.contentobject}
-                                    {if and( $participant_role.role_id|eq(5), $sensor_post.object|has_attribute('on_behalf_of') )}
-                                        [{$sensor_post.object|attribute('on_behalf_of').contentclass_attribute_name|wash()} {$sensor_post.object|attribute('on_behalf_of').content|wash()}]
-                                    {/if}
-                                </small>
-                            </li>
-                        {else}
-                            <li>?</li>
-                        {/if}
-                    {/foreach}
-                </ul></dd>
-        {/foreach}
+            {foreach $post.approvers.participants as $participant}
+                <li>
+                    <small>{$participant.name|wash()}</small>
+                </li>
+            {/foreach}
+            </ul></dd>
+        {/if}
+
+        {if count($post.owners.participants)|gt(0)}
+            {foreach $post.owners.participants as $participant}
+                <dt>{$participant.roleName|wash}:</dt>
+                {break}
+            {/foreach}
+            <dd><ul class="list-unstyled">
+            {foreach $post.owners.participants as $participant}
+                <li>
+                    <small>{$participant.name|wash()}</small>
+                </li>
+            {/foreach}
+            </ul></dd>
+        {/if}
+
+        {if count($post.observers.participants)|gt(0)}
+            {foreach $post.observers.participants as $participant}
+                <dt>{$participant.roleName|wash}:</dt>
+                {break}
+            {/foreach}
+            <dd><ul class="list-unstyled">
+            {foreach $post.observers.participants as $participant}
+                <li>
+                    <small>{$participant.name|wash()}</small>
+                </li>
+            {/foreach}
+            </ul></dd>
+        {/if}
     </dl>
 </aside>
