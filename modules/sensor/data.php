@@ -3,7 +3,7 @@
 $module = $Params['Module'];
 $contentType = eZHTTPTool::instance()->getVariable( 'contentType', 'geojson' );
 $data = array();
-header('Content-Type: application/json');
+
 try
 {
     if ( $contentType == 'geojson' )
@@ -94,12 +94,19 @@ try
             }
         }
     }
+    elseif ( $contentType == 'chart' )
+    {
+        $charts = new SensorCharts( eZHTTPTool::instance()->getVariable( 'parameters' ) );
+        $data = $charts->getData();
+    }
 
+    header('Content-Type: application/json');
     header( 'HTTP/1.1 200 OK' );
     echo json_encode( $data );
 }
 catch ( Exception $e )
 {
+    header('Content-Type: application/json');
     header( 'HTTP/1.1 500 Internal Server Error' );
     $data = array( 'error' => $e->getMessage() );
     echo json_encode( $data );

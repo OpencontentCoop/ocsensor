@@ -25,6 +25,8 @@ class SensorModuleFunctions
                     $postId = $object->attribute( 'id' );
                     $extraPath = "post/" . eZDir::filenamePath( $postId );
                     self::clearSensorCache( "$extraPath$postId-" );
+                    if ( class_exists( 'OpenContent\Sensor\Legacy\CachePostService') )
+                        OpenContent\Sensor\Legacy\CachePostService::clearCache( $object->attribute( 'id' ) );
                 }
             }
         }
@@ -189,6 +191,11 @@ class SensorModuleFunctions
             /** @var SensorHelper $helper */
             $helper = SensorHelper::instanceFromContentObjectId( $postId );
             $helper->onRead();
+
+            if ( class_exists( 'OpenPaSensorRepository') )
+            {
+                OpenPaSensorRepository::instance()->getPostService()->loadPost( $postId );
+            }
 
             $tpl->setVariable( 'view_parameters', isset( $viewParameters ) ? $viewParameters : array() );
             $tpl->setVariable( 'sensor_post', $helper );

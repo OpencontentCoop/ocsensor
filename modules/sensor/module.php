@@ -65,6 +65,13 @@ $ViewList['config'] = array(
     'functions' => array( 'config' )
 );
 
+$ViewList['stat'] = array(
+		'script' =>	'stat.php',
+		'params' => array(),
+		'unordered_params' => array(),
+		'functions' => array( 'config' )
+);
+
 //bc
 $ViewList['dimmi'] = array(
     'script' =>	'dimmi.php',

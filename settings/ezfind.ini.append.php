@@ -3,4 +3,7 @@
 [LanguageSearch]
 SearchMainLanguageOnly=disabled
 
+[IndexPlugins]
+Class[sensor_post]=ezfIndexSensor
+
 */ ?>
