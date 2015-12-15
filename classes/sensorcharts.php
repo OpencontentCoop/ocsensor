@@ -14,6 +14,32 @@ class SensorCharts
      */
     protected $searchService;
 
+    protected static $availableCharts = array(
+        array(
+            'identifier' => 'performance',
+            'name' => 'Tempi di risposta e di chiusura',
+            'template_uri' => 'design:sensor/charts/performance.tpl',
+            'call_method' => 'performanceData'
+        )
+    );
+
+    public static function listAvailableCharts()
+    {
+        return self::$availableCharts;
+    }
+
+    public static function fetchChartByIdentifier( $identifier )
+    {
+        foreach( self::$availableCharts as $chart )
+        {
+            if ( $chart['identifier'] == $identifier )
+            {
+                return $chart;
+            }
+        }
+        return false;
+    }
+
     public function __construct( $chartParameters = array() )
     {
         $this->parameters = $chartParameters;
@@ -26,10 +52,16 @@ class SensorCharts
         $data = array();
         if ( isset( $this->parameters['type'] ) )
         {
-            $functionName = strtolower( $this->parameters['type'] ) . 'Data';
-            if ( method_exists( $this, $functionName ) )
+            $chart = self::fetchChartByIdentifier( $this->parameters['type'] );
+
+            if ( method_exists( $this, $chart['call_method'] ) )
             {
+                $functionName = $chart['call_method'];
                 $data = $this->$functionName();
+            }
+            elseif ( is_callable( $chart['call_method'] ) )
+            {
+                $data = call_user_func( $chart['call_method'] ); //@todo make factory
             }
         }
         return $data;
@@ -37,15 +69,16 @@ class SensorCharts
 
     public function performanceData()
     {
+        $limit = 1000;
         $query = $this->searchService->instanceNewSearchQuery()
             ->fields( array( 'open_timestamp', 'reading_time', 'closing_time' ) )
             ->filter( 'workflow_status', 'closed' )
-            ->limits( 1000 )
+            ->limits( $limit )
             ->sort( array( 'open_timestamp' => 'asc' ) );
 
         $result = $this->searchService->query( $query );
 
-        if ( $result['SearchCount'] > 1000 )
+        if ( $result['SearchCount'] > $limit )
         {
             $query->limits( $result['SearchCount'] );
             $result = $this->searchService->query( $query );

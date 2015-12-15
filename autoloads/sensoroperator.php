@@ -10,6 +10,7 @@ class SensorOperator
             'sensor_post',
             'sensor_postcontainer',
             'sensor_categorycontainer',
+            'sensor_chart_list'
         );
     }
 
@@ -64,6 +65,10 @@ class SensorOperator
             {
                 return $operatorValue = ObjectHandlerServiceControlSensor::postCategoriesNode();
             } break;
+
+            case 'sensor_chart_list':
+                $operatorValue = SensorCharts::listAvailableCharts();
+                break;
         }
         return null;
     }

@@ -67,7 +67,7 @@ $ViewList['config'] = array(
 
 $ViewList['stat'] = array(
 		'script' =>	'stat.php',
-		'params' => array(),
+		'params' => array( 'ChartIdentifier' ),
 		'unordered_params' => array(),
 		'functions' => array( 'config' )
 );

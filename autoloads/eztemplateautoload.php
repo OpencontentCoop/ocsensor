@@ -7,6 +7,7 @@ $eZTemplateOperatorArray[] = array(
         'sensor_root_handler',
         'sensor_post',
         'sensor_postcontainer',
-        'sensor_categorycontainer'
+        'sensor_categorycontainer',
+        'sensor_chart_list'
     )
 );
