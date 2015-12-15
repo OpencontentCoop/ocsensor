@@ -129,7 +129,7 @@ class SensorCharts
         $start = strftime( '%Y-%m-%dT%H:%M:%SZ', $startDateTime->format( 'U' ) );
         $startDateTime->add( $interval );
         $startDateTime->sub( new DateInterval( 'PT1S' ) );
-        $end = strftime( '%Y-%m-%dT%H:%M:%SZ', $month->format( 'U' ) );
+        $end = strftime( '%Y-%m-%dT%H:%M:%SZ', $startDateTime->format( 'U' ) );
         return array( $start, $end );
     }
 
