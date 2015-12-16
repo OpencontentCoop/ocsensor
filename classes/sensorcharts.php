@@ -341,36 +341,63 @@ class SensorCharts
     {
         $query = $this->searchService->instanceNewSearchQuery()
                                      ->fields(
-                                         array( 'id', 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' )
+                                         array( 'id', 'open_timestamp', 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' )
                                      )
                                      ->filter( 'workflow_status', 'closed' )
-                                     ->sort( array( 'id' => 'asc' ) );
-        $result = $this->fecthAll( $query );
+                                     ->sort( array( 'open_timestamp' => 'asc' )  );
+        $result = $this->fecthAll( $query );        
 
-        $data = array(
-            'categories' => array( 'Lettura', 'Assegnazione', 'Conclusione', 'Chiusura' ),
+        $data = array(            
             'series' => array(),
             'title' => 'Tempi di lavorazione per segnalazione'
-
+        );
+        $series = array(
+            'Lettura' => array(),
+            'Assegnazione' => array(),
+            'Conclusione' => array(),
+            'Chiusura'  => array()
         );
         foreach( $result['SearchResult'] as $item )
         {
-            $name = $item['fields'][$this->searchService->field( 'id' )];
-            $values = array( 0, 0, 0,0 );
+            $time = $item['fields'][$this->searchService->field( 'open_timestamp' )] * 1000;
+            
+            
             if ( isset( $item['fields'][$this->searchService->field( 'open_read_time' )] ) )
-                $values[0] = $item['fields'][$this->searchService->field( 'open_read_time' )];
+                $lettura = round( $item['fields'][$this->searchService->field( 'open_read_time' )] / 3600, 2 );
+            else
+                $lettura = 0;
+            $series['Lettura'][] = array( $time, $lettura );
+            
             if ( isset( $item['fields'][$this->searchService->field( 'read_assign_time' )] ) )
-                $values[1] = $item['fields'][$this->searchService->field( 'read_assign_time' )];
+                $assegnazione = round($item['fields'][$this->searchService->field( 'read_assign_time' )] / 3600, 2 );
+            else
+                $assegnazione = 0;
+            $series['Assegnazione'][] = array( $time, $assegnazione );                                
+            
             if ( isset( $item['fields'][$this->searchService->field( 'assign_fix_time' )] ) )
-                $values[2] = $item['fields'][$this->searchService->field( 'assign_fix_time' )];
+                $conclusione = round($item['fields'][$this->searchService->field( 'assign_fix_time' )] / 3600, 2 );
+            else
+                $conclusione = 0;
+            $series['Conclusione'][] = array( $time, $conclusione );   
+            
             if ( isset( $item['fields'][$this->searchService->field( 'fix_close_time' )] ) )
-                $values[3] = $item['fields'][$this->searchService->field( 'fix_close_time' )];
-
-            $data['series'][] = array(
-              'name' => $name,
-              'data' => $values
-            );
+                $chiusura = round($item['fields'][$this->searchService->field( 'fix_close_time' )] / 3600, 2 );
+            else
+                $chiusura = 0;            
+            $series['Chiusura'][] = array( $time, $chiusura );   
         }
+        
+        $series = array_reverse( $series, true );
+        
+        foreach( $series as $key => $values )
+        {
+            $data['series'][] = array(
+                'name' => $key,
+                'data' => $values,
+                'type' => 'column'
+            );            
+        }
+        
         return $data;
     }
 
