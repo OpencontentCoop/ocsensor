@@ -8,36 +8,39 @@
                 type: 'times'
             }
         };
-        var getChart = function(){
+        var getChart = function () {
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#times').highcharts('StockChart', {
-				  rangeSelector: {
-					  selected: 1
-				  },
-				  yAxis: {
-					  min: 0
-				  },
-				  tooltip: {
-					  valueSuffix: ' ore',
-					  valueDecimals: 2
-				  },
-				  plotOptions: {
-					  column: {
-						  stacking: 'normal',
-						  dataLabels: {
-							  enabled: false,
-							  color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
-							  style: {
-								  textShadow: '0 0 3px black, 0 0 3px black'
-							  }
-						  },
-						  dataGrouping: {
-							  enabled: true
-						  }
-					  }
-				  },
-				  series: response.series
-			  });
+                    rangeSelector: {
+                        selected: 1
+                    },
+                    yAxis: {
+                        min: 0
+                    },
+                    tooltip: {
+                        valueSuffix: ' ore',
+                        valueDecimals: 2
+                    },
+                    title: {
+                        text: response.title
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: false,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                style: {
+                                    textShadow: '0 0 3px black, 0 0 3px black'
+                                }
+                            },
+                            dataGrouping: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: response.series
+                });
             });
         };
         getChart();
