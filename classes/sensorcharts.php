@@ -40,6 +40,12 @@ class SensorCharts
             'call_method' => 'typeData'
         ),
         array(
+            'identifier' => 'times',
+            'name' => 'Tempi',
+            'template_uri' => 'design:sensor/charts/times.tpl',
+            'call_method' => 'timesData'
+        ),
+        array(
             'identifier' => 'performance',
             'name' => 'Tempi di risposta e di chiusura',
             'template_uri' => 'design:sensor/charts/performance.tpl',
@@ -330,7 +336,44 @@ class SensorCharts
         
         return $data;
     }
-    
+
+    public function timesData()
+    {
+        $query = $this->searchService->instanceNewSearchQuery()
+                                     ->fields(
+                                         array( 'id', 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' )
+                                     )
+                                     ->filter( 'workflow_status', 'closed' )
+                                     ->sort( array( 'id' => 'asc' ) );
+        $result = $this->fecthAll( $query );
+
+        $data = array(
+            'categories' => array( 'Lettura', 'Assegnazione', 'Conclusione', 'Chiusura' ),
+            'series' => array(),
+            'title' => 'Tempi di lavorazione per segnalazione'
+
+        );
+        foreach( $result['SearchResult'] as $item )
+        {
+            $name = $item['fields'][$this->searchService->field( 'id' )];
+            $values = array( 0, 0, 0,0 );
+            if ( isset( $item['fields'][$this->searchService->field( 'open_read_time' )] ) )
+                $values[0] = $item['fields'][$this->searchService->field( 'open_read_time' )];
+            if ( isset( $item['fields'][$this->searchService->field( 'read_assign_time' )] ) )
+                $values[1] = $item['fields'][$this->searchService->field( 'read_assign_time' )];
+            if ( isset( $item['fields'][$this->searchService->field( 'assign_fix_time' )] ) )
+                $values[2] = $item['fields'][$this->searchService->field( 'assign_fix_time' )];
+            if ( isset( $item['fields'][$this->searchService->field( 'fix_close_time' )] ) )
+                $values[3] = $item['fields'][$this->searchService->field( 'fix_close_time' )];
+
+            $data['series'][] = array(
+              'name' => $name,
+              'data' => $values
+            );
+        }
+        return $data;
+    }
+
     public function performanceData()
     {
         $query = $this->searchService->instanceNewSearchQuery()
