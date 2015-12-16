@@ -17,6 +17,10 @@
 				  yAxis: {
 					  min: 0
 				  },
+				  tooltip: {
+					  valueSuffix: ' ore',
+					  valueDecimals: 2
+				  },
 				  plotOptions: {
 					  column: {
 						  stacking: 'normal',
@@ -28,8 +32,7 @@
 							  }
 						  },
 						  dataGrouping: {
-							  enabled: true,
-							  forced: true							  
+							  enabled: true
 						  }
 					  }
 				  },
