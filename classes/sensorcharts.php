@@ -46,6 +46,12 @@ class SensorCharts
             'call_method' => 'timesData'
         ),
         array(
+            'identifier' => 'timesAvg',
+            'name' => 'Media mensile tempi di esecuzione',
+            'template_uri' => 'design:sensor/charts/times_avg.tpl',
+            'call_method' => 'timesAvgData'
+        ),
+        array(
             'identifier' => 'performance',
             'name' => 'Tempi di risposta e di chiusura',
             'template_uri' => 'design:sensor/charts/performance.tpl',
@@ -145,7 +151,11 @@ class SensorCharts
             $facetFields = $result['SearchExtras']->attribute( 'facet_fields' );            
             $facet = new stdClass;
             $facet->interval = $interval['_start']->format( 'm Y' );
-            $facet->values = $facetFields[0]['countList'];
+            $facet->values = array();
+            foreach( $facets as $index => $facetName )
+            {
+                $facet->values[$facetName] = $facetFields[$index]['countList'];
+            }
             $data[] = $facet;            
         }
         return $data;
@@ -182,12 +192,13 @@ class SensorCharts
             
         );
         $series = array();
-        $facets = $this->getMonthlyFacets( array( 'type' ) );        
+        $facets = $this->getMonthlyFacets( array( 'type' ) );
         foreach( $facets as $facet )
         {            
             $data['categories'][] = $facet->interval;
-            foreach( $facet->values as $key => $value )
-                $series[$key][] = $value;
+            foreach( $facet->values as $name => $values )
+                foreach( $values as $key => $value )
+                    $series[$key][] = $value;
         }
         foreach( $series as $name => $serie )
         {
@@ -398,6 +409,45 @@ class SensorCharts
             );            
         }
         
+        return $data;
+    }
+
+    public function timesAvgData()
+    {
+        $data = array(
+            'categories' => array(),
+            'series' => array(),
+            'title' => 'Media mensile tempi di esecuzione'
+
+        );
+        $series = array();
+        $facets = $this->getMonthlyFacets( array( 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' ) );
+
+        foreach( $facets as $facet )
+        {
+            $data['categories'][] = $facet->interval;
+            foreach( $facet->values as $name => $values )
+            {
+                $array = array_keys( $values );
+                $avg = count( $array ) > 0 ? array_sum( $array ) / count( $array ) / 3600 : 0;
+                if ( $name == 'open_read_time' ) $name = 'Lettura';
+                if ( $name == 'read_assign_time' ) $name = 'Assegnazione';
+                if ( $name == 'assign_fix_time' ) $name = 'Conclusione';
+                if ( $name == 'fix_close_time' ) $name = 'Chiusura';
+                $series[$name][] = $avg;
+            }
+
+        }
+
+        $series = array_reverse( $series, true );
+
+        foreach( $series as $name => $serie )
+        {
+            $data['series'][] = array(
+                'name' => $name,
+                'data' => $serie
+            );
+        }
         return $data;
     }
 
