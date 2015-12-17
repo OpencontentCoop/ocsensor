@@ -17,6 +17,10 @@
                     rangeSelector: {
                         selected: 1
                     },
+                    tooltip: {
+                        valueSuffix: ' ore',
+                        valueDecimals: 2
+                    },
                     title: {
                         text: response.title
                     },

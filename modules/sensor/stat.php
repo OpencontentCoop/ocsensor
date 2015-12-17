@@ -2,7 +2,8 @@
 
 $Module = $Params['Module'];
 $chartIdentifier = $Params['ChartIdentifier'];
-$current = $chartIdentifier ? SensorCharts::fetchChartByIdentifier( $chartIdentifier ) : false;
+$charts = SensorCharts::listAvailableCharts();
+$current = $chartIdentifier ? SensorCharts::fetchChartByIdentifier( $chartIdentifier ) : $charts[0];
 
 $tpl = eZTemplate::factory();
 $tpl->setVariable( 'persistent_variable', array() );

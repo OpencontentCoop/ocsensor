@@ -41,7 +41,7 @@ class SensorCharts
         ),
         array(
             'identifier' => 'times',
-            'name' => 'Tempi',
+            'name' => 'Tempi di esecuzione',
             'template_uri' => 'design:sensor/charts/times.tpl',
             'call_method' => 'timesData'
         ),
@@ -420,13 +420,13 @@ class SensorCharts
                 $readingTime = null;
                 if ( isset( $item['fields'][$this->searchService->field( 'reading_time' )] ) )
                 {
-                    $readingTime = $item['fields'][$this->searchService->field( 'reading_time' )] / 60;
+                    $readingTime = $item['fields'][$this->searchService->field( 'reading_time' )] / 3600;
                 }
 
                 $closingTime = null;
                 if ( isset( $item['fields'][$this->searchService->field( 'closing_time' )] ) )
                 {
-                    $closingTime = $item['fields'][$this->searchService->field( 'closing_time' )] / 60;
+                    $closingTime = $item['fields'][$this->searchService->field( 'closing_time' )] / 3600;
                 }
 
                 $data[] = array(
