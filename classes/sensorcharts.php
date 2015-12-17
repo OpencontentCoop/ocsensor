@@ -91,11 +91,46 @@ class SensorCharts
             {
                 $name = $filter['name'];
                 $value = $filter['value'];
-                if ( !isset( $this->requestFilters[$name] ) )
-                    $this->requestFilters[$name] = array();
-                $this->requestFilters[$name][] = $value;
+                if ( !isset( $filters[$name] ) )
+                    $filters[$name] = array();
+                $filters[$name][] = $value;
+            }
+            foreach( $filters as $name => $values )
+            {
+                $allFilters = $values;
+                foreach( $values as $value )
+                    $allFilters = array_merge(
+                        $allFilters,
+                        $this->getSubFilters( $name, $value )
+                    );
+                $this->requestFilters[$name] = array_unique( $allFilters );
             }
         }
+    }
+
+    protected function getSubFilters( $name, $id )
+    {
+        $data = array();
+        $tree = array();
+
+        if ( $name == 'category_id_list' )
+            $tree = $this->repository->getCategoriesTree()->attribute( 'children' );
+
+        if ( $name == 'area_id_list' )
+            $tree = $this->repository->getAreasTree()->attribute( 'children' );
+
+        foreach( $tree as $item )
+        {
+            if ( $item->attribute( 'id' ) == $id && count( $item->attribute( 'children' ) ) > 0 )
+            {
+                foreach( $item->attribute( 'children' ) as $child )
+                {
+                    $data[] = $child->attribute( 'id' );
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function getData()
