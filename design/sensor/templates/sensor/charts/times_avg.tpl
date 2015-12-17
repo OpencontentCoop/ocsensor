@@ -23,7 +23,9 @@
                         }
                     },
                     tooltip: {
-                        shared: true
+                        shared: true,
+                        valueSuffix: ' ore',
+                        valueDecimals: 2
                     },
                     plotOptions: {
                         area: {

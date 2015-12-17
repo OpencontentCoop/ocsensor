@@ -460,12 +460,12 @@ class SensorCharts
             foreach( $facet->values as $name => $values )
             {
                 $array = array_keys( $values );
-                $avg = count( $array ) > 0 ? array_sum( $array ) / count( $array ) / 3600 : 0;
+                $avg = count( $array ) > 0 ? array_sum( $array ) / count( $array ) : 0;
                 if ( $name == 'open_read_time' ) $name = 'Lettura';
                 if ( $name == 'read_assign_time' ) $name = 'Assegnazione';
                 if ( $name == 'assign_fix_time' ) $name = 'Conclusione';
                 if ( $name == 'fix_close_time' ) $name = 'Chiusura';
-                $series[$name][] = $avg;
+                $series[$name][] = round( $avg / 3600, 2 );
             }
 
         }
