@@ -8,40 +8,40 @@
                 type: 'categories'
             }
         };
-        var getChart = function(){
-		  $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
-			$('#categories').highcharts({
-			  chart: {
-				  type: 'pie'
-			  },
-			  title: {
-				  text: response.title
-			  },
-			  subtitle: {
-				  text: 'Clicca sulle aree per il dettaglio dei descrittori.'
-			  },
-			  plotOptions: {
-				  series: {
-					  dataLabels: {
-						  enabled: true,
-						  format: '{point.name}: {point.y:.1f}%'
-					  }
-				  }
-			  },
-			  tooltip: {
-				  headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-				  pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> del totale<br/>'
-			  },
-			  series: [{
-				  name: 'Aree',
-				  colorByPoint: true,
-				  data: response.series
-			  }],
-			  drilldown: {
-				  series: response.drilldown
-			  }
-			});
-		  });
+        var getChart = function () {
+            $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
+                $('#categories').highcharts({
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: response.title
+                    },
+                    subtitle: {
+                        text: 'Clicca sulle aree per il dettaglio dei descrittori.'
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.y:.1f}%'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> del totale<br/>'
+                    },
+                    series: [{
+                        name: 'Aree',
+                        colorByPoint: true,
+                        data: response.series
+                    }],
+                    drilldown: {
+                        series: response.drilldown
+                    }
+                });
+            });
         };
         getChart();
     });

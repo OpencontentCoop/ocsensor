@@ -14,6 +14,8 @@ class SensorCharts
      */
     protected $searchService;
 
+    protected $requestFilters = array();
+
     protected static $availableCharts = array(
         array(
             'identifier' => 'status',
@@ -82,6 +84,18 @@ class SensorCharts
         $this->parameters = $chartParameters;
         $this->repository = OpenPaSensorRepository::instance();
         $this->searchService = $this->repository->getSearchService();
+        if ( isset( $this->parameters['filters'] ) )
+        {
+            $filters = array();
+            foreach( $this->parameters['filters'] as $filter )
+            {
+                $name = $filter['name'];
+                $value = $filter['value'];
+                if ( !isset( $this->requestFilters[$name] ) )
+                    $this->requestFilters[$name] = array();
+                $this->requestFilters[$name][] = $value;
+            }
+        }
     }
 
     public function getData()
@@ -106,11 +120,12 @@ class SensorCharts
     }
 
     protected function getMonthlyFacets( $facets )
-    {        
-        $query = $this->searchService->instanceNewSearchQuery();
-        $query->facetLimit = 1000;
+    {
         $startResult = $this->searchService->query(
-            $query->field( 'open_timestamp' )->limits( 1 )->sort( array( 'open_timestamp' => 'asc' ) )
+            $this->searchService->instanceNewSearchQuery()->field( 'open_timestamp' )
+                ->limits( 1 )
+                ->filters( $this->requestFilters )
+                ->sort( array( 'open_timestamp' => 'asc' ) )
         );        
         $startDate = new DateTime();
         $startDate->setTimestamp( $startResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
@@ -119,6 +134,7 @@ class SensorCharts
             $this->searchService->instanceNewSearchQuery()
                                 ->field( 'open_timestamp' )
                                 ->limits( 1 )
+                                ->filters( $this->requestFilters )
                                 ->sort( array( 'open_timestamp' => 'desc' ) )
         );
         $endDate = new DateTime();
@@ -137,16 +153,20 @@ class SensorCharts
         $data = array();        
         foreach( $intervals as $interval )
         {
+            $resultQuery = $this->searchService->instanceNewSearchQuery();
+            $resultQuery->facetLimit = 1000;
+
             $result = $this->searchService->query(
-                $this->searchService->instanceNewSearchQuery()
-                                    ->field( 'internalId' )
-                                    ->filter(
-                                        'open',
-                                        "[{$interval['start']} TO {$interval['end']}]"
-                                    )
-                                    ->facets( $facets )
-                                    ->limits( 1 )
-                                    ->sort( array( 'open_timestamp' => 'asc' ) )
+                $resultQuery
+                    ->field( 'internalId' )
+                    ->filter(
+                        'open',
+                        "[{$interval['start']} TO {$interval['end']}]"
+                    )
+                    ->facets( $facets )
+                    ->limits( 1 )
+                    ->filters( $this->requestFilters )
+                    ->sort( array( 'open_timestamp' => 'asc' ) )
             );
             $facetFields = $result['SearchExtras']->attribute( 'facet_fields' );            
             $facet = new stdClass;
@@ -214,6 +234,7 @@ class SensorCharts
     {
         $query = $this->searchService->instanceNewSearchQuery()                                     
                                      ->limits( 1 )
+                                     ->filters( $this->requestFilters )
                                      ->facet( 'category_id_list' );
 
         $result = $this->searchService->query( $query );
@@ -249,7 +270,7 @@ class SensorCharts
             foreach( $category->attribute( 'children' ) as $child )
             {                
                 $childCount = isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
-                $childPerc = floatval( number_format( $childCount * 100 / $childTotal, 2 ) );
+                $childPerc = $childTotal > 0 ? floatval( number_format( $childCount * 100 / $childTotal, 2 ) ) : 0;
                 $drilldown['data'][] = array( $child->attribute( 'name' ), $childPerc );
             }
             $parentTotal += $childTotal;
@@ -264,7 +285,8 @@ class SensorCharts
     
     public function areasData()
     {
-        $query = $this->searchService->instanceNewSearchQuery()                                     
+        $query = $this->searchService->instanceNewSearchQuery()
+                                     ->filters( $this->requestFilters )
                                      ->limits( 1 )
                                      ->facet( 'area_id_list' );
 
@@ -319,7 +341,8 @@ class SensorCharts
     
     public function statusData()
     {
-        $query = $this->searchService->instanceNewSearchQuery()                                     
+        $query = $this->searchService->instanceNewSearchQuery()
+                                     ->filters( $this->requestFilters )
                                      ->limits( 1 )
                                      ->facet( 'status' );
 
@@ -352,10 +375,18 @@ class SensorCharts
     {
         $query = $this->searchService->instanceNewSearchQuery()
                                      ->fields(
-                                         array( 'id', 'open_timestamp', 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' )
+                                         array(
+                                             'id',
+                                             'open_timestamp',
+                                             'open_read_time',
+                                             'read_assign_time',
+                                             'assign_fix_time',
+                                             'fix_close_time'
+                                         )
                                      )
                                      ->filter( 'workflow_status', 'closed' )
-                                     ->sort( array( 'open_timestamp' => 'asc' )  );
+                                     ->filters( $this->requestFilters )
+                                     ->sort( array( 'open_timestamp' => 'asc' ) );
         $result = $this->fecthAll( $query );        
 
         $data = array(            
@@ -457,7 +488,8 @@ class SensorCharts
                                      ->fields(
                                          array( 'open_timestamp', 'reading_time', 'closing_time' )
                                      )
-                                     ->filter( 'workflow_status', 'closed' )                                     
+                                     ->filter( 'workflow_status', 'closed' )
+                                     ->filters( $this->requestFilters )
                                      ->sort( array( 'open_timestamp' => 'asc' ) );
 
         $result = $this->fecthAll( $query );       

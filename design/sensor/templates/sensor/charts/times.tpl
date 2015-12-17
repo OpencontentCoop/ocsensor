@@ -9,6 +9,7 @@
             }
         };
         var getChart = function () {
+            getVars.parameters.filters = $('#chart-filters').serializeArray();
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#times').highcharts('StockChart', {
                     rangeSelector: {
@@ -44,8 +45,18 @@
             });
         };
         getChart();
+        $('#chart-filters input').bind('change', function () {
+            getChart();
+        })
     });
 </script>
 {/literal}
 
-<div id="times" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
+<div class="row">
+    <div class="col-md-10">
+        <div id="times" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <div class="col-md-2">
+        {include uri='design:sensor/charts/_filters.tpl'}
+    </div>
+</div>
