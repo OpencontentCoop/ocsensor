@@ -8,7 +8,8 @@
                 type: 'performance'
             }
         };
-        var getChart = function(){
+        var getChart = function () {
+            getVars.parameters.filters = $('#chart-filters').serializeArray();
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#performance').highcharts('StockChart', {
                     chart: {
@@ -28,15 +29,28 @@
                         name: response.seriesName,
                         data: response.data
                     }],
-                    yAxis:{
+                    yAxis: {
                         min: 0
                     }
                 });
             });
         };
         getChart();
+        $('#chart-filters input').bind('change', function () {
+            getChart();
+        })
     });
 </script>
 {/literal}
 
-<div id="performance" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div class="row">
+    <div class="col-md-10">
+        <div id="performance" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+    <div class="col-md-2">
+        {include uri='design:sensor/charts/_filters.tpl'}
+    </div>
+</div>
+
+
+

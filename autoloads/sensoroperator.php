@@ -10,7 +10,9 @@ class SensorOperator
             'sensor_post',
             'sensor_postcontainer',
             'sensor_categorycontainer',
-            'sensor_chart_list'
+            'sensor_chart_list',
+            'sensor_categories',
+            'sensor_areas'
         );
     }
 
@@ -69,6 +71,15 @@ class SensorOperator
             case 'sensor_chart_list':
                 $operatorValue = SensorCharts::listAvailableCharts();
                 break;
+
+            case 'sensor_areas':
+                $operatorValue = OpenPaSensorRepository::instance()->getAreasTree();
+            break;
+
+            case 'sensor_categories':
+                $operatorValue = OpenPaSensorRepository::instance()->getCategoriesTree();
+            break;
+
         }
         return null;
     }

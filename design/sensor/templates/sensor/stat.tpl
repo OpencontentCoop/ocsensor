@@ -7,20 +7,21 @@
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
             {foreach sensor_chart_list() as $chart}
-            <li role="presentation" {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
-                <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
-                    {$chart.name|wash()}
-                </a>
-            </li>
+                <li role="presentation"
+                    {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
+                    <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
+                        {$chart.name|wash()}
+                    </a>
+                </li>
             {/foreach}
         </ul>
     </div>
 
     <div class="col-md-9">
         {if $current}
-        <div class="tab-pane active" id="{$current.identifier}">
-            {include uri=$current.template_uri}
-        </div>
+            <div class="tab-pane active" id="panel-{$current.identifier}">
+                {include uri=$current.template_uri}
+            </div>
         {/if}
     </div>
 

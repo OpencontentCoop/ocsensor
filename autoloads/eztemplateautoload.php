@@ -8,6 +8,8 @@ $eZTemplateOperatorArray[] = array(
         'sensor_post',
         'sensor_postcontainer',
         'sensor_categorycontainer',
-        'sensor_chart_list'
+        'sensor_chart_list',
+        'sensor_categories',
+        'sensor_areas'
     )
 );

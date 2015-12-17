@@ -8,34 +8,34 @@
                 type: 'areas'
             }
         };
-        var getChart = function(){
-		  $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
-			$('#areas').highcharts({
-			  chart: {
-				  type: 'pie'
-			  },
-			  title: {
-				  text: response.title
-			  },
-			  plotOptions: {
-				  series: {
-					  dataLabels: {
-						  enabled: true,
-						  format: '{point.name}: {point.y:.1f}%'
-					  }
-				  }
-			  },
-			  tooltip: {
-				  headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-				  pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-			  },
-			  series: [{
-				  name: 'Punti sulla mappa',
-				  colorByPoint: true,
-				  data: response.series
-			  }]
-			});
-		  });
+        var getChart = function () {
+            $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
+                $('#areas').highcharts({
+                    chart: {
+                        type: 'pie'
+                    },
+                    title: {
+                        text: response.title
+                    },
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.name}: {point.y:.1f}%'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                    },
+                    series: [{
+                        name: 'Punti sulla mappa',
+                        colorByPoint: true,
+                        data: response.series
+                    }]
+                });
+            });
         };
         getChart();
     });
