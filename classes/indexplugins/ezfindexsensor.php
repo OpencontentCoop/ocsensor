@@ -22,9 +22,18 @@ class ezfIndexSensor implements ezfIndexPlugin
             foreach ( $availableLanguages as $languageCode )
             {
                 $repository->setCurrentLanguage( $languageCode );
-                $post = $repository->getPostService()->loadPost( $contentObject->attribute( 'id' ) );
-                foreach( $repository->getSearchService()->getSolrFields( $post ) as $key => $value )
-                    $this->addField( $docList[$languageCode], $key, $value );
+                try
+                {
+                    $post = $repository->getPostService()->loadPost( $contentObject->attribute( 'id' ) );
+                    foreach ( $repository->getSearchService()->getSolrFields( $post ) as $key => $value )
+                    {
+                        $this->addField( $docList[$languageCode], $key, $value );
+                    }
+                }
+                catch( Exception $e )
+                {
+
+                }
             }
         }
     }
