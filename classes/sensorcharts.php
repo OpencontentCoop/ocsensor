@@ -431,7 +431,7 @@ class SensorCharts
         $series = array(
             'Lettura' => array(),
             'Assegnazione' => array(),
-            'Conclusione' => array(),
+            'Lavorazione' => array(),
             'Chiusura'  => array()
         );
         foreach( $result['SearchResult'] as $item )
@@ -440,25 +440,25 @@ class SensorCharts
             
             
             if ( isset( $item['fields'][$this->searchService->field( 'open_read_time' )] ) )
-                $lettura = round( $item['fields'][$this->searchService->field( 'open_read_time' )] / 3600, 2 );
+                $lettura = $this->secondsInDay( $item['fields'][$this->searchService->field( 'open_read_time' )] );
             else
                 $lettura = 0;
             $series['Lettura'][] = array( $time, $lettura );
             
             if ( isset( $item['fields'][$this->searchService->field( 'read_assign_time' )] ) )
-                $assegnazione = round($item['fields'][$this->searchService->field( 'read_assign_time' )] / 3600, 2 );
+                $assegnazione = $this->secondsInDay( $item['fields'][$this->searchService->field( 'read_assign_time' )] );
             else
                 $assegnazione = 0;
             $series['Assegnazione'][] = array( $time, $assegnazione );                                
             
             if ( isset( $item['fields'][$this->searchService->field( 'assign_fix_time' )] ) )
-                $conclusione = round($item['fields'][$this->searchService->field( 'assign_fix_time' )] / 3600, 2 );
+                $lavorazione = $this->secondsInDay( $item['fields'][$this->searchService->field( 'assign_fix_time' )] );
             else
-                $conclusione = 0;
-            $series['Conclusione'][] = array( $time, $conclusione );   
+                $lavorazione = 0;
+            $series['Lavorazione'][] = array( $time, $lavorazione );
             
             if ( isset( $item['fields'][$this->searchService->field( 'fix_close_time' )] ) )
-                $chiusura = round($item['fields'][$this->searchService->field( 'fix_close_time' )] / 3600, 2 );
+                $chiusura = $this->secondsInDay( $item['fields'][$this->searchService->field( 'fix_close_time' )] );
             else
                 $chiusura = 0;            
             $series['Chiusura'][] = array( $time, $chiusura );   
@@ -476,6 +476,12 @@ class SensorCharts
         }
         
         return $data;
+    }
+
+    //@todo
+    protected function secondsInDay( $seconds )
+    {
+        return round( $seconds / 3600, 2 );
     }
 
     public function timesAvgData()
@@ -498,9 +504,9 @@ class SensorCharts
                 $avg = count( $array ) > 0 ? array_sum( $array ) / count( $array ) : 0;
                 if ( $name == 'open_read_time' ) $name = 'Lettura';
                 if ( $name == 'read_assign_time' ) $name = 'Assegnazione';
-                if ( $name == 'assign_fix_time' ) $name = 'Conclusione';
+                if ( $name == 'assign_fix_time' ) $name = 'Lavorazione';
                 if ( $name == 'fix_close_time' ) $name = 'Chiusura';
-                $series[$name][] = round( $avg / 3600, 2 );
+                $series[$name][] = $this->secondsInDay( $avg );
             }
 
         }
@@ -537,13 +543,13 @@ class SensorCharts
                 $readingTime = null;
                 if ( isset( $item['fields'][$this->searchService->field( 'reading_time' )] ) )
                 {
-                    $readingTime = $item['fields'][$this->searchService->field( 'reading_time' )] / 3600;
+                    $readingTime = $this->secondsInDay( $item['fields'][$this->searchService->field( 'reading_time' )] );
                 }
 
                 $closingTime = null;
                 if ( isset( $item['fields'][$this->searchService->field( 'closing_time' )] ) )
                 {
-                    $closingTime = $item['fields'][$this->searchService->field( 'closing_time' )] / 3600;
+                    $closingTime = $this->secondsInDay( $item['fields'][$this->searchService->field( 'closing_time' )] );
                 }
 
                 $data[] = array(
