@@ -164,6 +164,8 @@ class SensorCharts
         );        
         $startDate = new DateTime();
         $startDate->setTimestamp( $startResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
+        $startDate->setDate( $startDate->format( 'Y' ), $startDate->format( 'm' ), 1 );
+        $startDate->setTime( 0, 0 );
 
         $endResult = $this->searchService->query(
             $this->searchService->instanceNewSearchQuery()
