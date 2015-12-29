@@ -13,7 +13,7 @@
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#timesAvg').highcharts({
                     chart: {
-                        type: 'area'
+                        type: 'column'
                     },
                     xAxis: {
                         categories: response.categories,
@@ -22,22 +22,36 @@
                             enabled: false
                         }
                     },
+					yAxis: {
+						min: 0,
+						title: {
+							text: 'Giorni'
+						},
+						stackLabels: {
+							enabled: true,
+							style: {
+								fontWeight: 'bold',
+								color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+							}
+						}
+					},
                     tooltip: {
                         shared: true,
-                        valueSuffix: ' ore',
-                        valueDecimals: 2
+                        valueSuffix: ' giorni',
+                        valueDecimals: 1
                     },
                     plotOptions: {
-                        area: {
-                            stacking: 'normal',
-                            lineColor: '#666666',
-                            lineWidth: 1,
-                            marker: {
-                                lineWidth: 1,
-                                lineColor: '#666666'
-                            }
-                        }
-                    },
+						column: {
+							stacking: 'normal',
+							dataLabels: {
+								enabled: true,
+								color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+								style: {
+									textShadow: '0 0 3px black'
+								}
+							}
+						}
+					},
                     title: {
                         text: response.title
                     },

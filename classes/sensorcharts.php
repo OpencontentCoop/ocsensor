@@ -205,7 +205,7 @@ class SensorCharts
             );
             $facetFields = $result['SearchExtras']->attribute( 'facet_fields' );            
             $facet = new stdClass;
-            $facet->interval = $interval['_start']->format( 'm Y' );
+            $facet->interval = $interval['_start']->format( 'm/Y' );
             $facet->values = array();
             foreach( $facets as $index => $facetName )
             {
@@ -481,7 +481,7 @@ class SensorCharts
     //@todo
     protected function secondsInDay( $seconds )
     {
-        return round( $seconds / 3600, 2 );
+        return round( $seconds / 3600 / 24, 1 );
     }
 
     public function timesAvgData()

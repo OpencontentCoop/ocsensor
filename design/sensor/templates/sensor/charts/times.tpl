@@ -19,8 +19,8 @@
                         min: 0
                     },
                     tooltip: {
-                        valueSuffix: ' ore',
-                        valueDecimals: 2
+                        valueSuffix: ' giorni',
+                        valueDecimals: 1
                     },
                     title: {
                         text: response.title
