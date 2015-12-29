@@ -150,8 +150,17 @@ class SensorCharts
                 $data = call_user_func( $chart['call_method'] ); //@todo make factory
             }
         }
+        elseif ( isset( $this->parameters['debug'] ) )
+        {
+            $data = $this->debugData();
+        }
 
         return $data;
+    }
+    
+    protected function debugData()
+    {
+        return array();
     }
 
     protected function getMonthlyFacets( $facets )
