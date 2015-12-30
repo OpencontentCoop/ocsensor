@@ -591,7 +591,7 @@ class SensorCharts
         );
         $series = array();
 
-        $this->requestFilters['status'] = 'close';
+        $this->requestFilters['workflow_status'] = 'closed';
 
         $intervalString = 'monthly';
         if ( isset( $this->requestExtras['_interval'][0] ) )
