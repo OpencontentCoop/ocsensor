@@ -1,4 +1,4 @@
-{ezscript_require( array( 'ezjsc::jquery', 'highcharts/charts/highcharts.js', 'highcharts/charts/modules/data.js', 'highcharts/charts/modules/drilldown.js', 'highcharts/charts/modules/exporting.js' ) )}
+{ezscript_require( array( 'ezjsc::jquery', 'highcharts/charts/highcharts.js', 'highcharts/charts/modules/exporting.js' ) )}
 {literal}
 <script type="text/javascript">
     $(function () {
@@ -9,43 +9,71 @@
             }
         };
         var getChart = function () {
+            getVars.parameters.filters = $('#chart-filters').serializeArray();
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#categories').highcharts({
                     chart: {
-                        type: 'pie'
+                        type: 'column'
                     },
-                    title: {
-                        text: response.title
+                    xAxis: {
+                        categories: response.categories,
+                        tickmarkPlacement: 'on',
+                        title: {
+                            enabled: false
+                        }
                     },
-                    subtitle: {
-                        text: 'Clicca sulle aree per il dettaglio dei descrittori.'
-                    },
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.name}: {point.y:.1f}%'
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Numero'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                             }
                         }
                     },
                     tooltip: {
-                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> del totale<br/>'
+                        shared: true
                     },
-                    series: [{
-                        name: 'Aree',
-                        colorByPoint: true,
-                        data: response.series
-                    }],
-                    drilldown: {
-                        series: response.drilldown
-                    }
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                style: {
+                                    textShadow: '0 0 3px black'
+                                }
+                            }
+                        }
+                    },
+                    title: {
+                        text: response.title
+                    },
+                    series: response.series
                 });
             });
         };
-        getChart();
+        $(document).on('sensor:charts:filterchange', '#chart-filters', function () {
+            getChart();
+        });
+        $('#chart-filters').trigger('sensor:charts:filterchange');
     });
 </script>
 {/literal}
 
 <div id="categories" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<form id="chart-filters">
+    <div class="row">
+        <div class="col-md-6">
+            {include uri='design:sensor/charts/filters/category.tpl'}
+        </div>
+        <div class="col-md-6">
+            {include uri='design:sensor/charts/filters/interval.tpl'}
+        </div>
+    </div>
+</form>
