@@ -65,7 +65,7 @@
 </script>
 {/literal}
 
-<div id="categories" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="categories" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
 
 <form id="chart-filters">
     <div class="row">
