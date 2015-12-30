@@ -372,14 +372,15 @@ class SensorCharts
                 {
                     foreach ( $values as $key => $value )
                     {
+                        $key = $this->getCategoryNameById( $key );
                         $series[$key][] = $value;
                     }
                 }
             }
         }
+        ksort( $series );
         foreach( $series as $name => $serie )
         {
-            $name = $this->getCategoryNameById( $name );
             $data['series'][] = array(
                 'name' => $name,
                 'data' => $serie
