@@ -13,7 +13,7 @@
             $.getJSON('{/literal}{'sensor/data'|ezurl(no)}{literal}', getVars, function (response) {
                 $('#type').highcharts({
                     chart: {
-                        type: 'area'
+                        type: 'column'
                     },
                     xAxis: {
                         categories: response.categories,
@@ -22,17 +22,31 @@
                             enabled: false
                         }
                     },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Numero'
+                        },
+                        stackLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold',
+                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            }
+                        }
+                    },
                     tooltip: {
                         shared: true
                     },
                     plotOptions: {
-                        area: {
+                        column: {
                             stacking: 'normal',
-                            lineColor: '#666666',
-                            lineWidth: 1,
-                            marker: {
-                                lineWidth: 1,
-                                lineColor: '#666666'
+                            dataLabels: {
+                                enabled: true,
+                                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                style: {
+                                    textShadow: '0 0 3px black'
+                                }
                             }
                         }
                     },
@@ -43,19 +57,23 @@
                 });
             });
         };
-        getChart();
-        $('#chart-filters input').bind('change', function () {
+        $(document).on('sensor:charts:filterchange', '#chart-filters', function () {
             getChart();
-        })
+        });
+        $('#chart-filters').trigger('sensor:charts:filterchange');
     });
 </script>
 {/literal}
 
-<div class="row">
-    <div class="col-md-10">
-        <div id="type" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div id="type" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<form id="chart-filters">
+    <div class="row">
+        <div class="col-md-6">
+            {include uri='design:sensor/charts/filters/category.tpl'}
+        </div>
+        <div class="col-md-6">
+            {include uri='design:sensor/charts/filters/interval.tpl'}
+        </div>
     </div>
-    <div class="col-md-2">
-        {include uri='design:sensor/charts/_filters.tpl'}
-    </div>
-</div>
+</form>

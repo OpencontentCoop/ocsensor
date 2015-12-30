@@ -16,10 +16,12 @@ class SensorCharts
 
     protected $requestFilters = array();
 
+    protected $requestExtras = array();
+
     protected static $availableCharts = array(
         array(
             'identifier' => 'status',
-            'name' => 'Stato',
+            'name' => 'Numero totale e stato corrente',
             'template_uri' => 'design:sensor/charts/status.tpl',
             'call_method' => 'statusData'
         ),        
@@ -31,7 +33,7 @@ class SensorCharts
         ),
         array(
             'identifier' => 'areas',
-            'name' => 'Punti sulla mappa',
+            'name' => 'Quartieri',
             'template_uri' => 'design:sensor/charts/areas.tpl',
             'call_method' => 'areasData'
         ),
@@ -41,24 +43,24 @@ class SensorCharts
             'template_uri' => 'design:sensor/charts/type.tpl',
             'call_method' => 'typeData'
         ),
-        array(
-            'identifier' => 'times',
-            'name' => 'Tempi di esecuzione',
-            'template_uri' => 'design:sensor/charts/times.tpl',
-            'call_method' => 'timesData'
-        ),
+//        array(
+//            'identifier' => 'times',
+//            'name' => 'Tempi di esecuzione',
+//            'template_uri' => 'design:sensor/charts/times.tpl',
+//            'call_method' => 'timesData'
+//        ),
         array(
             'identifier' => 'timesAvg',
-            'name' => 'Media mensile tempi di esecuzione',
+            'name' => 'Media tempi di esecuzione',
             'template_uri' => 'design:sensor/charts/times_avg.tpl',
             'call_method' => 'timesAvgData'
         ),
-        array(
-            'identifier' => 'performance',
-            'name' => 'Tempi di risposta e di chiusura',
-            'template_uri' => 'design:sensor/charts/performance.tpl',
-            'call_method' => 'performanceData'
-        )        
+//        array(
+//            'identifier' => 'performance',
+//            'name' => 'Tempi di risposta e di chiusura',
+//            'template_uri' => 'design:sensor/charts/performance.tpl',
+//            'call_method' => 'performanceData'
+//        )
     );
 
     public static function listAvailableCharts()
@@ -86,25 +88,28 @@ class SensorCharts
         $this->searchService = $this->repository->getSearchService();
         if ( isset( $this->parameters['filters'] ) )
         {
-            $filters = array();
             foreach( $this->parameters['filters'] as $filter )
             {
                 $name = $filter['name'];
                 $value = $filter['value'];
-                if ( !isset( $filters[$name] ) )
-                    $filters[$name] = array();
-                $filters[$name][] = $value;
+                if ( !empty( $value ) )
+                {
+                    if ( $this->searchService->field( $name ) )
+                        $this->requestFilters[$name][] = $value;
+                    else
+                        $this->requestExtras[$name][] = $value;
+                }
             }
-            foreach( $filters as $name => $values )
-            {
-                $allFilters = $values;
-                foreach( $values as $value )
-                    $allFilters = array_merge(
-                        $allFilters,
-                        $this->getSubFilters( $name, $value )
-                    );
-                $this->requestFilters[$name] = array_unique( $allFilters );
-            }
+//            foreach( $filters as $name => $values )
+//            {
+//                $allFilters = $values;
+//                foreach( $values as $value )
+//                    $allFilters = array_merge(
+//                        $allFilters,
+//                        $this->getSubFilters( $name, $value )
+//                    );
+//                $this->requestFilters[$name] = array_unique( $allFilters );
+//            }
         }
     }
 
@@ -163,17 +168,21 @@ class SensorCharts
         return array();
     }
 
-    protected function getMonthlyFacets( $facets )
+    protected function getIntervalFacets( $intervalString, $facets )
     {
         $startResult = $this->searchService->query(
             $this->searchService->instanceNewSearchQuery()->field( 'open_timestamp' )
                 ->limits( 1 )
                 ->filters( $this->requestFilters )
                 ->sort( array( 'open_timestamp' => 'asc' ) )
-        );        
+        );
+
+        if ( $startResult['SearchCount'] == 0 )
+            return array();
+
         $startDate = new DateTime();
         $startDate->setTimestamp( $startResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
-        $startDate->setDate( $startDate->format( 'Y' ), $startDate->format( 'm' ), 1 );
+        $startDate->setDate( $startDate->format( 'Y' ), 1, 1 );
         $startDate->setTime( 0, 0 );
 
         $endResult = $this->searchService->query(
@@ -185,44 +194,95 @@ class SensorCharts
         );
         $endDate = new DateTime();
         $endDate->setTimestamp( $endResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
+        $endDate->setDate( $startDate->format( 'Y' ), 12, 31 );
+        $endDate->setTime( 23, 59 );
 
-        $byMonthInterval = new DateInterval( 'P1M' );
-        $byMonthPeriod = new DatePeriod( $startDate, $byMonthInterval, $endDate );
+
+        switch ( $intervalString  )
+        {
+            case 'quarterly':
+            {
+                $byInterval = new DateInterval( 'P3M' );
+            } break;
+
+            case 'half-yearly':
+            {
+                $byInterval = new DateInterval( 'P6M' );
+            } break;
+
+            case 'yearly':
+            {
+                $byInterval = new DateInterval( 'P1Y' );
+            } break;
+
+            default:
+                $byInterval = new DateInterval( 'P1M' );
+        }
+
+        $byPeriod = new DatePeriod( $startDate, $byInterval, $endDate );
 
         $intervals = array();
         /** @var DateTime $month */
-        foreach( $byMonthPeriod as $month )
+        foreach( $byPeriod as $period )
         {
-            $intervals[] = $this->getSolrIntervalArray( $month, $byMonthInterval );
+            $intervals[] = $this->getSolrIntervalArray( $period, $byInterval );
         }
 
+        $availableFacets = $this->getAvailableFacetsKeys( $facets );
         $data = array();        
         foreach( $intervals as $interval )
         {
             $resultQuery = $this->searchService->instanceNewSearchQuery();
             $resultQuery->facetLimit = 1000;
+            $resultQuery
+                ->field( 'internalId' )
+                ->filter(
+                    'open',
+                    "[{$interval['start']} TO {$interval['end']}]"
+                )
+                ->facets( $facets )
+                ->limits( 1 )
+                ->filters( $this->requestFilters )
+                ->sort( array( 'open_timestamp' => 'asc' ) );
 
-            $result = $this->searchService->query(
-                $resultQuery
-                    ->field( 'internalId' )
-                    ->filter(
-                        'open',
-                        "[{$interval['start']} TO {$interval['end']}]"
-                    )
-                    ->facets( $facets )
-                    ->limits( 1 )
-                    ->filters( $this->requestFilters )
-                    ->sort( array( 'open_timestamp' => 'asc' ) )
-            );
+            $result = $this->searchService->query( $resultQuery );
             $facetFields = $result['SearchExtras']->attribute( 'facet_fields' );            
             $facet = new stdClass;
             $facet->interval = $interval['_start']->format( 'm/Y' );
             $facet->values = array();
             foreach( $facets as $index => $facetName )
             {
-                $facet->values[$facetName] = $facetFields[$index]['countList'];
+                $values = array();
+                foreach( $availableFacets[$facetName] as $key )
+                {
+                    if ( isset( $facetFields[$index]['countList'][$key] ) && !empty( $facetFields[$index]['countList'][$key] ))
+                        $values[$key] = $facetFields[$index]['countList'][$key];
+                    else
+                        $values[$key] = 0;
+                }
+                $facet->values[$facetName] = $values;
             }
             $data[] = $facet;            
+        }
+        return $data;
+    }
+
+    protected function getAvailableFacetsKeys( $facets )
+    {
+        $resultQuery = $this->searchService->instanceNewSearchQuery();
+        $resultQuery->facetLimit = 1000;
+        $resultQuery
+            ->field( 'internalId' )
+            ->facets( $facets )
+            ->limits( 1 )
+            ->filters( $this->requestFilters )
+            ->sort( array( 'open_timestamp' => 'asc' ) );
+        $result = $this->searchService->query( $resultQuery );
+        $facetFields = $result['SearchExtras']->attribute( 'facet_fields' );
+        $data = array();
+        foreach( $facets as $index => $facetName )
+        {
+            $data[$facetName] = array_keys( $facetFields[$index]['countList'] );
         }
         return $data;
     }
@@ -258,13 +318,25 @@ class SensorCharts
             
         );
         $series = array();
-        $facets = $this->getMonthlyFacets( array( 'type' ) );
+
+        $intervalString = 'monthly';
+        if ( isset( $this->requestExtras['_interval'][0] ) )
+            $intervalString = $this->requestExtras['_interval'][0];
+
+        $facets = $this->getIntervalFacets( $intervalString, array( 'type' ) );
         foreach( $facets as $facet )
         {            
             $data['categories'][] = $facet->interval;
             foreach( $facet->values as $name => $values )
-                foreach( $values as $key => $value )
-                    $series[$key][] = $value;
+            {
+                if ( count( $values ) > 0 )
+                {
+                    foreach ( $values as $key => $value )
+                    {
+                        $series[$key][] = $value;
+                    }
+                }
+            }
         }
         foreach( $series as $name => $serie )
         {
@@ -278,110 +350,123 @@ class SensorCharts
     
     public function categoriesData()
     {
-        $query = $this->searchService->instanceNewSearchQuery()                                     
-                                     ->limits( 1 )
-                                     ->filters( $this->requestFilters )
-                                     ->facet( 'category_id_list' );
-
-        $result = $this->searchService->query( $query );
-        $facetFields =  $result['SearchExtras']->attribute( 'facet_fields' );
-        $countList = $facetFields[0]['countList'];                
-        $totalList = array_sum( $countList );
-        
         $data = array(
-            'title' => 'Aree tematiche',
+            'categories' => array(),
             'series' => array(),
-            'drilldown' => array()
+            'title' => 'Numero di segnalazioni per area tematica'
+
         );
-        
-        $categoryTree = $this->repository->getCategoriesTree();
-        foreach( $categoryTree->attribute( 'children' ) as $category )
+        $series = array();
+
+        $intervalString = 'monthly';
+        if ( isset( $this->requestExtras['_interval'][0] ) )
+            $intervalString = $this->requestExtras['_interval'][0];
+
+        $facets = $this->getIntervalFacets( $intervalString, array( 'category_id_list' ) );
+        foreach( $facets as $facet )
         {
-            $drilldown = array(
-                'name' => $category->attribute( 'name' ),
-                'id' => 'cat-' . $category->attribute( 'id' ),
-                'data' => array()
-            );
-            $series = array(
-                'name' => $category->attribute( 'name' ),
-                'drilldown' => 'cat-' . $category->attribute( 'id' ),
-                'y' => 0
-            );
-            $parentTotal = isset( $countList[$category->attribute( 'id' )] ) ? $countList[$category->attribute( 'id' )] : 0;            
-            $childTotal = 0;
-            foreach( $category->attribute( 'children' ) as $child )
+            $data['categories'][] = $facet->interval;
+            foreach( $facet->values as $name => $values )
             {
-                $childTotal += isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
-            }           
-            foreach( $category->attribute( 'children' ) as $child )
-            {                
-                $childCount = isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
-                $childPerc = $childTotal > 0 ? floatval( number_format( $childCount * 100 / $childTotal, 2 ) ) : 0;
-                $drilldown['data'][] = array( $child->attribute( 'name' ), $childPerc );
+                if ( count( $values ) > 0 )
+                {
+                    foreach ( $values as $key => $value )
+                    {
+                        $series[$key][] = $value;
+                    }
+                }
             }
-            $parentTotal += $childTotal;
-            $series['y'] = floatval( number_format( $parentTotal * 100 / $totalList, 2 ) );
-            
-            $data['series'][] = $series;
-            $data['drilldown'][] = $drilldown;
         }
-        
+        foreach( $series as $name => $serie )
+        {
+            $name = $this->getCategoryNameById( $name );
+            $data['series'][] = array(
+                'name' => $name,
+                'data' => $serie
+            );
+        }
         return $data;
     }
-    
-    public function areasData()
-    {
-        $query = $this->searchService->instanceNewSearchQuery()
-                                     ->filters( $this->requestFilters )
-                                     ->limits( 1 )
-                                     ->facet( 'area_id_list' );
 
-        $result = $this->searchService->query( $query );
-        $facetFields =  $result['SearchExtras']->attribute( 'facet_fields' );
-        $countList = $facetFields[0]['countList'];
-        $totalList = array_sum( $countList );
-        
-        $data = array(
-            'title' => 'Punti sulla mappa',
-            'series' => array(),
-            'drilldown' => array()
-        );
-        
-        $areaTree = $this->repository->getAreasTree();
-        foreach( $areaTree->attribute( 'children' ) as $firstArea )
+    protected function getCategoryNameById( $id )
+    {
+        $categoryTree = $this->repository->getCategoriesTree();
+        foreach ( $categoryTree->attribute( 'children' ) as $category )
         {
-            foreach( $firstArea->attribute( 'children' ) as $area )
+            if ( $category->attribute( 'id' ) == $id )
             {
-                $drilldown = array(
-                    'name' => $area->attribute( 'name' ),
-                    'id' => 'area-' . $area->attribute( 'id' ),
-                    'data' => array()
-                );
-                $series = array(
-                    'name' => $area->attribute( 'name' ),
-                    'drilldown' => 'area-' . $area->attribute( 'id' ),
-                    'y' => 0
-                );
-                $parentTotal = isset( $countList[$area->attribute( 'id' )] ) ? $countList[$area->attribute( 'id' )] : 0;            
-                $childTotal = 0;
-                foreach( $area->attribute( 'children' ) as $child )
+                return $category->attribute( 'name' );
+            }
+            foreach ( $category->attribute( 'children' ) as $child )
+            {
+                if ( $child->attribute( 'id' ) == $id )
                 {
-                    $childTotal += isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
-                }           
-                foreach( $area->attribute( 'children' ) as $child )
-                {                
-                    $childCount = isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
-                    $childPerc = floatval( number_format( $childCount * 100 / $childTotal, 2 ) );
-                    $drilldown['data'][] = array( $child->attribute( 'name' ), $childPerc );
+                    return $child->attribute( 'name' );
                 }
-                $parentTotal += $childTotal;
-                $series['y'] = floatval( number_format( $parentTotal * 100 / $totalList, 2 ) );
-                
-                $data['series'][] = $series;
-                $data['drilldown'][] = $drilldown;
             }
         }
-        
+
+        return $id;
+    }
+
+    protected function getAreaNameById( $id )
+    {
+        $areaTree = $this->repository->getAreasTree();
+        foreach ( $areaTree->attribute( 'children' ) as $area )
+        {
+            if ( $area->attribute( 'id' ) == $id )
+            {
+                return $area->attribute( 'name' );
+            }
+            foreach ( $area->attribute( 'children' ) as $child )
+            {
+                if ( $child->attribute( 'id' ) == $id )
+                {
+                    return $child->attribute( 'name' );
+                }
+            }
+        }
+
+        return $id;
+    }
+
+    public function areasData()
+    {
+        $data = array(
+            'categories' => array(),
+            'series' => array(),
+            'title' => 'Numero di segnalazioni per quartiere'
+
+        );
+        $series = array();
+
+        $intervalString = 'monthly';
+        if ( isset( $this->requestExtras['_interval'][0] ) )
+            $intervalString = $this->requestExtras['_interval'][0];
+
+        $facets = $this->getIntervalFacets( $intervalString, array( 'area_id_list' ) );
+        foreach( $facets as $facet )
+        {
+            $data['categories'][] = $facet->interval;
+            foreach( $facet->values as $name => $values )
+            {
+                if ( count( $values ) > 0 )
+                {
+                    foreach ( $values as $key => $value )
+                    {
+                        $series[$key][] = $value;
+                    }
+                }
+            }
+        }
+        foreach( $series as $name => $serie )
+        {
+            $name = $this->getAreaNameById( $name );
+            $data['series'][] = array(
+                'name' => $name,
+                'data' => $serie
+            );
+        }
         return $data;
     }
     
@@ -398,7 +483,7 @@ class SensorCharts
         $totalList = array_sum( $countList );
         
         $data = array(
-            'title' => 'Stati',
+            'title' => 'Numero totale e stato corrente',
             'series' => array()
         );
         
@@ -407,7 +492,7 @@ class SensorCharts
         {            
             $count = isset( $countList[$state->attribute( 'identifier' )] ) ? $countList[$state->attribute( 'identifier' )] : 0;
             $series = array(
-                'name' => $state->attribute( 'current_translation' )->attribute( 'name' ),                
+                'name' => $state->attribute( 'current_translation' )->attribute( 'name' ) . ' ' . $count,
                 'y' => floatval( number_format( $count * 100 / $totalList, 2 ) )
             );                            
             
@@ -500,19 +585,35 @@ class SensorCharts
         $data = array(
             'categories' => array(),
             'series' => array(),
-            'title' => 'Media mensile tempi di esecuzione'
+            'title' => 'Media tempi di esecuzione'
 
         );
         $series = array();
-        $facets = $this->getMonthlyFacets( array( 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' ) );
+
+        $this->requestFilters['status'] = 'close';
+
+        $intervalString = 'monthly';
+        if ( isset( $this->requestExtras['_interval'][0] ) )
+            $intervalString = $this->requestExtras['_interval'][0];
+
+        $facets = $this->getIntervalFacets( $intervalString, array( 'open_read_time', 'read_assign_time', 'assign_fix_time', 'fix_close_time' ) );
 
         foreach( $facets as $facet )
         {
             $data['categories'][] = $facet->interval;
             foreach( $facet->values as $name => $values )
             {
-                $array = array_keys( $values );
-                $avg = count( $array ) > 0 ? array_sum( $array ) / count( $array ) : 0;
+                $sum = array();
+                $count = 0;
+
+                foreach( $values as $key => $value )
+                {
+                    $sum[] = $key * $value;
+                    $count += $value;
+                }
+                $sum = array_sum( $sum );
+
+                $avg = $count > 0 ? $sum / $count : 0;
                 if ( $name == 'open_read_time' ) $name = 'Lettura';
                 if ( $name == 'read_assign_time' ) $name = 'Assegnazione';
                 if ( $name == 'assign_fix_time' ) $name = 'Lavorazione';
