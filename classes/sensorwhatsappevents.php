@@ -158,9 +158,14 @@ class SensorWhatsAppEvents extends AllEvents
         try
         {
             $user = $this->getUser( $from, $name );
-            $imageFile = self::getRemoteFile( $url );
+            
+            $ini = eZINI::instance();
+            $fileName = md5( $url ) . '.jpg';
+            $localPath = $ini->variable( 'FileSettings', 'TemporaryDir' ) . '/' . $fileName;
+            eZFile::create( $fileName, $ini->variable( 'FileSettings', 'TemporaryDir' ), $file );
+
             $data = array(
-                'image' => $imageFile . '|' . $caption,
+                'image' => $localPath . '|' . $caption,
                 'subject' => 'Nuova segnalazione'
             );
             if ( !empty( $caption ) )
@@ -375,7 +380,7 @@ class SensorWhatsAppEvents extends AllEvents
 
     protected static function getRemoteFile( $url, array $httpAuth = null, $debug = false )
     {
-        $url = trim( $url );
+        $url = trim( $url );        
         $ini = eZINI::instance();
         $localPath = $ini->variable( 'FileSettings', 'TemporaryDir' ).'/'.basename( $url );
         $timeout = 50;
@@ -394,7 +399,7 @@ class SensorWhatsAppEvents extends AllEvents
 
         // Should we use proxy ?
         $proxy = $ini->variable( 'ProxySettings', 'ProxyServer' );
-        if ( $proxy )
+        if ( !empty( $proxy ) )
         {
             curl_setopt( $ch, CURLOPT_PROXY, $proxy );
             $userName = $ini->variable( 'ProxySettings', 'User' );

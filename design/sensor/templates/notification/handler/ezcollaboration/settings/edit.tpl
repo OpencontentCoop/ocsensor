@@ -46,7 +46,7 @@
                         {/if}
                         {if $hasTransports}
                             {foreach $transportNames as $name}
-                                <th width="1" class="text-center"><span{if count($transportNames)|eq(1)} class="hide"{/if}>{$name|wash()}</span></th>
+                                <th width="1" class="text-center"><span>{$name|wash()}</span></th>
                             {/foreach}
                         {/if}
                     </tr>
@@ -85,10 +85,11 @@
                                             {set $countTransport = $countTransport|inc()}
                                         {/if}
                                     {/foreach}
+                                    
                                     {foreach $current_handler.info.notification-types as $transport_type}
                                         {if and( $transport_type.group|eq( 'transport' ), $transport_type.parent|eq( $type.identifier ))}
                                             <td class="text-center">
-                                              <div{if $countTransport|eq(1)} class="hide"{/if}>
+                                              <div>
                                                 <input type="checkbox"
                                                        {if $transport_type.enabled|not()}disabled="disabled"{/if}
                                                        name="CollaborationHandlerSelection_{$handler.id_string}[{$transport_type.identifier}]"
