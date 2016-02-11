@@ -10,7 +10,7 @@ class SensorCharts
     protected $repository;
 
     /**
-     * @var \OpenContent\Sensor\Legacy\SearchService
+     * @var \Opencontent\Sensor\Legacy\SearchService
      */
     protected $searchService;
 
@@ -296,7 +296,7 @@ class SensorCharts
         return array( 'start' => $start, 'end' => $end, '_start' => $startDateTime );
     }
     
-    protected function fecthAll( OpenContent\Sensor\Api\SearchQuery $query )
+    protected function fecthAll( Opencontent\Sensor\Api\SearchQuery $query )
     {
         $query->limits( 1 );
         $result = $this->searchService->query( $query );

@@ -25,8 +25,8 @@ class SensorModuleFunctions
                     $postId = $object->attribute( 'id' );
                     $extraPath = "post/" . eZDir::filenamePath( $postId );
                     self::clearSensorCache( "$extraPath$postId-" );
-                    if ( class_exists( 'OpenContent\Sensor\Legacy\CachePostService') )
-                        OpenContent\Sensor\Legacy\CachePostService::clearCache( $object->attribute( 'id' ) );
+                    if ( class_exists( 'Opencontent\Sensor\Legacy\CachePostService') )
+                        Opencontent\Sensor\Legacy\CachePostService::clearCache( $object->attribute( 'id' ) );
                 }
             }
         }
