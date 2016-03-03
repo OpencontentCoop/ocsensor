@@ -130,7 +130,7 @@
     </message>
     <message>
         <source>indica la presenza di commenti</source>
-        <translation>Anwesenheit von Kommentaren</translation>
+        <translation>Keine Kommentare</translation>
     </message>
     <message>
         <source>indica la presenza di messaggi privati</source>
