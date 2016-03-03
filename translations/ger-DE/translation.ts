@@ -16,8 +16,24 @@
         <translation>Löschen</translation>
     </message>
     <message>
+        <source>Non specificato</source>
+        <translation>Nicht angeführt</translation>
+    </message>
+    <message>
         <source>Rileva la mia posizione</source>
         <translation>Mein Standort</translation>
+    </message>
+    <message>
+        <source>segnalazione</source>
+        <translation>Meldung</translation>
+    </message>
+    <message>
+        <source>suggerimento</source>
+        <translation>Anregung</translation>
+    </message>
+    <message>
+        <source>reclamo</source>
+        <translation>Beschwerde</translation>
     </message>
 </context>
 <context>
@@ -532,6 +548,21 @@
         <translation>Zuweisen eines Bericht</translation>
     </message>
     <message>
+        <location filename="notificationhelper.php" line="371"/>
+        <source>Coinvolgimento di un osservatore</source>
+        <translation>Beobachter hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="371"/>
+        <source>Commento a una segnalazione</source>
+        <translation>Kommentar für eine Mitteilung</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="371"/>
+        <source>Intervento terminato</source>
+        <translation>Bearbeitung abgeschlossen</translation>
+    </message>
+    <message>
         <location filename="notificationhelper.php" line="375"/>
         <source>Ricevi una notifica quando una tua segnalazione è assegnata a un responsabile</source>
         <translation>Werde benachrichtigt wenn einer Ihrer Berichterstattung zu einem verantwortungsvollen zugeordnet</translation>
@@ -565,6 +596,21 @@
         <location filename="notificationhelper.php" line="504"/>
         <source>Ricevi la notifica via WhatsApp</source>
         <translation>Erhalten einer Benachrichtigung per WhatsApp</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="504"/>
+        <source>Ricevi una notifica quando un osservatore viene coinvolto in una segnalazione</source>
+        <translation>Mitteilung erfolgt, wenn ein Beobachter hinzugefügt wird.</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="504"/>
+        <source>Ricevi una notifica quando viene aggiunto un commento ad una tua segnalazione</source>
+        <translation>Mitteilung erfolgt, wenn ein Kommentar abgegeben wird.</translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php" line="504"/>
+        <source>Ricevi una notifica quando un responsabile ha completato l'attività che riguarda una tua segnalazione</source>
+        <translation>Mitteilung erfolgt, wenn alle Bearbeitungschritte abgeschlossen sind.</translation>
     </message>
 </context>
 <context>

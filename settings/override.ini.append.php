@@ -41,6 +41,13 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=area
 
+[post_edit_type]
+Source=content/datatype/edit/ezselection.tpl
+MatchFile=edit_type.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=type
+
 [post_edit_privacy]
 Source=content/datatype/edit/ezselection.tpl
 MatchFile=edit_privacy.tpl

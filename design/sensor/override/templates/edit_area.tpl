@@ -18,7 +18,7 @@
 <input type="hidden" name="single_select_{$attribute.id}" value="1" />
 {if ne( count( $areas ), 0)}
     <select {if ezini( 'SensorConfig', 'MoveMarkerOnSelectArea', 'ocsensor.ini' )|eq('enabled')}id="poi"{/if} class="{$html_class}" name="{$attribute_base}_data_object_relation_list_{$attribute.id}[]">
-        <option>Non specificato</option>
+        <option>{'Non specificato'|i18n( 'sensor/add' )}</option>
         {foreach $areas as $area}
             {include name=areatree uri='design:tools/walk_item_option.tpl' item=$area recursion=0 attribute=$attribute}
         {/foreach}
