@@ -30,11 +30,16 @@ class SensorPostResponseHelper
 
     public function add( $text )
     {
-        if ( trim( $text ) != '' )
+        if ( $this->isValidText( $text ) )
         {
             $this->text = $text;
         }
         return $this;
+    }
+
+    public function isValidText( $text )
+    {
+        return trim( $text ) != '';
     }
 
     public function store()

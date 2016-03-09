@@ -453,32 +453,41 @@ class SensorPostActionHandler
 
     public function addComment( $text )
     {
-        $this->post->commentHelper->add( $text )->store();
-        $this->post->eventHelper->createEvent( 'on_add_comment', array( 'text' => $text ) );
-        if ( $this->post->isClosed() && $this->userPostRoles->isAuthor() && $this->post->configParameters['AuthorCanReopen'] )
+        if ( $this->post->commentHelper->isValidText( $text ) )
         {
-            $this->post->setStatus( SensorPost::STATUS_REOPENED );
-            $this->post->timelineHelper->add( SensorPost::STATUS_REOPENED, eZUser::currentUserID() )->store();
-            $this->post->eventHelper->createEvent( 'on_reopen' );
-        }
-        else
-        {
-            $this->post->touch();
+            $this->post->commentHelper->add($text)->store();
+            $this->post->eventHelper->createEvent('on_add_comment', array('text' => $text));
+            if ($this->post->isClosed() && $this->userPostRoles->isAuthor() && $this->post->configParameters['AuthorCanReopen'])
+            {
+                $this->post->setStatus(SensorPost::STATUS_REOPENED);
+                $this->post->timelineHelper->add(SensorPost::STATUS_REOPENED, eZUser::currentUserID())->store();
+                $this->post->eventHelper->createEvent('on_reopen');
+            }
+            else
+            {
+                $this->post->touch();
+            }
         }
     }
 
     public function addMessage( $text, $privateReceivers = array() )
     {
-        $this->post->messageHelper->add( $text )->to( $privateReceivers )->store();
-        $this->post->eventHelper->createEvent( 'on_add_message' );
-        $this->post->touch();
+        if ( $this->post->messageHelper->isValidText( $text ) )
+        {
+            $this->post->messageHelper->add($text)->to($privateReceivers)->store();
+            $this->post->eventHelper->createEvent('on_add_message');
+            $this->post->touch();
+        }
     }
 
     public function addResponse( $text )
     {
-        $this->post->responseHelper->add( $text )->store();
-        $this->post->eventHelper->createEvent( 'on_add_response' );
-        $this->post->touch();
+        if ( $this->post->responseHelper->isValidText( $text ) )
+        {
+            $this->post->responseHelper->add($text)->store();
+            $this->post->eventHelper->createEvent('on_add_response');
+            $this->post->touch();
+        }
     }
 
     public function editComment( $idTextArray )
