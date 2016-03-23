@@ -28,9 +28,23 @@ $(document).ready(function(){
   <ul class="list-unstyled">
     <li>{'Modifica impostazioni generali'|i18n('sensor/config')} {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$root redirect_if_discarded='/sensor/config' redirect_after_publish='/sensor/config'}</li>
     <li>{'Modifica informazioni Sensor'|i18n('sensor/config')} {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$sensor.post_container_node redirect_if_discarded='/sensor/config' redirect_after_publish='/sensor/config'}</li>
+    {def $default_approvers = sensor_default_approvers()}
+
+      <li>
+        {'Riferimento per il cittadino'|i18n('sensor/config')}:
+        {if count($default_approvers)|gt(0)}
+        {foreach $default_approvers as $approver}<strong>{include uri='design:content/view/sensor_person.tpl' sensor_person=$approver}{delimiter}, {/delimiter}</strong>
+        {/foreach}
+        {/if}
+        <form class="form-inline" style="display: inline" action="{'sensor/config/operators'|ezurl(no)}" method="post">
+          <button class="btn btn-default btn-xs" name="SelectDefaultApprover" type="submit">Modifica</button>
+        </form>
+
+      </li>
+
+    {undef $default_approvers}
   </ul>
-		
-	<hr />
+  <hr />
 		
   <div class="row">
   
@@ -109,7 +123,9 @@ $(document).ready(function(){
           {/foreach}
         </table>
 		<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_area/',$areas[0].node.parent_node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-        <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_area/?parent=',$areas[0].node.parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$areas[0].node.class_name}</a></div>
+        {if count($areas)|eq(0)}
+          <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_area/?parent=',$areas[0].node.parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$areas[0].node.class_name}</a></div>
+        {/if}
       </div>
       {/if}
 

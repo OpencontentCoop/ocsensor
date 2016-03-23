@@ -12,7 +12,8 @@ class SensorOperator
             'sensor_categorycontainer',
             'sensor_chart_list',
             'sensor_categories',
-            'sensor_areas'
+            'sensor_areas',
+            'sensor_default_approvers'
         );
     }
 
@@ -30,6 +31,17 @@ class SensorOperator
     {
         switch ( $operatorName )
         {
+            case 'sensor_default_approvers':
+            {
+                $ids = SensorHelper::defaultApproverIdArray();
+                $ids = array_map('intval', $ids);
+                $data = array();
+                if ( !empty( $ids ) ){
+                    $data = eZContentObject::fetchList( true, array( 'id' => array( $ids ) ) );
+                }
+                return $operatorValue = $data;
+            } break;
+
             case 'sensor_collaboration_identifier':
             {
                 return $operatorValue = SensorHelper::factory()->getSensorCollaborationHandlerTypeString();
@@ -60,12 +72,12 @@ class SensorOperator
 
             case 'sensor_postcontainer':
             {
-                return $operatorValue = ObjectHandlerServiceControlSensor::postContainerNode();
+                return $operatorValue = SensorHelper::postContainerNode();
             } break;
 
             case 'sensor_categorycontainer':
             {
-                return $operatorValue = ObjectHandlerServiceControlSensor::postCategoriesNode();
+                return $operatorValue = SensorHelper::postCategoriesNode();
             } break;
 
             case 'sensor_chart_list':

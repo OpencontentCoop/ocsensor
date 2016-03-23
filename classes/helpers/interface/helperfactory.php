@@ -95,4 +95,9 @@ interface SensorHelperFactoryInterface
      */
     public static function fetchSensorGeoJsonFeatureCollection();
 
+    /**
+     * @return int[]
+     */
+    public static function defaultApproverIdArray();
+
 }

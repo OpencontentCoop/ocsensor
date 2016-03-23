@@ -702,4 +702,13 @@ class SensorHelper
     {
         return self::factory()->fetchSensorGeoJsonFeatureCollection();
     }
+
+    /**
+     * @return int[]
+     * @throws Exception
+     */
+    public static function defaultApproverIdArray()
+    {
+        return self::factory()->defaultApproverIdArray();
+    }
 }

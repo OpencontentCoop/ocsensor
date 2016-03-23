@@ -1,5 +1,6 @@
 <?php
 
+/** @var eZModule $Module */
 $Module = $Params['Module'];
 $Http = eZHTTPTool::instance();
 $Offset = $Params['Offset'] ? $Params['Offset'] : 0;
@@ -10,6 +11,40 @@ $currentUser = eZUser::currentUser();
 
 if ( $Http->hasVariable( 's' ) )
     $viewParameters['query'] = $Http->variable( 's' );
+
+if ( $Http->hasPostVariable( 'SelectDefaultApprover' ) )
+{
+    eZContentBrowse::browse( array( 'action_name' => 'SelectDefaultApprover',
+                                    'return_type' => 'ObjectID',
+                                    'class_array' => eZUser::fetchUserClassNames(),
+                                    'start_node' => SensorHelper::operatorsNode()->attribute( 'node_id' ),
+                                    'cancel_page' => '/sensor/config',
+                                    'from_page' => '/sensor/config' ), $Module );
+    return;
+}
+
+if ( $Http->hasPostVariable( 'BrowseActionName' )
+     && $Http->postVariable( 'BrowseActionName' ) == 'SelectDefaultApprover' )
+{
+    $objectIdList = $Http->postVariable( 'SelectedObjectIDArray' );
+
+    $areas = SensorHelper::areas();
+    $area = isset( $areas['tree'][0]['node'] ) ? $areas['tree'][0]['node'] : false;
+    if ( $area instanceof eZContentObjectTreeNode )
+    {
+        $object = $area->object();
+        /** @var eZContentObjectAttribute[] $areaDataMap */
+        $areaDataMap = $object->attribute( 'data_map' );
+        if ( isset( $areaDataMap['approver'] ) )
+        {
+            $params = array( 'attributes' => array( 'approver' => implode( '-', $objectIdList ) ) );
+            $result = eZContentFunctions::updateAndPublishObject( $object, $params );
+            $Module->redirectTo( '/sensor/config' );
+            return;
+        }
+    }
+
+}
 
 $root = SensorHelper::rootNode();
 
@@ -38,6 +73,7 @@ elseif ( $Part == 'operators' )
 }
 
 $data = array();
+/** @var eZContentObjectTreeNode[] $otherFolders */
 $otherFolders = eZContentObjectTreeNode::subTreeByNodeID( array( 'ClassFilterType' => 'include', 'ClassFilterArray' => array( 'folder' ), 'Depth' => 1, 'DepthOperator' => 'eq', ), $root->attribute( 'node_id' ) );
 foreach( $otherFolders as $folder )
 {
