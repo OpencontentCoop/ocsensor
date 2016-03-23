@@ -46,6 +46,36 @@ if ( $Http->hasPostVariable( 'BrowseActionName' )
 
 }
 
+//AddOperatorLocation
+if ( $Http->hasPostVariable( 'AddOperatorLocation' ) )
+{
+    eZContentBrowse::browse( array( 'action_name' => 'AddOperatorLocation',
+                                    'return_type' => 'NodeID',
+                                    'class_array' => eZUser::fetchUserClassNames(),
+                                    'start_node' => eZINI::instance('content.ini')->variable('NodeSettings','UserRootNode'),
+                                    'cancel_page' => '/sensor/config/operators',
+                                    'from_page' => '/sensor/config/operators' ), $Module );
+    return;
+}
+
+if ( $Http->hasPostVariable( 'BrowseActionName' )
+     && $Http->postVariable( 'BrowseActionName' ) == 'AddOperatorLocation' )
+{
+    $nodeIdList = $Http->postVariable( 'SelectedNodeIDArray' );
+
+    $operatorsNode = SensorHelper::operatorsNode();
+    foreach( $nodeIdList as $nodeId )
+    {
+        $node = eZContentObjectTreeNode::fetch($nodeId);
+        if ($node instanceof eZContentObjectTreeNode){
+            eZContentOperationCollection::addAssignment($nodeId, $node->attribute( 'contentobject_id' ), array($operatorsNode->attribute('node_id')));
+        }
+    }
+    $Module->redirectTo( '/sensor/config/operators' );
+    return;
+}
+
+
 $root = SensorHelper::rootNode();
 
 if ( $Part == 'areas' )
