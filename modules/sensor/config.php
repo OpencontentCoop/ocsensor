@@ -27,23 +27,22 @@ if ( $Http->hasPostVariable( 'BrowseActionName' )
      && $Http->postVariable( 'BrowseActionName' ) == 'SelectDefaultApprover' )
 {
     $objectIdList = $Http->postVariable( 'SelectedObjectIDArray' );
+    if ( !empty( $objectIdList ) ) {
+        $areas = SensorHelper::areas();
+        $area = isset($areas['tree'][0]['node']) ? $areas['tree'][0]['node'] : false;
+        if ($area instanceof eZContentObjectTreeNode) {
+            $object = $area->object();
+            /** @var eZContentObjectAttribute[] $areaDataMap */
+            $areaDataMap = $object->attribute('data_map');
+            if (isset($areaDataMap['approver'])) {
+                $params = array('attributes' => array('approver' => implode('-', $objectIdList)));
+                $result = eZContentFunctions::updateAndPublishObject($object, $params);
+                $Module->redirectTo('/sensor/config');
 
-    $areas = SensorHelper::areas();
-    $area = isset( $areas['tree'][0]['node'] ) ? $areas['tree'][0]['node'] : false;
-    if ( $area instanceof eZContentObjectTreeNode )
-    {
-        $object = $area->object();
-        /** @var eZContentObjectAttribute[] $areaDataMap */
-        $areaDataMap = $object->attribute( 'data_map' );
-        if ( isset( $areaDataMap['approver'] ) )
-        {
-            $params = array( 'attributes' => array( 'approver' => implode( '-', $objectIdList ) ) );
-            $result = eZContentFunctions::updateAndPublishObject( $object, $params );
-            $Module->redirectTo( '/sensor/config' );
-            return;
+                return;
+            }
         }
     }
-
 }
 
 //AddOperatorLocation
