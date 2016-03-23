@@ -20,13 +20,16 @@ class SensorModuleFunctions
             $objects = eZContentObject::fetchByNodeID( $nodeList );
             foreach ( $objects as $object )
             {
-                if ( $object->attribute( 'contentclass_id' ) == $postClass->attribute( 'id' ) )
+                if ( $object instanceof eZContentObject && $postClass instanceof eZContentClass )
                 {
-                    $postId = $object->attribute( 'id' );
-                    $extraPath = "post/" . eZDir::filenamePath( $postId );
-                    self::clearSensorCache( "$extraPath$postId-" );
-                    if ( class_exists( 'Opencontent\Sensor\Legacy\CachePostService') )
-                        Opencontent\Sensor\Legacy\CachePostService::clearCache( $object->attribute( 'id' ) );
+                    if ( $object->attribute( 'contentclass_id' ) == $postClass->attribute( 'id' ) )
+                    {
+                        $postId = $object->attribute( 'id' );
+                        $extraPath = "post/" . eZDir::filenamePath( $postId );
+                        self::clearSensorCache( "$extraPath$postId-" );
+                        if ( class_exists( 'OpenContent\Sensor\Legacy\CachePostService') )
+                            OpenContent\Sensor\Legacy\CachePostService::clearCache( $object->attribute( 'id' ) );
+                    }
                 }
             }
         }
