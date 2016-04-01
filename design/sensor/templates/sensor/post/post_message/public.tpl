@@ -21,7 +21,7 @@
                 </div>
             {/if}
             <div id="view-message-{$message.id}">
-                <p>{$message.data_text1|wash()}</p>
+                <p>{$message.data_text1|wash(xhtml)|break|wordtoimage|autolink}</p>
             </div>
         </div>
     </div>

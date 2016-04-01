@@ -39,7 +39,7 @@
     {/if}
     <div id="view-message-{$message.id}">
         <p>
-            {$message.data_text1|wash()}
+            {$message.data_text1|wash(xhtml)|break|wordtoimage|autolink}
         </p>
     </div>
 </div>

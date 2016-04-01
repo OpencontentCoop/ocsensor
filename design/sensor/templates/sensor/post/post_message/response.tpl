@@ -6,7 +6,7 @@
             {if $is_read|not}<strong>{/if}{$item.created|l10n(shortdatetime)}{if $is_read|not}</strong>{/if}
         </div>
         <div class="the_comment">
-            <p>{$message.data_text1}</p>
+            <p>{$message.data_text1|wash(xhtml)|break|wordtoimage|autolink}</p>
         </div>
       </div>
     </div>
