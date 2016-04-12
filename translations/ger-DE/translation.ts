@@ -535,47 +535,47 @@
     <message>
         <location filename="notificationhelper.php" line="358"/>
         <source>Creazione di una segnalazione</source>
-        <translation>Erstellen eines Berichts</translation>
+        <translation>Meldung erstellt</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="362"/>
         <source>Ricevi una notifica alla creazione di una segnalazione</source>
-        <translation>Werde benachrichtigt die Schaffung einer Benachrichtigung</translation>
+        <translation>Mitteilung erfolgt, wenn Meldung eingegangen ist</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="371"/>
         <source>Assegnazione di una segnalazione</source>
-        <translation>Zuweisen eines Bericht</translation>
+        <translation>Meldung zugewiesen</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="371"/>
         <source>Coinvolgimento di un osservatore</source>
-        <translation>Beobachter hinzufügen</translation>
+        <translation>BeobachterIn hinzugefügt</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="371"/>
         <source>Commento a una segnalazione</source>
-        <translation>Kommentar für eine Mitteilung</translation>
+        <translation>Kommentar eingegangen</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="371"/>
         <source>Intervento terminato</source>
-        <translation>Bearbeitung abgeschlossen</translation>
+        <translation>Verlauf abgeschlossen</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="375"/>
         <source>Ricevi una notifica quando una tua segnalazione è assegnata a un responsabile</source>
-        <translation>Werde benachrichtigt wenn einer Ihrer Berichterstattung zu einem verantwortungsvollen zugeordnet</translation>
+        <translation>Mitteilung erfolgt, wenn Meldung zur Bearbeitung zugewiesen wurde</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="410"/>
         <source>Chiusura di una segnalazione</source>
-        <translation>Schließung</translation>
+        <translation>Beendet</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="414"/>
         <source>Ricevi una notifica quando una tua segnalazione è stata chiusa</source>
-        <translation>Erhalten eine Benachrichtigung, wenn ein Ihre Empfehlung wurde geschlossen</translation>
+        <translation>Mitteilung erfolgt, wenn Verfahren beendet wurde</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="426"/>
@@ -600,17 +600,17 @@
     <message>
         <location filename="notificationhelper.php" line="504"/>
         <source>Ricevi una notifica quando un osservatore viene coinvolto in una segnalazione</source>
-        <translation>Mitteilung erfolgt, wenn ein Beobachter hinzugefügt wird.</translation>
+        <translation>Mitteilung erfolgt, falls BeobachterIn hinzugefügt wurde</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="504"/>
         <source>Ricevi una notifica quando viene aggiunto un commento ad una tua segnalazione</source>
-        <translation>Mitteilung erfolgt, wenn ein Kommentar abgegeben wird.</translation>
+        <translation>Mitteilung erfolgt, wenn ein Kommentar hinzugefügt wurde</translation>
     </message>
     <message>
         <location filename="notificationhelper.php" line="504"/>
         <source>Ricevi una notifica quando un responsabile ha completato l'attività che riguarda una tua segnalazione</source>
-        <translation>Mitteilung erfolgt, wenn alle Bearbeitungschritte abgeschlossen sind.</translation>
+        <translation>Mitteilung erfolgt, wenn Bearbeitungsverlauf abgeschlossen wurde</translation>
     </message>
 </context>
 <context>
