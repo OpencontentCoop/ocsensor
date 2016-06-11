@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-    <div class="panel-heading">Area tematica</div>
+    <div class="panel-heading">{'Area tematica'|i18n('sensor/chart')}</div>
     <div class="panel-body" style="max-height: 200px;overflow-y: scroll">
         {def $categories = sensor_categories().children}
         {foreach $categories as $category}

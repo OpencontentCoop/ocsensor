@@ -1,5 +1,5 @@
 <form id="chart-filters">
-    <strong>{'Aree tematiche'|i18n('sensor/config')}</strong>
+    <strong>{'Aree tematiche'|i18n('sensor/chart')}</strong>
     <ul class="list-unstyled">
         {foreach sensor_categories().children as $category}
         <div class="checkbox">

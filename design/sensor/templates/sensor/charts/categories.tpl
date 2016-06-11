@@ -25,7 +25,7 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Numero'
+                            text: {/literal}{'Numero'|i18n('sensor/chart')}{literal}
                         },
                         stackLabels: {
                             enabled: true,

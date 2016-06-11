@@ -25,7 +25,7 @@
 					yAxis: {
 						min: 0,
 						title: {
-							text: 'Giorni'
+							text: {/literal}{'Giorni'|i18n('sensor/chart')}{literal}
 						},
 						stackLabels: {
 							enabled: true,
@@ -37,7 +37,7 @@
 					},
                     tooltip: {
                         shared: true,
-                        valueSuffix: ' giorni',
+                        valueSuffix: {/literal}{' giorni'|i18n('sensor/chart')}{literal},
                         valueDecimals: 1
                     },
                     plotOptions: {

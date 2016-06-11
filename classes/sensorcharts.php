@@ -18,61 +18,64 @@ class SensorCharts
 
     protected $requestExtras = array();
 
-    protected static $availableCharts = array(
-        array(
-            'identifier' => 'status',
-            'name' => 'Numero totale e stato corrente',
-            'template_uri' => 'design:sensor/charts/status.tpl',
-            'call_method' => 'statusData'
-        ),        
-        array(
-            'identifier' => 'categories',
-            'name' => 'Aree tematiche',
-            'template_uri' => 'design:sensor/charts/categories.tpl',
-            'call_method' => 'categoriesData'
-        ),
-        array(
-            'identifier' => 'areas',
-            'name' => 'Quartieri',
-            'template_uri' => 'design:sensor/charts/areas.tpl',
-            'call_method' => 'areasData'
-        ),
-        array(
-            'identifier' => 'type',
-            'name' => 'Tipologia di segnalazione',
-            'template_uri' => 'design:sensor/charts/type.tpl',
-            'call_method' => 'typeData'
-        ),
-//        array(
-//            'identifier' => 'times',
-//            'name' => 'Tempi di esecuzione',
-//            'template_uri' => 'design:sensor/charts/times.tpl',
-//            'call_method' => 'timesData'
-//        ),
-        array(
-            'identifier' => 'timesAvg',
-            'name' => 'Media tempi di esecuzione',
-            'template_uri' => 'design:sensor/charts/times_avg.tpl',
-            'call_method' => 'timesAvgData'
-        ),
-//        array(
-//            'identifier' => 'performance',
-//            'name' => 'Tempi di risposta e di chiusura',
-//            'template_uri' => 'design:sensor/charts/performance.tpl',
-//            'call_method' => 'performanceData'
-//        ),
-        array(
-            'identifier' => 'categoriesDrilldown',
-            'name' => 'Aree in percentuale',
-            'template_uri' => 'design:sensor/charts/categories_drilldown.tpl',
-            'call_method' => 'categoriesDrilldown'
-        )
-    );
+    protected static $availableCharts;
 
     protected static $accessibleCharts;
 
     public static function listAvailableCharts()
     {
+        if (self::$availableCharts === null) {
+            self::$availableCharts = array(
+                array(
+                    'identifier' => 'status',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Numero totale e stato corrente' ),
+                    'template_uri' => 'design:sensor/charts/status.tpl',
+                    'call_method' => 'statusData'
+                ),
+                array(
+                    'identifier' => 'categories',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Aree tematiche'),
+                    'template_uri' => 'design:sensor/charts/categories.tpl',
+                    'call_method' => 'categoriesData'
+                ),
+                array(
+                    'identifier' => 'areas',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Quartieri'),
+                    'template_uri' => 'design:sensor/charts/areas.tpl',
+                    'call_method' => 'areasData'
+                ),
+                array(
+                    'identifier' => 'type',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Tipologia di segnalazione'),
+                    'template_uri' => 'design:sensor/charts/type.tpl',
+                    'call_method' => 'typeData'
+                ),
+                //        array(
+                //            'identifier' => 'times',
+                //            'name' => 'Tempi di esecuzione',
+                //            'template_uri' => 'design:sensor/charts/times.tpl',
+                //            'call_method' => 'timesData'
+                //        ),
+                array(
+                    'identifier' => 'timesAvg',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Media tempi di esecuzione'),
+                    'template_uri' => 'design:sensor/charts/times_avg.tpl',
+                    'call_method' => 'timesAvgData'
+                ),
+                //        array(
+                //            'identifier' => 'performance',
+                //            'name' => 'Tempi di risposta e di chiusura',
+                //            'template_uri' => 'design:sensor/charts/performance.tpl',
+                //            'call_method' => 'performanceData'
+                //        ),
+                array(
+                    'identifier' => 'categoriesDrilldown',
+                    'name' => ezpI18n::tr( 'sensor/chart', 'Aree in percentuale'),
+                    'template_uri' => 'design:sensor/charts/categories_drilldown.tpl',
+                    'call_method' => 'categoriesDrilldown'
+                )
+            );
+        }
         return self::$availableCharts;
     }
 
@@ -85,7 +88,7 @@ class SensorCharts
             $accessArray = $user->accessArray();
 
             if (isset( $accessArray['*']['*'] ) || isset( $accessArray[$module]['*'] )) {
-                self::$accessibleCharts = self::$availableCharts;
+                self::$accessibleCharts = self::listAvailableCharts();
 
             } elseif (isset( $accessArray[$module][$function] )) {
 
@@ -99,7 +102,7 @@ class SensorCharts
                         switch ($limitationIdentifier) {
                             case '*':
                                 if ($limitationValues == '*') {
-                                    $accessibleCharts = self::$availableCharts;
+                                    $accessibleCharts = self::listAvailableCharts();
                                 }
                                 $result = true;
                                 break;
@@ -113,7 +116,7 @@ class SensorCharts
                                     }
 
                                     if ($identifier == '*'){
-                                        $accessibleCharts = self::$availableCharts;
+                                        $accessibleCharts = self::listAvailableCharts();
                                         $result = true;
                                         break;
                                     }
@@ -143,7 +146,7 @@ class SensorCharts
 
     public static function fetchChartByIdentifier( $identifier )
     {
-        foreach ( self::$availableCharts as $chart )
+        foreach ( self::listAvailableCharts() as $chart )
         {
             if ( $chart['identifier'] == $identifier )
             {
@@ -390,7 +393,7 @@ class SensorCharts
         $data = array(
             'categories' => array(),
             'series' => array(),
-            'title' => 'Numero di segnalazioni per tipologia'
+            'title' => ezpI18n::tr( 'sensor/chart', 'Numero di segnalazioni per tipologia' )
             
         );
         $series = array();
@@ -429,7 +432,7 @@ class SensorCharts
         $data = array(
             'categories' => array(),
             'series' => array(),
-            'title' => 'Numero di segnalazioni per area tematica'
+            'title' => ezpI18n::tr( 'sensor/chart', 'Numero di segnalazioni per area tematica' )
 
         );
         $series = array();
@@ -512,7 +515,7 @@ class SensorCharts
         $data = array(
             'categories' => array(),
             'series' => array(),
-            'title' => 'Numero di segnalazioni per quartiere'
+            'title' => ezpI18n::tr( 'sensor/chart', 'Numero di segnalazioni per quartiere' )
 
         );
         $series = array();
@@ -599,13 +602,13 @@ class SensorCharts
 
         $data = array(            
             'series' => array(),
-            'title' => 'Tempi di lavorazione per segnalazione'
+            'title' => ezpI18n::tr( 'sensor/chart', 'Tempi di lavorazione per segnalazione' )
         );
         $series = array(
-            'Lettura' => array(),
-            'Assegnazione' => array(),
-            'Lavorazione' => array(),
-            'Chiusura'  => array()
+            ezpI18n::tr( 'sensor/chart', 'Lettura') => array(),
+            ezpI18n::tr( 'sensor/chart', 'Assegnazione') => array(),
+            ezpI18n::tr( 'sensor/chart', 'Lavorazione') => array(),
+            ezpI18n::tr( 'sensor/chart', 'Chiusura')  => array()
         );
         foreach( $result['SearchResult'] as $item )
         {
@@ -616,25 +619,25 @@ class SensorCharts
                 $lettura = $this->secondsInDay( $item['fields'][$this->searchService->field( 'open_read_time' )] );
             else
                 $lettura = 0;
-            $series['Lettura'][] = array( $time, $lettura );
+            $series[ezpI18n::tr( 'sensor/chart', 'Lettura')][] = array( $time, $lettura );
             
             if ( isset( $item['fields'][$this->searchService->field( 'read_assign_time' )] ) )
                 $assegnazione = $this->secondsInDay( $item['fields'][$this->searchService->field( 'read_assign_time' )] );
             else
                 $assegnazione = 0;
-            $series['Assegnazione'][] = array( $time, $assegnazione );                                
+            $series[ezpI18n::tr( 'sensor/chart', 'Assegnazione')][] = array( $time, $assegnazione );
             
             if ( isset( $item['fields'][$this->searchService->field( 'assign_fix_time' )] ) )
                 $lavorazione = $this->secondsInDay( $item['fields'][$this->searchService->field( 'assign_fix_time' )] );
             else
                 $lavorazione = 0;
-            $series['Lavorazione'][] = array( $time, $lavorazione );
+            $series[ezpI18n::tr( 'sensor/chart', 'Lavorazione')][] = array( $time, $lavorazione );
             
             if ( isset( $item['fields'][$this->searchService->field( 'fix_close_time' )] ) )
                 $chiusura = $this->secondsInDay( $item['fields'][$this->searchService->field( 'fix_close_time' )] );
             else
                 $chiusura = 0;            
-            $series['Chiusura'][] = array( $time, $chiusura );   
+            $series[ezpI18n::tr( 'sensor/chart', 'Chiusura')][] = array( $time, $chiusura );
         }
         
         $series = array_reverse( $series, true );
@@ -662,7 +665,7 @@ class SensorCharts
         $data = array(
             'categories' => array(),
             'series' => array(),
-            'title' => 'Media tempi di esecuzione'
+            'title' => ezpI18n::tr( 'sensor/chart', 'Media tempi di esecuzione' )
 
         );
         $series = array();
@@ -750,8 +753,8 @@ class SensorCharts
         }
 
         return array(
-            'title' => 'Tempi di risposta e di chiusura',
-            'seriesName' => 'Minuti',
+            'title' => ezpI18n::tr( 'sensor/chart', 'Tempi di risposta e di chiusura' ),
+            'seriesName' => ezpI18n::tr( 'sensor/chart', 'Minuti' ),
             'data' => $data
         );
     }
@@ -780,7 +783,7 @@ class SensorCharts
             $countList = $facet->values['category_id_list'];
             $totalList = array_sum( $countList );
             $data = array(
-                'title' => 'Aree tematiche ' . $facet->interval,
+                'title' => ezpI18n::tr( 'sensor/chart', 'Aree tematiche') . ' ' . $facet->interval,
                 'series' => array(),
                 'drilldown' => array()
             );
