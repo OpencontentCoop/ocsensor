@@ -174,35 +174,31 @@ class SensorCharts
         return array();
     }
 
-    protected function getIntervalFacets( $intervalString, $facets )
+    protected function getIntervalFacets( $intervalString, $facets, DateTime $startDate = null, DateTime $endDate = null )
     {
-        $startResult = $this->searchService->query(
-            $this->searchService->instanceNewSearchQuery()->field( 'open_timestamp' )
-                ->limits( 1 )
-                ->filters( $this->requestFilters )
-                ->sort( array( 'open_timestamp' => 'asc' ) )
-        );
 
-        if ( $startResult['SearchCount'] == 0 )
-            return array();
+        if ( $startDate === null ) {
 
-        $startDate = new DateTime();
-        $startDate->setTimestamp( $startResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
-        $startDate->setDate( $startDate->format( 'Y' ), 1, 1 );
-        $startDate->setTime( 0, 0 );
+            /** @var eZContentObjectTreeNode[] $firstPostArray */
+            $firstPostArray = SensorHelper::postContainerNode()->subTree(
+                array( 'Limit' => 1, 'SortBy' => array( 'published', true ))
+            );
 
-        $endResult = $this->searchService->query(
-            $this->searchService->instanceNewSearchQuery()
-                                ->field( 'open_timestamp' )
-                                ->limits( 1 )
-                                ->filters( $this->requestFilters )
-                                ->sort( array( 'open_timestamp' => 'desc' ) )
-        );
-        $endDate = new DateTime();
-        $endDate->setTimestamp( $endResult['SearchResult'][0]['fields'][$this->searchService->field( 'open_timestamp')] );
-        $endDate->setDate( $startDate->format( 'Y' ), 12, 31 );
-        $endDate->setTime( 23, 59 );
+            if (empty($firstPostArray)){
+                $creationTimestamp = SensorHelper::postContainerNode()->object()->attribute('published');
+            }else{
+                $creationTimestamp = $firstPostArray[0]->object()->attribute('published');
+            }
 
+            $startDate = new DateTime();
+            $startDate->setTimestamp($creationTimestamp);
+            $startDate->setTime(0, 0);
+        }
+
+        if ( $endDate === null ) {
+            $endDate = new DateTime();
+            $endDate->setTime(23, 59);
+        }
 
         switch ( $intervalString  )
         {
@@ -685,26 +681,26 @@ class SensorCharts
             'data' => $data
         );
     }
-
+    
     public function categoriesDrilldown()
     {
         $aggregateData = array();
-
+        
         $intervalString = 'monthly';
         if ( isset( $this->requestExtras['_interval'][0] ) )
             $intervalString = $this->requestExtras['_interval'][0];
 
         $facets = $this->getIntervalFacets( $intervalString, array( 'category_id_list' ) );
-
-        //$query = $this->searchService->instanceNewSearchQuery()
+        
+        //$query = $this->searchService->instanceNewSearchQuery()                                     
         //                             ->limits( 1 )
         //                             ->facet( 'category_id_list' );
         //
         //$result = $this->searchService->query( $query );
         //$facetFields =  $result['SearchExtras']->attribute( 'facet_fields' );
-        //$countList = $facetFields[0]['countList'];
+        //$countList = $facetFields[0]['countList'];                
         //$totalList = array_sum( $countList );
-
+        
         foreach( $facets as $facet )
         {
             $countList = $facet->values['category_id_list'];
@@ -714,7 +710,7 @@ class SensorCharts
                 'series' => array(),
                 'drilldown' => array()
             );
-
+            
             $categoryTree = $this->repository->getCategoriesTree();
             foreach( $categoryTree->attribute( 'children' ) as $category )
             {
@@ -729,15 +725,15 @@ class SensorCharts
                     'y' => 0,
                     'count' => 0
                 );
-                $parentTotal = isset( $countList[$category->attribute( 'id' )] ) ? $countList[$category->attribute( 'id' )] : 0;
+                $parentTotal = isset( $countList[$category->attribute( 'id' )] ) ? $countList[$category->attribute( 'id' )] : 0;            
                 $childTotal = 0;
                 foreach( $category->attribute( 'children' ) as $child )
                 {
-                    $childTotal += isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;
-                }
+                    $childTotal += isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
+                }           
                 foreach( $category->attribute( 'children' ) as $child )
-                {
-                    $childCount = isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;
+                {                
+                    $childCount = isset( $countList[$child->attribute( 'id' )] ) ? $countList[$child->attribute( 'id' )] : 0;                
                     $childPerc = floatval( number_format( $childCount * 100 / $childTotal, 2 ) );
                     $drilldown['data'][] = array(
                         'name' => $child->attribute( 'name' ),
@@ -748,15 +744,16 @@ class SensorCharts
                 $parentTotal += $childTotal;
                 $series['y'] = floatval( number_format( $parentTotal * 100 / $totalList, 2 ) );
                 $series['count'] = $parentTotal;
-
+                
                 $data['series'][] = $series;
                 $data['drilldown'][] = $drilldown;
             }
-
+            
             $aggregateData[] = $data;
         }
-
+        
         return $aggregateData;
     }
+
 
 }

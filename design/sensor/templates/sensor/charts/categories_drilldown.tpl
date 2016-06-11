@@ -48,6 +48,10 @@
                         }],
                         drilldown: {
                             series: response.drilldown
+                        },
+                        exporting:{
+                          sourceWidth: 1000,
+                          sourceHeight: 500,
                         }
                     });
                 });
@@ -63,7 +67,7 @@
 
 
 <form id="chart-filters">
-    {include uri='design:sensor/charts/filters/interval.tpl' prechecked="half-yearly"}
+  {include uri='design:sensor/charts/filters/interval.tpl' prechecked="half-yearly"}
 </form>
 
 <div id="categories"></div>
