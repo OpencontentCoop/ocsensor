@@ -19,7 +19,7 @@
                         selected: 1
                     },
                     tooltip: {
-                        valueSuffix: {/literal}{' ore'|i18n('sensor/chart')}{literal},
+                        valueSuffix: '{/literal}{' ore'|i18n('sensor/chart')}{literal}',
                         valueDecimals: 2
                     },
                     title: {

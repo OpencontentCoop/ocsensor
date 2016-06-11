@@ -19,7 +19,7 @@
                         min: 0
                     },
                     tooltip: {
-                        valueSuffix: {/literal}{' giorni'|i18n('sensor/chart')}{literal},
+                        valueSuffix: '{/literal}{' giorni'|i18n('sensor/chart')}{literal}',
                         valueDecimals: 1
                     },
                     title: {

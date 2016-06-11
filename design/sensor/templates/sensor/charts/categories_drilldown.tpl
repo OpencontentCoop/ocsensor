@@ -21,13 +21,13 @@
                             type: 'pie'
                         },
                         lang:{
-                            drillUpText: {/literal}{'Vedi tutte'|i18n('sensor/chart')}{literal}
+                            drillUpText: '{/literal}{'Vedi tutte'|i18n('sensor/chart')}{literal}'
                         },
                         title: {
                             text: response.title
                         },
                         subtitle: {
-                            text: {/literal}{'Clicca sulle aree per il dettaglio dei descrittori'|i18n('sensor/chart')}{literal}
+                            text: '{/literal}{'Clicca sulle aree per il dettaglio dei descrittori'|i18n('sensor/chart')}{literal}'
                         },
                         plotOptions: {
                             series: {
