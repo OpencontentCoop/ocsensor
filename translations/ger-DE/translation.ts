@@ -971,5 +971,9 @@
             <source>Lettura</source>
             <translation>Annahme</translation>
         </message>
+        <message>
+            <source>Aree in percentuale</source>
+            <translation>Prozentueller Anteil / Bereich</translation>
+        </message>
     </context>
 </TS>
