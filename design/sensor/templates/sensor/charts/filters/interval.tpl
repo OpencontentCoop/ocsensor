@@ -6,7 +6,7 @@
     <div class="panel-body" style="max-height: 200px;overflow-y: scroll">
         <div class="radio">
             <label>
-                <input type="radio" name="_interval" value="monthly" {if $prechecked|eq("monthly")} checked="checked"{/if} class="interval" /> {'Mensileì'|i18n('sensor/chart')}
+                <input type="radio" name="_interval" value="monthly" {if $prechecked|eq("monthly")} checked="checked"{/if} class="interval" /> {'Mensile'|i18n('sensor/chart')}
             </label>
         </div>
         <div class="radio">
