@@ -69,10 +69,77 @@ class SensorCharts
         )
     );
 
+    protected static $accessibleCharts;
+
     public static function listAvailableCharts()
     {
         return self::$availableCharts;
     }
+
+    public static function listAccessibleCharts()
+    {
+        if (self::$accessibleCharts === null) {
+            $user = eZUser::currentUser();
+            $module = 'sensor';
+            $function = 'stat';
+            $accessArray = $user->accessArray();
+
+            if (isset( $accessArray['*']['*'] ) || isset( $accessArray[$module]['*'] )) {
+                self::$accessibleCharts = self::$availableCharts;
+
+            } elseif (isset( $accessArray[$module][$function] )) {
+
+                $accessibleCharts = array();
+
+                $policies = $accessArray[$module][$function];
+
+                foreach ($policies as $policyIdentifier => $limitationArray) {
+                    $result = false;
+                    foreach ($limitationArray as $limitationIdentifier => $limitationValues) {
+                        switch ($limitationIdentifier) {
+                            case '*':
+                                if ($limitationValues == '*') {
+                                    $accessibleCharts = self::$availableCharts;
+                                }
+                                $result = true;
+                                break;
+
+                            case 'ChartList':
+                                foreach($limitationValues as $identifier){
+
+                                    $chart =  self::fetchChartByIdentifier($identifier);
+                                    if ($chart){
+                                        $accessibleCharts[$identifier] = $chart;
+                                    }
+
+                                    if ($identifier == '*'){
+                                        $accessibleCharts = self::$availableCharts;
+                                        $result = true;
+                                        break;
+                                    }
+                                }
+                                break;
+                        }
+                        if (!$result) {
+                            break;
+                        }
+                    }
+                    if ($result) {
+                        break;
+                    }
+                }
+
+                self::$accessibleCharts = array_values($accessibleCharts);
+
+            } else {
+                self::$accessibleCharts = array();
+            }
+
+        }
+
+        return self::$accessibleCharts;
+    }
+
 
     public static function fetchChartByIdentifier( $identifier )
     {
@@ -119,6 +186,16 @@ class SensorCharts
         }
     }
 
+    protected function canAccess($currentChart)
+    {
+        foreach(self::listAccessibleCharts() as $chart){
+            if ($currentChart['identifier'] == $chart['identifier']){
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function getSubFilters( $name, $id )
     {
         $data = array();
@@ -147,9 +224,15 @@ class SensorCharts
     public function getData()
     {
         $data = array();
+
         if ( isset( $this->parameters['type'] ) )
         {
             $chart = self::fetchChartByIdentifier( $this->parameters['type'] );
+
+            if (!$this->canAccess($chart))
+            {
+                throw new Exception("Access denied");
+            }
 
             if ( method_exists( $this, $chart['call_method'] ) )
             {
@@ -161,19 +244,10 @@ class SensorCharts
                 $data = call_user_func( $chart['call_method'] ); //@todo make factory
             }
         }
-        elseif ( isset( $this->parameters['debug'] ) )
-        {
-            $data = $this->debugData();
-        }
 
         return $data;
     }
     
-    protected function debugData()
-    {
-        return array();
-    }
-
     protected function getIntervalFacets( $intervalString, $facets, DateTime $startDate = null, DateTime $endDate = null )
     {
 

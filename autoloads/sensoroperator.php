@@ -81,7 +81,7 @@ class SensorOperator
             } break;
 
             case 'sensor_chart_list':
-                $operatorValue = SensorCharts::listAvailableCharts();
+                $operatorValue = SensorCharts::listAccessibleCharts();
                 break;
 
             case 'sensor_areas':

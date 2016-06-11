@@ -1,82 +1,83 @@
 <?php
-$Module = array( 'name' => 'Sensor' );
+$Module = array('name' => 'Sensor');
 
 $ViewList = array();
 $ViewList['home'] = array(
-	'script' =>	'home.php',
-	'functions' => array( 'use' )
+    'script' => 'home.php',
+    'functions' => array('use')
 );
 
 $ViewList['info'] = array(
-    'script' =>	'info.php',
-    'params' => array( 'Page' ),
-    'functions' => array( 'use' )
+    'script' => 'info.php',
+    'params' => array('Page'),
+    'functions' => array('use')
 );
 
 $ViewList['posts'] = array(
-    'script' =>	'posts.php',
-    'params' => array( 'ID', 'Offset' ),
-    'functions' => array( 'use' )
+    'script' => 'posts.php',
+    'params' => array('ID', 'Offset'),
+    'functions' => array('use')
 );
 
 $ViewList['data'] = array(
-    'script' =>	'data.php',
+    'script' => 'data.php',
     'params' => array(),
-    'functions' => array( 'use' )
+    'functions' => array('use')
 );
 
 $ViewList['add'] = array(
-    'script' =>	'add.php',
+    'script' => 'add.php',
     'params' => array(),
-    'functions' => array( 'use' )
+    'functions' => array('use')
 );
 
 $ViewList['edit'] = array(
-    'script' =>	'edit.php',
-    'params' => array( 'ID' ),
-    'functions' => array( 'use' )
+    'script' => 'edit.php',
+    'params' => array('ID'),
+    'functions' => array('use')
 );
 
 $ViewList['dashboard'] = array(
-    'script' =>	'dashboard.php',
-    'params' => array( "Part", "Group", "Export" ),
+    'script' => 'dashboard.php',
+    'params' => array("Part", "Group", "Export"),
     'unordered_params' => array(
         "list" => "List",
-        "offset" => "Offset" ),
-    'functions' => array( 'use' )
+        "offset" => "Offset"
+    ),
+    'functions' => array('use')
 );
 
 $ViewList['redirect'] = array(
-    'script' =>	'redirect.php',
-    'params' => array( 'View' ),
-    'functions' => array( 'use' )
+    'script' => 'redirect.php',
+    'params' => array('View'),
+    'functions' => array('use')
 );
 
 $ViewList['test_mail'] = array(
-    'script' =>	'test_mail.php',
-    'params' => array( 'Type', 'Id', 'Param', 'Param2' ),
-    'functions' => array( 'debug' )
+    'script' => 'test_mail.php',
+    'params' => array('Type', 'Id', 'Param', 'Param2'),
+    'functions' => array('debug')
 );
 
 $ViewList['config'] = array(
-    'script' =>	'config.php',
-    'params' => array( "Part" ),
-    'unordered_params' => array( 'offset' => 'Offset' ),
-    'functions' => array( 'config' )
+    'script' => 'config.php',
+    'params' => array("Part"),
+    'unordered_params' => array('offset' => 'Offset'),
+    'functions' => array('stat')
 );
 
 $ViewList['stat'] = array(
-		'script' =>	'stat.php',
-		'params' => array( 'ChartIdentifier' ),
-		'unordered_params' => array(),
-		'functions' => array( 'config' )
+    'script' => 'stat.php',
+    'params' => array('ChartIdentifier'),
+    'unordered_params' => array(),
+    'functions' => array('config')
 );
 
 //bc
 $ViewList['dimmi'] = array(
-    'script' =>	'dimmi.php',
+    'script' => 'dimmi.php',
     'params' => array(),
-    'functions' => array( 'use' )
+    'functions' => array('use')
 );
 
 
@@ -88,3 +89,16 @@ $FunctionList['manage'] = array();
 $FunctionList['behalf'] = array();
 $FunctionList['ws_user'] = array();
 
+$charts = array();
+foreach( SensorCharts::listAvailableCharts() as $item )
+{
+    $charts[$item['name']] = array( 'Name' => $item['name'], 'value' => $item['identifier'] );
+}
+$chartList = array(
+    'name' => 'ChartList',
+    'values' => $charts
+);
+
+$FunctionList['stat'] = array(
+    'ChartList' => $chartList,
+);
