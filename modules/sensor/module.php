@@ -63,14 +63,14 @@ $ViewList['config'] = array(
     'script' => 'config.php',
     'params' => array("Part"),
     'unordered_params' => array('offset' => 'Offset'),
-    'functions' => array('stat')
+    'functions' => array('config')
 );
 
 $ViewList['stat'] = array(
     'script' => 'stat.php',
     'params' => array('ChartIdentifier'),
     'unordered_params' => array(),
-    'functions' => array('config')
+    'functions' => array('stat')
 );
 
 //bc
