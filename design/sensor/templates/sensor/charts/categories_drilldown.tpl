@@ -42,7 +42,7 @@
                             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.count}</b> {/literal}{'segnalazioni'|i18n('sensor/chart')}{literal}<br/>'
                         },
                         series: [{
-                            name: {/literal}{'Aree tematiche'|i18n('sensor/chart')}{literal},
+                            name: '{/literal}{'Aree tematiche'|i18n('sensor/chart')}{literal}',
                             colorByPoint: true,
                             data: response.series
                         }],
