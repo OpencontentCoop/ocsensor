@@ -920,6 +920,14 @@
             <translation>Anzahl der Meldungen pro Themenbereich</translation>
         </message>
         <message>
+            <source>Numero di segnalazioni per quartiere</source>
+            <translation>Anzahl der Meldungen nach Stadtvierteln</translation>
+        </message>
+        <message>
+            <source>Numero di segnalazioni per tipologia</source>
+            <translation>Anzahl der Meldungen nach Meldungsart</translation>
+        </message>
+        <message>
             <source>Intervallo di tempo</source>
             <translation>Zeitintervall</translation>
         </message>
@@ -941,7 +949,7 @@
         </message>
         <message>
             <source>Clicca sulle aree per il dettaglio dei descrittori</source>
-            <translation>Bereich anklicken um deteils anzuzeigen</translation>
+            <translation>Bereich anklicken um Deteils anzuzeigen</translation>
         </message>
         <message>
             <source> ore</source>
@@ -974,6 +982,26 @@
         <message>
             <source>Aree in percentuale</source>
             <translation>Prozentueller Anteil / Bereich</translation>
+        </message>
+        <message>
+            <source>segnalazione</source>
+            <translation>Meldung</translation>
+        </message>
+        <message>
+            <source>segnalazioni</source>
+            <translation>Meldung</translation>
+        </message>
+        <message>
+            <source>suggerimento</source>
+            <translation>Anregung</translation>
+        </message>
+        <message>
+            <source>reclamo</source>
+            <translation>Beschwerde</translation>
+        </message>
+        <message>
+            <source>Vedi tutte</source>
+            <translation>alle</translation>
         </message>
     </context>
 </TS>

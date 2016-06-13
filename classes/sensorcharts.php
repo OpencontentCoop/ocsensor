@@ -420,7 +420,7 @@ class SensorCharts
         foreach( $series as $name => $serie )
         {
             $data['series'][] = array(
-                'name' => $name,
+                'name' => ezpI18n::tr( 'sensor/chart', $name ),
                 'data' => $serie
             );
         }
@@ -563,7 +563,7 @@ class SensorCharts
         $totalList = array_sum( $countList );
         
         $data = array(
-            'title' => 'Numero totale e stato corrente',
+            'title' => ezpI18n::tr( 'sensor/chart', 'Numero totale e stato corrente' ),
             'series' => array()
         );
         
@@ -694,10 +694,10 @@ class SensorCharts
                 $sum = array_sum( $sum );
 
                 $avg = $count > 0 ? $sum / $count : 0;
-                if ( $name == 'open_read_time' ) $name = 'Lettura';
-                if ( $name == 'read_assign_time' ) $name = 'Assegnazione';
-                if ( $name == 'assign_fix_time' ) $name = 'Lavorazione';
-                if ( $name == 'fix_close_time' ) $name = 'Chiusura';
+                if ( $name == 'open_read_time' ) $name = ezpI18n::tr( 'sensor/chart', 'Lettura');
+                if ( $name == 'read_assign_time' ) $name = ezpI18n::tr( 'sensor/chart', 'Assegnazione');
+                if ( $name == 'assign_fix_time' ) $name = ezpI18n::tr( 'sensor/chart', 'Lavorazione');
+                if ( $name == 'fix_close_time' ) $name = ezpI18n::tr( 'sensor/chart', 'Chiusura');
                 $series[$name][] = $this->secondsInDay( $avg );
             }
 

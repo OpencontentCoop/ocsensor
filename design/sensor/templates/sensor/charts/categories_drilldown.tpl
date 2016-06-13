@@ -39,10 +39,10 @@
                         },
                         tooltip: {
                             headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.count}</b> segnalazioni<br/>'
+                            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.count}</b> {/literal}{'segnalazioni'|i18n('sensor/chart')}{literal}<br/>'
                         },
                         series: [{
-                            name: 'Aree',
+                            name: {/literal}{'Aree tematiche'|i18n('sensor/chart')}{literal},
                             colorByPoint: true,
                             data: response.series
                         }],
