@@ -1,5 +1,5 @@
 <section class="hgroup">
-    <h1>{'Statistiche'|i18n('sensor/menu')}</h1>
+    <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
 </section>
 
 <div class="row">

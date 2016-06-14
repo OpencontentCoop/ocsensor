@@ -19,7 +19,7 @@
                                 <div class="checkbox" style="margin: 5px 0">
                                     <label>
                                         <input type="checkbox" name="category_id_list" value="{$category.id}" class="child"/>
-                                        {$category.name|wash} (senza descrittori)
+                                        {$category.name|wash} {'(senza descrittori)'|i18n('sensor/chart')}
                                     </label>
                                 </div>
                             </li>

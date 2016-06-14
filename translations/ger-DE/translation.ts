@@ -1003,5 +1003,9 @@
             <source>Vedi tutte</source>
             <translation>alle</translation>
         </message>
+        <message>
+            <source>(senza descrittori)</source>
+            <translation>(unspezifiziert)</translation>
+        </message>
     </context>
 </TS>
