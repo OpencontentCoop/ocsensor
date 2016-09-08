@@ -60,14 +60,16 @@
       <div class="tab-pane active">
         {include name=navigator
                 uri='design:navigator/google.tpl'
-                page_uri=concat('sensor/dashboard/(list)/',$current_list.identifier,$filters_query)
+                page_uri=concat('sensor/dashboard/(list)/',$current_list.identifier)
+                page_uri_suffix=$filters_query
                 item_count=$current_list.count
                 view_parameters=$view_parameters
                 item_limit=$limit}
         {include uri="design:sensor/post/table_items.tpl" item_list=$items name=items}
         {include name=navigator
                 uri='design:navigator/google.tpl'
-                page_uri=concat('sensor/dashboard/(list)/',$current_list.identifier,$filters_query)
+                page_uri=concat('sensor/dashboard/(list)/',$current_list.identifier)
+                page_uri_suffix=$filters_query
                 item_count=$current_list.count
                 view_parameters=$view_parameters
                 item_limit=$limit}
