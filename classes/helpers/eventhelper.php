@@ -66,13 +66,16 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
     {
         foreach( $this->notificationHelper->postNotificationTypes() as $type )
         {
-            if ( $type['identifier'] ==  $eventName )
+            if ( $type['identifier'] == $eventName )
             {
                 $event = $this->post->getCollaborationItem()->createNotificationEvent( $eventName );
                 $event->setAttribute( self::EVENT_CREATOR_FIELD, eZUser::currentUserID() );
                 $event->setAttribute( self::EVENT_TIMESTAMP_FIELD, time() );
                 $event->setAttribute( self::EVENT_DETAILS_FIELD, json_encode( $eventDetails ) );
                 $event->store();
+
+                $parameters = array();
+                $this->handleEvent( $event, $parameters );
             }
         }
     }
