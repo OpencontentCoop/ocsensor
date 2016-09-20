@@ -166,6 +166,38 @@ class SensorNotificationHelper
         }
     }
 
+    public function sendNotifications( eZNotificationEvent $event, array $parameters )
+    {
+        /** @var eZNotificationCollection[] $collections */
+        $collections = eZNotificationCollection::fetchListForHandler(
+            eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
+            $event->attribute( 'id' ),
+            eZCollaborationNotificationHandler::TRANSPORT
+        );
+        foreach ( $collections as $collection )
+        {
+            /** @var eZNotificationCollectionItem[] $items */
+            $items = $collection->attribute( 'items_to_send' );
+            $addressList = array();
+            foreach ( $items as $item )
+            {
+                $addressList[] = $item->attribute( 'address' );
+                $item->remove();
+            }
+            /** @var eZMailNotificationTransport $transport */
+            $transport = eZNotificationTransport::instance( 'ezmail' );
+            $transport->send( $addressList,
+                $collection->attribute( 'data_subject' ),
+                $collection->attribute( 'data_text' ),
+                null,
+                $parameters );
+            if ( $collection->attribute( 'item_count' ) == 0 )
+            {
+                $collection->remove();
+            }
+        }
+    }
+
     protected function createMailNotificationCollections( $eventIdentifier, eZNotificationEvent $event, $userCollection, &$parameters )
     {
         $db = eZDB::instance();
