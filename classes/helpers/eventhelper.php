@@ -75,7 +75,8 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
                 $event->store();
 
                 $parameters = array();
-                $this->handleEvent( $event, $parameters );
+                $this->notificationHelper->handleEvent( $event, $parameters );
+                $this->notificationHelper->sendNotifications( $event, $parameters);
             }
         }
     }
