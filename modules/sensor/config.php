@@ -112,6 +112,15 @@ foreach( $otherFolders as $folder )
     }
 }
 
+$ids = SensorHelper::defaultApproverIdArray();
+$adminRole = eZRole::fetchByName( "Sensor Admin" );
+if ( $adminRole instanceof eZRole )
+{
+    foreach($ids as $id){
+        $adminRole->assignToUser($id);
+    }
+}
+
 $tpl->setVariable( 'view_parameters', $viewParameters );
 $tpl->setVariable( 'current_part', $Part );
 $tpl->setVariable( 'data', $data );
