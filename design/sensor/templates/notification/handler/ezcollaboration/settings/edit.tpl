@@ -23,10 +23,12 @@
                 {/foreach}
 
                 {def $hasTransports = false()
-                     $transportNames = array()}
+                     $transportNames = array()
+                     $countTransports = 0}
                 {foreach $current_handler.info.notification-types as $type}
                     {if $type.group|eq( 'transport' )}
                         {set $hasTransports = true()}
+                        {set $countTransports = $countTransports|inc()}
                         {if $transportNames|contains($type.name)|not()}
                             {set $transportNames = $transportNames|append($type.name)}
                         {/if}
@@ -46,7 +48,11 @@
                         {/if}
                         {if $hasTransports}
                             {foreach $transportNames as $name}
-                                <th width="1" class="text-center"><span>{$name|wash()}</span></th>
+                                <th width="1" class="text-center">
+                                    {if count($countTransports)|gt(1)}
+                                        <span>{$name|wash()}</span>
+                                    {/if}
+                                </th>
                             {/foreach}
                         {/if}
                     </tr>
@@ -85,15 +91,15 @@
                                             {set $countTransport = $countTransport|inc()}
                                         {/if}
                                     {/foreach}
-                                    
+
                                     {foreach $current_handler.info.notification-types as $transport_type}
                                         {if and( $transport_type.group|eq( 'transport' ), $transport_type.parent|eq( $type.identifier ))}
                                             <td class="text-center">
                                               <div>
-                                                <input type="checkbox"
+                                                <input type={if $countTransport|gt(1)}"checkbox"{else}"hidden"{/if}
                                                        {if $transport_type.enabled|not()}disabled="disabled"{/if}
                                                        name="CollaborationHandlerSelection_{$handler.id_string}[{$transport_type.identifier}]"
-                                                       value="{$current_handler.info.type-identifier}_{$transport_type.identifier}" {if and( $transport_type.enabled, or( $selection|contains(concat($current_handler.info.type-identifier,'_',$transport_type.identifier)), $transport_type.default_transport|eq($transport_type.transport) ) )} checked="checked"{/if} />
+                                                       value="{$current_handler.info.type-identifier}_{$transport_type.identifier}" {if and( $countTransport|gt(1), $transport_type.enabled, or( $selection|contains(concat($current_handler.info.type-identifier,'_',$transport_type.identifier)), $transport_type.default_transport|eq($transport_type.transport) ) )} checked="checked"{/if} />
                                                 </div>
                                             </td>
                                         {/if}

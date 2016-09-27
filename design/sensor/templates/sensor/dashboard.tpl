@@ -1,3 +1,9 @@
+{if $current_user_has_notifications|not()}
+  <div class="alert alert-danger">
+      <i class="fa fa-exclamation-triangle"></i>
+      {"Attenzione: non hai nessuna notifica attiva e quindi non riceverai alcuna mail. Puoi attivare le notifiche nella pagina dedicata alle <a href='%notification_url'>impostazioni delle notifiche</a>."|i18n('sensor/dashboard', '', hash( '%notification_url', 'notification/settings'|ezurl(no) ))}
+  </div>
+{/if}
 <section class="hgroup">
   <div class="row">
     <div class="col-md-8">

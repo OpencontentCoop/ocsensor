@@ -26,6 +26,15 @@ $limit = 15;
 $currentUser = eZUser::currentUser();
 $currentSensorUser = SensorUserInfo::current();
 
+$notificationPrefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+$notificationTypes = SensorNotificationHelper::instance()->postNotificationTypes();
+$searchNotificationRules = array();
+foreach($notificationTypes as $type){
+    $searchNotificationRules[] = $notificationPrefix . $type['identifier'];
+}
+$notifications = SensorNotificationHelper::instance()->getNotificationSubscriptionsForUser($currentUser->id());
+
+$tpl->setVariable( 'current_user_has_notifications', count($notifications) > 0 );
 $tpl->setVariable( 'current_user', $currentUser );
 $tpl->setVariable( 'limit', $limit );
 $viewParameters = array( 'offset' => $offset );

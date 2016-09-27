@@ -552,23 +552,23 @@ class SensorNotificationHelper
                 'enabled' => $defaultTransport == 'ezmail'
             );
 
-            if ( class_exists( 'OCWhatsAppConnector' ) && $userInfo->whatsAppId() )
-            {
-                $transportNotificationTypes[] = array(
-                    'name' => 'WhatsApp',
-                    'identifier' => $type['identifier'] . ':ezwhatsapp',
-                    'description' => ezpI18n::tr(
-                        'sensor/notification',
-                        'Ricevi la notifica via WhatsApp'
-                    ),
-                    'transport' => 'ezwhatsapp',
-                    'default_transport' => $defaultTransport,
-                    'parent' => $type['identifier'],
-                    'group' => 'transport',
-                    'enabled' => $type['identifier'] != 'on_create' && $userInfo->whatsAppId()
-                    //@todo
-                );
-            }
+//            if ( class_exists( 'OCWhatsAppConnector' ) && $userInfo->whatsAppId() )
+//            {
+//                $transportNotificationTypes[] = array(
+//                    'name' => 'WhatsApp',
+//                    'identifier' => $type['identifier'] . ':ezwhatsapp',
+//                    'description' => ezpI18n::tr(
+//                        'sensor/notification',
+//                        'Ricevi la notifica via WhatsApp'
+//                    ),
+//                    'transport' => 'ezwhatsapp',
+//                    'default_transport' => $defaultTransport,
+//                    'parent' => $type['identifier'],
+//                    'group' => 'transport',
+//                    'enabled' => $type['identifier'] != 'on_create' && $userInfo->whatsAppId()
+//                    //@todo
+//                );
+//            }
         }
         return $transportNotificationTypes;
     }
@@ -623,6 +623,22 @@ class SensorNotificationHelper
     public static function onSocialUserSignup( $userId )
     {
         SensorNotificationHelper::instance()->storeDefaultNotificationRules( $userId );
+    }
+
+    public function getNotificationSubscriptionsForUser($userId)
+    {
+        $notificationPrefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+        $notificationTypes = $this->postNotificationTypes();
+        $searchNotificationRules = array();
+        foreach($notificationTypes as $type){
+            $searchNotificationRules[] = $notificationPrefix . $type['identifier'];
+        }
+        $subscriptions = eZPersistentObject::fetchObjectList(
+            eZCollaborationNotificationRule::definition(),
+            null,
+            array( 'user_id' => $userId, 'collab_identifier' => array($searchNotificationRules) )
+        );
+        return $subscriptions;
     }
 
 }
