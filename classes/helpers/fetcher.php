@@ -249,6 +249,7 @@ class SensorPostFetcher
             $solr = new eZSolr();
             $search =$solr->search( '', array(
                     'AsObjects' => false,
+                    'SearchLimit' => 1000,
                     'Filter' => array( 'attr_subject_t:' . $filters['subject'] ),
                     'SearchContentClassID' => array( SensorHelper::postContentClass()->attribute( 'id' ) ),
                     'SearchSubTreeArray' => array( 1 ) ) );
@@ -288,6 +289,7 @@ class SensorPostFetcher
             {
                 $search =$solr->search( '', array(
                         'AsObjects' => false,
+                        'SearchLimit' => 1000,
                         'Filter' => $categoryFilter,
                         'SearchContentClassID' => array( SensorHelper::postContentClass()->attribute( 'id' ) ),
                         'SearchSubTreeArray' => array( 1 ) ) );
@@ -323,6 +325,7 @@ class SensorPostFetcher
                 $solr = new eZSolr();
                 $search = $solr->search( $creatorId, array(
                         'AsObjects' => false,
+                        'SearchLimit' => 1000,
                         'Limitation' => array(),
                         'SearchContentClassID' => array( 'user', 'sensor_operator' ),
                         'SearchSubTreeArray' => array( 1 ) ) );
