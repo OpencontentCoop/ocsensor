@@ -573,15 +573,71 @@ class SensorNotificationHelper
         return $transportNotificationTypes;
     }
 
-    public function storeNotificationRules( $userId, $typeIdentifiersFilters = null )
+    public function removeNotificationRules( $userId, $typeIdentifiersFilters = null, $transport = null, $language = null )
+    {
+        $user = eZUser::fetch( $userId );
+        if (!$user instanceof eZUser){
+            throw new Exception("User ($userId) not found");
+        }
+        $userInfo = SensorUserInfo::instance( $user );
+        $prefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+
+        if (!$transport) {
+            $transport = $userInfo->attribute('default_notification_transport');
+        }
+        if (!$language) {
+            $language = $userInfo->attribute('default_notification_language');
+        }
+        $postNotificationTypes = SensorNotificationHelper::instance()->postNotificationTypes();
+
+        foreach ( $postNotificationTypes as $notificationType )
+        {
+            if ( is_array( $typeIdentifiersFilters ) && !in_array( $notificationType['identifier'], $typeIdentifiersFilters ) )
+            {
+                continue;
+            }
+
+            $notificationRules[] = $prefix . $notificationType['identifier'];
+            $notificationRules[] = $prefix . $notificationType['identifier'] . ':' . $transport;
+            $notificationRules[] = $prefix . $notificationType['identifier'] . ':' . $language;
+        }
+
+        if ( !empty( $notificationRules ) )
+        {
+            $db = eZDB::instance();
+            $db->begin();
+
+            /** @var eZCollaborationNotificationRule[] $subscriptions */
+            $subscriptions = (array)eZPersistentObject::fetchObjectList(
+                eZCollaborationNotificationRule::definition(),
+                null,
+                array('user_id' => $userId, 'collab_identifier' => array($notificationRules))
+            );
+            foreach($subscriptions as $subscription){
+                $subscription->remove();
+            }
+
+            $db->commit();
+        }
+    }
+
+    public function storeNotificationRules( $userId, $typeIdentifiersFilters = null, $transport = null, $language = null )
     {
         try
         {
-            $userInfo = SensorUserInfo::instance( eZUser::fetch( $userId ) );
+            $user = eZUser::fetch( $userId );
+            if (!$user instanceof eZUser){
+                throw new Exception("User ($userId) not found");
+            }
+            $userInfo = SensorUserInfo::instance( $user );
             $prefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
 
-            $transport = $userInfo->attribute( 'default_notification_transport' );
-            $language = $userInfo->attribute( 'default_notification_language' );
+            if (!$transport) {
+                $transport = $userInfo->attribute('default_notification_transport');
+            }
+            if (!$language) {
+                $language = $userInfo->attribute('default_notification_language');
+            }
             $postNotificationTypes = SensorNotificationHelper::instance()->postNotificationTypes();
 
             $notificationRules = array();
@@ -625,20 +681,49 @@ class SensorNotificationHelper
         SensorNotificationHelper::instance()->storeDefaultNotificationRules( $userId );
     }
 
-    public function getNotificationSubscriptionsForUser($userId)
+    public function getNotificationSubscriptionsForUser($userId, $subIdentifier = null)
     {
         $notificationPrefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
         $notificationTypes = $this->postNotificationTypes();
         $searchNotificationRules = array();
-        foreach($notificationTypes as $type){
-            $searchNotificationRules[] = $notificationPrefix . $type['identifier'];
+        foreach ($notificationTypes as $type) {
+            if ($subIdentifier) {
+                $searchNotificationRules[] = $notificationPrefix . $type['identifier'] . ':' . $subIdentifier;
+            } else {
+                $searchNotificationRules[] = $notificationPrefix . $type['identifier'];
+            }
         }
-        $subscriptions = eZPersistentObject::fetchObjectList(
+        /** @var eZCollaborationNotificationRule[] $subscriptions */
+        $subscriptions = (array)eZPersistentObject::fetchObjectList(
             eZCollaborationNotificationRule::definition(),
             null,
-            array( 'user_id' => $userId, 'collab_identifier' => array($searchNotificationRules) )
+            array('user_id' => $userId, 'collab_identifier' => array($searchNotificationRules))
         );
-        return $subscriptions;
+
+        $result = array();
+        $notificationPrefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+        $notificationTypes = $this->postNotificationTypes();
+        foreach ($subscriptions as $subscription) {
+            $collaborationIdentifier = $subscription->attribute('collab_identifier');
+            $identifier = str_replace($notificationPrefix, '', $collaborationIdentifier);
+            if ($subIdentifier) {
+                $identifier = str_replace(':' . $subIdentifier, '', $identifier);
+            }
+            $result[] = array(
+                'collab_identifier' => $collaborationIdentifier,
+                'identifier' => $identifier,
+                'subType' => $subIdentifier,
+                'name' => array_reduce( $notificationTypes, function($carry, $item) use($identifier){
+                    if ($item['identifier'] == $identifier){
+                        $carry = $item['name'];
+                    }
+                    return $carry;
+                })
+            );
+
+        }
+
+        return $result;
     }
 
 }
