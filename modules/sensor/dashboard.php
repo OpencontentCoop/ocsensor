@@ -32,7 +32,13 @@ $searchNotificationRules = array();
 foreach($notificationTypes as $type){
     $searchNotificationRules[] = $notificationPrefix . $type['identifier'];
 }
-$notifications = SensorNotificationHelper::instance()->getNotificationSubscriptionsForUser($currentUser->id());
+
+$userInfo = SensorUserInfo::current();
+
+$notifications = SensorNotificationHelper::instance()->getNotificationSubscriptionsForUser(
+    $currentUser->id(),
+    $userInfo->attribute('default_notification_transport')
+);
 
 $tpl->setVariable( 'current_user_has_notifications', count($notifications) > 0 );
 $tpl->setVariable( 'current_user', $currentUser );

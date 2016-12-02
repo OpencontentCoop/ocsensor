@@ -66,6 +66,12 @@ $ViewList['config'] = array(
     'functions' => array('config')
 );
 
+$ViewList['notifications'] = array(
+    'script' => 'notifications.php',
+    'params' => array('UserId','Type','SubType'),
+    'functions' => array('config')
+);
+
 $ViewList['stat'] = array(
     'script' => 'stat.php',
     'params' => array('ChartIdentifier'),

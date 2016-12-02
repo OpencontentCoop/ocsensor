@@ -103,7 +103,7 @@ elseif ( $Part == 'operators' )
 
 $data = array();
 /** @var eZContentObjectTreeNode[] $otherFolders */
-$otherFolders = eZContentObjectTreeNode::subTreeByNodeID( array( 'ClassFilterType' => 'include', 'ClassFilterArray' => array( 'folder' ), 'Depth' => 1, 'DepthOperator' => 'eq', ), $root->attribute( 'node_id' ) );
+$otherFolders = (array)eZContentObjectTreeNode::subTreeByNodeID( array( 'ClassFilterType' => 'include', 'ClassFilterArray' => array( 'folder' ), 'Depth' => 1, 'DepthOperator' => 'eq', ), $root->attribute( 'node_id' ) );
 foreach( $otherFolders as $folder )
 {
     if ( $folder->attribute( 'contentobject_id' ) != SensorHelper::postCategoriesNode()->attribute( 'contentobject_id' ) )
