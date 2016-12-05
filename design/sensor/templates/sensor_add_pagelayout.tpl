@@ -150,10 +150,10 @@
             var control = new L.Control.Geocoder({geocoder: null});
 
             if (window.XDomainRequest) {
-                control.options.geocoder = L.Control.Geocoder.bing('Ahmnz1XxcrJXgiVWzx6W8ewWeqLGztZRIB1hysjaoHI5nV38WXxywjh6vj0lyl4u');
+                control.options.geocoder = L.Control.Geocoder.bing('{/literal}{ezini('GeoCoderSettings', 'BingApiKey    ', 'ocsensor.ini')}{literal}');
             }
             else {
-                control.options.geocoder = L.Control.Geocoder.google('AIzaSyDVnxoH2lLysFsPPQcwxZ0ROYNVCBkmQZk');
+                control.options.geocoder = L.Control.Geocoder.google('{/literal}{ezini('GeoCoderSettings', 'GoogleApiKey', 'ocsensor.ini')}{literal}');
             }
 
             var map = new L.Map('sensor_full_map', {loadingControl: true}).setActiveArea('viewport');
