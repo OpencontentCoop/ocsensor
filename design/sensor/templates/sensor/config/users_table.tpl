@@ -22,7 +22,7 @@
                 <div class="notification-dropdown-container dropdown" data-user="{$user.contentobject_id}">
                     <div class="button-group">
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+                            <i class="fa fa-bell"></i> <span class="caret"></span>
                         </button>
                         <ul class="notification-dropdown-menu dropdown-menu">
                         </ul>
@@ -86,9 +86,16 @@ $(document).ready(function(){
     };
 
     var buildNotificationMenu = function(user, menu){
-        menu.html('');
+        menu.html('<li style="padding: 50px; text-align: center; font-size: 2em;"><i class="fa fa-gear fa-spin fa2x"></i></li>');
         $.get(baseUrl+user, function(response){
             if (response.result && response.result == 'success'){
+                menu.html('');
+                var add = $('<li><a href="#" class="small" data-user="'+user+'" data-identifier="all" tabIndex="-1"><input type="checkbox"/><b> Attiva tutto</b></a></li>');
+                add.find('a').on('click', function(e){onOptionClick(e)});
+                menu.append(add);
+                var remove = $('<li><a href="#" class="small" data-user="'+user+'" data-identifier="none" tabIndex="-1"><input type="checkbox"/><b> Disattiva tutto</b></a></li>');
+                remove.find('a').on('click', function(e){onOptionClick(e)});
+                menu.append(remove);
                 $.each(response.data, function(){
                     var item = $('<li><a href="#" class="small" data-user="'+user+'" data-identifier="'+this.identifier+'" tabIndex="-1"><input type="checkbox"/>&nbsp;'+this.name+'</a></li>');
                     if (this.enabled){

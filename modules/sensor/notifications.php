@@ -22,30 +22,43 @@ try {
 
     if ($Identifier) {
 
-        $exists = array_reduce($allNotifications, function ($carry, $item) use ($Identifier) {
-            if ($item['identifier'] == $Identifier) {
-                $carry++;
+        if ($Identifier == 'all' && $_SERVER['REQUEST_METHOD'] === 'POST'){
+
+            foreach($allNotifications as $notification){
+                SensorNotificationHelper::instance()->storeNotificationRules($UserId, array($notification['identifier']), $Transport);
+            }
+            $Identifier = null;
+        }elseif ($Identifier == 'none' && $_SERVER['REQUEST_METHOD'] === 'POST'){
+            foreach($allNotifications as $notification){
+                SensorNotificationHelper::instance()->removeNotificationRules($UserId, array($notification['identifier']), $Transport);
+            }
+            $Identifier = null;
+        }else {
+            $exists = array_reduce($allNotifications, function ($carry, $item) use ($Identifier) {
+                if ($item['identifier'] == $Identifier) {
+                    $carry++;
+                }
+
+                return $carry;
+            });
+
+            if (!$exists) {
+                throw new Exception("Notification identifier $Identifier not found");
             }
 
-            return $carry;
-        });
+            $notifications = array_reduce((array)$notifications, function ($carry, $item) use ($Identifier) {
+                if ($item['identifier'] == $Identifier) {
+                    $carry = array($item);
+                }
 
-        if (!$exists){
-            throw new Exception("Notification identifier $Identifier not found");
-        }
+                return $carry;
+            });
 
-        $notifications = array_reduce((array)$notifications, function ($carry, $item) use ($Identifier) {
-            if ($item['identifier'] == $Identifier) {
-                $carry = array($item);
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                SensorNotificationHelper::instance()->storeNotificationRules($UserId, array($Identifier), $Transport);
+            } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+                SensorNotificationHelper::instance()->removeNotificationRules($UserId, array($Identifier), $Transport);
             }
-
-            return $carry;
-        });
-
-        if ( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
-            SensorNotificationHelper::instance()->storeNotificationRules($UserId, array($Identifier), $Transport);
-        }elseif ( $_SERVER['REQUEST_METHOD'] === 'DELETE' ) {
-            SensorNotificationHelper::instance()->removeNotificationRules($UserId, array($Identifier), $Transport);
         }
     }
 
