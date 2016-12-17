@@ -7,7 +7,7 @@
 )}
     <aside class="widget well well-sm" id="current-post-action">
 
-        {if $sensor_post.can_add_area}
+        {if and( $sensor_post.can_add_area, is_set($sensor_post.object.data_map.area))}
             <strong>{'Quartiere/Zona'|i18n('sensor/post')}</strong>
             <div class="form-group">
                 <div class="row">
@@ -26,7 +26,7 @@
             </div>
         {/if}
 
-        {if $sensor_post.can_add_category}
+        {if and($sensor_post.can_add_category, is_set($sensor_post.object.data_map.category))}
             <strong>{'Area tematica'|i18n('sensor/post')}</strong>
             <div class="form-group">
                 <div class="row">
