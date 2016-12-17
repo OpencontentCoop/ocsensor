@@ -11,7 +11,7 @@
     {if $sensor_post.can_comment}
         <div class="new_comment">
             <h4>{'Aggiungi un commento'|i18n('sensor/messages')}</h4>
-            {if $sensor_post.can_send_private_message}
+            {if and($sensor_post.can_send_private_message, ezini( 'SensorConfig', 'AlertOwnerComment', 'ocsensor.ini' )|eq( 'enabled' ))}
             <small class="text-muted"><i class="fa fa-warning"></i> {'Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".'|i18n('sensor/messages')}</small>
             {/if}
             <div class="row">
@@ -24,12 +24,28 @@
                     <input class="btn send btn-primary btn-lg btn-block"
                            type="submit" name="CollaborationAction_Comment"
                            value="{'Pubblica il commento'|i18n('sensor/messages')}"
-                           {if $sensor_post.can_send_private_message}
+                           {if and( $sensor_post.can_send_private_message, ezini( 'SensorConfig', 'AlertOwnerComment', 'ocsensor.ini' )|eq( 'enabled' ))}
                                data-confirmation="{'Sei sicuro di voler aggiungere un commento visibile a tutti?'|i18n( 'sensor/messages' )|wash(javascript)}"
                            {/if} />
                 </div>
             </div>
         </div>
+        {if ezini( 'SensorConfig', 'AllowFileComment', 'ocsensor.ini' )|eq( 'enabled' )}
+
+            <div class="new_comment" style="margin-top: 20px">
+                <h4>{'Aggiungi un file'|i18n('sensor/messages')}</h4>
+                <div class="form-group">
+                    <input type="file" name="Collaboration_SensorItemCommentFile" />
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-md-8">
+                        <input class="btn send btn-primary btn-lg btn-block"
+                               type="submit" name="CollaborationAction_CommentFile"
+                               value="{'Pubblica il file'|i18n('sensor/messages')}" />
+                    </div>
+                </div>
+            </div>
+        {/if}
     {/if}
 </div>
 

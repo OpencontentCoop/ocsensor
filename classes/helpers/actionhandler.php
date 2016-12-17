@@ -165,6 +165,15 @@ class SensorPostActionHandler
                     )
                 )
             ),
+            'add_comment_file' => array(
+                'call_function' => 'addCommentFile',
+                'check_role' => array( 'can_comment' ),
+                'parameters' => array(
+                    'file' => array(
+                        'required' => true
+                    )
+                )
+            ),
         );
     }
 
@@ -255,13 +264,23 @@ class SensorPostActionHandler
 
     public function assign( $participantIds )
     {
-        //@todo verificare multi owner
         $isChanged = false;
 
-        $currentApproverIds = $this->post->getParticipants( SensorUserPostRoles::ROLE_APPROVER );
-        $currentOwnerIds = $this->post->getParticipants( SensorUserPostRoles::ROLE_OWNER );
-        $makeOwnerIds = array_diff( $participantIds, $currentOwnerIds, $currentApproverIds );
-        $makeObserverIds = array_diff( $currentOwnerIds, $participantIds );
+        $currentApproverIds = $this->post->getParticipants(SensorUserPostRoles::ROLE_APPROVER);
+        $currentOwnerIds = $this->post->getParticipants(SensorUserPostRoles::ROLE_OWNER);
+
+        if (eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'MultipleOwnerAssign') == 'enabled') {
+            $makeOwnerIds = array_diff(array_unique(array_merge((array)$participantIds, (array)$currentOwnerIds)),
+                array_unique(array_merge($currentOwnerIds, $currentApproverIds)));
+        } else {
+            $makeOwnerIds = array_diff($participantIds, $currentOwnerIds, $currentApproverIds);
+        }
+
+        if (eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'MultipleObserverAssign') == 'enabled') {
+            $makeObserverIds = array();
+        } else {
+            $makeObserverIds = array_diff($currentOwnerIds, $participantIds);
+        }
 
         $debugArray = array(
             'request' => $participantIds,
@@ -296,7 +315,6 @@ class SensorPostActionHandler
 
     public function fix()
     {
-        //@todo verificare multi owner
         $this->post->addParticipant( $this->userInfo->user()->id(), SensorUserPostRoles::ROLE_OBSERVER );
         if ( !$this->post->hasOwner() )
         {
@@ -312,7 +330,6 @@ class SensorPostActionHandler
 
     public function forceFix()
     {
-        //@todo verificare multi owner
         foreach( $this->post->getOwners() as $ownerId )
         {
             $this->post->addParticipant(
@@ -374,7 +391,6 @@ class SensorPostActionHandler
         $currentApproverIds = $this->post->getParticipants( SensorUserPostRoles::ROLE_APPROVER );
         $currentOwnerIds = $this->post->getParticipants( SensorUserPostRoles::ROLE_OWNER );
         $currentObserverIds = $this->post->getParticipants( SensorUserPostRoles::ROLE_OBSERVER );
-        $makeObserverIds = array_intersect( $currentObserverIds, $participantIds );
         $makeObserverIds = array_diff( $participantIds, $currentObserverIds, $currentApproverIds, $currentOwnerIds );
         $debugArray = array(
             'request' => $participantIds,
@@ -468,6 +484,45 @@ class SensorPostActionHandler
                 $this->post->touch();
             }
         }
+    }
+
+    public function addCommentFile( eZHTTPFile $file )
+    {
+        $upload = new eZContentUpload();
+        $isUploaded = $upload->handleUpload(
+            $result,
+            $file->HTTPName,
+            $this->post->objectHelper->getContentObject()->attribute('main_node_id'),
+            false
+        );
+
+        $text = null;
+
+        if ( $isUploaded ){
+            if (!empty($result['errors'])){
+                eZDebug::writeError($result['errors'], __METHOD__);
+            }
+            /** @var eZContentObject $object */
+            $object = eZContentObject::fetch($result['contentobject_id']);
+
+            if (!$object instanceof eZContentObject){
+                eZDebug::writeError("Error uploading file", __METHOD__);
+            }
+            /** @var eZContentObjectAttribute $attribute */
+            foreach($object->contentObjectAttributes() as $attribute){
+                if (($attribute->attribute('data_type_string') == 'ezbinaryfile' || $attribute->attribute('data_type_string') == 'ezimage')
+                    && $attribute->hasContent()){
+                    $url = 'content/download/' . $attribute->attribute('contentobject_id') . '/' . $attribute->attribute('id')  . '/version/' . $attribute->attribute('version') . '/file/' . urlencode($object->attribute('name'));
+                    eZURI::transformURI($url,false,'full');
+                    $text = "File: " . $object->attribute('name') . "\n $url";
+                    break;
+                }
+            }
+        }else{
+            eZDebug::writeError($result, __METHOD__);
+        }
+        eZDebug::writeNotice($text, __METHOD__);
+        $this->addComment($text);
     }
 
     public function addMessage( $text, $privateReceivers = array() )

@@ -139,7 +139,16 @@ class SensorHttpActionHelper
                     )
                 ),
                 'action_name' => 'edit_message',
-            )
+            ),
+            'CommentFile' => array(
+                'http_parameters' => array(
+                    'SensorItemCommentFile'  => array(
+                        'required' => true,
+                        'action_parameter_name' => 'file'
+                    )
+                ),
+                'action_name' => 'add_comment_file',
+            ),
         );
     }
 
@@ -167,9 +176,14 @@ class SensorHttpActionHelper
                 foreach( $parameters['http_parameters'] as $parameterName => $parameterOptions )
                 {
                     $parameterPostVariable = 'Collaboration_' . $parameterName;
-                    if ( $parameterOptions['required'] && $http->hasPostVariable( $parameterPostVariable ) )
-                    {
-                        $actionParameters[$parameterOptions['action_parameter_name']] = $http->postVariable( $parameterPostVariable );
+                    if ( $parameterOptions['required']
+                         && ( $http->hasPostVariable( $parameterPostVariable ) || eZHTTPFile::canFetch($parameterPostVariable) )
+                    ){
+                        if ($parameterOptions['action_parameter_name'] == 'file'){
+                            $actionParameters[$parameterOptions['action_parameter_name']] = eZHTTPFile::fetch( $parameterPostVariable );
+                        }else{
+                            $actionParameters[$parameterOptions['action_parameter_name']] = $http->postVariable( $parameterPostVariable );
+                        }
                     }
                     elseif ( isset( $parameterOptions['default'] ) )
                     {

@@ -2,7 +2,6 @@
 
 class SensorUserInfo extends SocialUser
 {
-    const MAIN_COLLABORATION_GROUP_NAME = 'Sensor';
     const TRASH_COLLABORATION_GROUP_NAME = 'Trash';
 
     private static $_cache = array();
@@ -124,7 +123,7 @@ class SensorUserInfo extends SocialUser
      */
     public function sensorCollaborationGroup()
     {
-        return $this->getCollaborationGroup( self::MAIN_COLLABORATION_GROUP_NAME );
+        return $this->getCollaborationGroup( eZINI::instance( 'ocsensor.ini' )->variable( 'SensorConfig', 'CollaborationGroupName' ));
     }
 
     public function trashCollaborationGroup()

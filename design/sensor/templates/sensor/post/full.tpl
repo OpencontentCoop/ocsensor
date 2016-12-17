@@ -14,7 +14,7 @@
       <a class="btn btn-warning btn-sm" href="{concat('sensor/edit/',$sensor_post.object.id)|ezurl(no)}"><i class="fa fa-edit"></i></a>
     {/if}
     {if $sensor_post.object.can_remove}
-    <form method="post" action={"content/action"|ezurl} style="display: inline">
+    <form method="post" action="{"content/action"|ezurl(no)}" style="display: inline">
         <input type="hidden" name="ContentObjectID" value="{$sensor_post.object.id}" />
         <input type="hidden" name="ContentNodeID" value="{$sensor_post.object.main_node_id}" />
         <input type="hidden" name="RedirectURIAfterRemove" value="/sensor/dashboard" />
@@ -40,16 +40,18 @@
     </ul>
 </section>
 
-<form id="sensor-post" method="post" action={"collaboration/action/"|ezurl} xmlns="http://www.w3.org/1999/html">
+<form id="sensor-post" method="post" action="{"collaboration/action/"|ezurl(no)}" enctype="multipart/form-data" >
   <div class="row">
     <div class="col-md-8">
     
       <div class="row">
+      {if or($sensor_post.object|has_attribute('geo'), $sensor_post.object|has_attribute('area'))}
         <div class="col-md-4">
           <aside class="widget">            
             {include uri='design:sensor/post/map.tpl'}
           </aside>
         </div>
+      {/if}
         <div class="col-md-8" id="current-post-detail">
           <p>{attribute_view_gui attribute=$sensor_post.object|attribute('description')}</p>
           {if $sensor_post.object|has_attribute('attachment')}
@@ -73,7 +75,10 @@
             {if $sensor_post.object|has_attribute( 'category' )}
               <li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$sensor_post.object.data_map.category href=no-link}</small></li>
             {/if}
-          </ul>              
+          </ul>
+         {if $sensor_post.object|has_attribute('main_document')}
+             {attribute_view_gui attribute=$sensor_post.object|attribute('main_document')}
+         {/if}
         </div>        
       </div>
       
@@ -100,7 +105,8 @@
   <input type="hidden" name="CollaborationItemID" value="{$sensor_post.collaboration_item.id}" />
 </form>
 
-{literal}<script type="application/javascript">
+<script type="application/javascript">
+{literal}
 $(document).ready(function() {
     $(document).on('show.bs.collapse','#collapseConversation',function(e){Cookies.set('collapseConversation',1);});
     $(document).on('hide.bs.collapse','#collapseConversation',function(e){Cookies.set('collapseConversation',0);});
@@ -112,6 +118,9 @@ $(document).ready(function() {
         e.preventDefault();
     });
 });
+{/literal}
+{if ezini( 'SensorConfig', 'AllowFileComment', 'ocsensor.ini' )|ne( 'enabled' )}
+{literal}
 var actionStarted = false;
 $(document).on("click", ":submit", function(e){
     var currentFormId = $(this).parents('form').attr('id');
@@ -155,6 +164,8 @@ $(document).on("click", ":submit", function(e){
         e.preventDefault();
     }
 });
-</script>{/literal}
+{/literal}
+{/if}
+</script>
 
 {/if} {* if error *}

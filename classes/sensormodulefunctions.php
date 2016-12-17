@@ -209,6 +209,7 @@ class SensorModuleFunctions
         catch( Exception $e )
         {
             $tpl->setVariable( 'error', $e->getMessage() );
+            eZDebug::writeError($e->getTraceAsString(), __METHOD__);
         }
     
         $Result = array();

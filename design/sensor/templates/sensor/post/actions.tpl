@@ -81,12 +81,13 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="operators">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAssignTo[]" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="operators"
+                                {if ezini( 'SensorConfig', 'MultipleOwnerAssign', 'ocsensor.ini' )|eq( 'enabled' )}multiple="multiple"{/if}>
                             <option></option>
                         </select>
                     </div>
                     <div class="col-xs-4">
-                        <input class="btn btn-info btn-block" type="submit" name="CollaborationAction_Assign" value="{if $sensor_post.has_owner|not()}{'Assegna'|i18n('sensor/post')}{else}{'Riassegna'|i18n('sensor/post')}{/if}" />
+                        <input class="btn btn-info btn-block" type="submit" name="CollaborationAction_Assign" value="{if or($sensor_post.has_owner|not(), ezini( 'SensorConfig', 'MultipleOwnerAssign', 'ocsensor.ini' )|eq( 'enabled' ))}{'Assegna'|i18n('sensor/post')}{else}{'Riassegna'|i18n('sensor/post')}{/if}" />
                     </div>
                 </div>
             </div>
@@ -96,7 +97,8 @@
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
-                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="observers">
+                        <select data-placeholder="{'Seleziona operatore'|i18n('sensor/post')}" name="Collaboration_SensorItemAddObserver" class="form-control remote-select" data-post_id="{$sensor_post.id}" data-value="observers"
+                                {if ezini( 'SensorConfig', 'MultipleObserverAssign', 'ocsensor.ini' )|eq( 'enabled' )}multiple="multiple"{/if}>
                             <option></option>
                         </select>
                     </div>

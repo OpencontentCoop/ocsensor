@@ -65,7 +65,7 @@ class OpenPaSensorRepository extends CoreRepository
 
     public static function sensorRootRemoteId()
     {
-        return OpenPABase::getCurrentSiteaccessIdentifier() . '_openpa_sensor';
+        return OpenPABase::getCurrentSiteaccessIdentifier() . eZINI::instance( 'ocsensor.ini' )->variable( 'SensorConfig', 'RemoteIdSuffix' );
     }
 
     public function getSensorSettings()
@@ -152,7 +152,7 @@ class OpenPaSensorRepository extends CoreRepository
 
     public function getSensorCollaborationHandlerTypeString()
     {
-        return 'openpasensor';
+        return eZINI::instance( 'ocsensor.ini' )->variable( 'SensorConfig', 'CollaborationHandlerTypeString' );
     }
 
     public function getPostRootNode()
@@ -165,7 +165,7 @@ class OpenPaSensorRepository extends CoreRepository
     public function getPostContentClass()
     {
         if ( !isset($this->data['post_class']) )
-            $this->data['post_class'] = eZContentClass::fetchByIdentifier( 'sensor_post' );
+            $this->data['post_class'] = eZContentClass::fetchByIdentifier( eZINI::instance( 'ocsensor.ini' )->variable( 'SensorConfig', 'SensorPostContentClass' ) );
         return $this->data['post_class'];
     }
 
