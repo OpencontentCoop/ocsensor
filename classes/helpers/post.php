@@ -773,12 +773,14 @@ class SensorPost
         if ( empty( $GLOBALS['SensorParticipantRoleNameMap'] ) )
         {
 
+            $roleNames = eZINI::instance('ocsensor.ini')->variable('SensorConfig','RoleNames');
+
             $GLOBALS['SensorParticipantRoleNameMap'] =
-                array( eZCollaborationItemParticipantLink::ROLE_STANDARD => ezpI18n::tr( 'sensor/role_name', 'Standard' ),
-                       eZCollaborationItemParticipantLink::ROLE_OBSERVER => ezpI18n::tr( 'sensor/role_name', 'Osservatore' ),
-                       eZCollaborationItemParticipantLink::ROLE_OWNER => ezpI18n::tr( 'sensor/role_name', 'In carico a' ),
-                       eZCollaborationItemParticipantLink::ROLE_APPROVER => ezpI18n::tr( 'sensor/role_name', 'Riferimento per il cittadino' ),
-                       eZCollaborationItemParticipantLink::ROLE_AUTHOR => ezpI18n::tr( 'sensor/role_name', 'Autore' ) );
+                array( eZCollaborationItemParticipantLink::ROLE_STANDARD => ezpI18n::tr( 'sensor/role_name', $roleNames['ROLE_STANDARD'] ),
+                       eZCollaborationItemParticipantLink::ROLE_OBSERVER => ezpI18n::tr( 'sensor/role_name', $roleNames['ROLE_OBSERVER'] ),
+                       eZCollaborationItemParticipantLink::ROLE_OWNER => ezpI18n::tr( 'sensor/role_name', $roleNames['ROLE_OWNER'] ),
+                       eZCollaborationItemParticipantLink::ROLE_APPROVER => ezpI18n::tr( 'sensor/role_name', $roleNames['ROLE_APPROVER'] ),
+                       eZCollaborationItemParticipantLink::ROLE_AUTHOR => ezpI18n::tr( 'sensor/role_name', $roleNames['ROLE_AUTHOR'] ) );
         }
         $roleNameMap = $GLOBALS['SensorParticipantRoleNameMap'];
         if ( isset( $roleNameMap[$roleID] ) )
