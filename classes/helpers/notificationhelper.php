@@ -539,7 +539,7 @@ class SensorNotificationHelper
         foreach( self::postNotificationTypes() as $type )
         {
             $transportNotificationTypes[] = array(
-                'name' => 'Email',
+                'name' => 'Email istantanea',
                 'identifier' => $type['identifier'] . ':ezmail',
                 'description' => ezpI18n::tr(
                     'sensor/notification',
@@ -550,6 +550,20 @@ class SensorNotificationHelper
                 'parent' => $type['identifier'],
                 'group' => 'transport',
                 'enabled' => $defaultTransport == 'ezmail'
+            );
+
+            $transportNotificationTypes[] = array(
+                'name' => 'Riepilogo giornaliero',
+                'identifier' => $type['identifier'] . ':ezmaildigest',
+                'description' => ezpI18n::tr(
+                    'sensor/notification',
+                    'Ricevi la notifica via mail'
+                ),
+                'transport' => 'ezmaildigest',
+                'default_transport' => $defaultTransport,
+                'parent' => $type['identifier'],
+                'group' => 'transport',
+                'enabled' => true
             );
 
 //            if ( class_exists( 'OCWhatsAppConnector' ) && $userInfo->whatsAppId() )

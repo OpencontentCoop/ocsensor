@@ -10,10 +10,11 @@
 
     <input type="hidden" name="CollaborationHandlerSelection" value="1"/>
     {foreach $handlers as $current_handler}
+
+
         {if $current_handler.info.type-identifier|eq(sensor_collaboration_identifier())}
 
             {if is_array($current_handler.info.notification-types)}
-
                 {def $hasLanguages = false()}
                 {foreach $current_handler.info.notification-types as $type}
                     {if $type.group|eq( 'language' )}
@@ -34,6 +35,7 @@
                         {/if}
                     {/if}
                 {/foreach}
+
                 <table class="table table-striped">
                     <tr>
                         <th colspan="2">{"Azione"|i18n('sensor/settings')}</th>
@@ -49,7 +51,7 @@
                         {if $hasTransports}
                             {foreach $transportNames as $name}
                                 <th width="1" class="text-center">
-                                    {if count($countTransports)|gt(1)}
+                                    {if count($transportNames)|gt(1)}
                                         <span>{$name|wash()}</span>
                                     {/if}
                                 </th>
@@ -61,9 +63,11 @@
                         {if $type.group|eq( 'standard' )}
                             <tr>
                                 <td width="1">
-                                    <input type="checkbox"
-                                           name="CollaborationHandlerSelection_{$handler.id_string}[]"
-                                           value="{$current_handler.info.type-identifier}_{$type.identifier}" {if $selection|contains(concat($current_handler.info.type-identifier,'_',$type.identifier))} checked="checked"{/if} />
+                                    {if count($transportNames)|eq(1)}
+                                        <input type="checkbox"
+                                               name="CollaborationHandlerSelection_{$handler.id_string}[]"
+                                               value="{$current_handler.info.type-identifier}_{$type.identifier}" {if $selection|contains(concat($current_handler.info.type-identifier,'_',$type.identifier))} checked="checked"{/if} />
+                                    {/if}
                                 </td>
                                 <td>
                                     {$type.name|wash}
@@ -99,7 +103,7 @@
                                                 <input type={if $countTransport|gt(1)}"checkbox"{else}"hidden"{/if}
                                                        {if $transport_type.enabled|not()}disabled="disabled"{/if}
                                                        name="CollaborationHandlerSelection_{$handler.id_string}[{$transport_type.identifier}]"
-                                                       value="{$current_handler.info.type-identifier}_{$transport_type.identifier}" {if and( $countTransport|gt(1), $transport_type.enabled, or( $selection|contains(concat($current_handler.info.type-identifier,'_',$transport_type.identifier)), $transport_type.default_transport|eq($transport_type.transport) ) )} checked="checked"{/if} />
+                                                       value="{$current_handler.info.type-identifier}_{$transport_type.identifier}" {if and( $countTransport|gt(1), $transport_type.enabled, $selection|contains(concat($current_handler.info.type-identifier,'_',$transport_type.identifier)) )} checked="checked"{/if} />
                                                 </div>
                                             </td>
                                         {/if}
