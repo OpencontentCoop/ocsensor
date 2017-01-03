@@ -19,6 +19,12 @@ $ViewList['posts'] = array(
     'functions' => array('use')
 );
 
+$ViewList['public_posts'] = array(
+    'script' => 'public_posts.php',
+    'params' => array('ID', 'Offset'),
+    'functions' => array('use')
+);
+
 $ViewList['data'] = array(
     'script' => 'data.php',
     'params' => array(),

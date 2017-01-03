@@ -6,8 +6,6 @@ $http = eZHTTPTool::instance();
 $node = SensorHelper::postContainerNode();
 $class = SensorHelper::postContentClass();
 
-eZSys::addAccessPath( array( 'layout', 'set', 'sensor_add' ), 'layout', false );
-
 if ( $node instanceof eZContentObjectTreeNode && $class instanceof eZContentClass )
 {
     $languageCode = eZINI::instance()->variable( 'RegionalSettings', 'Locale' );

@@ -172,7 +172,7 @@ class SensorModuleFunctions
         return $returnValue;
     }
     
-    public static function sensorPostGenerate( $file, $args )
+    public static function sensorPostGenerate( $file, $args, $public = false )
     {
         extract( $args );
         
@@ -214,10 +214,10 @@ class SensorModuleFunctions
     
         $Result = array();
         $Result['persistent_variable'] = $tpl->variable( 'persistent_variable' );
-        $Result['content'] = $tpl->fetch( 'design:sensor/post/full.tpl' );
+        $Result['content'] = $public ? $tpl->fetch( 'design:sensor/post/full_public.tpl' ) :  $tpl->fetch( 'design:sensor/post/full.tpl' );
         $Result['node_id'] = 0;
     
-        $contentInfoArray = array( 'url_alias' => 'sensor/post/' . $postId );
+        $contentInfoArray = $public ? array( 'url_alias' => 'sensor/public_post/' . $postId ) : array( 'url_alias' => 'sensor/post/' . $postId );
         $contentInfoArray['persistent_variable'] = false;
         if ( $tpl->variable( 'persistent_variable' ) !== false )
         {
