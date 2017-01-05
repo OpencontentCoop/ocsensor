@@ -7,15 +7,14 @@
     </section>
 
     {let handlers=fetch('notification','handler_list')}
-
         <p>
             {section name=Handlers loop=$handlers}
-            {if array( 'ezcollaboration' )|contains( $Handlers:item.id_string )}
-                {include handler=$Handlers:item uri=concat( "design:notification/handler/",$Handlers:item.id_string,"/settings/edit.tpl")}
-            {/if}
+                {if array( 'ezcollaboration', 'ezgeneraldigest', 'sensordigest' )|contains( $Handlers:item.id_string )}
+                    {include handler=$Handlers:item uri=concat( "design:notification/handler/",$Handlers:item.id_string,"/settings/edit.tpl")}
+                    <br />
+                {/if}
             {/section}
         </p>
-
     {/let}
 
     {*<div>

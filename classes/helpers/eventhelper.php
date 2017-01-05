@@ -18,6 +18,14 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
      */
     protected $notificationHelper;
 
+    /**
+     * @var bool
+     */
+    protected $isEnabledDigestNotificationHandler= false;
+
+    /**
+     * @var array
+     */
     public $availableEvents = array(
         'on_create',
         'on_update',
@@ -46,6 +54,18 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
     {
         $this->post = $post;
         $this->notificationHelper = SensorNotificationHelper::instance( $this->post );
+        $this->checkIsEnabledDigestNotificationHandler();
+    }
+
+
+    protected function checkIsEnabledDigestNotificationHandler()
+    {
+        $notificationINI = eZINI::instance( 'notification.ini' );
+        $availableHandlers = $notificationINI->variable( 'NotificationEventHandlerSettings', 'AvailableNotificationEventTypes' );
+        if (class_exists('SensorDigestHandler') && in_array( SensorDigestHandler::NOTIFICATION_HANDLER_ID, $availableHandlers))
+        {
+            $this->isEnabledDigestNotificationHandler = true;
+        }
     }
 
     final public static function instance( SensorPost $post )
@@ -68,6 +88,17 @@ class SensorPostEventHelper implements SensorPostEventHelperInterface
         {
             if ( $type['identifier'] == $eventName )
             {
+                // Verifico che sia attivo anche il digest notification handler
+                if ($this->isEnabledDigestNotificationHandler)
+                {
+                    $prefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+                    $digestEvent = eZNotificationEvent::create( SensorDigestHandler::NOTIFICATION_HANDLER_ID, array( 'type' => $prefix .$eventName ) );
+                    $digestEvent->setAttribute( self::EVENT_CREATOR_FIELD, eZUser::currentUserID() );
+                    $digestEvent->setAttribute( self::EVENT_TIMESTAMP_FIELD, time() );
+                    $digestEvent->setAttribute( self::EVENT_DETAILS_FIELD, json_encode( $eventDetails ) );
+                    $digestEvent->store();
+                }
+
                 $event = $this->post->getCollaborationItem()->createNotificationEvent( $eventName );
                 $event->setAttribute( self::EVENT_CREATOR_FIELD, eZUser::currentUserID() );
                 $event->setAttribute( self::EVENT_TIMESTAMP_FIELD, time() );
