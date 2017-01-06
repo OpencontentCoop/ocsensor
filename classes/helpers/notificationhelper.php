@@ -2,6 +2,48 @@
 
 class SensorNotificationHelper
 {
+
+    /*  Todo: Vedere con Luca
+        Modificato per il digest (prob un bug di ez) L'id del'ezcollaborationhandler è ezcollaboration ma
+       eZNotificationEventFilter::availableHandlers restituisce ezcollaborationnotification
+
+        Array
+        (
+            [0] => ezgeneraldigest
+            [1] => ezcollaborationnotification
+            [2] => ezsubtree
+            [3] => sensordigest
+        )
+        Array
+        (
+            [ezgeneraldigest] => eZGeneralDigestHandler Object
+                (
+                    [IDString] => ezgeneraldigest
+                    [Name] => General Digest Handler
+                )
+
+            [ezcollaborationnotification] => eZCollaborationNotificationHandler Object
+                (
+                    [IDString] => ezcollaboration
+                    [Name] => Collaboration Handler
+                )
+
+            [ezsubtree] => eZSubTreeHandler Object
+                (
+                    [IDString] => ezsubtree
+                    [Name] => Subtree Handler
+                )
+
+            [sensordigest] => SensorDigestHandler Object
+                (
+                    [IDString] => sensordigest
+                    [Name] => Sensor Digest Handler
+                )
+
+        )
+     */
+    const NOTIFICATION_HANDLER_ID  = eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID . 'notification';
+
     /**
      * @var SensorPost
      */
@@ -177,34 +219,37 @@ class SensorNotificationHelper
     {
         /** @var eZNotificationCollection[] $collections */
         $collections = eZNotificationCollection::fetchListForHandler(
-            eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
+            self::NOTIFICATION_HANDLER_ID,
             $event->attribute( 'id' ),
             eZCollaborationNotificationHandler::TRANSPORT
         );
-
-
-        echo '<pre>';
-        print_r($collections);
 
         foreach ( $collections as $collection )
         {
             /** @var eZNotificationCollectionItem[] $items */
             $items = $collection->attribute( 'items_to_send' );
-            print_r($items);
-            exit;
-
-
             $addressList = array();
             foreach ( $items as $item )
             {
                 $addressList[] = $item->attribute( 'address' );
                 $item->remove();
             }
+
+            $subject = $collection->attribute( 'data_subject' );
+            $body  = $collection->attribute( 'data_text' )
+
+            $tpl = eZTemplate::factory();
+            $tpl->resetVariables();
+            $tpl->setVariable( 'title', $subject );
+            $tpl->setVariable( 'content', $body );
+            $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' )
+
+
             /** @var eZMailNotificationTransport $transport */
             $transport = eZNotificationTransport::instance( 'ezmail' );
             $transport->send( $addressList,
-                $collection->attribute( 'data_subject' ),
-                $collection->attribute( 'data_text' ),
+                $subject,
+                $templateResult,
                 null,
                 $parameters );
             if ( $collection->attribute( 'item_count' ) == 0 )
@@ -255,9 +300,9 @@ class SensorNotificationHelper
 
             if ( $body != '' )
             {
-                $tpl->setVariable( 'title', $subject );
+                /*$tpl->setVariable( 'title', $subject );
                 $tpl->setVariable( 'content', $body );
-                $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
+                $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );*/
 
                 if ( $tpl->hasVariable( 'message_id' ) )
                 {
@@ -286,7 +331,7 @@ class SensorNotificationHelper
 
                 $collection = eZNotificationCollection::create(
                     $event->attribute( 'id' ),
-                    eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
+                    self::NOTIFICATION_HANDLER_ID,
                     'ezmail'
                 );
 
@@ -376,7 +421,7 @@ class SensorNotificationHelper
 
                     //                $collection = eZNotificationCollection::create(
                     //                    $event->attribute( 'id' ),
-                    //                    eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
+                    //                    self::NOTIFICATION_HANDLER_ID,
                     //                    'ezwhatsapp'
                     //                );
                     //                $collection->setAttribute( 'data_text', $templateResult );
@@ -488,7 +533,7 @@ class SensorNotificationHelper
 
                 $collection = eZNotificationCollection::create(
                     $event->attribute( 'id' ),
-                    eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
+                    self::NOTIFICATION_HANDLER_ID,
                     'ezmail'
                 );
 
