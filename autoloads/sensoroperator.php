@@ -13,7 +13,8 @@ class SensorOperator
             'sensor_chart_list',
             'sensor_categories',
             'sensor_areas',
-            'sensor_default_approvers'
+            'sensor_default_approvers',
+            'sensor_notification_collection'
         );
     }
 
@@ -24,7 +25,15 @@ class SensorOperator
 
     function namedParameterList()
     {
-        return array();
+        return array(
+            'sensor_notification_collection' => array(
+                'collection_id' => array(
+                    'type' => 'string',
+                    'required' => true,
+                    'default' => ''
+                )
+            )
+        );
     }
 
     function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace, $currentNamespace, &$operatorValue, $namedParameters )
@@ -90,6 +99,10 @@ class SensorOperator
 
             case 'sensor_categories':
                 $operatorValue = OpenPaSensorRepository::instance()->getCategoriesTree();
+            break;
+
+            case 'sensor_notification_collection':
+                $operatorValue = eZPersistentObject::fetchObject( eZNotificationCollection::definition(), null, array( 'id' => $namedParameters['collection_id'] ) );
             break;
 
         }

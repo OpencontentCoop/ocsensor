@@ -11,6 +11,7 @@ $eZTemplateOperatorArray[] = array(
         'sensor_chart_list',
         'sensor_categories',
         'sensor_areas',
-        'sensor_default_approvers'
+        'sensor_default_approvers',
+        'sensor_notification_collection'
     )
 );

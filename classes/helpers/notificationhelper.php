@@ -200,11 +200,6 @@ class SensorNotificationHelper
                     $this->createWhatsAppNotificationCollections( $eventIdentifier, $event, $userList, $parameters );
                 }
 
-                if ( $transport == 'ezmaildigest' )
-                {
-                    $this->createMailDigestNotificationCollections( $eventIdentifier, $event, $userList, $parameters );
-                }
-
             }
             return eZNotificationEventHandler::EVENT_HANDLED;
         }
@@ -236,14 +231,13 @@ class SensorNotificationHelper
             }
 
             $subject = $collection->attribute( 'data_subject' );
-            $body  = $collection->attribute( 'data_text' )
+            $body  = $collection->attribute( 'data_text' );
 
             $tpl = eZTemplate::factory();
             $tpl->resetVariables();
             $tpl->setVariable( 'title', $subject );
             $tpl->setVariable( 'content', $body );
-            $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' )
-
+            $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
 
             /** @var eZMailNotificationTransport $transport */
             $transport = eZNotificationTransport::instance( 'ezmail' );
@@ -336,7 +330,7 @@ class SensorNotificationHelper
                 );
 
                 $collection->setAttribute( 'data_subject', $subject );
-                $collection->setAttribute( 'data_text', $templateResult );
+                $collection->setAttribute( 'data_text', $body );
                 $collection->store();
 
                 $locale = eZLocale::instance();
@@ -455,100 +449,6 @@ class SensorNotificationHelper
         }
     }
 
-    protected function createMailDigestNotificationCollections( $eventIdentifier, eZNotificationEvent $event, $userCollection, &$parameters )
-    {
-        $db = eZDB::instance();
-        $db->begin();
-
-        $eventCreator = $event->attribute( SensorPostEventHelper::EVENT_CREATOR_FIELD );
-        $eventTimestamp = $event->attribute( SensorPostEventHelper::EVENT_TIMESTAMP_FIELD );
-        $eventDetails = json_decode( $event->attribute( SensorPostEventHelper::EVENT_DETAILS_FIELD ), true );
-
-        $tpl = eZTemplate::factory();
-        $tpl->resetVariables();
-
-        $tpl->setVariable( 'event_identifier', $eventIdentifier );
-        $tpl->setVariable( 'event_details', $eventDetails );
-        $tpl->setVariable( 'event_creator', $eventCreator );
-        $tpl->setVariable( 'event_timestamp', $eventTimestamp );
-
-
-        echo '<pre>';
-        print_r($event);
-        exit;
-
-
-        foreach( $userCollection as $participantRole => $collectionItems )
-        {
-            $tpl->setVariable( 'subject', '' );
-            $tpl->setVariable( 'body', '' );
-            $templateName = self::notificationMailTemplate( $participantRole );
-
-            if ( !$templateName ) continue;
-
-            $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
-
-            $tpl->setVariable( 'collaboration_item', $this->post->getCollaborationItem() );
-            $tpl->setVariable( 'collaboration_participant_role', $participantRole );
-            $tpl->setVariable( 'collaboration_item_status', $this->post->getCollaborationItem()->attribute( SensorPost::COLLABORATION_FIELD_STATUS ) );
-            $tpl->setVariable( 'sensor_post', $this->post );
-            $tpl->setVariable( 'object', $this->post->objectHelper->getContentObject() );
-            $tpl->setVariable( 'node', $this->post->objectHelper->getContentObject()->attribute( 'main_node' ) );
-
-            $tpl->fetch( $templatePath );
-
-            $body = trim( $tpl->variable( 'body' ) );
-            $subject = $tpl->variable( 'subject' );
-
-            if ( $body != '' )
-            {
-                $tpl->setVariable( 'title', $subject );
-                $tpl->setVariable( 'content', $body );
-                $templateResult = $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
-
-                if ( $tpl->hasVariable( 'message_id' ) )
-                {
-                    $parameters['message_id'] = $tpl->variable( 'message_id' );
-                }
-                if ( $tpl->hasVariable( 'references' ) )
-                {
-                    $parameters['references'] = $tpl->variable( 'references' );
-                }
-                if ( $tpl->hasVariable( 'reply_to' ) )
-                {
-                    $parameters['reply_to'] = $tpl->variable( 'reply_to' );
-                }
-                if ( $tpl->hasVariable( 'from' ) )
-                {
-                    $parameters['from'] = $tpl->variable( 'from' );
-                }
-                if ( $tpl->hasVariable( 'content_type' ) )
-                {
-                    $parameters['content_type'] = $tpl->variable( 'content_type' );
-                }
-                else
-                {
-                    $parameters['content_type'] = 'text/html';
-                }
-
-                $collection = eZNotificationCollection::create(
-                    $event->attribute( 'id' ),
-                    self::NOTIFICATION_HANDLER_ID,
-                    'ezmail'
-                );
-
-                $collection->setAttribute( 'data_subject', $subject );
-                $collection->setAttribute( 'data_text', $templateResult );
-                $collection->store();
-                foreach ( $collectionItems as $collectionItem )
-                {
-                    $collection->addItem( $collectionItem['email'] );
-                }
-            }
-        }
-
-        $db->commit();
-    }
 
     public static function notificationMailTemplate( $participantRole )
     {
@@ -740,20 +640,6 @@ class SensorNotificationHelper
                 'group' => 'transport',
                 'enabled' => $defaultTransport == 'ezmail'
             );
-
-            /*$transportNotificationTypes[] = array(
-                'name' => 'Riepilogo giornaliero',
-                'identifier' => $type['identifier'] . ':ezmaildigest',
-                'description' => ezpI18n::tr(
-                    'sensor/notification',
-                    'Ricevi la notifica via mail'
-                ),
-                'transport' => 'ezmaildigest',
-                'default_transport' => $defaultTransport,
-                'parent' => $type['identifier'],
-                'group' => 'transport',
-                'enabled' => true
-            );*/
 
 //            if ( class_exists( 'OCWhatsAppConnector' ) && $userInfo->whatsAppId() )
 //            {
