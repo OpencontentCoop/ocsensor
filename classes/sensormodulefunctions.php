@@ -214,10 +214,18 @@ class SensorModuleFunctions
     
         $Result = array();
         $Result['persistent_variable'] = $tpl->variable( 'persistent_variable' );
-        $Result['content'] = $public ? $tpl->fetch( 'design:sensor/post/full_public.tpl' ) :  $tpl->fetch( 'design:sensor/post/full.tpl' );
+        if (!$public){
+            $Result['content'] = $tpl->fetch( 'design:sensor/post/full.tpl' );
+            $contentInfoArray = array( 'url_alias' => 'sensor/post/' . $postId );
+        } elseif ($public = 'secret') {
+            $Result['content'] = $tpl->fetch( 'design:sensor/post/full_secret.tpl' );
+            $contentInfoArray = array( 'url_alias' => '#' );
+        } else {
+            $Result['content'] = $tpl->fetch( 'design:sensor/post/full_public.tpl' );
+            $contentInfoArray = array( 'url_alias' => 'sensor/public_post/' . $postId );
+        }
         $Result['node_id'] = 0;
     
-        $contentInfoArray = $public ? array( 'url_alias' => 'sensor/public_post/' . $postId ) : array( 'url_alias' => 'sensor/post/' . $postId );
         $contentInfoArray['persistent_variable'] = false;
         if ( $tpl->variable( 'persistent_variable' ) !== false )
         {

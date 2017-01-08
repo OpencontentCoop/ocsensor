@@ -22,6 +22,8 @@ class SensorPost
 
     const COLLABORATION_FIELD_HANDLER = 'data_text1';
 
+    const COLLABORATION_FIELD_SECRET_HASH = 'data_text2';
+
     const COLLABORATION_FIELD_EXPIRY = 'data_text3';
 
     const SITE_DATA_FIELD_PREFIX = 'sensorpost_';
@@ -114,6 +116,11 @@ class SensorPost
     public function getCurrentStatus()
     {
         return $this->collaborationItem->attribute( self::COLLABORATION_FIELD_STATUS );
+    }
+
+    public function getSecretHash()
+    {
+        return $this->collaborationItem->attribute( self::COLLABORATION_FIELD_SECRET_HASH );
     }
 
     public function isWaiting()
@@ -468,6 +475,19 @@ class SensorPost
         $this->collaborationItem->setAttribute(
             self::COLLABORATION_FIELD_EXPIRY,
             self::expiryTimestamp( $this->collaborationItem->attribute( 'created' ), $value )
+        );
+        $this->collaborationItem->store();
+    }
+
+    public function setSecretHash($empty = false)
+    {
+        $hash = md5($this->objectHelper->getContentObject()->attribute("id") . time());
+        if ($empty) {
+            $hash = "";
+        }
+        $this->collaborationItem->setAttribute(
+            self::COLLABORATION_FIELD_SECRET_HASH,
+            $hash
         );
         $this->collaborationItem->store();
     }

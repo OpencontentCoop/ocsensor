@@ -40,6 +40,12 @@ class SensorHttpActionHelper
             'MakePublic' => array(
                 'action_name' => 'make_public'
             ),
+            'CreateSecretHash' => array(
+                'action_name' => 'create_secret_hash'
+            ),
+            'RemoveSecretHash' => array(
+                'action_name' => 'remove_secret_hash'
+            ),
             'Moderate' => array(
                 'http_parameters' => array(
                     'SensorItemModerationIdentifier' => array(

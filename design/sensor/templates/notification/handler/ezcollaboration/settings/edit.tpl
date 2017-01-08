@@ -4,7 +4,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4 class="panel-title">
-            <i class="fa fa-bolt" aria-hidden="true"></i> {"Notifiche immediate"|i18n('sensor/settings')}
+            {"Notifiche segnalazioni"|i18n('sensor/settings')}
         </h4>
     </div>
 

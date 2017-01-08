@@ -119,6 +119,33 @@ class SensorHelper
     }
 
     /**
+     * @param string $hash
+     * @param SensorUserInfo $user
+     *
+     * @return SensorHelper
+     * @throws Exception
+     */
+    public static function instanceFromHash( $hash, SensorUserInfo $user = null )
+    {
+        $type = self::factory()->getSensorCollaborationHandlerTypeString();
+        if (!$hash) {
+            throw new Exception( "$type eZCollaborationItem not found for $hash" );
+        }
+        $collaborationItem = eZPersistentObject::fetchObject(
+            eZCollaborationItem::definition(),
+            null,
+            array(
+                'type_identifier' => $type,
+                'data_text2' => $hash
+            ) );
+        if ( $collaborationItem instanceof eZCollaborationItem )
+        {
+            return new SensorHelper( $collaborationItem, $user );
+        }
+        throw new Exception( "$type eZCollaborationItem not found for $hash" );
+    }
+
+    /**
      * @param eZContentObject $object
      *
      * @return SensorPost
@@ -368,6 +395,7 @@ class SensorHelper
                 'expiration_days',
                 'resolution_time',
                 'last_timeline',
+                'secret_hash',
 
                 //SensorPost message*Handler
                 'comment_count',
@@ -479,6 +507,10 @@ class SensorHelper
 
             case 'last_timeline':
                 return $this->currentSensorPost->getLastTimelineMessage();
+                break;
+
+            case 'secret_hash':
+                return $this->currentSensorPost->getSecretHash();
                 break;
 
 
