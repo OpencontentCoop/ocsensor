@@ -390,13 +390,13 @@ class SensorPostActionHandler
     public function createSecretHash()
     {
         $this->post->setSecretHash();
-        //$this->post->touch();
+        $this->post->touch();
     }
 
     public function removeSecretHash()
     {
         $this->post->setSecretHash(true);
-        //$this->post->touch();
+        $this->post->touch();
     }
 
     public function moderate( $status )
