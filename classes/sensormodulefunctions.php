@@ -214,10 +214,11 @@ class SensorModuleFunctions
     
         $Result = array();
         $Result['persistent_variable'] = $tpl->variable( 'persistent_variable' );
+
         if (!$public){
             $Result['content'] = $tpl->fetch( 'design:sensor/post/full.tpl' );
             $contentInfoArray = array( 'url_alias' => 'sensor/post/' . $postId );
-        } elseif ($public = 'secret') {
+        } elseif ($public == 'secret') {
             $Result['content'] = $tpl->fetch( 'design:sensor/post/full_secret.tpl' );
             $contentInfoArray = array( 'url_alias' => '#' );
         } else {

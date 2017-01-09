@@ -11,7 +11,7 @@ try {
 
     eZPreferences::sessionCleanup();
     $viewParameters = array(
-        'offset' => $Offset
+        'offset' => 0
     );
     $user = eZUser::currentUser();
     $cacheFilePath = SensorModuleFunctions::sensorPostCacheFilePath( $user, $postId, $viewParameters );
@@ -19,7 +19,7 @@ try {
     $cacheFile = eZClusterFileHandler::instance( $cacheFilePath );
     $args = compact( $localVars );
 
-    $data = SensorModuleFunctions::sensorPostGenerate( false, $args, true );
+    $data = SensorModuleFunctions::sensorPostGenerate( false, $args, 'secret' );
     $Result = $data['content'];
 
     return $Result;
