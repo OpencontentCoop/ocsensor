@@ -18,7 +18,7 @@ class GroupHelper
 
         // Creo lo stato per il gruppo
         $referenceGroupStates = OpenPABase::initStateGroup(
-            ObjectHandlerServiceControlSensor::$referenceGroupStateGroupIdentifier,
+            ObjectHandlerServiceControlSensor::$referenceGroupStateIdentifier,
             array(
                 'group_' . $object->ID => $object->Name
             )

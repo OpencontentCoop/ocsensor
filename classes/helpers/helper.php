@@ -136,13 +136,13 @@ class SensorHelper
             null,
             array(
                 'type_identifier' => $type,
-                'data_text2' => intval( $objectId )
+                'data_text2' => intval( $hash )
             ) );
         if ( $collaborationItem instanceof eZCollaborationItem )
         {
             return new SensorHelper( $collaborationItem, $user );
         }
-        throw new Exception( "$type eZCollaborationItem not found for $objectId" );
+        throw new Exception( "$type eZCollaborationItem not found for $hash" );
     }
 
     /**
@@ -188,6 +188,29 @@ class SensorHelper
                  || ( $dataMap['privacy']->attribute( 'data_type_string' ) == 'ezselection' && strtolower( $dataMap['privacy']->attribute( 'data_text' ) ) == 'no' ) )
             {
                 $struct->privacy = 'private';
+            }
+        }
+
+        if (isset( $dataMap['category'])){
+            if ($dataMap['category']->hasContent())
+            {
+                $catContent = $dataMap['category']->content();
+                $categoryID = $catContent['relation_list'][0]['contentobject_id'];
+                $category = eZContentObject::fetch($categoryID);
+
+                $categoryDatamap = $category->dataMap();
+
+                if ($categoryDatamap['reference_group']->hasContent())
+                {
+                    $groupContent = $categoryDatamap['reference_group']->content();
+                    $groupID = $groupContent['relation_list'][0]['contentobject_id'];
+                    OpenPABase::sudo(
+                        function () use ( $object, $groupID )
+                        {
+                            ObjectHandlerServiceControlSensor::setState( $object, 'reference_group', 'group_' . $groupID );
+                        }
+                    );
+                }
             }
         }
 
@@ -288,6 +311,10 @@ class SensorHelper
                 $helper->currentSensorUserRoles->actionHandler->makePublic();
             }
         }
+
+
+
+
         
         $helper->collaborationItem->setAttribute( 'modified', $object->attribute( 'modified' ) );
         $helper->collaborationItem->sync();

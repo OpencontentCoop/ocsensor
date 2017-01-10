@@ -90,14 +90,9 @@ $(document).ready(function(){
             <input type="text" name="search" value="" class="quick_search form-control" placeholder="{'Cerca'|i18n('sensor/config')}" autofocus />
           </fieldset>
         </form>
-          {if $operators|count()|gt(0)}
-            <table class="table table-hover">
-                {foreach $operators as $operator}
-                    {include name=cattree uri='design:tools/walk_item_table.tpl' item=$operator recursion=0 redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators' redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
-                {/foreach}
-            </table>
-          {/if}
-        <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operators_parent_node.node__id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+          {include name=users_table uri='design:sensor/config/operators_tree_table.tpl' operators=$operators operator_class=$operator_class}
+
+        <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operators_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
         <div class="pull-right">
           <a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a>
           <a class="btn btn-danger" href="{concat('add/new/user_group/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$user_group_class.name}</a>
