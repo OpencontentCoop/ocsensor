@@ -136,13 +136,13 @@ class SensorHelper
             null,
             array(
                 'type_identifier' => $type,
-                'data_text2' => $hash
+                'data_text2' => intval( $objectId )
             ) );
         if ( $collaborationItem instanceof eZCollaborationItem )
         {
             return new SensorHelper( $collaborationItem, $user );
         }
-        throw new Exception( "$type eZCollaborationItem not found for $hash" );
+        throw new Exception( "$type eZCollaborationItem not found for $objectId" );
     }
 
     /**
@@ -713,6 +713,18 @@ class SensorHelper
     public static function operators( SensorPost $post = null, $queryParams = null )
     {
         return self::factory()->operators( $post, $queryParams );
+    }
+
+    /**
+     * @param SensorPost|null $post
+     * @param array $queryParams
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function operatorGroups()
+    {
+        return self::factory()->operatorGroups();
     }
 
     /**

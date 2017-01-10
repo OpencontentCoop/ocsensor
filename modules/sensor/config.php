@@ -97,9 +97,18 @@ elseif ( $Part == 'categories' )
 
 elseif ( $Part == 'operators' )
 {
+    $object = eZContentObject::fetch(2767);
+    GroupHelper::createGroup($object);
+    exit;
+
+
+    $operators = SensorHelper::operatorGroups();
     $tpl->setVariable( 'operator_parent_node', SensorHelper::operatorsNode() );
+    $tpl->setVariable( 'user_group_class', eZContentClass::fetchByIdentifier( 'user_group' ) );
     $tpl->setVariable( 'operator_class', eZContentClass::fetchByIdentifier( 'sensor_operator' ) );
+    $tpl->setVariable( 'operators', $operators['tree'] );
 }
+
 
 $data = array();
 /** @var eZContentObjectTreeNode[] $otherFolders */

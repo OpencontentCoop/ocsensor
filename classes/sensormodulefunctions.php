@@ -218,9 +218,6 @@ class SensorModuleFunctions
         if (!$public){
             $Result['content'] = $tpl->fetch( 'design:sensor/post/full.tpl' );
             $contentInfoArray = array( 'url_alias' => 'sensor/post/' . $postId );
-        } elseif ($public == 'secret') {
-            $Result['content'] = $tpl->fetch( 'design:sensor/post/full_secret.tpl' );
-            $contentInfoArray = array( 'url_alias' => '#' );
         } else {
             $Result['content'] = $tpl->fetch( 'design:sensor/post/full_public.tpl' );
             $contentInfoArray = array( 'url_alias' => 'sensor/public_post/' . $postId );

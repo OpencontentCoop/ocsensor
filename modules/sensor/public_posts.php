@@ -31,7 +31,7 @@ else
     $cacheFile = eZClusterFileHandler::instance( $cacheFilePath );
     $args = compact( $localVars );
 
-    $data = SensorModuleFunctions::sensorPostGenerate( false, $args, 'public' );
+    $data = SensorModuleFunctions::sensorPostGenerate( false, $args, true );
     $Result = $data['content'];
 
     return $Result;

@@ -19,16 +19,9 @@ try {
     $cacheFile = eZClusterFileHandler::instance( $cacheFilePath );
     $args = compact( $localVars );
 
-    $data = SensorModuleFunctions::sensorPostGenerate( false, $args, 'secret' );
+    $data = SensorModuleFunctions::sensorPostGenerate( false, $args );
     $Result = $data['content'];
-
     return $Result;
 } catch (Exception $e) {
-
+    return $module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
 }
-
-
-
-
-
-
