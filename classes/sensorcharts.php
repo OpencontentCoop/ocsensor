@@ -269,6 +269,7 @@ class SensorCharts
 
             $startDate = new DateTime();
             $startDate->setTimestamp($creationTimestamp);
+            $startDate->setDate($startDate->format('Y'), 1, 1);
             $startDate->setTime(0, 0);
         }
 
