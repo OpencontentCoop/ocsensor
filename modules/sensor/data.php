@@ -45,7 +45,7 @@ try
             'offset' => $offset
         );
         if ( $query )
-            $params['query'] = strtolower( $query ) . ' OR *' . strtolower( $query ) . '*';
+            $params['query'] = $query;
 
         $result = array(
             'SearchCount' => 0,
@@ -98,6 +98,14 @@ try
     {
         $charts = new SensorCharts( eZHTTPTool::instance()->getVariable( 'parameters' ) );
         $data = $charts->getData();
+    }
+
+    if (eZHTTPTool::instance()->hasGetVariable( 'debug')){
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        eZDisplayDebug();
+        eZExecution::cleanExit();
     }
 
     header('Content-Type: application/json');
