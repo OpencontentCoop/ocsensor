@@ -74,7 +74,7 @@
             and( $sensor_post.current_privacy_state.identifier|ne('private'), $sensor_post.can_change_privacy ),
             and( $sensor_post.current_moderation_state.identifier|eq('waiting'), $sensor_post.can_moderate )
         )}
-            <strong>{'Azioni'|i18n('sensor/post')}</strong>
+            <strong>{'Assegnazione'|i18n('sensor/post')}</strong>
         {/if}
 
         {if $sensor_post.can_assign}
@@ -163,7 +163,7 @@
                     <input class="btn btn-warning btn-lg btn-block" type="submit" name="CollaborationAction_RemoveSecretHash" value="{'Rimuovi link segreto'|i18n('sensor/post')}" />
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" readonly="readonly">{concat('sensor/view/', $sensor_post.secret_hash)|ezurl(no)}</textarea>
+                    <textarea class="form-control" readonly="readonly">{concat('sensor/view/', $sensor_post.secret_hash)|ezurl(no, full)}</textarea>
                 </div>
             {/if}
         {/if}

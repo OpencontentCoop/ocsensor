@@ -6,21 +6,19 @@
 {/if}
 <section class="hgroup">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-7">
       <h1>
         {"Le mie segnalazioni"|i18n('sensor/dashboard')}
         {if $simplified_dashboard|not()}<br /><small>{"Segnalazioni da leggere, in corso e chiuse"|i18n('sensor/dashboard')}</small>{/if}
       </h1>
     </div>
-    <div class="col-md-4">
-      <small>
+    <div class="col-md-5">
         <strong>{"Legenda:"|i18n('sensor/dashboard')}</strong><br />
         <i class="fa fa-comments-o"></i> {"indica la presenza di commenti"|i18n('sensor/dashboard')} <br />
         {if $simplified_dashboard|not()}
           <i class="fa fa-comments"></i> {"indica la presenza di messaggi privati"|i18n('sensor/dashboard')} <br />
         {/if}
         <i class="fa fa-exclamation-triangle"></i> {"indica la presenza di variazioni in cronologia non lette"|i18n('sensor/dashboard')}
-      </small>
     </div>
   </div>
 </section>
@@ -44,8 +42,8 @@
 
       <ul class="nav nav-pills" style="margin-bottom: 10px">
         {foreach $list_types as $type}
-          <li role="presentation" {if $current_list.identifier|eq($type.identifier)}class="active"{/if}>
-            <a href="{concat('sensor/dashboard/(list)/',$type.identifier,$filters_query)|ezurl(no)}">
+          <li role="presentation" class="{if $current_list.identifier|eq($type.identifier)}active{/if} {if $type.count|eq(0)}disabled{/if}">
+            <a href="{if $type.count|gt(0)}{concat('sensor/dashboard/(list)/',$type.identifier,$filters_query)|ezurl(no)}{else}#{/if}">
               {$type.name|wash()}
               <span class="badge">{$type.count}</span>
             </a>
@@ -83,6 +81,28 @@
     </div>
     
     <div class="col-md-3" id="sidebar">
+
+      {if $expiring_items|count()}
+        <aside class="widget" {if $expiring_items|count()|gt(3)}style="height: 300px;overflow-y: auto"{/if}>
+          <h4 class="section_header">In scadenza</h4>
+          <ul class="media-list">
+              {foreach $expiring_items as $item}
+                <li class="media">
+                  <a class="media-date" href="{concat('sensor/posts/',$item.id)|ezurl(no)}" style="opacity: 1">
+                      {$item.expiring_date.timestamp|datetime('custom', '%j')}<span>{$item.expiring_date.timestamp|datetime('custom', '%M')}</span>
+                  </a>
+                  <h5>
+                    <a href={concat('sensor/posts/',$item.id)|ezurl()}>
+                      <strong>{$item.id}</strong> {$item.object.name|wash()}
+                    </a>
+                  </h5>
+                  <small>{$item.expiring_date.text|wash()}</small>
+                </li>
+              {/foreach}
+          </ul>
+        </aside>
+      {/if}
+
       {ezscript_require(array('ezjsc::jquery','ezjsc::jqueryUI'))}
       <script type="text/javascript">
       {literal}$(function() {
@@ -94,8 +114,8 @@
       <div class="well dashboard-search">
         <form method="get" action="{'sensor/dashboard/post'|ezurl(no)}" class="form">
           <div class="form-group">
-            <label class="" for="searchId">Cerca per ID</label>
-            <input type="text" value="{if is_set($filters.id)}{$filters.id|wash()}{/if}" placeholder="Cerca per ID" name="filters[id]" id="searchId" class="form-control">
+            <label class="" for="searchId">Cerca per Numero</label>
+            <input type="text" value="{if is_set($filters.id)}{$filters.id|wash()}{/if}" placeholder="Cerca per Numero" name="filters[id]" id="searchId" class="form-control">
           </div>
           <div class="form-group">
             <label class="" for="searchCreatorId">Cerca per autore</label>
@@ -143,28 +163,6 @@
           <a class="btn btn-danger pull-right" title="Reset" href="{'sensor/dashboard/post'|ezurl(no)}"><span class="fa fa-close"></span> Annulla</a>      
         </form>
       </div>
-
-      {if $expiring_items|count()}
-      <aside class="widget" style="height: 570px;overflow-y: auto">
-        <h4 class="section_header">In scadenza</h4>
-          <ul class="media-list">
-          {foreach $expiring_items as $item}              
-            <li class="media">
-              <a class="media-date" href="{concat('sensor/posts/',$item.id)|ezurl(no)}" style="opacity: 1">
-                {$item.expiring_date.timestamp|datetime('custom', '%j')}<span>{$item.expiring_date.timestamp|datetime('custom', '%M')}</span>
-              </a>
-              <h5>
-                <a href={concat('sensor/posts/',$item.id)|ezurl()}>
-                  <strong>{$item.id}</strong> {$item.object.name|wash()}
-                </a>
-              </h5>
-              <small>{$item.expiring_date.text|wash()}</small>
-            </li>              
-          {/foreach}
-          </ul>
-      </aside>
-      {/if}
-      
     </div>    
   </div>
 
@@ -214,5 +212,13 @@
       });
     });
     {/literal}</script>
+
+    <style>
+      {literal}
+          .label {
+            font-size: 90%;
+          }
+      {/literal}
+    </style>
 
 {/if}

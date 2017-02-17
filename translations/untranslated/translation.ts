@@ -767,6 +767,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Pareri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parere</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aggiungi un parere</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invia parere</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Risposte ufficiali</source>
         <translation type="unfinished"></translation>
     </message>
@@ -907,6 +923,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Assegnazione</source>
+    <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Seleziona operatore</source>
         <translation type="unfinished"></translation>
     </message>
@@ -968,6 +988,10 @@
     </message>
     <message>
         <source>commenti</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pareri</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

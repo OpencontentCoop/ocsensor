@@ -3,6 +3,24 @@
 class CategoryHelper
 {
 
+    public static function executePostpublish( eZContentObject $object )
+    {
+
+    }
+
+    public static function checkStatesCategory( eZContentObject $object )
+    {
+        if (!$object instanceof eZContentObject) {
+            throw new Exception("Object not found");
+        }
+
+        OpenPABase::initStateGroup(
+            ObjectHandlerServiceControlSensor::$referenceGroupStateIdentifier,
+            array(
+                'read_' . $object->ID => "Lettura categoria " . $object->Name
+            )
+        );
+    }
 
     /**
      * @param eZContentObject $object

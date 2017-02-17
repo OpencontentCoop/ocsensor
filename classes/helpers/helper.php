@@ -136,7 +136,7 @@ class SensorHelper
             null,
             array(
                 'type_identifier' => $type,
-                'data_text2' => intval( $hash )
+                'data_text2' => $hash
             ) );
         if ( $collaborationItem instanceof eZCollaborationItem )
         {

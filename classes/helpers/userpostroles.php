@@ -220,7 +220,6 @@ class SensorUserPostRoles
         return !(bool)$this->userInfo->hasDenyCommentMode()
                && !(bool)$this->userInfo->hasModerationMode()
                && $this->post->commentsIsOpen();
-
     }
 
     public function canChangePrivacy()
@@ -260,7 +259,8 @@ class SensorUserPostRoles
     {
         return $this->isOwner()
                || $this->isObserver()
-               || $this->isApprover();
+               || $this->isApprover()
+               || $this->isAuthor();
     }
 
     public function canAddObserver()

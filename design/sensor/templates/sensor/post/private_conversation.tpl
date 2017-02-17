@@ -21,9 +21,12 @@
                 <textarea name="Collaboration_SensorItemPrivateMessage" class="form-control" placeholder="{'Aggiungi messaggio'|i18n('sensor/messages')}" rows="4"></textarea>
                 <input class="btn send btn-info btn-sm btn-block" type="submit" name="CollaborationAction_PrivateMessage" value="{'Invia messaggio'|i18n('sensor/messages')}" />
             </p>
-            <strong>{'Chi può leggere questo messaggio?'|i18n('sensor/messages')} </strong>
+            <p><strong>{'Chi può leggere questo messaggio?'|i18n('sensor/messages')} </strong></p>
+
             {foreach $sensor_post.participants as $participant_role}
-                {if $participant_role.role_id|eq(5)}{skip}{/if}
+                <strong>{$participant_role.role_name}</strong>
+                {* Mostro anche il proponente *}
+                {*if $participant_role.role_id|eq(5)}{skip}{/if*}
                 {foreach $participant_role.items as $participant}
                     {if $participant.contentobject}
                         {if fetch(user,current_user).contentobject_id|eq($participant.contentobject.id)}
@@ -31,8 +34,8 @@
                                 <label>
                                     <input type="checkbox" checked="checked" disabled="disabled" />
                                     {*<small>{$participant.contentobject.name|wash()}</small>*}
-                                    <small>{'Solo te stesso'|i18n('sensor/messages')}</small>
                                     <input name="Collaboration_SensorItemPrivateMessageReceiver[]" type="hidden" value="{$participant.contentobject.id}" />
+                                    <small>{'Solo te stesso'|i18n('sensor/messages')}</small>
                                 </label>
                             </div>
                         {else}

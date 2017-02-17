@@ -25,7 +25,7 @@ class GroupHelper
         );
 
         $roles = array(
-            "Sensor operators group $object->Name" => array(
+            "[Autogenerato] Lettura Area tematica" => array(
                 array(
                     'ModuleName' => 'content',
                     'FunctionName' => 'read',

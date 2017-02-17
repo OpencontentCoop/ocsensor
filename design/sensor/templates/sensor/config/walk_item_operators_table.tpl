@@ -34,9 +34,9 @@
         {def $userSetting = $operator|user_settings()}
         <td>
             <span style="padding-left:{$recursion|mul(20)}px">
-                {if $userSetting.is_enabled|not()}<span style="text-decoration: line-through">{/if}
+                {*if $userSetting.is_enabled|not()}<span style="text-decoration: line-through">{/if*}
                     {include uri='design:content/view/sensor_person.tpl' sensor_person=$item.node.object}
-                {if $userSetting.is_enabled|not()}</span>{/if}
+                {*if $userSetting.is_enabled|not()}</span>{/if*}
             </span>
             {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf', 'user_id', $item.node.contentobject_id ) )}
                 <span title="{"L'utente può inserire segnalazioni per conto di altri"|i18n('sensor/config')}"><i class="fa fa-life-ring"></i></span>

@@ -5,7 +5,6 @@
 {if is_set( $error )}
   <div class="alert alert-danger">{$error}</div>
 {else}
-
 <section class="hgroup">
   <h1>
     <span class="label label-primary" id="current-post-id">{$sensor_post.object.id}</span>
@@ -70,7 +69,10 @@
             {if $sensor_post.current_owner}
               <li><small><i class="fa fa-user"></i> {'In carico a'|i18n('sensor/post')} {$sensor_post.current_owner}</small></li>
             {/if}
-            <li><small><i class="fa fa-comments"></i> {$sensor_post.comment_count} {'commenti'|i18n('sensor/post')}</small></li>
+            {* Todo: nascondere da permessi *}
+            {if $sensor_post.collaboration_item.is_creator|not()}
+                <li><small><i class="fa fa-comments"></i> {$sensor_post.comment_count} {'pareri'|i18n('sensor/post')}</small></li>
+            {/if}
             <li><small><i class="fa fa-comment"></i> {$sensor_post.response_count} {'risposte ufficiali'|i18n('sensor/post')}</small></li>
             {if $sensor_post.object|has_attribute( 'category' )}
               <li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$sensor_post.object.data_map.category href=no-link}</small></li>
@@ -81,13 +83,13 @@
          {/if}
         </div>        
       </div>
-      
+      <br />
+
       <div class="row">
         <div class="col-md-12" id="current-post-messages">
           {include uri='design:sensor/post/post_messages.tpl'}
         </div>
       </div>
-
     </div>
     <div class="col-md-4" id="sidebar">
 

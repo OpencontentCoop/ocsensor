@@ -664,6 +664,10 @@
             <translation>Maßnahmen</translation>
         </message>
         <message>
+            <source>Assegnazione</source>
+            <translation>Zuordnung</translation>
+        </message>
+        <message>
             <source>Seleziona operatore</source>
             <translation>Betreiber</translation>
         </message>
