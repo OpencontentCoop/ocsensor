@@ -483,20 +483,11 @@ class SensorNotificationHelper
 
     public function postNotificationTypes()
     {
+
+        $userInfo = SensorUserInfo::current();
         $postNotificationTypes = array();
 
-        $postNotificationTypes[] = array(
-            'identifier' => 'on_create',
-            'name' => ezpI18n::tr(
-                'sensor/notification',
-                'Creazione di una segnalazione'
-            ),
-            'description' => ezpI18n::tr(
-                'sensor/notification',
-                'Ricevi una notifica alla creazione di una segnalazione'
-            ),
-            'group' => 'standard'
-        );
+
 
         $postNotificationTypes[] = array(
             'identifier' => 'on_assign',
@@ -520,19 +511,6 @@ class SensorNotificationHelper
             'description' => ezpI18n::tr(
                 'sensor/notification',
                 'Ricevi una notifica quando un osservatore viene coinvolto in una segnalazione'
-            ),
-            'group' => 'standard'
-        );
-
-        $postNotificationTypes[] = array(
-            'identifier' => 'on_add_comment',
-            'name' => ezpI18n::tr(
-                'sensor/notification',
-                'Commento a una segnalazione'
-            ),
-            'description' => ezpI18n::tr(
-                'sensor/notification',
-                'Ricevi una notifica quando viene aggiunto un commento ad una tua segnalazione'
             ),
             'group' => 'standard'
         );
@@ -563,23 +541,50 @@ class SensorNotificationHelper
             'group' => 'standard'
         );
 
-        $config = SensorHelper::factory()->getSensorConfigParams();
-        if ( $config['AuthorCanReopen'] )
+        $postNotificationTypes[] = array(
+            'identifier' => 'on_set_expiry',
+            'name' => ezpI18n::tr(
+                'sensor/notification',
+                'Modifica scadenza'
+            ),
+            'description' => ezpI18n::tr(
+                'sensor/notification',
+                'Ricevi una notifica quando viene modficata la scadenza di una tua segnalazione'
+            ),
+            'group' => 'standard'
+        );
+
+        $ini = eZINI::instance();
+        $defaultUserPlacement = eZContentObjectTreeNode::fetch( (int)$ini->variable( "UserSettings", "DefaultUserPlacement" ) );
+
+        if ($defaultUserPlacement instanceof eZContentObjectTreeNode &&  !in_array($defaultUserPlacement->object()->ID, $userInfo->user()->groups()))
         {
             $postNotificationTypes[] = array(
-                'identifier' => 'on_reopen',
+                'identifier' => 'on_create',
                 'name' => ezpI18n::tr(
                     'sensor/notification',
-                    'Riapertura di una segnalazione'
+                    'Creazione di una segnalazione'
                 ),
                 'description' => ezpI18n::tr(
                     'sensor/notification',
-                    "Ricevi una notifica alla riapertura di una tua segnalazione"
+                    'Ricevi una notifica alla creazione di una segnalazione'
+                ),
+                'group' => 'standard'
+            );
+
+            $postNotificationTypes[] = array(
+                'identifier' => 'on_add_comment',
+                'name' => ezpI18n::tr(
+                    'sensor/notification',
+                    'Commento a una segnalazione'
+                ),
+                'description' => ezpI18n::tr(
+                    'sensor/notification',
+                    'Ricevi una notifica quando viene aggiunto un commento ad una tua segnalazione'
                 ),
                 'group' => 'standard'
             );
         }
-
         return $postNotificationTypes;
     }
 

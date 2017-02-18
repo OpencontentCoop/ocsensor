@@ -406,6 +406,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>indica la presenza di pareri</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>indica la presenza di messaggi privati</source>
         <translation type="unfinished"></translation>
     </message>
@@ -709,6 +713,14 @@
         <source>Puoi decidere se risolvere la segnalazione o assegnarla a un altro operatore</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Modifica scadenza</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>La scadenza della segnalazione è stata modificata</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>sensor/mail/registration</name>
@@ -859,6 +871,16 @@
     <message>
         <location filename="notificationhelper.php" line="430"/>
         <source>Ricevi una notifica alla riapertura di una tua segnalazione</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php"/>
+        <source>Modifica scadenza</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="notificationhelper.php"/>
+        <source>Ricevi una notifica quando viene modficata la scadenza di una tua segnalazione</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

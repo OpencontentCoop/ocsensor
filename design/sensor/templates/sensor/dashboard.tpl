@@ -14,10 +14,10 @@
     </div>
     <div class="col-md-5">
         <strong>{"Legenda:"|i18n('sensor/dashboard')}</strong><br />
-        <i class="fa fa-comments-o"></i> {"indica la presenza di commenti"|i18n('sensor/dashboard')} <br />
         {if $simplified_dashboard|not()}
-          <i class="fa fa-comments"></i> {"indica la presenza di messaggi privati"|i18n('sensor/dashboard')} <br />
+          <i class="fa fa-comments-o"></i> {"indica la presenza di pareri"|i18n('sensor/dashboard')} <br />
         {/if}
+        <i class="fa fa-comments"></i> {"indica la presenza di messaggi privati"|i18n('sensor/dashboard')} <br />
         <i class="fa fa-exclamation-triangle"></i> {"indica la presenza di variazioni in cronologia non lette"|i18n('sensor/dashboard')}
     </div>
   </div>

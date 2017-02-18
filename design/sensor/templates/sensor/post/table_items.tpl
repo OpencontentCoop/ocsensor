@@ -20,7 +20,7 @@
 
 <tr id="item-{$item.collaboration_item.id}"{if $item.human_unread_count|gt(0)} class="danger"{/if}>
   <td style="vertical-align: middle;white-space: nowrap; border-left: 5px solid {$area_color}" width="1">
-    {if $item.comment_count}
+    {if and($item.comment_count, and( fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) ), $item.collaboration_item.user_status.is_active ))}
       <p>
         <i class="fa fa-comments-o {if $item.comment_unread_count|gt(0)}faa-tada animated{/if}"> </i>
       </p>
@@ -56,9 +56,9 @@
       <li><strong>{"Creata"|i18n('sensor/dashboard')}</strong> {$item.object.published|l10n(shortdatetime)}</li>
       {if $item.object.modified|ne($item.object.published)}<li><strong>{"Modificata"|i18n('sensor/dashboard')}</strong> {$item..object.modified|l10n(shortdatetime)}</li>{/if}
 
-      {if and( fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) ), $item.collaboration_item.user_status.is_active )}
+      {*if and( fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) ), $item.collaboration_item.user_status.is_active )*}
         <li><strong>{"Scadenza"|i18n('sensor/dashboard')}</strong> <span class="label label-{$item.expiring_date.label}">{$item.expiring_date.text|wash()}</span></li>
-      {/if}
+      {*/if*}
     </ul>
     <p>      
       {$item.object.name|wash()}
