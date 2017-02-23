@@ -38,6 +38,16 @@
                                     <small>{'Solo te stesso'|i18n('sensor/messages')}</small>
                                 </label>
                             </div>
+                        {* Se l'utente loggato è il creatore invio sempre copia messaggio a responsabile *}
+                        {elseif and($sensor_post.collaboration_item.is_creator, $participant_role.role_id|eq(4))}
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" checked="checked" disabled="disabled" />
+                                    {*<small>{$participant.contentobject.name|wash()}</small>*}
+                                    <input name="Collaboration_SensorItemPrivateMessageReceiver[]" type="hidden" value="{$participant.contentobject.id}" />
+                                    <small>{$participant.contentobject.name|wash()}</small>
+                                </label>
+                            </div>
                         {else}
                             <div class="checkbox">
                                 <label>
@@ -49,7 +59,6 @@
                     {/if}
                 {/foreach}
             {/foreach}
-
         </div>
     {/if}
 </div>

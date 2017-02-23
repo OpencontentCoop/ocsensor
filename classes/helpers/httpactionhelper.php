@@ -155,6 +155,15 @@ class SensorHttpActionHelper
                 ),
                 'action_name' => 'add_comment_file',
             ),
+            'RespondFile' => array(
+                'http_parameters' => array(
+                    'SensorItemResponseFile'  => array(
+                        'required' => true,
+                        'action_parameter_name' => 'file'
+                    )
+                ),
+                'action_name' => 'add_response_file',
+            ),
         );
     }
 

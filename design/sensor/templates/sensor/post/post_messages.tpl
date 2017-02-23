@@ -61,18 +61,34 @@
     </div>
     {/if}
     {if $sensor_post.can_respond}
-    <div class="new_comment">
-        <h4>{'Aggiungi risposta ufficiale'|i18n('sensor/messages')}</h4>
-        <div class="row">
-            <div class="col-sm-8 col-md-8"><br>
-                <textarea name="Collaboration_SensorItemResponse" class="form-control" placeholder="{'Risposta ufficiale'|i18n('sensor/messages')}" rows="7"></textarea>
+        <div class="new_comment">
+            <h4>{'Aggiungi risposta ufficiale'|i18n('sensor/messages')}</h4>
+            <div class="row">
+                <div class="col-sm-8 col-md-8"><br>
+                    <textarea name="Collaboration_SensorItemResponse" class="form-control" placeholder="{'Risposta ufficiale'|i18n('sensor/messages')}" rows="7"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8 col-md-8">
+                    <input class="btn send btn-success btn-lg btn-block" type="submit" name="CollaborationAction_Respond" value="{'Pubblica la risposta ufficiale'|i18n('sensor/messages')}" />
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-8 col-md-8">
-                <input class="btn send btn-success btn-lg btn-block" type="submit" name="CollaborationAction_Respond" value="{'Pubblica la risposta ufficiale'|i18n('sensor/messages')}" />
+        {if ezini( 'SensorConfig', 'AllowFileComment', 'ocsensor.ini' )|eq( 'enabled' )}
+
+            <div class="new_comment" style="margin: 20px 0">
+                <h4>{'Aggiungi un file'|i18n('sensor/messages')}</h4>
+                <div class="form-group">
+                    <input type="file" name="Collaboration_SensorItemResponseFile" />
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-md-8">
+                        <input class="btn send btn-success btn-lg btn-block"
+                               type="submit" name="CollaborationAction_RespondFile"
+                               value="{'Invia il file'|i18n('sensor/messages')}" />
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        {/if}
     {/if}
 </div>

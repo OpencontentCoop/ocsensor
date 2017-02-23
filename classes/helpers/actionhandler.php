@@ -184,6 +184,15 @@ class SensorPostActionHandler
                     )
                 )
             ),
+            'add_response_file' => array(
+                'call_function' => 'addResponseFile',
+                'check_role' => array( 'can_respond' ),
+                'parameters' => array(
+                    'file' => array(
+                        'required' => true
+                    )
+                )
+            ),
         );
     }
 
@@ -565,6 +574,44 @@ class SensorPostActionHandler
             $this->post->eventHelper->createEvent('on_add_response');
             $this->post->touch();
         }
+    }
+
+    public function addResponseFile( eZHTTPFile $file )
+    {
+        $upload = new eZContentUpload();
+        $isUploaded = $upload->handleUpload(
+            $result,
+            $file->HTTPName,
+            $this->post->objectHelper->getContentObject()->attribute('main_node_id'),
+            false
+        );
+
+        $text = null;
+
+        if ( $isUploaded ){
+            if (!empty($result['errors'])){
+                eZDebug::writeError($result['errors'], __METHOD__);
+            }
+            /** @var eZContentObject $object */
+            $object = eZContentObject::fetch($result['contentobject_id']);
+
+            if (!$object instanceof eZContentObject){
+                eZDebug::writeError("Error uploading file", __METHOD__);
+            }
+            /** @var eZContentObjectAttribute $attribute */
+            foreach($object->contentObjectAttributes() as $attribute){
+                if (($attribute->attribute('data_type_string') == 'ezbinaryfile' || $attribute->attribute('data_type_string') == 'ezimage')
+                    && $attribute->hasContent()){
+                    $url = 'content/download/' . $attribute->attribute('contentobject_id') . '/' . $attribute->attribute('id')  . '/version/' . $attribute->attribute('version') . '/file/' . urlencode($object->attribute('name'));
+                    eZURI::transformURI($url,false,'full');
+                    $text = "File: " . $object->attribute('name') . "\n $url";
+                    break;
+                }
+            }
+        }else{
+            eZDebug::writeError($result, __METHOD__);
+        }
+        $this->addResponse($text);
     }
 
     public function editComment( $idTextArray )

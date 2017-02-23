@@ -487,7 +487,18 @@ class SensorNotificationHelper
         $userInfo = SensorUserInfo::current();
         $postNotificationTypes = array();
 
-
+        $postNotificationTypes[] = array(
+            'identifier' => 'on_create',
+            'name' => ezpI18n::tr(
+                'sensor/notification',
+                'Creazione di una segnalazione'
+            ),
+            'description' => ezpI18n::tr(
+                'sensor/notification',
+                'Ricevi una notifica alla creazione di una segnalazione'
+            ),
+            'group' => 'standard'
+        );
 
         $postNotificationTypes[] = array(
             'identifier' => 'on_assign',
@@ -559,19 +570,6 @@ class SensorNotificationHelper
 
         if ($defaultUserPlacement instanceof eZContentObjectTreeNode &&  !in_array($defaultUserPlacement->object()->ID, $userInfo->user()->groups()))
         {
-            $postNotificationTypes[] = array(
-                'identifier' => 'on_create',
-                'name' => ezpI18n::tr(
-                    'sensor/notification',
-                    'Creazione di una segnalazione'
-                ),
-                'description' => ezpI18n::tr(
-                    'sensor/notification',
-                    'Ricevi una notifica alla creazione di una segnalazione'
-                ),
-                'group' => 'standard'
-            );
-
             $postNotificationTypes[] = array(
                 'identifier' => 'on_add_comment',
                 'name' => ezpI18n::tr(

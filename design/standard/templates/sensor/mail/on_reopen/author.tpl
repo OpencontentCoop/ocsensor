@@ -3,7 +3,7 @@
 {set-block scope=root variable=reply_to}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
 
 {if $collaboration_item_status|eq(0)} {* WAITING*}
-{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {'Nuova segnalazione'|i18n('sensor/mail/post')}{/set-block}
+{set-block scope=root variable=subject}[{$social_pagedata.site_title}] {$node.contentobject_id}: {'Nuova segnalazione'|i18n('sensor/mail/post')}{/set-block}
 {set-block scope=root variable=body}
 <table border='0' cellpadding='30' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
     <tr>
@@ -56,7 +56,7 @@
 {/set-block}
 
 {elseif $collaboration_item_status|eq(2)} {* ASSIGNED *}
-{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {'La tua segnalazione è stata presa in carico'|i18n('sensor/mail/post')}{/set-block}
+{set-block scope=root variable=subject}[{$social_pagedata.site_title}] {$node.contentobject_id}: {'La tua segnalazione è stata presa in carico'|i18n('sensor/mail/post')}{/set-block}
 {set-block scope=root variable=body}
 <table border='0' cellpadding='30' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
     <tr>
@@ -108,7 +108,7 @@
 {/set-block}
 
 {elseif $collaboration_item_status|eq(4)} {* FIXED *}
-{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {"La tua segnalazione è stata chiusa dall'operatore"|i18n('sensor/mail/post')}{/set-block}
+{set-block scope=root variable=subject}[{$social_pagedata.site_title}] {$node.contentobject_id}: {"La tua segnalazione è stata chiusa dall'operatore"|i18n('sensor/mail/post')}{/set-block}
 {set-block scope=root variable=body}
 <table border='0' cellpadding='30' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
     <tr>
@@ -156,7 +156,7 @@
 {/set-block}
 
 {elseif $collaboration_item_status|eq(3)} {* CLOSED *}
-{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {'La tua segnalazione è stata risolta'|i18n('sensor/mail/post')}{/set-block}
+{set-block scope=root variable=subject}[{$social_pagedata.site_title}] {$node.contentobject_id}: {'La tua segnalazione è stata risolta'|i18n('sensor/mail/post')}{/set-block}
 {set-block scope=root variable=body}
 <table border='0' cellpadding='30' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
     <tr>
