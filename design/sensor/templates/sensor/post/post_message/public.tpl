@@ -1,5 +1,5 @@
 {def $participant = first_set( $item_link.participant.participant.contentobject, fetch( content, object, hash( object_id, $item_link.participant_id ) ) )}
-<div class="row">
+<div class="row msg">
     <figure class="col-xs-2 col-md-2">
         {include uri='design:parts/user_image.tpl' object=$participant}
     </figure>

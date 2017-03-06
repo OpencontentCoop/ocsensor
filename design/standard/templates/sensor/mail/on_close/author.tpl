@@ -1,4 +1,4 @@
-{def $social_pagedata = social_pagedata('sensor')}
+{def $social_pagedata = social_pagedata('iter')}
 {set-block scope=root variable=message_id}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
 {set-block scope=root variable=reply_to}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
 

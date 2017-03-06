@@ -314,6 +314,11 @@ class SensorNotificationHelper
                 {
                     $parameters['from'] = $tpl->variable( 'from' );
                 }
+                else
+                {
+                    $parameters['from'] = eZINI::instance( 'site.ini' )->variable( 'SiteSettings', 'SiteName' ) .
+                                          ' <'. eZINI::instance( 'site.ini' )->variable( 'MailSettings', 'EmailSender' ) .'>';
+                }
                 if ( $tpl->hasVariable( 'content_type' ) )
                 {
                     $parameters['content_type'] = $tpl->variable( 'content_type' );
