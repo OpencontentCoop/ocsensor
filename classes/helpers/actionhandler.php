@@ -453,7 +453,7 @@ class SensorPostActionHandler
 
     public function addComment( $text )
     {
-        if ( $this->post->commentHelper->isValidText( $text ) )
+        if ( $this->post->commentsIsOpen() && $this->post->commentHelper->isValidText( $text ) )
         {
             $this->post->commentHelper->add($text)->store();
             $this->post->eventHelper->createEvent('on_add_comment', array('text' => $text));

@@ -725,11 +725,12 @@ class SensorPost
 
     public function commentsIsOpen()
     {
-        $now = time();
-        $resolutionTime = $this->getResolutionTime();
-        if ( $resolutionTime['timestamp'] && $this->configParameters['CloseCommentsAfterSeconds'] )
-        {
-            return ( $now - $resolutionTime['timestamp'] ) < $this->configParameters['CloseCommentsAfterSeconds'];
+        if ($this->isClosed() && $this->configParameters['AllowCommentsInClosedPost']) {
+            $now = time();
+            $resolutionTime = $this->getResolutionTime();
+            if ($resolutionTime['timestamp'] && $this->configParameters['CloseCommentsAfterSeconds']) {
+                return ($now - $resolutionTime['timestamp']) < $this->configParameters['CloseCommentsAfterSeconds'];
+            }
         }
         return true;
     }

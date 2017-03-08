@@ -85,7 +85,8 @@ class OpenPaSensorRepository extends CoreRepository
             'FilterOperatorsByOwner' => isset( $sensorIni['FilterOperatorsByOwner'] ) ? $sensorIni['FilterOperatorsByOwner'] == 'enabled' : true,
             'FilterObserversByOwner' => isset( $sensorIni['FilterObserversByOwner'] ) ? $sensorIni['FilterObserversByOwner'] == 'enabled' : true,
             'CloseCommentsAfterSeconds' => isset( $sensorIni['CloseCommentsAfterSeconds'] ) ? intval( $sensorIni['CloseCommentsAfterSeconds'] ) : 1814400,
-            'MoveMarkerOnSelectArea' => isset( $sensorIni['MoveMarkerOnSelectArea'] ) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true
+            'MoveMarkerOnSelectArea' => isset( $sensorIni['MoveMarkerOnSelectArea'] ) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
+            'AllowCommentsInClosedPost' => isset( $sensorIni['AllowCommentsInClosedPost'] ) ? $sensorIni['AllowCommentsInClosedPost'] == 'enabled' : true
         ) );
     }
 
