@@ -312,9 +312,28 @@ class SensorHelper
             }
         }
 
+        if (isset( $dataMap['category'])){
+            if ($dataMap['category']->hasContent())
+            {
+                $catContent = $dataMap['category']->content();
+                $categoryID = $catContent['relation_list'][0]['contentobject_id'];
+                $category = eZContentObject::fetch($categoryID);
 
+                $categoryDatamap = $category->dataMap();
 
-
+                if ($categoryDatamap['reference_group']->hasContent())
+                {
+                    $groupContent = $categoryDatamap['reference_group']->content();
+                    $groupID = $groupContent['relation_list'][0]['contentobject_id'];
+                    OpenPABase::sudo(
+                        function () use ( $object, $groupID )
+                        {
+                            ObjectHandlerServiceControlSensor::setState( $object, 'reference_group', 'group_' . $groupID );
+                        }
+                    );
+                }
+            }
+        }
         
         $helper->collaborationItem->setAttribute( 'modified', $object->attribute( 'modified' ) );
         $helper->collaborationItem->sync();

@@ -53,7 +53,7 @@ $(document).ready(function(){
         <li role="presentation" {if $current_part|eq('users')}class="active"{/if}><a href="{'sensor/config/users'|ezurl(no)}">{'Utenti'|i18n('sensor/config')}</a></li>
           <li role="presentation" {if $current_part|eq('operators')}class="active"{/if}><a href="{'sensor/config/operators'|ezurl(no)}">{'Operatori'|i18n('sensor/config')}</a></li>
           <li role="presentation" {if $current_part|eq('categories')}class="active"{/if}><a href="{'sensor/config/categories'|ezurl(no)}">{'Aree tematiche'|i18n('sensor/config')}</a></li>
-          <li role="presentation" {if $current_part|eq('areas')}class="active"{/if}><a href="{'sensor/config/areas'|ezurl(no)}">{'Punti sulla mappa'|i18n('sensor/config')}</a></li>
+          {*<li role="presentation" {if $current_part|eq('areas')}class="active"{/if}><a href="{'sensor/config/areas'|ezurl(no)}">{'Punti sulla mappa'|i18n('sensor/config')}</a></li>*}
         {if $data|count()|gt(0)}
           {foreach $data as $item}
             <li role="presentation" {if $current_part|eq(concat('data-',$item.contentobject_id))}class="active"{/if}><a href="{concat('sensor/config/data-',$item.contentobject_id)|ezurl(no)}">{$item.name|wash()}</a></li>
@@ -94,8 +94,8 @@ $(document).ready(function(){
 
         <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operators_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
         <div class="pull-right">
-          <a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a>
-          <a class="btn btn-danger" href="{concat('add/new/user_group/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$user_group_class.name}</a>
+          <a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi nuovo'|i18n('sensor/config')} {$operator_class.name}</a>
+          <a class="btn btn-danger" href="{concat('add/new/user_group/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi nuovo'|i18n('sensor/config')} {$user_group_class.name}</a>
           <form class="form-inline" style="display: inline" action="{'sensor/config/operators'|ezurl(no)}" method="post">
             <button class="btn btn-danger" name="AddOperatorLocation" type="submit"><i class="fa fa-plus"></i> {'Aggiungi utente esistente'|i18n('sensor/config')}</button>
           </form>

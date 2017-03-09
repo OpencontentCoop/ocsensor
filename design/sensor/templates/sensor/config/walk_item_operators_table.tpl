@@ -28,14 +28,14 @@
         </td>
 
         <td width="1">
-            <a title="{'Aggiungi'|i18n('social_user/config')}  {$operator_class.name} in {$item.node.name|wash()}" href="{concat('openpa/add/', {$operator_class.identifier}, '/?parent=',$item.node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i></a>
+            <a title="{'Aggiungi'|i18n('social_user/config')}  {$operator_class.name} in {$item.node.name|wash()}" href="{concat('openpa/add/', $operator_class.identifier, '/?parent=',$item.node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i></a>
         </td>
     {else}
         {def $userSetting = $operator|user_settings()}
         <td>
             <span style="padding-left:{$recursion|mul(20)}px">
                 {*if $userSetting.is_enabled|not()}<span style="text-decoration: line-through">{/if*}
-                    {include uri='design:content/view/sensor_person.tpl' sensor_person=$item.node.object}
+                {include uri='design:content/view/sensor_person.tpl' sensor_person=$item.node.object}
                 {*if $userSetting.is_enabled|not()}</span>{/if*}
             </span>
             {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf', 'user_id', $item.node.contentobject_id ) )}
@@ -71,7 +71,10 @@
                 </div>
             </div>
         </td>
-        <td width="1">{include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}</td>
+        <td width="1">
+            {*include name=trash uri='design:parts/toolbar/node_move.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'*}
+            {include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
+        </td>
         {*<td width="1">
           {if fetch( 'user', 'has_access_to', hash( 'module', 'user', 'function', 'setting' ))}
             <form name="Setting" method="post" action={concat( 'user/setting/', $operator.contentobject_id )|ezurl}>

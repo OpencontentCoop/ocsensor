@@ -2,7 +2,6 @@
 
 class CategoryHelper
 {
-
     public static function executePostpublish( eZContentObject $object )
     {
 

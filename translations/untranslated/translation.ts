@@ -356,6 +356,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Aggiungi nuovo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>L&apos;utente può inserire segnalazioni per conto di altri</source>
         <translation type="unfinished"></translation>
     </message>
