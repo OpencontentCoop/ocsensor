@@ -74,6 +74,60 @@ if ( $Http->hasPostVariable( 'BrowseActionName' )
     return;
 }
 
+//MoveOperator
+if ( $Http->hasPostVariable( 'MoveOperator' ) && $Http->hasPostVariable( 'ContentNodeID' ) && $Http->hasPostVariable( 'ContentObjectID' ) )
+{
+    eZContentBrowse::browse( array(
+        'action_name' => 'MoveOperator',
+        'return_type' => 'NodeID',
+        'class_array' => array('user_group'),
+        'persistent_data' => array(
+            'ContentNodeID'   => $Http->postVariable('ContentNodeID'),
+            'ContentObjectID' => $Http->postVariable('ContentObjectID')
+        ),
+        'start_node' => SensorHelper::operatorsNode()->attribute('node_id'),
+        'cancel_page' => '/sensor/config/operators',
+        'from_page' => '/sensor/config/operators' ), $Module );
+    return;
+}
+
+if ( $Http->hasPostVariable( 'BrowseActionName' )
+    && $Http->postVariable( 'BrowseActionName' ) == 'MoveOperator'
+    && $Http->hasPostVariable( 'ContentNodeID' ) 
+    && $Http->hasPostVariable( 'ContentObjectID' ))
+{
+    $nodeIdList = $Http->postVariable( 'SelectedNodeIDArray' );
+    $operatorObject = eZContentObject::fetch($Http->postVariable( 'ContentObjectID' ));
+    if ( !$operatorObject instanceof eZContentObject)
+    {
+        return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel', array() );
+    }
+    foreach( $nodeIdList as $nodeId )
+    {
+        $node = eZContentObjectTreeNode::fetch($nodeId);
+        if ($node instanceof eZContentObjectTreeNode){
+            if ( eZOperationHandler::operationIsAvailable( 'content_move' ) )
+            {
+                $operationResult = eZOperationHandler::execute(
+                    'content', 'move', array(
+                    'node_id'            => $operatorObject->mainNodeID(),
+                    'object_id'          => $operatorObject->ID,
+                    'new_parent_node_id' => $nodeId
+                ),
+                    null,
+                    true
+                );
+            }
+            else
+            {
+                $operationResult = eZContentOperationCollection::moveNode( $operatorObject->mainNodeID(), $operatorObject->ID, $nodeId );
+            }
+        }
+    }
+    $Module->redirectTo( '/sensor/config/operators' );
+    return;
+}
+
 
 $root = SensorHelper::rootNode();
 

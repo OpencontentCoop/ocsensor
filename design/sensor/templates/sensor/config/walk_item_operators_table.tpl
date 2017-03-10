@@ -18,9 +18,6 @@
             {/foreach}
         </td>
 
-        <td width="1">{include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded=$redirect_if_discarded redirect_after_publish=$redirect_after_publish}</td>
-        <td width="1">{include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node}</td>
-
         <td width="1">
             {if $item.children|count()|gt(0)}
                 <a href={concat("/websitetoolbar/sort/",$item.node.node_id)|ezurl()}><i class="fa fa-sort-alpha-asc "></i>
@@ -28,8 +25,39 @@
         </td>
 
         <td width="1">
-            <a title="{'Aggiungi'|i18n('social_user/config')}  {$operator_class.name} in {$item.node.name|wash()}" href="{concat('openpa/add/', $operator_class.identifier, '/?parent=',$item.node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i></a>
+            <div class="dropdown" data-user="{$item.node.contentobject_id}">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog" aria-hidden="true"></i> <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu pull-right">
+                        <p class="dropdown-header">{"Azioni gruppo"|i18n('sensor/config')}</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded=$redirect_if_discarded redirect_after_publish=$redirect_after_publish}
+                                </td>
+                                <td><small>{"Modifica"|i18n('sensor/config')}</small></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="btn btn-link btn-xs" title="{'Aggiungi'|i18n('social_user/config')}  {$operator_class.name} in {$item.node.name|wash()}" href="{concat('openpa/add/', $operator_class.identifier, '/?parent=',$item.node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i></a>
+                                </td>
+                                <td><small>{'Aggiungi'|i18n('social_user/config')}  {$operator_class.name} in {$item.node.name|wash()}</small></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
+                                </td>
+                                <td><small>{"Elimina"|i18n('sensor/config')}</small></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </td>
+
+
     {else}
         {def $userSetting = $operator|user_settings()}
         <td>
@@ -53,12 +81,12 @@
             {/foreach}
         </td>
 
-        <td width="1">{include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators'}</td>
-
-
+        {*<td width="1">
+            {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators'}
+        </td>
         <td width="1">
             <a href="{concat('social_user/setting/',$item.node.contentobject_id)|ezurl(no)}"><i class="fa fa-user"></i></a>
-        </td>
+        </td>*}
 
         <td width="1">
             <div class="notification-dropdown-container dropdown" data-user="{$item.node.contentobject_id}">
@@ -72,9 +100,47 @@
             </div>
         </td>
         <td width="1">
-            {*include name=trash uri='design:parts/toolbar/node_move.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'*}
-            {include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
+            <div class="dropdown" data-user="{$item.node.contentobject_id}">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-cog" aria-hidden="true"></i> <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu pull-right">
+                        <p class="dropdown-header">{"Azioni gruppo"|i18n('sensor/config')}</p>
+                        <table>
+                            <tr>
+                                <td>
+                                    {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators'}
+                                </td>
+                                <td><small>{"Impostazioni utente"|i18n('sensor/config')}</small></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="btn btn-link btn-xs" href="{concat('social_user/setting/',$item.node.contentobject_id)|ezurl(no)}"><i class="fa fa-user"></i></a>
+                                </td>
+                                <td><small>{"Modifica"|i18n('sensor/config')}</small></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {include name=trash uri='design:parts/toolbar/node_move.tpl' current_node=$item.node}
+                                </td>
+                                <td><small>{"Sposta"|i18n('sensor/config')}</small></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
+                                </td>
+                                <td><small>{"Elimina"|i18n('sensor/config')}</small></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </td>
+        {*<td width="1">
+            {include name=trash uri='design:parts/toolbar/node_move.tpl' current_node=$item.node}
+            {include name=trash uri='design:parts/toolbar/node_trash.tpl' current_node=$item.node redirect_if_cancel='/sensor/config/operators' redirect_after_remove='/sensor/config/operators'}
+        </td>*}
         {*<td width="1">
           {if fetch( 'user', 'has_access_to', hash( 'module', 'user', 'function', 'setting' ))}
             <form name="Setting" method="post" action={concat( 'user/setting/', $operator.contentobject_id )|ezurl}>

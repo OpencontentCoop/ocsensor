@@ -101,6 +101,8 @@
             $.get(baseUrl+user, function(response){
                 if (response.result && response.result == 'success'){
                     menu.html('');
+                    var header = $('<li class="dropdown-header">Impostazini notifiche</>');
+                    menu.append(header);
                     var add = $('<li><a href="#" class="small" data-user="'+user+'" data-identifier="all" tabIndex="-1"><input type="checkbox"/><b> Attiva tutto</b></a></li>');
                     add.find('a').on('click', function(e){onOptionClick(e)});
                     menu.append(add);
