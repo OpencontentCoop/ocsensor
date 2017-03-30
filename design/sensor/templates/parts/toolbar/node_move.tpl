@@ -41,11 +41,11 @@
 
 <form method="post" class="form-inline" action={"sensor/config"|ezurl} style="display: inline;">
 
-{if $content_object.can_move}
+{*if $content_object.can_move*}
     <button class="btn btn-link btn-xs" type="submit" name="MoveOperator" title="{'Move'|i18n('design/standard/parts/website_toolbar')}{$node_hint}">
         <i class="fa fa-arrows"></i>
     </button>
-{/if}
+{*/if*}
 
 <input type="hidden" name="ContentObjectID" value="{$content_object.id}" />
 <input type="hidden" name="NodeID" value="{$current_node.node_id}" />

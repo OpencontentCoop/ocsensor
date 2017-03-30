@@ -96,7 +96,7 @@
                     <tr>
                         <td align='center' valign='top'>
                             <img src="http://{$social_pagedata.asset_url}{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90" style="outline:none; text-decoration:none;border:none,display:block;">
-                            <p>{$social_pagedata.logo_title} - {$social_pagedata.logo_subtitle}</p>
+                            <p>{$social_pagedata.logo_title}</p>
                         </td>
                     </tr>
                 </table>
@@ -119,9 +119,7 @@
                     <tr>
                         <td align='center' valign='top'>
                             <small>
-                                &copy; {currentdate()|datetime('custom', '%Y')} {$social_pagedata.logo_title} -
-                                {'%privacy_link_start%Informazioni sulla privacy%privacy_link_end%'|i18n('sensor/mail/registration',, hash( '%privacy_link_start%', concat( '<a href=http://', $social_pagedata.site_url, '/sensor/info/privacy/>' ), '%privacy_link_end%', '</a>' ))} -
-                                {'%terms_link_start%Termini di utilizzo%terms_link_end%'|i18n('sensor/mail/registration',, hash( '%terms_link_start%', concat( '<a href=http://', $social_pagedata.site_url, '/sensor/info/terms/>' ), '%terms_link_end%', '</a>' ))}
+                                &copy; {currentdate()|datetime('custom', '%Y')} {$social_pagedata.logo_title}
                             </small>
                         </td>
                     </tr>

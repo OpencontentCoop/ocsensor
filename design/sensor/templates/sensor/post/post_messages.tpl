@@ -17,7 +17,7 @@
                 {/if*}
                 <div class="row">
                     <div class="col-sm-8 col-md-8"><br>
-                        <textarea name="Collaboration_SensorItemComment" class="form-control" placeholder="{'Parere'|i18n('sensor/messages')}" rows="7"></textarea>
+                        <textarea name="Collaboration_SensorItemComment" id="Collaboration_SensorItemComment" class="form-control" placeholder="{'Parere'|i18n('sensor/messages')}" rows="7"></textarea>
                     </div>
                 </div>
                 <div class="row">

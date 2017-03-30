@@ -112,13 +112,13 @@
                                 <td>
                                     {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$item.node redirect_if_discarded='/sensor/config/operators' redirect_after_publish='/sensor/config/operators'}
                                 </td>
-                                <td><small>{"Impostazioni utente"|i18n('sensor/config')}</small></td>
+                                <td><small>{"Modifica"|i18n('sensor/config')}</small></td>
                             </tr>
                             <tr>
                                 <td>
                                     <a class="btn btn-link btn-xs" href="{concat('social_user/setting/',$item.node.contentobject_id)|ezurl(no)}"><i class="fa fa-user"></i></a>
                                 </td>
-                                <td><small>{"Modifica"|i18n('sensor/config')}</small></td>
+                                <td><small>{"Impostazioni utente"|i18n('sensor/config')}</small></td>
                             </tr>
                             <tr>
                                 <td>
