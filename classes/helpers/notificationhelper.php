@@ -245,7 +245,7 @@ class SensorNotificationHelper
 
                 if ( $tpl->hasVariable( 'message_id' ) )
                 {
-                    $parameters['message_id'] = $tpl->variable( 'message_id' );
+                    //$parameters['message_id'] = $tpl->variable( 'message_id' );
                 }
                 if ( $tpl->hasVariable( 'references' ) )
                 {
