@@ -1,5 +1,5 @@
 {* Todo: nascondere da permessi *}
-{if $sensor_post.collaboration_item.is_creator|not()}
+{if or($sensor_post.collaboration_item.is_creator|not(), $sensor_post.can_add_observer) }
     <div id="post_comments">
         {if $sensor_post.comment_count}
         <div class="comment">

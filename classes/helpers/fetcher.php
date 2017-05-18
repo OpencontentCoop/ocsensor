@@ -283,7 +283,9 @@ class SensorPostFetcher
             foreach( $filters['category'] as $category )
             {
                 if ( !empty( $category ) )
-                    $categoryFilter[] = 'submeta_category___id_si:' . $category;
+                    $categoryFilter[] = OpenPASolr::generateSolrSubMetaField('category', 'id') . ':' . $category;
+                    //$categoryFilter[] = 'submeta_category___id_si:' . $category;
+
             }
             if ( !empty( $categoryFilter ) )
             {

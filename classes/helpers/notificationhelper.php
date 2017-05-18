@@ -300,7 +300,7 @@ class SensorNotificationHelper
 
                 if ( $tpl->hasVariable( 'message_id' ) )
                 {
-                    $parameters['message_id'] = $tpl->variable( 'message_id' );
+                    //$parameters['message_id'] = $tpl->variable( 'message_id' );
                 }
                 if ( $tpl->hasVariable( 'references' ) )
                 {
@@ -569,6 +569,20 @@ class SensorNotificationHelper
             ),
             'group' => 'standard'
         );
+
+        $postNotificationTypes[] = array(
+            'identifier' => 'on_add_message',
+            'name' => ezpI18n::tr(
+                'sensor/notification',
+                'Nuovo messaggio privato'
+            ),
+            'description' => ezpI18n::tr(
+                'sensor/notification',
+                'Ricevi una notifica quando viene inserito un messaggio privato'
+            ),
+            'group' => 'standard'
+        );
+
 
         $ini = eZINI::instance();
         $defaultUserPlacement = eZContentObjectTreeNode::fetch( (int)$ini->variable( "UserSettings", "DefaultUserPlacement" ) );
