@@ -184,6 +184,8 @@ class SensorNotificationHelper
                 $addressList[] = $item->attribute( 'address' );
                 $item->remove();
             }
+
+            $addressList = array_unique($addressList);
             /** @var eZMailNotificationTransport $transport */
             $transport = eZNotificationTransport::instance( 'ezmail' );
             $transport->send( $addressList,
@@ -191,6 +193,13 @@ class SensorNotificationHelper
                 $collection->attribute( 'data_text' ),
                 null,
                 $parameters );
+
+            eZLog::write(
+                $collection->attribute( 'data_subject' ) .' -> '. implode(', ', $addressList),
+                'sensor_mail.log',
+                eZSys::varDirectory() . '/log'
+            );
+
             if ( $collection->attribute( 'item_count' ) == 0 )
             {
                 $collection->remove();
