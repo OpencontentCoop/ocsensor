@@ -522,6 +522,7 @@ class SensorPost
             $sensorUserInfo = SensorUserInfo::instance( $user );
             $sensorUserInfo->participateAs( $this, $participantRole );
             ezpEvent::getInstance()->notify( 'sensor/add_participant', array( $user, $participantRole, $this ) );
+            $this->participantList = null;
         }
         else
         {
@@ -537,6 +538,7 @@ class SensorPost
             $sensorUserInfo = SensorUserInfo::instance( $user );
             $sensorUserInfo->restoreParticipation( $this );
             ezpEvent::getInstance()->notify( 'sensor/restore_participant', array( $user, $this ) );
+            $this->participantList = null;
         }
         else
         {
@@ -552,6 +554,7 @@ class SensorPost
             $sensorUserInfo = SensorUserInfo::instance( $user );
             $sensorUserInfo->trashParticipation( $this );
             ezpEvent::getInstance()->notify( 'sensor/trash_participant', array( $user, $this ) );
+            $this->participantList = null;
         }
         else
         {
