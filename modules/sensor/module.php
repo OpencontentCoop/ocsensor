@@ -19,12 +19,6 @@ $ViewList['posts'] = array(
     'functions' => array('use')
 );
 
-$ViewList['view'] = array(
-    'script' => 'view.php',
-    'params' => array('Hash'),
-    'functions' => array('use')
-);
-
 $ViewList['public_posts'] = array(
     'script' => 'public_posts.php',
     'params' => array('ID', 'Offset'),
