@@ -69,16 +69,6 @@ class SensorPostActionHandler
                 'check_role' => array( 'can_change_privacy' ),
                 'parameters' => array()
             ),
-            'create_secret_hash' => array(
-                'call_function' => 'createSecretHash',
-                'check_role' => array( 'can_change_privacy' ),
-                'parameters' => array()
-            ),
-            'remove_secret_hash' => array(
-                'call_function' => 'removeSecretHash',
-                'check_role' => array( 'can_change_privacy' ),
-                'parameters' => array()
-            ),
             'moderate' => array(
                 'call_function' => 'moderate',
                 'check_role' => array( 'can_moderate' ),
@@ -393,18 +383,6 @@ class SensorPostActionHandler
     {
         $this->post->objectHelper->makePublic();
         $this->post->eventHelper->createEvent( 'on_make_public' );
-        $this->post->touch();
-    }
-
-    public function createSecretHash()
-    {
-        $this->post->setSecretHash();
-        $this->post->touch();
-    }
-
-    public function removeSecretHash()
-    {
-        $this->post->setSecretHash(true);
         $this->post->touch();
     }
 

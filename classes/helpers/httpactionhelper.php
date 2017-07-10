@@ -169,7 +169,15 @@ class SensorHttpActionHelper
 
     final public static function instance( SensorUserPostRoles $postUserRoles )
     {
-        //@todo customize handler
+        $className = false;
+        if ( eZINI::instance( 'ocsensor.ini' )->hasVariable( 'PHPCLasses', 'HttpActionHandler' ) )
+        {
+            $className = eZINI::instance( 'ocsensor.ini' )->variable( 'PHPCLasses', 'HttpActionHandler' );
+        }
+        if ( $className && class_exists( $className ) )
+        {
+            return new $className( $postUserRoles );
+        }
         return new SensorHttpActionHelper( $postUserRoles );
     }
 

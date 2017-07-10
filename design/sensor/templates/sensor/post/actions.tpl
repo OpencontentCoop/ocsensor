@@ -152,23 +152,6 @@
             {/if}
         {/if}
 
-
-        {if $sensor_post.can_change_privacy}
-            {if $sensor_post.secret_hash|eq('')}
-                <div class="form-group">
-                    <input class="btn btn-warning btn-lg btn-block" type="submit" name="CollaborationAction_CreateSecretHash" value="{'Crea link segreto'|i18n('sensor/post')}" />
-                </div>
-            {else}
-                <div class="form-group">
-                    <input class="btn btn-warning btn-lg btn-block" type="submit" name="CollaborationAction_RemoveSecretHash" value="{'Rimuovi link segreto'|i18n('sensor/post')}" />
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" readonly="readonly">{concat('sensor/view/', $sensor_post.secret_hash)|ezurl(no, full)}</textarea>
-                </div>
-            {/if}
-        {/if}
-
-
         {if and( $sensor_post.current_moderation_state.identifier|eq('waiting'), $sensor_post.can_moderate )}
             <div class="form-group">
                 {*
