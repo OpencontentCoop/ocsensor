@@ -135,6 +135,7 @@
 
 {literal}
     <script type="text/javascript">
+        var GeocoderHandler = "{/literal}{ezini('GeoCoderSettings', 'GeocoderHandler', 'ocsensor.ini')}{literal}";
         $(document).ready(function () {
             $(document).on('click', '#sensor_show_map_button', function () {
                 $(window).scrollTop(0);
@@ -149,11 +150,12 @@
             var CenterMapAddress = PointsOfInterest[0].address || null;
             var control = new L.Control.Geocoder({geocoder: null});
 
-            if (window.XDomainRequest) {
-                control.options.geocoder = L.Control.Geocoder.bing('Ahmnz1XxcrJXgiVWzx6W8ewWeqLGztZRIB1hysjaoHI5nV38WXxywjh6vj0lyl4u');
-            }
-            else {
-                control.options.geocoder = L.Control.Geocoder.google('AIzaSyDVnxoH2lLysFsPPQcwxZ0ROYNVCBkmQZk');
+            if (GeocoderHandler == "Nominatim" || GeocoderHandler == ''){
+                control.options.geocoder = L.Control.Geocoder.nominatim();
+            }else if (window.XDomainRequest) {
+                control.options.geocoder = L.Control.Geocoder.bing("{/literal}{ezini('GeoCoderSettings', 'BingApiKey', 'ocsensor.ini')}{literal}");
+            } else if (GeocoderHandler == "Google"){
+                control.options.geocoder = L.Control.Geocoder.google("{/literal}{ezini('GeoCoderSettings', 'GoogleApiKey', 'ocsensor.ini')}{literal}");
             }
 
             var map = new L.Map('sensor_full_map', {loadingControl: true}).setActiveArea('viewport');
@@ -189,7 +191,7 @@
                 if (typeof name == 'undefined' || name === null) {
                     name = latlng.toString();
                     map.loadingControl.addLoader('sc');
-                    control.options.geocoder.reverse(latlng, 0, function (result) {
+                    control.options.geocoder.reverse(latlng, 1, function (result) {
                         if (result.length > 0) name = result[0].name;
                         $container = $('#input-results');
                         $container.empty();
