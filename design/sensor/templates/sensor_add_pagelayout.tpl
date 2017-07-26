@@ -187,7 +187,7 @@
 
             var setAddressName = function(name){
                 if (name.length > 150){
-                    name = name.substring(0, 146)+'...';
+                    name = name.substring(0, 120)+'...';
                 }
                 $('input#input-address').val(name);
             };
