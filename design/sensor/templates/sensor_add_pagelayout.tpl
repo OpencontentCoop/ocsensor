@@ -185,9 +185,24 @@
                 $container.empty();
             };
 
+            var setAddressName = function(name){
+                if (name.length > 150){
+                    name = name.substring(0, 146)+'...';
+                }
+                $('input#input-address').val(name);
+            };
+
+            var setAddressLatitude = function(lat){
+                $('input#latitude').val(lat);
+            };
+
+            var setAddressLongitude = function(lng){
+                $('input#longitude').val(lng);
+            };
+
             var setContent = function (latlng, name) {
-                $('input#latitude').val(latlng.lat);
-                $('input#longitude').val(latlng.lng);
+                setAddressLatitude(latlng.lat);
+                setAddressLongitude(latlng.lng);
                 if (typeof name == 'undefined' || name === null) {
                     name = latlng.toString();
                     map.loadingControl.addLoader('sc');
@@ -195,13 +210,13 @@
                         if (result.length > 0) name = result[0].name;
                         $container = $('#input-results');
                         $container.empty();
-                        $('input#input-address').val(name);
+                        setAddressName(name);
                         map.setView(latlng, 17);
                         userMarker.bindPopup(name).openPopup();
                         map.loadingControl.removeLoader('sc');
                     }, this);
                 } else {
-                    $('input#input-address').val(name);
+                    setAddressName(name);
                     map.setView(latlng, 17);
                     userMarker.bindPopup(name).openPopup();
                 }
