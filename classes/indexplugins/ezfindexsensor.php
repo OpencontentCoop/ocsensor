@@ -16,8 +16,20 @@ class ezfIndexSensor implements ezfIndexPlugin
             $version = $contentObject->currentVersion();
             if ( $version === false )
             {
-                return;
+                return false;
             }
+
+            $collaboration = eZPersistentObject::fetchObject(
+                eZCollaborationItem::definition(),
+                null,
+                array(
+                    'data_int1' => intval( $contentObject->attribute('id') )
+                )
+            );
+            if(!$collaboration instanceof eZCollaborationItem){
+                return false;
+            }
+
             $availableLanguages = $version->translationList( false, false );
             foreach ( $availableLanguages as $languageCode )
             {
