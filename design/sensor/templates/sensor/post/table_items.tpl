@@ -65,6 +65,19 @@
         {if $item.object.data_map.category.has_content}
           <li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$item.object.data_map.category href=no-link} </small></li>
         {/if}
+        {if $item.object.data_map.area.has_content}
+            <li><small><i class="fa fa-map"></i> {attribute_view_gui attribute=$item.object.data_map.area href=no-link} </small></li>
+        {/if}
+        {if $item.object|has_attribute( 'referents' )}
+            <li>
+                <small><i class="fa fa-university"></i> {$item.object.data_map.referents.contentclass_attribute_name}:
+                    {foreach $item.object.data_map.referents.content as $r}
+                        {$item.object.data_map.referents.class_content.options[$r].name}
+                        {delimiter}, {/delimiter}
+                    {/foreach}
+                </small>
+            </li>
+        {/if}
         {if $item.current_owner}
           <li><small><strong>{"In carico a"|i18n('sensor/dashboard')}</strong> {$item.current_owner}</small></li>
         {elseif $item.last_timeline}

@@ -48,8 +48,8 @@
 		  <p>{attribute_view_gui attribute=$sensor_post.object|attribute('attachment')}</p>
 	  {/if}
 	  <ul class="list-inline">
-		  <li><small><i class="fa fa-clock-o"></i> {'Pubblicata il'|i18n('sensor/post')} {$sensor_post.object.published|l10n(shortdatetime)}</small></li>
-		  {if $sensor_post.object.modified|gt($sensor_post.object.published)}
+		  <li><small><i class="fa fa-clock-o"></i> {'Pubblicata il'|i18n('sensor/post')} {$sensor_post.object.published|l10n(shortdate)}</small></li>
+		  {if and( $sensor_post.object.modified|gt($sensor_post.object.published), $showModifiedTime|eq('enabled') )}
 			  <li><small><i class="fa fa-clock-o"></i> {'Ultima modifica del'|i18n('sensor/post')} {$sensor_post.object.modified|l10n(shortdatetime)}</small></li>
 		  {/if}
 		  {if $sensor_post.current_owner}<li><small><i class="fa fa-user"></i> In carico a {$sensor_post.current_owner|wash()}</small></li>{/if}
@@ -58,6 +58,19 @@
 		  {if $node.data_map.category.has_content}
 			<li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$node.data_map.category href=no-link}</small></li>
 		  {/if}
+          {if $node.data_map.area.has_content}
+			  <li><small><i class="fa fa-map"></i> {attribute_view_gui attribute=$node.data_map.area href=no-link}</small></li>
+          {/if}
+          {if $sensor_post.object|has_attribute( 'referents' )}
+			  <li>
+				  <small><i class="fa fa-university"></i> {$sensor_post.object.data_map.referents.contentclass_attribute_name}:
+                      {foreach $sensor_post.object.data_map.referents.content as $r}
+                          {$sensor_post.object.data_map.referents.class_content.options[$r].name}
+                          {delimiter}, {/delimiter}
+                      {/foreach}
+				  </small>
+			  </li>
+          {/if}
 	  </ul>
 	  <a href={concat('sensor/posts/',$sensor_post.object.id)|ezurl()} class="btn btn-info btn-sm">{"Dettagli"|i18n('sensor/dashboard')}</a>
 	  {if $sensor_post.object.can_edit}

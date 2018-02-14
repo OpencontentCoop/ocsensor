@@ -127,6 +127,13 @@
                 width: auto;
             }
         }
+
+        @media only screen and (min-width: 500px) {
+            .checkbox {
+                display: inline-block;
+                width: 45%;
+            }
+        }
     </style>
 {/literal}
 <body>

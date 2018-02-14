@@ -32,40 +32,55 @@ sort_by, array( 'priority', true() )
 }
 {switch match=$class_content.selection_type}
 
-
-
-
-{* Dropdown list *}
-{case in=array(1,2,3,4,5,6)}
-    <input type="hidden" name="single_select_{$attribute.id}" value="1"/>
-{if ne( count( $nodesList ), 0)}
-    <select class="{$html_class}" name="{$attribute_base}_data_object_relation_list_{$attribute.id}[]">
-        {*{if $attribute.contentclass_attribute.is_required|not}
-            <option value="no_relation" {if eq( $attribute.content.relation_list|count, 0 )} selected="selected"{/if}></option>
-        {/if}*}
-        {section var=node loop=$nodesList}
-            <option value="{$node.contentobject_id}"
-                    {if ne( count( $attribute.content.relation_list ), 0)}
-                        {foreach $attribute.content.relation_list as $item}
-                            {if eq( $item.contentobject_id, $node.contentobject_id )}
-                                selected="selected"
-                                {break}
+    {* Dropdown list *}
+    {case in=array(1,2,5,6)}
+        <input type="hidden" name="single_select_{$attribute.id}" value="1"/>
+        {if ne( count( $nodesList ), 0)}
+            <select class="{$html_class}" name="{$attribute_base}_data_object_relation_list_{$attribute.id}[]">
+                {section var=node loop=$nodesList}
+                    <option value="{$node.contentobject_id}"
+                            {if ne( count( $attribute.content.relation_list ), 0)}
+                                {foreach $attribute.content.relation_list as $item}
+                                    {if eq( $item.contentobject_id, $node.contentobject_id )}
+                                        selected="selected"
+                                        {break}
+                                    {/if}
+                                {/foreach}
+                            {else}
+                                {if eq( $user.contentobject_id, $node.contentobject_id )}
+                                    selected="selected"
+                                {/if}
                             {/if}
-                        {/foreach}
-                    {else}
-                        {if eq( $user.contentobject_id, $node.contentobject_id )}
-                            selected="selected"
+                    >
+                        {$node.name|wash}</option>
+                {/section}
+            </select>
+        {/if}
+    {/case}
+
+    {case in=array(3,4)} {* check boxes list *}
+    {section var=node loop=$nodesList}
+        <div class="checkbox"><label>
+                <input type="checkbox" name="{$attribute_base}_data_object_relation_list_{$attribute.id}[{$node.node_id}]" value="{$node.contentobject_id}"
+                        {if ne( count( $attribute.content.relation_list ), 0)}
+                            {foreach $attribute.content.relation_list as $item}
+                                {if eq( $item.contentobject_id, $node.contentobject_id )}
+                                    checked="checked"
+                                    {break}
+                                {/if}
+                            {/foreach}
+                        {else}
+                            {if eq( $user.contentobject_id, $node.contentobject_id )}
+                                checked="checked"
+                            {/if}
                         {/if}
-                    {/if}
-            >
-                {$node.name|wash}</option>
-        {/section}
-    </select>
-{/if}
-{/case}
+                />
+                {$node.name|wash}
+            </label></div>
+    {/section}
+    {/case}
 
 {/switch}
-
 {if eq( count( $nodesList ), 0 )}
 {def $parentnode = fetch( 'content', 'node', hash( 'node_id', $parent_node ) )}
 {if is_set( $parentnode )}
@@ -86,6 +101,7 @@ sort_by, array( 'priority', true() )
     <p>{'There are no objects of allowed classes'|i18n( 'design/standard/content/datatype' )}.</p></div>
 {/if}
 
-
+{/let}
+{/default}
 {/default}
 {/let}
