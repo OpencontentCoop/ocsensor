@@ -69,5 +69,12 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=on_behalf_of_detail
 
+[post_edit_consultant]
+Source=content/datatype/edit/ezobjectrelationlist.tpl
+MatchFile=edit_consultant.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=consultant
+
 
  */ ?>

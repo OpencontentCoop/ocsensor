@@ -1,4 +1,4 @@
-{def $sensor = sensor_root_handler()
+{def $sensor          = sensor_root_handler()
      $social_pagedata = social_pagedata( 'sensor' )}
 
 <script type="text/javascript">
@@ -13,7 +13,7 @@
 
   <div class="panel panel-default">
 	<div class="panel-body">
-	  
+
 	  <div class="navbar hidden-sm hidden-md hidden-lg" style="margin-top: 0;overflow: hidden;">
 		  <a class="navbar-brand" href="{'sensor/home'|ezurl(no)}">
 			  <img src="{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90">
@@ -34,16 +34,31 @@
 
 	{def $content_attributes_extra = hash()}
 	{if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )}
-	  {def $behalf = $content_attributes_grouped_data_map['hidden']['on_behalf_of']}    
-	  {set $content_attributes_extra = hash('on_behalf_of', $behalf)}
-	  {def $behalf_detail = $content_attributes_grouped_data_map['hidden']['on_behalf_of_detail']}	
-	  {if $behalf_detail}
-		{set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_detail', $behalf_detail ) )}
-	  {/if}
-	  {if is_set( $content_attributes_grouped_data_map['hidden']['on_behalf_of_mode'] )}
-		{def $behalf_mode = $content_attributes_grouped_data_map['hidden']['on_behalf_of_mode']}
-		{set $content_attributes_extra = $content_attributes_extra|merge( hash( 'on_behalf_of_mode', $behalf_mode ) )}
-	  {/if}
+	  {foreach $content_attributes_grouped_data_map['hidden'] as $attribute}
+		  {if $attribute.contentclass_attribute.identifier|contains('on_behalf_of')}
+		  	{def $behalf_attribute = $content_attributes_grouped_data_map['hidden'][$attribute.contentclass_attribute.identifier]}
+		    {set $content_attributes_extra = $content_attributes_extra|merge( hash( $attribute.contentclass_attribute.identifier, $behalf_attribute ) )}
+		    {undef $behalf_attribute}
+		  {/if}
+	  {/foreach}
+	{/if}
+
+	{* Se tra i campi nascosti ci sono consultant o category e ho come ruolo sensor/manage li sposto tra i campi visibili *}
+	{* Todo: Inserire ini o un meccanismo tipo 'on_behalf_of' ?*}
+	{if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) )}
+
+		{def $content_attributes = $content_attributes_grouped_data_map['content']}
+
+		{if is_set( $content_attributes_grouped_data_map['hidden']['consultant'] )}
+			{set $content_attributes = $content_attributes|merge( hash('consultant', $content_attributes_grouped_data_map['hidden']['consultant']) )}
+		{/if}
+
+		{*{if is_set( $content_attributes_grouped_data_map['hidden']['category'] )}
+            {set $content_attributes = $content_attributes|merge( hash('category', $content_attributes_grouped_data_map['hidden']['category']) )}
+        {/if}*}
+
+		{set $content_attributes_grouped_data_map = $content_attributes_grouped_data_map|merge( hash( 'content', $content_attributes ) )}
+
 	{/if}
 	
 	{if count( $content_attributes_extra )|gt(0)}
@@ -80,7 +95,7 @@
     {if $attribute_group|eq('hidden')}{skip}{/if}
     
     {*if $attribute_group|eq('content')}{set $content_attributes_grouped = $content_attributes_grouped|merge($content_attributes_extra)}{/if*}
-    
+
     <div class="clearfix attribute-edit tab-pane{if $count|eq(0)} active{/if}" id="attribute-group-{$attribute_group}">
 			{set $count = $count|inc()}
 			{foreach $content_attributes_grouped as $attribute_identifier => $attribute}
