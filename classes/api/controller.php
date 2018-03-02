@@ -150,6 +150,12 @@ class SensorApiController extends ezpRestMvcController
                 )
             );
         }
+
+        if ( class_exists( 'Opencontent\Sensor\Legacy\CachePostService') )
+            Opencontent\Sensor\Legacy\CachePostService::clearCache( $post->attribute( 'id' ) );
+
+        eZContentCacheManager::clearContentCache( $post->attribute( 'id' ) );
+
         return $result;
     }
 
