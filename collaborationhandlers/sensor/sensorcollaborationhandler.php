@@ -5,9 +5,9 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
     /*!
      Initializes the handler
     */
-    function SensorCollaborationHandler()
+    function __construct()
     {
-        $this->eZCollaborationItemHandler(
+        parent::__construct(
             SensorHelper::factory()->getSensorCollaborationHandlerTypeString(),
             ezpI18n::tr( 'sensor/settings', 'Notifiche Sensor' ),
             array(
