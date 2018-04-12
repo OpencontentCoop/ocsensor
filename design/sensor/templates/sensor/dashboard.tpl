@@ -51,17 +51,34 @@
             </a>
           </li>
         {/foreach}
-        <li role="presentation" class="pull-right">
-            <a href="{concat('sensor/dashboard/post/default/csv/',$filters_query)|ezurl(no)}">
+        {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) )}
+          <li role="presentation" class="pull-right">
+            {def $export_all_url = 'sensor/dashboard/post/default/csv/?all=true'|ezurl(no)}
+            {if $filters_query|ne('')}
+              {set $export_all_url = concat('sensor/dashboard/post/default/csv/', $filters_query, '?all=true')|ezurl(no)}
+            {/if}
+            <a href="{$export_all_url}">
               <small><i class="fa fa-download"></i>
-              {if $filters_query|eq('')}
-                {"Esporta CSV"|i18n('sensor/dashboard')}
-              {else}
-                {"Esporta risultati CSV"|i18n('sensor/dashboard')}
-              {/if}
+                  {if $filters_query|eq('')}
+                      {"Esporta tutto"|i18n('sensor/dashboard')}
+                  {else}
+                      {"Esporta tutto (filtri attivi)"|i18n('sensor/dashboard')}
+                  {/if}
               </small>
             </a>
           </li>
+        {/if}
+        <li role="presentation" class="pull-right">
+          <a href="{concat('sensor/dashboard/post/default/csv/',$filters_query)|ezurl(no)}">
+            <small><i class="fa fa-download"></i>
+            {if $filters_query|eq('')}
+              {"Esporta mie attività"|i18n('sensor/dashboard')}
+            {else}
+              {"Esporta mie attività (filtri attivi)"|i18n('sensor/dashboard')}
+            {/if}
+            </small>
+          </a>
+        </li>
       </ul>
       <div class="tab-pane active">
         {include name=navigator

@@ -8,7 +8,7 @@
     <aside class="widget well well-sm" id="current-post-action">
 
         {if $sensor_post.can_add_area}
-            <strong>{'Quartiere/Zona'|i18n('sensor/post')}</strong>
+            <strong>{$sensor_post.object.data_map.area.contentclass_attribute.name}</strong>
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
@@ -27,7 +27,7 @@
         {/if}
 
         {if $sensor_post.can_add_category}
-            <strong>{'Area tematica'|i18n('sensor/post')}</strong>
+            <strong>{$sensor_post.object.data_map.category.contentclass_attribute.name}</strong>
             <div class="form-group">
                 <div class="row">
                     <div class="col-xs-8">
@@ -50,6 +50,24 @@
                     </div>
                 </div>
             </div>
+
+            {if is_set( $sensor_post.object.data_map.ente_type )}
+                <strong>{$sensor_post.object.data_map.ente_type.contentclass_attribute.name}</strong>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <select data-placeholder="{'Seleziona tipologia ente'|i18n('sensor/post')}" name="Collaboration_SensorItemEnteType" class="select form-control">
+                                {foreach $sensor_post.object.data_map.ente_type.class_content.options as $ente_type}
+                                    <option value="{$ente_type.name}" {if $sensor_post.object.data_map.ente_type.content|contains( $ente_type.id )}selected="selected"{/if}>{$ente_type.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <div class="col-xs-4">
+                            <input class="btn btn-info btn-block" type="submit" name="CollaborationAction_AddEnteType" value="{'Associa'|i18n('sensor/post')}" />
+                        </div>
+                    </div>
+                </div>
+            {/if}
         {/if}
 
         {if $sensor_post.can_set_expiry}

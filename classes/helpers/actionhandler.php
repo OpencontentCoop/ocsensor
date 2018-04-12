@@ -108,6 +108,15 @@ class SensorPostActionHandler
                     )
                 )
             ),
+            'add_ente_type' => array(
+                'call_function' => 'AddEnteType',
+                'check_role' => array( 'can_add_area' ),
+                'parameters' => array(
+                    'ente_type_id' => array(
+                        'required' => true
+                    )
+                )
+            ),
             'set_expiry' => array(
                 'call_function' => 'setExpiry',
                 'check_role' => array( 'can_set_expiry' ),
@@ -438,6 +447,12 @@ class SensorPostActionHandler
             $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas' => $categoryIdList ) );
             $this->post->touch();
         }
+    }
+
+    public function addEnteType( $enteTypeID )
+    {
+        $this->post->objectHelper->setContentObjectAttribute( 'ente_type', $enteTypeID );
+        $this->post->touch();
     }
 
     public function setExpiry( $days )

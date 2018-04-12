@@ -16,7 +16,8 @@ $tpl = eZTemplate::factory();
 $http = eZHTTPTool::instance();
 $offset = !is_numeric( $Params['Offset'] ) ? 0 : $Params['Offset'];
 $groupId = !is_numeric( $Params['Group'] ) ? false : $Params['Group'];
-$export = !is_string( $Params['Export'] ) ? false : strtolower( $Params['Export'] ); 
+$export = !is_string( $Params['Export'] ) ? false : strtolower( $Params['Export'] );
+$exportAll = $http->getVariable('all', false);
 
 
 $selectedList = $Params['List'];
@@ -97,7 +98,14 @@ else
             {
                 try
                 {
-                    $exporter = SensorHelper::instantiateExporter( $export, $filters, $group, $selectedList );
+                    if ( $exportAll )
+                    {
+                        $exporter = SensorHelper::instantiateExporter($export, $filters, null, $selectedList);
+                    }
+                    else
+                    {
+                        $exporter = SensorHelper::instantiateExporter( $export, $filters, $group, $selectedList );
+                    }
                     ob_get_clean(); //chiudo l'ob_start dell'index.php
                     $exporter->handleDownload();
                     eZExecution::cleanExit();

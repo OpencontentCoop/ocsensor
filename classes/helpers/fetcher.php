@@ -11,7 +11,7 @@ class SensorPostFetcher
      *
      * @return SensorHelper[]|array
      */
-    protected static function fetchList( $parameters = array(), $asCount, array $filters = array(), eZUser $user = null )
+    protected static function fetchList( $parameters = array(), $asCount, array $filters = array(), eZUser $user = null, $forceFetchUser = true )
     {
         $parameters = array_merge( array( 'as_object' => true,
                                           'offset' => false,
@@ -134,13 +134,21 @@ class SensorPostFetcher
             );
         }
 
+        //Fixme: porcata massima per non rifare tutte le query
+        $userFilterText = ' 1 = 1 ';
+        $userID = false;
         if ( $user instanceof eZUser )
         {
             $userID = $user->id();
         }
-        else
+        elseif ( $forceFetchUser )
         {
+
             $userID = eZUser::currentUserID();
+        }
+        if ( $userID )
+        {
+            $userFilterText = " cis.user_id = '$userID' AND cigl.user_id = '$userID'";
         }
 
         if ( $statusTypes === false )
@@ -151,9 +159,21 @@ class SensorPostFetcher
         $statusText = implode( ', ', $statusTypes );
 
         if ( $asCount )
+        {
             $selectText = 'count( ci.id ) as count';
+        }
         else
-            $selectText = 'ci.*, cis.is_read, cis.is_active, cis.last_read';
+        {
+            if ($forceFetchUser)
+            {
+                $selectText = 'ci.*, cis.is_read, cis.is_active, cis.last_read';
+            }
+            else
+            {
+                $selectText = "ci.*, '-' AS is_read, '-' AS is_active, '-' AS last_read";
+            }
+
+        }
 
         $isExpiringTest = '';
         if ( $isExpiring == true )
@@ -163,6 +183,12 @@ class SensorPostFetcher
             $nowDate = new DateTime();
             $now = $nowDate->getTimestamp();
             $isExpiringTest = "( CAST( nullif(ci.{$expiryField},'') AS integer ) - {$now} <= $secondsLimit OR {$now} >= CAST( nullif(ci.{$expiryField},'') AS integer ) )  AND ";
+        }
+
+        $groupByText = '';
+        if ( !$forceFetchUser )
+        {
+            $groupByText = 'GROUP BY ci.id';
         }
 
         $sql = "SELECT $selectText
@@ -183,8 +209,8 @@ class SensorPostFetcher
                        ci.id = cigl.collaboration_id AND
                        ci.data_int1 = co.id AND
                        $parentGroupText
-                       cis.user_id = '$userID' AND
-                       cigl.user_id = '$userID'
+                       $userFilterText
+                $groupByText
                 $sortText";
         //eZDebug::writeNotice($sql);
         $db = eZDB::instance();
@@ -608,6 +634,41 @@ class SensorPostFetcher
            return $data[0];
         }
         return false;
+    }
+
+    /**
+     * @param array $filters
+     * @param $limit
+     * @param int $offset
+     * @param string $sortBy
+     * @param bool $sortOrder
+     * @param bool $status
+     *
+     * @return array|SensorHelper[]
+     */
+    public static function fetchAllItemsGroupLess( array $filters = array(), $limit, $offset = 0, $sortBy = 'modified', $sortOrder = false, $status = false )
+    {
+        $itemParameters = array(
+            'offset' => $offset,
+            'limit' => $limit,
+            'sort_by' => array( $sortBy, $sortOrder ),
+            'parent_group_id' => 0,
+            'status' => $status
+        );
+        return self::fetchList( $itemParameters, false, $filters, null, false );
+    }
+
+    /**
+     * @param array $filters
+     *
+     * @return array|SensorHelper[]
+     */
+    public static function fetchAllItemsCountGroupLess( array $filters = array() )
+    {
+        $itemParameters = array(
+            'parent_group_id' => 0,
+        );
+        return self::fetchList( $itemParameters, true, $filters, null, false );
     }
 
 }

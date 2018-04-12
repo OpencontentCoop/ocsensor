@@ -82,6 +82,15 @@ class SensorHttpActionHelper
                 ),
                 'action_name' => 'add_area',
             ),
+            'AddEnteType' => array(
+                'http_parameters' => array(
+                    'SensorItemEnteType'  => array(
+                        'required' => true,
+                        'action_parameter_name' => 'ente_type_id'
+                    )
+                ),
+                'action_name' => 'add_ente_type',
+            ),
             'SetExpiry' => array(
                 'http_parameters' => array(
                     'SensorItemExpiry'  => array(

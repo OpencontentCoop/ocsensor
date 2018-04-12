@@ -73,6 +73,19 @@
             {if $sensor_post.object|has_attribute( 'category' )}
               <li><small><i class="fa fa-tags"></i> {attribute_view_gui attribute=$sensor_post.object.data_map.category href=no-link}</small></li>
             {/if}
+              {if $sensor_post.object|has_attribute( 'area' )}
+              <li><small><i class="fa fa-map"></i> {attribute_view_gui attribute=$sensor_post.object.data_map.area href=no-link}</small></li>
+            {/if}
+            {if $sensor_post.object|has_attribute( 'referents' )}
+              <li>
+                <small><i class="fa fa-university"></i> {$sensor_post.object.data_map.referents.contentclass_attribute_name}:
+                  {foreach $sensor_post.object.data_map.referents.content as $r}
+                    {$sensor_post.object.data_map.referents.class_content.options[$r].name}
+                    {delimiter}, {/delimiter}
+                  {/foreach}
+                </small>
+              </li>
+            {/if}
           </ul>              
         </div>        
       </div>
