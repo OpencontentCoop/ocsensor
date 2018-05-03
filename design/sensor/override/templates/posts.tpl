@@ -7,10 +7,10 @@
         'offset', $view_parameters.offset,
         'sort_by', hash( 'published', 'desc' ),
         'facet', array(
-            hash( 'field', 'subattr_area___name____s', 'name', 'Zona', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', 'attr_type_s', 'name', 'Tipo', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', 'subattr_category___name____s', 'name', 'Area tematica', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', 'meta_object_states_si', 'name', 'Stato', 'limit', 500, 'sort', 'alpha' )
+            hash( 'field', solr_subfield('area', 'name', 'string'), 'name', 'Zona', 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_field('type', 'string'), 'name', 'Tipo', 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_subfield('category', 'name', 'Area tematica', 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_meta_field('object_states'), 'name', 'Stato', 'limit', 500, 'sort', 'alpha' )
         ),
         'limit', $page_limit
     ),

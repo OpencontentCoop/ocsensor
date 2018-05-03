@@ -276,7 +276,7 @@ class SensorPostFetcher
             $search =$solr->search( '', array(
                     'AsObjects' => false,
                     'SearchLimit' => 1000,
-                    'Filter' => array( 'attr_subject_t:' . $filters['subject'] ),
+                    'Filter' => array( SearchFormOperator::generateSolrField('subject', 'text') . ':' . $filters['subject'] ),
                     'SearchContentClassID' => array( SensorHelper::postContentClass()->attribute( 'id' ) ),
                     'SearchSubTreeArray' => array( 1 ) ) );
             if ( $search['SearchCount'] > 0 )
@@ -309,7 +309,7 @@ class SensorPostFetcher
             foreach( $filters['category'] as $category )
             {
                 if ( !empty( $category ) )
-                    $categoryFilter[] = 'submeta_category___id_si:' . $category;
+                    $categoryFilter[] = SearchFormOperator::generateSolrSubMetaField('category', 'id') . ':' . $category;
             }
             if ( !empty( $categoryFilter ) )
             {
