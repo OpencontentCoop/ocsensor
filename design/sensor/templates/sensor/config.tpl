@@ -92,7 +92,7 @@ $(document).ready(function(){
           <button type="submit" class="btn btn-success"><i class="fa fa-search"></i></button>
         </form>
         {include name=users_table uri='design:sensor/config/operators_table.tpl' view_parameters=$view_parameters operator_parent_node=$operator_parent_node}
-		<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operator_parent_node.node__id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+		<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_operator/',$operator_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
         <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a>
           <form class="form-inline" style="display: inline" action="{'sensor/config/operators'|ezurl(no)}" method="post">
             <button class="btn btn-danger" name="AddOperatorLocation" type="submit"><i class="fa fa-plus"></i> {'Aggiungi utente esistente'|i18n('sensor/config')}</button>
