@@ -4,8 +4,8 @@
     <context>
         <name>sensor/add</name>
         <message>
-            <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la &lt;a target=&quot;_blank&quot;href=&quot;%privacy_link&quot;&gt;privacy&lt;/a&gt;</source>
-            <translation>Texte und Bilder entsprechen den &lt;a target="_blank" href="%privacy_link"&gt;Datenschutzbestimmungen/Privacy/Netiquette&lt;/a&gt;</translation>
+            <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy</source>
+            <translation>Texte und Bilder müssen den festgelegten Datenschutzrichtlinien entsprechen</translation>
         </message>
         <message>
             <source>Salva</source>
@@ -34,6 +34,14 @@
         <message>
             <source>reclamo</source>
             <translation>Beschwerde</translation>
+        </message>
+        <message>
+            <source>Segnalatore</source>
+            <translation>Nutzer</translation>
+        </message>
+        <message>
+            <source>Nome e cognome del segnalatore</source>
+            <translation>Name und Nachname des Nutzers</translation>
         </message>
     </context>
     <context>
@@ -528,6 +536,10 @@
         <message>
             <source>Solo te stesso</source>
             <translation>nur du</translation>
+        </message>
+        <message>
+            <source>Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".</source>
+            <translation>Achtung: Der Kommentar wird für alle sichtbar sein. Um Nachrichten zu senden, die nur für das Team sichtbar sind, verwenden Sie die Schaltfläche \"Private Nachrichten\".</translation>
         </message>
     </context>
     <context>

@@ -63,7 +63,7 @@
 	
 	{if count( $content_attributes_extra )|gt(0)}
 	  {set $content_attributes_grouped_data_map = $content_attributes_grouped_data_map|merge( hash( 'segnalatore', $content_attributes_extra ) )}
-	  {set $attribute_categorys = $attribute_categorys|merge( hash( 'segnalatore', 'Segnalatore' ) )}
+	  {set $attribute_categorys = $attribute_categorys|merge( hash( 'segnalatore', 'Segnalatore'|i18n('sensor/add') ) )}
 	{/if}
 	
 	{def $count = 0}
@@ -237,9 +237,11 @@
 	{/section}
 
 	  <p class="text-center">
-		<small>		  
-		  {'I testi e le immagini inserite dovranno rispettare le policy stabilite per la <a target="_blank" href="%privacy_link">privacy</a>'|i18n('sensor/add',,hash('%privacy_link', '/sensor/redirect/info:privacy'|ezurl(no,full) ) )}
-		</small>
+		<a href="{'/sensor/redirect/info:privacy'|ezurl(no,full)}">
+			<small>
+				{'I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy'|i18n('sensor/add')}
+			</small>
+		</a>
 	  </p>
 	
 	  <div class="buttonblock">
