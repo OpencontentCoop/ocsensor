@@ -293,7 +293,7 @@
 <context>
     <name>sensor/add</name>
     <message>
-        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la &lt;a target=&quot;_blank&quot; href=&quot;%privacy_link&quot;&gt;privacy&lt;/a&gt;</source>
+        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -306,6 +306,14 @@
     </message>
     <message>
         <source>Rileva la mia posizione</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Segnalatore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nome e cognome del segnalatore</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -800,6 +808,10 @@
     </message>
     <message>
         <source>Solo te stesso</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

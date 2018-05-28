@@ -76,5 +76,11 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=consultant
 
+[post_view_type]
+Source=content/datatype/view/ezselection.tpl
+MatchFile=datatypes/view_type_selection.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=type
 
  */ ?>
