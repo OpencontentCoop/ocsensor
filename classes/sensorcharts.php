@@ -313,7 +313,7 @@ class SensorCharts
         foreach( $intervals as $interval )
         {
             $resultQuery = $this->searchService->instanceNewSearchQuery();
-            $resultQuery->facetLimit = 1000;
+            $resultQuery->facetLimit = 10000;
             $resultQuery
                 ->field( 'internalId' )
                 ->filter(
@@ -350,7 +350,7 @@ class SensorCharts
     protected function getAvailableFacetsKeys( $facets )
     {
         $resultQuery = $this->searchService->instanceNewSearchQuery();
-        $resultQuery->facetLimit = 1000;
+        $resultQuery->facetLimit = 10000;
         $resultQuery
             ->field( 'internalId' )
             ->facets( $facets )
