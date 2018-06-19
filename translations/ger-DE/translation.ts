@@ -538,8 +538,8 @@
             <translation>nur du</translation>
         </message>
         <message>
-            <source>Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".</source>
-            <translation>Achtung: Der Kommentar wird für alle sichtbar sein. Um Nachrichten zu senden, die nur für das Team sichtbar sind, verwenden Sie die Schaltfläche \"Private Nachrichten\".</translation>
+            <source>Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone "Messaggi privati".</source>
+            <translation>Achtung: Der Kommentar wird für alle sichtbar sein. Um Nachrichten zu senden, die nur für das Team sichtbar sind, verwenden Sie die Schaltfläche "Private Nachrichten".</translation>
         </message>
     </context>
     <context>
