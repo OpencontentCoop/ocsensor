@@ -56,7 +56,11 @@
             <p>{attribute_view_gui attribute=$sensor_post.object|attribute('attachment')}</p>
           {/if}
           {if $sensor_post.object|has_attribute('image')}
-            <figure>{attribute_view_gui attribute=$sensor_post.object|attribute('image') image_class='large' alignment=center}</figure>
+            {if $sensor_post.object|attribute('image').content.original.mime_type|explode('/')[0]|eq('image')}
+              <figure>{attribute_view_gui attribute=$sensor_post.object|attribute('image') image_class='large' alignment=center}</figure>
+            {else}
+              <p><a href={$sensor_post.object|attribute('image').content.original.url|ezroot()}>{$sensor_post.object|attribute('image').content.original.filename|wash()}</a></p>
+            {/if}
           {/if}
           <ul class="list-inline">
             <li><small><i class="fa fa-clock-o"></i> {'Pubblicata il'|i18n('sensor/post')} {$sensor_post.object.published|l10n(shortdatetime)}</small></li>
