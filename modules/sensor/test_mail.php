@@ -10,14 +10,14 @@ $objectId = $Params['Id'];
 $participantRole = $Params['Param'];
 $eventIdentifier = $Params['Param2'];
 
-$siteUrl = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );
+$siteUrl = rtrim(eZINI::instance()->variable( 'SiteSettings', 'SiteURL' ), '/');
 $parts = explode( '/', $siteUrl );
 if ( count( $parts ) >= 2 )
 {
     $suffix = array_shift( $parts );
     $siteUrl = implode( '/', $parts );
 }
-echo '<pre>' . rtrim( $siteUrl, '/' ) . '</pre>';
+//echo '<pre>' . rtrim( $siteUrl, '/' ) . '</pre>';
 
 if ( $test == 'registration' )
 {
@@ -42,6 +42,14 @@ elseif ( $test == 'post' )
     /** @var SensorCollaborationHandler $itemHandler */
     $itemHandler = $item->attribute( 'handler' );
 
+    $notificationTexts = SensorNotificationTextHelper::getTexts();
+    $currentNotificationTexts = false;
+    if (isset($notificationTexts[$eventIdentifier]['role_' . $participantRole]))
+    {
+        $currentNotificationTexts = $notificationTexts[$eventIdentifier]['role_' . $participantRole];
+    }
+    $currentLanguage = eZLocale::currentLocaleCode();
+
     $tpl->setVariable( 'event_identifier', $eventIdentifier );
     $tpl->setVariable( 'event_details', array(
         'observers' =>  array( 14 ),
@@ -55,6 +63,11 @@ elseif ( $test == 'post' )
     
     $templateName = SensorNotificationHelper::notificationMailTemplate( $participantRole );
     $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
+
+    $tpl->setVariable( 'subject', $currentNotificationTexts['title'][$currentLanguage] );
+    $tpl->setVariable( 'header', $currentNotificationTexts['header'][$currentLanguage] );
+    $tpl->setVariable( 'text', $currentNotificationTexts['text'][$currentLanguage] );
+
 
     $tpl->setVariable( 'collaboration_item', $item );
     $tpl->setVariable( 'collaboration_participant_role', $participantRole );

@@ -445,6 +445,19 @@ class SensorPostActionHandler
             $areasString = implode( '-', $areaIdList );
             $this->post->objectHelper->setContentObjectAttribute( 'area', $areasString );
             $this->post->eventHelper->createEvent( 'on_add_area', array( 'areas' => $categoryIdList ) );
+
+            if ( $this->post->configParameters['CategoryAreaAssign'] )
+            {
+                $userIds = $this->post->objectHelper->getApproverIdsByArea();
+                $userIds = ezpEvent::getInstance()->filter(
+                    'sensor/user_by_areas',
+                    $userIds
+                );
+                if ( !empty( $userIds ) )
+                {
+                    $this->assign( $userIds );
+                }
+            }
             $this->post->touch();
         }
     }
