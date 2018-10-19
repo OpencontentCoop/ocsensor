@@ -77,6 +77,7 @@ class OpenPaSensorRepository extends CoreRepository
             'ApproverCanReopen' => isset( $sensorIni['ApproverCanReopen'] ) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
             'UniqueCategoryCount' => isset( $sensorIni['CategoryCount'] ) ? $sensorIni['CategoryCount'] == 'unique' : true,
             'CategoryAutomaticAssign' => isset( $sensorIni['CategoryAutomaticAssign'] ) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
+            'AreaAutomaticAssign' => isset( $sensorIni['AreaAutomaticAssign'] ) ? $sensorIni['AreaAutomaticAssign'] == 'enabled' : false,
             'DefaultPostExpirationDaysInterval' => isset( $sensorIni['DefaultPostExpirationDaysInterval'] ) ? intval( $sensorIni['DefaultPostExpirationDaysInterval'] ) : 15,
             'DefaultPostExpirationDaysLimit' => isset( $sensorIni['DefaultPostExpirationDaysLimit'] ) ? intval( $sensorIni['DefaultPostExpirationDaysLimit']) : 7,
             'TextMaxLength' => isset( $sensorIni['TextMaxLength'] ) ? intval( $sensorIni['TextMaxLength'] ) : 800,
@@ -85,7 +86,8 @@ class OpenPaSensorRepository extends CoreRepository
             'FilterOperatorsByOwner' => isset( $sensorIni['FilterOperatorsByOwner'] ) ? $sensorIni['FilterOperatorsByOwner'] == 'enabled' : true,
             'FilterObserversByOwner' => isset( $sensorIni['FilterObserversByOwner'] ) ? $sensorIni['FilterObserversByOwner'] == 'enabled' : true,
             'CloseCommentsAfterSeconds' => isset( $sensorIni['CloseCommentsAfterSeconds'] ) ? intval( $sensorIni['CloseCommentsAfterSeconds'] ) : 1814400,
-            'MoveMarkerOnSelectArea' => isset( $sensorIni['MoveMarkerOnSelectArea'] ) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true
+            'MoveMarkerOnSelectArea' => isset( $sensorIni['MoveMarkerOnSelectArea'] ) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
+            'CommentsAllowed' => isset( $sensorIni['CommentsAllowed'] ) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
         ) );
     }
 

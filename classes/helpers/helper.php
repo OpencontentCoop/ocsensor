@@ -138,6 +138,7 @@ class SensorHelper
         $struct->authorUserId = $objectHelper->getPostAuthorId();
         $authorInfo = SensorUserInfo::instance( eZUser::fetch( $struct->authorUserId ) );
         $approverIDArray = $objectHelper->getApproverIdArray();
+        $observerIDArray = $objectHelper->getObserverIdArray();
         if ( empty( $approverIDArray ) )
         {
             $admin = eZUser::fetchByName( 'admin' );
@@ -151,6 +152,7 @@ class SensorHelper
             }
         }
         $struct->approverUserIdArray = $approverIDArray;
+        $struct->observerUserIdArray = $observerIDArray;
         $struct->configParams = SensorHelper::factory()->getSensorConfigParams();
 
         /** @var eZContentObjectAttribute[] $dataMap */
@@ -206,6 +208,10 @@ class SensorHelper
             array(
                 'id' => $struct->approverUserIdArray,
                 'role' => SensorUserPostRoles::ROLE_APPROVER
+            ),
+            array(
+                'id' => $struct->observerUserIdArray,
+                'role' => SensorUserPostRoles::ROLE_OBSERVER
             )
         );
         foreach ( $participantList as $participantItem )

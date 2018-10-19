@@ -8,6 +8,8 @@ class SensorPostCreateStruct
 
     public $approverUserIdArray = array();
 
+    public $observerUserIdArray = array();
+
     public $configParams = array();
 
     public $privacy;

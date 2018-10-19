@@ -83,4 +83,11 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=type
 
+[post_edit_category]
+Source=content/datatype/edit/ezobjectrelationlist.tpl
+MatchFile=edit_category.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=category
+
  */ ?>

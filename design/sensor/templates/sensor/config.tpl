@@ -54,6 +54,7 @@ $(document).ready(function(){
           <li role="presentation" {if $current_part|eq('operators')}class="active"{/if}><a href="{'sensor/config/operators'|ezurl(no)}">{'Operatori'|i18n('sensor/config')}</a></li>
           <li role="presentation" {if $current_part|eq('categories')}class="active"{/if}><a href="{'sensor/config/categories'|ezurl(no)}">{'Aree tematiche'|i18n('sensor/config')}</a></li>
           <li role="presentation" {if $current_part|eq('areas')}class="active"{/if}><a href="{'sensor/config/areas'|ezurl(no)}">{'Punti sulla mappa'|i18n('sensor/config')}</a></li>
+          <li role="presentation" {if $current_part|eq('notifications')}class="active"{/if}><a href="{'sensor/config/notifications'|ezurl(no)}">{'Testi notifiche'|i18n('sensor/config')}</a></li>
         {if $data|count()|gt(0)}
           {foreach $data as $item}
             <li role="presentation" {if $current_part|eq(concat('data-',$item.contentobject_id))}class="active"{/if}><a href="{concat('sensor/config/data-',$item.contentobject_id)|ezurl(no)}">{$item.name|wash()}</a></li>
@@ -131,6 +132,10 @@ $(document).ready(function(){
           <div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_area/?parent=',$areas[0].node.parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$areas[0].node.class_name}</a></div>
         {/if}
       </div>
+      {/if}
+
+      {if $current_part|eq('notifications')}   
+        {include uri='design:sensor/config/notifications.tpl'} 
       {/if}
 
       {if $data|count()|gt(0)}

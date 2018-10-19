@@ -56,7 +56,17 @@ interface SensorPostObjectHelperInterface
     /**
      * @return int[] eZUser ids
      */
+    public function getApproverIdsByArea();
+
+    /**
+     * @return int[] eZUser ids
+     */
     public function getApproverIdArray();
+
+    /**
+     * @return int[] eZUser ids
+     */
+    public function getObserverIdArray();
 
     /**
      * Restituisce un hash con il valore dell'attributo type dell'oggetto corrente tradotto  o false

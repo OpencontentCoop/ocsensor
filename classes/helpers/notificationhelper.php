@@ -168,6 +168,10 @@ class SensorNotificationHelper
 
     public function sendNotifications( eZNotificationEvent $event, array $parameters )
     {
+        $eventType = $event->attribute( 'data_text1' );
+        $prefix = SensorHelper::factory()->getSensorCollaborationHandlerTypeString() . '_';
+        $eventIdentifier = str_replace( $prefix, '', $eventType );
+
         /** @var eZNotificationCollection[] $collections */
         $collections = eZNotificationCollection::fetchListForHandler(
             eZCollaborationNotificationHandler::NOTIFICATION_HANDLER_ID,
@@ -194,11 +198,10 @@ class SensorNotificationHelper
                 null,
                 $parameters );
 
-            eZLog::write(
-                $collection->attribute( 'data_subject' ) .' -> '. implode(', ', $addressList),
-                'sensor_mail.log',
-                eZSys::varDirectory() . '/log'
-            );
+            $this->log(
+            	$collection->attribute( 'data_subject' ) .' -> '. implode(', ', $addressList),
+            	$eventIdentifier
+            );            
 
             if ( $collection->attribute( 'item_count' ) == 0 )
             {
@@ -224,15 +227,37 @@ class SensorNotificationHelper
         $tpl->setVariable( 'event_creator', $eventCreator );
         $tpl->setVariable( 'event_timestamp', $eventTimestamp );
 
+        $notificationTexts = SensorNotificationTextHelper::getTexts();        
+        $currentLanguage = eZLocale::currentLocaleCode();
+
         foreach( $userCollection as $participantRole => $collectionItems )
         {
+        	$currentNotificationTexts = false;
+	        if (isset($notificationTexts[$eventIdentifier]['role_' . $participantRole]))
+	        {
+	            $currentNotificationTexts = $notificationTexts[$eventIdentifier]['role_' . $participantRole];
+	        }	        
+            
+            if ( $currentNotificationTexts === false )
+            {
+            	$this->logError( 'empty notification texts', $eventIdentifier, $participantRole );
+            	continue;
+            }
+
             $tpl->setVariable( 'subject', '' );
             $tpl->setVariable( 'body', '' );
             $templateName = self::notificationMailTemplate( $participantRole );
 
-            if ( !$templateName ) continue;
+            if ( !$templateName ) {
+            	$this->logError( 'mail template not found', $eventIdentifier, $participantRole );
+            	continue;
+            }
 
             $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
+
+            $tpl->setVariable( 'subject', $currentNotificationTexts['title'][$currentLanguage] );
+            $tpl->setVariable( 'header', $currentNotificationTexts['header'][$currentLanguage] );
+            $tpl->setVariable( 'text', $currentNotificationTexts['text'][$currentLanguage] );
 
             $tpl->setVariable( 'collaboration_item', $this->post->getCollaborationItem() );
             $tpl->setVariable( 'collaboration_participant_role', $participantRole );
@@ -290,6 +315,10 @@ class SensorNotificationHelper
                 {
                     $collection->addItem( $collectionItem['email'] );
                 }
+            }
+            else
+            {
+            	$this->logError( 'empty template result', $eventIdentifier, $participantRole );
             }
         }
 
@@ -733,6 +762,42 @@ class SensorNotificationHelper
         }
 
         return $result;
+    }
+
+    private function log( $message, $eventIdentifier, $participantRole = null, $prefix = null )
+    {
+    	$messageParts = array();
+    	if ( $this->post instanceof SensorPost )
+    	{
+    		$messageParts[] = $this->post->objectHelper->getContentObject()->attribute('id');
+    	}
+    	$messageParts[] = $eventIdentifier;
+    	if ( $participantRole )
+    	{
+    		$nameMap = SensorPost::participantRoleNameMap();
+    		$messageParts[] = $nameMap[$participantRole] . ' (' . $participantRole . ')';
+    	}    	
+
+    	$message = '[' . implode('] [', $messageParts) . '] ' . $message;
+
+    	$this->writeLog($prefix  . $message);
+    }
+
+    private function logError( $message, $eventIdentifier, $participantRole = null )
+    {    	
+    	$this->log( $message, $eventIdentifier, $participantRole, '*** ERROR *** ' );
+    }
+
+    private function writeLog($message)
+    {
+    	$ini = eZINI::instance();
+        $varDir = $ini->variable( 'FileSettings', 'VarDir' );
+        $logDir = $ini->variable( 'FileSettings', 'LogDir' );
+        
+        $logName = 'sensor_mail.log';
+        $dir = $varDir . '/' . $logDir;
+
+    	eZLog::write($message, $logName, $dir);
     }
 
 }

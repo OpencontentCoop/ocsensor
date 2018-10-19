@@ -728,6 +728,10 @@ class SensorPost
 
     public function commentsIsOpen()
     {
+        if ( !$this->configParameters['CommentsAllowed'] )
+        {
+            return false;
+        }
         $now = time();
         $resolutionTime = $this->getResolutionTime();
         if ( $resolutionTime['timestamp'] && $this->configParameters['CloseCommentsAfterSeconds'] )
@@ -772,18 +776,8 @@ class SensorPost
     }
 
     protected static function participantRoleName( $roleID )
-    {
-        if ( empty( $GLOBALS['SensorParticipantRoleNameMap'] ) )
-        {
-
-            $GLOBALS['SensorParticipantRoleNameMap'] =
-                array( eZCollaborationItemParticipantLink::ROLE_STANDARD => ezpI18n::tr( 'sensor/role_name', 'Standard' ),
-                       eZCollaborationItemParticipantLink::ROLE_OBSERVER => ezpI18n::tr( 'sensor/role_name', 'Osservatore' ),
-                       eZCollaborationItemParticipantLink::ROLE_OWNER => ezpI18n::tr( 'sensor/role_name', 'In carico a' ),
-                       eZCollaborationItemParticipantLink::ROLE_APPROVER => ezpI18n::tr( 'sensor/role_name', 'Riferimento per il cittadino' ),
-                       eZCollaborationItemParticipantLink::ROLE_AUTHOR => ezpI18n::tr( 'sensor/role_name', 'Autore' ) );
-        }
-        $roleNameMap = $GLOBALS['SensorParticipantRoleNameMap'];
+    {    
+        $roleNameMap = self::participantRoleNameMap();
         if ( isset( $roleNameMap[$roleID] ) )
         {
             return $roleNameMap[$roleID];
@@ -801,6 +795,21 @@ class SensorPost
             eZCollaborationItemParticipantLink::ROLE_AUTHOR => 1
         );
         return isset( $sorter[$roleID] ) ? $sorter[$roleID] : 1000;
+    }
+
+    public static function participantRoleNameMap()
+    {
+        if ( empty( $GLOBALS['SensorParticipantRoleNameMap'] ) )
+        {
+            $GLOBALS['SensorParticipantRoleNameMap'] = array( 
+               eZCollaborationItemParticipantLink::ROLE_AUTHOR => ezpI18n::tr( 'sensor/role_name', 'Autore' ),
+               eZCollaborationItemParticipantLink::ROLE_APPROVER => ezpI18n::tr( 'sensor/role_name', 'Riferimento per il cittadino' ),               
+               eZCollaborationItemParticipantLink::ROLE_OWNER => ezpI18n::tr( 'sensor/role_name', 'In carico a' ),                              
+               eZCollaborationItemParticipantLink::ROLE_OBSERVER => ezpI18n::tr( 'sensor/role_name', 'Osservatore' ),
+               eZCollaborationItemParticipantLink::ROLE_STANDARD => ezpI18n::tr( 'sensor/role_name', 'Standard' ),   
+           );
+        }
+        return $GLOBALS['SensorParticipantRoleNameMap'];
     }
 
 }

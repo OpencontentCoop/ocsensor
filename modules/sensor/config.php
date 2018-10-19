@@ -101,6 +101,60 @@ elseif ( $Part == 'operators' )
     $tpl->setVariable( 'operator_class', eZContentClass::fetchByIdentifier( 'sensor_operator' ) );
 }
 
+elseif ( $Part == 'notifications' )
+{
+    if ( $Http->hasPostVariable( 'StoreNotificationsText' ) )
+    {        
+        $data = $Http->postVariable( 'NotificationsText' );
+        SensorNotificationTextHelper::storeTexts($data);
+    }
+    if ( $Http->hasPostVariable( 'ResetNotificationsText' ) )
+    {                
+        SensorNotificationTextHelper::reset();
+    }
+    $texts = SensorNotificationTextHelper::getTexts();
+    $tpl->setVariable( 'notification_types', SensorNotificationHelper::instance()->postNotificationTypes() );
+    $tpl->setVariable( 'participant_roles', SensorPost::participantRoleNameMap() );
+    
+    $languages = array();
+    $ini = eZINI::instance();
+    if ( !$ini->hasVariable( 'RegionalSettings', 'TranslationSA' ) or count($ini->variable( 'RegionalSettings', 'TranslationSA' )) == 0 )
+    {                
+        $locale = eZLocale::instance();
+        $host = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );        
+        $languages[$locale->localeCode()] = array(
+            'url' => '//' . $host,
+            'name' => $locale->languageName(),
+            'locale' => $locale->localeCode()
+        );
+    }
+    else
+    {
+        $translationSiteAccesses = $ini->variable( 'RegionalSettings', 'TranslationSA' );
+        foreach ( $translationSiteAccesses as $siteAccessName => $translationName )
+        {            
+            $host = eZSiteAccess::getIni( $siteAccessName )->variable( 'SiteSettings', 'SiteURL' );            
+            $locale = eZSiteAccess::getIni( $siteAccessName )->variable( 'RegionalSettings', 'ContentObjectLocale' );
+            $languages[$locale] = array(
+                'url' => '//' . $host,
+                'name' => $translationName,
+                'locale' => $locale
+             );
+        }
+    }
+
+    $tpl->setVariable( 'languages', $languages );  
+    $tpl->setVariable( 'all_languages', eZContentLanguage::fetchList() );  
+    $tpl->setVariable( 'texts', $texts );
+    $samplePost = SensorHelper::postContainerNode()->subtree(array(
+        'Limit' => 1,
+        'ClassFilterType' => 'include',
+        'ClassFilterInclude' => array( 'sensor_post' ),
+        'SortBy' => array( 'published', false )
+    ));
+    $tpl->setVariable( 'sample_post_id', $samplePost[0] instanceof eZContentObjectTreeNode ? $samplePost[0]->attribute( 'contentobject_id' ) : 0 );
+}
+
 $data = array();
 /** @var eZContentObjectTreeNode[] $otherFolders */
 $otherFolders = (array)eZContentObjectTreeNode::subTreeByNodeID( array( 'ClassFilterType' => 'include', 'ClassFilterArray' => array( 'folder' ), 'Depth' => 1, 'DepthOperator' => 'eq', ), $root->attribute( 'node_id' ) );
