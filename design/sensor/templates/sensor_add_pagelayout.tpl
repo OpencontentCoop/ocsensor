@@ -134,6 +134,9 @@
                 width: 45%;
             }
         }
+        span.classattribute-description{
+            color: #333;
+        }
     </style>
 {/literal}
 <body>

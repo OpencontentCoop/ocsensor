@@ -116,35 +116,46 @@ elseif ( $Part == 'notifications' )
     $tpl->setVariable( 'notification_types', SensorNotificationHelper::instance()->postNotificationTypes() );
     $tpl->setVariable( 'participant_roles', SensorPost::participantRoleNameMap() );
     
+    $allLanguages = eZContentLanguage::fetchList();
+    $allLanguageLocales = eZContentLanguage::fetchLocaleList();
+    $siteaccessList = array_column(eZSiteAccess::siteaccessList(), 'name');
     $languages = array();
     $ini = eZINI::instance();
-    if ( !$ini->hasVariable( 'RegionalSettings', 'TranslationSA' ) or count($ini->variable( 'RegionalSettings', 'TranslationSA' )) == 0 )
-    {                
-        $locale = eZLocale::instance();
-        $host = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );        
-        $languages[$locale->localeCode()] = array(
+    $locale = eZLocale::instance();
+    $host = eZINI::instance()->variable( 'SiteSettings', 'SiteURL' );        
+    
+    $currentLanguage = array(
+        $locale->localeCode() => array(
             'url' => '//' . $host,
             'name' => $locale->languageName(),
             'locale' => $locale->localeCode()
-        );
-    }
-    else
+        )
+    );    
+    
+    if ( $ini->hasVariable( 'RegionalSettings', 'TranslationSA' ) && count($ini->variable( 'RegionalSettings', 'TranslationSA' )) > 0 )
     {
         $translationSiteAccesses = $ini->variable( 'RegionalSettings', 'TranslationSA' );
         foreach ( $translationSiteAccesses as $siteAccessName => $translationName )
         {            
-            $host = eZSiteAccess::getIni( $siteAccessName )->variable( 'SiteSettings', 'SiteURL' );            
-            $locale = eZSiteAccess::getIni( $siteAccessName )->variable( 'RegionalSettings', 'ContentObjectLocale' );
-            $languages[$locale] = array(
-                'url' => '//' . $host,
-                'name' => $translationName,
-                'locale' => $locale
-             );
+            if (in_array($siteAccessName, $siteaccessList)){
+                $host = eZSiteAccess::getIni( $siteAccessName )->variable( 'SiteSettings', 'SiteURL' );            
+                $locale = eZSiteAccess::getIni( $siteAccessName )->variable( 'RegionalSettings', 'ContentObjectLocale' );
+                if(in_array($locale, $allLanguageLocales)){
+                    $languages[$locale] = array(
+                        'url' => '//' . $host,
+                        'name' => $translationName,
+                        'locale' => $locale
+                    );
+                }
+            }
         }
+    }
+    if(empty($languages)){
+        $languages = $currentLanguage;
     }
 
     $tpl->setVariable( 'languages', $languages );  
-    $tpl->setVariable( 'all_languages', eZContentLanguage::fetchList() );  
+    $tpl->setVariable( 'all_languages', $allLanguages );  
     $tpl->setVariable( 'texts', $texts );
     $samplePost = SensorHelper::postContainerNode()->subtree(array(
         'Limit' => 1,

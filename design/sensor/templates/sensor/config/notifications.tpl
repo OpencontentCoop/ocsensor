@@ -22,11 +22,13 @@
 							{if $id|gt(1)}
 								<tr>
 									<td width="200px" valign="middle" style="vertical-align: middle;">
-										<a target="_blank" href="#" data-toggle="modal" data-target="#preview" data-load-url="{$languages[$language.locale].url}/sensor/test_mail/post/{$sample_post_id}/{$id}/{$notification_type.identifier}/{$language.locale}">{"Notifica per"|i18n('sensor/settings')}<br /><strong>{$participant_role"|i18n('sensor/settings')}</strong></a>
+										<a target="_blank" href="#" data-toggle="modal" data-target="#preview" data-load-url="{$languages[$language.locale].url}/sensor/test_mail/post/{$sample_post_id}/{$id}/{$notification_type.identifier}/{$language.locale}">{"Notifica per"|i18n('sensor/settings')}<br />
+											<strong>{$participant_role"|i18n('sensor/settings')}</strong><br />
+											<small>{"Clicca per vedere l'anteprima"|i18n('sensor/settings')}</small></a>
 									</td>
 									<td>
 										<p>
-											<label for="{$notification_type.identifier}_role_{$id}_{$language.locale}_title">{"Titolo"|i18n('sensor/settings')}</label>
+											<label for="{$notification_type.identifier}_role_{$id}_{$language.locale}_title">{"Titolo dell'email"|i18n('sensor/settings')}</label>
 											<input id="{$notification_type.identifier}_role_{$id}_{$language.locale}_title" type="text" class="form-control" 
 												   name="NotificationsText[{$notification_type.identifier}][role_{$id}][title][{$language.locale}]" value="{$texts[$notification_type.identifier][concat('role_',$id)][title][$language.locale]|wash()}" />				
 										</p>

@@ -40,7 +40,7 @@
                         {if ezini( 'SensorConfig', 'CategoryAutomaticAssign', 'ocsensor.ini' )|eq( 'enabled' )}
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="Collaboration_SensorItemAssignToCategoryApprover"> {"Assegna al responsabile dell'area selezionata"|i18n('sensor/post')}
+                                    <input type="checkbox" name="Collaboration_SensorItemAssignToCategoryApprover"> {"Assegna al responsabile della categoria selezionata"|i18n('sensor/post')}
                                 </label>
                             </div>
                         {/if}
