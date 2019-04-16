@@ -200,7 +200,7 @@ class SensorHelper
 
                 $categoryDatamap = $category->dataMap();
 
-                if ($categoryDatamap['reference_group']->hasContent())
+                if (isset($categoryDatamap['reference_group']) && $categoryDatamap['reference_group']->hasContent())
                 {
                     $groupContent = $categoryDatamap['reference_group']->content();
                     $groupID = $groupContent['relation_list'][0]['contentobject_id'];
