@@ -2,6 +2,7 @@
 <html class="no-js" lang="en">
 {def $social_pagedata = social_pagedata()}
 {include uri='design:page_head.tpl'}
+{include uri='design:page_head_google_tag_manager.tpl'}
 {ezcss_require(array(
     'leaflet.0.7.2.css',
     'Control.Loading.css'
@@ -140,7 +141,7 @@
     </style>
 {/literal}
 <body>
-
+{include uri='design:page_body_google_tag_manager.tpl'}
 {$module_result.content}
 
 {literal}
