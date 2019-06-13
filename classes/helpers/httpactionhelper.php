@@ -148,6 +148,15 @@ class SensorHttpActionHelper
                     )
                 ),
                 'action_name' => 'edit_message',
+            ),
+            'EditResponse' => array(
+                'http_parameters' => array(
+                    'SensorEditResponse' => array(
+                        'required' => true,
+                        'action_parameter_name' => 'id_text'
+                    )
+                ),
+                'action_name' => 'edit_response',
             )
         );
     }
