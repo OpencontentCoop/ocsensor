@@ -49,7 +49,7 @@
 	  {/if}
 	  <ul class="list-inline">
 		  <li><small><i class="fa fa-clock-o"></i> {'Pubblicata il'|i18n('sensor/post')} {$sensor_post.object.published|l10n(shortdate)}</small></li>
-		  {if and( $sensor_post.object.modified|gt($sensor_post.object.published), $showModifiedTime|eq('enabled') )}
+		  {if and( $sensor_post.object.modified|gt($sensor_post.object.published), ezini( 'ListSettings', 'ShowModifiedTime', 'ocsensor.ini' )|eq('enabled') )}
 			  <li><small><i class="fa fa-clock-o"></i> {'Ultima modifica del'|i18n('sensor/post')} {$sensor_post.object.modified|l10n(shortdatetime)}</small></li>
 		  {/if}
 		  {if $sensor_post.current_owner}<li><small><i class="fa fa-user"></i> In carico a {$sensor_post.current_owner|wash()}</small></li>{/if}
