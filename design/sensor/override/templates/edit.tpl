@@ -237,9 +237,9 @@
 	{/section}
 
 	  <p class="text-center">
-		<a href="{'/sensor/redirect/info:privacy'|ezurl(no,full)}">
+		<a href="{'/sensor/redirect/info,privacy'|ezurl(no,full)}">
 			<small>
-				{'I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy'|i18n('sensor/add')}
+				{'I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy e i termini di utilizzo'|i18n('sensor/add')}
 			</small>
 		</a>
 	  </p>
