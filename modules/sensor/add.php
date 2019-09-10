@@ -3,8 +3,8 @@
 $module = $Params['Module'];
 $http = eZHTTPTool::instance();
 
-$node = SensorHelper::postContainerNode();
-$class = SensorHelper::postContentClass();
+$node = OpenPaSensorRepository::instance()->getPostRootNode();
+$class = OpenPaSensorRepository::instance()->getPostContentClass();
 
 eZSys::addAccessPath( array( 'layout', 'set', 'sensor_add' ), 'layout', false );
 

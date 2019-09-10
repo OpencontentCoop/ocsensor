@@ -17,7 +17,6 @@ if ( count( $parts ) >= 2 )
     $suffix = array_shift( $parts );
     $siteUrl = implode( '/', $parts );
 }
-//echo '<pre>' . rtrim( $siteUrl, '/' ) . '</pre>';
 
 if ( $test == 'registration' )
 {
@@ -30,62 +29,25 @@ if ( $test == 'registration' )
 }
 elseif ( $test == 'post' )
 {
-    $helper = SensorHelper::instanceFromContentObjectId( $objectId );
-    $item = $helper->currentSensorPost->getCollaborationItem();
-    //$item->createNotificationEvent();    
-    $object = eZContentObject::fetch( $item->attribute( "data_int1" ) );
-    $node = $object->attribute( 'main_node' );
-    if ( !$object instanceof eZContentObject )
-    {
-        throw new Exception( 'object not found' );
-    }
-    /** @var SensorCollaborationHandler $itemHandler */
-    $itemHandler = $item->attribute( 'handler' );
-
-    $notificationTexts = SensorNotificationTextHelper::getTexts();
-    $currentNotificationTexts = false;
-    if (isset($notificationTexts[$eventIdentifier]['role_' . $participantRole]))
-    {
-        $currentNotificationTexts = $notificationTexts[$eventIdentifier]['role_' . $participantRole];
-    }
-    $currentLanguage = eZLocale::currentLocaleCode();
-
-    $tpl->setVariable( 'event_identifier', $eventIdentifier );
-    $tpl->setVariable( 'event_details', array(
+    $repository = OpenPaSensorRepository::instance();
+    $post = $repository->getPostService()->loadPost($objectId);
+    $event = new \Opencontent\Sensor\Api\Values\Event();
+    $event->identifier = $eventIdentifier;
+    $event->post = $post;
+    $event->user = $repository->getCurrentUser();
+    $event->parameters = array(
         'observers' =>  array( 14 ),
         'owners' =>  array( 14 ),
         'categories'  =>  array( 57 ),
         'areas'  =>  array( 57 ),
         'expiry'  =>  15,
-    ));
-    $tpl->setVariable( 'event_creator', 14 );
-    $tpl->setVariable( 'event_timestamp', time() );
-    
-    $templateName = SensorNotificationHelper::notificationMailTemplate( $participantRole );
-    $templatePath = 'design:sensor/mail/' . $eventIdentifier . '/' . $templateName;
+    );
+    $notificationType = $repository->getNotificationService()->getNotificationByIdentifier($event->identifier);
+    $mailListener = new \Opencontent\Sensor\Legacy\Listeners\MailNotificationListener($repository);
+    $data = $mailListener->buildMailDataToRole($event, $notificationType, $participantRole);
 
-    $tpl->setVariable( 'subject', $currentNotificationTexts['title'][$currentLanguage] );
-    $tpl->setVariable( 'header', $currentNotificationTexts['header'][$currentLanguage] );
-    $tpl->setVariable( 'text', $currentNotificationTexts['text'][$currentLanguage] );
-
-
-    $tpl->setVariable( 'collaboration_item', $item );
-    $tpl->setVariable( 'collaboration_participant_role', $participantRole );
-    $tpl->setVariable( 'collaboration_item_status', $item->attribute( SensorPost::COLLABORATION_FIELD_STATUS ) );
-    $tpl->setVariable( 'sensor_post', $helper );
-    $tpl->setVariable( 'object', $object );
-    $tpl->setVariable( 'node', $node );
-
-    $result = $tpl->fetch( $templatePath );
-
-    $body = $tpl->variable( 'body' );
-    $subject = $tpl->variable( 'subject' );
-
-    $tpl->setVariable( 'title', $subject );
-    $tpl->setVariable( 'content', $body );
-
-    $templateResult = "<pre>{$subject}</pre>";
-    $templateResult .= $tpl->fetch( 'design:mail/sensor_mail_pagelayout.tpl' );
+    $templateResult = "<pre>{$data['subject']}</pre>";
+    $templateResult .= $data['body'];
 
 }
 

@@ -862,11 +862,6 @@
         <source>Ricevi la notifica via mail</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="notificationhelper.php" line="504"/>
-        <source>Ricevi la notifica via WhatsApp</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>sensor/post</name>
@@ -1098,61 +1093,6 @@
     </message>
     <message>
         <source>Impostazioni delle notifiche</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>sensor/whatsapp/post</name>
-    <message>
-        <source>Nuova segnalazione</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Segnalazione chiusa da operatore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La tua segnalazione è stata presa in carico</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La tua segnalazione è stata risolta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Segnalazione risolta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ti è stata assegnata una segnalazione</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nuova segnalazione #%post_id% clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La segnalazione #%post_id% è stata chiusa da operatore; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La tua segnalazione #%post_id% è stata presa in carico; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La tua segnalazione #%post_id% è stata risolta; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La segnalazione #%post_id% è stata chiusa da operatore; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>La segnalazione #%post_id% è stata risolta; per ulteriori informazioni, clicca sul seguente link: %post_url%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ti è stata assegnata la segnalazione #%post_id%, clicca sul seguente link: %post_url%</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -23,6 +23,8 @@ name=Sensor cache
 id=sensor
 tags[]=content
 path=sensor
+isClustered=true
+class=OpenPaSensorRepository
 
 
 */ ?>

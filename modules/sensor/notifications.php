@@ -4,78 +4,52 @@ $Module = $Params['Module'];
 $Http = eZHTTPTool::instance();
 $UserId = $Params['UserId'];
 $Identifier = $Params['Type'];
-$Transport = $Params['SubType'];
 
 try {
 
-    $user = eZUser::fetch($UserId);
-    if (!$user instanceof eZUser) {
+    $repository = OpenPaSensorRepository::instance();
+
+    $user = $repository->getUserService()->loadUser($UserId);
+    if (!$user instanceof \Opencontent\Sensor\Api\Values\User) {
         throw new Exception("User $UserId not found");
     }
-    $userInfo = SensorUserInfo::instance($user);
 
-    $allNotifications = (array)SensorNotificationHelper::instance()->postNotificationTypes();
-    $notifications = SensorNotificationHelper::instance()->getNotificationSubscriptionsForUser(
-        $user->id(),
-        $Transport ? $Transport : $userInfo->attribute('default_notification_transport')
-    );
+    $allNotifications = $repository->getNotificationService()->getNotificationTypes();
+    $userNotifications = $repository->getNotificationService()->getUserNotifications($user);
 
     if ($Identifier) {
 
-        if ($Identifier == 'all' && $_SERVER['REQUEST_METHOD'] === 'POST'){
-
-            foreach($allNotifications as $notification){
-                SensorNotificationHelper::instance()->storeNotificationRules($UserId, array($notification['identifier']), $Transport);
+        if ($Identifier == 'all' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            foreach ($allNotifications as $notification) {
+                $repository->getNotificationService()->addUserToNotification($user, $notification);
             }
             $Identifier = null;
-        }elseif ($Identifier == 'none' && $_SERVER['REQUEST_METHOD'] === 'POST'){
-            foreach($allNotifications as $notification){
-                SensorNotificationHelper::instance()->removeNotificationRules($UserId, array($notification['identifier']), $Transport);
+
+        } elseif ($Identifier == 'none' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            foreach ($allNotifications as $notification) {
+                $repository->getNotificationService()->removeUserToNotification($user, $notification);
             }
             $Identifier = null;
-        }else {
-            $exists = array_reduce($allNotifications, function ($carry, $item) use ($Identifier) {
-                if ($item['identifier'] == $Identifier) {
-                    $carry++;
-                }
 
-                return $carry;
-            });
+        } else {
 
-            if (!$exists) {
+            $notification = $repository->getNotificationService()->getNotificationByIdentifier($Identifier);
+            if (!$notification instanceof \Opencontent\Sensor\Api\Values\NotificationType) {
                 throw new Exception("Notification identifier $Identifier not found");
             }
 
-            $notifications = array_reduce((array)$notifications, function ($carry, $item) use ($Identifier) {
-                if ($item['identifier'] == $Identifier) {
-                    $carry = array($item);
-                }
-
-                return $carry;
-            });
-
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                SensorNotificationHelper::instance()->storeNotificationRules($UserId, array($Identifier), $Transport);
+                $repository->getNotificationService()->addUserToNotification($user, $notification);
             } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-                SensorNotificationHelper::instance()->removeNotificationRules($UserId, array($Identifier), $Transport);
+                $repository->getNotificationService()->removeUserToNotification($user, $notification);
             }
         }
     }
 
     $data = array();
-    foreach($allNotifications as $postNotification){
-        if ($Identifier && $Identifier != $postNotification['identifier']){
-            continue;
-        }
-        $active = array_reduce((array)$notifications, function ($carry, $item) use ($postNotification) {
-            if ($item['identifier'] == $postNotification['identifier']) {
-                $carry++;
-            }
-
-            return $carry;
-        });
-        $item = $postNotification;
-        $item['enabled'] = $active > 0;
+    foreach ($allNotifications as $notification) {
+        $item = $notification->jsonSerialize();
+        $item['enabled'] = in_array($notification->identifier, $userNotifications);
         $data[] = $item;
     }
 
@@ -95,7 +69,7 @@ try {
 }
 
 header('Content-Type: application/json');
-header( 'HTTP/1.1 200 OK' );
-echo json_encode( $result );
+header('HTTP/1.1 200 OK');
+echo json_encode($result);
 
 eZExecution::cleanExit();

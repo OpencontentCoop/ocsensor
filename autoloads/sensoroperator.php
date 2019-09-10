@@ -6,11 +6,8 @@ class SensorOperator
     {
         return array(
             'sensor_collaboration_identifier',
-            'sensor_root_handler',
-            'sensor_post',
             'sensor_postcontainer',
             'sensor_categorycontainer',
-            'sensor_chart_list',
             'sensor_categories',
             'sensor_areas',
             'sensor_default_approvers'
@@ -29,11 +26,13 @@ class SensorOperator
 
     function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace, $currentNamespace, &$operatorValue, $namedParameters )
     {
+        $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
             case 'sensor_default_approvers':
             {
-                $ids = SensorHelper::defaultApproverIdArray();
+                $scenario = new \Opencontent\Sensor\Legacy\PostService\Scenarios\FirstAreaApproverScenario($repository);
+                $ids = $scenario->getApprovers();
                 $ids = array_map('intval', $ids);
                 $data = array();
                 if ( !empty( $ids ) ){
@@ -44,52 +43,26 @@ class SensorOperator
 
             case 'sensor_collaboration_identifier':
             {
-                return $operatorValue = SensorHelper::factory()->getSensorCollaborationHandlerTypeString();
+                return $operatorValue = $repository->getSensorCollaborationHandlerTypeString();
             } break;
 
-            case 'sensor_root_handler':
-            {
-                return $operatorValue = ObjectHandlerServiceControlSensor::rootHandler();
-            } break;
-
-            case 'sensor_post':
-            {
-                if ( $operatorValue instanceof eZContentObject )
-                {
-                    try
-                    {
-                        $operatorValue = SensorHelper::instanceFromContentObjectId(
-                            $operatorValue->attribute( 'id' )
-                        );
-                    }
-                    catch( Exception $e )
-                    {
-                        eZDebug::writeError( $e->getMessage(), __METHOD__ );
-                        $operatorValue = null;
-                    }
-                }
-            } break;
 
             case 'sensor_postcontainer':
             {
-                return $operatorValue = SensorHelper::postContainerNode();
+                return $operatorValue = $repository->getPostRootNode();
             } break;
 
             case 'sensor_categorycontainer':
             {
-                return $operatorValue = SensorHelper::postCategoriesNode();
+                return $operatorValue = $repository->getCategoriesRootNode();
             } break;
 
-            case 'sensor_chart_list':
-                $operatorValue = SensorCharts::listAccessibleCharts();
-                break;
-
             case 'sensor_areas':
-                $operatorValue = OpenPaSensorRepository::instance()->getAreasTree();
+                $operatorValue = $repository->getAreasTree();
             break;
 
             case 'sensor_categories':
-                $operatorValue = OpenPaSensorRepository::instance()->getCategoriesTree();
+                $operatorValue = $repository->getCategoriesTree();
             break;
 
         }

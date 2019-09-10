@@ -1,50 +1,72 @@
 <?php
+
+use Opencontent\Opendata\Api\ClassRepository;
+
 /** @var eZModule $module */
 $module = $Params['Module'];
 $tpl = eZTemplate::factory();
 $postId = $Params['ID'];
-$Offset = $Params['Offset'];
-if ( !is_numeric( $Offset ) )
-    $Offset = 0;
+$repository = OpenPaSensorRepository::instance();
 
-if ( !is_numeric( $postId ) )
-{
-    $node = SensorHelper::postContainerNode();
-    //$module->redirectTo( $node->attribute( 'url_alias' ) );
-    $contentModule = eZModule::exists( 'content' );
-    return $contentModule->run(
-        'view',
-        array( 'full', $node->attribute( 'node_id' ) ),
-        false,
-        array( 'Offset' => $Offset )
-    );
-}
-else
-{
-    eZPreferences::sessionCleanup();
-    
-    $viewParameters = array(
-        'offset' => $Offset
-    );
-    $user = eZUser::currentUser();
-    $cacheFilePath = SensorModuleFunctions::sensorPostCacheFilePath( $user, $postId, $viewParameters );    
-    $localVars = array( "cacheFilePath", "postId", "module", "tpl", 'viewParameters' );        
-    $cacheFile = eZClusterFileHandler::instance( $cacheFilePath );
-    $args = compact( $localVars );
-    $ini = eZINI::instance();
-    $viewCacheEnabled = ( $ini->variable( 'ContentSettings', 'ViewCaching' ) == 'enabled' );    
-    if ( $viewCacheEnabled )
-    {
-        $Result = $cacheFile->processCache( array( 'SensorModuleFunctions', 'sensorCacheRetrieve' ),
-                                            array( 'SensorModuleFunctions', 'sensorPostGenerate' ),
-                                            null,
-                                            null,
-                                            $args );
+if (!is_numeric($postId)) {
+
+    $tpl->setVariable('areas', $repository->getAreasTree());
+    $tpl->setVariable('categories', $repository->getCategoriesTree());
+    $Result = array();
+    $Result['persistent_variable'] = $tpl->variable('persistent_variable');
+    $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts.tpl');
+    $Result['node_id'] = $repository->getPostRootNode()->attribute('node_id');
+
+    $contentInfoArray = array('url_alias' => 'sensor/posts');
+    $contentInfoArray['persistent_variable'] = false;
+    if ($tpl->variable('persistent_variable') !== false) {
+        $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
     }
-    else
-    {    
-        $data = SensorModuleFunctions::sensorPostGenerate( false, $args );
-        $Result = $data['content']; 
-    }
+    $Result['content_info'] = $contentInfoArray;
+    $Result['path'] = array();
+
     return $Result;
+
+} else {
+
+    try {
+        $post = $repository->getSearchService()->searchPost($postId);
+
+        $readAction = new \Opencontent\Sensor\Api\Action\Action();
+        $readAction->identifier = 'read';
+        $repository->getActionService()->runAction($readAction, $post);
+
+        $tpl->setVariable('post_id', (int)$postId);
+
+        $tpl->setVariable('areas', json_encode($repository->getAreasTree()));
+        $tpl->setVariable('categories', json_encode($repository->getCategoriesTree()));
+        $tpl->setVariable('settings', json_encode($repository->getSensorSettings()));
+
+        $classRepository = new ClassRepository();
+        $tpl->setVariable('sensor_post', json_encode($classRepository->load($repository->getPostContentClassIdentifier())));
+
+        $Result = array();
+        $Result['persistent_variable'] = $tpl->variable('persistent_variable');
+        $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/post.tpl');
+        $Result['node_id'] = 0;
+
+        $contentInfoArray = array('url_alias' => 'sensor/post/' . $postId);
+        $contentInfoArray['persistent_variable'] = false;
+        if ($tpl->variable('persistent_variable') !== false) {
+            $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
+        }
+        $Result['content_info'] = $contentInfoArray;
+        $Result['path'] = array();
+
+        return $Result;
+
+    } catch (\Opencontent\Sensor\Api\Exception\NotFoundException $e) {
+        eZDebug::writeError($e->getMessage(), __FILE__);
+        return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel', ['error' => $e->getMessage()]);
+
+    } catch (\Opencontent\Sensor\Api\Exception\BaseException $e) {
+        eZDebug::writeError($e->getMessage(), __FILE__);
+        return $module->handleError(eZError::KERNEL_ACCESS_DENIED, 'kernel', ['error' => $e->getMessage()]);
+    }
+
 }

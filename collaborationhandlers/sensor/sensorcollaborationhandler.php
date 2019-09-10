@@ -2,17 +2,17 @@
 
 class SensorCollaborationHandler extends eZCollaborationItemHandler
 {
-    /*!
-     Initializes the handler
-    */
-    function SensorCollaborationHandler()
+    private $repository;
+
+    function __construct()
     {
-        $this->eZCollaborationItemHandler(
-            SensorHelper::factory()->getSensorCollaborationHandlerTypeString(),
+        $this->repository = OpenPaSensorRepository::instance();
+        parent::__construct(
+            $this->repository->getSensorCollaborationHandlerTypeString(),
             ezpI18n::tr( 'sensor/settings', 'Notifiche Sensor' ),
             array(
                 'use-messages' => true,
-                'notification-types' => SensorNotificationHelper::instance()->notificationTypes(),
+                'notification-types' => $this->repository->getNotificationService()->getNotificationTypes(),
                 'notification-collection-handling' => eZCollaborationItemHandler::NOTIFICATION_COLLECTION_PER_PARTICIPATION_ROLE
             )
         );
@@ -36,28 +36,8 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
         return array(
             "content_object_id" => $collaborationItem->attribute( "data_int1" ),
             "last_change" => $collaborationItem->attribute( SensorPost::COLLABORATION_FIELD_LAST_CHANGE),
-            "helper" => self::helper( $collaborationItem ),
             "item_status" => $collaborationItem->attribute( SensorPost::COLLABORATION_FIELD_STATUS)
         );
-    }
-
-    /**
-     * @param eZCollaborationItem $collaborationItem
-     * @return SensorHelper
-     * @throws Exception
-     */
-    static function helper( $collaborationItem )
-    {
-        $helper = null;
-        try
-        {
-            $helper = SensorHelper::instanceFromCollaborationItem( $collaborationItem );
-        }
-        catch( Exception $e )
-        {
-            eZDebug::writeError( $e->getMessage() );
-        }
-        return $helper;
     }
 
     /**
@@ -77,9 +57,6 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
     function readItem( $collaborationItem, $viewMode = false )
     {
         $collaborationItem->setLastRead();
-        $helper = self::helper( $collaborationItem );
-        if ( $helper instanceof SensorHelper )
-            $helper->onRead();
     }
 
     /**
@@ -88,9 +65,6 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
      */
     function messageCount( $collaborationItem )
     {
-        $helper = self::helper( $collaborationItem );
-        if ( $helper instanceof SensorHelper )
-            return $helper->attribute( 'human_count' );
         return 0;
     }
 
@@ -100,25 +74,7 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
      */
     function unreadMessageCount( $collaborationItem )
     {
-        $helper = self::helper( $collaborationItem );
-        if ( $helper instanceof SensorHelper )
-            return $helper->attribute( 'human_unread_count' );
         return 0;
-    }
-
-    /**
-     * @param int $collaborationItemId
-     * @return bool
-     */
-    static function checkItem( $collaborationItemId )
-    {
-        /** @var eZCollaborationItem $collaborationItem */
-        $collaborationItem = eZCollaborationItem::fetch( $collaborationItemId );
-        if ( $collaborationItem !== null )
-        {
-            return $collaborationItem->attribute( 'data_int3' );
-        }
-        return false;
     }
 
     /**
@@ -128,13 +84,7 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
      */
     function handleCustomAction( $module, $collaborationItem )
     {
-        $helper = self::helper( $collaborationItem );
-        if ( $helper instanceof SensorHelper )
-        {
-            $helper->handleHttpAction( $module );
-            $module->redirectTo( 'sensor/posts/' . $collaborationItem->attribute( 'data_int1' ) );
-        }
-        return;
+        return false;
     }
 
 
@@ -147,11 +97,7 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
      */
     static function handleCollaborationEvent( $event, $item, &$parameters )
     {
-        $helper = self::helper( $item );
-        if ( $helper  )
-            return $helper->currentSensorPost->eventHelper->handleEvent( $event, $parameters );
-        else
-            return eZNotificationEventHandler::EVENT_SKIPPED;
+        return eZNotificationEventHandler::EVENT_SKIPPED;
     }
 
 }

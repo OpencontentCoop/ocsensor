@@ -2,28 +2,30 @@
 
 class SensorNotificationTextHelper
 {
-	const SITEDATA_NAME = 'Sensor.NotificationTexts';
+    const SITEDATA_NAME = 'Sensor.NotificationTexts';
 
-	private static function getSiteData()
-	{
-		$data = eZSiteData::fetchByName(self::SITEDATA_NAME);
-		if (!$data instanceof eZSiteData) {
+    private static $templates;
+
+    private static function getSiteData()
+    {
+        $data = eZSiteData::fetchByName(self::SITEDATA_NAME);
+        if (!$data instanceof eZSiteData) {
             $data = new eZSiteData(array(
                 'name' => self::SITEDATA_NAME,
                 'value' => json_encode(self::getDefaultTexts())
-            ));            
+            ));
             $data->store();
         }
 
         return $data;
-	}
+    }
 
-	public static function storeTexts($newData)
-	{
-		$data = self::getSiteData();
-		$data->setAttribute('value', json_encode($newData));
-		$data->store();
-	}
+    public static function storeTexts($newData)
+    {
+        $data = self::getSiteData();
+        $data->setAttribute('value', json_encode($newData));
+        $data->store();
+    }
 
     public static function reset()
     {
@@ -32,14 +34,34 @@ class SensorNotificationTextHelper
         $data->store();
     }
 
-	public static function getTexts()
-	{
-		$data = self::getSiteData();
-		
-        return json_decode($data->attribute('value'), 1);
-	}
+    public static function getTexts()
+    {
+        $data = self::getSiteData();
 
-	public static function getDefaultTexts()
+        return json_decode($data->attribute('value'), 1);
+    }
+
+    public static function getTemplates()
+    {
+        if (self::$templates === null) {
+            $texts = self::getTexts();
+            self::$templates = [];
+            foreach ($texts as $event => $text) {
+                foreach ($text as $roleString => $values) {
+                    $roleId = str_replace('role_', '', $roleString);
+                    foreach ($values as $identifier => $languages) {
+                        foreach ($languages as $language => $value) {
+                            self::$templates[$event][$roleId][$language][$identifier] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return self::$templates;
+    }
+
+    public static function getDefaultTexts()
     {
         return array(
             'on_create' => array(

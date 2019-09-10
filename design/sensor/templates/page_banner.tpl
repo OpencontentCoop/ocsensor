@@ -9,5 +9,67 @@
         </div>
     </div>
 {elseif and( is_set( $module_result.node_id ), $module_result.node_id|eq( sensor_postcontainer().node_id ) )}
-    {include uri='design:sensor/post/posts_map.tpl'}
+    <div class="hidden-xs">
+        <div class="full_page_photo"><div id="map"></div><div id="map-spinner" style="position: absolute;bottom: 0;height: 2px;background: #f00;width: 0;z-index: 2000;"></div></div>
+        <div style="background: #eee;padding-top: 15px" id="posts-search">
+            <div class="container">
+                <form class="row" role="search">
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" name="query" value="" placeholder="{'Ricerca testuale'|i18n('sensor/post')}">
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group" id="area-filter">
+                            <select class="select form-control" name="area">
+                                <option>{'Area'|i18n('sensor/post')}</option>
+                                {foreach $module_result.content_info.persistent_variable.areas.children as $item}
+                                    <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                                    {foreach $item.children as $child}
+                                        <option value="{$child.id}"
+                                                style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                                    {/foreach}
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group" id="category-filter">
+                            <select class="select form-control" name="category">
+                                <option>{'Categoria'|i18n('sensor/post')}</option>
+                                {foreach $module_result.content_info.persistent_variable.categories.children as $item}
+                                    <option value="{$item.id}"
+                                            style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                                    {foreach $item.children as $child}
+                                        <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                                    {/foreach}
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group" id="type-filter">
+                            <select class="select form-control" name="type">
+                                <option>{'Tipo'|i18n('sensor/post')}</option>
+                                <option value="segnalazione">{'Segnalazione'|i18n('openpa_sensor/type')}</option>
+                                <option value="suggerimento">{'Suggerimento'|i18n('openpa_sensor/type')}</option>
+                                <option value="reclamo">{'Reclamo'|i18n('openpa_sensor/type')}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="published"
+                                   class="form-control daterange"
+                                   placeholder="{'Data creazione'|i18n('sensor/post')}"
+                                   value=""/>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-info"><span class="fa fa-search"></span></button>
+                        <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {/if}

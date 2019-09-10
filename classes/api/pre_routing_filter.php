@@ -4,7 +4,7 @@ class SensorPreRoutingFilter implements ezpRestPreRoutingFilterInterface
 {
     public function __construct( ezcMvcRequest $request )
     {        
-        if ( strpos( $request->requestId, 'api/sensor/' ) !== false )
+        if ( strpos( $request->requestId, 'api/sensor' ) !== false )
         {                                    
             eZDebug::setHandleType( eZDebug::HANDLE_FROM_PHP );
             $currentSiteaccess = eZSiteAccess::current();

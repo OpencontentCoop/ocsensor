@@ -1,11 +1,11 @@
-{def $sensor          = sensor_root_handler()
-     $social_pagedata = social_pagedata( 'sensor' )}
+{def $areas = sensor_areas()
+	 $social_pagedata = social_pagedata( 'sensor' )}
 
 <script type="text/javascript">
   {if $object.data_map.geo.has_content}
 	var PointsOfInterest = [{ldelim}"id":"{$object.id}","coords":["{$object.data_map.geo.content.latitude|explode(',')|implode('.')}","{$object.data_map.geo.content.longitude|explode(',')|implode('.')}"],"address":"{$object.data_map.geo.content.address}"{rdelim}];
   {else}
-    var PointsOfInterest = {$sensor.areas.coords_json};
+    var PointsOfInterest = [{ldelim}"id":"{$areas.children[0].id}","coords":["{$areas.children[0].geo.coords[0]}","{$areas.children[0].geo.coords[1]}"],"address":"{$areas.children[0].name}"{rdelim}];
   {/if}
 </script>
 

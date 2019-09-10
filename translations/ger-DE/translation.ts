@@ -606,11 +606,6 @@
         </message>
         <message>
             <location filename="notificationhelper.php" line="504"/>
-            <source>Ricevi la notifica via WhatsApp</source>
-            <translation>Erhalten einer Benachrichtigung per WhatsApp</translation>
-        </message>
-        <message>
-            <location filename="notificationhelper.php" line="504"/>
             <source>Ricevi una notifica quando un osservatore viene coinvolto in una segnalazione</source>
             <translation>Mitteilung erfolgt, falls BeobachterIn hinzugefügt wurde</translation>
         </message>
@@ -856,33 +851,6 @@
         <message>
             <source>Impostazioni delle notifiche</source>
             <translation>Benachrichtigungseinstellungen</translation>
-        </message>
-    </context>
-    <context>
-        <name>sensor/whatsapp/post</name>
-        <message>
-            <source>Nuova segnalazione</source>
-            <translation>Neue Meldung</translation>
-        </message>
-        <message>
-            <source>Segnalazione chiusa da operatore</source>
-            <translation></translation>
-        </message>
-        <message>
-            <source>La tua segnalazione è stata presa in carico</source>
-            <translation>Deine Meldung wurde angenommen</translation>
-        </message>
-        <message>
-            <source>La tua segnalazione è stata risolta</source>
-            <translation>Die Meldung erfolgreich abgeschlossen</translation>
-        </message>
-        <message>
-            <source>Segnalazione risolta</source>
-            <translation>Die Meldung erfolgreich abgeschlossen</translation>
-        </message>
-        <message>
-            <source>Ti è stata assegnata una segnalazione</source>
-            <translation>Es wurde dir eine Meldung zugewiesen</translation>
         </message>
     </context>
     <context>

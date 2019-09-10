@@ -1,17 +1,28 @@
 <?php /* #?ini charset="utf-8"?
 
 [ApiProvider]
-ProviderClass[sensor]=SensorApiProvider
+ProviderClass[sensor_gui]=SensorGuiApiProvider
+ProviderClass[sensor]=SensorOpenApiProvider
 
-[SensorApiController_CacheSettings]
+[SensorGuiApiController_CacheSettings]
 ApplicationCache=disabled
 
 [RouteSettings]
-SkipFilter[]=SensorApiController_loadPost
+SkipFilter[]=SensorGuiApiController_endpoint
+SkipFilter[]=SensorOpenApiProvider_endpoint
+
+[SensorApiCompatController_CacheSettings]
+ApplicationCache=disabled
+
+[SensorGuiApiController_CacheSettings]
+ApplicationCache=disabled
+
+[SensorOpenApiController_CacheSettings]
+ApplicationCache=disabled
 
 [Authentication]
 RequireAuthentication=enabled
-AuthenticationStyle=ezpRestBasicAuthStyle
+AuthenticationStyle=SensorApiBasicAuthStyle
 DefaultUserID=
 
 

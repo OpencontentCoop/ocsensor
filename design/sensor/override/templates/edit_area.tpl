@@ -8,19 +8,28 @@
   {def $attribute_base = 'ContentObjectAttribute'}
 {/if}
 
-{def $sensor = sensor_root_handler()     
-     $areas = $sensor.areas.tree}
+{def $areas = sensor_areas()}
 
-{if and( count( $areas )|eq(1), is_set( $areas[0]['children'] ))}
-    {set $areas = $areas[0]['children']}
+{if is_set( $areas['children'] )}
+    {set $areas = $areas['children']}
+{/if}
+
+{def $current_areas = array()}
+{if ne( count( $attribute.content.relation_list ), 0)}
+    {foreach $attribute.content.relation_list as $relation}
+        {set $current_areas = $current_areas|append($relation.contentobject_id)}
+    {/foreach}
 {/if}
 
 <input type="hidden" name="single_select_{$attribute.id}" value="1" />
 {if ne( count( $areas ), 0)}
     <select {if ezini( 'SensorConfig', 'MoveMarkerOnSelectArea', 'ocsensor.ini' )|eq('enabled')}id="poi"{/if} class="{$html_class}" name="{$attribute_base}_data_object_relation_list_{$attribute.id}[]">
         <option>{'Non specificato'|i18n( 'sensor/add' )}</option>
-        {foreach $areas as $area}
-            {include name=areatree uri='design:tools/walk_item_option.tpl' item=$area recursion=0 attribute=$attribute}
+        {foreach $areas as $item}
+            <option value="{$item.id}" data-lat="{$item.geo.coords[0]}" data-lng="{$item.geo.coords[1]}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}" {if $current_areas|contains($item.id)} selected="selected"{/if}>{$item.name|wash()}</option>
+            {foreach $item.children as $child}
+                <option value="{$child.id}" data-lat="{$child.geo.coords[0]}" data-lng="{$child.geo.coords[1]}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}" {if $current_areas|contains($child.id)} selected="selected"{/if}>{$child.name|wash()}</option>
+            {/foreach}
         {/foreach}
     </select>
 {/if}

@@ -18,11 +18,13 @@
                       {include uri='design:sensor/mail/parts/post_info.tpl'}
                     </td>
                 </tr>
-                <tr>
-                    <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>                        
-                        <p><strong>{"Assegnata a"|i18n('sensor/mail/post')}:</strong> {$collaboration_item.content.helper.owner_name|wash()}</p>
-                    </td>
-                </tr>
+                {if and( count( $event_details )|gt(0), is_set( $event_details.owners ) )}
+                    <tr>
+                        <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
+                            <p><strong>{"Assegnata a"|i18n('sensor/mail/post')}:</strong> {foreach $event_details.owners as $owner_id}{fetch( content, object, hash( object_id, $owner_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
+                        </td>
+                    </tr>
+                {/if}
                 <tr>
                     <td align='center' bgcolor='#f90f00' valign='top'>
                         <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Controlla l'andamento della risoluzione"|i18n('sensor/mail/post')}</a></h3>

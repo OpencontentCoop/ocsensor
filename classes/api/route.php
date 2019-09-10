@@ -21,10 +21,10 @@ class SensorApiRailsRoute extends ezcMvcRailsRoute
      * @param array $defaultValues
      * @param null|string $protocol Match specific protocol if string value, eg: 'http-get'
      */
-    public function __construct( $pattern, $controllerClassName, $action = null, array $defaultValues = array(), $protocol = null )
+    public function __construct($pattern, $controllerClassName, $action = null, array $defaultValues = array(), $protocol = null)
     {
         $this->protocol = $protocol;
-        parent::__construct( $pattern, $controllerClassName, $action, $defaultValues );
+        parent::__construct($pattern, $controllerClassName, $action, $defaultValues);
     }
 
     /**
@@ -33,10 +33,15 @@ class SensorApiRailsRoute extends ezcMvcRailsRoute
      * @param ezcMvcRequest $request
      * @return ezcMvcRoutingInformation|null
      */
-    public function matches( ezcMvcRequest $request )
+    public function matches(ezcMvcRequest $request)
     {
-        if ( $this->protocol === null || $request->protocol === $this->protocol )
-            return parent::matches( $request );
+        if ($this->match($request, $matches)) {
+            if ($request->protocol === $this->protocol) {
+                $request->variables = array_merge($this->defaultValues, $request->variables, $matches);
+
+                return new ezcMvcRoutingInformation($this->pattern, $this->controllerClassName, $this->action);
+            }
+        }
 
         return null;
     }

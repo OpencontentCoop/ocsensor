@@ -19,12 +19,6 @@ $ViewList['posts'] = array(
     'functions' => array('use')
 );
 
-$ViewList['data'] = array(
-    'script' => 'data.php',
-    'params' => array(),
-    'functions' => array('use')
-);
-
 $ViewList['add'] = array(
     'script' => 'add.php',
     'params' => array(),
@@ -68,7 +62,7 @@ $ViewList['config'] = array(
 
 $ViewList['notifications'] = array(
     'script' => 'notifications.php',
-    'params' => array('UserId','Type','SubType'),
+    'params' => array('UserId', 'Type', 'SubType'),
     'functions' => array('config')
 );
 
@@ -79,10 +73,17 @@ $ViewList['stat'] = array(
     'functions' => array('stat')
 );
 
-//bc
-$ViewList['dimmi'] = array(
-    'script' => 'dimmi.php',
+$ViewList['openapi'] = array(
+    'script' => 'openapi.php',
     'params' => array(),
+    'unordered_params' => array(),
+    'functions' => array('use')
+);
+
+$ViewList['openapi.json'] = array(
+    'script' => 'openapi.php',
+    'params' => array(),
+    'unordered_params' => array(),
     'functions' => array('use')
 );
 
@@ -96,9 +97,8 @@ $FunctionList['behalf'] = array();
 $FunctionList['ws_user'] = array();
 
 $charts = array();
-foreach( SensorCharts::listAvailableCharts() as $item )
-{
-    $charts[$item['name']] = array( 'Name' => $item['name'], 'value' => $item['identifier'] );
+foreach (OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true) as $item) {
+    $charts[$item->getName()] = array('Name' => $item->getName(), 'value' => $item->getIdentifier());
 }
 $chartList = array(
     'name' => 'ChartList',

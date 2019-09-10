@@ -1,229 +1,137 @@
 <?php
 
-class SensorPostCsvExporter
+class SensorPostCsvExporter extends SearchQueryCSVExporter
 {
-    protected $filters;
+    const MAX_DIRECT_DOWNLOAD_ITEMS = 0;
 
-    protected $group;
+    protected $queryParams;
 
-    protected $CSVheaders = array();
+    protected $csvHeaders = array();
 
-    protected $extraAttributes = false;
-    
+    protected $repository;
+
+    public $filename;
+
+    protected $downloadId;
+
+    protected $iteration;
+
     public $options = array(
         'CSVDelimiter' => ';',
         'CSVEnclosure' => '"'
     );
-    
-    public function __construct( array $filters, eZCollaborationGroup $group, $selectedList = null )
+
+    public function __construct(\Opencontent\Sensor\Legacy\Repository $repository)
     {
-        $this->filters = $filters;
-        $this->group = $group;
-        $this->CSVheaders = array(
-            'id'                => ezpI18n::tr( 'sensor/export', 'ID' ),
-            'privacy'           => ezpI18n::tr( 'sensor/export', 'Privacy' ),
-            'moderation'        => ezpI18n::tr( 'sensor/export', 'Moderazione' ),
-            'type'              => ezpI18n::tr( 'sensor/export', 'Tipo' ),
-            'current_status'    => ezpI18n::tr( 'sensor/export', 'Stato corrente' ),
-            'created'           => ezpI18n::tr( 'sensor/export', 'Creato il' ),
-            'modified'          => ezpI18n::tr( 'sensor/export', 'Ultima modifica del' ),
-            'expiring_date'     => ezpI18n::tr( 'sensor/export', 'Scadenza' ),
-            'resolution_time'   => ezpI18n::tr( 'sensor/export', 'Data risoluzione' ),
-            'resolution_diff'   => ezpI18n::tr( 'sensor/export', 'Tempo di risoluzione' ),
-            'title'             => ezpI18n::tr( 'sensor/export', 'Titolo' ),
-            'author'            => ezpI18n::tr( 'sensor/export', 'Autore' ),
-            'category'          => ezpI18n::tr( 'sensor/export', 'Area tematica' ),
-            'category_child'    => ezpI18n::tr( 'sensor/export', 'Area tematica (descrittore)' ),
-            'current_owner'     => ezpI18n::tr( 'sensor/export', 'Assegnatario' ),
-            'comment'           => ezpI18n::tr( 'sensor/export', 'Commenti' )
+        $http = eZHTTPTool::instance();
+        $this->repository = $repository;
+
+        $this->queryParams = $_GET;
+        $this->queryString = $this->queryParams['q'];
+        $this->maxSearchLimit = \Opencontent\Sensor\Legacy\SearchService::MAX_LIMIT;
+
+        $this->csvHeaders = array(
+            'id' => ezpI18n::tr('sensor/export', 'ID'),
+            'privacy' => ezpI18n::tr('sensor/export', 'Privacy'),
+            'moderation' => ezpI18n::tr('sensor/export', 'Moderazione'),
+            'type' => ezpI18n::tr('sensor/export', 'Tipo'),
+            'current_status' => ezpI18n::tr('sensor/export', 'Stato corrente'),
+            'created' => ezpI18n::tr('sensor/export', 'Creato il'),
+            'modified' => ezpI18n::tr('sensor/export', 'Ultima modifica del'),
+            'expiring_date' => ezpI18n::tr('sensor/export', 'Scadenza'),
+            'resolution_time' => ezpI18n::tr('sensor/export', 'Data risoluzione'),
+            'resolution_diff' => ezpI18n::tr('sensor/export', 'Tempo di risoluzione'),
+            'title' => ezpI18n::tr('sensor/export', 'Titolo'),
+            'author' => ezpI18n::tr('sensor/export', 'Autore'),
+            'category' => ezpI18n::tr('sensor/export', 'Area tematica'),
+            //'category_child' => ezpI18n::tr('sensor/export', 'Area tematica (descrittore)'),
+            'current_owner' => ezpI18n::tr('sensor/export', 'Assegnatario'),
+            'comment' => ezpI18n::tr('sensor/export', 'Commenti')
         );
 
-        /** @var eZContentClass $postContentClass */
-        $extraAttributes = eZINI::instance( 'ocsensor.ini' )->variable( 'ExportSettings', 'ExtraAttributes');
-        $postContentClass = SensorHelper::postContentClass();
-        $postContentClassAttributes = array_keys($postContentClass->dataMap());
+        $this->filename = 'posts' . '_' . time();
 
-        if (!empty($extraAttributes))
-        {
-            $this->extraAttributes = $extraAttributes;
-            foreach ($extraAttributes as $k => $v)
-            {
-                if (in_array($k, $postContentClassAttributes))
-                {
-                    $this->CSVheaders[$k] = $v;
-                }
+        if ($http->hasGetVariable('download_id')) {
+            $this->downloadId = $http->getVariable('download_id');
+            $this->filename = $this->downloadId;
+            $this->iteration = intval($http->getVariable('iteration'));
+            if ($http->hasGetVariable('download')) {
+                $this->download = true;
             }
         }
-        $this->filename = 'posts' . '_' . date('Ymd');
     }
-    
-    public function handleDownload()
-    {        
-        $filename = $this->filename . '.csv';
-        header( 'X-Powered-By: eZ Publish' );
-        header( 'Content-Description: File Transfer' );
-        header( 'Content-Type: text/csv; charset=utf-8' );
-        header( "Content-Disposition: attachment; filename=$filename" );
-        header( "Pragma: no-cache" );
-        header( "Expires: 0" );
 
-        if ($this->group != null)
-        {
-            $listTypes = SensorHelper::availableListTypes();
-            $runOnce = false;
-            foreach( $listTypes as $type )
-            {
-                $count = call_user_func( $type['count_function'], $this->filters, $this->group );
-                $length = 50;
-                $offset = 0;
-                $output = fopen('php://output', 'w');
-                do
-                {
-                    $items = call_user_func( $type['list_function'], $this->filters, $this->group, $length, $offset );
-
-                    foreach ( $items as $item )
-                    {
-                        $values = $this->transformItem( $item );
-                        if ( !$runOnce )
-                        {
-                            fputcsv( $output, array_values( $this->CSVheaders ), $this->options['CSVDelimiter'], $this->options['CSVEnclosure'] );
-                            $runOnce = true;
-                        }
-                        fputcsv( $output, $values, $this->options['CSVDelimiter'], $this->options['CSVEnclosure'] );
-                        flush();
-                    }
-                    $offset += $length;
-
-                } while ( count( $items ) == $length );
-            }
-        }
-        else
-        {
-            $runOnce = false;
-            $count = SensorPostFetcher::fetchAllItemsCountGroupLess( $this->filters );
-            $length = 50;
-            $offset = 0;
-            $output = fopen('php://output', 'w');
-            do
-            {
-                $items = SensorPostFetcher::fetchAllItemsGroupLess( $this->filters, $length, $offset );
-
-                foreach ( $items as $item )
-                {
-                    $values = $this->transformItem( $item );
-                    if ( !$runOnce )
-                    {
-                        fputcsv( $output, array_values( $this->CSVheaders ), $this->options['CSVDelimiter'], $this->options['CSVEnclosure'] );
-                        $runOnce = true;
-                    }
-                    fputcsv( $output, $values, $this->options['CSVDelimiter'], $this->options['CSVEnclosure'] );
-                    flush();
-                }
-                $offset += $length;
-
-            } while ( count( $items ) == $length );
-        }
-    }
-    
-    protected function transformItem( SensorHelper $item )
+    public function fetch()
     {
-        $data = array_fill_keys( array_keys( $this->CSVheaders ), '');
-        $data['id'] = $item->attribute( 'id' );
-        
-        $privacy = $item->attribute( 'current_privacy_state' );
-        $data['privacy'] = $privacy['name'];
-        
-        $moderation = $item->attribute( 'current_moderation_state' );
-        $data['moderation'] = $moderation['name'];
-        
-        $type = $item->attribute( 'type' );
-        $data['type'] = $type['name'];
-
-        $currentStatus = $item->attribute( 'current_object_state' );
-        $data['current_status'] = $currentStatus['name'];
-
-        /** @var eZContentObject $object */
-        $object = $item->attribute( 'object' );
-        $data['created'] = strftime( '%d/%m/%Y %H:%M', $object->attribute( 'published' ) );
-        $data['modified'] = strftime( '%d/%m/%Y %H:%M', $object->attribute( 'modified' ) );
-        
-        $expiringDate = $item->attribute( 'expiring_date' );
-        $data['expiring_date'] = strftime( '%d/%m/%Y %H:%M', $expiringDate['timestamp'] );
-    
-        $resolutionTime = $item->attribute( 'resolution_time' );
-        $data['resolution_time'] = $resolutionTime['timestamp'] ? strftime( '%d/%m/%Y %H:%M', $resolutionTime['timestamp'] ) : '';
-        $data['resolution_diff'] = $resolutionTime['text'];
-        
-        $data['title'] = $object->attribute( 'name' );
-        
-        $data['author'] = $item->attribute( 'author_name' );
-
-        /** @var eZContentObject[] $categories */
-        $categories = $item->attribute( 'post_categories' );
-        $parentCategoryList = array();
-        $childCategoryList = array();
-        foreach( $categories as $category )
-        {
-            if ( intval( $category->attribute( 'main_node_id' ) ) > 0 )
-            {
-                /** @var eZContentObjectTreeNode $mainNode */
-                $mainNode = $category->attribute( 'main_node' );
-                /** @var eZContentObjectTreeNode $mainNodeParent */
-                $mainNodeParent = $mainNode->attribute( 'parent' );
-                if ( $mainNodeParent->attribute( 'class_identifier' ) == $mainNode->attribute( 'class_identifier' ) )
-                {
-                    $parentCategoryList[] = $mainNodeParent->attribute( 'name' );
-                    $childCategoryList[] = $mainNode->attribute( 'name' );
-                }
-                else
-                {
-                    $parentCategoryList[] = $mainNode->attribute( 'name' );
-                }
-            }
-
-        }
-        $data['category'] = implode( ', ', $parentCategoryList );
-        $data['category_child'] = implode( ', ', $childCategoryList );
-
-        $data['current_owner'] = $item->attribute( 'current_owner' ) ? str_replace( "\n", '', $item->attribute( 'current_owner' ) ): '';
-        $data['comment'] = $item->attribute( 'comment_count' );
-
-        $data = $this->fillExtraAttributes($data, $item);
-
-        return $data;
+        return $this->repository->getSearchService()->searchPosts($this->queryString, $this->queryParams);
     }
 
-    protected function fillExtraAttributes($data, $item)
+    public function fetchCount()
     {
-        if (!$this->extraAttributes)
-        {
-            return $data;
+        if ($this->count === null) {
+            $this->count = $this->repository->getSearchService()->searchPosts($this->queryString . ' and limit 1', $this->queryParams)->totalCount;
         }
+        return $this->count;
+    }
 
-        foreach ($this->extraAttributes as $k => $v)
-        {
-            /** @var eZContentObjectAttribute $attribute */
-            $attribute = $item->currentSensorPost->objectHelper->getContentObjectAttribute($k);
+    protected function csvHeaders($item)
+    {
+        return array_values($this->csvHeaders);
+    }
 
-            if ($attribute->DataTypeString == 'ezobjectrelationlist')
-            {
-                $temp = array();
-                $content = $attribute->content();
-                foreach ( $content['relation_list'] as $r)
-                {
-                    $related = eZContentObject::fetch($r['contentobject_id']);
-                    if ( $related instanceof eZContentObject )
-                    {
-                        $temp []= $related->name();
-                    }
-                }
-                $data[$k] = implode('|', $temp);
-            }
-            else
-            {
-                $data[$k] = $attribute->toString();
+    /**
+     * @param \Opencontent\Sensor\Api\Values\Post $item
+     * @return array
+     */
+    function transformItem($post)
+    {
+        return array(
+            'id' => $post->id,
+            'privacy' => $post->privacy->name,
+            'moderation' => $post->moderation->name,
+            'type' => $post->type->name,
+            'current_status' => $post->status->name,
+            'created' => $post->published->format('d/m/Y H:i'),
+            'modified' => $post->modified->format('d/m/Y H:i'),
+            'expiring_date' => $post->expirationInfo->expirationDateTime->format('d/m/Y H:i'),
+            'resolution_time' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
+            'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
+            'title' => $post->subject,
+            'author' => $post->author->name,
+            'category' => count($post->categories) > 0 ? $post->categories[0]->name : '',
+            //'category_child' => '', //@todo
+            'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',
+            'comment' => $post->comments->count()
+        );
+    }
+
+    protected function startPaginateDownload()
+    {
+        $this->tempFile($this->filename);
+
+        echo $this->getPaginateTemplate(array_merge(
+                $this->queryParams,
+                array(
+                    'query' => $this->queryString . ' and limit ' . $this->maxSearchLimit,
+                    'download_id' => $this->filename,
+                    'iteration' => 0,
+                    'count' => $this->count,
+                    'limit' => $this->maxSearchLimit
+                )
+            )
+        );
+    }
+
+    protected function getPaginateTemplate($variables)
+    {
+        $tpl = eZTemplate::factory();
+        foreach ($variables as $key => $value){
+            if (is_string($value) && $value != 'true' && $value != 'false'){ //@todo
+                $variables[$key] = '"' . $variables[$key] . '"';
             }
         }
-        return $data;
+        $tpl->setVariable('variables', $variables);
+
+        return $tpl->fetch('design:sensor_api_gui/dashboard/download_paginate.tpl');
     }
 }
