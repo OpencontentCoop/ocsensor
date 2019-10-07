@@ -40,6 +40,12 @@
         {foreach $sensor_post.response_items as $item}
             {include uri='design:sensor/post/post_message/response.tpl' is_read=cond( $sensor_post.current_participant, $sensor_post.current_participant.last_read|gt($item.modified), true()) item_link=$item message=$item.simple_message}
         {/foreach}
+        {if $sensor_post.object|has_attribute('attachment')}
+            <h4>{'Allegati'|i18n('sensor/messages')}</h4>
+            <div class="well">
+                {attribute_view_gui attribute=$sensor_post.object|attribute('attachment') sensor_post=$sensor_post}
+            </div>
+        {/if}
     </div>
     {/if}
     {if $sensor_post.can_respond}
@@ -53,6 +59,15 @@
         <div class="row">
             <div class="col-sm-8 col-md-8">
                 <input class="btn send btn-success btn-lg btn-block" type="submit" name="CollaborationAction_Respond" value="{'Pubblica la risposta ufficiale'|i18n('sensor/messages')}" />
+            </div>
+        </div>
+        <h4>{'Aggiungi allegato'|i18n('sensor/messages')}</h4>
+        <div class="row">
+            <div class="col-sm-4 col-md-6">
+                <input type="file" name="Collaboration_SensorItemAttach" value="" />
+            </div>
+            <div class="col-sm-4 col-md-2">
+                <input class="btn send btn-success btn-md btn-block" type="submit" name="CollaborationAction_Attach" value="{'Allega'|i18n('sensor/messages')}" />
             </div>
         </div>
     </div>
