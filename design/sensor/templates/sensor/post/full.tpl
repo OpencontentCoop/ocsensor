@@ -40,7 +40,7 @@
     </ul>
 </section>
 
-<form id="sensor-post" method="post" action={"collaboration/action/"|ezurl} xmlns="http://www.w3.org/1999/html">
+<form id="sensor-post" method="post" action="{'collaboration/action/'|ezurl(no)}" xmlns="http://www.w3.org/1999/html" enctype="multipart/form-data">
   <div class="row">
     <div class="col-md-8">
     
@@ -52,9 +52,6 @@
         </div>
         <div class="col-md-8" id="current-post-detail">
           <p>{attribute_view_gui attribute=$sensor_post.object|attribute('description')}</p>
-          {if $sensor_post.object|has_attribute('attachment')}
-            <p>{attribute_view_gui attribute=$sensor_post.object|attribute('attachment')}</p>
-          {/if}
           {if $sensor_post.object|has_attribute('image')}
             {if $sensor_post.object|attribute('image').content.original.mime_type|explode('/')[0]|eq('image')}
               <figure>{attribute_view_gui attribute=$sensor_post.object|attribute('image') image_class='large' alignment=center}</figure>
@@ -131,6 +128,9 @@ $(document).ready(function() {
 });
 var actionStarted = false;
 $(document).on("click", ":submit", function(e){
+    if ($(this).attr('name') === 'CollaborationAction_Attach'){
+        return true;
+    }
     var currentFormId = $(this).parents('form').attr('id');
     if ( currentFormId == 'sensor-post' ) {
         var confirmation = true;

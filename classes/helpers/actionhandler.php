@@ -156,6 +156,24 @@ class SensorPostActionHandler
                     )
                 )
             ),
+            'add_attachment' => array(
+                'call_function' => 'addAttachment',
+                'check_role' => array( 'can_add_attachment' ),
+                'parameters' => array(
+                    'file' => array(
+                        'required' => true
+                    )
+                )
+            ),
+            'remove_attachment' => array(
+                'call_function' => 'removeAttachment',
+                'check_role' => array( 'can_add_attachment' ),
+                'parameters' => array(
+                    'filename' => array(
+                        'required' => true
+                    )
+                )
+            ),
             'edit_comment' => array(
                 'call_function' => 'editComment',
                 'check_role' => array( 'can_comment' ),
@@ -523,6 +541,22 @@ class SensorPostActionHandler
         {
             $this->post->responseHelper->add($text)->store();
             $this->post->eventHelper->createEvent('on_add_response');
+            $this->post->touch();
+        }
+    }
+
+    public function addAttachment( eZHTTPFile $file )
+    {
+        if ($attachment = $this->post->addAttachment($file)) {
+            $this->post->eventHelper->createEvent('on_add_attachment', array('attachment' => $attachment));
+            $this->post->touch();
+        }
+    }
+
+    public function removeAttachment( $filename )
+    {
+        if ($this->post->removeAttachment($filename)) {
+            $this->post->eventHelper->createEvent('on_remove_attachment', array('attachment' => $filename));
             $this->post->touch();
         }
     }

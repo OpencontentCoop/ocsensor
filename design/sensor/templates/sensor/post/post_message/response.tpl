@@ -5,7 +5,7 @@
         <div class="comment_date"><i class="fa-time"></i>
             {if $is_read|not}<strong>{/if}{$item.created|l10n(shortdatetime)}{if $is_read|not}</strong>{/if}
             {if and( $message.creator_id|eq(fetch(user,current_user).contentobject_id), $sensor_post.can_respond )}
-                <a class="btn btn-warning btn-sm edit-message" href="#" data-message-id="{$message.id}"><i class="fa fa-edit"></i></a>
+                <a class="btn btn-link text-warning btn-sm edit-message" href="#" data-message-id="{$message.id}"><i class="fa fa-edit"></i></a>
             {/if}
         </div>
         <div class="the_comment">

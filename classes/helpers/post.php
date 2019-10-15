@@ -812,4 +812,54 @@ class SensorPost
         return $GLOBALS['SensorParticipantRoleNameMap'];
     }
 
+    public function addAttachment( eZHTTPFile $file )
+    {
+        $object = $this->objectHelper->getContentObject();
+        $currentVersion = $object->attribute('current_version');
+        $localeCode = eZContentObject::defaultLanguage();
+        $mimeData = eZMimeType::findByFileContents($file->attribute("original_filename"));
+        $dataMap = $object->dataMap();
+        if (isset($dataMap['attachment'])) {
+            $result = array();
+            $status = $dataMap['attachment']->insertHTTPFile($object, $currentVersion, $localeCode, $file, $mimeData, $result);
+
+            if (!$status) {
+                eZDebug::writeError(
+                    ezpI18n::tr('kernel/content/upload',
+                        'The attribute %class_identifier does not support HTTP file storage.', null,
+                        array('%class_identifier' => $object->attribute('class_identifier'))), __METHOD__);
+                return false;
+            }
+
+            if ($result['require_storage']) {
+                $dataMap['attachment']->store();
+            }
+
+            return $dataMap['attachment']->content();
+        }
+
+        return false;
+    }
+
+    public function removeAttachment($filename)
+    {
+        $object = $this->objectHelper->getContentObject();
+        $dataMap = $object->dataMap();
+        if (isset($dataMap['attachment'])) {
+            if ($dataMap['attachment']->attribute('data_type_string') == OCMultiBinaryType::DATA_TYPE_STRING){
+                foreach ((array)$filename as $item) {
+                    $http = eZHTTPTool::instance();
+                    $postValue = [];
+                    $postValue[$dataMap['attachment']->attribute('id') . '_delete_multibinary'][$item] = 1;
+                    $http->setPostVariable('CustomActionButton', $postValue);
+                    $dataMap['attachment']->customHTTPAction($http, 'delete_multibinary', []);
+                }
+            }elseif ($dataMap['attachment']->attribute('data_type_string') == eZBinaryFileType::DATA_TYPE_STRING){
+                $http = eZHTTPTool::instance();
+                $dataMap['attachment']->customHTTPAction($http, 'delete_binary', []);
+            }
+        }
+
+        return false;
+    }
 }
