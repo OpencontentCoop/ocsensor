@@ -131,6 +131,25 @@ class SensorHttpActionHelper
                 ),
                 'action_name' => 'add_response',
             ),
+            'Attach' => array(
+                'http_parameters' => array(
+                    'SensorItemAttach' => array(
+                        'required' => true,
+                        'type' => 'file',
+                        'action_parameter_name' => 'file'
+                    )
+                ),
+                'action_name' => 'add_attachment',
+            ),
+            'RemoveAttach' => array(
+                'http_parameters' => array(
+                    'SensorItemRemoveAttach' => array(
+                        'required' => true,
+                        'action_parameter_name' => 'filename'
+                    )
+                ),
+                'action_name' => 'remove_attachment',
+            ),
             'EditComment' => array(
                 'http_parameters' => array(
                     'SensorEditComment' => array(
@@ -185,9 +204,14 @@ class SensorHttpActionHelper
                 foreach( $parameters['http_parameters'] as $parameterName => $parameterOptions )
                 {
                     $parameterPostVariable = 'Collaboration_' . $parameterName;
-                    if ( $parameterOptions['required'] && $http->hasPostVariable( $parameterPostVariable ) )
+                    $parameterPostType = isset($parameterOptions['type']) ? $parameterOptions['type'] : 'default';
+                    $hasPost = $parameterPostType == 'file' ?
+                        eZHTTPFile::canFetch($parameterPostVariable) :
+                        $http->hasPostVariable( $parameterPostVariable );
+
+                    if ( $parameterOptions['required'] && $hasPost )
                     {
-                        $actionParameters[$parameterOptions['action_parameter_name']] = $http->postVariable( $parameterPostVariable );
+                        $actionParameters[$parameterOptions['action_parameter_name']] = $parameterPostType == 'file' ? eZHTTPFile::fetch($parameterPostVariable) : $http->postVariable( $parameterPostVariable );
                     }
                     elseif ( isset( $parameterOptions['default'] ) )
                     {

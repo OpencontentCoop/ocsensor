@@ -56,7 +56,8 @@ class SensorUserPostRoles
             'can_send_private_message',
             'can_add_observer',
             'can_set_expiry',
-            'can_reopen'
+            'can_reopen',
+            'can_add_attachment'
         );
     }
 
@@ -129,6 +130,10 @@ class SensorUserPostRoles
                 return $this->canReopen();
                 break;
 
+            case 'can_add_attachment':
+                return $this->canAddAttachment();
+                break;
+
         }
         return false;
     }
@@ -187,6 +192,7 @@ class SensorUserPostRoles
             || $this->canSetExpiry()
             || $this->canForceFix()
             || $this->canReopen()
+            || $this->canAddAttachment()
         );
     }
 
@@ -271,6 +277,11 @@ class SensorUserPostRoles
     public function canReopen()
     {
         return $this->post->configParameters['ApproverCanReopen'] && $this->post->isClosed() && $this->isApprover();
+    }
+
+    public function canAddAttachment()
+    {
+        return $this->isApprover() || $this->isOwner();
     }
 
 }
