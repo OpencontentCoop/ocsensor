@@ -507,6 +507,7 @@ class SensorPost
             $object->setAttribute( 'modified', $timestamp );
             $object->store();
             $this->storeActivesParticipants();
+            eZSearch::addObject($object, true);
             eZContentCacheManager::clearContentCacheIfNeeded( $object->attribute( 'id' ) );
 
             if ( class_exists( 'Opencontent\Sensor\Legacy\CachePostService') )
