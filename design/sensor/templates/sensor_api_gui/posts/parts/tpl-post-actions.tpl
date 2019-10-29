@@ -12,6 +12,7 @@
                 <strong>{/literal}{'Azioni'|i18n('sensor/post')}{literal}</strong>
              {{/if}}
 
+             {{include tmpl="#tpl-post-add_approver"/}}
              {{include tmpl="#tpl-post-assign"/}}
              {{include tmpl="#tpl-post-add_observer"/}}
              {{include tmpl="#tpl-post-autoassign"/}}
@@ -102,12 +103,28 @@
     </div>
 {{/if}}
 </script>
+<script id="tpl-post-add_approver" type="text/x-jsrender">
+{{if capabilities.can_add_approver}}
+    <div class="form-group" data-action-wrapper>
+        <div class="row">
+            <div class="col-xs-8">
+                <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona gruppo'|i18n('sensor/post')}{literal}" class="form-control remote-select" data-remote="groups">
+                    <option></option>
+                </select>
+            </div>
+            <div class="col-xs-4">
+                <input class="btn btn-info btn-block" type="submit" data-action="add_approver" data-parameters="participant_ids" value="{/literal}{'Coinvolgi'|i18n('sensor/post')}{literal}" />
+            </div>
+        </div>
+    </div>
+{{/if}}
+</script>
 <script id="tpl-post-assign" type="text/x-jsrender">
 {{if capabilities.can_assign}}
     <div class="form-group" data-action-wrapper>
         <div class="row">
             <div class="col-xs-8">
-                <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="form-control remote-select">
+                <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="form-control remote-select" data-remote="operators">
                     <option></option>
                 </select>
             </div>
@@ -123,7 +140,7 @@
     <div class="form-group" data-action-wrapper>
         <div class="row">
             <div class="col-xs-8">
-                <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="form-control remote-select">
+                <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="form-control remote-select" data-remote="operators">
                     <option></option>
                 </select>
             </div>
@@ -162,7 +179,7 @@
     <div class="form-group" data-action-wrapper>
         <input class="btn btn-success btn-lg btn-block"
                type="submit"
-               {{if responses.length == 0}}}data-confirmation="{/literal}{'Non ci sono risposte ufficiali inserite: sei sicuro di voler chiudere la segnalazione?'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"{{/if}}
+               {{if responses.length == 0}}data-confirmation="{/literal}{'Non ci sono risposte ufficiali inserite: sei sicuro di voler chiudere la segnalazione?'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"{{/if}}
                data-action="close"
                value="{/literal}{'Chiudi'|i18n('sensor/post')}{literal}" />
     </div>

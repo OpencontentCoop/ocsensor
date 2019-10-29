@@ -1,4 +1,4 @@
-<section class="hgroup" id="login">
+<section id="login">
     <div class="row">
         <div class="col-sm-12 col-md-12 text-center">
             <h1 style="margin-bottom: 1em">

@@ -51,6 +51,24 @@
   </div>
 </div>
 
+<hr />
+<section id="login">
+  <div class="row">
+    <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
+      <div class="signup">
+        <div class="social_sign">
+          <h3>
+            <strong>{'Are you not registered yet?'|i18n('social_user/signup')}</strong><br />
+            {'It takes just 5 seconds to register!'|i18n('social_user/signup')}
+            <a style="background:#f0ad4e;font-size: 0.7em;padding: 18px 2px;" href="{'/user/register/'|ezurl(no)}" class="btn btn-success btn-lg">{'Subscribe'|i18n('social_user/signup')}</a>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 {ezscript_require(array("password-score/password.js"))}
 {literal}
 <script type="text/javascript">

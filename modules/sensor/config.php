@@ -57,6 +57,10 @@ if ($Part == 'areas') {
     $tpl->setVariable('operator_parent_node', $repository->getOperatorsRootNode());
     $tpl->setVariable('operator_class', eZContentClass::fetchByIdentifier('sensor_operator'));
 
+} elseif ($Part == 'groups') {
+    $tpl->setVariable('groups_parent_node', $repository->getGroupsRootNode());
+    $tpl->setVariable('group_class', 'sensor_group');
+
 } elseif ($Part == 'notifications') {
     if ($Http->hasPostVariable('StoreNotificationsText')) {
         $data = $Http->postVariable('NotificationsText');
@@ -126,7 +130,8 @@ $otherFolders = (array)$repository->getRootNode()->subTree(array(
     'DepthOperator' => 'eq')
 );
 foreach ($otherFolders as $folder) {
-    if ($folder->attribute('contentobject_id') != $repository->getCategoriesRootNode()->attribute('contentobject_id')) {
+    if ($folder->attribute('contentobject_id') != $repository->getCategoriesRootNode()->attribute('contentobject_id')
+        && $folder->attribute('contentobject_id') != $repository->getGroupsRootNode()->attribute('contentobject_id')) {
         $data[] = $folder;
     }
 }

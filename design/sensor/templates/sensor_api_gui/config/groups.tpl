@@ -14,23 +14,25 @@
     </div>
 </form>
 <div style="margin: 20px 0"
-     data-parent="{$operator_parent_node.node_id}"
-     data-classes="{$operator_class.identifier}"
+     data-parent="{$groups_parent_node.node_id}"
+     data-classes="{$group_class}"
      data-limit="20"
-     data-redirect="/sensor/config/operators"></div>
+     data-redirect="/sensor/config/groups"></div>
 
-<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/',$operator_class.identifier,'/',$operator_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-<div class="pull-right">
-    <a class="btn btn-danger" id="add" data-add-parent="{$operator_parent_node.node_id}" data-add-class="sensor_operator" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a>
+<div class="pull-left add-class">
+    <a class="btn btn-info" href="{concat('exportas/csv/',$group_class,'/',$groups_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a>
+</div>
+<div class="pull-right add-class">
+    <a class="btn btn-danger" id="add" data-add-parent="{$groups_parent_node.node_id}" data-add-class="{$group_class}" href="{concat('add/new/'$,'/?parent=',$groups_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a>
 </div>
 
 {literal}
-<script id="tpl-data-spinner" type="text/x-jsrender">
+    <script id="tpl-data-spinner" type="text/x-jsrender">
 <div class="col-xs-12 spinner text-center">
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
 </div>
-</script>
 
+    </script>
 <script id="tpl-data-results" type="text/x-jsrender">
 <div class="row">
     {{if totalCount == 0}}
@@ -45,7 +47,6 @@
                 <tr>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
-                        {{if ~i18n(data, 'struttura_di_competenza')}}<br /><small>{{for ~i18n(data, 'struttura_di_competenza')}}{{:~i18n(name)}}{{/for}}</small>{{/if}}
                     </td>
                     <td width="1">
                         <span style="white-space:nowrap">
@@ -59,18 +60,7 @@
                         </span>
                     </td>
                     <td width="1">
-                        <div class="notification-dropdown-container dropdown" data-user="{{:metadata.id}}">
-                            <div class="button-group">
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-bell"></i> <span class="caret"></span>
-                                </button>
-                                <ul class="notification-dropdown-menu dropdown-menu">
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                    <td width="1">
-                        <a class="btn btn-link btn-xs text-black" href="{{:baseUrl}}/social_user/setting/{{:metadata.id}}"><i class="fa fa-user"></i></a>
+                        <td width="1"><a href="#" data-object={{:metadata.id}}><i class="fa fa-eye"></i></a></td>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -95,14 +85,12 @@
     <div class="col-xs-12">
         <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
             <ul class="pagination">
-
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
                         <span class="sr-only">Pagina precedente</span>
                     </a>
                 </li>
-
                 {{for pages ~current=currentPage}}
                     <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
                 {{/for}}
@@ -124,7 +112,6 @@
     <script>
         $.views.helpers($.opendataTools.helpers);
         $(document).ready(function () {
-
             $('#add').on('click', function(e){
                 $('#item').opendataFormCreate({
                     class: $(this).data('add-class'),
@@ -156,59 +143,6 @@
             var template = $.templates('#tpl-data-results');
             var spinner = $($.templates("#tpl-data-spinner").render({}));
 
-            var onOptionClick = function (event) {
-                var $target = $(event.currentTarget);
-                var identifier = $target.data('identifier');
-                var user = $target.data('user');
-                var menu = $target.parents('.notification-dropdown-container .notification-dropdown-menu');
-
-                $(event.target).blur();
-                var enable = $(event.target).prop('checked');
-                if ($(event.target).attr('type') === 'checkbox') {
-                    jQuery.ajax({
-                        url: notificationUrl + user + '/' + identifier,
-                        type: enable ? 'post' : 'delete',
-                        success: function (response) {
-                            buildNotificationMenu(user, menu);
-                        }
-                    });
-                }
-
-                event.stopPropagation();
-                event.preventDefault();
-            };
-
-            var buildNotificationMenu = function (user, menu) {
-                menu.html('<li style="padding: 50px; text-align: center; font-size: 2em;"><i class="fa fa-gear fa-spin fa2x"></i></li>');
-                $.get(notificationUrl + user, function (response) {
-                    if (response.result && response.result === 'success') {
-                        menu.html('');
-                        var add = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="all" tabIndex="-1"><input type="checkbox"/><b> Attiva tutto</b></a></li>');
-                        add.find('a').on('click', function (e) {
-                            onOptionClick(e)
-                        });
-                        menu.append(add);
-                        var remove = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="none" tabIndex="-1"><input type="checkbox"/><b> Disattiva tutto</b></a></li>');
-                        remove.find('a').on('click', function (e) {
-                            onOptionClick(e)
-                        });
-                        menu.append(remove);
-                        $.each(response.data, function () {
-                            var item = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="' + this.identifier + '" tabIndex="-1"><input type="checkbox"/>&nbsp;' + this.name + '</a></li>');
-                            if (this.enabled) {
-                                item.find('input').attr('checked', true);
-                            }
-                            item.find('a').on('click', function (e) {
-                                onOptionClick(e)
-                            });
-                            menu.append(item);
-                        })
-                    } else {
-                        console.log(response);
-                    }
-                });
-            };
-
             var buildQuery = function () {
                 var classQuery = '';
                 if (classes.length) {
@@ -217,7 +151,7 @@
                 var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
                 var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
                 if (searchText.length > 0) {
-                    query += " and name = '" + searchText + "'";
+                    query += " and q = '\"" + searchText + "\"'";
                 }
                 query += ' sort [name=>asc]';
 
@@ -282,10 +216,18 @@
                     var renderData = $(template.render(response));
                     resultsContainer.html(renderData);
 
-                    resultsContainer.find('.notification-dropdown-container').on('show.bs.dropdown', function () {
-                        var user = $(this).data('user');
-                        var menu = $(this).find('.notification-dropdown-menu');
-                        buildNotificationMenu(user, menu);
+                    renderData.find('[data-object]').on('click', function(e){
+                        $('#item').opendataFormView({
+                            object: $(this).data('object')
+                        },{
+                            onBeforeCreate: function(){
+                                $('#modal').modal('show');
+                                setTimeout(function() {
+                                    $('#modal .leaflet-container').trigger('click');
+                                }, 1000);
+                            }
+                        });
+                        e.preventDefault();
                     });
                     renderData.find('[data-edit]').on('click', function(e){
                         $('#item').opendataFormEdit({

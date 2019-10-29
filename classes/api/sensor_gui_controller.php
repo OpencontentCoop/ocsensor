@@ -232,6 +232,58 @@ class SensorGuiApiController extends ezpRestMvcController
         return $result;
     }
 
+    public function doLoadGroups()
+    {
+        try {
+            $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : null;
+            $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
+            $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
+            $data = $this->repository->getGroupService()->loadGroups($query, $limit, $cursor);
+
+            $result = new ezpRestMvcResult();
+            $resultData = [
+                'self' => $this->getBaseUri() . "/groups?query={$query}&limit={$limit}&cursor=" . urlencode($data['current']),
+                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'next' => null,
+            ];
+            if ($data['next']) {
+                $resultData['next'] = $this->getBaseUri() . "/groups?query={$query}&limit={$limit}&cursor=" . rawurlencode($data['next']);
+                header("x-next: " . $resultData['next']);
+            }
+            $result->variables = $resultData;
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doLoadOperatorsAndGroups()
+    {
+        try {
+            $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : null;
+            $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
+            $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
+            $data = $this->repository->getSearchService()->searchOperatorAnGroups($query, $limit, $cursor);
+
+            $result = new ezpRestMvcResult();
+            $resultData = [
+                'self' => $this->getBaseUri() . "/operators?query={$query}&limit={$limit}&cursor=" . urlencode($data['current']),
+                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'next' => null,
+            ];
+            if ($data['next']) {
+                $resultData['next'] = $this->getBaseUri() . "/operators?query={$query}&limit={$limit}&cursor=" . rawurlencode($data['next']);
+                header("x-next: " . $resultData['next']);
+            }
+            $result->variables = $resultData;
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
     public function doPostAction()
     {
         try {

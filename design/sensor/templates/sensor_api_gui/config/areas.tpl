@@ -15,7 +15,7 @@
 </tr>
 </script>
 <script id="tpl-data-results" type="text/x-jsrender">
-{{for children ~parent_node_id=node_id ~can_create=can_create ~baseUrl=baseUrl ~redirect=redirect ~locale=locale}}
+{{for children ~parent_node_id=node_id ~baseUrl=baseUrl ~redirect=redirect ~locale=locale}}
 <tr>
   <td>
       <span style="padding-left:{{:(level*20)}}px">
@@ -47,8 +47,8 @@
   </td>
 
   <td width="1">
-    {{if ~can_create && level == 0}}
-    <a href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
+    {{if can_create && level == 0}}
+    <a data-create-parent="{{:node_id}}" data-create-class="{{:type}}" href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
     {{/if}}
   </td>
 </tr>
@@ -93,6 +93,24 @@
                     renderData.find('[data-edit]').on('click', function(e){
                         $('#item').opendataFormEdit({
                             object: $(this).data('edit')
+                        },{
+                            onBeforeCreate: function(){
+                                $('#modal').modal('show');
+                                setTimeout(function() {
+                                    $('#modal .leaflet-container').trigger('click');
+                                }, 1000);
+                            },
+                            onSuccess: function () {
+                                $('#modal').modal('hide');
+                                loadContents();
+                            }
+                        });
+                        e.preventDefault();
+                    });
+                    renderData.find('[data-create-parent]').on('click', function(e){
+                        $('#item').opendataFormCreate({
+                            class: $(this).data('create-class'),
+                            parent: $(this).data('create-parent')
                         },{
                             onBeforeCreate: function(){
                                 $('#modal').modal('show');

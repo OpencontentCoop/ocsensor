@@ -29,10 +29,7 @@ else
         }
     }
 
-    $notifications = SensorNotificationHelper::instance()->getNotificationSubscriptionsForUser(
-        $currentUser->id(),
-        $currentSensorUser->attribute('default_notification_transport')
-    );
+    $notifications = $repository->getNotificationService()->getUserNotifications($repository->getCurrentUser());
 
     $tpl->setVariable( 'current_user_has_notifications', count($notifications) > 0 );
     $tpl->setVariable( 'current_user', $currentUser );

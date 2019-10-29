@@ -5,7 +5,7 @@
 </div>
 
 <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_category/',$categories_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-<div class="pull-right"><a class="btn btn-danger" href="{concat('add/new/sensor_category/?parent=',$categories_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$categories[0].node.class_name}</a></div>
+<div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$categories_parent_node.node_id}" data-add-class="sensor_category" href="{concat('add/new/sensor_category/?parent=',$categories_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$categories[0].node.class_name}</a></div>
 
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
@@ -49,7 +49,7 @@
 
   <td width="1">
     {{if ~can_create && level == 0}}
-    <a href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
+    <a data-create-parent="{{:node_id}}" data-create-class="{{:type}}" href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
     {{/if}}
   </td>
 </tr>
@@ -61,81 +61,117 @@
 <script>
     $.views.helpers($.opendataTools.helpers);
     $(document).ready(function () {
-        $('[data-items]').each(function(){
-            var resultsContainer = $(this);
-            var table = resultsContainer.find('table');
-            var form = resultsContainer.prev();
-            var selfCursor, nextCursor;
-            var template = $.templates('#tpl-data-results');
-            var spinner = $($.templates("#tpl-data-spinner").render({}));
 
-            var loadContents = function(){
-                table.html(spinner);
-                $.getJSON('/api/sensor_gui/category_tree', function (response) {
-                    response.baseUrl = $.opendataTools.settings('accessPath');
-                    response.redirect = $.opendataTools.settings('accessPath')+'/sensor/config/categories';
-                    response.locale = $.opendataTools.settings('language');
-                    var renderData = $(template.render(response));
-                    table.html(renderData);
+        $('#add').on('click', function(e){
+            $('#item').opendataFormCreate({
+                class: $(this).data('add-class'),
+                parent: $(this).data('add-parent')
+            },{
+                onBeforeCreate: function(){
+                    $('#modal').modal('show');
+                    setTimeout(function() {
+                        $('#modal .leaflet-container').trigger('click');
+                    }, 1000);
+                },
+                onSuccess: function () {
+                    $('#modal').modal('hide');
+                    loadContents();
+                }
+            });
+            e.preventDefault();
+        });
 
-                    renderData.find('[data-object]').on('click', function(e){
-                        $('#item').opendataFormView({
-                            object: $(this).data('object')
-                        },{
-                            onBeforeCreate: function(){
-                                $('#modal').modal('show')
-                            }
-                        });
-                        e.preventDefault();
+        var resultsContainer = $('[data-items]');
+        var table = resultsContainer.find('table');
+        var form = resultsContainer.prev();
+        var selfCursor, nextCursor;
+        var template = $.templates('#tpl-data-results');
+        var spinner = $($.templates("#tpl-data-spinner").render({}));
+
+        var loadContents = function(){
+            table.html(spinner);
+            $.getJSON('/api/sensor_gui/category_tree', function (response) {
+                response.baseUrl = $.opendataTools.settings('accessPath');
+                response.redirect = $.opendataTools.settings('accessPath')+'/sensor/config/categories';
+                response.locale = $.opendataTools.settings('language');
+                var renderData = $(template.render(response));
+                table.html(renderData);
+
+                renderData.find('[data-object]').on('click', function(e){
+                    $('#item').opendataFormView({
+                        object: $(this).data('object')
+                    },{
+                        onBeforeCreate: function(){
+                            $('#modal').modal('show')
+                        }
                     });
-                    renderData.find('[data-edit]').on('click', function(e){
-                        $('#item').opendataFormEdit({
-                            object: $(this).data('edit')
-                        },{
-                            onBeforeCreate: function(){
-                                $('#modal').modal('show');
-                                setTimeout(function() {
-                                    $('#modal .leaflet-container').trigger('click');
-                                }, 1000);
-                            },
-                            onSuccess: function () {
-                                $('#modal').modal('hide');
-                                loadContents();
-                            }
-                        });
-                        e.preventDefault();
-                    });
-                    renderData.find('[data-remove]').on('click', function(e){
-                        $('#item').opendataFormDelete({
-                            object: $(this).data('remove')
-                        },{
-                            onBeforeCreate: function(){
-                                $('#modal').modal('show');
-                            },
-                            onSuccess: function () {
-                                $('#modal').modal('hide');
-                                loadContents();
-                            }
-                        });
-                        e.preventDefault();
-                    });
+                    e.preventDefault();
                 });
-            };
+                renderData.find('[data-edit]').on('click', function(e){
+                    $('#item').opendataFormEdit({
+                        object: $(this).data('edit')
+                    },{
+                        onBeforeCreate: function(){
+                            $('#modal').modal('show');
+                            setTimeout(function() {
+                                $('#modal .leaflet-container').trigger('click');
+                            }, 1000);
+                        },
+                        onSuccess: function () {
+                            $('#modal').modal('hide');
+                            loadContents();
+                        }
+                    });
+                    e.preventDefault();
+                });
+                renderData.find('[data-create-parent]').on('click', function(e){
+                    $('#item').opendataFormCreate({
+                        class: $(this).data('create-class'),
+                        parent: $(this).data('create-parent')
+                    },{
+                        onBeforeCreate: function(){
+                            $('#modal').modal('show');
+                            setTimeout(function() {
+                                $('#modal .leaflet-container').trigger('click');
+                            }, 1000);
+                        },
+                        onSuccess: function () {
+                            $('#modal').modal('hide');
+                            loadContents();
+                        }
+                    });
+                    e.preventDefault();
+                });
+                renderData.find('[data-remove]').on('click', function(e){
+                    $('#item').opendataFormDelete({
+                        object: $(this).data('remove')
+                    },{
+                        onBeforeCreate: function(){
+                            $('#modal').modal('show');
+                        },
+                        onSuccess: function () {
+                            $('#modal').modal('hide');
+                            loadContents();
+                        }
+                    });
+                    e.preventDefault();
+                });
+            });
+        };
 
-            //form[0].reset();
+        //form[0].reset();
+        loadContents();
+
+        form.find('button[type="submit"]').on('click', function(e){
+            form.find('button[type="reset"]').removeClass('hide');
             loadContents();
-
-            form.find('button[type="submit"]').on('click', function(e){
-                form.find('button[type="reset"]').removeClass('hide');
-                loadContents();
-                e.preventDefault();
-            });
-            form.find('button[type="reset"]').on('click', function(e){
-                form[0].reset();
-                form.find('button[type="reset"]').addClass('hide');
-                loadContents();
-                e.preventDefault();
-            });
+            e.preventDefault();
+        });
+        form.find('button[type="reset"]').on('click', function(e){
+            form[0].reset();
+            form.find('button[type="reset"]').addClass('hide');
+            loadContents();
+            e.preventDefault();
         });
     });
 </script>

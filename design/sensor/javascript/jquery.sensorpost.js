@@ -97,7 +97,7 @@
                             that.select2({
                                 width: '100%',
                                 ajax: {
-                                    url: plugin.settings.apiEndPoint + '/operators',
+                                    url: plugin.settings.apiEndPoint + '/' + that.data('remote'),
                                     dataType: 'json',
                                     delay: 250,
                                     data: function (params) {
