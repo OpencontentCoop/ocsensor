@@ -43,8 +43,11 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanRespond();
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
-        if ($this->getSensorSettings()->get('ApproverCanReopen')) {
-            $permissionDefinitions[] = new PermissionDefinitions\CanReopen();
+        if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
+            $permissionDefinitions[] = new PermissionDefinitions\CanReopen(
+                $this->getSensorSettings()->get('ApproverCanReopen'),
+                $this->getSensorSettings()->get('AuthorCanReopen')
+            );
         }
         //$permissionDefinitions[] = new PermissionDefinitions\CanRead();
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRead();
@@ -73,7 +76,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\MakePublicAction();
         $actionDefinitions[] = new ActionDefinitions\ModerateAction();
         $actionDefinitions[] = new ActionDefinitions\ReadAction();
-        if ($this->getSensorSettings()->get('ApproverCanReopen')) {
+        if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
             $actionDefinitions[] = new ActionDefinitions\ReopenAction();
         }
         $actionDefinitions[] = new ActionDefinitions\SendPrivateMessageAction();
