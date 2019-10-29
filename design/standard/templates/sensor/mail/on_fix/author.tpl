@@ -1,8 +1,8 @@
 {def $social_pagedata = social_pagedata('sensor')}
-{set-block scope=root variable=message_id}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
-{set-block scope=root variable=reply_to}{concat('<post.',$node.contentobject_id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
+{set-block scope=root variable=message_id}{concat('<post.', $object.id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
+{set-block scope=root variable=reply_to}{concat('<post.', $object.id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
 
-{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$node.contentobject_id}: {$subject|wash()}{/set-block}
+{set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$object.id}: {$subject|wash()}{/set-block}
 {set-block scope=root variable=body}
 <table border='0' cellpadding='30' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
     <tr>
