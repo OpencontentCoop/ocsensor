@@ -71,7 +71,7 @@ if ($Part == 'areas') {
     }
     $texts = SensorNotificationTextHelper::getTexts();
     $tpl->setVariable('notification_types', $repository->getNotificationService()->getNotificationTypes());
-    $tpl->setVariable('participant_roles', $repository->getParticipantService()->loadParticipantRoleCollection()->jsonSerialize());
+    $tpl->setVariable('participant_roles', $repository->getParticipantService()->loadParticipantRoleCollection()->getArrayCopy());
 
     $allLanguages = eZContentLanguage::fetchList();
     $allLanguageLocales = eZContentLanguage::fetchLocaleList();
