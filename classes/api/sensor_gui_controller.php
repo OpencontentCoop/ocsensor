@@ -36,7 +36,7 @@ class SensorGuiApiController extends ezpRestMvcController
     private function getHostURI()
     {
         $hostUri = $this->request->getHostURI();
-        if (eZSys::isSSLNow()){
+        if (eZSys::isSSLNow()) {
             $hostUri = str_replace('http:', 'https:', $hostUri);
         }
 
@@ -51,7 +51,7 @@ class SensorGuiApiController extends ezpRestMvcController
             }
             $result = new ezpRestMvcResult();
             $settings = [];
-            foreach ($this->repository->getSensorSettings()->jsonSerialize() as $key => $value){
+            foreach ($this->repository->getSensorSettings()->jsonSerialize() as $key => $value) {
                 $settings[] = ['key' => $key, 'value' => $value];
             }
             $result->variables = $settings;
@@ -89,7 +89,7 @@ class SensorGuiApiController extends ezpRestMvcController
 
     public function doLoadPostById()
     {
-        if ($this->Id === 'search'){
+        if ($this->Id === 'search') {
             return $this->doPostSearch();
         }
 
@@ -299,10 +299,7 @@ class SensorGuiApiController extends ezpRestMvcController
             $this->repository->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
 
-            $result->status = new ezpRestStatusResponse(
-                204,
-                ezpRestStatusResponse::$statusCodes[204]
-            );
+            header("HTTP/1.1 204 " . ezpRestStatusResponse::$statusCodes[204]);
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -345,10 +342,7 @@ class SensorGuiApiController extends ezpRestMvcController
             $this->repository->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
 
-            $result->status = new ezpRestStatusResponse(
-                204,
-                ezpRestStatusResponse::$statusCodes[204]
-            );
+            header("HTTP/1.1 204 " . ezpRestStatusResponse::$statusCodes[204]);
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
