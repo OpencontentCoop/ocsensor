@@ -35,8 +35,8 @@ class SensorCollaborationHandler extends eZCollaborationItemHandler
     {
         return array(
             "content_object_id" => $collaborationItem->attribute( "data_int1" ),
-            "last_change" => $collaborationItem->attribute( SensorPost::COLLABORATION_FIELD_LAST_CHANGE),
-            "item_status" => $collaborationItem->attribute( SensorPost::COLLABORATION_FIELD_STATUS)
+            "last_change" => $collaborationItem->attribute( \Opencontent\Sensor\Legacy\PostService::COLLABORATION_FIELD_LAST_CHANGE),
+            "item_status" => $collaborationItem->attribute( \Opencontent\Sensor\Legacy\PostService::COLLABORATION_FIELD_STATUS)
         );
     }
 

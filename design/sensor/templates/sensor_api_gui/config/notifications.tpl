@@ -18,29 +18,29 @@
 						</a>						
 						<div id="collapse-{$language.locale}-{$notification_type.identifier}" class="panel-collapse collapse">
 							<table class="table table-striped">
-							{foreach $participant_roles as $id => $participant_role}	
-							{if $id|gt(1)}
+							{foreach $participant_roles as $participant_role}
+							{if $participant_role.id|gt(1)}
 								<tr>
 									<td width="200px" valign="middle" style="vertical-align: middle;">
-										<a target="_blank" href="#" data-toggle="modal" data-target="#preview" data-load-url="{$languages[$language.locale].url}/sensor/test_mail/post/{$sample_post_id}/{$id}/{$notification_type.identifier}/{$language.locale}">{"Notifica per"|i18n('sensor/settings')}<br />
-											<strong>{$participant_role	|i18n('sensor/settings')}</strong><br />
+										<a target="_blank" href="#" data-toggle="modal" data-target="#preview" data-load-url="{$languages[$language.locale].url}/sensor/test_mail/post/{$sample_post_id}/{$participant_role.id}/{$notification_type.identifier}/{$language.locale}">{"Notifica per"|i18n('sensor/settings')}<br />
+											<strong>{$participant_role.name	|i18n('sensor/settings')}</strong><br />
 											<small>{"Clicca per vedere l'anteprima"|i18n('sensor/settings')}</small></a>
 									</td>
 									<td>
 										<p>
-											<label for="{$notification_type.identifier}_role_{$id}_{$language.locale}_title">{"Titolo dell'email"|i18n('sensor/settings')}</label>
-											<input id="{$notification_type.identifier}_role_{$id}_{$language.locale}_title" type="text" class="form-control" 
-												   name="NotificationsText[{$notification_type.identifier}][role_{$id}][title][{$language.locale}]" value="{$texts[$notification_type.identifier][concat('role_',$id)][title][$language.locale]|wash()}" />				
+											<label for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_title">{"Titolo dell'email"|i18n('sensor/settings')}</label>
+											<input id="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_title" type="text" class="form-control"
+												   name="NotificationsText[{$notification_type.identifier}][role_{$participant_role.id}][title][{$language.locale}]" value="{$texts[$notification_type.identifier][concat('role_',$participant_role.id)][title][$language.locale]|wash()}" />
 										</p>
 										<p>
-											<label for="{$notification_type.identifier}_role_{$id}_{$language.locale}_header">{"Intestazione"|i18n('sensor/settings')}</label>
-											<input id="{$notification_type.identifier}_role_{$id}_{$language.locale}_header" type="text" class="form-control" 
-												   name="NotificationsText[{$notification_type.identifier}][role_{$id}][header][{$language.locale}]" value="{$texts[$notification_type.identifier][concat('role_',$id)][header][$language.locale]|wash()}" />				
+											<label for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_header">{"Intestazione"|i18n('sensor/settings')}</label>
+											<input id="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_header" type="text" class="form-control"
+												   name="NotificationsText[{$notification_type.identifier}][role_{$participant_role.id}][header][{$language.locale}]" value="{$texts[$notification_type.identifier][concat('role_',$participant_role.id)][header][$language.locale]|wash()}" />
 										</p>
 										<p>
-											<label for="{$notification_type.identifier}_role_{$id}_{$language.locale}_text">{"Testo"|i18n('sensor/settings')}</label>
-											<textarea for="{$notification_type.identifier}_role_{$id}_{$language.locale}_text" class="form-control" row="2" 
-													  name="NotificationsText[{$notification_type.identifier}][role_{$id}][text][{$language.locale}]">{$texts[$notification_type.identifier][concat('role_',$id)][text][$language.locale]|wash()}</textarea>				
+											<label for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_text">{"Testo"|i18n('sensor/settings')}</label>
+											<textarea for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_text" class="form-control" row="2"
+													  name="NotificationsText[{$notification_type.identifier}][role_{$participant_role.id}][text][{$language.locale}]">{$texts[$notification_type.identifier][concat('role_',$participant_role.id)][text][$language.locale]|wash()}</textarea>
 										</p>
 									</td>
 								</tr>
