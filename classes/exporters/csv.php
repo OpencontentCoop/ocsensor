@@ -20,6 +20,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
     protected $childCategories;
 
+    protected $searchPolicies;
+
     public $options = array(
         'CSVDelimiter' => ';',
         'CSVEnclosure' => '"'
@@ -30,9 +32,14 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $http = eZHTTPTool::instance();
         $this->repository = $repository;
 
-        $this->queryParams = $_GET;
+        $this->queryParams = $http->attribute('get');
         $this->queryString = $this->queryParams['q'];
         $this->maxSearchLimit = \Opencontent\Sensor\Legacy\SearchService::MAX_LIMIT;
+
+        unset($this->queryParams['capabilities']); //boost performance
+        if (isset($this->queryParams['ignorePolicies']) && $this->queryParams['ignorePolicies']){
+            $this->searchPolicies = [];
+        }
 
         $this->csvHeaders = array(
             'id' => ezpI18n::tr('sensor/export', 'ID'),
@@ -78,13 +85,13 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
     public function fetch()
     {
-        return $this->repository->getSearchService()->searchPosts($this->queryString, $this->queryParams);
+        return $this->repository->getSearchService()->searchPosts($this->queryString, $this->queryParams, $this->searchPolicies);
     }
 
     public function fetchCount()
     {
         if ($this->count === null) {
-            $this->count = $this->repository->getSearchService()->searchPosts($this->queryString . ' and limit 1', $this->queryParams)->totalCount;
+            $this->count = $this->repository->getSearchService()->searchPosts($this->queryString . ' and limit 1', $this->queryParams, $this->searchPolicies)->totalCount;
         }
         return $this->count;
     }
@@ -100,24 +107,33 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
      */
     function transformItem($post)
     {
-        return array(
-            'id' => $post->id,
-            'privacy' => $post->privacy->name,
-            'moderation' => $post->moderation->name,
-            'type' => $post->type->name,
-            'current_status' => $post->status->name,
-            'created' => $post->published->format('d/m/Y H:i'),
-            'modified' => $post->modified->format('d/m/Y H:i'),
-            'expiring_date' => $post->expirationInfo->expirationDateTime->format('d/m/Y H:i'),
-            'resolution_time' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
-            'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
-            'title' => $post->subject,
-            'author' => $post->author->name,
-            'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id]: '',
-            'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
-            'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',
-            'comment' => $post->comments->count()
-        );
+        if ($post instanceof \Opencontent\Sensor\Api\Values\Post) {
+            $item = array(
+                'id' => $post->id,
+                'privacy' => $post->privacy->name,
+                'moderation' => $post->moderation->name,
+                'type' => $post->type->name,
+                'current_status' => $post->status->name,
+                'created' => $post->published->format('d/m/Y H:i'),
+                'modified' => $post->modified->format('d/m/Y H:i'),
+                'expiring_date' => $post->expirationInfo->expirationDateTime->format('d/m/Y H:i'),
+                'resolution_time' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
+                'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
+                'title' => $post->subject,
+                'author' => $post->author->name,
+                'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
+                'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
+                'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',
+                'comment' => $post->comments->count()
+            );
+
+            if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->modified->identifier == 'waiting')){
+                $item['title'] = '***';
+                $item['author'] = '***';
+            }
+
+            return $item;
+        }
     }
 
     protected function startPaginateDownload()

@@ -7,7 +7,6 @@ use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Legacy\PostService\Scenarios;
 use Opencontent\Sensor\Legacy\PostService\ScenarioInterface;
-use Opencontent\Sensor\Api\Values\NotificationType;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
@@ -96,9 +95,7 @@ class OpenPaSensorRepository extends LegacyRepository
         }
         $this->setScenarios($scenarios);
 
-        $notificationTexts = SensorNotificationTextHelper::getTemplates();
         $notificationTypes = [];
-
         $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
         $this->addListener('on_create', new MailNotificationListener($this));
 

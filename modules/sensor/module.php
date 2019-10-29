@@ -87,6 +87,12 @@ $ViewList['openapi.json'] = array(
     'functions' => array('use')
 );
 
+$ViewList['export'] = array(
+    'script' => 'export.php',
+    'params' => array(),
+    'functions' => array('use')
+);
+
 
 $FunctionList = array();
 $FunctionList['use'] = array();

@@ -15,6 +15,17 @@
                     </a>
                 </li>
             {/foreach}
+            <li class="divider" style="border-bottom: 1px solid #ccc"></li>
+            <li>
+                <a href="{'sensor/export/'|ezurl(no)}">
+                    <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
+                </a>
+            </li>
+            <li>
+                <a href="{'sensor/openapi/'|ezurl(no)}">
+                    <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
+                </a>
+            </li>
         </ul>
     </div>
 
