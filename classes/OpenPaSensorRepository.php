@@ -329,7 +329,8 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function isModerationEnabled()
     {
-        return false; //@todo
+        $globalModeration = $this->getRootNodeAttribute('enable_moderation');
+        return ($globalModeration && $globalModeration->attribute( 'data_type_string' ) == 'ezboolean' && $globalModeration->attribute( 'data_int' ) == 1);
     }
 
     public static function clearCache()
