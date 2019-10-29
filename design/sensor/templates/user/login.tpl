@@ -46,7 +46,11 @@
     </form>
     <div class='text-center'>
       <hr class='hr-normal'>
+      {if ezmodule( 'userpaex' )}
+      <a href={'/userpaex/forgotpassword'|ezurl}>{'Forgot your password?'|i18n( 'design/ocbootstrap/user/login' )}</a>
+      {else}
       <a href={'/user/forgotpassword'|ezurl}>{'Forgot your password?'|i18n( 'design/ocbootstrap/user/login' )}</a>
+      {/if}
     </div>
   </div>
 </div>

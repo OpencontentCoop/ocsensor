@@ -291,7 +291,7 @@ $(document).ready(function () {ldelim}
                 },
                 cache: true
             },
-            minimumInputLength: 1
+            minimumInputLength: 4
         });
     });
 
