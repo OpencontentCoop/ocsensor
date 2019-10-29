@@ -16,6 +16,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
     protected $iteration;
 
+    protected $mainCategories;
+
+    protected $childCategories;
+
     public $options = array(
         'CSVDelimiter' => ';',
         'CSVEnclosure' => '"'
@@ -44,12 +48,23 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'title' => ezpI18n::tr('sensor/export', 'Titolo'),
             'author' => ezpI18n::tr('sensor/export', 'Autore'),
             'category' => ezpI18n::tr('sensor/export', 'Area tematica'),
-            //'category_child' => ezpI18n::tr('sensor/export', 'Area tematica (descrittore)'),
+            'category_child' => ezpI18n::tr('sensor/export', 'Area tematica (descrittore)'),
             'current_owner' => ezpI18n::tr('sensor/export', 'Assegnatario'),
             'comment' => ezpI18n::tr('sensor/export', 'Commenti')
         );
 
         $this->filename = 'posts' . '_' . time();
+
+        $this->mainCategories = [];
+        $this->childCategories = [];
+        $categoryTree = $this->repository->getCategoriesTree();
+        foreach ($categoryTree->attribute('children') as $categoryTreeItem){
+            $this->mainCategories[$categoryTreeItem->attribute('id')] = $categoryTreeItem->attribute('name');
+            foreach ($categoryTreeItem->attribute('children') as $categoryTreeItemChild) {
+                $this->mainCategories[$categoryTreeItemChild->attribute('id')] = $categoryTreeItem->attribute('name');
+                $this->childCategories[$categoryTreeItemChild->attribute('id')] = $categoryTreeItemChild->attribute('name');
+            }
+        }
 
         if ($http->hasGetVariable('download_id')) {
             $this->downloadId = $http->getVariable('download_id');
@@ -98,8 +113,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
             'title' => $post->subject,
             'author' => $post->author->name,
-            'category' => count($post->categories) > 0 ? $post->categories[0]->name : '',
-            //'category_child' => '', //@todo
+            'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id]: '',
+            'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
             'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',
             'comment' => $post->comments->count()
         );
