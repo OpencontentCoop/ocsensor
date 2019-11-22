@@ -4,8 +4,8 @@
     <context>
         <name>sensor/add</name>
         <message>
-            <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy e i termini di utilizzo</source>
-            <translation>Texte und Bilder müssen den festgelegten Datenschutzrichtlinien entsprechen</translation>
+            <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%</source>
+            <translation>Texte und Bilder müssen den festgelegten %open_privacy_url%Datenschutzrichtlinien%close_privacy_url% entsprechen</translation>
         </message>
         <message>
             <source>Salva</source>

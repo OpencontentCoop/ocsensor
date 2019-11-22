@@ -236,13 +236,16 @@
 		{/section}
 	{/section}
 
-	  <p class="text-center">
-		<a href="{'/sensor/redirect/info,privacy'|ezurl(no,full)}">
+		<p class="text-center">
 			<small>
-				{'I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy e i termini di utilizzo'|i18n('sensor/add')}
+				{'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
+					'%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
+					'%close_privacy_url%', '</a>',
+					'%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
+					'%close_terms_url%', '</a>'
+				))}
 			</small>
-		</a>
-	  </p>
+		</p>
 	
 	  <div class="buttonblock">
 		<input class="btn btn-lg btn-success pull-right" type="submit" name="PublishButton" value="{'Salva'|i18n('sensor/add')}" />
