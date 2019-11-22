@@ -71,7 +71,7 @@
             <translation>Sachbearbeiter</translation>
         </message>
         <message>
-            <source>Aree tematiche</source>
+            <source>Categorie</source>
             <translation>Themenbereiche</translation>
         </message>
         <message>
@@ -336,7 +336,7 @@
         </message>
         <message>
             <location filename="csv.php" line="33"/>
-            <source>Area tematica</source>
+            <source>Categoria</source>
             <translation>Themenbereiche</translation>
         </message>
         <message>
@@ -623,7 +623,7 @@
     <context>
         <name>sensor/post</name>
         <message>
-            <source>Cerca per area tematica</source>
+            <source>Cerca per categoria</source>
             <translation>Suche nach Themenbereiche</translation>
         </message>
         <message>
@@ -631,11 +631,11 @@
             <translation>Suche nach Zugewiesen</translation>
         </message>
         <message>
-            <source>Quartiere/Zona</source>
+            <source>Zona</source>
             <translation>Stadtviertel/Satdtteil</translation>
         </message>
         <message>
-            <source>Seleziona Quartiere/Zona</source>
+            <source>Seleziona Zona</source>
             <translation>Stadtviertel/Satdtteil</translation>
         </message>
         <message>
@@ -643,11 +643,11 @@
             <translation>Bestätige</translation>
         </message>
         <message>
-            <source>Area tematica</source>
+            <source>Categoria</source>
             <translation>Themenbereiche</translation>
         </message>
         <message>
-            <source>Seleziona area tematica</source>
+            <source>Seleziona categoria</source>
             <translation>Themenbereiche</translation>
         </message>
         <message>
@@ -872,7 +872,7 @@
             <translation>Grundgesamtheit / aktueller Stand</translation>
         </message>
         <message>
-            <source>Aree tematiche</source>
+            <source>Categorie</source>
             <translation>Themenbereiche</translation>
         </message>
         <message>
@@ -892,15 +892,15 @@
             <translation>Durchschnitt Ausführungszeit</translation>
         </message>
         <message>
-            <source>Area tematica</source>
+            <source>Categoria</source>
             <translation>Themenbereich</translation>
         </message>
         <message>
-            <source>Numero di segnalazioni per area tematica</source>
+            <source>Numero di segnalazioni per categoria</source>
             <translation>Anzahl der Meldungen pro Themenbereich</translation>
         </message>
         <message>
-            <source>Numero di segnalazioni per quartiere</source>
+            <source>Numero di segnalazioni per zona</source>
             <translation>Anzahl der Meldungen nach Stadtvierteln</translation>
         </message>
         <message>

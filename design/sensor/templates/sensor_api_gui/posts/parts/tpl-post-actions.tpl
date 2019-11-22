@@ -34,7 +34,7 @@
     <div class="form-group" data-action-wrapper>
         <div class="row">
             <div class="col-xs-8">
-                <select data-value="area_id" data-placeholder="{/literal}{'Seleziona Quartiere/Zona'|i18n('sensor/post')}{literal}" class="select form-control">
+                <select data-value="area_id" data-placeholder="{/literal}{'Seleziona Zona'|i18n('sensor/post')}{literal}" class="select form-control">
                     <option></option>
                     {{for areasTree.children}}
                         {{include tmpl="#tpl-tree-option"/}}
@@ -54,7 +54,7 @@
     <div class="form-group" data-action-wrapper>
         <div class="row">
             <div class="col-xs-8">
-                <select data-value="category_id" data-placeholder="{/literal}{'Seleziona area tematica'|i18n('sensor/post')}{literal}" class="select form-control">
+                <select data-value="category_id" data-placeholder="{/literal}{'Seleziona categoria'|i18n('sensor/post')}{literal}" class="select form-control">
                     <option></option>
                     {{for categoriesTree.children}}
                         {{include tmpl="#tpl-tree-option"/}}
@@ -62,28 +62,16 @@
                 </select>
             </div>
             <div class="col-xs-4">
-                <input data-action="add_category" data-parameters="category_id,assign_to_operator,assign_to_group" class="btn btn-info btn-block" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
-            </div>
-            <div class="col-xs-12">
-                {{if settings.CategoryAutomaticAssign}}
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" data-value="assign_to_operator" value="1"> {/literal}{"Assegna agli operatori della categoria selezionata"|i18n('sensor/post')}{literal}
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" data-value="assign_to_group" value="1"> {/literal}{"Aggiungi come approvatori i gruppi della categoria selezionata"|i18n('sensor/post')}{literal}
-                        </label>
-                    </div>
-                {{/if}}
+                <input data-action="add_category" data-parameters="category_id" class="btn btn-info btn-block" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
             </div>
         </div>
     </div>
 {{/if}}
 </script>
 <script id="tpl-tree-option" type="text/x-jsrender">
-<option value="{{:id}}" style="padding-left:calc(10px*{{:level}});{{if level == 0}}font-weight: bold;{{/if}}">{{:name}}</option>
+<option value="{{:id}}" style="padding-left:calc(10px*{{:level}});{{if level == 0}}font-weight: bold;{{/if}}">
+   {{:name}} {{if type == 'sensor_category' && group}}({{:group}}){{/if}}
+</option>
 {{for children}}
     {{include tmpl="#tpl-tree-option"/}}
 {{/for}}
@@ -104,7 +92,7 @@
 {{/if}}
 </script>
 <script id="tpl-post-add_approver" type="text/x-jsrender">
-{{if capabilities.can_add_approver}}
+{{if capabilities.can_add_approver && !settings.CategoryAutomaticAssign}}
     <div class="form-group" data-action-wrapper>
         <div class="row">
             <div class="col-xs-8">

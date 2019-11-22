@@ -9,7 +9,7 @@
         'facet', array(
             hash( 'field', solr_subfield('area', 'name', 'string'), 'name', 'Zona', 'limit', 500, 'sort', 'alpha' ),
             hash( 'field', solr_field('type', 'string'), 'name', 'Tipo', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', solr_subfield('category', 'name', 'Area tematica', 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_subfield('category', 'name', 'Categoria', 'limit', 500, 'sort', 'alpha' ),
             hash( 'field', solr_meta_field('object_states'), 'name', 'Stato', 'limit', 500, 'sort', 'alpha' )
         ),
         'limit', $page_limit

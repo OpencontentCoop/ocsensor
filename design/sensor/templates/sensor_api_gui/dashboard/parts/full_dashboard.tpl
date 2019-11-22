@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchCategory">{'Cerca per area tematica'|i18n('sensor/post')}</label>
+                    <label for="searchCategory">{'Cerca per ca'|i18n('sensor/post')}</label>
                     <select name="category"
                             class="select form-control"
                             id='searchCategory'>

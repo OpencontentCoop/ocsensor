@@ -130,9 +130,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\AvgTimes($this);
         $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
 
-        eZModule::setGlobalPathList(
-            eZINI::instance('module.ini')->variable('ModuleSettings', 'ModuleRepositories')
-        );
+        eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
 
         parent::__construct();
     }
@@ -146,7 +144,7 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
         return new Settings(array(
-            'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : true,
+            'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
             'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
             'AuthorCanReopen' => isset($sensorIni['AuthorCanReopen']) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
             'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
