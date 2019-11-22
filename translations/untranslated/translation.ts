@@ -293,7 +293,7 @@
 <context>
     <name>sensor/add</name>
     <message>
-        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy e i termini di utilizzo</source>
+        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
