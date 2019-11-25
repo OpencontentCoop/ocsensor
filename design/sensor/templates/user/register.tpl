@@ -34,7 +34,7 @@
 {if count($content_attributes)|gt(0)}
     <div class="row">
         <div class="col-md-6">
-            {foreach $content_attributes as $attribute max 3}
+            {foreach $content_attributes as $attribute max 4}
             {if $attribute.contentclass_attribute.category|eq('hidden')}<div style="display:none">{/if}
                 <input type="hidden" name="ContentObjectAttribute_id[]" value="{$attribute.id}" />
                 <p>{attribute_edit_gui attribute=$attribute html_class="form-control input-lg" placeholder=$attribute.contentclass_attribute.name}</p>
@@ -43,7 +43,7 @@
         </div>
             
         <div class="col-md-6">
-            {foreach $content_attributes as $attribute offset 3}
+            {foreach $content_attributes as $attribute offset 4}
             {if $attribute.contentclass_attribute.category|eq('hidden')}<div style="display:none">{/if}
                 <input type="hidden" name="ContentObjectAttribute_id[]" value="{$attribute.id}" />
                 <p>{attribute_edit_gui attribute=$attribute html_class="form-control input-lg" placeholder=$attribute.contentclass_attribute.name}</p>

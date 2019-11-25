@@ -54,8 +54,12 @@
 <div class="row">
   <div class="col-md-12">
   <ul class="list-unstyled">
+    {if $root.can_edit}
     <li>{'Modifica impostazioni generali'|i18n('sensor/config')} {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$root redirect_if_discarded='/sensor/config' redirect_after_publish='/sensor/config'}</li>
+    {/if}
+    {if $post_container_node.can_edit}
     <li>{'Modifica informazioni Sensor'|i18n('sensor/config')} {include name=edit uri='design:parts/toolbar/node_edit.tpl' current_node=$post_container_node redirect_if_discarded='/sensor/config' redirect_after_publish='/sensor/config'}</li>
+    {/if}
     {def $default_approvers = sensor_default_approvers()}
     <li>
       {'Riferimento per il cittadino'|i18n('sensor/config')}:

@@ -13,8 +13,8 @@
 </div>    
 {elseif $already_active}
 <h1 class="container-title">{"Activate account"|i18n("design/ocbootstrap/user/activate")}</h1>
-<div class="alert alert-success">    
-    <form action={"/user/login"|ezurl} method="post" class="form-inline"><input class="btn btn-success pull-right" type="submit" value="{'OK'|i18n( 'design/ocbootstrap/user/activate' )}" /></form>
+<div class="alert alert-success">
+    <a class="btn btn-success pull-right" href="/">{'OK'|i18n( 'design/ocbootstrap/user/activate' )}</a>
     {'Your account is already active.'|i18n('design/standard/user')}
 </div>    
 {else}

@@ -1,3 +1,11 @@
+<div class="row" style="text-align:center;margin: 20px 0">
+    <div class="col-md-12" data-participant_filters="sensor_participant_filter">
+        <p><strong>{"Mostra solo le segnalazioni nelle quali partecipo come:"|i18n('sensor/dashboard')}</strong></p>
+        <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{"Riferimento per il cittadino"|i18n('sensor/dashboard')}</button>
+        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{"Assegnatario"|i18n('sensor/dashboard')}</button>
+        <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{"Osservatore"|i18n('sensor/dashboard')}</button>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-9">
 
@@ -63,7 +71,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchCategory">{'Cerca per ca'|i18n('sensor/post')}</label>
+                    <label for="searchCategory">{'Cerca per categoria'|i18n('sensor/post')}</label>
                     <select name="category"
                             class="select form-control"
                             id='searchCategory'>
@@ -236,6 +244,7 @@ $(document).ready(function () {ldelim}
     var processingToggle = $('[data-status="processing"]');
     var closedToggle = $('[data-status="closed"]');
     var viewContainer = $('[data-contents]');
+    var participantFilters = $('[data-participant_filters]');
     var exportUrl = $('#export-url');
     var limitPagination = 15;
     var currentPage = 0;
@@ -249,6 +258,33 @@ $(document).ready(function () {ldelim}
         capabilities: true,
         currentUserInParticipants: true
     };
+
+    var preferencePrefix = participantFilters.data('participant_filters');
+    participantFilters.find('button').each(function () {
+        var button = $(this);
+        var filter = button.data('participant_filter');
+        var preset = button.data('participant_filter_preset');
+        if (preset === 1){
+            button.removeClass('btn-default');
+            button.addClass('btn-warning');
+        }
+        var preferenceKey = preferencePrefix+'_'+filter;
+        button.on('click', function (e) {
+            var preferenceValue;
+            if (button.hasClass('btn-default')){
+                button.removeClass('btn-default');
+                button.addClass('btn-warning');
+                preferenceValue = 1;
+            }else{
+                button.addClass('btn-default');
+                button.removeClass('btn-warning');
+                preferenceValue = 0;
+            }
+            buildDashboard();
+            $.ez.setPreference(preferenceKey,preferenceValue);
+            e.preventDefault();
+        })
+    });
 
     selectCategory.append($.templates('#tpl-tree-option').render(JSON.parse(settings.categories)));
     selectArea.append($.templates('#tpl-tree-option').render(JSON.parse(settings.areas)));
@@ -418,6 +454,14 @@ $(document).ready(function () {ldelim}
             query.push("(expiration range [" + searchExpiry.data('daterangepicker').startDate.format('YYYY-MM-DDTHH:mm:ss') + "Z," + searchExpiry.data('daterangepicker').endDate.format('YYYY-MM-DDTHH:mm:ss') + "Z] and workflow_status in [waiting,read,assigned,fixed])");
         }
 
+        var participantRoles = [];
+        participantFilters.find('button.btn-warning').each(function () {
+            participantRoles.push($(this).data('participant_filter')+'_id_list in ['+settings.currentUserId+']');
+        });
+        if (participantRoles.length > 0) {
+            query.push("("+participantRoles.join(' or ')+")");
+        }
+
         return query.length > 0 ? query.join(' and ') + ' and ' : '';
     };
 
@@ -580,7 +624,6 @@ $(document).ready(function () {ldelim}
         viewContainer.html(spinner);
         buildDashboard();
     };
-
     form.find('[type="submit"]').on('click', function(e){
         form.find('[type="reset"]').removeClass('hide');
         viewContainer.html(spinner);
