@@ -293,7 +293,7 @@
 <context>
     <name>sensor/add</name>
     <message>
-        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%</source>
+        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per la privacy e i termini di utilizzo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -344,7 +344,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Aree tematiche</source>
+        <source>Categorie</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -609,7 +609,7 @@
     </message>
     <message>
         <location filename="csv.php" line="33"/>
-        <source>Area tematica</source>
+        <source>Categoria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -866,7 +866,7 @@
 <context>
     <name>sensor/post</name>
     <message>
-        <source>Cerca per area tematica</source>
+        <source>Cerca per categoria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -874,11 +874,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Quartiere/Zona</source>
+        <source>Zona</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seleziona Quartiere/Zona</source>
+        <source>Seleziona Zona</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -886,11 +886,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Area tematica</source>
+        <source>Categoria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seleziona area tematica</source>
+        <source>Seleziona categoria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group hide" id="area-filter">
-                        <label>{'Filtra per Area/Quartiere/Zona'|i18n('sensor/post')}</label>
+                        <label>{'Filtra per zona'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="area">
                             <option></option>
                             {foreach $areas.children as $item}
