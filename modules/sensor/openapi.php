@@ -1,10 +1,10 @@
 <?php
 
 $siteUrl = '/';
-eZUri::transformURI($siteUrl,false, 'full');
+eZURI::transformURI($siteUrl,false, 'full');
 
 $endpointUrl = '/api/sensor';
-eZUri::transformURI($endpointUrl, true, 'full');
+eZURI::transformURI($endpointUrl, true, 'full');
 
 $openApiTools = new \Opencontent\Sensor\OpenApi(
     OpenPaSensorRepository::instance(),

@@ -130,6 +130,10 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\AvgTimes($this);
         $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
 
+        if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
+            $this->addListener('*', new SensorWebHookListener($this));
+        }
+
         eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
 
         parent::__construct();
