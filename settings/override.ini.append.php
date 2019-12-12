@@ -90,4 +90,11 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=category
 
+[sensor_root_user_inactivity_days]
+Source=content/datatype/edit/ezinteger.tpl
+MatchFile=datatypes/edit_user_inactivity_days.tpl
+Subdir=templates
+Match[class_identifier]=sensor_root
+Match[attribute_identifier]=user_inactivity_days
+
  */ ?>
