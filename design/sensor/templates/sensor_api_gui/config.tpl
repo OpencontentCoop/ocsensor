@@ -21,6 +21,8 @@
   'jquery.opendatabrowse.js',
   'fields/OpenStreetMap.js',
   'fields/RelationBrowse.js',
+  concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
+  'fields/Recaptcha.js',
   'jquery.opendataform.js')
 )}
 {ezcss_load(array(

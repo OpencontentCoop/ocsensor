@@ -32,7 +32,7 @@
                     <span class="label label-primary">{{:id}}</span>
                     {{:subject}}
                   </a>
-                  <small>{{:author.name}}{{if reporter.id != author.id}} [{{:reporter.name}}]{{/if}}</small>
+                  <small>{{:author.name}}</small>
                   </h2>
                   <ul class="breadcrumb pull-right">
                   <li>

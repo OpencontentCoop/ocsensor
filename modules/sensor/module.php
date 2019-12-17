@@ -93,6 +93,17 @@ $ViewList['export'] = array(
     'functions' => array('use')
 );
 
+$ViewList['create-user'] = array(
+    'script' => 'create-user.php',
+    'params' => array(),
+    'functions' => array('behalf')
+);
+
+$ViewList['search-user'] = array(
+    'script' => 'search-user.php',
+    'params' => array('FiscalCode'),
+    'functions' => array('behalf')
+);
 
 $FunctionList = array();
 $FunctionList['use'] = array();
