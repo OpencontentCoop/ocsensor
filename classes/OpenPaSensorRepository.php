@@ -87,12 +87,6 @@ class OpenPaSensorRepository extends LegacyRepository
 
         $scenarios = [];
         $scenarios[ScenarioInterface::LOW] = new Scenarios\FirstAreaApproverScenario($this);
-        if ($this->getSensorSettings()->get('AreaAutomaticAssign')) {
-            $scenarios[ScenarioInterface::HIGH] = new Scenarios\AreaApproverScenario($this);
-        }
-        if ($this->getSensorSettings()->get('CategoryAutomaticAssign')) {
-            $scenarios[ScenarioInterface::MEDIUM] = new Scenarios\CategoryApproverScenario($this);
-        }
         $this->setScenarios($scenarios);
 
         $notificationTypes = [];
@@ -133,6 +127,8 @@ class OpenPaSensorRepository extends LegacyRepository
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
             $this->addListener('*', new SensorWebHookListener($this));
         }
+
+        $this->addListener('*', new SensorFlashMessageListener($this));
 
         eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
 

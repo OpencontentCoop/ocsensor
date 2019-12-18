@@ -48,7 +48,8 @@ $(document).ready(function () {ldelim}
         'categories': '{$categories|wash(javascript)}',
         'settings': '{$settings|wash(javascript)}',
         'spinnerTpl': '#tpl-spinner',
-        'postTpl': '#tpl-post'
+        'postTpl': '#tpl-post',
+        'alertsEndPoint': '{'social_user/alert'|ezurl(no)}'
     {rdelim}, {$post_id});
 {rdelim});
 </script>

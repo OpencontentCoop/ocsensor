@@ -14,7 +14,8 @@
             'spinnerTpl': '#tpl-spinner',
             'postTpl': '#tpl-post',
             'alertTpl': '#tpl-alerts',
-            'onRemove': null
+            'onRemove': null,
+            'alertsEndPoint': false
         };
 
     function Plugin(element, options, postId) {
@@ -218,6 +219,12 @@
                                     success: function (data) {
                                         plugin.load(post.id);
                                         plugin.actionStarted = false;
+                                        if (plugin.settings.alertsEndPoint) {
+                                            $('#social_user_alerts').remove();
+                                            $.get(plugin.settings.alertsEndPoint, function (data) {
+                                                $('header').prepend(data);
+                                            });
+                                        }
                                     },
                                     error: function (data) {
                                         plugin.actionStarted = false;
