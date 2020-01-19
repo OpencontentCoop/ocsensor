@@ -16,7 +16,7 @@
       </span>
     </div>
     <div id="behalf-of-view" class="{if $current|not()}hide{/if}">
-        <span>{$current.name|wash()}</span> <i class="fa fa-times"></i>
+        <span>{if $current}{$current.name|wash()}{/if}</span> <i class="fa fa-times"></i>
     </div>
     <div id="behalf-of-create" class="hide">
         <div class="row form-group" style="margin-bottom: 10px">
