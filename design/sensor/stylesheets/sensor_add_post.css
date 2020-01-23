@@ -1,0 +1,152 @@
+html, body {
+    background: none;
+    height: 100%;
+    width: 100%;
+}
+
+.zindexize {
+    z-index: 10 !important;
+}
+
+.edit-row {
+    margin: 10px 0;
+}
+
+.panel {
+    margin: 0;
+}
+
+.noscroll{
+    overflow: hidden;
+}
+
+@media (min-width: 320px) {
+    #sensor_full_map {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    #sensor_hide_map_button {
+        position: absolute;
+        right: 68px;
+        top: 10px;
+        z-index: -1;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    }
+
+    #mylocation-mobile-button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: -1;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+    }
+
+    #edit {
+        padding: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+    }
+
+    .viewport {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    form.edit .tab-pane {
+        padding: 0;
+    }
+    .alert {
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
+    .leaflet-bar a, .leaflet-bar a:hover{
+        width: 52px;
+        height: 52px;
+        line-height: 52px;
+        font-size: 2em;
+    }
+    form#edit, #sensor_add_gui{
+        height: 100%;
+    }
+    #sensor_add_gui >.panel{
+        min-height: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    #edit .panel {
+        overflow-y: auto;
+        height: 100%;
+        opacity: .9;
+    }
+
+    #edit {
+        position: fixed;
+        right: 10px;
+        z-index: 1000000;
+        bottom: 10px;
+    }
+
+    #sensor_full_map {
+        z-index: 1;
+    }
+
+    #sensor_hide_map_button,
+    #sensor_show_map_button {
+        display: none;
+    }
+
+    .viewport {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40%;
+        height: 100%;
+    }
+
+    form.edit .tab-pane {
+        padding: 20px;
+    }
+    .alert {
+        left: auto;
+        position: static;
+        top: auto;
+        width: auto;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+    .checkbox {
+        display: inline-block;
+        width: 45%;
+    }
+    .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
+    .leaflet-bar a, .leaflet-bar a:hover{
+        width: 26px;
+        height: 26px;
+        line-height: 26px;
+        font-size: 1em;
+    }
+    form#edit, #sensor_add_gui{
+        height: auto;
+    }
+    #sensor_add_gui >.panel{
+        min-height: auto;
+    }
+}
+span.classattribute-description{
+    color: #333;
+}
