@@ -63,7 +63,7 @@
                 if (this.settings.geocoder === "Nominatim") {
                     nominatimGeocoderParams = {
                         geocodingQueryParams:{
-                            globalBoundingBox: this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth(),
+                            viewbox: this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth(),
                             bounded: 1
                         }
                     };
