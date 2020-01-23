@@ -46,20 +46,21 @@
                 $attribute_default_category = ezini( 'ClassAttributeSettings', 'DefaultCategory', 'content.ini' )}
 
                 {def $content_attributes_extra = hash()}
-                {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )}
-                    {foreach $content_attributes_grouped_data_map['hidden'] as $attribute}
-                        {if $attribute.contentclass_attribute.identifier|contains('on_behalf_of')}
-                            {def $behalf_attribute = $content_attributes_grouped_data_map['hidden'][$attribute.contentclass_attribute.identifier]}
-                            {set $content_attributes_extra = $content_attributes_extra|merge( hash( $attribute.contentclass_attribute.identifier, $behalf_attribute ) )}
-                            {undef $behalf_attribute}
-                        {/if}
-                        {if $attribute.contentclass_attribute.identifier|eq('meta')}
-                            <div style="display: none">
-                                {attribute_edit_gui attribute_base=$attribute_base attribute=$attribute view_parameters=$view_parameters html_class='form-control'}
-                            </div>
-                        {/if}
-                    {/foreach}
-                {/if}
+                {foreach $content_attributes_grouped_data_map['hidden'] as $attribute}
+                    {if and(
+                        $attribute.contentclass_attribute.identifier|contains('on_behalf_of'),
+                        fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'behalf' ) )
+                    )}
+                        {def $behalf_attribute = $content_attributes_grouped_data_map['hidden'][$attribute.contentclass_attribute.identifier]}
+                        {set $content_attributes_extra = $content_attributes_extra|merge( hash( $attribute.contentclass_attribute.identifier, $behalf_attribute ) )}
+                        {undef $behalf_attribute}
+                    {/if}
+                    {if $attribute.contentclass_attribute.identifier|eq('meta')}
+                        <div style="display: none">
+                            {attribute_edit_gui attribute_base=$attribute_base attribute=$attribute view_parameters=$view_parameters html_class='form-control'}
+                        </div>
+                    {/if}
+                {/foreach}
 
                 {if count( $content_attributes_extra )|gt(0)}
                     {set $content_attributes_grouped_data_map = $content_attributes_grouped_data_map|merge( hash( 'segnalatore', $content_attributes_extra ) )}
