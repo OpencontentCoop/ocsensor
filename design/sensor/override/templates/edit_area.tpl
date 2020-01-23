@@ -31,13 +31,13 @@
                     {if is_set($item.geo.coords[0])}
                         data-lat="{$item.geo.coords[0]}" data-lng="{$item.geo.coords[1]}"
                     {/if}
-                    {if $item.bounding_box}
+                    {*if $item.bounding_box}
                         data-geojson='{$item.bounding_box.geo_json}'
                         data-type="{$item.bounding_box.type}"
                         data-color="{if $item.bounding_box.color}{$item.bounding_box.color}{else}#3388ff{/if}"
-                    {/if}
+                    {/if*}
                     style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}"
-                    {if and(ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled'),$item.bounding_box|not())}
+                    {if ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled')}
                         disabled="disabled"
                     {/if}
                     {if $current_areas|contains($item.id)} selected="selected"{/if}>

@@ -1,13 +1,21 @@
 {def $areas = sensor_areas()
-$social_pagedata = social_pagedata( 'sensor' )}
+     $social_pagedata = social_pagedata( 'sensor' )}
 
 <script type="text/javascript">
     {if $object.data_map.geo.has_content}
-    var PointsOfInterest = {ldelim}"id": "{$object.id}", "coords": ["{$object.data_map.geo.content.latitude|explode(',')|implode('.')}", "{$object.data_map.geo.content.longitude|explode(',')|implode('.')}"], "address": "{$object.data_map.geo.content.address}"{rdelim};
-    {elseif is_set($areas.children[0].geo.coords[0])}
-    var PointsOfInterest = {ldelim}"id": "default", "coords": ["{$areas.children[0].geo.coords[0]}", "{$areas.children[0].geo.coords[1]}"], "address": "{$areas.children[0].name}"{rdelim};
+        var PointsOfInterest = {ldelim}"id": "{$object.id}", "coords": ["{$object.data_map.geo.content.latitude|explode(',')|implode('.')}", "{$object.data_map.geo.content.longitude|explode(',')|implode('.')}"], "address": "{$object.data_map.geo.content.address}"{rdelim};    
     {else}
-    var PointsOfInterest = null;
+        var PointsOfInterest = null;
+    {/if}
+    {if is_set($areas.children[0].geo.coords[0])}
+        var CenterMap = new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]});    
+    {else}
+        var CenterMap = false;
+    {/if}
+    {if is_set($areas.children[0].bounding_box)}
+        var BoundingArea = '{$areas.children[0].bounding_box.geo_json}';
+    {else}
+        var BoundingArea = false;
     {/if}
 </script>
 

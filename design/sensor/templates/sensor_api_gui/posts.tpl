@@ -75,7 +75,13 @@ $(document).ready(function () {ldelim}
         ],
         "firstDay": {'1'|i18n('sensor/datepicker')}
     {rdelim};
-    var centerMap = new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]});
+    {if is_set($areas.children[0].geo.coords[0])}
+        var centerMap = new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]});
+    {elseif is_set($areas.children[0].bounding_box)}
+        var centerMap = '{$areas.children[0].bounding_box.geo_json}';
+    {else}
+        var centerMap = false;
+    {/if}
 {literal}
     $.views.helpers($.opendataTools.helpers);
     var form = $('#posts-search form');
@@ -385,8 +391,17 @@ $(document).ready(function () {ldelim}
     var tiles = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18,attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
     var map = L.map('map').addLayer(tiles);
     map.scrollWheelZoom.disable();
-    var markers = new L.markerClusterGroup();
-    map.setView(centerMap, 13);
+    var markers = new L.markerClusterGroup();    
+    if (typeof centerMap === 'string') {
+        try{
+            var centerMapLayer = L.geoJson(JSON.parse(centerMap));
+            map.fitBounds(centerMapLayer.getBounds());
+        }catch(err) {
+            console.log(err.message);
+        }
+    }else if (typeof centerMap === 'object') {
+        map.setView(centerMap, 13);
+    }
     map.addLayer(markers);
     markers.on('clusterclick', function(){hasClickOnMarker = true});
 

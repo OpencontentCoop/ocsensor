@@ -52,6 +52,8 @@
             'strict_in_area': {cond(ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled'), true, false)},
             {if $nearestService}
             'nearest_service': {ldelim}
+                'strict_in_area_alert': "{'La località selezionata non è coperta dal servizio'|i18n('sensor/config')}",
+                'no_suggestion_message': "{'Nessun risultato'|i18n('sensor/config')}",
                 'debug': {cond(ezini('GeoCoderSettings', 'NearestServiceDebug', 'ocsensor.ini')|eq('enabled'), true, false)},
                 'url': '{ezini('GeoCoderSettings', 'NearestServiceUrl', 'ocsensor.ini')}',
                 'typeName': '{ezini('GeoCoderSettings', 'NearestServiceTypeName', 'ocsensor.ini')}',
@@ -60,7 +62,9 @@
                 'geometryName': '{ezini('GeoCoderSettings', 'NearestServiceGeometryName', 'ocsensor.ini')}'
             {rdelim},
             {/if}
-            'default_marker': PointsOfInterest
+            'default_marker': PointsOfInterest,
+            'center_map': CenterMap,
+            'bounding_area': BoundingArea
         {rdelim});
     {rdelim});
 </script>
