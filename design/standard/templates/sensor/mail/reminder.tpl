@@ -41,7 +41,7 @@
                                 {if $last_closed_near_user}
                                     <p>
                                         {"E' stata chiusa una segnalazione vicino al tuo domicilio:"|i18n('sensor/mail/post')}
-                                        <a href="http://{$social_pagedata.site_url}/sensor/posts/{$last_closed_near_user.id}{$campain}">{$last_closed_near_user.subject}</a>
+                                        <a href="https://{$social_pagedata.site_url}/sensor/posts/{$last_closed_near_user.id}{$campain}">{$last_closed_near_user.subject}</a>
                                     </p>
                                 {/if}
                                 {if $last_closed_user_post.totalCount > 0}
@@ -50,7 +50,7 @@
                                     </p>
                                     <ul>
                                         {foreach $last_closed_user_post.searchHits as $post}
-                                            <li style="padding: 5px 0;"><a href="http://{$social_pagedata.site_url}/sensor/posts/{$post.id}{$campain}">{$post.subject}</a></li>
+                                            <li style="padding: 5px 0;"><a href="https://{$social_pagedata.site_url}/sensor/posts/{$post.id}{$campain}">{$post.subject}</a></li>
                                         {/foreach}
                                     </ul>
                                 {/if}
@@ -60,13 +60,13 @@
                     </tr>
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
-                            <h3><a href="http://{$social_pagedata.site_url}/sensor/posts/{$campain}" style="color: #ffffff !important">{"Vedi tutte le segnalazioni"|i18n('sensor/mail/post')}</a></h3>
+                            <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$campain}" style="color: #ffffff !important">{"Vedi tutte le segnalazioni"|i18n('sensor/mail/post')}</a></h3>
                         </td>
                     </tr>
                     <tr><td><br /></td></tr>
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
-                            <h3><a href="http://{$social_pagedata.site_url}/sensor/add/{$campain}" style="color: #ffffff !important">{"Fai la tua segnalazione"|i18n('sensor/mail/post')}</a></h3>
+                            <h3><a href="https://{$social_pagedata.site_url}/sensor/add/{$campain}" style="color: #ffffff !important">{"Fai la tua segnalazione"|i18n('sensor/mail/post')}</a></h3>
                         </td>
                     </tr>
                     <tr>

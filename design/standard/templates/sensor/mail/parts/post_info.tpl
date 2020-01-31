@@ -1,5 +1,5 @@
 <p>
-    <strong>ID:</strong> <a href="http://{$social_pagedata.site_url}/sensor/posts/{$object.id}">{$object.id}</a>
+    <strong>ID:</strong> <a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}">{$object.id}</a>
 </p>
 <p>
     <strong>{$object.data_map.subject.contentclass_attribute_name}:</strong> {$object.name|wash()}

@@ -8,7 +8,7 @@
 	<title>{$title}</title>
 	<style type="text/css">
   {literal}  
-    @import url('http://fonts.googleapis.com/css?family=Open+Sans');
+    @import url('//fonts.googleapis.com/css?family=Open+Sans');
     body{font-family: 'Open Sans', 'Arial', 'Helvetica', sans-serif;}
 		#outlook a {padding:0;}
 		body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}		
@@ -93,7 +93,7 @@
                 <table border='0' cellpadding='20' cellspacing='0' style='margin-left: auto;margin-right: auto;width:600px;text-align:center;' width='600'>
                     <tr>
                         <td align='center' valign='top'>
-                          <img src="http://{$social_pagedata.asset_url}{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90" style="outline:none; text-decoration:none;border:none,display:block;">
+                          <img src="https://{$social_pagedata.asset_url}{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90" style="outline:none; text-decoration:none;border:none,display:block;">
                           <p>{$social_pagedata.logo_title} - {$social_pagedata.logo_subtitle}</p>
                         </td>
                     </tr>
@@ -116,8 +116,8 @@
                         <td align='center' valign='top'>
                           <small>
                             &copy; {currentdate()|datetime('custom', '%Y')} {$social_pagedata.logo_title} -
-                            {'%privacy_link_start%Informazioni sulla privacy%privacy_link_end%'|i18n('sensor/mail/registration',, hash( '%privacy_link_start%', concat( '<a href=http://', $social_pagedata.site_url, '/sensor/info/privacy/>' ), '%privacy_link_end%', '</a>' ))} -
-                            {'%terms_link_start%Termini di utilizzo%terms_link_end%'|i18n('sensor/mail/registration',, hash( '%terms_link_start%', concat( '<a href=http://', $social_pagedata.site_url, '/sensor/info/terms/>' ), '%terms_link_end%', '</a>' ))}
+                            {'%privacy_link_start%Informazioni sulla privacy%privacy_link_end%'|i18n('sensor/mail/registration',, hash( '%privacy_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/sensor/info/privacy/>' ), '%privacy_link_end%', '</a>' ))} -
+                            {'%terms_link_start%Termini di utilizzo%terms_link_end%'|i18n('sensor/mail/registration',, hash( '%terms_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/sensor/info/terms/>' ), '%terms_link_end%', '</a>' ))}
                           </small>
                         </td>
                     </tr>
