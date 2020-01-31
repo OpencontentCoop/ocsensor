@@ -34,7 +34,7 @@
     {set $geocoder_params = hash('geocodingQueryParams', ezini('GeoCoderSettings', 'NominatimDetailedDefaults', 'ocsensor.ini'))}
 {/if}
 {def $nearestService = cond(ezini('GeoCoderSettings', 'NearestService', 'ocsensor.ini')|eq('enabled'), true(), false())}
-
+{def $show_map_debug = cond(and(ezhttp_hasvariable('debug', 'get'), fetch('user','has_access_to',hash('module','sensor','function','config'))), 'true', 'false')}
 <script>
     $(document).ready(function () {ldelim}
         $(document).on('click', '#sensor_show_map_button', function () {ldelim}
@@ -50,11 +50,16 @@
             'geocoder': '{$geocoder}',
             'geocoder_params': {$geocoder_params|json_encode()},
             'strict_in_area': {cond(ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled'), true, false)},
+            'debug_bounding_area': {$show_map_debug},
+            'debug_meta_info': {$show_map_debug},
+            'debug_geocoder': {$show_map_debug},
+            'strict_in_area_alert': "{ezini('GeoCoderSettings', 'MarkerOutOfBoundsAlert', 'ocsensor.ini')}",
+            'no_suggestion_message': "{ezini('GeoCoderSettings', 'NoSuggestionMessage', 'ocsensor.ini')}",
             {if $nearestService}
             'nearest_service': {ldelim}
                 'strict_in_area_alert': "{'La località selezionata non è coperta dal servizio'|i18n('sensor/config')}",
                 'no_suggestion_message': "{'Nessun risultato'|i18n('sensor/config')}",
-                'debug': {cond(ezini('GeoCoderSettings', 'NearestServiceDebug', 'ocsensor.ini')|eq('enabled'), true, false)},
+                'debug': {cond(or($show_map_debug|eq('true'), ezini('GeoCoderSettings', 'NearestServiceDebug', 'ocsensor.ini')|eq('enabled')), 'true', 'false')},
                 'url': '{ezini('GeoCoderSettings', 'NearestServiceUrl', 'ocsensor.ini')}',
                 'typeName': '{ezini('GeoCoderSettings', 'NearestServiceTypeName', 'ocsensor.ini')}',
                 'maxFeatures': '{ezini('GeoCoderSettings', 'NearestServiceMaxFeatures', 'ocsensor.ini')}',

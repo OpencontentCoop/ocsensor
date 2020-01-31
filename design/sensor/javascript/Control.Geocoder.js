@@ -380,7 +380,7 @@
         geocode: function (query, cb, context) {
             L.Control.Geocoder.jsonp(this.options.serviceUrl + 'search/', L.extend({
                     q: query,
-                    limit: 5,
+                    limit: 10,
                     format: 'json',
                     addressdetails: 1
                 }, this.options.geocodingQueryParams),

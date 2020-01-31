@@ -4,14 +4,21 @@
 {/if}
 {* Make sure to normalize floats from db  *}
 {def $latitude  = $attribute.content.latitude|explode(',')|implode('.')
-     $longitude = $attribute.content.longitude|explode(',')|implode('.')}
+$longitude = $attribute.content.longitude|explode(',')|implode('.')}
 
 
-<div class="clearfix">
+<div class="clearfix" style="position: relative">
     <div class="input-group">
-        <input class="form-control" size="20" type="text" id="input-address" name="{$attribute_base}_data_gmaplocation_address_{$attribute.id}" value="{$attribute.content.address}"/>
-      <span class="input-group-btn">
-        <button tabindex="-1" class="btn btn-default hidden-xs" type="button" id="mylocation-button" value="{'Rileva la mia posizione'|i18n('sensor/add')}" title="{'Gets your current position if your browser support GeoLocation and you grant this website access to it! Most accurate if you have a built in gps in your Internet device! Also note that you might still have to type in address manually!'|i18n('extension/ezgmaplocation/datatype')}">
+        <input class="form-control" size="20" type="text" id="input-address"
+               name="{$attribute_base}_data_gmaplocation_address_{$attribute.id}" value="{$attribute.content.address}"/>
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button" id="input-address-button"
+                value="{'Find address'|i18n('extension/ezgmaplocation/datatype')}">
+            <i class="fa fa-search"></i>
+        </button>
+        <button tabindex="-1" class="btn btn-default hidden-xs" type="button" id="mylocation-button"
+                value="{'Rileva la mia posizione'|i18n('sensor/add')}"
+                title="{'Gets your current position if your browser support GeoLocation and you grant this website access to it! Most accurate if you have a built in gps in your Internet device! Also note that you might still have to type in address manually!'|i18n('extension/ezgmaplocation/datatype')}">
             <i class="fa fa-location-arrow"></i>
         </button>
         <button tabindex="-1" class="btn btn-default visible-xs-inline-block" type="button" id="sensor_show_map_button">
@@ -19,21 +26,23 @@
         </button>
       </span>
     </div>
-    <input class="btn btn-sm pull-right hidden" type="button" id="input-address-button" value="{'Find address'|i18n('extension/ezgmaplocation/datatype')}"/>
+    <div class="list-group" id="input-results" style="position: absolute;z-index: 1;width: 100%;"></div>
 </div>
-<ul class="list-unstyled" id="input-results" style="max-height: 50px;overflow-y: auto;"></ul>
 
-<input type="hidden" name="ezgml_hidden_address_{$attribute.id}" value="{$attribute.content.address}" disabled="disabled" />
-<input type="hidden" name="ezgml_hidden_latitude_{$attribute.id}" value="{$latitude}" disabled="disabled" />
-<input type="hidden" name="ezgml_hidden_longitude_{$attribute.id}" value="{$longitude}" disabled="disabled" />
+<input type="hidden" name="ezgml_hidden_address_{$attribute.id}" value="{$attribute.content.address}"
+       disabled="disabled"/>
+<input type="hidden" name="ezgml_hidden_latitude_{$attribute.id}" value="{$latitude}" disabled="disabled"/>
+<input type="hidden" name="ezgml_hidden_longitude_{$attribute.id}" value="{$longitude}" disabled="disabled"/>
 
 <div class="row" style="display: none">
-  <div class="col-xs-6">
-    <input placeholder="{'Latitude'|i18n('extension/ezgmaplocation/datatype')}" id="latitude" class="form-control" type="text" name="{$attribute_base}_data_gmaplocation_latitude_{$attribute.id}" value="{$latitude}" />
-  </div>
-  <div class="col-xs-6">
-    <input placeholder="{'Longitude'|i18n('extension/ezgmaplocation/datatype')}" id="longitude" class="form-control" type="text" name="{$attribute_base}_data_gmaplocation_longitude_{$attribute.id}" value="{$longitude}" />
-  </div>
+    <div class="col-xs-6">
+        <input placeholder="{'Latitude'|i18n('extension/ezgmaplocation/datatype')}" id="latitude" class="form-control"
+               type="text" name="{$attribute_base}_data_gmaplocation_latitude_{$attribute.id}" value="{$latitude}"/>
+    </div>
+    <div class="col-xs-6">
+        <input placeholder="{'Longitude'|i18n('extension/ezgmaplocation/datatype')}" id="longitude" class="form-control"
+               type="text" name="{$attribute_base}_data_gmaplocation_longitude_{$attribute.id}" value="{$longitude}"/>
+    </div>
 </div>
 
 

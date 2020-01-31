@@ -5,7 +5,7 @@
     var pluginName = 'sensorAddPost',
         defaults = {
             'geocoder': 'Nominatim',
-            'geocoder_params': null,
+            'geocoder_params': {},
             'nearest_service': {
                 'debug': true,
                 'url': false,
@@ -21,6 +21,8 @@
             'center_map': false,
             'bounding_area': false,
             'debug_bounding_area': false,
+            'debug_meta_info': false,
+            'debug_geocoder': false,
             'map_params': {
                 scrollWheelZoom: true,
                 loadingControl: true
@@ -30,8 +32,8 @@
     function Plugin(element, options) {
         this.element = $(element);
         this.settings = $.extend({}, defaults, options);
+        this.settings.geoinput_splitted = false;
 
-        this.loading = false;
         this.positionBeforeDrag = false;
 
         this.map = new L.Map(
@@ -50,25 +52,32 @@
 
         var nominatimGeocoderParams = {};
         if (typeof this.settings.bounding_area === 'string') {
-            try{                
+            try {
                 this.globalBoundingBox = L.geoJson(JSON.parse(this.settings.bounding_area)).getBounds();
                 this.globalBoundingPerimeter = L.rectangle(this.globalBoundingBox, {
-                    color: 'red',
-                    fillColor: '#f03',
+                    color: 'blue',
+                    weight: 2,
                     fillOpacity: 0
                 });
-                if (this.settings.debug_bounding_area) {                    
+                if (this.settings.debug_bounding_area) {
                     this.map.addLayer(this.globalBoundingPerimeter);
                 }
+                var viewBox = this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth();
                 if (this.settings.geocoder === "Nominatim") {
                     nominatimGeocoderParams = {
-                        geocodingQueryParams:{
-                            viewbox: this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth(),
+                        geocodingQueryParams: {
+                            viewbox: viewBox,
                             bounded: 1
                         }
                     };
-                }         
-            }catch(err) {
+                } else if (this.settings.geocoder === "NominatimDetailed") {
+                    if (this.settings.geocoder_params === false) {
+                        this.settings.geocoder_params = {geocodingQueryParams: {}};
+                    }
+                    this.settings.geocoder_params.geocodingQueryParams.viewbox = viewBox;
+                    this.settings.geocoder_params.geocodingQueryParams.bounded = 1;
+                }
+            } catch (err) {
                 console.log(err.message);
             }
         }
@@ -81,6 +90,7 @@
             this.geocoder = L.Control.Geocoder.google(this.settings.geocoder_params);
         } else if (this.settings.geocoder === "NominatimDetailed") {
             this.geocoder = L.Control.Geocoder.nominatimDetailed(this.settings.geocoder_params);
+            this.settings.geoinput_splitted = true;
         }
 
         this.selectArea = $('.select-sensor-area');
@@ -90,23 +100,31 @@
         this.inputAddress = $('input#input-address');
         this.searchButton = $('#input-address-button');
         this.inputMeta = $('textarea.ezcca-sensor_post_meta');
+        this._debugMeta();
 
+        if (this.settings.geoinput_splitted) {
+            this.inputAddress.hide();
+            this.inputNumber = $('<input class="form-control" size="20" type="text" placeholder="civico" id="input-number" value="" style="width: 20%;border-left:0">').prependTo(this.inputAddress.parent());
+            this.inputStreet = $('<input class="form-control" size="20" type="text" placeholder="Via, viale, piazza..." id="input-street" value="" style="width: 80%;border-right:0">').prependTo(this.inputAddress.parent());
+        }
         this.initSearch();
-        
+
         this.initPerimeters();
 
         if (this.settings.default_marker) {
-            var latLng = new L.LatLng(this.settings.default_marker.coords[0], this.settings.default_marker.coords[1]);            
+            var latLng = new L.LatLng(this.settings.default_marker.coords[0], this.settings.default_marker.coords[1]);
             var self = this;
-            this.setUserMarker(latLng, this.settings.default_marker.address || null, function () {});            
-        }else if (typeof this.settings.center_map === 'object') {
+            this.setUserMarker(latLng, this.settings.default_marker.address || null, function () {
+            });
+        } else if (typeof this.settings.center_map === 'object') {
             this.map.setView(this.settings.center_map, 15);
-        }else if (this.perimeters.getLayers().length === 0 && this.globalBoundingBox) {
-            this.map.setView(new L.LatLng(0,0), 10);                
-            this.map.fitBounds(this.globalBoundingBox);            
+        } else if (this.perimeters.getLayers().length === 0 && this.globalBoundingBox) {
+            this.map.setView(new L.LatLng(0, 0), 10);
+            this.map.fitBounds(this.globalBoundingBox);
         }
 
         this.debugNearest = this.settings.nearest_service.debug ? L.featureGroup().addTo(this.map) : false;
+        this.debugGeocoder = this.settings.debug_geocoder ? L.featureGroup().addTo(this.map) : false;
     }
 
     $.extend(Plugin.prototype, {
@@ -139,16 +157,16 @@
             $('#mylocation-button, #mylocation-mobile-button').on('click', function (e) {
                 var icon = $(e.currentTarget).find('i');
                 icon.addClass('fa-spin');
-                self.map.loadingControl.addLoader('lc');
+                self.map.loadingControl.addLoader('mylocation');
                 self.map.locate({setView: false, watch: false})
                     .on('locationfound', function (e) {
-                        self.map.loadingControl.removeLoader('lc');
+                        self.map.loadingControl.removeLoader('mylocation');
                         icon.removeClass('fa-spin');
                         self.setUserMarker(new L.LatLng(e.latitude, e.longitude));
                     })
                     .on('locationerror', function (e) {
                         icon.removeClass('fa-spin');
-                        self.map.loadingControl.removeLoader('lc');
+                        self.map.loadingControl.removeLoader('mylocation');
                         alert(e.message);
                     });
             });
@@ -157,11 +175,7 @@
         initSearch: function () {
             var self = this;
 
-            if (self.settings.geocoder === "NominatimDetailed") {
-                self.inputAddress.hide();
-                self.inputNumber = $('<input class="form-control" size="20" type="text" placeholder="civico" id="input-number" value="" style="width: 20%;border-left:0">').prependTo(InputAddress.parent());
-                self.inputStreet = $('<input class="form-control" size="20" type="text" placeholder="Via, viale, piazza..." id="input-street" value="" style="width: 80%;border-right:0">').prependTo(InputAddress.parent());
-
+            if (self.settings.geoinput_splitted) {
                 self.inputStreet.on('keypress', function (e) {
                     if (e.which === 13) {
                         self.inputNumber.focus();
@@ -174,10 +188,6 @@
                         self.searchButton.trigger('click');
                         e.preventDefault();
                     }
-                }).on('focusout', function (e) {
-                    if (!self.loading) {
-                        self.searchButton.trigger('click');
-                    }
                 });
             }
 
@@ -188,37 +198,63 @@
                     self.searchButton.trigger('click');
                     e.preventDefault();
                 }
-            }).on('focusout', function (e) {
-                if (!self.loading) {
-                    self.searchButton.trigger('click');
-                }
             });
 
             self.searchButton.on('click', function (e) {
-                self.loading = true;
-                self.map.loadingControl.addLoader('gc');
+                self.map.loadingControl.addLoader('inputsearch');
                 var query = self.inputAddress.val();
-                if (self.settings.geocoder === "NominatimDetailed") {
+                if (self.settings.geoinput_splitted) {
                     query = {street: self.inputNumber.val() + ' ' + self.inputStreet.val()};
                 }
 
                 self.clearSuggestions();
-                self.geocoder.geocode(query, function (result) {
-                    if (result.length > 0) {                        
-                        if (result.length > 1) {
-                            $.each(result, function (i, o) {
+                self.geocoder.geocode(query, function (response) {
+                    var results = response;
+                    if (self.debugGeocoder) {
+                        self.debugGeocoder.clearLayers();
+                        $.each(response, function (i, o) {
+                            self.debugGeocoder.addLayer(
+                                L.circleMarker(new L.LatLng(o.center.lat, o.center.lng), {color: 'blue'})
+                                    .bindPopup(o.name)
+                            );
+                        });
+                        if (self.debugGeocoder.getLayers().length > 0) {
+                            self.map.fitBounds(self.debugGeocoder.getBounds());
+                        }
+                    }
+                    if (self.settings.strict_in_area) {
+                        results = [];
+                        $.each(response, function (i, o) {
+                            if (self.getPerimeterIdByPosition(new L.LatLng(o.center.lat, o.center.lng))) {
+                                results.push(o);
+                            }
+                        });
+                    }
+                    self.map.loadingControl.removeLoader('inputsearch');
+                    if (results.length > 0) {
+
+                        // deduplicate suggestions
+                        var suggestions = [];
+                        $.each(results, function (i, o) {
+                            var name = o.name;
+                            var alreadySuggested = $.grep(suggestions, function(e){ return e.name === name; });
+                            if (alreadySuggested.length === 0) {
+                                suggestions.push(o);
+                            }
+                        });
+
+                        if (suggestions.length > 1) {
+                            $.each(suggestions, function (i, o) {
                                 self.appendSuggestion(o);
                             });
                         } else {
-                            self.setUserMarker(new L.LatLng(result[0].center.lat, result[0].center.lng), result[0].name);
-                            self.appendGeocoderMeta(result[0]);
+                            self.setUserMarker(new L.LatLng(suggestions[0].center.lat, suggestions[0].center.lng), suggestions[0]);
+                            self.appendGeocoderMeta(suggestions[0]);
                         }
-                        self.map.loadingControl.removeLoader('gc');
-                    }else{
+                    } else {
                         self.noSuggestion();
                     }
                 }, this);
-                self.map.loadingControl.removeLoader('gc');
             });
         },
 
@@ -256,12 +292,12 @@
                     if (layer) {
                         self.map.fitBounds(layer.getBounds());
                     }
-                    if (self.getUserMarker() && current !== self.getPerimeterIdByPosition(self.getUserMarker().getLatLng())) {                        
+                    if (self.getUserMarker() && current !== self.getPerimeterIdByPosition(self.getUserMarker().getLatLng())) {
                         self.markers.clearLayers();
                         self.clearGeo();
                     }
                 });
-            }else{
+            } else {
                 self.settings.strict_in_area = false;
             }
         },
@@ -280,17 +316,18 @@
             var self = this;
 
             if (!$.isFunction(cb)) {
-                var areaId = self.getPerimeterIdByPosition(latLng);            
+                var areaId = self.getPerimeterIdByPosition(latLng);
                 if (self.settings.strict_in_area && !areaId) {
                     alert(self.settings.strict_in_area_alert);
                     if (self.positionBeforeDrag) {
-                        self.setUserMarker(self.positionBeforeDrag, null, function () {});
-                    }                
+                        self.setUserMarker(self.positionBeforeDrag, null, function () {
+                        });
+                    }
                     return false;
                 }
             }
             self.positionBeforeDrag = false;
-            self.markers.clearLayers();            
+            self.markers.clearLayers();
             var userMarker = new L.Marker(latLng, {
                 icon: L.MakiMarkers.icon({icon: "star", color: "#f00", size: "l"}),
                 draggable: true
@@ -299,8 +336,13 @@
             }).on('dragend', function (event) {
                 self.setUserMarker(event.target.getLatLng());
             });
-            self.markers.addLayer(userMarker);            
-            self.map.setView(latLng, 17);
+            self.markers.addLayer(userMarker);
+            var zoom = self.map.getZoom();
+            self.map.setView(latLng, zoom > 17 ? zoom : 17);
+
+            if (self.debugGeocoder) {
+                self.debugGeocoder.clearLayers();
+            }
 
             if ($.isFunction(cb)) {
                 cb.call(context, self, userMarker);
@@ -310,27 +352,30 @@
                 self.setArea(areaId);
                 self.appendNearestMeta(latLng, areaId);
                 self.clearSuggestions();
-                self.loading = false;
             }
         },
 
         noSuggestion: function (suggestion) {
             var self = this;
 
-            var item = $('<li><em>' + self.settings.no_suggestion_message + '</em></li>')                
-                .appendTo(this.suggestionContainer);
+            var item = $('<a class="list-group-item" href="#">' + self.settings.no_suggestion_message + '</a>')
+                .appendTo(this.suggestionContainer)
+                .on('click', function (e) {
+                    self.suggestionContainer.empty()
+                });
         },
 
         appendSuggestion: function (suggestion) {
             var self = this;
 
-            var item = $('<li style="cursor:pointer">' + suggestion.name + '</li>')
+            $('<a class="list-group-item" href="#">' + suggestion.name + '</a>')
                 .data('geocoder_result', suggestion)
                 .appendTo(this.suggestionContainer)
                 .on('click', function (e) {
-                    var suggestion = $(e.target).data('geocoder_result');
-                    self.setUserMarker(new L.LatLng(suggestion.center.lat, suggestion.center.lng), suggestion.name);
-                    self.appendGeocoderMeta(suggestion);
+                    var selectedSuggestion = $(this).data('geocoder_result');
+                    self.setUserMarker(new L.LatLng(selectedSuggestion.center.lat, selectedSuggestion.center.lng), selectedSuggestion);
+                    self.appendGeocoderMeta(selectedSuggestion);
+                    e.preventDefault();
                 });
         },
 
@@ -347,6 +392,7 @@
             this.inputLng.val('');
             this.inputAddress.val('');
             this.inputMeta.val('');
+            this._debugMeta();
         },
 
         setGeo: function (latLng, address) {
@@ -356,37 +402,52 @@
             this.inputLng.val(latLng.lng);
 
             if (!address) {
-                address = latLng.toString();
-                self.map.loadingControl.addLoader('sc');
+                address = {'name': latLng.toString()};
+                self.map.loadingControl.addLoader('reversegeo');
                 self.geocoder.reverse(latLng, 1, function (result) {
                     if (result.length > 0) {
-                        address = result[0].name;
+                        address = result[0];
                         self.appendGeocoderMeta(result[0]);
                     }
                     self._setAddress(address);
-                    self.map.loadingControl.removeLoader('sc');
+                    self.map.loadingControl.removeLoader('reversegeo');
                 }, this);
             } else {
                 self._setAddress(address);
             }
         },
 
-        _setAddress: function (address) {
-            var self = this;
-
-            if (address.length > 150) {
-                address = address.substring(0, 140) + '...';
+        _setAddress: function (data) {
+            var name = data.name;
+            if (name.length > 150) {
+                name = name.substring(0, 140) + '...';
             }
-            this.inputAddress.val(address);
-            self.getUserMarker().bindPopup(address).openPopup();
+            this.inputAddress.val(name);
+            this.getUserMarker().bindPopup(name).openPopup();
+
+            if (this.settings.geoinput_splitted) {
+                if (data.properties.address.hasOwnProperty('house_number')) {
+                    this.inputNumber.val(data.properties.address.house_number);
+                } else {
+                    this.inputNumber.val('');
+                }
+
+                if (data.properties.address.hasOwnProperty('road')) {
+                    this.inputStreet.val(data.properties.address.road);
+                } else if (data.properties.address.hasOwnProperty('pedestrian')) {
+                    this.inputStreet.val(data.properties.address.pedestrian);
+                } else {
+                    this.inputStreet.val('');
+                }
+            }
         },
 
         appendNearestMeta: function (latLng, areaId) {
-            if (!areaId){
+            if (!areaId) {
                 return null;
             }
             if (this.settings.nearest_service.url) {
-                this.map.loadingControl.addLoader('fn');
+                this.map.loadingControl.addLoader('findnearest');
                 this._findNearest(latLng, 100);
             }
         },
@@ -395,7 +456,7 @@
             var self = this;
 
             if (distance > 10000) {
-                self.map.loadingControl.removeLoader('fn');
+                self.map.loadingControl.removeLoader('findnearest');
                 return false;
             }
 
@@ -406,7 +467,7 @@
             var circleBounds = circle.getBounds();
             var rectangle = L.rectangle(circleBounds, {
                 color: 'red',
-                fillColor: '#f03',
+                weight: 2,
                 fillOpacity: 0
             });
             if (self.debugNearest) {
@@ -423,7 +484,7 @@
                     'maxFeatures': self.settings.nearest_service.maxFeatures,
                     'srsName': self.settings.nearest_service.srsName,
                     'outputFormat': 'JSON',
-                    'cql_filter': '(BBOX('+self.settings.nearest_service.geometryName+',' + circleBounds.getWest() + ',' + circleBounds.getSouth() + ',' + circleBounds.getEast() + ',' + circleBounds.getNorth() + ',\'EPSG:4326\'))'
+                    'cql_filter': '(BBOX(' + self.settings.nearest_service.geometryName + ',' + circleBounds.getWest() + ',' + circleBounds.getSouth() + ',' + circleBounds.getEast() + ',' + circleBounds.getNorth() + ',\'EPSG:4326\'))'
                 },
                 function (response) {
                     var searchLayer = L.geoJson(response, {
@@ -441,11 +502,8 @@
                         if (self.debugNearest) {
                             var nearestLayer = L.geoJson(nearest, {
                                 pointToLayer: function (feature, latLng) {
-                                    return new L.Marker(latLng, {
-                                        icon: L.MakiMarkers.icon({
-                                            icon: "circle",
-                                            color: '#f00'
-                                        })
+                                    return L.circleMarker(latLng, {
+                                        color: 'yellow'
                                     });
                                 }
                             });
@@ -453,7 +511,7 @@
                             self.debugNearest.addLayer(nearestLayer);
                         }
                         self.appendMeta(nearest.properties);
-                        self.map.loadingControl.removeLoader('fn');
+                        self.map.loadingControl.removeLoader('findnearest');
                     } else {
                         distance = distance + 100;
                         self._findNearest(latLng, distance);
@@ -476,6 +534,29 @@
             var meta = JSON.parse(this.inputMeta.val() || '{}');
             meta = $.extend({}, meta, data);
             this.inputMeta.val(JSON.stringify(meta));
+            this._debugMeta();
+        },
+
+        _debugMeta: function () {
+            if (this.settings.debug_meta_info) {
+                var debugContainer = $('#debug-meta-info');
+                if (debugContainer.length === 0) {
+                    debugContainer = $('<dl class="dl-horizontal hidden-xs" id="debug-meta-info"></dl>').css({
+                        'position': 'fixed',
+                        'top': '0',
+                        'right': '0',
+                        'width': '300px',
+                        'background': '#fff',
+                        'padding': '10px'
+                    }).appendTo($('form#edit'));
+                }
+                debugContainer.empty();
+                var meta = JSON.parse(this.inputMeta.val() || '{}');
+                $.each(meta, function (i, v) {
+                    debugContainer.append($('<dt>' + i + '</dt>'));
+                    debugContainer.append($('<dd>' + v + '</dd>'));
+                });
+            }
         },
 
         getPerimeterIdByPosition: function (latLng) {
@@ -507,7 +588,7 @@
 
         _layerContains: function (layer, latLng) {
             var self = this;
-            
+
             var layerHasPoint;
             if ($.isFunction(layer.contains) && layer.contains(latLng)) {
                 layerHasPoint = layer;
