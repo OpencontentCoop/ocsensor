@@ -155,19 +155,21 @@
             });
 
             $('#mylocation-button, #mylocation-mobile-button').on('click', function (e) {
-                var icon = $(e.currentTarget).find('i');
-                icon.addClass('fa-spin');
+                var button = $(e.currentTarget);
+                button.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
                 self.map.loadingControl.addLoader('mylocation');
                 self.map.locate({setView: false, watch: false})
                     .on('locationfound', function (e) {
                         self.map.loadingControl.removeLoader('mylocation');
-                        icon.removeClass('fa-spin');
+                        button.html('<i class="fa fa-location-arrow"></i>');
                         self.setUserMarker(new L.LatLng(e.latitude, e.longitude));
+                        self.map.off('locationfound');
                     })
                     .on('locationerror', function (e) {
-                        icon.removeClass('fa-spin');
+                        button.html('<i class="fa fa-location-arrow"></i>');
                         self.map.loadingControl.removeLoader('mylocation');
                         alert(e.message);
+                        self.map.off('locationerror');
                     });
             });
         },
@@ -202,6 +204,7 @@
 
             self.searchButton.on('click', function (e) {
                 self.map.loadingControl.addLoader('inputsearch');
+                self.searchButton.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
                 var query = self.inputAddress.val();
                 if (self.settings.geoinput_splitted) {
                     query = {street: self.inputNumber.val() + ' ' + self.inputStreet.val()};
@@ -231,8 +234,10 @@
                         });
                     }
                     self.map.loadingControl.removeLoader('inputsearch');
+                    self.searchButton.html('<i class="fa fa-search"></i>');
+                    
+                    self.clearSuggestions();
                     if (results.length > 0) {
-
                         // deduplicate suggestions
                         var suggestions = [];
                         $.each(results, function (i, o) {

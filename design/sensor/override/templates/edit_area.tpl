@@ -25,7 +25,7 @@
 {if ne( count( $areas ), 0)}
     <select {if ezini( 'SensorConfig', 'MoveMarkerOnSelectArea', 'ocsensor.ini' )|eq('enabled')}id="poi"{/if}
             class="{$html_class} select-sensor-area"
-            {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')}readonly="readonly"{/if}
+            {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')}readonly="readonly" style="pointer-events: none;" tabindex="-1"{/if}
             name="{$attribute_base}_data_object_relation_list_{$attribute.id}[]">
         {if ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('disabled')}<option>{'Non specificato'|i18n( 'sensor/add' )}</option>{/if}
         {foreach $areas as $item}
