@@ -298,8 +298,7 @@ class SensorGuiApiController extends ezpRestMvcController
 
             $this->repository->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
-
-            header("HTTP/1.1 204 " . ezpRestStatusResponse::$statusCodes[204]);
+            $result->variables = ['action' => $action->identifier];
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -341,8 +340,7 @@ class SensorGuiApiController extends ezpRestMvcController
 
             $this->repository->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
-
-            header("HTTP/1.1 204 " . ezpRestStatusResponse::$statusCodes[204]);
+            $result->variables = ['action' => $action->identifier];
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
