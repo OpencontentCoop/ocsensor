@@ -24,7 +24,7 @@ class SensorWebHookListener extends AbstractListener
             }
         }
         $siteUrl = '/';
-        eZURI::transformURI($siteUrl,false, 'full');
+        eZURI::transformURI($siteUrl,true, 'full');
         $endpointUrl = '/api/sensor';
         eZURI::transformURI($endpointUrl, true, 'full');
         $openApiTools = new OpenApi(
