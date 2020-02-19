@@ -6,6 +6,8 @@ class SensorNotificationTextHelper
 
     private static $templates;
 
+    private static $defaultTemplates;
+
     private static function getSiteData()
     {
         $data = eZSiteData::fetchByName(self::SITEDATA_NAME);
@@ -25,6 +27,7 @@ class SensorNotificationTextHelper
         $data = self::getSiteData();
         $data->setAttribute('value', json_encode($newData));
         $data->store();
+        self::$templates = null;
     }
 
     public static function reset()
@@ -59,6 +62,26 @@ class SensorNotificationTextHelper
         }
 
         return self::$templates;
+    }
+
+    public static function getDefaultTemplates()
+    {
+        if (self::$defaultTemplates === null) {
+            $texts = self::getDefaultTexts();
+            self::$templates = [];
+            foreach ($texts as $event => $text) {
+                foreach ($text as $roleString => $values) {
+                    $roleId = str_replace('role_', '', $roleString);
+                    foreach ($values as $identifier => $languages) {
+                        foreach ($languages as $language => $value) {
+                            self::$defaultTemplates[$event][$roleId][$language][$identifier] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return self::$defaultTemplates;
     }
 
     public static function getDefaultTexts()
@@ -476,6 +499,146 @@ class SensorNotificationTextHelper
                         'eng-GB' => "",
                         'ger-DE' => "Ihre Empfehlung wurde geschlossen",
                         'ita-IT' => "La segnalazione è stata risolta",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+            ),
+            'on_send_private_message' => array(
+                'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo messaggio privato",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Hai ricevuto un messaggio privato",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_APPROVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo messaggio privato",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Hai ricevuto un messaggio privato",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OWNER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo messaggio privato",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Hai ricevuto un messaggio privato",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OBSERVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo messaggio privato",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Hai ricevuto un messaggio privato",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+            ),
+            'reminder' => array(
+                'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Aggiornamento periodico",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_APPROVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Aggiornamento periodico",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OWNER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Aggiornamento periodico",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OBSERVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Aggiornamento periodico",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
                     ),
                     'text' => array(
                         'eng-GB' => "",

@@ -9,6 +9,7 @@ use Opencontent\Sensor\Legacy\PostService\Scenarios;
 use Opencontent\Sensor\Legacy\PostService\ScenarioInterface;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Statistics;
 
@@ -113,6 +114,9 @@ class OpenPaSensorRepository extends LegacyRepository
 
         $notificationTypes[] = new NotificationTypes\ReminderNotificationType();
         $this->addListener('reminder', new ReminderNotificationListener($this));
+
+        $notificationTypes[] = new NotificationTypes\OnSendPrivateMessageNotificationType();
+        $this->addListener('on_send_private_message', new PrivateMailNotificationListener($this));
 
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
 
