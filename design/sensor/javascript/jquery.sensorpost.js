@@ -139,7 +139,7 @@
                             var map = new L.Map(postMap[0]);
                             map.scrollWheelZoom.disable();
                             var customIcon = L.MakiMarkers.icon({icon: "star", color: "#f00", size: "l"});
-                            var postMarker = new L.marker(latLng, {icon: customIcon});
+                            var postMarker = new L.Marker(latLng, {icon: customIcon});
                             postMarker.addTo(map);
                             map.setView(latLng, 18);
                             L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

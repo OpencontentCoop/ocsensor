@@ -1,15 +1,19 @@
 {literal}
 <script id="tpl-post-detail" type="text/x-jsrender">
 <div class="row">
+    {{if geoLocation.latitude && geoLocation.longitude}}
     <div class="col-md-4">
       <aside class="widget">
         <div class="post-map" style="width: 100%; height: 200px;"
-             data-lat={{:geoLocation.latitude}}
-             data-lng={{:geoLocation.longitude}}></div>
+             data-lat="{{:geoLocation.latitude}}"
+             data-lng="{{:geoLocation.longitude}}"></div>
          <small><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</small>
       </aside>
     </div>
     <div class="col-md-8">
+    {{else}}
+    <div class="col-md-12">
+    {{/if}}
         <p>{{:description}}</p>
         {{for images}}
             <figure><a href="{{:original}}" data-gallery><img class="center-block" src="{{:thumbnail}}" /></a></figure>
