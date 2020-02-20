@@ -39,7 +39,7 @@ class SensorWebHookListener extends AbstractListener
     {
         if ($param instanceof SensorEvent){
             if (in_array($param->identifier, $this->events)){
-                $this->repository->getLogger()->info("Send webhook '{$param->identifier}' on post {$param->post->id}");
+                $this->repository->getLogger()->info("Emit '{$param->identifier}' to webhook on post {$param->post->id}");
                 $payload = $this->postSerializer->serialize($param->post);
                 OCWebHookEmitter::emit(
                     $param->identifier,

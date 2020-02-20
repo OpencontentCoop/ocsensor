@@ -7,7 +7,7 @@
             {{for timelineItems}}
                 <li>
                     <div class="icon"><i class="fa fa-clock-o"></i></div>
-                    <div class="title" title="{{:creator.name}}">{{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</div>
+                    <div class="title">{{:creator.name}} &middot; {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</div>
                     <div class="content"><small>{{:text}}</small></div>
                 </li>
             {{/for}}
