@@ -327,15 +327,11 @@ class SensorGuiApiController extends ezpRestMvcController
             $files = [];
             foreach ($data[$options['param_name']] as $file) {
                 $filePath = $options['upload_dir'] . $file->name;
-                $file = eZClusterFileHandler::instance($filePath);
                 $files[] = [
                     'filename' => basename($filePath),
-                    'file' => base64_encode($file->fetchContents())
+                    'file' => base64_encode(file_get_contents($filePath))
                 ];
-                if ($file->exists()) {
-                    $file->delete();
-                }
-            }
+                @unlink($filePath);            }
             $action->setParameter('files', $files);
 
             $this->repository->getActionService()->runAction($action, $post);
