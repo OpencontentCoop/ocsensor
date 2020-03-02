@@ -273,7 +273,11 @@ $(document).ready(function () {ldelim}
                     map.fitBounds(markers.getBounds());
                 }
                 var currentCount = markers.getLayers().length;
-                currentPercentage = Math.ceil(100/response.totalCount * currentCount);
+                if (!response.nextPageQuery){
+                    currentPercentage = 100;
+                }else {
+                    currentPercentage = Math.ceil(100 / response.totalCount * currentCount);
+                }
             }else{
                 currentPercentage = 100;
             }

@@ -217,7 +217,7 @@
                 var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
                 var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
                 if (searchText.length > 0) {
-                    query += " and name = '" + searchText + "'";
+                    query += " and q = '" + searchText + "'";
                 }
                 query += ' sort [name=>asc]';
 
