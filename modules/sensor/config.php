@@ -3,11 +3,52 @@
 /** @var eZModule $Module */
 $Module = $Params['Module'];
 $Http = eZHTTPTool::instance();
-$Part = $Params['Part'] ? $Params['Part'] : 'users';
+$Part = $Params['Part'] ? $Params['Part'] : 'default';
 $tpl = eZTemplate::factory();
 $currentUser = eZUser::currentUser();
 $repository = OpenPaSensorRepository::instance();
+$root = $repository->getRootNode();
 
+if ($Part == '_set'){
+    $rootObject = $root->object();
+    if (!$rootObject->canEdit()){
+        $data = [
+            'result' => 'fail',
+            'message' => 'Unauthorized',
+        ];
+    }else{
+        $key = $Http->getVariable('key');
+        $value = intval($Http->getVariable('value') === 'true');        
+        $attribute = false;
+        switch($key){
+            case 'Moderation':
+                $attribute = 'enable_moderation';
+                break;
+            case 'HidePrivacyChoice':
+                $attribute = 'hide_privacy_choice';
+                break;
+            case 'HideTimelineDetails':
+                $attribute = 'hide_timeline_details';
+                break;
+        }        
+        if ($attribute){
+            $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);
+            if ($result){
+                $data = [
+                    'result' => 'success',
+                    'attributes' => [$attribute => $value],
+                ];
+            }else{
+                $data['message'] = "Fail updating";    
+            }
+        }else{
+            $data['message'] = "Attribute not found for key";
+        }
+    }
+    header('Content-Type: application/json');
+    echo json_encode( $data );
+    eZExecution::cleanExit();
+}
 
 if ($Http->hasPostVariable('SelectDefaultApprover')) {
     eZContentBrowse::browse(array('action_name' => 'SelectDefaultApprover',
@@ -41,7 +82,6 @@ if ($Http->hasPostVariable('BrowseActionName')
     }
 }
 
-$root = $repository->getRootNode();
 
 if ($Part == 'areas') {
     $tpl->setVariable('areas_parent_node', $repository->getAreasRootNode());
@@ -143,6 +183,7 @@ $tpl->setVariable('post_container_node', $repository->getPostRootNode());
 $tpl->setVariable('moderation_is_enabled',  $repository->isModerationEnabled());
 $tpl->setVariable('current_user', $currentUser);
 $tpl->setVariable('persistent_variable', array());
+$tpl->setVariable('sensor_settings', $repository->getSensorSettings()->jsonSerialize());
 
 $Result = array();
 $Result['persistent_variable'] = $tpl->variable('persistent_variable');

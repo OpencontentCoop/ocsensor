@@ -9,7 +9,7 @@
                     {{for comments ~currentUserId=currentUserId ~capabilities=capabilities}}
                         <div class="row">
                             <figure class="col-xs-2 col-md-2">
-                                <img src={/literal}{"user_placeholder.jpg"|ezimage()}{literal} class="img-circle" />
+                                <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" />
                             </figure>
                             <div class="col-xs-10 col-md-10">
                                 <div class="comment_name">
@@ -123,7 +123,7 @@
                                        data-value="files"
                                        value="{{:filename}}" />
                             {{/if}}
-                            <a href="{{:downloadUrl}}"><i class="fa fa-download"></i> {{:filename}}</a>
+                            <a href="{{:downloadUrl}}" target="_blank"><i class="fa fa-download"></i> {{:filename}}</a>
                         </li>
                     {{/for}}
                     </ul>

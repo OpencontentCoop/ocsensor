@@ -48,6 +48,7 @@
 	{{for searchHits}}
         <tr {{if (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
           <td style="vertical-align: middle;white-space: nowrap;" width="1">
+            {{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<p><i class="fa fa-lock"></i>{{/if}}
             {{if comments.length > 0}}
               <p><i class="fa fa-comments-o{{if readingStatuses.unread_comments > 0}} faa-tada animated{{/if}}"> </i></p>
             {{/if}}
@@ -59,12 +60,6 @@
             <ul class="list-inline">
               <li><strong>{{:id}}</strong></li>
               <li>
-                {{if privacy.identifier == 'private'}}
-                  <span class="label label-default">{{:privacy.name}}</span>
-                {{/if}}
-                {{if privacy.moderation == 'waiting'}}
-                  <span class="label label-danger">{{:moderation.name}}</span>
-                {{/if}}
                 <span class="label label-{{:typeCss}}">{{:type.name}}</span>
                 <span class="label label-{{:statusCss}}">{{:status.name}}</span>
               </li>
@@ -72,41 +67,19 @@
             <ul class="list-inline">
               <li><small><strong>{/literal}{"Creata"|i18n('sensor/dashboard')}{literal}</strong> {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
               {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}<li><small><strong>{/literal}{"Modificata"|i18n('sensor/dashboard')}{literal}</strong> {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>{{/if}}
-              {/literal}{if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' ) )}{literal}
-              {{if workflowStatus.identifier != 'closed'}}
-                <li><small><strong>{/literal}{"Scadenza"|i18n('sensor/dashboard')}{literal}</strong></small> <span class="label label-{{:expirationInfo.label}}">{{:expirationInfo.text}}</span></li>
+              {{if categories.length > 0}}
+                <li><small><i class="fa fa-tags"></i> {{for categories}}{{:name}}{{/for}}</small></li>
               {{/if}}
-              {/literal}{/if}{literal}
+              {{if areas.length > 0}}
+                <li><small><i class="fa fa-map-pin"></i> {{for areas}}{{:name}}{{/for}}</small></li>
+              {{/if}}
             </ul>
             <p>
               {{:subject}}
             </p>
-            <ul class="list-unstyled">
-              <li><small><strong>{/literal}{"Autore"|i18n('sensor/dashboard')}{literal}</strong> {{:author.name}}{{if reporter.id != author.id}} ({{:reporter.name}}){{/if}}</small></li>
-                {{if categories.length > 0}}
-                    <li><small><i class="fa fa-tags"></i> {{for categories}}{{:name}}{{/for}}</small></li>
-                {{/if}}
-                {{if areas.length > 0}}
-                    <li><small><i class="fa fa-map-pin"></i> {{for areas}}{{:name}}{{/for}}</small></li>
-                {{/if}}
-                {{if owners.length > 0}}
-                    <li><small><strong>{/literal}{'In carico a'|i18n('sensor/post')}{literal}</strong> {{for owners}}{{:name}}{{if description}} ({{:description}}){{/if}}{{/for}}</small></li>
-                {{else lastTimelineItem}}
-                    <li><small>{{:lastTimelineItem.text}}</small></li>
-                {{/if}}
-            </ul>
           </td>
-          <td class="text-left">
+          <td class="text-center" style="vertical-align: middle;">
               <p><a href="{{:accessPath}}/sensor/posts/{{:id}}" class="btn btn-info btn-sm">{/literal}{"Dettagli"|i18n('sensor/dashboard')}{literal}</a></p>
-              {{if capabilities.can_edit}}
-                  <p><a class="btn btn-warning btn-sm" href="{{:accessPath}}/sensor/edit/{{:id}}" data-post="{{:id}}">{/literal}{'Edit'|i18n( 'design/admin/node/view/full' )}{literal}</a>
-              {{/if}}
-              {{if capabilities.can_remove}}
-                  <p><a class="btn btn-danger btn-sm" href="#"
-                     data-remove
-                     data-confirmation="{/literal}{'Sei sicuro di voler rimuovere questo contenuto?'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"
-                     data-post="{{:id}}">{/literal}{'Remove'|i18n( 'design/admin/node/view/full' )}{literal}</a></p>
-              {{/if}}
           </td>
         </tr>
 	{{/for}}

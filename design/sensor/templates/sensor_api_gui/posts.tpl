@@ -24,9 +24,9 @@
     </div>
 </section>
 
-{include uri='design:sensor_api_gui/posts/parts/tpl-posts-results.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-popup.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-spinner.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-posts-results.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-post-popup.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
 
 {def $current_language = ezini('RegionalSettings', 'Locale')}
 {def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}

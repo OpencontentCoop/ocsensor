@@ -55,6 +55,14 @@ class SensorOpenApiProvider implements ezpRestProviderInterface
             }
         }
 
+        $routes[] = new ezpRestVersionedRoute(new SensorApiRailsRoute(
+            '/file/:attributeIdentifier/:fileName/:originalFileName',
+            'SensorOpenApiController',
+            'getFile',
+            [],
+            'http-get'
+        ), 1);
+
         return $routes;
     }
 

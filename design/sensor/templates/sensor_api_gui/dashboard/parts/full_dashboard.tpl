@@ -2,52 +2,52 @@
     <div class="col-md-12" data-participant_filters="sensor_participant_filter">
         <p><strong>{"Mostra solo le segnalazioni nelle quali partecipo come:"|i18n('sensor/dashboard')}</strong></p>
         <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{"Riferimento per il cittadino"|i18n('sensor/dashboard')}</button>
-        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{"Assegnatario"|i18n('sensor/dashboard')}</button>
+        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{"Incaricato"|i18n('sensor/dashboard')}</button>
         <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{"Osservatore"|i18n('sensor/dashboard')}</button>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-9">
+<div class="row post-gui">
+    <div class="col-md-12">
+        <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> Cerca</button>
+        <div class="bordered">
+            <ul class="nav nav-pills" style="margin-bottom: 10px">
 
-        <ul class="nav nav-pills" style="margin-bottom: 10px">
+                <li role="presentation">
+                    <a href="#" data-status="unread">
+                        {"Da leggere"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
 
-            <li role="presentation">
-                <a href="#" data-status="unread">
-                    {"Da leggere"|i18n('sensor/dashboard')}
-                    <span class="badge"></span>
-                </a>
-            </li>
+                <li role="presentation">
+                    <a href="#" data-status="processing">
+                        {"In corso"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
 
-            <li role="presentation">
-                <a href="#" data-status="processing">
-                    {"In corso"|i18n('sensor/dashboard')}
-                    <span class="badge"></span>
-                </a>
-            </li>
-
-            <li role="presentation">
-                <a href="#" data-status="closed">
-                    {"Chiuse"|i18n('sensor/dashboard')}
-                    <span class="badge"></span>
-                </a>
-            </li>
-            <li role="presentation" class="pull-right">
-                <a id="export-url" href="{'sensor/dashboard/(export)/'|ezurl(no)}">
-                    <small><i class="fa fa-download"></i>
-                        {"Esporta"|i18n('sensor/dashboard')}
-                    </small>
-                </a>
-            </li>
-        </ul>
-        <div class="tab-pane active" data-contents></div>
+                <li role="presentation">
+                    <a href="#" data-status="closed">
+                        {"Chiuse"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
+                <li role="presentation" class="pull-right">
+                    <a id="export-url" href="{'sensor/dashboard/(export)/'|ezurl(no)}">
+                        <i class="fa fa-download"></i> {"Esporta"|i18n('sensor/dashboard')}                        
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-pane active" data-contents></div>
+        </div>
     </div>
 
-    <div class="col-md-3" id="sidebar">
-
-        <div class="well dashboard-search">
+    <div class="col-md-3 hide searchform">        
+        <div class="dashboard-search">
             <form method="get" class="form">
+            	<button class="btn" type="reset" style="padding-left:0"><span class="fa fa-times"></span> Cerca</button>
                 <div class="form-group">
-                    <label for="searchId">{'Cerca per ID'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title" for="searchId">{'Cerca per ID'|i18n('sensor/dashboard')}</label>
                     <input type="number" value=""
                            name="id"
                            id="searchId"
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchAuthor">{'Cerca per autore'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchAuthor">{'Cerca per autore'|i18n('sensor/dashboard')}</label>
                     <input type="text" value=""
                            name="author"
                            id="searchAuthor"
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchSubject">{'Cerca per oggetto'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchSubject">{'Cerca per oggetto'|i18n('sensor/dashboard')}</label>
                     <input type="text" value=""
                            name="subject"
                            id="searchSubject"
@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchCategory">{'Cerca per categoria'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchCategory">{'Cerca per categoria'|i18n('sensor/post')}</label>
                     <select name="category"
                             class="select form-control"
                             id='searchCategory'>
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchArea">{'Cerca per zona'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchArea">{'Cerca per zona'|i18n('sensor/post')}</label>
                     <select name="area"
                             class="select form-control"
                             id='searchArea'>
@@ -89,9 +89,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchOwner">{'Cerca per assegnatario'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchAddress">{'Cerca per indirizzo'|i18n('sensor/dashboard')}</label>
+                    <input type="text" value=""
+                           name="address"
+                           id="searchAddress"
+                           class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label class="widget-title"  for="searchOwner">{'Cerca per incaricato'|i18n('sensor/post')}</label>
                     <select name="owner"
-                            class="remote-select form-control"
+                            class="select select-operator form-control"
                             data-type="operators"
                             id='searchOwner'>
                         <option></option>
@@ -99,9 +107,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchObserver">{'Cerca per osservatore'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchObserver">{'Cerca per osservatore'|i18n('sensor/post')}</label>
                     <select name="observer"
-                            class="remote-select form-control"
+                            class="select select-operator form-control"
                             data-type="operators"
                             id='searchObserver'>
                         <option></option>
@@ -109,7 +117,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchPublished" class="">{'Data creazione'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchPublished" class="">{'Data creazione'|i18n('sensor/post')}</label>
                     <input type="text"
                            name="published"
                            class="form-control daterange"
@@ -118,7 +126,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchExpiry" class="">{"Scadenza"|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchExpiry" class="">{"Scadenza"|i18n('sensor/dashboard')}</label>
                     <input type="text"
                            name="expiry"
                            class="form-control daterange"
@@ -127,7 +135,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchPrivacy">{'Cerca per visibilità'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchPrivacy">{'Cerca per visibilità'|i18n('sensor/post')}</label>
                     <select name="privacy"
                             class="form-control"
                             id='searchPrivacy'>
@@ -138,7 +146,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="searchModeration">{'Cerca per moderazione'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchModeration">{'Cerca per moderazione'|i18n('sensor/post')}</label>
                     <select name="moderation"
                             class="form-control"
                             id='searchModeration'>
@@ -149,8 +157,8 @@
                     </select>
                 </div>
 
-                <button class="btn btn-info" type="submit"><span class="fa fa-search"></span> {'Cerca'|i18n('sensor/post')}</button>
-                <button class="btn btn-danger pull-right hide" type="reset"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/post')}</button>
+                <button class="btn pull-right" type="submit"><span class="fa fa-search"></span> {'Cerca'|i18n('sensor/post')}</button>
+                <button class="btn btn-danger" type="reset"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/post')}</button>
             </form>
         </div>
 
@@ -185,6 +193,13 @@
 
 <script>
 $(document).ready(function () {ldelim}
+
+
+    $('.search-trigger').on('click', function (e) {ldelim}
+       $(this).hide().parent().addClass('col-md-9').removeClass('col-md-12');
+       $('.searchform').removeClass('hide');
+    {rdelim});
+
     $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
     $.opendataTools.settings('language', "{$current_language}");
     $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
@@ -231,6 +246,8 @@ $(document).ready(function () {ldelim}
         'currentUserId': {fetch(user,current_user).contentobject_id|int()},
         'areas': '{$areas|wash(javascript)}',
         'categories': '{$categories|wash(javascript)}',
+        'operators': '{$operators|wash(javascript)}',
+        'groups': '{$groups|wash(javascript)}',
         'settings': '{$settings|wash(javascript)}'
     {rdelim};
 {literal}
@@ -238,6 +255,8 @@ $(document).ready(function () {ldelim}
     var form = $('form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
+    var selectOwner = form.find('select[name="owner"]');
+    var selectObserver = form.find('select[name="observer"]');
     var toggles = $('[data-status]');
     var toggleBadges = toggles.find('.badge');
     var unreadToggle = $('[data-status="unread"]');
@@ -288,6 +307,8 @@ $(document).ready(function () {ldelim}
 
     selectCategory.append($.templates('#tpl-tree-option').render(JSON.parse(settings.categories)));
     selectArea.append($.templates('#tpl-tree-option').render(JSON.parse(settings.areas)));
+    selectOwner.append($.templates('#tpl-tree-option').render(JSON.parse(settings.operators)));
+    selectObserver.append($.templates('#tpl-tree-option').render(JSON.parse(settings.operators)));
     form.find(".select").select2({
         width: '100%',
         templateResult: function (item) {
@@ -429,6 +450,10 @@ $(document).ready(function () {ldelim}
         if (searchArea){
             query.push("area.id in [" + searchArea + "]");
         }
+        var searchAddress = form.find('#searchAddress').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
+        if (searchAddress){
+            query.push("address = '" + searchAddress + "'");
+        }
         var searchOwner = form.find('#searchOwner').find(':selected').val();
         if (searchOwner){
             query.push("owner_id_list in [" + searchOwner + "]");
@@ -468,11 +493,13 @@ $(document).ready(function () {ldelim}
     var buildDashboard = function() {
         selectCategory.find('option').attr('disabled', 'disabled').trigger('change');
         selectArea.find('option').attr('disabled', 'disabled').trigger('change');
+        selectOwner.find('option').attr('disabled', 'disabled').trigger('change');
+        selectObserver.find('option').attr('disabled', 'disabled').trigger('change');
         toggleBadges.each(function () {
             $(this).html('').parents('li').removeClass('active');
         });
         fillExportUrl();
-        find(buildQueryFilters()+' facets [workflow_status,category.id,area.id] limit 1', function (response) {
+        find(buildQueryFilters()+' facets [workflow_status,category.id,area.id,owner_id_list,observer_id_list] limit 1', function (response) {
             $.each(response.facets, function () {
                 var facet = this;
                 if (facet.name === 'category.id') {
@@ -485,6 +512,16 @@ $(document).ready(function () {ldelim}
                         selectArea.find('option[value="' + id + '"]').removeAttr('disabled');
                     });
                     selectArea.trigger('change');
+                } else if (facet.name === 'owner_id_list') {
+                    $.each(facet.data, function (id, count) {
+                        selectOwner.find('option[value="' + id + '"]').removeAttr('disabled');
+                    });
+                    selectOwner.trigger('change');
+                } else if (facet.name === 'observer_id_list') {
+                    $.each(facet.data, function (id, count) {
+                        selectObserver.find('option[value="' + id + '"]').removeAttr('disabled');
+                    });
+                    selectObserver.trigger('change');
                 } else if (facet.name === 'workflow_status') {
                     toggleBadges.html('0');
                     var processingCount = 0;
@@ -581,6 +618,10 @@ $(document).ready(function () {ldelim}
             var renderData = $(template.render(response));
             viewContainer.html(renderData);
 
+            viewContainer.find('tr[data-href]').on('click', function (e) {
+                document.location = $(this).data('href');
+            });
+
             viewContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
                 currentPage = $(this).data('page');
                 if (currentPage >= 0) buildView(viewIdentifier);
@@ -620,7 +661,6 @@ $(document).ready(function () {ldelim}
     var reset = function(){
         form[0].reset();
         form.find('.select, .remote-select').val(null).trigger('change');
-        form.find('[type="reset"]').addClass('hide');
         viewContainer.html(spinner);
         buildDashboard();
     };
@@ -632,6 +672,8 @@ $(document).ready(function () {ldelim}
     });
     form.find('[type="reset"]').on('click', function(e){
         reset();
+        $('.search-trigger').show().parent().addClass('col-md-12').removeClass('col-md-9');
+        $('.searchform').addClass('hide');
         e.preventDefault();
     });
 

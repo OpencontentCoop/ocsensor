@@ -33,7 +33,7 @@ class SensorFlashMessageListener extends AbstractListener
                         }else{
                             $message = 'Aggiunti ';
                         }
-                        $message .= implode(',', $approverNameList) . ' al ruolo Riferimento per il cittadino';
+                        $message .= implode(',', $approverNameList) . ' al ruolo riferimento per il cittadino';
                     }
                     break;
 
@@ -50,7 +50,7 @@ class SensorFlashMessageListener extends AbstractListener
                         }else{
                             $message = 'Aggiunti ';
                         }
-                        $message .= implode(',', $ownerNameList) . ' al ruolo Assegnatario';
+                        $message .= implode(',', $ownerNameList) . ' al ruolo incaricato';
                     }
                     break;
 
@@ -67,7 +67,7 @@ class SensorFlashMessageListener extends AbstractListener
                         }else{
                             $message = 'Aggiunti ';
                         }
-                        $message .= implode(',', $observerNameList) . ' al ruolo Osservatore';
+                        $message .= implode(',', $observerNameList) . ' al ruolo osservatore';
                     }
                     break;
             }

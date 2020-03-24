@@ -39,6 +39,8 @@ else
 
     $tpl->setVariable('areas', json_encode($repository->getAreasTree()));
     $tpl->setVariable('categories', json_encode($repository->getCategoriesTree()));
+    $tpl->setVariable('operators', json_encode($repository->getOperatorsTree()));
+    $tpl->setVariable('groups', json_encode($repository->getGroupsTree()));
     $tpl->setVariable('settings', json_encode($repository->getSensorSettings()));
 
     $Result = array();

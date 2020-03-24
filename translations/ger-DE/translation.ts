@@ -341,7 +341,7 @@
         </message>
         <message>
             <location filename="csv.php" line="34"/>
-            <source>Assegnatario</source>
+            <source>Incaricato</source>
             <translation>Empfänger</translation>
         </message>
         <message>
@@ -627,7 +627,7 @@
             <translation>Suche nach Themenbereiche</translation>
         </message>
         <message>
-            <source>Cerca per assegnatario</source>
+            <source>Cerca per incaricato</source>
             <translation>Suche nach Zugewiesen</translation>
         </message>
         <message>

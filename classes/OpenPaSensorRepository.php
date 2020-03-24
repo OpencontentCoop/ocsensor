@@ -154,16 +154,16 @@ class OpenPaSensorRepository extends LegacyRepository
             'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
             'UniqueCategoryCount' => isset($sensorIni['CategoryCount']) ? $sensorIni['CategoryCount'] == 'unique' : true,
             'CategoryAutomaticAssign' => isset($sensorIni['CategoryAutomaticAssign']) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
-            'AreaAutomaticAssign' => isset($sensorIni['AreaAutomaticAssign']) ? $sensorIni['AreaAutomaticAssign'] == 'enabled' : true,
             'DefaultPostExpirationDaysInterval' => isset($sensorIni['DefaultPostExpirationDaysInterval']) ? intval($sensorIni['DefaultPostExpirationDaysInterval']) : 15,
             'DefaultPostExpirationDaysLimit' => isset($sensorIni['DefaultPostExpirationDaysLimit']) ? intval($sensorIni['DefaultPostExpirationDaysLimit']) : 7,
             'TextMaxLength' => isset($sensorIni['TextMaxLength']) ? intval($sensorIni['TextMaxLength']) : 800,
-            'UseShortUrl' => isset($sensorIni['UseShortUrl']) ? $sensorIni['UseShortUrl'] == 'enabled' : false,
-            'FilterOperatorsByOwner' => isset($sensorIni['FilterOperatorsByOwner']) ? $sensorIni['FilterOperatorsByOwner'] == 'enabled' : true,
-            'FilterObserversByOwner' => isset($sensorIni['FilterObserversByOwner']) ? $sensorIni['FilterObserversByOwner'] == 'enabled' : true,
             'CloseCommentsAfterSeconds' => isset($sensorIni['CloseCommentsAfterSeconds']) ? intval($sensorIni['CloseCommentsAfterSeconds']) : 1814400,
             'MoveMarkerOnSelectArea' => isset($sensorIni['MoveMarkerOnSelectArea']) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
             'CommentsAllowed' => isset($sensorIni['CommentsAllowed']) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
+            'CategoryAutomaticAssignToRandomOperator' => isset($sensorIni['CategoryAutomaticAssignToRandomOperator']) ? $sensorIni['CategoryAutomaticAssignToRandomOperator'] == 'enabled' : false,
+            'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
+            'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
+            'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
         ));
     }
 
@@ -195,18 +195,20 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getRootNode()
     {
-        if (!isset($this->data['root']))
+        if (!isset($this->data['root']) || $this->data['root'] === null)
             $this->data['root'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId())->attribute('main_node');
         return $this->data['root'];
     }
 
     public function getRootNodeAttribute($identifier)
     {
-        if (!isset($this->data['root_data_map'])) {
-            $this->data['root_data_map'] = $this->getRootNode()->attribute('data_map');
-        }
-        if (isset($this->data['root_data_map'][$identifier])){
-            return $this->data['root_data_map'][$identifier];
+        if ($this->getRootNode()) {
+            if (!isset($this->data['root_data_map'])) {
+                $this->data['root_data_map'] = $this->getRootNode()->attribute('data_map');
+            }
+            if (isset($this->data['root_data_map'][$identifier])) {
+                return $this->data['root_data_map'][$identifier];
+            }
         }
 
         return null;
@@ -340,6 +342,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $repository = new static();
         \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getCategoriesRootNode()->attribute('node_id'));
         \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getAreasRootNode()->attribute('node_id'));
+        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getOperatorsRootNode()->attribute('node_id'));
+        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getGroupsRootNode()->attribute('node_id'));
         $commonPath = eZDir::path(array(eZSys::cacheDirectory(), 'sensor'));
         $fileHandler = eZClusterFileHandler::instance();
         $commonSuffix = '';
@@ -357,5 +361,25 @@ class OpenPaSensorRepository extends LegacyRepository
         }catch (Exception $e){
             eZDebug::writeError($e->getMessage(), __METHOD__);
         }
+    }
+
+    private function isHiddenPrivacyChoice()
+    {
+        $attribute = $this->getRootNodeAttribute('hide_privacy_choice');
+        if ($attribute instanceof eZContentObjectAttribute){
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
+    }
+
+    private function isHiddenTimelineDetails()
+    {
+        $attribute = $this->getRootNodeAttribute('hide_timeline_details');
+        if ($attribute instanceof eZContentObjectAttribute){
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return true;
     }
 }

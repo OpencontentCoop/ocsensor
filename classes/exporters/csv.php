@@ -54,9 +54,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'resolution_diff' => ezpI18n::tr('sensor/export', 'Tempo di risoluzione'),
             'title' => ezpI18n::tr('sensor/export', 'Titolo'),
             'author' => ezpI18n::tr('sensor/export', 'Autore'),
+            'fiscal_code' => ezpI18n::tr('sensor/export', 'Codice Fiscale'),
             'category' => ezpI18n::tr('sensor/export', 'Categoria'),
             'category_child' => ezpI18n::tr('sensor/export', 'Categoria (descrittore)'),
-            'current_owner' => ezpI18n::tr('sensor/export', 'Assegnatario'),
+            'current_owner' => ezpI18n::tr('sensor/export', 'Incaricato'),
             'comment' => ezpI18n::tr('sensor/export', 'Commenti')
         );
 
@@ -121,6 +122,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
                 'title' => $post->subject,
                 'author' => $post->author->name,
+                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
                 'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
                 'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',

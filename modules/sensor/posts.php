@@ -40,6 +40,8 @@ if (!is_numeric($postId)) {
 
         $tpl->setVariable('areas', json_encode($repository->getAreasTree()));
         $tpl->setVariable('categories', json_encode($repository->getCategoriesTree()));
+        $tpl->setVariable('operators', json_encode($repository->getOperatorsTree()));
+        $tpl->setVariable('groups', json_encode($repository->getGroupsTree()));
         $tpl->setVariable('settings', json_encode($repository->getSensorSettings()));
 
         $classRepository = new ClassRepository();
@@ -47,7 +49,17 @@ if (!is_numeric($postId)) {
 
         $Result = array();
         $Result['persistent_variable'] = $tpl->variable('persistent_variable');
-        $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/post.tpl');
+
+        $layoutVersion = 1;
+        if (eZINI::instance('ocsensor.ini')->hasVariable('SensorConfig', 'PostLayoutVersion')) {
+            $layoutVersion = eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'PostLayoutVersion');
+        }
+        $layoutPreference = eZPreferences::value('sensor_post_layout');
+        if ($layoutPreference){
+            $layoutVersion = (int)$layoutPreference;
+        }
+
+        $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/v'. $layoutVersion . '/post.tpl');
         $Result['node_id'] = 0;
 
         $contentInfoArray = array('url_alias' => 'sensor/post/' . $postId);

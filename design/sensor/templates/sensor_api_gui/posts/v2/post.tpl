@@ -1,4 +1,4 @@
-<div id="post" style="position: relative;min-height: 400px;"></div>
+<div id="post" class="post-gui" style="position: relative;min-height: 400px;"></div>
 
 {ezcss_require(array(
     'plugins/blueimp/blueimp-gallery.css',
@@ -20,16 +20,14 @@
     'jquery.sensorpost.js'
 ))}
 
-{include uri='design:sensor_api_gui/posts/parts/tpl-spinner.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-alerts.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-title.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-detail.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-messages.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-actions.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-participants.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-timeline.tpl'}
-{include uri='design:sensor_api_gui/posts/parts/tpl-post-gallery.tpl'}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post.tpl'}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-title.tpl'}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-detail.tpl'}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-messages.tpl'}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-sidebar.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-alerts.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
+{include uri='design:sensor_api_gui/posts/tpl-post-gallery.tpl'}
 
 {def $current_language = ezini('RegionalSettings', 'Locale')}
 {def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
@@ -46,6 +44,8 @@ $(document).ready(function () {ldelim}
         'currentUserId': {fetch(user,current_user).contentobject_id|int()},
         'areas': '{$areas|wash(javascript)}',
         'categories': '{$categories|wash(javascript)}',
+        'operators': '{$operators|wash(javascript)}',
+        'groups': '{$groups|wash(javascript)}',
         'settings': '{$settings|wash(javascript)}',
         'spinnerTpl': '#tpl-spinner',
         'postTpl': '#tpl-post',
@@ -53,3 +53,8 @@ $(document).ready(function () {ldelim}
     {rdelim}, {$post_id});
 {rdelim});
 </script>
+<style>
+    @media screen and (min-width: 992px) {ldelim}
+        .select2-container{ldelim}max-width:196px;font-size:.875em{rdelim}
+    {rdelim}
+</style>

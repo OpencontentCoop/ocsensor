@@ -56,6 +56,8 @@
                         post.capabilities = capabilities;
                         post.areasTree = JSON.parse(plugin.settings.areas);
                         post.categoriesTree = JSON.parse(plugin.settings.categories);
+                        post.operatorsTree = JSON.parse(plugin.settings.operators);
+                        post.groupsTree = JSON.parse(plugin.settings.groups);
                         post.settings = JSON.parse(plugin.settings.settings);
 
                         var statusCss = 'info';
@@ -271,6 +273,41 @@
                         renderData.find('#current-post-id').on('click', function () {
                             plugin.removeAlert().startLoading().load($(this).text());
                         });
+
+                        renderData.find('.message-triggers a').on('click', function (e) {
+                            var target = $(this).data('target');
+                            renderData.find('.message-form .' + target).removeClass('hide');
+                            renderData.find('.message-triggers').addClass('hide');
+                            e.preventDefault();
+                        });
+                        renderData.find('a.reset-message-form').on('click', function (e) {
+                            renderData.find('.message-form .action-form').addClass('hide');
+                            renderData.find('.message-triggers').removeClass('hide');
+                            e.preventDefault();
+                        });
+
+                        renderData.find('.sidebar a.action-trigger').on('click', function (e) {
+                            var widget = $(this).parent();
+                            widget.find('.widget-content').toggleClass('hide');
+                            widget.find('.form-group').toggleClass('hide');
+                            e.preventDefault();
+                        });
+
+                        renderData.find('a.message-visibility').on('click', function (e) {
+                            var that = $(this);
+                            var type = that.data('type');
+                            if (that.hasClass('label-default')){
+                                that.removeClass('label-default');
+                                that.addClass('label-simple');
+                                $('.message-'+type).hide();
+                            }else{
+                                that.removeClass('label-simple');
+                                that.addClass('label-default');
+                                $('.message-'+type).show();
+                            }
+                            e.preventDefault();
+                        });
+
                     });
                 }
             });

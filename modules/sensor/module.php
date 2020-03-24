@@ -105,6 +105,12 @@ $ViewList['search-user'] = array(
     'functions' => array('behalf')
 );
 
+$ViewList['avatar'] = array(
+    'script' => 'avatar.php',
+    'params' => array('Id'),
+    'functions' => array('use')
+);
+
 $FunctionList = array();
 $FunctionList['use'] = array();
 $FunctionList['debug'] = array();

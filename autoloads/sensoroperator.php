@@ -10,7 +10,8 @@ class SensorOperator
             'sensor_categorycontainer',
             'sensor_categories',
             'sensor_areas',
-            'sensor_default_approvers'
+            'sensor_default_approvers',
+            'sensor_settings',
         );
     }
 
@@ -21,7 +22,15 @@ class SensorOperator
 
     function namedParameterList()
     {
-        return array();
+        return array(
+            'sensor_settings' => array(
+                'setting' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => false,
+                )
+            ),
+        );
     }
 
     function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace, $currentNamespace, &$operatorValue, $namedParameters )
@@ -29,6 +38,15 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_settings':
+                $settings = $repository->getSensorSettings()->jsonSerialize();
+                if ($namedParameters['setting'] === false){
+                    return $operatorValue = $settings;
+                }else{
+                    return $operatorValue = $settings[$namedParameters['setting']];
+                }
+                break;
+
             case 'sensor_default_approvers':
             {
                 $scenario = new \Opencontent\Sensor\Legacy\PostService\Scenarios\FirstAreaApproverScenario($repository);

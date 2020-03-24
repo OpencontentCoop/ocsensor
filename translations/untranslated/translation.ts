@@ -614,7 +614,7 @@
     </message>
     <message>
         <location filename="csv.php" line="34"/>
-        <source>Assegnatario</source>
+        <source>Incaricato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -870,7 +870,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cerca per assegnatario</source>
+        <source>Cerca per incaricato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

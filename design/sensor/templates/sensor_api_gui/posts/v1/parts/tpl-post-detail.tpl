@@ -14,10 +14,28 @@
     {{else}}
     <div class="col-md-12">
     {{/if}}
-        <p>{{:description}}</p>
-        {{for images}}
-            <figure><a href="{{:original}}" data-gallery><img class="center-block" src="{{:thumbnail}}" /></a></figure>
-        {{/for}}
+        <p style="white-space:pre-wrap;">{{:description}}</p>
+        {{if images.length}}
+        <div id="carousel-{{:id}}" class="carousel slide large" data-ride="carousel">
+          <div class="carousel-inner" role="listbox">
+            {{for images}}
+            <div class="item{{if #index == 0}} active{{/if}}">
+              <a href="{{:original}}" data-gallery><img src="{{:thumbnail}}" /></a>
+            </div>
+            {{/for}}
+          </div>
+          {{if images.length > 1}}
+          <a class="left carousel-control" href="#carousel-{{:id}}" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control" href="#carousel-{{:id}}" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+          {{/if}}
+        </div>
+        {{/if}}
         <ul class="list-inline">
             <li><small><i class="fa fa-clock-o"></i> {/literal}{'Pubblicata il'|i18n('sensor/post')}{literal} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
             {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}

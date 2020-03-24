@@ -97,6 +97,27 @@ class SensorGuiApiController extends ezpRestMvcController
             $apiPost = $this->openApiTools->replacePlaceholders(
                 $this->repository->getSearchService()->searchPost($this->Id)->jsonSerialize()
             );
+
+            $messages = [];
+            foreach ($apiPost['timelineItems'] as $message){
+                $message['_type'] = 'system';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($apiPost['privateMessages'] as $message){
+                $message['_type'] = 'private';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($apiPost['comments'] as $message){
+                $message['_type'] = 'public';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($apiPost['responses'] as $message){
+                $message['_type'] = 'response';
+                $messages[$message['id']] = $message;
+            }
+            ksort($messages);
+            $apiPost['_messages'] = array_values($messages);
+
             $result = new ezpRestMvcResult();
             $result->variables = $apiPost;
         } catch (Exception $e) {

@@ -69,12 +69,65 @@ class SensorOpenApiController extends ezpRestMvcController
             if (!method_exists($controller, $this->request->variables['operationId'])){
                 throw new InvalidArgumentException("Invalid operationId " . $this->request->variables['operationId'], 1);
             }
+
             return $controller->{$this->request->variables['operationId']}();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
 
         return $result;
+    }
+
+    public function doGetFile()
+    {
+        try {
+            list($id, $version, $language) = explode('-', $this->attributeIdentifier, 3);
+            $attribute = eZContentObjectAttribute::fetch($id, $version, $language);
+            if ($attribute instanceof eZContentObjectAttribute) {
+
+                $readAllPostPolicies = null;
+                if (eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'AccessApiFilesByIP') === 'enabled'){
+                    $ip = eZSys::clientIP();
+                    if (in_array($ip, eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'AccessApiFilesIPList'))){
+                        $readAllPostPolicies = [
+                            'accessWord' => 'limited',
+                            'policies' => [
+                                'custom1' => ['Class' => [$this->repository->getPostContentClass()->attribute('id')]]
+                            ]
+                        ];
+                    }
+                }
+
+                // throw exception in access for current user is denied
+                $searchPosts = $this->repository->getSearchService()->searchPosts('id = ' . $attribute->attribute('contentobject_id') . ' limit 1', [], $readAllPostPolicies);
+                if ($searchPosts->totalCount == 0) {
+                    throw new \Opencontent\Sensor\Api\Exception\NotFoundException();
+                }
+
+                if ($attribute->attribute('data_type_string') == OCMultiBinaryType::DATA_TYPE_STRING) {
+                    $fileInfo = OCMultiBinaryType::storedSingleFileInformation($attribute, base64_decode($this->fileName));
+                    OCMultiBinaryType::handleSingleDownload($attribute, $this->fileName);
+
+                    $fileHandler = new eZFilePassthroughHandler();
+                    ob_start();
+                    $result = $fileHandler->handleFileDownload($attribute->object(), $attribute, eZBinaryFileHandler::TYPE_FILE, $fileInfo);
+
+                } else {
+                    $fileHandler = eZBinaryFileHandler::instance();
+                    ob_start();
+                    $result = $fileHandler->handleDownload($attribute->object(), $attribute, eZBinaryFileHandler::TYPE_FILE);
+                }
+
+                if ($result == eZBinaryFileHandler::RESULT_UNAVAILABLE) {
+                    throw new \Opencontent\Sensor\Api\Exception\UnexpectedException();
+                }
+            }
+
+            throw new \Opencontent\Sensor\Api\Exception\NotFoundException();
+
+        } catch (Exception $e) {
+            return $this->doExceptionResult($e);
+        }
     }
 
     public function getBaseUri()

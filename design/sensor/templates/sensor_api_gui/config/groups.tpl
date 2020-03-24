@@ -23,7 +23,7 @@
     <a class="btn btn-info" href="{concat('exportas/csv/',$group_class,'/',$groups_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a>
 </div>
 <div class="pull-right add-class">
-    <a class="btn btn-danger" id="add" data-add-parent="{$groups_parent_node.node_id}" data-add-class="{$group_class}" href="{concat('add/new/'$group_class,'/?parent=',$groups_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a>
+    <a class="btn btn-danger" id="add" data-add-parent="{$groups_parent_node.node_id}" data-add-class="{$group_class}" href="{concat('add/new/', $group_class,'/?parent=',$groups_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a>
 </div>
 
 {literal}

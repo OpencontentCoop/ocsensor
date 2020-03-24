@@ -20,6 +20,13 @@ Subdir=templates
 Match[class_identifier]=sensor_post
 Match[attribute_identifier]=image
 
+[post_edit_images]
+Source=content/datatype/edit/ocmultibinary.tpl
+MatchFile=edit_images.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=images
+
 [post_edit_geo]
 Source=content/datatype/edit/ezgmaplocation.tpl
 MatchFile=edit_geo.tpl

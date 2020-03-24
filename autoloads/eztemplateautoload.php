@@ -8,6 +8,7 @@ $eZTemplateOperatorArray[] = array(
         'sensor_categorycontainer',
         'sensor_categories',
         'sensor_areas',
-        'sensor_default_approvers'
+        'sensor_default_approvers',
+        'sensor_settings',
     )
 );
