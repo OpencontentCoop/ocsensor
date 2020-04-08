@@ -6,10 +6,6 @@ TranslationExtensions[]=ocsensor
 [TemplateSettings]
 ExtensionAutoloadPath[]=ocsensor
 
-[RoleSettings]
-PolicyOmitList[]=sensor/use
-PolicyOmitList[]=sensor/avatar
-
 [Event]
 Listeners[]=content/cache@SensorModuleFunctions::onClearObjectCache
 Listeners[]=social_user/signup@SensorNotificationHelper::onSocialUserSignup
