@@ -25,6 +25,12 @@ $ViewList['add'] = array(
     'functions' => array('use')
 );
 
+$ViewList['copy'] = array(
+    'script' => 'copy.php',
+    'params' => array('Id'),
+    'functions' => array('use')
+);
+
 $ViewList['edit'] = array(
     'script' => 'edit.php',
     'params' => array('ID'),

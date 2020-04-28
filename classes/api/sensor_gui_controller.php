@@ -175,9 +175,11 @@ class SensorGuiApiController extends ezpRestMvcController
             $post = $this->repository->getPostService()->loadPost($this->Id);
             if ($this->UserId == 'current') {
                 $result->variables = $this->repository->getPermissionService()->loadCurrentUserPostPermissionCollection($post)->jsonSerialize();
+                $result->variables[] = ['identifier' => 'can_behalf_of', 'grant' => $this->repository->getCurrentUser()->behalfOfMode];
             } else {
                 $user = $this->repository->getUserService()->loadUser($this->UserId);
                 $result->variables = $this->repository->getPermissionService()->loadUserPostPermissionCollection($user, $post)->jsonSerialize();
+                $result->variables[] = ['identifier' => 'can_behalf_of', 'grant' => $user->behalfOfMode];
             }
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
