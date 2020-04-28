@@ -179,15 +179,6 @@
     </div>
     {{/if}}
 
-    {{if relatedItems && relatedItems.length > 0}}
-    <div class="widget">
-        <strong class="widget-title">{/literal}{'Segnalazioni correlate'|i18n('sensor/post')}{literal}</strong>
-        <div>
-            {{for relatedItems}}<a href="/sensor/posts/{{:#data}}" class="label label-default">{{:#data}}</a>{{/for}}
-        </div>
-    </div>
-    {{/if}}
-
     <div class="widget">
         <strong class="widget-title">{/literal}{'Visualizza'|i18n('sensor/post')}{literal}</strong>
         <div>

@@ -9,11 +9,19 @@
         {{/if}}
         <li>{{:comments.length}} {/literal}{'commenti'|i18n('sensor/post')}{literal} - {{:responses.length}} {/literal}{'risposte ufficiali'|i18n('sensor/post')}{literal}</li>
     </ul>
+
+    {{if relatedItems && relatedItems.length > 0}}
     <ul class="list-inline">
-        {{if geoLocation.address}}
-            <li><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</li>
-        {{/if}}
+        <li>{/literal}{'Segnalazioni correlate'|i18n('sensor/post')}{literal}</li>
+        {{for relatedItems}}<li><a href="/sensor/posts/{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
     </ul>
+    {{/if}}
+
+    {{if geoLocation.address}}
+    <ul class="list-inline">
+        <li><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</li>
+    </ul>
+    {{/if}}
 
     <div class="row">
         {{if geoLocation.latitude && geoLocation.longitude}}
