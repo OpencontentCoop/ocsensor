@@ -21,5 +21,7 @@ path=sensor
 isClustered=true
 class=OpenPaSensorRepository
 
+[UserContextHash]
+IncludeCurrentUserId=enabled
 
 */ ?>
