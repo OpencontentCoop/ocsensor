@@ -21,7 +21,7 @@
   <td>
       <span style="padding-left:{{:(level*20)}}px">
         {{if level == 0}}<strong>{{/if}}
-        {{:name}} {{if group}}({{:group}}){{/if}}
+        {{:name}} {{if group}} <span class="label label-default">{{:group}}</span>{{/if}}
         {{if level == 0}}</strong>{{/if}}
       </span>
   </td>
