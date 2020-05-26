@@ -12,6 +12,7 @@ Listeners[]=social_user/signup@SensorNotificationHelper::onSocialUserSignup
 
 [Cache]
 CacheItems[]=sensor
+CacheItems[]=avatar
 
 [Cache_sensor]
 name=Sensor cache
@@ -20,6 +21,13 @@ tags[]=content
 path=sensor
 isClustered=true
 class=OpenPaSensorRepository
+
+[Cache_avatar]
+name=Avatar cache
+id=avatar
+path=avatars
+isClustered=true
+class=SensorAvatar
 
 [UserContextHash]
 IncludeCurrentUserId=enabled
