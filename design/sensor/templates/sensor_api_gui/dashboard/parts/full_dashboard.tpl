@@ -10,28 +10,45 @@
     <div class="col-md-12">
         <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> Cerca</button>
         <div class="bordered">
-            <ul class="nav nav-pills" style="margin-bottom: 10px">
+            <ul class="nav nav-pills" style="margin-bottom: 20px">
 
                 <li role="presentation">
-                    <a href="#" data-status="unread">
+                    <a href="#" data-status="waiting">
                         {"Da leggere"|i18n('sensor/dashboard')}
                         <span class="badge"></span>
                     </a>
                 </li>
-
                 <li role="presentation">
-                    <a href="#" data-status="processing">
-                        {"In corso"|i18n('sensor/dashboard')}
+                    <a href="#" data-status="read">
+                        {"In attesa di assegnazione"|i18n('sensor/dashboard')}
                         <span class="badge"></span>
                     </a>
                 </li>
-
+                <li role="presentation">
+                    <a href="#" data-status="assigned">
+                        {"Assegnato"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a href="#" data-status="fixed">
+                        {"Intervento terminato"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
                 <li role="presentation">
                     <a href="#" data-status="closed">
-                        {"Chiuse"|i18n('sensor/dashboard')}
+                        {"Chiuso"|i18n('sensor/dashboard')}
                         <span class="badge"></span>
                     </a>
                 </li>
+                <li role="presentation">
+                    <a href="#" data-status="reopened">
+                        {"Riaperto"|i18n('sensor/dashboard')}
+                        <span class="badge"></span>
+                    </a>
+                </li>
+
                 <li role="presentation" class="pull-right">
                     <a id="export-url" href="{'sensor/dashboard/(export)/'|ezurl(no)}">
                         <i class="fa fa-download"></i> {"Esporta"|i18n('sensor/dashboard')}                        
@@ -42,10 +59,10 @@
         </div>
     </div>
 
-    <div class="col-md-3 hide searchform">        
+    <div class="col-md-3 hide searchform">
         <div class="dashboard-search">
             <form method="get" class="form">
-            	<button class="btn" type="reset" style="padding-left:0"><span class="fa fa-times"></span> Cerca</button>
+            	<button class="btn" type="reset" style="margin-bottom: 10px"><span class="fa fa-times"></span> Annulla ricerca</button>
                 <div class="form-group">
                     <label class="widget-title" for="searchId">{'Cerca per ID'|i18n('sensor/dashboard')}</label>
                     <input type="number" value=""
@@ -259,9 +276,6 @@ $(document).ready(function () {ldelim}
     var selectObserver = form.find('select[name="observer"]');
     var toggles = $('[data-status]');
     var toggleBadges = toggles.find('.badge');
-    var unreadToggle = $('[data-status="unread"]');
-    var processingToggle = $('[data-status="processing"]');
-    var closedToggle = $('[data-status="closed"]');
     var viewContainer = $('[data-contents]');
     var participantFilters = $('[data-participant_filters]');
     var exportUrl = $('#export-url');
@@ -524,17 +538,9 @@ $(document).ready(function () {ldelim}
                     selectObserver.trigger('change');
                 } else if (facet.name === 'workflow_status') {
                     toggleBadges.html('0');
-                    var processingCount = 0;
                     $.each(facet.data, function (id, count) {
-                        if (id === 'waiting') {
-                            unreadToggle.find('.badge').html(count)
-                        }else if (id === 'closed') {
-                            closedToggle.find('.badge').html(count)
-                        }else{
-                            processingCount += count
-                        }
+                        $('[data-status="'+id+'"] .badge').html(count);
                     });
-                    processingToggle.find('.badge').html(processingCount)
                 }
             });
             var firstView = false;
@@ -561,13 +567,7 @@ $(document).ready(function () {ldelim}
     var buildView = function(viewIdentifier) {
         currentView = viewIdentifier;
         var baseQuery = buildQueryFilters();
-        if (viewIdentifier === 'unread'){
-            baseQuery += 'workflow_status in [waiting]';
-        }else if (viewIdentifier === 'closed'){
-            baseQuery += 'workflow_status in [closed]';
-        }else if (viewIdentifier === 'processing'){
-            baseQuery += 'workflow_status in [read,assigned,fixed]';
-        }
+        baseQuery += 'workflow_status in ['+viewIdentifier+']';
 
         var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
         viewContainer.html(spinner);
