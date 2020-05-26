@@ -23,7 +23,7 @@ class SensorAvatar
             function ($file, $args) {
                 $id = $args['id'];
                 $object = eZContentObject::fetch((int)$id);
-                $name = '?';
+                $name = 'X';
                 $content = false;
                 $style= '';
                 if ($object instanceof eZContentObject){
@@ -40,6 +40,8 @@ class SensorAvatar
                             $content = eZClusterFileHandler::instance($alias['full_path'])->fetchContents();
                         }
                     }
+                }else{
+                    $style = '&background=666666&color=ffffff';
                 }
                 if (!$content){
                     $content = file_get_contents('https://eu.ui-avatars.com/api/?name=' . $name . $style);
