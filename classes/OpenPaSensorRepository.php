@@ -12,6 +12,7 @@ use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Statistics;
+use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
 
 class OpenPaSensorRepository extends LegacyRepository
 {
@@ -89,6 +90,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $scenarios = [];
         $scenarios[ScenarioInterface::LOW] = new Scenarios\FirstAreaApproverScenario($this);
         $this->setScenarios($scenarios);
+
+        $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
 
         $notificationTypes = [];
         $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
