@@ -196,7 +196,7 @@
                     if (searchText.length > 0) {
                         query += " and q = '\"" + searchText + "\"'";
                     }
-                    query += ' sort [name=>asc]';
+                    query += ' sort [last_name=>asc,name=>asc]';
 
                     return query;
                 };
