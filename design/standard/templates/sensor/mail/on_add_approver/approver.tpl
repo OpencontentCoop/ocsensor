@@ -18,12 +18,12 @@
                             {include uri='design:sensor/mail/parts/post_info.tpl'}
                         </td>
                     </tr>
-                    {if and( sensor_settings('HideTimelineDetails')|not(), count( $event_details )|gt(0), is_set( $event_details.observers ) )}
-                        <tr>
-                            <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
-                                <p><strong>{"Osservatore"|i18n('sensor/mail/post')}:</strong> {foreach $event_details.observers as $observer_id}{fetch( content, object, hash( object_id, $observer_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
-                            </td>
-                        </tr>
+                    {if and( count( $event_details )|gt(0), is_set( $event_details.approvers ) )}
+                    <tr>
+                        <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
+                            <p><strong>{"Osservatore"|i18n('sensor/mail/post')}:</strong> {foreach $event_details.approvers as $approver_id}{fetch( content, object, hash( object_id, $approver_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
+                        </td>
+                    </tr>
                     {/if}
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>

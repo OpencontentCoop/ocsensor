@@ -297,6 +297,76 @@ class SensorNotificationTextHelper
                     ),
                 ),
             ),
+            'on_add_approver' => array(
+                'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo riferimento per il cittadino",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo riferimento per il cittadino è stata assegnato alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_APPROVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo riferimento per il cittadino",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo riferimento per il cittadino è stata assegnato alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OWNER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo riferimento per il cittadino",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo riferimento per il cittadino è stata assegnato alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OBSERVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo riferimento per il cittadino",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo riferimento per il cittadino è stata assegnato alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+            ),
             'on_add_comment' => array(
                 'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
                     'title' => array(

@@ -121,6 +121,9 @@ class OpenPaSensorRepository extends LegacyRepository
         $notificationTypes[] = new NotificationTypes\OnSendPrivateMessageNotificationType();
         $this->addListener('on_send_private_message', new PrivateMailNotificationListener($this));
 
+        $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
+        $this->addListener('on_add_approver', new MailNotificationListener($this));
+
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
 
         $statisticsFactories = [];
