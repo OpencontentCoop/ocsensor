@@ -20,6 +20,8 @@ class OpenPaSensorRepository extends LegacyRepository
 
     protected static $instance;
 
+    private $settings;
+
     public static function instance()
     {
         //@todo load from ini
@@ -30,18 +32,22 @@ class OpenPaSensorRepository extends LegacyRepository
 
     protected function __construct()
     {
+        $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
+        $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ?
+            array_map('intval', $firstApproverScenario->getApprovers()) : [];
+
         $permissionDefinitions = array();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddCategory();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddObserver();
         $permissionDefinitions[] = new PermissionDefinitions\CanAssign();
         $permissionDefinitions[] = new PermissionDefinitions\CanChangePrivacy();
-        $permissionDefinitions[] = new PermissionDefinitions\CanClose();
+        $permissionDefinitions[] = new PermissionDefinitions\CanClose($restrictResponders);
         $permissionDefinitions[] = new PermissionDefinitions\CanComment();
         $permissionDefinitions[] = new PermissionDefinitions\CanFix();
         $permissionDefinitions[] = new PermissionDefinitions\CanForceFix();
         $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
-        $permissionDefinitions[] = new PermissionDefinitions\CanRespond();
+        $permissionDefinitions[] = new PermissionDefinitions\CanRespond($restrictResponders);
         $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
         if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
@@ -88,7 +94,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->setActionDefinitions($actionDefinitions);
 
         $scenarios = [];
-        $scenarios[ScenarioInterface::LOW] = new Scenarios\FirstAreaApproverScenario($this);
+        $scenarios[ScenarioInterface::LOW] = $firstApproverScenario;
         $this->setScenarios($scenarios);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
@@ -152,25 +158,29 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getSensorSettings()
     {
-        $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
-        return new Settings(array(
-            'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
-            'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
-            'AuthorCanReopen' => isset($sensorIni['AuthorCanReopen']) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
-            'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
-            'UniqueCategoryCount' => isset($sensorIni['CategoryCount']) ? $sensorIni['CategoryCount'] == 'unique' : true,
-            'CategoryAutomaticAssign' => isset($sensorIni['CategoryAutomaticAssign']) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
-            'DefaultPostExpirationDaysInterval' => isset($sensorIni['DefaultPostExpirationDaysInterval']) ? intval($sensorIni['DefaultPostExpirationDaysInterval']) : 15,
-            'DefaultPostExpirationDaysLimit' => isset($sensorIni['DefaultPostExpirationDaysLimit']) ? intval($sensorIni['DefaultPostExpirationDaysLimit']) : 7,
-            'TextMaxLength' => isset($sensorIni['TextMaxLength']) ? intval($sensorIni['TextMaxLength']) : 800,
-            'CloseCommentsAfterSeconds' => isset($sensorIni['CloseCommentsAfterSeconds']) ? intval($sensorIni['CloseCommentsAfterSeconds']) : 1814400,
-            'MoveMarkerOnSelectArea' => isset($sensorIni['MoveMarkerOnSelectArea']) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
-            'CommentsAllowed' => isset($sensorIni['CommentsAllowed']) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
-            'CategoryAutomaticAssignToRandomOperator' => isset($sensorIni['CategoryAutomaticAssignToRandomOperator']) ? $sensorIni['CategoryAutomaticAssignToRandomOperator'] == 'enabled' : false,
-            'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
-            'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
-            'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
-        ));
+        if ($this->settings === null) {
+            $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
+            $this->settings = new Settings(array(
+                'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
+                'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
+                'AuthorCanReopen' => isset($sensorIni['AuthorCanReopen']) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
+                'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
+                'UniqueCategoryCount' => isset($sensorIni['CategoryCount']) ? $sensorIni['CategoryCount'] == 'unique' : true,
+                'CategoryAutomaticAssign' => isset($sensorIni['CategoryAutomaticAssign']) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
+                'DefaultPostExpirationDaysInterval' => isset($sensorIni['DefaultPostExpirationDaysInterval']) ? intval($sensorIni['DefaultPostExpirationDaysInterval']) : 15,
+                'DefaultPostExpirationDaysLimit' => isset($sensorIni['DefaultPostExpirationDaysLimit']) ? intval($sensorIni['DefaultPostExpirationDaysLimit']) : 7,
+                'TextMaxLength' => isset($sensorIni['TextMaxLength']) ? intval($sensorIni['TextMaxLength']) : 800,
+                'CloseCommentsAfterSeconds' => isset($sensorIni['CloseCommentsAfterSeconds']) ? intval($sensorIni['CloseCommentsAfterSeconds']) : 1814400,
+                'MoveMarkerOnSelectArea' => isset($sensorIni['MoveMarkerOnSelectArea']) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
+                'CommentsAllowed' => isset($sensorIni['CommentsAllowed']) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
+                'CategoryAutomaticAssignToRandomOperator' => isset($sensorIni['CategoryAutomaticAssignToRandomOperator']) ? $sensorIni['CategoryAutomaticAssignToRandomOperator'] == 'enabled' : false,
+                'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
+                'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
+                'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
+            ));
+        }
+
+        return $this->settings;
     }
 
     public function getCurrentUser()

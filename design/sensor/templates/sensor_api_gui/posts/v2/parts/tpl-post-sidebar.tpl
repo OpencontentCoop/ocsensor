@@ -169,10 +169,8 @@
                 
                 {{include tmpl="#tpl-post-force_fix"/}}
                 
-                {{if !capabilities.can_auto_assign && !capabilities.can_fix && !capabilities.can_force_fix}}
-                    {{include tmpl="#tpl-post-close"/}}
-                {{/if}}
-                
+                {{include tmpl="#tpl-post-close"/}}
+
                 {{include tmpl="#tpl-post-reopen"/}}
             </div>
         </div>
