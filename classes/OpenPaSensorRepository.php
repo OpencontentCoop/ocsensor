@@ -64,6 +64,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveAttachment();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
         $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign();
+        $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
         $this->setPermissionDefinitions($permissionDefinitions);
 
         $actionDefinitions = array();
@@ -91,6 +92,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\AddAttachmentAction();
         $actionDefinitions[] = new ActionDefinitions\RemoveAttachmentAction();
         $actionDefinitions[] = new ActionDefinitions\AddApproverAction();
+        $actionDefinitions[] = new ActionDefinitions\RemoveObserverAction();
         $this->setActionDefinitions($actionDefinitions);
 
         $scenarios = [];

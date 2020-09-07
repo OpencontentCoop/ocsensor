@@ -51,10 +51,16 @@
             {{/if}}
             <strong class="widget-title">Osservatori</strong>
             <ul class="list-unstyled widget-content">
-            {{for observers}}
-                <li>
+            {{for observers ~capabilities=capabilities}}
+                <li data-action-wrapper>
                     <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
                     {{:name}}
+                    {{if ~capabilities.can_remove_observer}}
+                    <a href="#"
+                       data-action="remove_observer" data-parameters="participant_id"
+                       title="{/literal}{'Rimuovi osservatore'|i18n('sensor/messages')}{literal}"><i class="fa fa-times"></i></a>
+                    <input type="hidden" value="{{:id}}" data-value="participant_id" />
+                    {{/if}}
                 </li>
             {{else}}
                 <li>
