@@ -2,7 +2,7 @@
 <script id="tpl-post-sidebar" type="text/x-jsrender">
 
     <div class="widget">
-        {{if capabilities.can_add_approver && !settings.CategoryAutomaticAssign}}
+        {{if capabilities.can_add_approver}}
             <a href="#" class="pull-right action-trigger">Modifica</a>
         {{/if}}
         <strong class="widget-title">Riferimento</strong>
