@@ -254,7 +254,7 @@
 </script>
 
 <script id="tpl-post-add_approver" type="text/x-jsrender">
-{{if capabilities.can_add_approver && !settings.CategoryAutomaticAssign}}
+{{if capabilities.can_add_approver}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group">
             <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona gruppo'|i18n('sensor/post')}{literal}" class="select form-control">
