@@ -1,5 +1,6 @@
 <?php
 
+use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Core\PermissionDefinitions;
@@ -74,6 +75,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\AddResponseAction();
         $actionDefinitions[] = new ActionDefinitions\AddObserverAction();
         $actionDefinitions[] = new ActionDefinitions\AssignAction();
+        $actionDefinitions[] = new ActionDefinitions\AutoAssignAction();
         $actionDefinitions[] = new ActionDefinitions\CloseAction();
         $actionDefinitions[] = new ActionDefinitions\EditCommentAction();
         $actionDefinitions[] = new ActionDefinitions\EditPrivateMessageAction();
@@ -108,6 +110,9 @@ class OpenPaSensorRepository extends LegacyRepository
         $notificationTypes[] = new NotificationTypes\OnAssignNotificationType();
         $this->addListener('on_assign', new MailNotificationListener($this));
 
+        $notificationTypes[] = new NotificationTypes\OnGroupAssignNotificationType();
+        $this->addListener('on_group_assign', new MailNotificationListener($this));
+
         $notificationTypes[] = new NotificationTypes\OnAddObserverNotificationType();
         $this->addListener('on_add_observer', new MailNotificationListener($this));
 
@@ -131,6 +136,8 @@ class OpenPaSensorRepository extends LegacyRepository
 
         $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
         $this->addListener('on_add_approver', new MailNotificationListener($this));
+
+        $this->addListener('after_run_action', new SendMailListener($this));
 
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
 

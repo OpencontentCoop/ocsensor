@@ -2,8 +2,10 @@
 
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
+use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\PostCreateStruct;
 use Opencontent\Sensor\Api\Values\PostUpdateStruct;
+use Opencontent\Sensor\Legacy\SearchService;
 
 class SensorGuiApiController extends ezpRestMvcController
 {
@@ -255,6 +257,18 @@ class SensorGuiApiController extends ezpRestMvcController
         return $result;
     }
 
+    public function doLoadOperator()
+    {
+        try {
+            $result = new ezpRestMvcResult();
+            $result->variables = $this->repository->getOperatorService()->loadOperator($this->OperatorId);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
     public function doLoadGroups()
     {
         try {
@@ -279,6 +293,32 @@ class SensorGuiApiController extends ezpRestMvcController
         }
 
         return $result;
+    }
+
+    public function doLoadOperatorsByGroup()
+    {
+        $result = new ezpRestMvcResult();
+        $group = $this->repository->getGroupService()->loadGroup($this->GroupId);
+        $operators = [];
+        if ($group instanceof Group){
+            $operatorResult = $this->repository->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, '*');
+            $operators = $operatorResult['items'];
+            $this->recursiveLoadOperatorsByGroup($group, $operatorResult, $operators);
+        }
+        $result->variables = $operators;
+
+        return $result;
+    }
+
+    private function recursiveLoadOperatorsByGroup(Group $group, $operatorResult, &$operators)
+    {
+        if ($operatorResult['next']) {
+            $operatorResult = $this->repository->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, $operatorResult['next']);
+            $operators = array_merge($operatorResult['items'], $operators);
+            $this->recursiveLoadOperatorsByGroup($group, $operatorResult, $operators);
+        }
+
+        return $operators;
     }
 
     public function doLoadOperatorsAndGroups()

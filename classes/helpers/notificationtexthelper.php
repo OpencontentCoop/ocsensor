@@ -717,6 +717,76 @@ class SensorNotificationTextHelper
                     ),
                 ),
             ),
+            'on_group_assign' => array(
+                'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La tua segnalazione è stata assegnata a un gruppo di lavoro",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La tua segnalazione è stata assegnata a un gruppo di lavoro",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_APPROVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata a un gruppo",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata a un gruppo",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OWNER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata al tuo gruppo",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata al tuo gruppo",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Puoi prendere in carico la segnalazione",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OBSERVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata a un gruppo",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "La segnalazione è stata assegnata a un gruppo",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+            ),
         );
     }
 }

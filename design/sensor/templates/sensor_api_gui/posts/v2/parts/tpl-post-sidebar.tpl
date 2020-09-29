@@ -2,8 +2,8 @@
 <script id="tpl-post-sidebar" type="text/x-jsrender">
 
     <div class="widget">
-        {{if capabilities.can_add_approver}}
-            <a href="#" class="pull-right action-trigger">Modifica</a>
+        {{if capabilities.can_add_approver && groupsTree.children.length > 0}}
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">Riferimento</strong>
         <ul class="list-unstyled widget-content">
@@ -18,14 +18,16 @@
             </li>
         {{/for}}
         </ul>
+        {{if groupsTree.children.length > 0}}
         {{include tmpl="#tpl-post-add_approver"/}}
+        {{/if}}
     </div>
 
     {{if capabilities.can_send_private_message || !settings.HideTimelineDetails}}
         {{if capabilities.can_assign || owners.length}}
         <div class="widget">
             {{if capabilities.can_assign}}
-                <a href="#" class="pull-right action-trigger">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
             {{/if}}
             <strong class="widget-title">Incaricato</strong>
             <ul class="list-unstyled widget-content">
@@ -47,7 +49,7 @@
         {{if capabilities.can_add_observer || observers.length}}
         <div class="widget">
             {{if capabilities.can_add_observer}}
-                <a href="#" class="pull-right action-trigger">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
             {{/if}}
             <strong class="widget-title">Osservatori</strong>
             <ul class="list-unstyled widget-content">
@@ -75,7 +77,7 @@
 
     <div class="widget">
         {{if capabilities.can_add_area}}
-            <a href="#" class="pull-right action-trigger">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'area'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
         <p class="widget-content">{{for areas}}{{:name}}{{else}}<em class="text-muted">Non definito</em>{{/for}}</p>
@@ -84,7 +86,7 @@
 
     <div class="widget">
         {{if capabilities.can_add_category}}
-            <a href="#" class="pull-right action-trigger">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'category'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
         <p class="widget-content">{{for categories}}{{:name}}{{else}}<em class="text-muted">Non definito</em>{{/for}}</p>
@@ -94,7 +96,7 @@
     {{if capabilities.can_send_private_message}}
         <div class="widget">
             {{if capabilities.can_set_expiry}}
-                <a href="#" class="pull-right action-trigger">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
             {{/if}}
             <strong class="widget-title">{/literal}{'Scadenza'|i18n('sensor/post')}{literal}</strong>
             <p class="widget-content">{{:~formatDate(expirationInfo.expirationDateTime, 'DD/MM/YYYY HH:mm')}}</p>
@@ -104,7 +106,7 @@
 
     <div class="widget">
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
-            <a href="#" class="pull-right action-trigger">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">{/literal}{'Visibilità'|i18n('sensor/post')}{literal}</strong>
         <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}Pubblico{{else}}<i class="fa fa-lock"></i> Privato{{/if}}</p>
@@ -119,7 +121,7 @@
 
     <div class="widget">
         {{if capabilities.can_add_attachment}}
-            <a href="#" class="pull-right action-trigger">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">{/literal}{'Allegati'|i18n('sensor/messages')}{literal}</strong>
         <div class="widget-content" data-action-wrapper>
@@ -198,7 +200,7 @@
 <script id="tpl-post-add_area" type="text/x-jsrender">
 {{if capabilities.can_add_area}}
     <div class="form-group hide" data-action-wrapper>
-        <div class="input-group">
+        <div class="input-group d-flex">
             <select data-value="area_id" data-placeholder="{/literal}{'Seleziona Zona'|i18n('sensor/post')}{literal}" class="select form-control">
                 <option></option>
                 {{for areasTree.children}}
@@ -216,7 +218,7 @@
 <script id="tpl-post-add_category" type="text/x-jsrender">
 {{if capabilities.can_add_category}}
     <div class="form-group hide" data-action-wrapper>
-        <div class="input-group">
+        <div class="input-group d-flex">
             <select data-value="category_id" data-placeholder="{/literal}{'Seleziona categoria'|i18n('sensor/post')}{literal}" class="select form-control">
                 <option></option>
                 {{for categoriesTree.children}}
@@ -233,7 +235,7 @@
 
 <script id="tpl-tree-option" type="text/x-jsrender">
 <option value="{{:id}}" style="padding-left:calc(10px*{{:level}});{{if level == 0 && type != 'sensor_group' && type != 'sensor_operator'}}font-weight: bold;{{/if}}">
-   {{:name}} {{if (type == 'sensor_category' || type == 'sensor_operator') && group}}<small>({{:group}})</small>{{/if}}
+   {{:name}} {{if type == 'sensor_category' && group}}<small>({{:group}})</small>{{/if}}
 </option>
 {{for children}}
     {{include tmpl="#tpl-tree-option"/}}
@@ -256,12 +258,14 @@
 <script id="tpl-post-add_approver" type="text/x-jsrender">
 {{if capabilities.can_add_approver}}
     <div class="form-group hide" data-action-wrapper>
-        <div class="input-group">
+        <div class="input-group d-flex">
             <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona gruppo'|i18n('sensor/post')}{literal}" class="select form-control">
                 <option></option>
+                {{if groupsTree.children.length > 0}}
                 {{for groupsTree.children}}
                     {{include tmpl="#tpl-tree-option"/}}
                 {{/for}}
+                {{/if}}
                 {/literal}
                     {def $default_approvers = sensor_default_approvers()}
                     {if count($default_approvers)}
@@ -283,15 +287,17 @@
 <script id="tpl-post-assign" type="text/x-jsrender">
 {{if capabilities.can_assign}}
     <div class="form-group hide" data-action-wrapper>
-        <div class="input-group">
-            <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="select form-control">
+        <div class="input-group d-flex">
+            {{if groupsTree.children.length > 0}}
+            <select id="group-assign" data-current="{{:currentOwnerGroupId}}" data-value="group_ids" data-placeholder="{/literal}{'Gruppo'|i18n('sensor/post')}{literal}" class="select form-control reset-on-close">
                 <option></option>
-                {{for operatorsTree.children}}
-                    {{include tmpl="#tpl-tree-option"/}}
-                {{/for}}
+            </select>
+            {{/if}}
+            <select id="user-assign" data-current="{{:currentOwnerUserId}}" data-value="participant_ids" data-placeholder="{/literal}{'Operatore'|i18n('sensor/post')}{literal}" class="select form-control reset-on-close">
+                <option></option>
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids" value="{{if owners.length == 0}}{/literal}{'Assegna'|i18n('sensor/post')}{literal}{{else}}{/literal}{'Riassegna'|i18n('sensor/post')}{/literal}{{/if}}" />
+                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids,group_ids" value="{{if owners.length == 0}}{/literal}{'Assegna'|i18n('sensor/post')}{literal}{{else}}{/literal}{'Riassegna'|i18n('sensor/post')}{/literal}{{/if}}" />
             </span>
         </div>
     </div>
@@ -301,7 +307,7 @@
 <script id="tpl-post-add_observer" type="text/x-jsrender">
 {{if capabilities.can_add_observer}}
     <div class="form-group hide" data-action-wrapper>
-        <div class="input-group">
+        <div class="input-group d-flex">
             <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="select form-control">
                 <option></option>
                 {{for operatorsTree.children}}
@@ -320,7 +326,7 @@
 {{if capabilities.can_auto_assign}}
     <div class="form-group" data-action-wrapper>
         <input type="hidden" data-value="participant_ids" value="{{:currentUserId}}" />
-        <input class="btn {{if workflowStatus.identifier == 'assigned'}}btn-danger{{else}}btn-default{{/if}} btn-md btn-block" type="submit" data-action="assign" data-parameters="participant_ids"
+        <input class="btn {{if workflowStatus.identifier == 'assigned'}}btn-danger{{else}}btn-default{{/if}} btn-md btn-block" type="submit" data-action="auto_assign" data-parameters="participant_ids"
                value="{/literal}{'Prendi in carico'|i18n('sensor/post')}{literal}" />
     </div>
 {{/if}}

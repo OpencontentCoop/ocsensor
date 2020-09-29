@@ -1,4 +1,7 @@
 <?php
+
+use Opencontent\Sensor\Api\Values\Post;
+
 require 'autoload.php';
 
 $script = eZScript::instance(array('description' => ("Remove participant\n\n"),
@@ -27,7 +30,7 @@ try {
         foreach ($objectIdList as $objectId) {
             $repository = OpenPaSensorRepository::instance();
             $post = $repository->getPostService()->loadPost($objectId);
-            if ($post instanceof \Opencontent\Sensor\Api\Values\Post) {
+            if ($post instanceof Post) {
                 $repository->getParticipantService()->removePostParticipant($post, $participantId);
                 $repository->getPostService()->refreshPost($post);
             }

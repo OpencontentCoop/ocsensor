@@ -470,7 +470,7 @@ $(document).ready(function () {ldelim}
         }
         var searchOwner = form.find('#searchOwner').find(':selected').val();
         if (searchOwner){
-            query.push("owner_id_list in [" + searchOwner + "]");
+            query.push("owner_user_id_list in [" + searchOwner + "]");
         }
         var searchObserver = form.find('#searchObserver').find(':selected').val();
         if (searchObserver){
@@ -513,7 +513,7 @@ $(document).ready(function () {ldelim}
             $(this).html('').parents('li').removeClass('active');
         });
         fillExportUrl();
-        find(buildQueryFilters()+' facets [workflow_status,category.id,area.id,owner_id_list,observer_id_list] limit 1', function (response) {
+        find(buildQueryFilters()+' facets [workflow_status,category.id,area.id,owner_user_id_list,observer_id_list] limit 1', function (response) {
             $.each(response.facets, function () {
                 var facet = this;
                 if (facet.name === 'category.id') {
@@ -526,7 +526,7 @@ $(document).ready(function () {ldelim}
                         selectArea.find('option[value="' + id + '"]').removeAttr('disabled');
                     });
                     selectArea.trigger('change');
-                } else if (facet.name === 'owner_id_list') {
+                } else if (facet.name === 'owner_user_id_list') {
                     $.each(facet.data, function (id, count) {
                         selectOwner.find('option[value="' + id + '"]').removeAttr('disabled');
                     });

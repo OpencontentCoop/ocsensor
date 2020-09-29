@@ -86,11 +86,27 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-get'
             ), 1),
 
+            'sensorGuiApiOperatorLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/operators/:OperatorId',
+                'SensorGuiApiController',
+                'loadOperator',
+                array('query' => '', 'limit' => 10, 'cursor' => '*'),
+                'http-get'
+            ), 1),
+
             'sensorGuiApiGroupsLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/groups',
                 'SensorGuiApiController',
                 'loadGroups',
                 array('query' => '', 'limit' => 10, 'cursor' => '*'),
+                'http-get'
+            ), 1),
+
+            'sensorGuiApiOperatorsByGroupLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/groups/:GroupId',
+                'SensorGuiApiController',
+                'loadOperatorsByGroup',
+                array(),
                 'http-get'
             ), 1),
 

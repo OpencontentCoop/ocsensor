@@ -445,3 +445,27 @@ table.list > tfoot > tr > td {
     padding-right: 12px;
     font-size: 30px;
 }
+
+.d-flex{
+    display: flex;
+}
+
+.d-flex .select2-container,
+.d-flex .input-group-btn{
+    flex-grow: 1;
+}
+
+.post-gui .sidebar .d-flex .select2-container .select2-selection--single{
+    height: 30px;
+    border-radius: 0 !important;
+    border-color: #ccc;
+}
+
+.post-gui .sidebar .d-flex .select2-container:first-of-type .select2-selection--single{
+    border-right: 0;
+    border-radius: 4px 0 0 4px !important;
+}
+
+.select2-container--open .select2-dropdown--below{
+    min-width: 200px;
+}
