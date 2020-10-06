@@ -133,7 +133,6 @@
                                 return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
                             }
                         }).on('select2:select', function (e) {
-                            var data = e.params.data;
                             if (post.groupsTree.children.length > 0) {
                                 if ($(e.currentTarget).attr('id') === groupAssignSelect.attr('id')) {
                                     var currentUserSelected = userAssignSelect.val();
@@ -162,6 +161,9 @@
                                 }
                             }
                         });
+                        if (post.currentOwnerGroupId){
+                            groupAssignSelect.trigger('select2:select');
+                        }
 
                         renderData.find(".remote-select").each(function () {
                             var that = $(this);
