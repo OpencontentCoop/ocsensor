@@ -1,14 +1,13 @@
 <?php
 
+use Opencontent\Sensor\Api\Values\Participant as ParticipantAlias;
+
 class SensorWebHookTrigger implements OCWebHookTriggerInterface
 {
-    protected $identifier;
-
-    protected $name;
-
-    protected $repository;
-
     protected static $schema;
+    protected $identifier;
+    protected $name;
+    protected $repository;
 
     public function __construct($identifier, $name)
     {
@@ -22,14 +21,14 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         return $this->identifier;
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
-
     public function getDescription()
     {
         return "Viene scatenato quando accade un evento di tipo '" . $this->getName() . "'. Il payload è un oggetto json API Sensor Post";
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function canBeEnabled()
@@ -46,34 +45,50 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         if (self::$schema === null) {
             /** @var \Opencontent\Sensor\Legacy\Utils\TreeNodeItem $categories */
             $categories = $this->repository->getCategoriesTree();
-            $list = [];
+            $categoryList = [];
             foreach ($categories->attribute('children') as $category) {
-                $list[$category->attribute('id')] = '<strong>' . $category->attribute('name') . '</strong>';
+                $categoryList['cat-' . $category->attribute('id')] = '<strong>' . addcslashes($category->attribute('name'), "'") . '</strong>';
                 foreach ($category->attribute('children') as $child) {
-                    $list[$child->attribute('id')] = $child->attribute('name');
+                    $categoryList['cat-' . $child->attribute('id')] = str_replace("'", "&apos;", $child->attribute('name'));
                 }
+            }
+
+            $groups = $this->repository->getGroupsTree();
+            $groupList = [];
+            foreach ($groups->attribute('children') as $group) {
+                $groupList['group-' . $group->attribute('id')] = str_replace("'", "&apos;", $group->attribute('name'));
             }
 
             $schema = [
                 'schema' => [
-                    'title' => "Seleziona una o più categorie",
+                    'title' => "Il webhook viene eseguito quando si verificano tutte le condizioni di seguito indicate",
                     'type' => 'object',
                     'properties' => [
-                        'category' => [
+                        'group' => [
+                            'title' => "1 - Seleziona un gruppo",
                             'type' => 'string',
-                            'enum' => array_keys($list),
+                            'enum' => array_keys($groupList),
+                        ],
+                        'category' => [
+                            'title' => "2 - Seleziona una o più categorie",
+                            'type' => 'string',
+                            'enum' => array_keys($categoryList),
                         ],
                     ],
                 ],
                 'options' => [
-                    'helper' => "Il webhook viene eseguito solo se la segnalazione rientra nelle categorie selezionate",
                     'fields' => [
                         'category' => [
-                            'name' => 'category',
-                            'optionLabels' => array_values($list),
+                            'helper' => "Il webhook viene eseguito solo se la segnalazione rientra nelle categorie selezionate",
+                            'optionLabels' => array_values($categoryList),
                             'multiple' => true,
                             'type' => 'checkbox',
                             'sort' => false,
+                        ],
+                        'group' => [
+                            'helper' => "Il webhook viene eseguito solo se la segnalazione è assegnata a un gruppo selezionato",
+                            'optionLabels' => array_values($groupList),
+                            'type' => 'select',
                         ],
                     ],
                 ]
@@ -108,15 +123,46 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         }
 
         $filters = json_decode($filters, true);
-        $categoryIdList = explode(',', $filters['category']);
+        $categoryIdList = $groupIdList = [];
+        if (isset($filters['category'])) {
+            $categoryIdList = explode(',', $filters['category']);
+        }
+        if (isset($filters['group'])) {
+            $groupIdList = explode(',', $filters['group']);
+        }
+
+        if (empty($categoryIdList) && empty($groupIdList)) {
+            return true;
+        }
 
         try {
             $post = $this->repository->getPostService()->loadPost($payload['id']);
-            foreach ($post->categories as $category) {
-                if (in_array($category->id, $categoryIdList)) {
-                    return true;
+            $filteredByCategory = false;
+            if (!empty($categoryIdList)) {
+                foreach ($post->categories as $category) {
+                    if (in_array('cat-' . $category->id, $categoryIdList)) {
+                        $filteredByCategory = true;
+                        break;
+                    }
                 }
+            } else {
+                $filteredByCategory = true;
             }
+
+            $filteredByGroup = false;
+            if (!empty($groupIdList)) {
+                foreach ($post->owners->getParticipantIdListByType(ParticipantAlias::TYPE_GROUP) as $groupId) {
+                    if (in_array('group-' . $groupId, $groupIdList)) {
+                        $filteredByGroup = true;
+                        break;
+                    }
+                }
+            } else {
+                $filteredByGroup = true;
+            }
+
+            return $filteredByCategory && $filteredByGroup;
+
         } catch (Exception $e) {
             eZDebug::writeError($e->getMessage(), __METHOD__);
         }
