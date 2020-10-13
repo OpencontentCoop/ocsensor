@@ -20,11 +20,11 @@
                     <div class="col-sm-2">
                         <div class="form-group" id="area-filter">
                             <select class="select form-control" name="area">
-                                <option>{'Area'|i18n('sensor/post')}</option>
+                                <option value="">{'Area'|i18n('sensor/post')}</option>
                                 {foreach $module_result.content_info.persistent_variable.areas.children as $item}
                                     <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                     {foreach $item.children as $child}
-                                        <option value="{$child.id}"
+                                        <option data-parent="{$item.id}" value="{$child.id}"
                                                 style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
                                     {/foreach}
                                 {/foreach}
@@ -34,12 +34,12 @@
                     <div class="col-sm-2">
                         <div class="form-group" id="category-filter">
                             <select class="select form-control" name="category">
-                                <option>{'Categoria'|i18n('sensor/post')}</option>
+                                <option value="">{'Categoria'|i18n('sensor/post')}</option>
                                 {foreach $module_result.content_info.persistent_variable.categories.children as $item}
                                     <option value="{$item.id}"
                                             style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                     {foreach $item.children as $child}
-                                        <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                                        <option data-parent="{$item.id}" value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
                                     {/foreach}
                                 {/foreach}
                             </select>
@@ -48,7 +48,7 @@
                     <div class="col-sm-2">
                         <div class="form-group" id="type-filter">
                             <select class="select form-control" name="type">
-                                <option>{'Tipo'|i18n('sensor/post')}</option>
+                                <option value="">{'Tipo'|i18n('sensor/post')}</option>
                                 <option value="segnalazione">{'Segnalazione'|i18n('openpa_sensor/type')}</option>
                                 <option value="suggerimento">{'Suggerimento'|i18n('openpa_sensor/type')}</option>
                                 <option value="reclamo">{'Reclamo'|i18n('openpa_sensor/type')}</option>

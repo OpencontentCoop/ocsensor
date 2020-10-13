@@ -208,11 +208,19 @@ $(document).ready(function () {ldelim}
         }
         var searchCategory = selectCategory.val();
         if (searchCategory){
-            query.push("category.id in [" + searchCategory + "]");
+            var searchCategoryList = [searchCategory];
+            selectCategory.find('[data-parent="'+searchCategory+'"]').each(function () {
+                searchCategoryList.push($(this).attr('value'));
+            })
+            query.push("category.id in [" + searchCategoryList.join(',') + "]");
         }
         var searchArea = selectArea.val();
         if (searchArea){
-            query.push("area.id in [" + searchArea + "]");
+            var searchAreaList = [searchArea];
+            selectArea.find('[data-parent="'+searchArea+'"]').each(function () {
+                searchAreaList.push($(this).attr('value'));
+            })
+            query.push("area.id in [" + searchAreaList.join(',') + "]");
         }
         var searchType = selectType.val();
         if (searchType){
