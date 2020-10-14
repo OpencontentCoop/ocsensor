@@ -43,11 +43,10 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         }
 
         if (self::$schema === null) {
-            /** @var \Opencontent\Sensor\Legacy\Utils\TreeNodeItem $categories */
             $categories = $this->repository->getCategoriesTree();
             $categoryList = [];
             foreach ($categories->attribute('children') as $category) {
-                $categoryList['cat-' . $category->attribute('id')] = '<strong>' . addcslashes($category->attribute('name'), "'") . '</strong>';
+                $categoryList['cat-' . $category->attribute('id')] = '<strong>' . str_replace("'", "&apos;", $category->attribute('name')) . '</strong>';
                 foreach ($category->attribute('children') as $child) {
                     $categoryList['cat-' . $child->attribute('id')] = str_replace("'", "&apos;", $child->attribute('name'));
                 }
