@@ -185,6 +185,24 @@
                 <input type="checkbox" {if $sensor_settings.ForceUrpApproverOnFix}checked{/if} disabled data-toggleconfig>
               </td>
             </tr>
+            <tr>
+              <th>
+                Sono permessi i commenti pubblici alle segnalazioni
+                <br /><small>Se l'opzione è attivata, gli utenti autenticati possono inserire commenti alle segnalazioni pubbliche</small>
+              </th>
+              <td class="text-center">
+                <input type="checkbox" {if $sensor_settings.CommentsAllowed}checked{/if} disabled data-toggleconfig>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                Destinatari esclusivi delle note private
+                <br /><small>Se l'opzione è attivata, è possibile selezionare quali operatori possono leggere ciascuna nota</small>
+              </th>
+              <td class="text-center">
+                <input type="checkbox" {if $sensor_settings.UseDirectPrivateMessage}checked{/if} disabled data-toggleconfig>
+              </td>
+            </tr>
           </table>
       {elseif $current_part|eq('notifications')}
         {include uri='design:sensor_api_gui/config/notifications.tpl'}

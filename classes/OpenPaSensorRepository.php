@@ -66,6 +66,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
         $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign();
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
+        $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
         $this->setPermissionDefinitions($permissionDefinitions);
 
         $actionDefinitions = array();
@@ -186,6 +187,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
                 'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
                 'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
+                'UseDirectPrivateMessage' => isset($sensorIni['UseDirectPrivateMessage']) ? $sensorIni['UseDirectPrivateMessage'] == 'enabled' : true,
             ));
         }
 

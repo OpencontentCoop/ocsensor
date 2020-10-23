@@ -102,29 +102,6 @@
                             renderData.find('[data-value="category_id"] option[value="' + this.id + '"]').attr('selected', 'selected');
                         });
 
-                        var userAssignSelect = renderData.find('#user-assign');
-                        var groupAssignSelect = renderData.find('#group-assign');
-                        var resetUserAssignSelect = function() {
-                            userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
-                            $.each(post.operatorsTree.children, function () {
-                                var selected = parseInt(post.currentOwnerUserId) === parseInt(this.id);
-                                var newOption = new Option(this.name, this.id, selected, selected);
-                                userAssignSelect.append(newOption).trigger('change');
-                            });
-                        };
-                        resetUserAssignSelect();
-                        var resetGroupAssignSelect = function() {
-                            if (post.groupsTree.children.length > 0) {
-                                groupAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
-                                $.each(post.groupsTree.children, function () {
-                                    var selected = parseInt(post.currentOwnerGroupId) === parseInt(this.id);
-                                    var newOption = new Option(this.name, this.id, selected, selected);
-                                    groupAssignSelect.append(newOption).trigger('change');
-                                });
-                            }
-                        };
-                        resetGroupAssignSelect();
-
                         renderData.find(".select").select2({
                             //width: '100%',
                             //allowClear: true,
@@ -135,35 +112,13 @@
                         }).on('select2:select', function (e) {
                             if (post.groupsTree.children.length > 0) {
                                 if ($(e.currentTarget).attr('id') === groupAssignSelect.attr('id')) {
-                                    var currentUserSelected = userAssignSelect.val();
-                                    userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
-                                    var currentGroup = $(e.currentTarget).val();
-                                    $.get(plugin.settings.apiEndPoint + '/groups/' + currentGroup, function (data) {
-                                        $.each(data, function () {
-                                            var selected = parseInt(currentUserSelected) === parseInt(this.id);
-                                            var newOption = new Option(this.name, this.id, selected, selected);
-                                            userAssignSelect.append(newOption).trigger('change');
-                                        });
-                                    });
+                                    onChangeGroupAssignSelect($(e.currentTarget).val());
                                 }
                                 if ($(e.currentTarget).attr('id') === userAssignSelect.attr('id')) {
-                                    var currentGroupSelected = groupAssignSelect.val();
-                                    var currentUser = $(e.currentTarget).val();
-                                    $.get(plugin.settings.apiEndPoint + '/operators/' + currentUser, function (data) {
-                                        if ($.inArray(parseInt(currentGroupSelected), data.groups) === -1) {
-                                            if (data.groups.length > 0){
-                                                groupAssignSelect.val(data.groups[0]).trigger('change');
-                                            }else {
-                                                groupAssignSelect.val('').trigger('change');
-                                            }
-                                        }
-                                    });
+                                    onChangeUserAssignSelect($(e.currentTarget).val())
                                 }
                             }
                         });
-                        if (post.currentOwnerGroupId){
-                            groupAssignSelect.trigger('select2:select');
-                        }
 
                         renderData.find(".remote-select").each(function () {
                             var that = $(this);
@@ -201,6 +156,63 @@
                                 minimumInputLength: 4
                             });
                         });
+
+                        var userAssignSelect = renderData.find('#user-assign');
+                        var groupAssignSelect = renderData.find('#group-assign');
+                        var onChangeUserAssignSelect = function(currentUser) {
+                            if (parseInt(currentUser) > 0) {
+                                var currentGroupSelected = groupAssignSelect.val();
+                                $.get(plugin.settings.apiEndPoint + '/operators/' + currentUser, function (data) {
+                                    if ($.inArray(parseInt(currentGroupSelected), data.groups) === -1) {
+                                        if (data.groups.length > 0){
+                                            groupAssignSelect.val(data.groups[0]).trigger('change');
+                                        }else {
+                                            groupAssignSelect.val('').trigger('change');
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        var onChangeGroupAssignSelect = function(currentGroup) {
+                            if (parseInt(currentGroup) > 0) {
+                                var currentUserSelected = userAssignSelect.val();
+                                userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
+                                $.get(plugin.settings.apiEndPoint + '/groups/' + currentGroup, function (data) {
+                                    $.each(data, function () {
+                                        var selected = parseInt(currentUserSelected) === parseInt(this.id);
+                                        var newOption = new Option(this.name, this.id, selected, selected);
+                                        if (userAssignSelect.find('option[value="'+this.id+'"]').length === 0) {
+                                            userAssignSelect.append(newOption).trigger('change');
+                                        }
+                                    });
+                                });
+                            }
+                        };
+                        var resetUserAndGroupSelect = function() {
+                            userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
+                            $.each(post.operatorsTree.children, function () {
+                                var selected = parseInt(post.currentOwnerUserId) === parseInt(this.id);
+                                var newOption = new Option(this.name, this.id, selected, selected);
+                                if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
+                                    userAssignSelect.append(newOption);
+                                }
+                            });
+                            userAssignSelect.trigger('change');
+                            userAssignSelect.trigger('select2:select');
+                            if (post.groupsTree.children.length > 0) {
+                                groupAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
+                                $.each(post.groupsTree.children, function () {
+                                    var selected = parseInt(post.currentOwnerGroupId) === parseInt(this.id);
+                                    var newOption = new Option(this.name, this.id, selected, selected);
+                                    if (groupAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
+                                        groupAssignSelect.append(newOption);
+                                    }
+                                });
+                                groupAssignSelect.trigger('change');
+                                groupAssignSelect.trigger('select2:select');
+                            }
+                        }
+                        resetUserAndGroupSelect();
 
                         plugin.stopLoading();
                         plugin.resultContainer.html(renderData);
@@ -366,10 +378,7 @@
                             widget.find('.form-group').toggleClass('hide');
                             if (widget.find('.form-group').hasClass('hide')){
                                 if (widget.find('.form-group').find('#user-assign').length > 0){
-                                    resetUserAssignSelect();
-                                }
-                                if (widget.find('.form-group').find('#group-assign').length > 0){
-                                    resetGroupAssignSelect();
+                                    resetUserAndGroupSelect();
                                 }
                             }
                             e.preventDefault();

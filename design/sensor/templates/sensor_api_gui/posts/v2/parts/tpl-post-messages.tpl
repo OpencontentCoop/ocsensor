@@ -92,32 +92,34 @@
             {{/if}}
             {{if capabilities.can_send_private_message}}
                 <div class="new_message action-form hide" data-action-wrapper>
-                    <strong>{/literal}{'Chi può leggere questo messaggio?'|i18n('sensor/messages')}{literal}</strong>
-                    {{for participants ~currentUserId=currentUserId}}
-                        {{if roleIdentifier != 5}}
-                            {{if ~currentUserId == id}}
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" checked="checked" disabled="disabled" />
-                                    <input class="hide" type="checkbox" data-value="participant_ids" value="{{:id}}" checked="checked" />
-                                    <small>{/literal}{'Solo te stesso'|i18n('sensor/messages')}{literal}</small>
-                                </label>
-                            </div>
+                    {{if capabilities.can_select_receiver_in_private_message}}
+                        <strong>{/literal}{'Chi può leggere questo messaggio?'|i18n('sensor/messages')}{literal}</strong>
+                        {{for participants ~currentUserId=currentUserId}}
+                            {{if roleIdentifier != 5}}
+                                {{if ~currentUserId == id}}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" checked="checked" disabled="disabled" />
+                                        <input class="hide" type="checkbox" data-value="participant_ids" value="{{:id}}" checked="checked" />
+                                        <small>{/literal}{'Solo te stesso'|i18n('sensor/messages')}{literal}</small>
+                                    </label>
+                                </div>
+                                {{/if}}
                             {{/if}}
-                        {{/if}}
-                    {{/for}}
-                    {{for participants ~currentUserId=currentUserId}}
-                        {{if roleIdentifier != 5}}
-                            {{if ~currentUserId != id}}
-                            <div class="checkbox">
-                                <label>
-                                    <input checked="checked" data-value="participant_ids" type="checkbox" value="{{:id}}" />
-                                    <small>{{:name}}</small>
-                                </label>
-                            </div>
+                        {{/for}}
+                        {{for participants ~currentUserId=currentUserId}}
+                            {{if roleIdentifier != 5}}
+                                {{if ~currentUserId != id}}
+                                <div class="checkbox">
+                                    <label>
+                                        <input checked="checked" data-value="participant_ids" type="checkbox" value="{{:id}}" />
+                                        <small>{{:name}}</small>
+                                    </label>
+                                </div>
+                                {{/if}}
                             {{/if}}
-                        {{/if}}
-                    {{/for}}
+                        {{/for}}
+                    {{/if}}
                     <textarea data-value="text" class="form-control" placeholder="{/literal}{'Aggiungi messaggio'|i18n('sensor/messages')}{literal}" rows="4"></textarea>
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default  pull-left">Annulla</a>
