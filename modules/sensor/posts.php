@@ -12,6 +12,7 @@ if (!is_numeric($postId)) {
 
     $tpl->setVariable('areas', $repository->getAreasTree());
     $tpl->setVariable('categories', $repository->getCategoriesTree());
+    $tpl->setVariable('types', $repository->getPostTypeService()->loadPostTypes());
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');
     $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts.tpl');

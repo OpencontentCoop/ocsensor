@@ -1,5 +1,6 @@
 {ezpagedata_set('areas', $areas)}
 {ezpagedata_set('categories', $categories)}
+{ezpagedata_set('types', $types)}
 {ezcss_require(array(
     'daterangepicker.css',
     'leaflet/MarkerCluster.css',

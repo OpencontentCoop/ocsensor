@@ -21,7 +21,7 @@
                                                 <a class="btn btn-warning button-icon edit-message pull-right" href="#" data-message-id="{{:id}}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha aggiunto una nota privata
-                                            {{if receivers.length > 0}}
+                                            {{if ~capabilities.can_select_receiver_in_private_message and receivers.length > 0}}
                                                   {/literal}{'a'|i18n('sensor/messages')}{literal} {{for receivers}}{{if #index > 0}}, {{/if}}{{:name}}{{/for}}
                                             {{/if}}
                                         {{else _type == 'public'}}

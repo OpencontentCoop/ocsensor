@@ -14,6 +14,7 @@ use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
+use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
 class OpenPaSensorRepository extends LegacyRepository
 {
@@ -367,10 +368,10 @@ class OpenPaSensorRepository extends LegacyRepository
     public static function clearCache()
     {
         $repository = new static();
-        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getCategoriesRootNode()->attribute('node_id'));
-        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getAreasRootNode()->attribute('node_id'));
-        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getOperatorsRootNode()->attribute('node_id'));
-        \Opencontent\Sensor\Legacy\Utils\TreeNode::clearCache($repository->getGroupsRootNode()->attribute('node_id'));
+        TreeNode::clearCache($repository->getCategoriesRootNode()->attribute('node_id'));
+        TreeNode::clearCache($repository->getAreasRootNode()->attribute('node_id'));
+        TreeNode::clearCache($repository->getOperatorsRootNode()->attribute('node_id'));
+        TreeNode::clearCache($repository->getGroupsRootNode()->attribute('node_id'));
         $commonPath = eZDir::path(array(eZSys::cacheDirectory(), 'sensor'));
         $fileHandler = eZClusterFileHandler::instance();
         $commonSuffix = '';

@@ -49,9 +49,9 @@
                         <div class="form-group" id="type-filter">
                             <select class="select form-control" name="type">
                                 <option value="">{'Tipo'|i18n('sensor/post')}</option>
-                                <option value="segnalazione">{'Segnalazione'|i18n('openpa_sensor/type')}</option>
-                                <option value="suggerimento">{'Suggerimento'|i18n('openpa_sensor/type')}</option>
-                                <option value="reclamo">{'Reclamo'|i18n('openpa_sensor/type')}</option>
+                                {foreach $module_result.content_info.persistent_variable.types as $item}
+                                    <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
+                                {/foreach}
                             </select>
                         </div>
                     </div>
