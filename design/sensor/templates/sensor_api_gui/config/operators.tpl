@@ -69,8 +69,8 @@
                             </div>
                         </div>
                     </td>
-                    <td width="1">
-                        <a class="btn btn-link btn-xs text-black" href="{{:baseUrl}}/social_user/setting/{{:metadata.id}}"><i class="fa fa-user"></i></a>
+                    <td width="1" class="text-center">
+                        <a class="btn btn-link btn-xs text-black" href="{{:baseUrl}}/social_user/setting/{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -324,6 +324,16 @@
                             }
                         });
                         e.preventDefault();
+                    });
+
+                    renderData.find('.fa-user').each(function () {
+                        var self = $(this);
+                        var id = $(this).data('user');
+                        $.get('/api/sensor_gui/operators/' + id, function (data) {
+                            if(!data.isEnabled){
+                                self.parent().html('<span class="fa-stack"><i class="fa fa-user fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>');
+                            }
+                        })
                     });
 
                     resultsContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
