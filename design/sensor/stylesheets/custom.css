@@ -469,3 +469,21 @@ table.list > tfoot > tr > td {
 .select2-container--open .select2-dropdown--below{
     min-width: 200px;
 }
+
+select.select-sensor-area-disabled{
+    pointer-events: none !important;
+    border: none !important;;
+    background: #fff !important;;
+    -webkit-appearance: none  !important;;
+    appearance: none !important;;
+    -moz-appearance: none !important;;
+    text-indent: 1px !important;;
+    text-overflow: '' !important;;
+    padding: 0 !important;;
+    margin: 0 !important;;
+    box-shadow: none !important;;
+    height: auto !important;;
+}
+select.select-sensor-area-disabled::-ms-expand {
+    display: none;
+}
