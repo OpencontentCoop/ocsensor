@@ -1,6 +1,9 @@
 <?php
 
 use Opencontent\Opendata\Api\ClassRepository;
+use Opencontent\Sensor\Api\Action\Action;
+use Opencontent\Sensor\Api\Exception\BaseException;
+use Opencontent\Sensor\Api\Exception\NotFoundException;
 
 /** @var eZModule $module */
 $module = $Params['Module'];
@@ -30,10 +33,15 @@ if (!is_numeric($postId)) {
 
 } else {
 
+    $postId = (int)$postId;
+    if (!eZContentObject::fetch($postId)){
+        return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
+    }
+
     try {
         $post = $repository->getSearchService()->searchPost($postId);
 
-        $readAction = new \Opencontent\Sensor\Api\Action\Action();
+        $readAction = new Action();
         $readAction->identifier = 'read';
         $repository->getActionService()->runAction($readAction, $post);
 
@@ -73,13 +81,18 @@ if (!is_numeric($postId)) {
 
         return $Result;
 
-    } catch (\Opencontent\Sensor\Api\Exception\NotFoundException $e) {
+    } catch (NotFoundException $e) {
         eZDebug::writeError($e->getMessage(), __FILE__);
-        return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel', ['error' => $e->getMessage()]);
+        return $module->handleError(eZError::KERNEL_ACCESS_DENIED, 'kernel', [
+            'post_id' => $postId,
+            'error' => $e->getMessage(),
+        ]);
 
-    } catch (\Opencontent\Sensor\Api\Exception\BaseException $e) {
+    } catch (BaseException $e) {
         eZDebug::writeError($e->getMessage(), __FILE__);
-        return $module->handleError(eZError::KERNEL_ACCESS_DENIED, 'kernel', ['error' => $e->getMessage()]);
+        return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel', [
+            'error' => $e->getMessage(),
+        ]);
     }
 
 }
