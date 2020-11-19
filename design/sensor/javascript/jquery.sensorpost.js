@@ -217,6 +217,36 @@
                         plugin.stopLoading();
                         plugin.resultContainer.html(renderData);
 
+                        var messageReceivers = renderData.find('.private_message_receivers');
+                        messageReceivers.find('.group_receivers').each(function () {
+                            var groupSelector = $(this).parent().find('.group_select');
+                            if ($(this).find('li').length === 0){
+                                groupSelector.attr('disabled', 'disabled');
+                                groupSelector.next().addClass('text-muted');
+                                $('a[data-toggle_group="'+groupSelector.data('toggle_group')+'"]').addClass('hide');
+                            }else{
+                                groupSelector.on('change', function () {
+                                    var group = $('[data-group="'+$(this).data('toggle_group')+'"]');
+                                    if ($(this).is(':checked')){
+                                        group.find('input').prop('checked', 'checked');
+                                    }else{
+                                        group.find('input').prop('checked', false);
+                                    }
+                                })
+                            }
+                        });
+                        messageReceivers.find('a[data-toggle_group]').on('click', function (e) {
+                            var group = $('[data-group="'+$(this).data('toggle_group')+'"]');
+                            if (group.hasClass('hide')){
+                                group.removeClass('hide');
+                                $(this).find('i').removeClass('fa-caret-right').addClass('fa-caret-down');
+                            }else{
+                                group.addClass('hide');
+                                $(this).find('i').removeClass('fa-caret-down').addClass('fa-caret-right');
+                            }
+                            e.preventDefault();
+                        })
+
                         var postMap = renderData.find('.post-map');
                         if (postMap.length > 0) {
                             var latLng = [postMap.data('lat'), postMap.data('lng')];

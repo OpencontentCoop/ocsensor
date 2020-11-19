@@ -21,8 +21,8 @@
                                                 <a class="btn btn-warning button-icon edit-message pull-right" href="#" data-message-id="{{:id}}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha aggiunto una nota privata
-                                            {{if ~capabilities.can_select_receiver_in_private_message and receivers.length > 0}}
-                                                  {/literal}{'a'|i18n('sensor/messages')}{literal} {{for receivers}}{{if #index > 0}}, {{/if}}{{:name}}{{/for}}
+                                            {{if receivers.length > 0}}
+                                                  {/literal}<p>{"All'attenzione di:"|i18n('sensor/messages')}{literal} {{for receivers}}<span class="label label-warning">{{:name}}</span> {{/for}}</p>
                                             {{/if}}
                                         {{else _type == 'public'}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
@@ -92,34 +92,81 @@
             {{/if}}
             {{if capabilities.can_send_private_message}}
                 <div class="new_message action-form hide" data-action-wrapper>
-                    {{if capabilities.can_select_receiver_in_private_message}}
-                        <strong>{/literal}{'Chi può leggere questo messaggio?'|i18n('sensor/messages')}{literal}</strong>
-                        {{for participants ~currentUserId=currentUserId}}
-                            {{if roleIdentifier != 5}}
-                                {{if ~currentUserId == id}}
-                                <div class="checkbox">
+                    <div class="alert alert-warning" style="margin-bottom:0">
+                        <strong>{/literal}{"Poni all'attenzione di:"|i18n('sensor/messages')}{literal}</strong>
+                        <br /><small class="text-muted">{/literal}{"Tutto il gruppo di lavoro può leggere la nota; verrà inviata una notifica solo ai partecipanti selezionati"|i18n('sensor/messages')}{literal}</small>
+                        <ul class="list-inline private_message_receivers">
+                            <li style="vertical-align: top;">
+                                <a href="#" data-toggle_group="approvers" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
+                                <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
                                     <label>
-                                        <input type="checkbox" checked="checked" disabled="disabled" />
-                                        <input class="hide" type="checkbox" data-value="participant_ids" value="{{:id}}" checked="checked" />
-                                        <small>{/literal}{'Solo te stesso'|i18n('sensor/messages')}{literal}</small>
+                                        <input type="checkbox" class="group_select" data-toggle_group="approvers" />
+                                        <span>{/literal}{"Riferimenti per il cittadino"|i18n('sensor/dashboard')}{literal}</span>
                                     </label>
                                 </div>
-                                {{/if}}
-                            {{/if}}
-                        {{/for}}
-                        {{for participants ~currentUserId=currentUserId}}
-                            {{if roleIdentifier != 5}}
+                                <ul class="list-unstyled group_receivers hide" data-group="approvers" style="margin-left: 15px;">
+                                {{for approvers ~currentUserId=currentUserId}}
                                 {{if ~currentUserId != id}}
-                                <div class="checkbox">
+                                    <li>
+                                    <div class="checkbox" style="margin-bottom: 3px;margin-top: 0;">
+                                        <label>
+                                            <input data-value="participant_ids" type="checkbox" value="{{:id}}" />
+                                            <small>{{:name}}</small>
+                                        </label>
+                                    </div>
+                                    </li>
+                                {{/if}}
+                                {{/for}}
+                                </ul>
+                            </li>
+                            <li style="vertical-align: top;">
+                                <a href="#" data-toggle_group="owners" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
+                                <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
                                     <label>
-                                        <input checked="checked" data-value="participant_ids" type="checkbox" value="{{:id}}" />
-                                        <small>{{:name}}</small>
+                                        <input type="checkbox" class="group_select" data-toggle_group="owners" />
+                                        <span>{/literal}{"Incaricati"|i18n('sensor/dashboard')}{literal}</span>
                                     </label>
                                 </div>
+                                <ul class="list-unstyled group_receivers hide" data-group="owners" style="margin-left: 15px;">
+                                {{for owners ~currentUserId=currentUserId}}
+                                {{if ~currentUserId != id}}
+                                    <li>
+                                    <div class="checkbox" style="margin-bottom: 3px;margin-top: 0;">
+                                        <label>
+                                            <input data-value="participant_ids" type="checkbox" value="{{:id}}" />
+                                            <small>{{:name}}</small>
+                                        </label>
+                                    </div>
+                                    </li>
                                 {{/if}}
-                            {{/if}}
-                        {{/for}}
-                    {{/if}}
+                                {{/for}}
+                                </ul>
+                            </li>
+                            <li style="vertical-align: top;">
+                                <a href="#" data-toggle_group="observers" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
+                                <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
+                                    <label>
+                                        <input type="checkbox" class="group_select" data-toggle_group="observers" />
+                                        <span>{/literal}{"Osservatori"|i18n('sensor/dashboard')}{literal}</span>
+                                    </label>
+                                </div>
+                                <ul class="list-unstyled group_receivers hide" data-group="observers" style="margin-left: 15px;">
+                                {{for observers ~currentUserId=currentUserId}}
+                                {{if ~currentUserId != id}}
+                                    <li>
+                                    <div class="checkbox" style="margin-bottom: 3px;margin-top: 0;">
+                                        <label>
+                                            <input data-value="participant_ids" type="checkbox" value="{{:id}}" />
+                                            <small>{{:name}}</small>
+                                        </label>
+                                    </div>
+                                    </li>
+                                {{/if}}
+                                {{/for}}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
                     <textarea data-value="text" class="form-control" placeholder="{/literal}{'Aggiungi messaggio'|i18n('sensor/messages')}{literal}" rows="4"></textarea>
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default  pull-left">Annulla</a>
