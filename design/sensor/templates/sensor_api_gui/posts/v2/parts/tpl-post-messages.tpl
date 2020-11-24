@@ -17,26 +17,32 @@
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
                                         {{else _type == 'private'}}
+                                            {{if ~capabilities.is_approver && isResponseProposal}}
+                                                <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-primary pull-right"
+                                                   style="margin-left:5px"
+                                                   title="{/literal}{"Crea risposta a partire da questa nota"|i18n('sensor/messages')}{literal}"><i class="fa fa-edit"></i></a>
+                                            {{/if}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_send_private_message}}
-                                                <a class="btn btn-warning button-icon edit-message pull-right" href="#" data-message-id="{{:id}}"><i class="fa fa-pencil"></i></a>
+                                                <a class="btn btn-warning button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha aggiunto una nota privata
                                             {{if receivers.length > 0}}
-                                                  {/literal}<p>{"All'attenzione di:"|i18n('sensor/messages')}{literal} {{for receivers}}<span class="label label-warning">{{:name}}</span> {{/for}}</p>
+                                                  <p>{/literal}{"All'attenzione di:"|i18n('sensor/messages')}{literal} {{for receivers}}<span class="label label-warning">{{:name}}</span> {{/for}}</p>
                                             {{/if}}
                                         {{else _type == 'public'}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
-                                                <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}"><i class="fa fa-pencil"></i></a>
+                                                <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha aggiunto un commento pubblico
                                         {{else}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
-                                                <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}"><i class="fa fa-pencil"></i></a>
+                                                <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha risposto alla segnalazione
                                         {{/if}}
                                     </p>
                                     {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
+                                    {{if _type == 'private' && isResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
@@ -63,7 +69,7 @@
                           {{/if}}                          
                           <div id="view-message-{{:id}}">
                               {{:richText}}
-                          </div>                          
+                          </div>
                       </div>
                       {{/if}}
                     </div>
@@ -165,9 +171,15 @@
                         </ul>
                     </div>
                     <textarea data-value="text" class="form-control" placeholder="{/literal}{'Aggiungi messaggio'|i18n('sensor/messages')}{literal}" rows="4"></textarea>
+                    <div class="checkbox">
+                        <label>
+                            <input data-value="is_response_proposal" type="checkbox" value="1" />
+                            <small>{/literal}{"Proponi come risposta ufficiale"|i18n('sensor/dashboard')}{literal}</small>
+                        </label>
+                    </div>
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default  pull-left">Annulla</a>
-                        <input class="btn send btn-bold pull-right" type="submit" data-action="send_private_message" data-parameters="text,participant_ids" value="{/literal}{'Aggiungi nota'|i18n('sensor/messages')}{literal}" />
+                        <input class="btn send btn-bold pull-right" type="submit" data-action="send_private_message" data-parameters="text,participant_ids,is_response_proposal" value="{/literal}{'Aggiungi nota'|i18n('sensor/messages')}{literal}" />
                     </div>
                 </div>
             {{/if}}

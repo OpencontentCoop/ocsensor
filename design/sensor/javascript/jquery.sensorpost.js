@@ -240,6 +240,23 @@
                         if (capabilities.is_approver){
                             messageReceivers.find('input[data-toggle_group="owners"]').trigger('click');
                         }
+                        renderData.find('input[data-value="is_response_proposal"]').on('click', function () {
+                            if ($(this).is(':checked')) {
+                                messageReceivers.find('input[data-toggle_group="approvers"]').trigger('click');
+                            }
+                        });
+                        if (capabilities.can_respond) {
+                            renderData.find('a.create-response-draft').on('click', function (e) {
+                                var messageId = $(this).data('message');
+                                $.each(post.privateMessages, function(){
+                                    if (this.id == messageId){
+                                        renderData.find('.new_response textarea').val(this.text);
+                                        renderData.find('[data-target="new_response"]').trigger('click');
+                                    }
+                                })
+                                e.preventDefault();
+                            });
+                        }
 
                         var postMap = renderData.find('.post-map');
                         if (postMap.length > 0) {
