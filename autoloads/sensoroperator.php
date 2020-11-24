@@ -12,6 +12,7 @@ class SensorOperator
             'sensor_areas',
             'sensor_default_approvers',
             'sensor_settings',
+            'sensor_config_menu',
         );
     }
 
@@ -38,6 +39,12 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_config_menu':
+            {
+                $operatorValue = $repository->getConfigMenu();
+                break;
+            }
+
             case 'sensor_settings':
                 $settings = $repository->getSensorSettings()->jsonSerialize();
                 if ($namedParameters['setting'] === false){

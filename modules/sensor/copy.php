@@ -17,7 +17,7 @@ if ($node instanceof eZContentObjectTreeNode && $class instanceof eZContentClass
                 $isValid = true;
             }else{
                 $post = OpenPaSensorRepository::instance()->getPostService()->loadPost($object->attribute('id'));
-                $isValid = eZUser::currentUserID() == $post->reporter->id || OpenPaSensorRepository::instance()->getCurrentUser()->behalfOfMode = true;
+                $isValid = eZUser::currentUserID() == $post->reporter->id || OpenPaSensorRepository::instance()->getCurrentUser()->behalfOfMode == true;
             }
         }
 

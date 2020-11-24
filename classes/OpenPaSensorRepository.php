@@ -1,19 +1,19 @@
 <?php
 
-use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
-use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Api\Exception\BaseException;
-use Opencontent\Sensor\Core\PermissionDefinitions;
-use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Api\Values\Settings;
-use Opencontent\Sensor\Legacy\PostService\Scenarios;
-use Opencontent\Sensor\Legacy\PostService\ScenarioInterface;
-use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
-use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
-use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
-use Opencontent\Sensor\Legacy\NotificationTypes;
-use Opencontent\Sensor\Legacy\Statistics;
+use Opencontent\Sensor\Core\ActionDefinitions;
+use Opencontent\Sensor\Core\PermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
+use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
+use Opencontent\Sensor\Legacy\NotificationTypes;
+use Opencontent\Sensor\Legacy\PostService\ScenarioInterface;
+use Opencontent\Sensor\Legacy\PostService\Scenarios;
+use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
+use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
 class OpenPaSensorRepository extends LegacyRepository
@@ -410,4 +410,66 @@ class OpenPaSensorRepository extends LegacyRepository
 
         return true;
     }
+
+    public function getConfigMenu()
+    {
+        $data = [
+            'default' => [
+                'uri' => 'sensor/config',
+                'label' => ezpI18n::tr('sensor/config', 'Settings'),
+                'node' => false,
+            ],
+            'users' => [
+                'uri' => 'sensor/config/users',
+                'label' => ezpI18n::tr('sensor/config', 'Utenti'),
+                'node' => false,
+            ],
+            'operators' => [
+                'uri' => 'sensor/config/operators',
+                'label' => ezpI18n::tr('sensor/config', 'Operatori'),
+                'node' => false,
+            ],
+            'categories' => [
+                'uri' => 'sensor/config/categories',
+                'label' => ezpI18n::tr('sensor/config', 'Categorie'),
+                'node' => false,
+            ],
+            'areas' => [
+                'uri' => 'sensor/config/areas',
+                'label' => ezpI18n::tr('sensor/config', 'Zone'),
+                'node' => false,
+            ],
+            'groups' => [
+                'uri' => 'sensor/config/groups',
+                'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
+                'node' => false,
+            ],
+        ];
+        /** @var eZContentObjectTreeNode[] $otherFolders */
+        $otherFolders = (array)$this->getRootNode()->subTree(array(
+                'ClassFilterType' => 'include',
+                'ClassFilterArray' => array('folder'),
+                'Depth' => 1,
+                'DepthOperator' => 'eq')
+        );
+        foreach ($otherFolders as $folder) {
+            if ($folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
+                && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')) {
+                $data['data-' . $folder->attribute('contentobject_id')] = [
+                    'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
+                    'label' => $folder->attribute('name'),
+                    'node' => $folder,
+                ];
+            }
+        }
+
+        $data['notifications'] = [
+            'uri' => 'sensor/config/notifications',
+            'label' => ezpI18n::tr('sensor/config', 'Testi notifiche'),
+            'node' => false,
+        ];
+
+        return $data;
+    }
+
 }

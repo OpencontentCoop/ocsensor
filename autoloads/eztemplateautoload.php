@@ -10,5 +10,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_areas',
         'sensor_default_approvers',
         'sensor_settings',
+        'sensor_config_menu',
     )
 );

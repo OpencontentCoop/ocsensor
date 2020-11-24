@@ -12,6 +12,11 @@
             </span>
         </div>
     </div>
+    {if fetch( 'user', 'has_access_to', hash( 'module', 'user', 'function', 'activation' ) )}
+    <div class="col-xs-12 col-md-6 text-right">
+        <a class="btn btn-sm btn-primary" href="{'user/unactivated'|ezurl(no)}">{'Unactivated users'|i18n('design/admin/parts/user/menu')}</a>
+    </div>
+    {/if}
 </form>
 <div style="margin: 20px 0"
      data-parent="{$user_parent_node.node_id}"

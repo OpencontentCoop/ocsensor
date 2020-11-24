@@ -161,23 +161,12 @@ if ($Part == 'areas') {
     $tpl->setVariable('sample_post_id', $samplePost[0] instanceof eZContentObjectTreeNode ? $samplePost[0]->attribute('contentobject_id') : 0);
 }
 
-$data = array();
-/** @var eZContentObjectTreeNode[] $otherFolders */
-$otherFolders = (array)$repository->getRootNode()->subTree(array(
-    'ClassFilterType' => 'include',
-    'ClassFilterArray' => array('folder'),
-    'Depth' => 1,
-    'DepthOperator' => 'eq')
-);
-foreach ($otherFolders as $folder) {
-    if ($folder->attribute('contentobject_id') != $repository->getCategoriesRootNode()->attribute('contentobject_id')
-        && $folder->attribute('contentobject_id') != $repository->getGroupsRootNode()->attribute('contentobject_id')) {
-        $data[] = $folder;
-    }
+$configMenu = $repository->getConfigMenu();
+if (!isset($configMenu[$Part])){
+    return $Module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
 }
-
 $tpl->setVariable('current_part', $Part);
-$tpl->setVariable('data', $data);
+$tpl->setVariable('menu', $configMenu);
 $tpl->setVariable('root', $root);
 $tpl->setVariable('post_container_node', $repository->getPostRootNode());
 $tpl->setVariable('moderation_is_enabled',  $repository->isModerationEnabled());
