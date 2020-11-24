@@ -23,7 +23,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     protected $searchPolicies;
 
     public $options = array(
-        'CSVDelimiter' => ';',
+        'CSVDelimiter' => ',',
         'CSVEnclosure' => '"'
     );
 
@@ -42,7 +42,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         }
 
         $this->csvHeaders = array(
-            'id' => ezpI18n::tr('sensor/export', 'ID'),
+            // https://answers.microsoft.com/en-us/office/forum/office_2013_release-excel/how-to-change-the-way-excel-scans-a-textcsv-file/24741ea7-5490-4d9a-a6b0-7728098330a2?auth=1
+            'id' => ezpI18n::tr('sensor/export', 'Id'),
             'privacy' => ezpI18n::tr('sensor/export', 'Privacy'),
             'moderation' => ezpI18n::tr('sensor/export', 'Moderazione'),
             'type' => ezpI18n::tr('sensor/export', 'Tipo'),
