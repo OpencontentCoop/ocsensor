@@ -3,6 +3,7 @@
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
 use Opencontent\Sensor\Api\Values\Group;
+use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Api\Values\PostCreateStruct;
 use Opencontent\Sensor\Api\Values\PostUpdateStruct;
 use Opencontent\Sensor\Legacy\SearchService;
@@ -176,13 +177,34 @@ class SensorGuiApiController extends ezpRestMvcController
             $result = new ezpRestMvcResult();
             $post = $this->repository->getPostService()->loadPost($this->Id);
             if ($this->UserId == 'current') {
+                $user = $this->repository->getCurrentUser();
                 $result->variables = $this->repository->getPermissionService()->loadCurrentUserPostPermissionCollection($post)->jsonSerialize();
-                $result->variables[] = ['identifier' => 'can_behalf_of', 'grant' => $this->repository->getCurrentUser()->behalfOfMode];
             } else {
                 $user = $this->repository->getUserService()->loadUser($this->UserId);
                 $result->variables = $this->repository->getPermissionService()->loadUserPostPermissionCollection($user, $post)->jsonSerialize();
-                $result->variables[] = ['identifier' => 'can_behalf_of', 'grant' => $user->behalfOfMode];
             }
+
+            $result->variables[] = [
+                'identifier' => 'can_behalf_of',
+                'grant' => $user->behalfOfMode
+            ];
+            $result->variables[] = [
+                'identifier' => 'is_approver',
+                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_APPROVER)->getUserById($user->id)
+            ];
+            $result->variables[] = [
+                'identifier' => 'is_owner',
+                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OWNER)->getUserById($user->id)
+            ];
+            $result->variables[] = [
+                'identifier' => 'is_observer',
+                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OBSERVER)->getUserById($user->id)
+            ];
+            $result->variables[] = [
+                'identifier' => 'is_author',
+                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_AUTHOR)->getUserById($user->id)
+            ];
+
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }

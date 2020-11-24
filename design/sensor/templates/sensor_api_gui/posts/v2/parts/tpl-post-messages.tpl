@@ -97,7 +97,6 @@
                         <br /><small class="text-muted">{/literal}{"Tutto il gruppo di lavoro può leggere la nota; verrà inviata una notifica solo ai partecipanti selezionati"|i18n('sensor/messages')}{literal}</small>
                         <ul class="list-inline private_message_receivers">
                             <li style="vertical-align: top;">
-                                <a href="#" data-toggle_group="approvers" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
                                 <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
                                     <label>
                                         <input type="checkbox" class="group_select" data-toggle_group="approvers" />
@@ -120,7 +119,6 @@
                                 </ul>
                             </li>
                             <li style="vertical-align: top;">
-                                <a href="#" data-toggle_group="owners" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
                                 <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
                                     <label>
                                         <input type="checkbox" class="group_select" data-toggle_group="owners" />
@@ -143,7 +141,6 @@
                                 </ul>
                             </li>
                             <li style="vertical-align: top;">
-                                <a href="#" data-toggle_group="observers" style="margin-right:3px"><i class="fa fa-caret-right"></i></a>
                                 <div class="checkbox" style="display: inline-block;margin-bottom: 0;">
                                     <label>
                                         <input type="checkbox" class="group_select" data-toggle_group="observers" />
