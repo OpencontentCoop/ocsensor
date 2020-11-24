@@ -35,9 +35,17 @@
         <div class="col-md-{{if geoLocation.latitude && geoLocation.longitude}}6{{else}}10{{/if}}">
             <div id="carousel-{{:id}}" class="carousel slide{{if geoLocation.latitude && geoLocation.longitude}} medium{{else}} large{{/if}}" data-ride="carousel">
               <div class="carousel-inner" role="listbox">
-                {{for images}}
+                {{for images ~capabilities=capabilities}}
                 <div class="item{{if #index == 0}} active{{/if}}">
                   <a href="{{:original}}" data-gallery><img src="{{:thumbnail}}" /></a>
+                  {{if ~capabilities.can_remove_image}}
+                    <div data-action-wrapper>
+                        <input type="hidden" data-value="files" value="{{:original}}" />
+                        <a href="#" style="position:absolute;bottom:3px; right:3px; z-index:1000"
+                           data-action="remove_image" data-parameters="files" data-confirmation="{/literal}{"Confermi l'eliminazione dell'immagine?"|i18n('sensor/post')|wash()}{literal}"
+                           class="btn btn-danger btn-icon"><i class="fa fa-trash"></i></a>
+                    </div>
+                  {{/if}}
                 </div>
                 {{/for}}
               </div>

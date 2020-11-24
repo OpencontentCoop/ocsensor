@@ -406,11 +406,44 @@ class SensorGuiApiController extends ezpRestMvcController
             $options['image_versions'] = array();
             $options['max_file_size'] = $http->variable("upload_max_file_size", null);
 
-            $uploadHandler = new SensorBinaryUploadHandler($options, false);
+            $classAttributeIdentifier = 'sensor_post/attachment';
+            if ($action->identifier == 'add_image'){
+                $classAttributeIdentifier = 'sensor_post/images';
+            }
+            if (eZINI::instance('ocmultibinary.ini')->hasVariable('AcceptFileTypesRegex', 'ClassAttributeIdentifier')) {
+                $acceptFileTypesClassAttributeIdentifier = eZINI::instance('ocmultibinary.ini')->variable('AcceptFileTypesRegex', 'ClassAttributeIdentifier');
+                if (isset($acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier])) {
+                    $options['accept_file_types'] = $acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier];
+                }
+            }
+
+            $uploadHandler = new SensorBinaryUploadHandler($options, false, [
+                1 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+                2 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+                3 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file was only partially uploaded'),
+                4 => ezpI18n::tr('extension/ocmultibinary', 'No file was uploaded'),
+                6 => ezpI18n::tr('extension/ocmultibinary', 'Missing a temporary folder'),
+                7 => ezpI18n::tr('extension/ocmultibinary', 'Failed to write file to disk'),
+                8 => ezpI18n::tr('extension/ocmultibinary', 'A PHP extension stopped the file upload'),
+                'post_max_size' => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the post_max_size directive in php.ini'),
+                'max_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too big'),
+                'min_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too small'),
+                'accept_file_types' => ezpI18n::tr('extension/ocmultibinary', 'Filetype not allowed'),
+                'max_number_of_files' => ezpI18n::tr('extension/ocmultibinary', 'Maximum number of files exceeded'),
+                'max_width' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum width'),
+                'min_width' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum width'),
+                'max_height' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum height'),
+                'min_height' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum height'),
+                'abort' => ezpI18n::tr('extension/ocmultibinary', 'File upload aborted'),
+                'image_resize' => ezpI18n::tr('extension/ocmultibinary', 'Failed to resize image'),
+            ]);
             /** @var array $data */
             $data = $uploadHandler->post(false);
             $files = [];
             foreach ($data[$options['param_name']] as $file) {
+                if ($file->error) {
+                    throw new Exception($file->error);
+                }
                 $filePath = $options['upload_dir'] . $file->name;
                 $files[] = [
                     'filename' => basename($filePath),
