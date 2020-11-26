@@ -42,8 +42,8 @@
                 {/if}
 
                 {default $view_parameters            = array()
-                $attribute_categorys        = ezini( 'ClassAttributeSettings', 'CategoryList', 'content.ini' )
-                $attribute_default_category = ezini( 'ClassAttributeSettings', 'DefaultCategory', 'content.ini' )}
+                         $attribute_categorys        = ezini( 'ClassAttributeSettings', 'CategoryList', 'content.ini' )
+                         $attribute_default_category = ezini( 'ClassAttributeSettings', 'DefaultCategory', 'content.ini' )}
 
                 {def $content_attributes_extra = hash()}
                 {foreach $content_attributes_grouped_data_map['hidden'] as $attribute}
@@ -100,7 +100,7 @@
                             {set $count = $count|inc()}
                             {foreach $content_attributes_grouped as $attribute_identifier => $attribute}
                                 {def $contentclass_attribute = $attribute.contentclass_attribute}
-                                <div class="row edit-row ezcca-edit-datatype-{$attribute.data_type_string} ezcca-edit-{$attribute_identifier}">
+                                <div class="row edit-row ezcca-edit-datatype-{$attribute.data_type_string} ezcca-edit-{$attribute_identifier}"{if and($attribute_identifier|eq('type'),  sensor_settings().HideTypeChoice)} style="display: none"{/if}>
 
                                     {if and( eq( $attribute.can_translate, 0 ), ne( $object.initial_language_code, $attribute.language_code ) )}
                                         <div class="col-md-3">

@@ -109,7 +109,7 @@
             <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">{/literal}{'Visibilità'|i18n('sensor/post')}{literal}</strong>
-        <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}Pubblico{{else}}<i class="fa fa-lock"></i> Privato{{/if}}</p>
+        <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}<i class="fa fa-globe"></i> Pubblico{{else}}<i class="fa fa-lock"></i> Privato{{/if}}</p>
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <div class="form-group hide" data-action-wrapper>
                 <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}accepted{{else}}waiting{{/if}}" />
@@ -185,6 +185,7 @@
     </div>
     {{/if}}
 
+    {{if comments.length > 0 || responses.length > 0 || timelineItems.length > 0 || privateMessages.length > 0}}
     <div class="widget">
         <strong class="widget-title">{/literal}{'Visualizza'|i18n('sensor/post')}{literal}</strong>
         <div>
@@ -194,6 +195,7 @@
             {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" data-type="private">Note</a>{{/if}}
         </div>
     </div>
+    {{/if}}
 
 </script>
 

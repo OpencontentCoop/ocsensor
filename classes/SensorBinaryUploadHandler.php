@@ -1450,4 +1450,13 @@ class SensorBinaryUploadHandler
         return $this->generate_response($response, $print_response);
     }
 
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function getOption($name)
+    {
+        return isset($this->options[$name]) ? $this->options[$name] : null;
+    }
 }

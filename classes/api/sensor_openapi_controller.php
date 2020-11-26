@@ -4,7 +4,7 @@ use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
 use Opencontent\Sensor\OpenApi;
 
-class SensorOpenApiController extends ezpRestMvcController
+class SensorOpenApiController extends ezpRestMvcController implements SensorOpenApiControllerInterface
 {
     /**
      * @var ezpRestRequest

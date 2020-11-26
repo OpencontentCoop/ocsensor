@@ -50,6 +50,24 @@
     </tr>
     <tr>
         <th>
+            Nascondi al segnalatore la scelta della tipologia di segnalazione
+            <br /><small>Se l'opzione è attivata non viene richiesto al segnalatore di scegliere la tipologia di segnalazione</small>
+        </th>
+        <td class="text-center">
+            <input type="checkbox" {if $sensor_settings.HideTypeChoice}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideTypeChoice"{else}disabled{/if}>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Visualizza l'interfaccia di inserimento ajax (sperimentale)
+            <br /><small>Viene esposta al segnalatore la nuova interfaccia di inserimento</small>
+        </th>
+        <td class="text-center">
+            <input type="checkbox" {if $sensor_settings.ShowSmartGui}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="ShowSmartGui"{else}disabled{/if}>
+        </td>
+    </tr>
+    <tr>
+        <th>
             Nascondi al pubblico la timeline dettagliata
             <br /><small>Se l'opzione è attivata verranno mostrati nella cronologia soltanto gli eventi di presa in carico e chiusura</small>
         </th>

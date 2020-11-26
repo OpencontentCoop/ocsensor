@@ -158,6 +158,13 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-get'
             ), 1),
 
+            'sensorGuiApiTempUpload' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/upload-temp',
+                'SensorGuiApiController',
+                'tempUpload',
+                array(),
+                'http-post'
+            ), 1),
         );
         return $routes;
     }

@@ -30,6 +30,12 @@ if ($Part == '_set'){
             case 'HideTimelineDetails':
                 $attribute = 'hide_timeline_details';
                 break;
+            case 'HideTypeChoice':
+                $attribute = 'hide_type_choice';
+                break;
+            case 'ShowSmartGui':
+                $attribute = 'show_smart_gui';
+                break;
         }        
         if ($attribute){
             $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);

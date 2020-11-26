@@ -125,6 +125,7 @@
 
         this.debugNearest = this.settings.nearest_service.debug ? L.featureGroup().addTo(this.map) : false;
         this.debugGeocoder = this.settings.debug_geocoder ? L.featureGroup().addTo(this.map) : false;
+        this.map.invalidateSize();
     }
 
     $.extend(Plugin.prototype, {
@@ -427,7 +428,7 @@
             if (name.length > 150) {
                 name = name.substring(0, 140) + '...';
             }
-            this.inputAddress.val(name);
+            this.inputAddress.val(name).trigger('change');
             this.getUserMarker().bindPopup(name).openPopup();
 
             if (this.settings.geoinput_splitted) {

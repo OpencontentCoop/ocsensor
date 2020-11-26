@@ -7,8 +7,9 @@ use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Api\Values\PostCreateStruct;
 use Opencontent\Sensor\Api\Values\PostUpdateStruct;
 use Opencontent\Sensor\Legacy\SearchService;
+use Opencontent\Sensor\OpenApi;
 
-class SensorGuiApiController extends ezpRestMvcController
+class SensorGuiApiController extends ezpRestMvcController  implements SensorOpenApiControllerInterface
 {
     /**
      * @var ezpRestRequest
@@ -46,6 +47,16 @@ class SensorGuiApiController extends ezpRestMvcController
         return $hostUri;
     }
 
+    public function getBaseUri()
+    {
+        $hostUri = $this->request->getHostURI();
+        $apiName = ezpRestPrefixFilterInterface::getApiProviderName();
+        $apiPrefix = eZINI::instance('rest.ini')->variable('System', 'ApiPrefix');
+        $uri = $hostUri . $apiPrefix . '/' . $apiName;
+
+        return $uri;
+    }
+
     public function doSettings()
     {
         try {
@@ -61,6 +72,29 @@ class SensorGuiApiController extends ezpRestMvcController
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
+
+        return $result;
+    }
+
+    protected function doExceptionResult(Exception $exception)
+    {
+        $result = new ezcMvcResult;
+        $result->variables['message'] = $exception->getMessage();
+
+        $this->repository->getLogger()->error($exception->getMessage());
+
+        $serverErrorCode = ezpHttpResponseCodes::SERVER_ERROR;
+        $errorType = BaseException::cleanErrorCode(get_class($exception));
+        if ($exception instanceof BaseException) {
+            $serverErrorCode = $exception->getServerErrorCode();
+            $errorType = $exception->getErrorType();
+        }
+
+        $result->status = new OcOpenDataErrorResponse(
+            $serverErrorCode,
+            $exception->getMessage(),
+            $errorType
+        );
 
         return $result;
     }
@@ -102,19 +136,19 @@ class SensorGuiApiController extends ezpRestMvcController
             );
 
             $messages = [];
-            foreach ($apiPost['timelineItems'] as $message){
+            foreach ($apiPost['timelineItems'] as $message) {
                 $message['_type'] = 'system';
                 $messages[$message['id']] = $message;
             }
-            foreach ($apiPost['privateMessages'] as $message){
+            foreach ($apiPost['privateMessages'] as $message) {
                 $message['_type'] = 'private';
                 $messages[$message['id']] = $message;
             }
-            foreach ($apiPost['comments'] as $message){
+            foreach ($apiPost['comments'] as $message) {
                 $message['_type'] = 'public';
                 $messages[$message['id']] = $message;
             }
-            foreach ($apiPost['responses'] as $message){
+            foreach ($apiPost['responses'] as $message) {
                 $message['_type'] = 'response';
                 $messages[$message['id']] = $message;
             }
@@ -215,9 +249,8 @@ class SensorGuiApiController extends ezpRestMvcController
     public function doCreatePost()
     {
         try {
-            $result = new ezpRestMvcResult();
-            $createStruct = PostCreateStruct::fromArray($this->getPayload());
-            $result->variables = $this->repository->getPostService()->createPost($createStruct)->jsonSerialize();
+            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $result = $controller->createPost();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -225,14 +258,21 @@ class SensorGuiApiController extends ezpRestMvcController
         return $result;
     }
 
+    public function getPayload()
+    {
+        $input = file_get_contents("php://input");
+        $data = json_decode($input, true);
+        if (json_last_error() != JSON_ERROR_NONE) {
+            throw new InvalidArgumentException("Invalid json", 1);
+        }
+        return $data;
+    }
+
     public function doUpdatePost()
     {
         try {
-            $post = $this->repository->getPostService()->loadPost($this->Id);
-            $updateStruct = PostUpdateStruct::fromArray($this->getPayload());
-            $updateStruct->setPost($post);
-            $result = new ezpRestMvcResult();
-            $result->variables = $this->repository->getPostService()->updatePost($updateStruct)->jsonSerialize();
+            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $result = $controller->updatePostById();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -322,7 +362,7 @@ class SensorGuiApiController extends ezpRestMvcController
         $result = new ezpRestMvcResult();
         $group = $this->repository->getGroupService()->loadGroup($this->GroupId);
         $operators = [];
-        if ($group instanceof Group){
+        if ($group instanceof Group) {
             $operatorResult = $this->repository->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, '*');
             $operators = $operatorResult['items'];
             $this->recursiveLoadOperatorsByGroup($group, $operatorResult, $operators);
@@ -399,62 +439,108 @@ class SensorGuiApiController extends ezpRestMvcController
             $action = new \Opencontent\Sensor\Api\Action\Action();
             $action->identifier = $this->Action;
 
-            $http = eZHTTPTool::instance();
-            $options['upload_dir'] = eZSys::cacheDirectory() . '/fileupload/';
-            $options['download_via_php'] = true;
-            $options['param_name'] = "files";
-            $options['image_versions'] = array();
-            $options['max_file_size'] = $http->variable("upload_max_file_size", null);
-
             $classAttributeIdentifier = 'sensor_post/attachment';
-            if ($action->identifier == 'add_image'){
+            if ($action->identifier == 'add_image') {
                 $classAttributeIdentifier = 'sensor_post/images';
             }
-            if (eZINI::instance('ocmultibinary.ini')->hasVariable('AcceptFileTypesRegex', 'ClassAttributeIdentifier')) {
-                $acceptFileTypesClassAttributeIdentifier = eZINI::instance('ocmultibinary.ini')->variable('AcceptFileTypesRegex', 'ClassAttributeIdentifier');
-                if (isset($acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier])) {
-                    $options['accept_file_types'] = $acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier];
-                }
-            }
 
-            $uploadHandler = new SensorBinaryUploadHandler($options, false, [
-                1 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the upload_max_filesize directive in php.ini'),
-                2 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
-                3 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file was only partially uploaded'),
-                4 => ezpI18n::tr('extension/ocmultibinary', 'No file was uploaded'),
-                6 => ezpI18n::tr('extension/ocmultibinary', 'Missing a temporary folder'),
-                7 => ezpI18n::tr('extension/ocmultibinary', 'Failed to write file to disk'),
-                8 => ezpI18n::tr('extension/ocmultibinary', 'A PHP extension stopped the file upload'),
-                'post_max_size' => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the post_max_size directive in php.ini'),
-                'max_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too big'),
-                'min_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too small'),
-                'accept_file_types' => ezpI18n::tr('extension/ocmultibinary', 'Filetype not allowed'),
-                'max_number_of_files' => ezpI18n::tr('extension/ocmultibinary', 'Maximum number of files exceeded'),
-                'max_width' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum width'),
-                'min_width' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum width'),
-                'max_height' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum height'),
-                'min_height' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum height'),
-                'abort' => ezpI18n::tr('extension/ocmultibinary', 'File upload aborted'),
-                'image_resize' => ezpI18n::tr('extension/ocmultibinary', 'Failed to resize image'),
-            ]);
+            $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
+            $uploadHandler = $this->getUploadHandler($classAttributeIdentifier, $uploadDir);
             /** @var array $data */
             $data = $uploadHandler->post(false);
             $files = [];
-            foreach ($data[$options['param_name']] as $file) {
+            foreach ($data[$uploadHandler->getOption('param_name')] as $file) {
                 if ($file->error) {
                     throw new Exception($file->error);
                 }
-                $filePath = $options['upload_dir'] . $file->name;
+                $filePath = $uploadHandler->getOption('upload_dir') . $file->name;
                 $files[] = [
                     'filename' => basename($filePath),
                     'file' => base64_encode(file_get_contents($filePath))
                 ];
-                @unlink($filePath);            }
+                @unlink($filePath);
+            }
             $action->setParameter('files', $files);
 
             $this->repository->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
             $result->variables = ['action' => $action->identifier];
+
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    private function getUploadHandler($classAttributeIdentifier, $uploadDir)
+    {
+        $options = [];
+
+        if (eZINI::instance('ocmultibinary.ini')->hasVariable('AcceptFileTypesRegex', 'ClassAttributeIdentifier')) {
+            $acceptFileTypesClassAttributeIdentifier = eZINI::instance('ocmultibinary.ini')->variable('AcceptFileTypesRegex', 'ClassAttributeIdentifier');
+            if (isset($acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier])) {
+                $options['accept_file_types'] = $acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier];
+            }
+        }
+
+        $options['upload_dir'] = $uploadDir;
+        $options['download_via_php'] = true;
+        $options['param_name'] = "files";
+        $options['image_versions'] = array();
+        $options['max_file_size'] = eZHTTPTool::instance()->variable("upload_max_file_size", null);
+
+        return new SensorBinaryUploadHandler($options, false, [
+            1 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the upload_max_filesize directive in php.ini'),
+            2 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form'),
+            3 => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file was only partially uploaded'),
+            4 => ezpI18n::tr('extension/ocmultibinary', 'No file was uploaded'),
+            6 => ezpI18n::tr('extension/ocmultibinary', 'Missing a temporary folder'),
+            7 => ezpI18n::tr('extension/ocmultibinary', 'Failed to write file to disk'),
+            8 => ezpI18n::tr('extension/ocmultibinary', 'A PHP extension stopped the file upload'),
+            'post_max_size' => ezpI18n::tr('extension/ocmultibinary', 'The uploaded file exceeds the post_max_size directive in php.ini'),
+            'max_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too big'),
+            'min_file_size' => ezpI18n::tr('extension/ocmultibinary', 'File is too small'),
+            'accept_file_types' => ezpI18n::tr('extension/ocmultibinary', 'Filetype not allowed'),
+            'max_number_of_files' => ezpI18n::tr('extension/ocmultibinary', 'Maximum number of files exceeded'),
+            'max_width' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum width'),
+            'min_width' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum width'),
+            'max_height' => ezpI18n::tr('extension/ocmultibinary', 'Image exceeds maximum height'),
+            'min_height' => ezpI18n::tr('extension/ocmultibinary', 'Image requires a minimum height'),
+            'abort' => ezpI18n::tr('extension/ocmultibinary', 'File upload aborted'),
+            'image_resize' => ezpI18n::tr('extension/ocmultibinary', 'Failed to resize image'),
+        ]);
+    }
+
+    public function doTempUpload()
+    {
+        try {
+            if (!$this->repository->getPostRootNode()->attribute('can_create')){
+                throw new \Opencontent\Opendata\Api\Exception\ForbiddenException('create', 'post');
+            }
+            $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
+            $uploadHandler = $this->getUploadHandler('sensor_post/images', $uploadDir);
+
+            /** @var array $data */
+            $data = $uploadHandler->post(false);
+
+            $files = [];
+            foreach ($data[$uploadHandler->getOption('param_name')] as $file) {
+                if ($file->error) {
+                    throw new Exception($file->error);
+                }
+                $filePath = $uploadHandler->getOption('upload_dir') . $file->name;
+                $mime = eZMimeType::findByURL($filePath);
+                $files[] = [
+                    'mime' => $mime['name'],
+                    'filename' => basename($filePath),
+                    'file' => base64_encode(file_get_contents($filePath)),
+                ];
+                @unlink($filePath);
+            }
+
+            $result = new ezpRestMvcResult();
+            $result->variables = $files;
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -485,49 +571,6 @@ class SensorGuiApiController extends ezpRestMvcController
         $stat = $this->repository->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
         $stat->setParameters($this->request->get);
         $result->variables = $stat->getData();
-
-        return $result;
-    }
-
-    protected function getBaseUri()
-    {
-        $hostUri = $this->request->getHostURI();
-        $apiName = ezpRestPrefixFilterInterface::getApiProviderName();
-        $apiPrefix = eZINI::instance('rest.ini')->variable('System', 'ApiPrefix');
-        $uri = $hostUri . $apiPrefix . '/' . $apiName;
-
-        return $uri;
-    }
-
-    protected function getPayload()
-    {
-        $input = file_get_contents("php://input");
-        $data = json_decode($input, true);
-        if (json_last_error() != JSON_ERROR_NONE) {
-            throw new InvalidArgumentException("Invalid json", 1);
-        }
-        return $data;
-    }
-
-    protected function doExceptionResult(Exception $exception)
-    {
-        $result = new ezcMvcResult;
-        $result->variables['message'] = $exception->getMessage();
-
-        $this->repository->getLogger()->error($exception->getMessage());
-
-        $serverErrorCode = ezpHttpResponseCodes::SERVER_ERROR;
-        $errorType = BaseException::cleanErrorCode(get_class($exception));
-        if ($exception instanceof BaseException) {
-            $serverErrorCode = $exception->getServerErrorCode();
-            $errorType = $exception->getErrorType();
-        }
-
-        $result->status = new OcOpenDataErrorResponse(
-            $serverErrorCode,
-            $exception->getMessage(),
-            $errorType
-        );
 
         return $result;
     }

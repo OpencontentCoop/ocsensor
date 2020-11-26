@@ -16,11 +16,11 @@ html, body {
     margin: 0;
 }
 
-.noscroll{
+.noscroll {
     overflow: hidden;
 }
 
-@media (min-width: 320px) {
+@media (min-width: 280px) {
     #sensor_full_map {
         z-index: -1;
         position: absolute;
@@ -35,7 +35,7 @@ html, body {
         right: 68px;
         top: 10px;
         z-index: -1;
-        box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     }
 
     #mylocation-mobile-button {
@@ -43,7 +43,7 @@ html, body {
         right: 10px;
         top: 10px;
         z-index: -1;
-        box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     }
 
     #edit {
@@ -64,6 +64,7 @@ html, body {
     form.edit .tab-pane {
         padding: 0;
     }
+
     .alert {
         left: 0;
         position: absolute;
@@ -72,16 +73,20 @@ html, body {
     }
 
     .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
-    .leaflet-bar a, .leaflet-bar a:hover{
+    .leaflet-bar a, .leaflet-bar a:hover {
         width: 52px;
         height: 52px;
         line-height: 52px;
         font-size: 2em;
     }
-    form#edit, #sensor_add_gui{
+
+    form#edit, #sensor_add_gui {
         height: 100%;
+        right: 0;
+        bottom: 0;
     }
-    #sensor_add_gui >.panel{
+
+    #sensor_add_gui > .panel {
         min-height: 100%;
     }
 }
@@ -113,13 +118,14 @@ html, body {
         position: absolute;
         top: 0;
         left: 0;
-        width: 40%;
+        width: 50%;
         height: 100%;
     }
 
     form.edit .tab-pane {
         padding: 20px;
     }
+
     .alert {
         left: auto;
         position: static;
@@ -133,20 +139,302 @@ html, body {
         display: inline-block;
         width: 45%;
     }
+
     .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
-    .leaflet-bar a, .leaflet-bar a:hover{
+    .leaflet-bar a, .leaflet-bar a:hover {
         width: 26px;
         height: 26px;
         line-height: 26px;
         font-size: 1em;
     }
-    form#edit, #sensor_add_gui{
-        height: auto;
+
+    form#edit, #sensor_add_gui {
+        /*height: auto;*/
     }
-    #sensor_add_gui >.panel{
+
+    #sensor_add_gui > .panel {
         min-height: auto;
     }
 }
-span.classattribute-description{
+
+span.classattribute-description {
     color: #333;
+}
+
+@media (max-height: 795px) {
+    #add-post-gui {
+        z-index: 1400;
+    }
+}
+
+@media (min-width: 280px) {
+    #add-post-gui {
+        display: none;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1400;
+        background: #fff;
+        overflow: auto;
+    }
+
+    #add-post-gui #edit {
+        right: 0;
+        bottom: 0
+    }
+
+    #add-post-gui #edit .panel-body {
+        height: 100%;
+        padding: 25px;
+        position: relative;
+    }
+
+    #add-post-gui #edit #sensor_add_gui {
+        padding: 0;
+    }
+
+    #add-post-gui #edit .step-nav {
+        margin: 20px 0;
+    }
+
+    #add-post-gui #edit .step-nav li {
+        vertical-align: middle;
+        padding: 0 8px 8px 0;
+    }
+
+    #add-post-gui #edit .step-nav .nav-item .btn-lg {
+        min-width: 48px;
+        min-height: 40px;
+        font-weight: bold;
+        font-size: 10px;
+    }
+
+    #add-post-gui #edit .step-nav li.active.nav-item .btn-lg{
+        background: #a94442;
+    }
+    #add-post-gui #edit .step-nav li.active.nav-item .btn-lg i{
+        color: #fff;
+    }
+
+    #add-post-gui .image-placeholder {
+        border: 1px solid #ccc;
+        width: 48px;
+        height: 40px;
+        border-radius: 6px;
+    }
+
+    #add-post-gui #edit .step-nav li .add-icon  {
+        font-size: 1.4em;
+        z-index: 4;
+        position: absolute;
+        display: inline-block;
+        margin-left: -9px;
+        top: 4px;
+    }
+
+    #add-post-gui #edit .step-nav li.active .add-icon {
+        display: none;
+    }
+
+    #add-post-gui .post-privacy {
+        padding: 0;
+        margin-top: 0;
+        font-size: 0.9em;
+        max-width: 80%;
+    }
+
+    #add-post-gui .post-subject input {
+        border: none;
+        box-shadow: none;
+        font-size: 15px;
+        padding: 0 0 5px 0;
+        font-weight: 600;
+        color: #000;
+    }
+
+    #add-post-gui .post-content {
+        padding: 0 0 20px;
+    }
+
+    #add-post-gui textarea {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        font-size: 15px;
+        border-bottom: 1px dotted #ccc;
+        margin-bottom: 5px;
+        resize: none;
+        line-height: 1.5;
+        color: #333;
+    }
+
+    #add-post-gui .post-send .btn-lg {
+        border-radius: 100%;
+        height: 55px;
+        width: 55px;
+        font-size: 2em;
+        text-indent: -2px;
+        background-color: #a94442;
+        border-color: #a94442;
+    }
+    #add-post-gui .post-send {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    #add-post-gui p.lead{
+        font-size: 16px;
+        margin: 20px 0 10px;
+    }
+}
+
+@media (min-width: 768px) {
+    #add-post-gui {
+        top: 126px;
+    }
+
+    form#edit, #sensor_add_gui {
+        height: auto;
+    }
+
+
+    #add-post-gui #edit .panel-body {
+        min-height: 250px;
+        padding: 35px 40px 15px;
+    }
+
+    #add-post-gui #edit #sensor_add_gui {
+        padding: 15px;
+    }
+
+    #add-post-gui #edit .step-nav .nav-item .btn-lg {
+        min-width: 65px;
+        min-height: 59px;
+        font-size: 18px;
+    }
+
+    #add-post-gui #edit .step-nav li .add-icon {
+        font-size: 1em;
+        margin-left: -11px;
+    }
+
+    #add-post-gui .image-placeholder {
+        width: 65px;
+        height: 59px;
+        background-size: cover;
+    }
+
+    #add-post-gui .post-privacy {
+        padding: 20px 0;
+        margin-top: 10px;
+        font-size: 1.2em;
+        max-width: 100%;
+    }
+
+    #add-post-gui .post-privacy i {
+        margin-right: 7px;
+        font-size: 1.3em;
+        vertical-align: middle;
+    }
+
+    #add-post-gui .post-subject {
+    }
+
+    #add-post-gui .post-subject input {
+        font-size: 21px;
+    }
+
+    #add-post-gui .step-part {
+        margin: 20px 0 10px;
+    }
+
+    #add-post-gui .step-buttons {
+        text-align: right;
+    }
+
+    #add-post-gui .input-lg {
+        height: 43px;
+    }
+
+    #add-post-gui textarea {
+        font-size: 16px;
+    }
+
+    #add-post-gui .post-send {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+    }
+
+    #add-post-gui form#edit{
+        max-width: 600px;
+    }
+}
+
+@media (max-aspect-ratio: 3/2) {
+    #add-post-gui #sensor_add_gui > .panel {
+        min-height: 100%;
+    }
+}
+
+@media (min-aspect-ratio: 8/5) and (max-width: 960px) and (max-height: 600px) {
+    #add-post-gui #sensor_add_gui > .panel {
+        min-height: 100%;
+    }
+    form#edit, #sensor_add_gui {
+        height: 100%;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+#add-post-gui ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #a94442;
+    opacity: 1; /* Firefox */
+    font-weight: normal;
+}
+
+#add-post-gui :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #a94442;
+    font-weight: normal;
+}
+
+#add-post-gui ::-ms-input-placeholder { /* Microsoft Edge */
+    color: #a94442;
+    font-weight: normal;
+}
+
+#add-post-gui .text-muted {
+    color: #333;
+}
+
+#add-post-gui .list-group{
+    z-index: 10 !important;
+}
+
+#add-post-gui #step-geo{
+    min-height: 220px;
+}
+
+#add-post-gui #step-geo i{
+    font-size: 2em;
+}
+
+#add-post-gui #post-spinner{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #fff;
+    opacity: .7;
+}
+#add-post-gui #post-spinner i{
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    font-size: 4em;
 }

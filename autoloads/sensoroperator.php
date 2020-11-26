@@ -13,6 +13,7 @@ class SensorOperator
             'sensor_default_approvers',
             'sensor_settings',
             'sensor_config_menu',
+            'sensor_types',
         );
     }
 
@@ -39,6 +40,12 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_types':
+            {
+                $operatorValue = $repository->getPostTypeService()->loadPostTypes();
+                break;
+            }
+
             case 'sensor_config_menu':
             {
                 $operatorValue = $repository->getConfigMenu();

@@ -193,6 +193,8 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
                 'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
                 'UseDirectPrivateMessage' => isset($sensorIni['UseDirectPrivateMessage']) ? $sensorIni['UseDirectPrivateMessage'] == 'enabled' : true,
+                'HideTypeChoice' => $this->isHiddenTypeChoice(),
+                'ShowSmartGui' => $this->isShownSmartGui(),
             ));
         }
 
@@ -413,6 +415,26 @@ class OpenPaSensorRepository extends LegacyRepository
         }
 
         return true;
+    }
+
+    private function isHiddenTypeChoice()
+    {
+        $attribute = $this->getRootNodeAttribute('hide_type_choice');
+        if ($attribute instanceof eZContentObjectAttribute){
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
+    }
+
+    private function isShownSmartGui()
+    {
+        $attribute = $this->getRootNodeAttribute('show_smart_gui');
+        if ($attribute instanceof eZContentObjectAttribute){
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
     }
 
     public function getConfigMenu()
