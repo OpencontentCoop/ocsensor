@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="sensor-add-post no-js" lang="en">
 {def $social_pagedata = social_pagedata()}
 {include uri='design:page_head.tpl'}
 {include uri='design:page_head_google_tag_manager.tpl'}
@@ -20,7 +20,7 @@
     'turf.min.js',
     'jquery.sensor_add_post.js'
 ))}
-<body>
+<body class="sensor-add-post">
 {include uri='design:page_body_google_tag_manager.tpl'}
 {$module_result.content}
 

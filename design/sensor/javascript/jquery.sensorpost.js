@@ -322,8 +322,8 @@
                                                 values.push($(this).val());
                                             });
                                             payload[this] = values;
-                                        } else {
-                                            payload[this] = valueContainer.is(':checked') ? valueContainer.val() : 0;
+                                        } else if (valueContainer.is(':checked')) {
+                                            payload[this] = valueContainer.val();
                                         }
                                     } else {
                                         payload[this] = valueContainer.val();

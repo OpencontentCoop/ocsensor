@@ -195,6 +195,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'UseDirectPrivateMessage' => isset($sensorIni['UseDirectPrivateMessage']) ? $sensorIni['UseDirectPrivateMessage'] == 'enabled' : true,
                 'HideTypeChoice' => $this->isHiddenTypeChoice(),
                 'ShowSmartGui' => $this->isShownSmartGui(),
+                'ShowResponseProposal' => isset($sensorIni['ShowResponseProposal']) ? $sensorIni['ShowResponseProposal'] == 'enabled' : false,
             ));
         }
 

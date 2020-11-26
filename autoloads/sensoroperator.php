@@ -14,6 +14,7 @@ class SensorOperator
             'sensor_settings',
             'sensor_config_menu',
             'sensor_types',
+            'sensor_is_moderation_enabled',
         );
     }
 
@@ -40,6 +41,12 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_is_moderation_enabled':
+            {
+                $operatorValue = $repository->isModerationEnabled();
+                break;
+            }
+
             case 'sensor_types':
             {
                 $operatorValue = $repository->getPostTypeService()->loadPostTypes();

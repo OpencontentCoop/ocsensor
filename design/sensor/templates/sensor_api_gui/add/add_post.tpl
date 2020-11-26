@@ -34,29 +34,29 @@
                                     </p>
                                     <p class="lead visible-xs">Digita un indirizzo e clicca sulla lente o clicca sulla cartina per visualizzare la mappa</p>
                                     {include uri='design:sensor_api_gui/add/geoLocation.tpl'}
+                                {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|ne('enabled')}
                                 </div>
                                 <div class="step-part">
-                                    {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|ne('enabled')}
                                     <p class="lead">Seleziona la zona di riferimento</p>
-                                    {/if}
+                                {/if}
                                     {include uri='design:sensor_api_gui/add/areas.tpl'}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <p class="text-muted post-help">
+                    <p class="lead">
                         Puoi aggiungere anche una geolocalizzazione e fino a tre immagini
                     </p>
                     <ul class="list-inline text-left step-nav" role="tablist">
                         <li role="presentation" class="nav-item active">
                             <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="Aggiungi testo" style="position: relative">
-                                <i class="add-icon fa fa-plus-circle text-danger"></i><i class="fa fa-align-left fa-2x text-muted"></i>
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-align-left fa-2x text-muted"></i>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a tabindex="3" href="#step-geo" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-geo" role="tab" title="Aggiungi geolocalizzazione" style="position: relative">
-                                <i class="add-icon fa fa-plus-circle text-danger"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
@@ -79,21 +79,60 @@
                                 <input type="hidden" name="images[2][filename]" value="">
                                 <input type="hidden" name="images[2][file]" value="">
                             </div>
+                        </li>
                     </ul>
 
-                    <div class="post-privacy post-privacy-select text-muted">
+                    <div class="post-privacy step-nav">
                         {if sensor_settings().HidePrivacyChoice}
-                            <i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione
+                            <p><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                            <input type="hidden" name="is_private" value="1" />
                         {else}
-                        <a href="#" class="text-danger" data-privacy="1"><i class="fa fa-lock text-danger"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</a>
-                        <a href="#" class="text-danger" style="display: none" data-privacy=""><i class="fa fa-globe text-danger"></i> Tutti potranno leggere questa segnalazione</a>
+
+                            <div class="row">
+                                <div class="col-xs-8 col-md-6">
+                                    <p class="lead">Consenti la pubblicazione:</p>
+                                </div>
+                                <div class="col-xs-2 col-md-2">
+                                    <label class="radio" style="font-size: 1.3em;margin-top: 20px">
+                                        <input required type="radio" name="is_private" value="" />Sì
+                                    </label>
+                                </div>
+                                <div class="col-xs-2 col-md-1">
+                                    <label class="radio" style="font-size: 1.3em;margin-top: 20px">
+                                        <input required type="radio" name="is_private" value="1" />No
+                                    </label>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                                    {if sensor_is_moderation_enabled()}
+                                        <p class="is_public" style="display: none">Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                                    {else}
+                                        <p class="is_public" style="display: none">Tutti potranno leggere questa segnalazione</p>
+                                    {/if}
+                                </div>
+                            </div>
                         {/if}
-                        <input type="hidden" name="is_private" value="1" />
                     </div>
 
-                    <div class="post-send">
-                        <button type="submit" class="btn btn-primary btn-lg" tabindex="10"><i class="fa fa-send-o"></i></button>
+
+                    <div class="row">
+                        <div class="col-xs-8">
+                            <p class="text-muted post-help" style="margin-top: 15px">
+                                {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
+                                '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
+                                '%close_privacy_url%', '</a>',
+                                '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
+                                '%close_terms_url%', '</a>'
+                                ))}
+                            </p>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="post-send">
+                                <button type="submit" class="btn btn-primary btn-lg" tabindex="10">Invia</button>
+                            </div>
+                        </div>
                     </div>
+
                     <div id="post-spinner" class="text-center" style="display: none">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
                         <span class="sr-only">Loading...</span>
@@ -226,15 +265,21 @@
                 uploadImage.find('.upload-button-spinner').hide();
                 if(addPostGui.find('.image-empty').length === 0){
                     uploadImage.find('.add-icon')
-                        .removeClass('fa-plus-circle text-danger')
+                        .removeClass('fa-plus-circle text-primary')
                         .addClass('fa-check-circle text-success');
                     uploadImage.find('.upload').attr('disabled', 'disabled').fileupload('destroy');
                 }
             }
         });
-        addPostGui.find('.post-privacy-select a').click(function (e) {
-            var privacy = $(this).hide().parent().find('a').not($(this)).show().data('privacy');
-            addPostGui.find('[name="is_private"]').val(privacy);
+        addPostGui.find('[name="is_private"]').on('change', function (e) {
+            var isPrivate = $(this).val().length > 0;
+            if (isPrivate){
+                addPostGui.find('p.is_private').show();
+                addPostGui.find('p.is_public').hide();
+            }else{
+                addPostGui.find('p.is_private').hide();
+                addPostGui.find('p.is_public').show();
+            }
             e.preventDefault();
         })
         addPostGui.find('form').on('submit', function (e) {
@@ -280,24 +325,24 @@
             var stepItemIcon = $('a[href="#step-text"] .add-icon');
             if (subject.val().length > 0 && description.val().length > 0){
                 stepItemIcon
-                    .removeClass('fa-plus-circle text-danger')
+                    .removeClass('fa-plus-circle text-primary')
                     .addClass('fa-check-circle text-success')
             }else{
                 stepItemIcon
                     .removeClass('fa-check-circle text-success')
-                    .addClass('fa-plus-circle text-danger')
+                    .addClass('fa-plus-circle text-primary')
             }
         }
         function checkMapFields() {
             var stepItemIcon = $('a[href="#step-geo"] .add-icon');
             if (address.val().length > 0 && latitude.val().length > 0 && longitude.val().length > 0){
                 stepItemIcon
-                    .removeClass('fa-plus-circle text-danger')
+                    .removeClass('fa-plus-circle text-primary')
                     .addClass('fa-check-circle text-success')
             }else{
                 stepItemIcon
                     .removeClass('fa-check-circle text-success')
-                    .addClass('fa-plus-circle text-danger')
+                    .addClass('fa-plus-circle text-primary')
             }
         }
         $(document).on('click', '#sensor_show_map_button', function () {
@@ -310,11 +355,12 @@
             $('body').removeClass('noscroll');
         });
         var showAddPostGui = function() {
+            $('html').addClass('sensor-add-post');
+            $('body').addClass('sensor-add-post').css('overflow', 'hidden');
             addPostGui.find('form').trigger("reset");
             checkTextFields();
             checkMapFields();
             addPostGui.show().find('.post-subject input').focus();
-            $('body').css('overflow', 'hidden');
             {/literal}
             $('#sensor_full_map').sensorAddPost({ldelim}
                 'geocoder': '{$geocoder}',
@@ -351,7 +397,8 @@
 
         $('.close-add-post').on('click', function (e) {
             addPostGui.hide();
-            $('body').css('overflow', 'auto');
+            $('html').removeClass('sensor-add-post');
+            $('body').removeClass('sensor-add-post').css('overflow', 'auto');
             e.preventDefault();
         });
 

@@ -17,7 +17,7 @@
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
                                         {{else _type == 'private'}}
-                                            {{if ~capabilities.is_approver && isResponseProposal}}
+                                            {{if ~capabilities.is_approver && isResponseProposal && settings.ShowResponseProposal}}
                                                 <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-primary pull-right"
                                                    style="margin-left:5px"
                                                    title="{/literal}{"Crea risposta a partire da questa nota"|i18n('sensor/messages')}{literal}"><i class="fa fa-edit"></i></a>
@@ -42,7 +42,7 @@
                                         {{/if}}
                                     </p>
                                     {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
-                                    {{if _type == 'private' && isResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
+                                    {{if _type == 'private' && isResponseProposal && settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
@@ -171,12 +171,14 @@
                         </ul>
                     </div>
                     <textarea data-value="text" class="form-control" placeholder="{/literal}{'Aggiungi messaggio'|i18n('sensor/messages')}{literal}" rows="4"></textarea>
+                    {{if settings.ShowResponseProposal}}
                     <div class="checkbox">
                         <label>
                             <input data-value="is_response_proposal" type="checkbox" value="1" />
                             <small>{/literal}{"Proponi come risposta ufficiale"|i18n('sensor/dashboard')}{literal}</small>
                         </label>
                     </div>
+                    {{/if}}
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default  pull-left">Annulla</a>
                         <input class="btn send btn-bold pull-right" type="submit" data-action="send_private_message" data-parameters="text,participant_ids,is_response_proposal" value="{/literal}{'Aggiungi nota'|i18n('sensor/messages')}{literal}" />

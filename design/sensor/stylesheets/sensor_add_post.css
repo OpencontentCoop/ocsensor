@@ -1,18 +1,18 @@
-html, body {
+html.sensor-add-post, body.sensor-add-post {
     background: none;
     height: 100%;
     width: 100%;
 }
 
-.zindexize {
+body.sensor-add-post .zindexize {
     z-index: 10 !important;
 }
 
-.edit-row {
+body.sensor-add-post .edit-row {
     margin: 10px 0;
 }
 
-.panel {
+body.sensor-add-post .panel {
     margin: 0;
 }
 
@@ -53,7 +53,7 @@ html, body {
         margin: 0;
     }
 
-    .viewport {
+    body.sensor-add-post .viewport {
         position: absolute;
         top: 0;
         left: 0;
@@ -61,19 +61,21 @@ html, body {
         height: 100%;
     }
 
-    form.edit .tab-pane {
+    body.sensor-add-post form.edit .tab-pane {
         padding: 0;
     }
 
-    .alert {
+    body.sensor-add-post .alert {
         left: 0;
         position: absolute;
         top: 0;
         width: 100%;
     }
 
-    .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
-    .leaflet-bar a, .leaflet-bar a:hover {
+    body.sensor-add-post .leaflet-touch .leaflet-bar a,
+    body.sensor-add-post .leaflet-touch .leaflet-bar a:hover,
+    body.sensor-add-post .leaflet-bar a,
+    body.sensor-add-post .leaflet-bar a:hover {
         width: 52px;
         height: 52px;
         line-height: 52px;
@@ -135,13 +137,15 @@ html, body {
 }
 
 @media only screen and (min-width: 500px) {
-    .checkbox {
+    body.sensor-add-post .checkbox {
         display: inline-block;
         width: 45%;
     }
 
-    .leaflet-touch .leaflet-bar a, .leaflet-touch .leaflet-bar a:hover,
-    .leaflet-bar a, .leaflet-bar a:hover {
+    body.sensor-add-post .leaflet-touch .leaflet-bar a,
+    body.sensor-add-post .leaflet-touch .leaflet-bar a:hover,
+    body.sensor-add-post .leaflet-bar a,
+    body.sensor-add-post .leaflet-bar a:hover {
         width: 26px;
         height: 26px;
         line-height: 26px;
@@ -212,7 +216,7 @@ span.classattribute-description {
     }
 
     #add-post-gui #edit .step-nav li.active.nav-item .btn-lg{
-        background: #a94442;
+        background: #f90f00;
     }
     #add-post-gui #edit .step-nav li.active.nav-item .btn-lg i{
         color: #fff;
@@ -241,8 +245,6 @@ span.classattribute-description {
     #add-post-gui .post-privacy {
         padding: 0;
         margin-top: 0;
-        font-size: 0.9em;
-        max-width: 80%;
     }
 
     #add-post-gui .post-subject input {
@@ -270,19 +272,9 @@ span.classattribute-description {
         color: #333;
     }
 
-    #add-post-gui .post-send .btn-lg {
-        border-radius: 100%;
-        height: 55px;
-        width: 55px;
-        font-size: 2em;
-        text-indent: -2px;
-        background-color: #a94442;
-        border-color: #a94442;
-    }
     #add-post-gui .post-send {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
+        margin: 10px 0;
+        text-align: right;
     }
 
     #add-post-gui p.lead{
@@ -328,15 +320,10 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-privacy {
-        padding: 20px 0;
-        margin-top: 10px;
-        font-size: 1.2em;
         max-width: 100%;
     }
 
     #add-post-gui .post-privacy i {
-        margin-right: 7px;
-        font-size: 1.3em;
         vertical-align: middle;
     }
 
@@ -364,9 +351,9 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-send {
-        position: absolute;
-        bottom: 30px;
-        right: 30px;
+        text-align: right;
+        font-size: 1.7em;
+        font-weight: 600;
     }
 
     #add-post-gui form#edit{
@@ -389,22 +376,6 @@ span.classattribute-description {
         right: 0;
         bottom: 0;
     }
-}
-
-#add-post-gui ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: #a94442;
-    opacity: 1; /* Firefox */
-    font-weight: normal;
-}
-
-#add-post-gui :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: #a94442;
-    font-weight: normal;
-}
-
-#add-post-gui ::-ms-input-placeholder { /* Microsoft Edge */
-    color: #a94442;
-    font-weight: normal;
 }
 
 #add-post-gui .text-muted {

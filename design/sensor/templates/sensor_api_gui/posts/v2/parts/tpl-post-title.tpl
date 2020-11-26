@@ -7,7 +7,7 @@
         <form class="form-group" data-upload="add_image" style="display: inline-block;margin-right: 1px">
             <div class="upload-button-container">
                 <span class="btn btn-default fileinput-button button-icon btn-lg" style="cursor:pointer">
-                    <i style="font-size: 0.8em;z-index: 4;position: absolute;display: inline-block;left: 1px;top: 2px;" class="fa fa-plus-circle text-danger"></i><i class="fa fa-image"></i>
+                    <i style="font-size: 0.8em;z-index: 4;position: absolute;display: inline-block;left: 1px;top: 2px;" class="fa fa-plus-circle text-primary"></i><i class="fa fa-image"></i>
                     <input class="upload" name="files" type="file">
                 </span>
             </div>
@@ -16,6 +16,10 @@
             </div>
         </form>
     </div>
+    {{else capabilities.is_author}}
+        <div class="btn btn-default fileinput-button button-icon btn-lg">
+            <i style="font-size: 0.8em;z-index: 4;position: absolute;display: inline-block;left: 1px;top: 2px;" class="fa fa-times text-muted"></i><i class="fa fa-image text-muted"></i>
+        </div>
     {{/if}}
     {{if capabilities.can_edit}}
       <a class="btn btn-default btn-lg button-icon"
