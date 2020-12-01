@@ -1,12 +1,15 @@
-<textarea maxlength="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
-          id="description"
-          name="description"
-          required
-          class="form-control"
-          data-limit="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
-          placeholder="Scrivi qui i dettagli della segnalazione (massimo {ezini('SensorConfig','TextMaxLength','ocsensor.ini')} caratteri)"
-          tabindex="2"
-          cols="70" rows="11"></textarea>
+<label class="form-group has-float-label">
+    <textarea maxlength="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
+              id="description"
+              name="description"
+              required
+              class="form-control"
+              data-limit="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
+              placeholder="Dettagli della segnalazione (massimo {ezini('SensorConfig','TextMaxLength','ocsensor.ini')} caratteri)"
+              tabindex="2"
+              cols="70" rows="11"></textarea>
+    <span>Specifica i dettagli della segnalazione</span>
+</label>
 <p id="description-counter" class="text-muted post-help">
     Hai a disposizione <span>{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}</span> caratteri su {ezini('SensorConfig','TextMaxLength','ocsensor.ini')}
 </p>

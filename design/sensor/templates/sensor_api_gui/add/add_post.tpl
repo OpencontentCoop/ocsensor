@@ -9,13 +9,30 @@
         <div id="sensor_add_gui">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a href="#" class="close-add-post close"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></a>
-                    <div class="post-subject">
-                        {include uri='design:sensor_api_gui/add/subject.tpl'}
-                    </div>
+
+                    <ul class="list-inline text-left step-nav" role="tablist">
+                        <li role="presentation" class="nav-item active">
+                            <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="Aggiungi testo" style="position: relative">
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-align-left fa-2x text-muted"></i>
+                            </a>
+                        </li>
+                        <li role="presentation" class="nav-item">
+                            <a tabindex="3" href="#step-geo" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-geo" role="tab" title="Aggiungi geolocalizzazione" style="position: relative">
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
+                            </a>
+                        </li>
+                        <li role="presentation" class="nav-item">
+                            <a tabindex="3" href="#step-image" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-image" role="tab" title="Aggiungi immagini" style="position: relative">
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-image fa-2x text-muted"></i>
+                            </a>
+                        </li>
+                    </ul>
 
                     <div class="post-content tab-content">
                         <div class="tab-pane active" role="tabpanel" id="step-text">
+                            <div class="post-subject">
+                                {include uri='design:sensor_api_gui/add/subject.tpl'}
+                            </div>
                             <div class="step-content">
                                 <div class="step-part">
                                     {include uri='design:sensor_api_gui/add/type.tpl'}
@@ -29,8 +46,8 @@
                             <div class="step-content">
                                 <div class="step-part">
                                     <p class="lead hidden-xs">
-                                        Digita un indirizzo e clicca sulla lente<br />
-                                        Oppure clicca sulla mappa e trascina il marker
+                                        Digita un indirizzo e clicca sulla lente oppure clicca sulla mappa<br />
+                                        Per inserire la tua posizione corrente clicca sulla bussola <br />
                                     </p>
                                     <p class="lead visible-xs">Digita un indirizzo e clicca sulla lente o clicca sulla cartina per visualizzare la mappa</p>
                                     {include uri='design:sensor_api_gui/add/geoLocation.tpl'}
@@ -39,48 +56,50 @@
                                 <div class="step-part">
                                     <p class="lead">Seleziona la zona di riferimento</p>
                                 {/if}
-                                    {include uri='design:sensor_api_gui/add/areas.tpl'}
+                                {include uri='design:sensor_api_gui/add/areas.tpl'}
+                                </div>
+                                <p class="drag-marker-help lead hidden-xs" style="display: none">
+                                    Puoi trascinare il marker sulla mappa per selezionare la posizione in maniera più precisa
+                                </p>
+                            </div>
+                        </div>
+                        <div class="tab-pane" role="tabpanel" id="step-image">
+                            <div class="step-content">
+                                <div class="step-part">
+                                    <p class="lead hidden-xs">
+                                        Puoi aggiungere fino a tre immagini in formato png o jpg<br />
+                                        Per rimuovere un'immagine allegata clicca sul cestino
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            {include uri='design:sensor_api_gui/add/images.tpl'}
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="image-placeholder image-empty" data-index="0">
+                                                <input type="hidden" name="images[0][filename]" value="">
+                                                <input type="hidden" name="images[0][file]" value="">
+                                                <i style="display: none" class="fa fa-trash fa-2x"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="image-placeholder image-empty" data-index="1">
+                                                <input type="hidden" name="images[1][filename]" value="">
+                                                <input type="hidden" name="images[1][file]" value="">
+                                                <i style="display: none" class="fa fa-trash fa-2x"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="image-placeholder image-empty" data-index="2">
+                                                <input type="hidden" name="images[2][filename]" value="">
+                                                <input type="hidden" name="images[2][file]" value="">
+                                                <i style="display: none" class="fa fa-trash fa-2x"></i>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <p class="lead">
-                        Puoi aggiungere anche una geolocalizzazione e fino a tre immagini
-                    </p>
-                    <ul class="list-inline text-left step-nav" role="tablist">
-                        <li role="presentation" class="nav-item active">
-                            <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="Aggiungi testo" style="position: relative">
-                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-align-left fa-2x text-muted"></i>
-                            </a>
-                        </li>
-                        <li role="presentation" class="nav-item">
-                            <a tabindex="3" href="#step-geo" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-geo" role="tab" title="Aggiungi geolocalizzazione" style="position: relative">
-                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
-                            </a>
-                        </li>
-                        <li role="presentation" class="nav-item">
-                            {include uri='design:sensor_api_gui/add/images.tpl'}
-                        </li>
-                        <li role="presentation" class="nav-item">
-                            <div class="image-placeholder image-empty" data-index="0">
-                                <input type="hidden" name="images[0][filename]" value="">
-                                <input type="hidden" name="images[0][file]" value="">
-                            </div>
-                        </li>
-                        <li role="presentation" class="nav-item">
-                            <div class="image-placeholder image-empty" data-index="1">
-                                <input type="hidden" name="images[1][filename]" value="">
-                                <input type="hidden" name="images[1][file]" value="">
-                            </div>
-                        </li>
-                        <li role="presentation" class="nav-item">
-                            <div class="image-placeholder image-empty" data-index="2">
-                                <input type="hidden" name="images[2][filename]" value="">
-                                <input type="hidden" name="images[2][file]" value="">
-                            </div>
-                        </li>
-                    </ul>
 
                     <div class="post-privacy step-nav">
                         {if sensor_settings().HidePrivacyChoice}
@@ -105,9 +124,9 @@
                                 <div class="col-xs-12">
                                     <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
                                     {if sensor_is_moderation_enabled()}
-                                        <p class="is_public" style="display: none">Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                                        <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
                                     {else}
-                                        <p class="is_public" style="display: none">Tutti potranno leggere questa segnalazione</p>
+                                        <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
                                     {/if}
                                 </div>
                             </div>
@@ -115,21 +134,22 @@
                     </div>
 
 
-                    <div class="row">
-                        <div class="col-xs-8">
-                            <p class="text-muted post-help" style="margin-top: 15px">
-                                {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
-                                '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
-                                '%close_privacy_url%', '</a>',
-                                '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
-                                '%close_terms_url%', '</a>'
-                                ))}
-                            </p>
+                    <p class="text-muted post-help" style="margin-top: 15px">
+                        {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
+                        '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
+                        '%close_privacy_url%', '</a>',
+                        '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
+                        '%close_terms_url%', '</a>'
+                        ))}
+                    </p>
+
+                    <div class="row post-send">
+                        <div class="col-xs-6">
+                            <a href="#" class="close-add-post btn btn-default btn-lg">Annulla</a>
                         </div>
-                        <div class="col-xs-4">
-                            <div class="post-send">
-                                <button type="submit" class="btn btn-primary btn-lg" tabindex="10">Invia</button>
-                            </div>
+                        <div class="col-xs-6 text-right">
+                            <a href="#" class="btn btn-default btn-lg next-step" tabindex="10">Avanti</a>
+                            <button type="submit" class="btn btn-primary btn-lg" style="display: none" tabindex="10">Invia</button>
                         </div>
                     </div>
 
@@ -210,8 +230,15 @@
     };
     $(document).ready(function () {
         var addPostGui = $('#add-post-gui');
-        addPostGui.find('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-            var $target = $(e.target);
+        addPostGui.find('a[data-toggle="tab"]').on('click', function (e) {
+            if (!checkTextFields()) {
+                showTextValidation();
+                e.preventDefault();
+                return false;
+            }
+            if ($(this).attr('href') === '#step-image'){
+                addPostGui.find('.next-step').hide().next().show();
+            }
         });
         var subject = addPostGui.find('[name="subject"]').on('input change', function () {
             checkTextFields()
@@ -228,7 +255,74 @@
         var longitude = addPostGui.find('[name="address[longitude]"]').on('input change', function () {
             checkMapFields()
         });
-        var uploadImage = addPostGui.find('#add_image')
+        var uploadImage = addPostGui.find('#add_image');
+        function checkTextFields() {
+            var stepItemIcon = $('a[href="#step-text"] .add-icon');
+            if (subject.val().length > 0 && description.val().length > 0){
+                if (subject.val().length > 0){
+                    subject.parent().removeClass('has-warning')
+                }
+                if (description.val().length > 0){
+                    description.parent().removeClass('has-warning')
+                }
+                stepItemIcon
+                    .removeClass('fa-plus-circle text-primary')
+                    .addClass('fa-check-circle text-success');
+
+                return true;
+            }else{
+                stepItemIcon
+                    .removeClass('fa-check-circle text-success')
+                    .addClass('fa-plus-circle text-primary')
+
+                return false;
+            }
+        }
+        function checkMapFields() {
+            var stepItemIcon = $('a[href="#step-geo"] .add-icon');
+            if (address.val().length > 0 && latitude.val().length > 0 && longitude.val().length > 0){
+                stepItemIcon
+                    .removeClass('fa-plus-circle text-primary')
+                    .addClass('fa-check-circle text-success');
+                addPostGui.find('.drag-marker-help').show();
+            }else{
+                stepItemIcon
+                    .removeClass('fa-check-circle text-success')
+                    .addClass('fa-plus-circle text-primary');
+                addPostGui.find('.drag-marker-help').hide();
+            }
+        }
+        function checkUploadImages(){
+            if(addPostGui.find('.image-empty').length === 0){
+                addPostGui.find('a[href="#step-image"]').find('.add-icon')
+                    .removeClass('fa-plus-circle text-primary')
+                    .addClass('fa-check-circle text-success');
+                uploadImage.find('.upload').attr('disabled', 'disabled');
+                uploadImage.find('.fileinput-button').hide();
+            }else{
+                addPostGui.find('a[href="#step-image"]').find('.add-icon')
+                    .addClass('fa-plus-circle text-primary')
+                    .removeClass('fa-check-circle text-success');
+                uploadImage.find('.upload').removeAttr('disabled');
+                uploadImage.find('.fileinput-button').show();
+            }
+        }
+        function showTextValidation(){
+            if (subject.val().length === 0){
+                subject.parent().addClass('has-warning')
+            }
+            if (description.val().length === 0){
+                description.parent().addClass('has-warning')
+            }
+        }
+        function hideTextValidation(){
+            if (subject.val().length === 0){
+                subject.parent().removeClass('has-warning')
+            }
+            if (description.val().length === 0){
+                description.parent().removeClass('has-warning')
+            }
+        }
         uploadImage.find('.upload').fileupload({
             dropZone: null,
             formData: function (form) {
@@ -257,18 +351,26 @@
                     var index = placeholder.data('index');
                     placeholder
                         .css('background-image', "url('data:" + this.mime + ";base64," + this.file + "')")
-                        .removeClass('image-empty');
+                        .removeClass('image-empty')
+                        .on('mouseover', function () {$(this).find('i').show()})
+                        .on('mouseout', function () {$(this).find('i').hide()})
+                        .on('click', function () {
+                            $(this)
+                                .css('background-image', "")
+                                .addClass('image-empty')
+                                .off('mouseover')
+                                .off('mouseout')
+                                .find('i').hide();
+                            $(this).find('input[name="images['+$(this).data('index')+'][file]"]').val('');
+                            $(this).find('input[name="images['+$(this).data('index')+'][filename]"]').val('');
+                            checkUploadImages();
+                        });
                     placeholder.find('input[name="images['+index+'][file]"]').val(this.file);
                     placeholder.find('input[name="images['+index+'][filename]"]').val(this.filename);
                 });
                 uploadImage.find('.upload-button-container').show();
                 uploadImage.find('.upload-button-spinner').hide();
-                if(addPostGui.find('.image-empty').length === 0){
-                    uploadImage.find('.add-icon')
-                        .removeClass('fa-plus-circle text-primary')
-                        .addClass('fa-check-circle text-success');
-                    uploadImage.find('.upload').attr('disabled', 'disabled').fileupload('destroy');
-                }
+                checkUploadImages();
             }
         });
         addPostGui.find('[name="is_private"]').on('change', function (e) {
@@ -279,6 +381,18 @@
             }else{
                 addPostGui.find('p.is_private').hide();
                 addPostGui.find('p.is_public').show();
+            }
+            e.preventDefault();
+        })
+        addPostGui.find('.next-step').on('click', function (e) {
+            if (checkTextFields()) {
+                var navActive = addPostGui.find('.step-nav li.active');
+                var next = navActive.next().find('a');
+                if (next.length > 0){
+                    next.trigger('click');
+                }
+            }else{
+                showTextValidation();
             }
             e.preventDefault();
         })
@@ -321,30 +435,6 @@
             });
             e.preventDefault();
         });
-        function checkTextFields() {
-            var stepItemIcon = $('a[href="#step-text"] .add-icon');
-            if (subject.val().length > 0 && description.val().length > 0){
-                stepItemIcon
-                    .removeClass('fa-plus-circle text-primary')
-                    .addClass('fa-check-circle text-success')
-            }else{
-                stepItemIcon
-                    .removeClass('fa-check-circle text-success')
-                    .addClass('fa-plus-circle text-primary')
-            }
-        }
-        function checkMapFields() {
-            var stepItemIcon = $('a[href="#step-geo"] .add-icon');
-            if (address.val().length > 0 && latitude.val().length > 0 && longitude.val().length > 0){
-                stepItemIcon
-                    .removeClass('fa-plus-circle text-primary')
-                    .addClass('fa-check-circle text-success')
-            }else{
-                stepItemIcon
-                    .removeClass('fa-check-circle text-success')
-                    .addClass('fa-plus-circle text-primary')
-            }
-        }
         $(document).on('click', '#sensor_show_map_button', function () {
             $(window).scrollTop(0);
             $('#sensor_hide_map_button, #sensor_full_map, #mylocation-mobile-button').addClass('zindexize');
@@ -355,11 +445,13 @@
             $('body').removeClass('noscroll');
         });
         var showAddPostGui = function() {
+            $('#social_user_alerts').remove();
             $('html').addClass('sensor-add-post');
             $('body').addClass('sensor-add-post').css('overflow', 'hidden');
             addPostGui.find('form').trigger("reset");
             checkTextFields();
             checkMapFields();
+            checkUploadImages();
             addPostGui.show().find('.post-subject input').focus();
             {/literal}
             $('#sensor_full_map').sensorAddPost({ldelim}
@@ -397,6 +489,9 @@
 
         $('.close-add-post').on('click', function (e) {
             addPostGui.hide();
+            addPostGui.find('a[href="#step-text"]').trigger('click');
+            addPostGui.find('.next-step').show().next().hide();
+            hideTextValidation();
             $('html').removeClass('sensor-add-post');
             $('body').removeClass('sensor-add-post').css('overflow', 'auto');
             e.preventDefault();

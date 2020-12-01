@@ -70,6 +70,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanAddImage();
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRemoveImage();
+        $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
         $this->setPermissionDefinitions($permissionDefinitions);
 
         $actionDefinitions = array();
@@ -101,6 +102,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\RemoveObserverAction();
         $actionDefinitions[] = new ActionDefinitions\AddImageAction();
         $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
+        $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
         $this->setActionDefinitions($actionDefinitions);
 
         $scenarios = [];
@@ -142,6 +144,9 @@ class OpenPaSensorRepository extends LegacyRepository
 
         $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
         $this->addListener('on_add_approver', new MailNotificationListener($this));
+
+        $notificationTypes[] = new NotificationTypes\OnAddCommentToModerateNotificationType();
+        $this->addListener('on_add_comment_to_moderate', new MailNotificationListener($this));
 
         $this->addListener('after_run_action', new SendMailListener($this));
 
@@ -213,11 +218,11 @@ class OpenPaSensorRepository extends LegacyRepository
     public function setCurrentLanguage($language)
     {
         $this->language = $language;
-        if ($this->language != eZLocale::currentLocaleCode()) {
-            //@todo
-            //$GLOBALS["eZLocaleStringDefault"] = $this->language;
-            //@todo svuotare cachce translations?
-        }
+//@todo
+//        if ($this->language != eZLocale::currentLocaleCode()) {
+//            $GLOBALS["eZLocaleStringDefault"] = $this->language;
+//            //@todo svuotare cachce translations?
+//        }
     }
 
     public function getCurrentLanguage()

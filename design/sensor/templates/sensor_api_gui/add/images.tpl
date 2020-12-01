@@ -1,7 +1,7 @@
-<div id="add_image" style="display: inline-block;margin-right: 1px">
+<div id="add_image">
     <div class="upload-button-container">
             <span class="btn btn-default fileinput-button btn-lg" style="cursor:pointer">
-                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-2x fa-image text-muted"></i>
+                <i class="fa fa-2x fa-plus text-muted"></i>
                 <input class="upload" name="files" type="file" tabindex="6">
             </span>
     </div>

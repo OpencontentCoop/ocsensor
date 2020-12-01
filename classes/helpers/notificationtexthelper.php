@@ -787,6 +787,76 @@ class SensorNotificationTextHelper
                     ),
                 ),
             ),
+            'on_add_comment_to_moderate' => array(
+                'role_' . eZCollaborationItemParticipantLink::ROLE_AUTHOR => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo commento da moderare",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo commento da moderare è stata aggiunto alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_APPROVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo commento da moderare",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo commento da moderare è stata aggiunto alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OWNER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo commento da moderare",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo commento da moderare è stata aggiunto alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+                'role_' . eZCollaborationItemParticipantLink::ROLE_OBSERVER => array(
+                    'title' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Nuovo commento da moderare",
+                    ),
+                    'header' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "Un nuovo commento da moderare è stata aggiunto alla segnalazione",
+                    ),
+                    'text' => array(
+                        'eng-GB' => "",
+                        'ger-DE' => "",
+                        'ita-IT' => "",
+                    ),
+                ),
+            ),
         );
     }
 }

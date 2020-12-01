@@ -394,9 +394,9 @@
         },
 
         clearGeo: function () {
-            this.inputLat.val('');
-            this.inputLng.val('');
-            this.inputAddress.val('');
+            this.inputLat.val('').trigger('change');
+            this.inputLng.val('').trigger('change');
+            this.inputAddress.val('').trigger('change');
             this.inputMeta.val('');
             this._debugMeta();
         },

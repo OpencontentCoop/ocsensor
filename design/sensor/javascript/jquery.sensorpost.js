@@ -234,7 +234,22 @@
                                         group.find('input').prop('checked', false);
                                         group.addClass('hide');
                                     }
-                                })
+                                });
+                                messageReceivers.find('[data-group="'+groupSelector.data('toggle_group')+'"] input').on('change', function () {
+                                    var group = $(this).parents('ul.group_receivers');
+                                    var groupSelector = messageReceivers.find('[data-toggle_group="'+group.data('group')+'"]');
+                                    var total = group.find('input').length;
+                                    var actives = group.find('input:checked').length;
+                                    if (actives === 0){
+                                        groupSelector.prop("indeterminate", false);
+                                        groupSelector.prop('checked', false).trigger('change');
+                                    }else if (actives < total){
+                                        groupSelector.prop("indeterminate", true);
+                                    }else{
+                                        groupSelector.prop("indeterminate", false);
+                                    }
+
+                                });
                             }
                         });
                         if (capabilities.is_approver){

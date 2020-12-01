@@ -30,10 +30,19 @@
                                                   <p>{/literal}{"All'attenzione di:"|i18n('sensor/messages')}{literal} {{for receivers}}<span class="label label-warning">{{:name}}</span> {{/for}}</p>
                                             {{/if}}
                                         {{else _type == 'public'}}
+                                            {{if ~capabilities.can_moderate_comment && needModeration}}
+                                                <div class="pull-right" data-action-wrapper>
+                                                    <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-danger"
+                                                       data-action="moderate_comment" data-parameters="comment_id"
+                                                       style="margin-left:5px"
+                                                       title="{/literal}{"Rendi pubblico"|i18n('sensor/messages')}{literal}"><i class="fa fa-unlock"></i></a>
+                                                   <input type="hidden" data-value="comment_id" value="{{:id}}" />
+                                               </div>
+                                            {{/if}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
                                                 <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
-                                            <strong>{{:creator.name}}</strong> ha aggiunto un commento pubblico
+                                            <strong>{{:creator.name}}</strong> ha aggiunto un commento {{if !needModeration}}pubblico{{/if}}
                                         {{else}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
                                                 <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
@@ -43,6 +52,7 @@
                                     </p>
                                     {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
                                     {{if _type == 'private' && isResponseProposal && settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
+                                    {{if _type == 'public' && needModeration}} <strong class="label label-danger">In attesa di moderazione</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
@@ -206,6 +216,25 @@
             {{if capabilities.can_respond}}
                 <a href="#" data-target="new_response" class="btn btn-default">{/literal}{'Aggiungi risposta ufficiale'|i18n('sensor/messages')}{literal}</a>
             {{/if}}
+            {{if capabilities.can_add_image}}
+                <div data-action-wrapper style="display: inline-block">
+                    <form class="form-group" data-upload="add_image" style="display: inline-block;margin-right: 1px">
+                        <div class="upload-button-container">
+                            <span class="btn btn-default fileinput-button" style="cursor:pointer">
+                                <strong>{/literal}{'Aggiungi immagine'|i18n('sensor/messages')}{literal}</strong>
+                                <input class="upload" name="files" type="file">
+                            </span>
+                        </div>
+                        <div class="upload-button-spinner btn btn-default" style="display: none">
+                            <i class="fa fa-cog fa-spin"></i>
+                        </div>
+                    </form>
+                </div>
+                {{else capabilities.is_author}}
+                    <div class="btn btn-default fileinput-button button-disabled">
+                        <strong class="text-muted">{/literal}{'Aggiungi immagine'|i18n('sensor/messages')}{literal}</strong>
+                    </div>
+                {{/if}}
         </div>
     </div>
 </div>
