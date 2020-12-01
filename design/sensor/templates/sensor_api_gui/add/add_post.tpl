@@ -450,7 +450,7 @@
             $('body').addClass('sensor-add-post').css('overflow', 'hidden');
             addPostGui.find('form').trigger("reset");
             subject.val('');
-            description.val('');
+            description.val('').trigger('keyup');
             address.val('');
             latitude.val('');
             longitude.val('');
