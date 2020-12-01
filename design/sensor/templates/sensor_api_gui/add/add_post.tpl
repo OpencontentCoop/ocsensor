@@ -449,6 +449,11 @@
             $('html').addClass('sensor-add-post');
             $('body').addClass('sensor-add-post').css('overflow', 'hidden');
             addPostGui.find('form').trigger("reset");
+            subject.val('');
+            description.val('');
+            address.val('');
+            latitude.val('');
+            longitude.val('');
             checkTextFields();
             checkMapFields();
             checkUploadImages();
