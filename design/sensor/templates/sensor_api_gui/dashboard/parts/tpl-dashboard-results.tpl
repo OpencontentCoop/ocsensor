@@ -49,7 +49,7 @@
                       <p><i class="fa fa-exclamation-triangle faa-tada animated"></i></p>
                     {{/if}}
                 </td>
-                <td>{{:id}}</td>
+                <td><a href="{{:accessPath}}/sensor/posts/{{:id}}">{{:id}}</a></td>
                 <td style="white-space:nowrap">
                     {{if workflowStatus.identifier == 'waiting'}}Da leggere
                     {{else workflowStatus.identifier == 'read'}}In attesa di assegnazione

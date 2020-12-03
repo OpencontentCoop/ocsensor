@@ -240,15 +240,19 @@ span.classattribute-description {
         border-radius: 6px;
         text-align: center;
         background-size: cover;
+        position: relative;
     }
 
     #add-post-gui .image-placeholder .fa-trash{
         color: #fff;
-        margin: 14px;
+        margin: 0;
         cursor: pointer;
         background: #333;
         padding: 5px;
         border-radius: 5px;
+        position: absolute;
+        top: -10px;
+        right: -10px;
     }
 
     #add-post-gui #edit .step-nav li .add-icon  {
@@ -282,7 +286,7 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-content {
-        padding: 0 0 20px;
+        padding: 0;
     }
 
     #add-post-gui textarea {
@@ -396,10 +400,6 @@ span.classattribute-description {
     #add-post-gui .image-placeholder {
         width: 90px;
         height: 90px;
-    }
-
-    #add-post-gui .image-placeholder .fa-trash{
-        margin: 25px;
     }
 }
 

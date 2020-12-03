@@ -13,7 +13,7 @@
                     <ul class="list-inline text-left step-nav" role="tablist">
                         <li role="presentation" class="nav-item active">
                             <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="Aggiungi testo" style="position: relative">
-                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-align-left fa-2x text-muted"></i>
+                                <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-pencil fa-2x text-muted"></i>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
@@ -46,8 +46,8 @@
                             <div class="step-content">
                                 <div class="step-part">
                                     <p class="lead hidden-xs">
-                                        Digita un indirizzo e clicca sulla lente oppure clicca sulla mappa<br />
-                                        Per inserire la tua posizione corrente clicca sulla bussola <br />
+                                        Scegli un punto sulla mappa o digita un indirizzo e clicca sulla lente.<br />
+                                        Per inserire la tua posizione corrente clicca sulla bussola.<br />
                                     </p>
                                     <p class="lead visible-xs">Digita un indirizzo e clicca sulla lente o clicca sulla cartina per visualizzare la mappa</p>
                                     {include uri='design:sensor_api_gui/add/geoLocation.tpl'}
@@ -101,7 +101,7 @@
                         </div>
                     </div>
 
-                    <div class="post-privacy step-nav">
+                    <div class="post-privacy">
                         {if sensor_settings().HidePrivacyChoice}
                             <p><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
                             <input type="hidden" name="is_private" value="1" />
@@ -121,27 +121,9 @@
                                         <input required type="radio" name="is_private" value="1" />No
                                     </label>
                                 </div>
-                                <div class="col-xs-12">
-                                    <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
-                                    {if sensor_is_moderation_enabled()}
-                                        <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
-                                    {else}
-                                        <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
-                                    {/if}
-                                </div>
                             </div>
                         {/if}
                     </div>
-
-
-                    <p class="text-muted post-help" style="margin-top: 15px">
-                        {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
-                        '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
-                        '%close_privacy_url%', '</a>',
-                        '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
-                        '%close_terms_url%', '</a>'
-                        ))}
-                    </p>
 
                     <div class="row post-send">
                         <div class="col-xs-6">
@@ -152,6 +134,25 @@
                             <button type="submit" class="btn btn-primary btn-lg" style="display: none" tabindex="10">Invia</button>
                         </div>
                     </div>
+
+                    <div>
+                        <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                        {if sensor_is_moderation_enabled()}
+                            <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                        {else}
+                            <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
+                        {/if}
+                        <p class="text-muted post-help">
+                            {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
+                            '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
+                            '%close_privacy_url%', '</a>',
+                            '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
+                            '%close_terms_url%', '</a>'
+                            ))}
+                        </p>
+                    </div>
+
+
 
                     <div id="post-spinner" class="text-center" style="display: none">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
@@ -352,19 +353,15 @@
                     placeholder
                         .css('background-image', "url('data:" + this.mime + ";base64," + this.file + "')")
                         .removeClass('image-empty')
-                        .on('mouseover', function () {$(this).find('i').show()})
-                        .on('mouseout', function () {$(this).find('i').hide()})
                         .on('click', function () {
                             $(this)
                                 .css('background-image', "")
                                 .addClass('image-empty')
-                                .off('mouseover')
-                                .off('mouseout')
                                 .find('i').hide();
                             $(this).find('input[name="images['+$(this).data('index')+'][file]"]').val('');
                             $(this).find('input[name="images['+$(this).data('index')+'][filename]"]').val('');
                             checkUploadImages();
-                        });
+                        }).find('i').show();
                     placeholder.find('input[name="images['+index+'][file]"]').val(this.file);
                     placeholder.find('input[name="images['+index+'][filename]"]').val(this.filename);
                 });
