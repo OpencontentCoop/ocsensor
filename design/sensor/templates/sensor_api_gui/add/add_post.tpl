@@ -103,10 +103,8 @@
 
                     <div class="post-privacy">
                         {if sensor_settings().HidePrivacyChoice}
-                            <p><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
                             <input type="hidden" name="is_private" value="1" />
                         {else}
-
                             <div class="row">
                                 <div class="col-xs-8 col-md-6">
                                     <p class="lead">Consenti la pubblicazione:</p>
@@ -136,11 +134,15 @@
                     </div>
 
                     <div>
-                        <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
-                        {if sensor_is_moderation_enabled()}
-                            <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                        {if sensor_settings().HidePrivacyChoice}
+                            <p><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
                         {else}
-                            <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
+                            <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                            {if sensor_is_moderation_enabled()}
+                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                            {else}
+                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
+                            {/if}
                         {/if}
                         <p class="text-muted post-help">
                             {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
