@@ -404,6 +404,11 @@
             addPostGui.find('#post-spinner').show();
             self.data('disabled', true);
             var payload = addPostGui.find('form').serializeObject();
+            if (payload.hasOwnProperty('areas')) {
+                if (payload.areas.length === 1 && payload.areas[0].length === 0){
+                    payload.areas = [];
+                }
+            }
             if (addPostGui.find('.image-empty').length === 3){
                 delete payload.images;
             }else {
