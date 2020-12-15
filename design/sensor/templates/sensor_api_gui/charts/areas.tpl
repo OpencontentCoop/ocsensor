@@ -6,6 +6,13 @@
             var categoryFilter = $('#category-filter').removeClass('hide');
             var intervalFilter = $('#interval-filter').removeClass('hide');
 
+            $(".select").select2({
+                templateResult: function (item) {
+                    var style = item.element ? $(item.element).attr('style') : '';
+                    return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
+                }
+            });
+
             $.each([areaFilter, categoryFilter, intervalFilter], function () {
                 this.find('select').on('change', function () {
                     chart.trigger('sensor:chart:filterchange');
@@ -86,7 +93,51 @@
                         title: {
                             text: chart.data('description')
                         },
-                        series: series
+                        series: series,
+                        exporting: {
+                            buttons: {
+                                contextButton: {
+                                    menuItems: [{
+                                        textKey: 'downloadPNG',
+                                        onclick: function () {
+                                            this.exportChart();
+                                        }
+                                    }, {
+                                        textKey: 'downloadJPEG',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'image/jpeg'
+                                            });
+                                        }
+                                    }, {
+                                        textKey: 'downloadPDF',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'application/pdf'
+                                            });
+                                        }
+                                    }, {
+                                        textKey: 'downloadSVG',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'image/svg+xml'
+                                            });
+                                        }
+                                    }, {
+                                        separator: true
+                                    }, {
+                                        text: 'Vedi segnalazioni',
+                                        onclick: function () {
+                                            var queryData = [];
+                                            $.each(params, function (key, value) {
+                                                queryData.push({name: key, value: value});
+                                            })
+                                            window.location = '/sensor/posts#'+$.param(queryData);
+                                        }
+                                    }]
+                                }
+                            }
+                        }
                     });
                 });
             };

@@ -1,4 +1,12 @@
-{ezscript_require( array( 'ezjsc::jquery', 'highcharts/charts/highcharts.js', 'highcharts/charts/modules/exporting.js' ) )}
+{ezcss_require(array(
+    'select2.min.css'
+))}
+{ezscript_require( array(
+    'ezjsc::jquery',
+    'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+    'highcharts/charts/highcharts.js',
+    'highcharts/charts/modules/exporting.js' )
+)}
 <section class="hgroup">
     <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
 </section>
@@ -31,7 +39,7 @@
 
     <div class="col-md-9">
         {if $current}
-            <div class="row">
+            <div class="row" id="posts-search">
                 <div class="col-md-4">
                     <div class="form-group hide" id="area-filter">
                         <label>{'Filtra per zona'|i18n('sensor/post')}</label>
@@ -50,14 +58,13 @@
                 <div class="col-md-4">
                     <div class="form-group hide" id="category-filter">
                         <label>{'Filtra per categoria'|i18n('sensor/post')}</label>
-                        <select class="select form-control" name="">
-                            <option></option>
+                        <select class="select form-control" name="" multiple>
                             {foreach $categories.children as $item}
                                 <option value="{$item.id}"
-                                        style="padding-left:{$item.level|mul(10)}px;{*if $item.level|eq(0)}font-weight: bold;{/if*}">{$item.name|wash()}</option>
-                                {*foreach $item.children as $child}
+                                        style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                                {foreach $item.children as $child}
                                     <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
-                                {/foreach*}
+                                {/foreach}
                             {/foreach}
                         </select>
                     </div>

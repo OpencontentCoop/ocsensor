@@ -19,8 +19,8 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group" id="area-filter">
-                            <select class="select form-control" name="area">
-                                <option value="">{'Area'|i18n('sensor/post')}</option>
+                            <select class="select form-control" name="area" data-placeholder="{'Area'|i18n('sensor/post')}">
+                                <option></option>
                                 {foreach $module_result.content_info.persistent_variable.areas.children as $item}
                                     <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                     {foreach $item.children as $child}
@@ -31,10 +31,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group" id="category-filter">
-                            <select class="select form-control" name="category">
-                                <option value="">{'Categoria'|i18n('sensor/post')}</option>
+                            <select class="select form-control" name="category" data-placeholder="{'Categoria'|i18n('sensor/post')}" multiple="multiple">
                                 {foreach $module_result.content_info.persistent_variable.categories.children as $item}
                                     <option value="{$item.id}"
                                             style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
@@ -47,8 +46,8 @@
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group" id="type-filter">
-                            <select class="select form-control" name="type">
-                                <option value="">{'Tipo'|i18n('sensor/post')}</option>
+                            <select class="select form-control" name="type" data-placeholder="{'Tipo'|i18n('sensor/post')}">
+                                <option></option>
                                 {foreach $module_result.content_info.persistent_variable.types as $item}
                                     <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
                                 {/foreach}
@@ -64,7 +63,7 @@
                                    value=""/>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1" style="padding: 0">
                         <button type="submit" class="btn btn-info"><span class="fa fa-search"></span></button>
                         <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span></button>
                     </div>

@@ -487,3 +487,24 @@ select.select-sensor-area-disabled{
 select.select-sensor-area-disabled::-ms-expand {
     display: none;
 }
+
+.modal-backdrop{
+    z-index: 2000;
+}
+.modal{
+    z-index: 2001;
+}
+
+#cookieChoiceInfo{
+    z-index: 1900 !important;
+}
+
+#posts-search .select2-container .select2-selection--single{
+    height: 34px;
+}
+#posts-search .select2-container--default .select2-selection--single .select2-selection__rendered{
+    line-height: 32px;
+}
+#posts-search .select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: 4px;
+}

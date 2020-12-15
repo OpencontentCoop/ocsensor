@@ -3,6 +3,7 @@
 {ezpagedata_set('types', $types)}
 {ezcss_require(array(
     'daterangepicker.css',
+    'select2.min.css',
     'leaflet/MarkerCluster.css',
     'leaflet/MarkerCluster.Default.css',
     'leaflet.0.7.2.css'
@@ -10,6 +11,7 @@
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
     'moment-with-locales.min.js',
+    'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
     'leaflet.0.7.2.js',
     'leaflet.markercluster.js',
     'Leaflet.MakiMarkers.js',
@@ -89,6 +91,12 @@ $(document).ready(function () {ldelim}
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
     var selectType = form.find('select[name="type"]');
+    form.find("select").select2({
+        templateResult: function (item) {
+            var style = item.element ? $(item.element).attr('style') : '';
+            return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
+        }
+    });
     var viewContainer = $('[data-contents]');
     var exportUrl = $('#export-url');
     var limitPagination = 15;
@@ -202,18 +210,26 @@ $(document).ready(function () {ldelim}
     };
 
     var buildQueryFilters = function () {
+        var queryData = [];
         query = [];
         var queryString = form.find('[name="query"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
         if (queryString.length > 0){
             query.push("(subject = '" + queryString + "' or description = '" + queryString + "')");
+            queryData.push({name: 'query', value: form.find('[name="query"]').val()});
         }
         var searchCategory = selectCategory.val();
-        if (searchCategory){
-            var searchCategoryList = [searchCategory];
-            selectCategory.find('[data-parent="'+searchCategory+'"]').each(function () {
-                searchCategoryList.push($(this).attr('value'));
+        if (searchCategory && searchCategory.length > 0){
+            var searchCategoryList = [];
+            $.each(searchCategory, function () {
+                searchCategoryList.push(this);
+                selectCategory.find('[data-parent="'+this+'"]').each(function () {
+                    searchCategoryList.push($(this).attr('value'));
+                })
             })
-            query.push("category.id in [" + searchCategoryList.join(',') + "]");
+            if (searchCategoryList.length > 0) {
+                query.push("category.id in [" + jQuery.unique(searchCategoryList).join(',') + "]");
+                queryData.push({name: 'category', value: jQuery.unique(searchCategoryList)});
+            }
         }
         var searchArea = selectArea.val();
         if (searchArea){
@@ -222,20 +238,26 @@ $(document).ready(function () {ldelim}
                 searchAreaList.push($(this).attr('value'));
             })
             query.push("area.id in [" + searchAreaList.join(',') + "]");
+            queryData.push({name: 'area', value: jQuery.unique(searchAreaList)});
         }
         var searchType = selectType.val();
         if (searchType){
             query.push("type in [" + searchType + "]");
+            queryData.push({name: 'type', value: searchType});
         }
         var searchPublished = form.find('[name="published"]');
         if (searchPublished.val().length > 0){
             query.push("published range [" + searchPublished.data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm') + "," + searchPublished.data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm') + "]");
         }
+        location.hash = $.param(queryData);
+
         return query.length > 0 ? query.join(' and ') + ' and ' : '';
     };
 
     var resetMarkers = function() {
-        currentGeoRequest.abort();
+        if (currentGeoRequest){
+            currentGeoRequest.abort();
+        }
         mapSpinner.stop(true,false).css({'width': '0'}).show();
         markers.clearLayers();
     };
@@ -404,7 +426,7 @@ $(document).ready(function () {ldelim}
     var tiles = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18,attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'});
     var map = L.map('map').addLayer(tiles);
     map.scrollWheelZoom.disable();
-    var markers = new L.markerClusterGroup();    
+    var markers = new L.markerClusterGroup();
     if (typeof centerMap === 'string') {
         try{
             var centerMapLayer = L.geoJson(JSON.parse(centerMap));
@@ -418,7 +440,35 @@ $(document).ready(function () {ldelim}
     map.addLayer(markers);
     markers.on('clusterclick', function(){hasClickOnMarker = true});
 
-    reset();
+    var parseParams = function (str) {
+        if (str.length === 0){
+            return false;
+        }
+        str = str.substring(1);
+        return str.split('&').reduce(function (params, param) {
+            var paramSplit = param.split('=').map(function (value) {
+                return decodeURIComponent(value.replace(/\+/g, ' '));
+            });
+            params[paramSplit[0]] = paramSplit[1];
+            return params;
+        }, {});
+    }
+
+    var hash = parseParams(location.hash);
+    if (hash){
+        $.each(hash, function (key, value) {
+            if (key === 'query'){
+                form.find('[name="query"]').val(value);
+            } else {
+                form.find('select[name="'+key+'"]').val(value.split(','));
+                form.find('select[name="'+key+'"]').trigger('change');
+            }
+        })
+        form.find('[name="published"]').val('');
+        form.find('[type="submit"]').trigger('click');
+    }else {
+        reset();
+    }
 
 {/literal}
 {rdelim});
