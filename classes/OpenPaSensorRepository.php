@@ -204,6 +204,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HideOperatorNames' => $this->isHiddenOperatorName(),
                 'HiddenOperatorName' => 'Operatore',
                 'HiddenOperatorEmail' => 'operator@example.it',
+                'AnnounceKitId' => $this->getAnnounceKitId(),
             ));
         }
 
@@ -451,6 +452,16 @@ class OpenPaSensorRepository extends LegacyRepository
         $attribute = $this->getRootNodeAttribute('hide_operator_name');
         if ($attribute instanceof eZContentObjectAttribute){
             return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
+    }
+
+    private function getAnnounceKitId()
+    {
+        $attribute = $this->getRootNodeAttribute('announce_kit_id');
+        if ($attribute instanceof eZContentObjectAttribute && $attribute->hasContent()){
+            return $attribute->toString();
         }
 
         return false;

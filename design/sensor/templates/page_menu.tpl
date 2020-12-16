@@ -40,7 +40,14 @@
         {/if}
     {/foreach}
 
-
+    {if and(sensor_settings('AnnounceKitId'), fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' )))}
+      <li>
+          <a href="#" id="announce-news" style="display: inline-block;text-decoration: none">
+              <span class="badge badge-warning pulsate" style="display: none;top: 3px;right: -6px;font-size:10px;position: absolute"></span>
+              Novità
+          </a>
+      </li>
+    {/if}
 
     {if $current_user.is_logged_in|not()}
 
@@ -74,3 +81,27 @@
 
   </ul>
 </div>
+
+{if and(sensor_settings('AnnounceKitId'), fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'manage' )))}
+<script>{literal}
+$(document).ready(function(){
+    window.announcekit = (window.announcekit || { queue: [], on: function(n, x) { window.announcekit.queue.push([n, x]); }, push: function(x) { window.announcekit.queue.push(x); } });
+    window.announcekit.push({
+        "widget": "https://announcekit.app/widgets/v2/{/literal}{sensor_settings('AnnounceKitId')}{literal}",
+        "selector": ".announcekit-widget",
+        "name": "announcekit",
+        "lang": "it"
+    });
+    window.announcekit.on("widget-unread", function({ widget, unread }) {
+        var badge = $('#announce-news .badge');
+        if (unread === 0) badge.hide();
+        else badge.show().html(unread);
+    });
+    $('#announce-news').on('click', function (e) {
+        announcekit.widget$announcekit.open();
+        e.preventDefault();
+    });
+})
+{/literal}</script>
+<script async src="https://cdn.announcekit.app/widget-v2.js"></script>
+{/if}
