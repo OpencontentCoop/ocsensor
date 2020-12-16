@@ -22,6 +22,7 @@
   'leaflet.markercluster.js',
   'jquery.opendatabrowse.js',
   'fields/OpenStreetMap.js',
+  'turf.min.js',
   'fields/DrawMap.js',
   'fields/RelationBrowse.js',
   concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
