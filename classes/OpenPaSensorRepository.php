@@ -201,6 +201,9 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HideTypeChoice' => $this->isHiddenTypeChoice(),
                 'ShowSmartGui' => $this->isShownSmartGui(),
                 'ShowResponseProposal' => isset($sensorIni['ShowResponseProposal']) ? $sensorIni['ShowResponseProposal'] == 'enabled' : false,
+                'HideOperatorNames' => $this->isHiddenOperatorName(),
+                'HiddenOperatorName' => 'Operatore',
+                'HiddenOperatorEmail' => 'operator@example.it',
             ));
         }
 
@@ -436,6 +439,16 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isShownSmartGui()
     {
         $attribute = $this->getRootNodeAttribute('show_smart_gui');
+        if ($attribute instanceof eZContentObjectAttribute){
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
+    }
+
+    private function isHiddenOperatorName()
+    {
+        $attribute = $this->getRootNodeAttribute('hide_operator_name');
         if ($attribute instanceof eZContentObjectAttribute){
             return $attribute->attribute('data_int') == 1;
         }

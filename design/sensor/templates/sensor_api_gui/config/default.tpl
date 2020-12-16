@@ -77,6 +77,15 @@
     </tr>
     <tr>
         <th>
+            Nascondi al pubblico il nome degli operatori
+            <br /><small>Se l'opzione è attivata i nomi degli operatori saranno sostituiti con una stringa generica <em>Operatore</em></small>
+        </th>
+        <td class="text-center">
+            <input type="checkbox" {if $sensor_settings.HideOperatorNames}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideOperatorNames"{else}disabled{/if}>
+        </td>
+    </tr>
+    <tr>
+        <th>
             Assegnazione automatica in base alla categoria
             <br /><small>Se l'opzione è attivata, quando viene associata una categoria, la segnalazione verrà assegnata al gruppo e agli operatori configurati nella categoria</small>
         </th>

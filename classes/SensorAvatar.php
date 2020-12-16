@@ -23,7 +23,7 @@ class SensorAvatar
             function ($file, $args) {
                 $id = $args['id'];
                 $object = eZContentObject::fetch((int)$id);
-                $name = 'X';
+                $name = $id == 1 ? 'Op' : 'X';
                 $content = false;
                 $style= '';
                 if ($object instanceof eZContentObject){

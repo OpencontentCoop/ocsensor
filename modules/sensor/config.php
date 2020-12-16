@@ -36,6 +36,9 @@ if ($Part == '_set'){
             case 'ShowSmartGui':
                 $attribute = 'show_smart_gui';
                 break;
+            case 'HideOperatorNames':
+                $attribute = 'hide_operator_name';
+                break;
         }        
         if ($attribute){
             $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);
