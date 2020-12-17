@@ -90,18 +90,35 @@
         <div class="message message-form">
             {{if capabilities.can_comment}}
                 <div class="new_comment action-form hide" data-action-wrapper>
-                    {{if capabilities.can_send_private_message}}
-                        <small class="text-muted"><i class="fa fa-warning"></i> {/literal}{'Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".'|i18n('sensor/messages')}{literal}</small>
+                    {{if capabilities.has_moderation}}
+                        <small class="text-muted">{/literal}{'Il commento sarà sottoposto a moderazione.'|i18n('sensor/messages')|wash()}{literal}</small>
                     {{/if}}
-                    <textarea data-value="text" class="form-control" placeholder="{/literal}{'Testo del commento'|i18n('sensor/messages')}{literal}" rows="7"></textarea>
+                    {{if capabilities.is_a == 'sensor_operator'}}
+                        <small class="text-muted">
+                            {{if capabilities.has_moderation}}
+                                {{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}
+                                    {/literal}{'Quando verrà approvato il commento sarà pubblico.'|i18n('sensor/messages')|wash()}{literal}
+                                {{else}}
+                                    {/literal}{'Quando verrà approvato il commento sarà visibile anche all\'autore della segnalazione.'|i18n('sensor/messages')|wash()}{literal}
+                                {{/if}}
+                            {{else}}
+                                {{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}
+                                    {/literal}{'Il commento sarà pubblico.'|i18n('sensor/messages')}{literal}
+                                {{else}}
+                                    {/literal}{'Il commento sarà visibile anche all\'autore della segnalazione.'|i18n('sensor/messages')|wash()}{literal}
+                                {{/if}}
+                            {{/if}}
+                        </small>
+                    {{/if}}
+                    <textarea data-value="text" class="form-control" placeholder="{/literal}{'Testo del commento'|i18n('sensor/messages')|wash()}{literal}" rows="7"></textarea>
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default pull-left">Annulla</a>
                         <input class="btn send btn-bold pull-right"
                                type="submit"
                                data-action="add_comment" data-parameters="text"
                                value="{/literal}{'Pubblica il commento'|i18n('sensor/messages')}{literal}"
-                               {{if capabilities.can_send_private_message}}
-                                   data-confirmation="{/literal}{'Sei sicuro di voler aggiungere un commento visibile a tutti?'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"
+                               {{if capabilities.is_a == 'sensor_operator' && !capabilities.has_moderation}}
+                                   data-confirmation="{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}{/literal}{'Sei sicuro di voler aggiungere un commento pubblico?'|i18n( 'sensor/messages' )|wash()}{literal}{{else}}{/literal}{"Sei sicuro di voler aggiungere un commento visibile anche all'autore della segnalazione?"|i18n( 'sensor/messages' )|wash()}{literal}{{/if}}"
                                {{/if}} />
                     </div>
                 </div>

@@ -238,6 +238,14 @@ class SensorGuiApiController extends ezpRestMvcController  implements SensorOpen
                 'identifier' => 'is_author',
                 'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_AUTHOR)->getUserById($user->id)
             ];
+            $result->variables[] = [
+                'identifier' => 'has_moderation',
+                'grant' => $user->moderationMode
+            ];
+            $result->variables[] = [
+                'identifier' => 'is_a',
+                'grant' => $user->type
+            ];
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
