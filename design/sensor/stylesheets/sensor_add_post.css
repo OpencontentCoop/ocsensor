@@ -200,7 +200,7 @@ span.classattribute-description {
     }
 
     #add-post-gui #edit .step-nav {
-        margin: 0 0 40px;
+        margin: 0 0 30px;
     }
 
     #add-post-gui #edit .step-nav li {
@@ -274,14 +274,14 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-subject{
-        margin-bottom: 20px;
+        margin-bottom: 30px;
     }
 
     #add-post-gui .post-subject input {
-        border: none;
+        border: 1px solid #ccc;
         box-shadow: none;
         font-size: 15px;
-        padding: 0 0 5px 0;
+        padding: 5px;
         color: #000;
     }
 
@@ -290,11 +290,10 @@ span.classattribute-description {
     }
 
     #add-post-gui textarea {
-        border: none;
+        border: 1px solid #ccc;
         box-shadow: none;
-        padding: 18px 0 0 0;
+        padding: 5px;
         font-size: 15px;
-        border-bottom: 1px dotted #ccc;
         margin-bottom: 5px;
         resize: none;
         line-height: 1.5;
@@ -343,7 +342,7 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-subject{
-        margin-bottom: 0;
+        margin-bottom: 30px;
     }
 
     #add-post-gui .post-privacy {
@@ -358,11 +357,11 @@ span.classattribute-description {
     }
 
     #add-post-gui .post-subject input {
-        font-size: 21px;
+        font-size: 18px;
     }
 
     #add-post-gui .step-part {
-        margin: 20px 0 10px;
+        margin: 0;
     }
 
     #add-post-gui .step-buttons {
@@ -469,14 +468,10 @@ span.classattribute-description {
     opacity: 1;
     -webkit-transition: all .2s;
     transition: all .2s;
-    top: -.3em;
+    top: -1.5em;
     z-index: 3;
     line-height: 1;
     padding: 0 1px;
-}
-.post-subject .has-float-label label,
-.post-subject .has-float-label > span{
-    top: -1.5em;
 }
 .has-float-label label::after, .has-float-label > span::after {
     content: " ";
@@ -523,6 +518,7 @@ span.classattribute-description {
     font-size: 150%;
     opacity: .5;
     top: 5px;
+    left: 5px;
 }
 
 .input-group .has-float-label {
