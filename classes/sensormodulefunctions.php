@@ -23,7 +23,7 @@ class SensorModuleFunctions
             $siteAccesses = $ini->variable('SiteAccessSettings', 'AvailableSiteAccessList');
         }
         if (!empty($siteAccesses)) {
-            $cacheBaseDir = eZDir::path(array(eZSys::cacheDirectory(), 'content', 'sensor'));
+            $cacheBaseDir = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'sensor'));
             $fileHandler = eZClusterFileHandler::instance();
             $fileHandler->fileDeleteByDirList($siteAccesses, $cacheBaseDir, $prefix);
         }
@@ -123,7 +123,7 @@ class SensorModuleFunctions
     {
         $currentSiteAccess = $GLOBALS['eZCurrentAccess']['name'];
         $cacheFile = self::GLOBAL_PREFIX . $fileName . '.php';
-        $cachePath = eZDir::path(array(eZSys::cacheDirectory(), 'content', 'sensor', $currentSiteAccess, $cacheFile));
+        $cachePath = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'sensor', $currentSiteAccess, $cacheFile));
         return $cachePath;
     }
 

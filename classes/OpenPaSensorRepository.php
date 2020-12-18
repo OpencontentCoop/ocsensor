@@ -388,7 +388,7 @@ class OpenPaSensorRepository extends LegacyRepository
         TreeNode::clearCache($repository->getAreasRootNode()->attribute('node_id'));
         TreeNode::clearCache($repository->getOperatorsRootNode()->attribute('node_id'));
         TreeNode::clearCache($repository->getGroupsRootNode()->attribute('node_id'));
-        $commonPath = eZDir::path(array(eZSys::cacheDirectory(), 'content', 'sensor'));
+        $commonPath = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'sensor'));
         $fileHandler = eZClusterFileHandler::instance();
         $commonSuffix = '';
         $fileHandler->fileDeleteByDirList(array('content'), $commonPath, $commonSuffix);
