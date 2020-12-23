@@ -63,6 +63,7 @@
                             }
                         },
                         yAxis: {
+                            allowDecimals: false,
                             min: 0,
                             title: {
                                 text: '{/literal}{'Numero'|i18n('sensor/chart')}{literal}'

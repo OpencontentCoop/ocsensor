@@ -158,6 +158,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\PerArea($this);
         $statisticsFactories[] = new Statistics\PerType($this);
         $statisticsFactories[] = new Statistics\AvgTimes($this);
+        $statisticsFactories[] = new Statistics\Users($this);
         $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
 
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {

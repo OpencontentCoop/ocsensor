@@ -73,6 +73,9 @@
                     <div class="form-group hide" id="interval-filter">
                         <label>{'Filtra per Intervallo di tempo'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="interval">
+                            {if $current.identifier|eq('users')}
+                                <option value="daily">{'Giornaliero'|i18n('sensor/chart')}</option>
+                            {/if}
                             <option value="monthly">{'Mensile'|i18n('sensor/chart')}</option>
                             <option value="quarterly">{'Trimestrale'|i18n('sensor/chart')}</option>
                             <option value="half-yearly">{'Semestrale'|i18n('sensor/chart')}</option>

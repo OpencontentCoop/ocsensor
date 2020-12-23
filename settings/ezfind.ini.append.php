@@ -5,5 +5,6 @@ SearchMainLanguageOnly=disabled
 
 [IndexPlugins]
 Class[sensor_post]=ezfIndexSensor
+Class[user]=ezfIndexSensorUser
 
 */ ?>
