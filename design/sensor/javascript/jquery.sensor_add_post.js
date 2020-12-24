@@ -33,6 +33,7 @@
         this.element = $(element);
         this.settings = $.extend({}, defaults, options);
         this.settings.geoinput_splitted = false;
+        this.settings.geoinput_autocomplete = false;
 
         this.positionBeforeDrag = false;
 
@@ -84,6 +85,9 @@
 
         if (this.settings.geocoder === "Nominatim" || this.settings.geocoder === '') {
             this.geocoder = L.Control.Geocoder.nominatim(nominatimGeocoderParams);
+        } else if (this.settings.geocoder === "Geoserver") {
+            this.geocoder = L.Control.Geocoder.geoserver(this.settings.geocoder_params);
+            this.settings.geoinput_autocomplete = true;
         } else if (window.XDomainRequest) {
             this.geocoder = L.Control.Geocoder.bing(this.settings.geocoder_params);
         } else if (this.settings.geocoder === "Google") {
@@ -194,73 +198,134 @@
                 });
             }
 
+            var suggestionSelected;
+            var suggestionSelectedClass = 'list-group-item-warning';
+
             self.inputAddress.on('click', function (e) {
                 //$(this).select();
             }).on('keypress', function (e) {
                 if (e.which === 13) {
-                    self.searchButton.trigger('click');
+                    if (suggestionSelected && suggestionSelected.hasClass(suggestionSelectedClass)){
+                        suggestionSelected.trigger('click');
+                    }else {
+                        self.searchButton.trigger('click');
+                    }
                     e.preventDefault();
                 }
             });
 
+            if (self.settings.geoinput_autocomplete){
+                self.inputAddress.on('keyup', function (e) {
+                    if (
+                        e.which === 8 || //del
+                        e.which === 46 || //canc
+                        e.which === 222 || //quote
+                        (e.which >= 48 && e.which <= 57) || //numbers
+                        (e.which >= 65 && e.which <= 90) || //chars
+                        (e.which >= 96 && e.which <= 105) //numbers
+                    ){
+                        self.searchButton.trigger('click');
+                    } else if (e.which === 40) { //arrow down
+                        if (suggestionSelected) {
+                            suggestionSelected.removeClass(suggestionSelectedClass);
+                            var nextSuggestion = suggestionSelected.next();
+                            if (nextSuggestion.length) {
+                                suggestionSelected = nextSuggestion.addClass(suggestionSelectedClass);
+                            } else {
+                                suggestionSelected = self.suggestionContainer.find('a.list-group-item').first().addClass(suggestionSelectedClass);
+                            }
+                        } else {
+                            suggestionSelected = self.suggestionContainer.find('a.list-group-item').first().addClass(suggestionSelectedClass);
+                        }
+                        if (suggestionSelected && suggestionSelected.hasClass(suggestionSelectedClass)){
+                            self.inputAddress.val(suggestionSelected.text());
+                        }
+                    } else if (e.which === 38) { //arrow up
+                        if (suggestionSelected) {
+                            suggestionSelected.removeClass(suggestionSelectedClass);
+                            var prevSuggestion = suggestionSelected.prev();
+                            if (prevSuggestion.length) {
+                                suggestionSelected = prevSuggestion.addClass(suggestionSelectedClass);
+                            } else {
+                                suggestionSelected = self.suggestionContainer.find('a.list-group-item').last().addClass(suggestionSelectedClass);
+                            }
+                        } else {
+                            suggestionSelected = self.suggestionContainer.find('a.list-group-item').last().addClass(suggestionSelectedClass);
+                        }
+                        if (suggestionSelected && suggestionSelected.hasClass(suggestionSelectedClass)){
+                            self.inputAddress.val(suggestionSelected.text());
+                        }
+                    }
+                });
+            }
+
             self.searchButton.on('click', function (e) {
-                self.map.loadingControl.addLoader('inputsearch');
-                self.searchButton.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
                 var query = self.inputAddress.val();
+                var queryString = query;
                 if (self.settings.geoinput_splitted) {
                     query = {street: self.inputNumber.val() + ' ' + self.inputStreet.val()};
+                    queryString = query.street;
                 }
-
                 self.clearSuggestions();
-                self.geocoder.geocode(query, function (response) {
-                    var results = response;
-                    if (self.debugGeocoder) {
-                        self.debugGeocoder.clearLayers();
-                        $.each(response, function (i, o) {
-                            self.debugGeocoder.addLayer(
-                                L.circleMarker(new L.LatLng(o.center.lat, o.center.lng), {color: 'blue'})
-                                    .bindPopup(o.name)
-                            );
-                        });
-                        if (self.debugGeocoder.getLayers().length > 0) {
-                            self.map.fitBounds(self.debugGeocoder.getBounds());
-                        }
-                    }
-                    if (self.settings.strict_in_area) {
-                        results = [];
-                        $.each(response, function (i, o) {
-                            if (self.getPerimeterIdByPosition(new L.LatLng(o.center.lat, o.center.lng))) {
-                                results.push(o);
-                            }
-                        });
-                    }
-                    self.map.loadingControl.removeLoader('inputsearch');
-                    self.searchButton.html('<i class="fa fa-search"></i>');
-                    
-                    self.clearSuggestions();
-                    if (results.length > 0) {
-                        // deduplicate suggestions
-                        var suggestions = [];
-                        $.each(results, function (i, o) {
-                            var name = o.name;
-                            var alreadySuggested = $.grep(suggestions, function(e){ return e.name === name; });
-                            if (alreadySuggested.length === 0) {
-                                suggestions.push(o);
-                            }
-                        });
-
-                        if (suggestions.length > 1) {
-                            $.each(suggestions, function (i, o) {
-                                self.appendSuggestion(o);
+                if (queryString.trim().length > 0) {
+                    self.map.loadingControl.addLoader('inputsearch');
+                    self.searchButton.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+                    self.geocoder.geocode(query, function (response) {
+                        var results = response;
+                        if (self.debugGeocoder) {
+                            self.debugGeocoder.clearLayers();
+                            $.each(response, function (i, o) {
+                                self.debugGeocoder.addLayer(
+                                    L.circleMarker(new L.LatLng(o.center.lat, o.center.lng), {color: 'blue'})
+                                        .bindPopup(o.name)
+                                );
                             });
-                        } else {
-                            self.setUserMarker(new L.LatLng(suggestions[0].center.lat, suggestions[0].center.lng), suggestions[0]);
-                            self.appendGeocoderMeta(suggestions[0]);
+                            if (self.debugGeocoder.getLayers().length > 0) {
+                                self.map.fitBounds(self.debugGeocoder.getBounds());
+                            }
                         }
-                    } else {
-                        self.noSuggestion();
-                    }
-                }, this);
+                        var skipCheck = false;
+                        if (self.settings.geocoder_params.hasOwnProperty('skipAreaCheck')){
+                            skipCheck = parseInt(self.settings.geocoder_params.skipAreaCheck) === 1;
+                        }
+                        if (self.settings.strict_in_area && !skipCheck) {
+                            results = [];
+                            $.each(response, function (i, o) {
+                                if (self.getPerimeterIdByPosition(new L.LatLng(o.center.lat, o.center.lng))) {
+                                    results.push(o);
+                                }
+                            });
+                        }
+                        self.map.loadingControl.removeLoader('inputsearch');
+                        self.searchButton.html('<i class="fa fa-search"></i>');
+
+                        self.clearSuggestions();
+                        if (results.length > 0) {
+                            // deduplicate suggestions
+                            var suggestions = [];
+                            $.each(results, function (i, o) {
+                                var name = o.name;
+                                var alreadySuggested = $.grep(suggestions, function (e) {
+                                    return e.name === name;
+                                });
+                                if (alreadySuggested.length === 0) {
+                                    suggestions.push(o);
+                                }
+                            });
+
+                            if (suggestions.length > 1 || self.settings.geoinput_autocomplete) {
+                                $.each(suggestions, function (i, o) {
+                                    self.appendSuggestion(o);
+                                });
+                            } else {
+                                self.setUserMarker(new L.LatLng(suggestions[0].center.lat, suggestions[0].center.lng), suggestions[0]);
+                                self.appendGeocoderMeta(suggestions[0]);
+                            }
+                        } else {
+                            self.noSuggestion();
+                        }
+                    }, this);
+                }
             });
         },
 
@@ -320,14 +385,12 @@
 
         setUserMarker: function (latLng, address, cb, context) {
             var self = this;
-
             if (!$.isFunction(cb)) {
                 var areaId = self.getPerimeterIdByPosition(latLng);
                 if (self.settings.strict_in_area && !areaId) {
                     alert(self.settings.strict_in_area_alert);
                     if (self.positionBeforeDrag) {
-                        self.setUserMarker(self.positionBeforeDrag, null, function () {
-                        });
+                        self.setUserMarker(self.positionBeforeDrag, null, function () {});
                     }
                     return false;
                 }
@@ -349,7 +412,6 @@
             if (self.debugGeocoder) {
                 self.debugGeocoder.clearLayers();
             }
-
             if ($.isFunction(cb)) {
                 cb.call(context, self, userMarker);
             } else {
@@ -533,6 +595,8 @@
                 meta.place_id = data.place_id;
                 meta.osm_type = data.osm_type;
                 this.appendMeta(meta);
+            }else if (this.settings.geocoder === 'Geoserver') {
+                this.appendMeta(data.properties);
             }
         },
 

@@ -1,6 +1,6 @@
 <div class="clearfix" style="position: relative">
     <div class="input-group">
-        <input name="address[address]" tabindex="4" class="form-control input-lg" size="20" type="text" id="input-address"/>
+        <input name="address[address]" tabindex="4" autocomplete="off" class="form-control input-lg" size="20" type="text" id="input-address"/>
         <span class="input-group-btn">
             <button tabindex="4" class="btn btn-default" type="button" id="input-address-button"
                     value="{'Find address'|i18n('extension/ezgmaplocation/datatype')}">

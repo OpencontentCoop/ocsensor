@@ -172,6 +172,8 @@
     {set $geocoder_params = ezini('GeoCoderSettings', 'BingApiKey', 'ocsensor.ini')}
 {elseif and($geocoder|eq('NominatimDetailed'), ezini_hasvariable('GeoCoderSettings', 'NominatimDetailedDefaults', 'ocsensor.ini'))}
     {set $geocoder_params = hash('geocodingQueryParams', ezini('GeoCoderSettings', 'NominatimDetailedDefaults', 'ocsensor.ini'))}
+{elseif and($geocoder|eq('Geoserver'), ezini_hasvariable('GeoCoderSettings', 'GeoserverParams', 'ocsensor.ini'))}
+    {set $geocoder_params = ezini('GeoCoderSettings', 'GeoserverParams', 'ocsensor.ini')}
 {/if}
 {def $nearestService = cond(ezini('GeoCoderSettings', 'NearestService', 'ocsensor.ini')|eq('enabled'), true(), false())}
 {def $show_map_debug = cond(and(ezhttp_hasvariable('debug', 'get'), fetch('user','has_access_to',hash('module','sensor','function','config'))), 'true', 'false')}

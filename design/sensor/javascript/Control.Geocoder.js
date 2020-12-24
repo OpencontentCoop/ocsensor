@@ -233,11 +233,9 @@
             return true;
         }
     });
-
     L.Control.geocoder = function (id, options) {
         return new L.Control.Geocoder(id, options);
     };
-
     L.Control.Geocoder.callbackId = 0;
     L.Control.Geocoder.jsonp = function (url, params, callback, context, jsonpParam) {
         var callbackId = '_l_geocoder_' + (L.Control.Geocoder.callbackId++);
@@ -269,7 +267,6 @@
             };
         }
     };
-
     L.Control.Geocoder.template = function (str, data, htmlEscape) {
         return str.replace(/\{ *([\w_]+) *\}/g, function (str, key) {
             var value = data[key];
@@ -281,7 +278,6 @@
             return L.Control.Geocoder.htmlEscape(value);
         });
     };
-
     // Adapted from handlebars.js
     // https://github.com/wycats/handlebars.js/
     L.Control.Geocoder.htmlEscape = (function () {
@@ -343,26 +339,26 @@
 
                 return L.Control.Geocoder.template(parts.join('<br/>'), a, true);
             },
-            parseGeocoderData: function(properties){
+            parseGeocoderData: function (properties) {
                 var name = [];
-                if (properties.hasOwnProperty('road')){
+                if (properties.hasOwnProperty('road')) {
                     name.push(properties['road']);
-                }else if (properties.hasOwnProperty('pedestrian')){
+                } else if (properties.hasOwnProperty('pedestrian')) {
                     name.push(properties['pedestrian']);
-                }else if (properties.hasOwnProperty('suburb')){
+                } else if (properties.hasOwnProperty('suburb')) {
                     name.push(properties['suburb']);
                 }
-                if (properties.hasOwnProperty('house_number')){
+                if (properties.hasOwnProperty('house_number')) {
                     name.push(properties['house_number']);
                 }
-                if (properties.hasOwnProperty('postcode')){
+                if (properties.hasOwnProperty('postcode')) {
                     name.push(properties['postcode']);
                 }
-                if (properties.hasOwnProperty('town')){
+                if (properties.hasOwnProperty('town')) {
                     name.push(properties['town']);
-                }else if (properties.hasOwnProperty('city')){
+                } else if (properties.hasOwnProperty('city')) {
                     name.push(properties['city']);
-                }else if (properties.hasOwnProperty('village')){
+                } else if (properties.hasOwnProperty('village')) {
                     name.push(properties['village']);
                 }
                 //if (properties.hasOwnProperty('country')){
@@ -370,7 +366,6 @@
                 //}
                 return name.join(' ').substr(0, 150);
             }
-
         },
 
         initialize: function (options) {
@@ -432,7 +427,6 @@
             }, this, 'json_callback');
         }
     });
-
     L.Control.Geocoder.nominatim = function (options) {
         return new L.Control.Geocoder.Nominatim(options);
     };
@@ -461,26 +455,26 @@
 
                 return L.Control.Geocoder.template(parts.join('<br/>'), a, true);
             },
-            parseGeocoderData: function(properties){
+            parseGeocoderData: function (properties) {
                 var name = [];
-                if (properties.hasOwnProperty('road')){
+                if (properties.hasOwnProperty('road')) {
                     name.push(properties['road']);
-                }else if (properties.hasOwnProperty('pedestrian')){
+                } else if (properties.hasOwnProperty('pedestrian')) {
                     name.push(properties['pedestrian']);
-                }else if (properties.hasOwnProperty('suburb')){
+                } else if (properties.hasOwnProperty('suburb')) {
                     name.push(properties['suburb']);
                 }
-                if (properties.hasOwnProperty('house_number')){
+                if (properties.hasOwnProperty('house_number')) {
                     name.push(properties['house_number']);
                 }
-                if (properties.hasOwnProperty('postcode')){
+                if (properties.hasOwnProperty('postcode')) {
                     name.push(properties['postcode']);
                 }
-                if (properties.hasOwnProperty('town')){
+                if (properties.hasOwnProperty('town')) {
                     name.push(properties['town']);
-                }else if (properties.hasOwnProperty('city')){
+                } else if (properties.hasOwnProperty('city')) {
                     name.push(properties['city']);
-                }else if (properties.hasOwnProperty('village')){
+                } else if (properties.hasOwnProperty('village')) {
                     name.push(properties['village']);
                 }
                 //if (properties.hasOwnProperty('country')){
@@ -549,7 +543,6 @@
             }, this, 'json_callback');
         }
     });
-
     L.Control.Geocoder.nominatimDetailed = function (options) {
         return new L.Control.Geocoder.NominatimDetailed(options);
     };
@@ -598,7 +591,6 @@
             }, this, 'jsonp');
         }
     });
-
     L.Control.Geocoder.bing = function (key) {
         return new L.Control.Geocoder.Bing(key);
     };
@@ -656,7 +648,6 @@
             }, this);
         }
     });
-
     L.Control.Geocoder.raveGeo = function (serviceUrl, scheme, options) {
         return new L.Control.Geocoder.RaveGeo(serviceUrl, scheme, options);
     };
@@ -731,7 +722,6 @@
             }, this);
         }
     });
-
     L.Control.Geocoder.mapQuest = function (key) {
         return new L.Control.Geocoder.MapQuest(key);
     };
@@ -803,7 +793,6 @@
             });
         }
     });
-
     L.Control.Geocoder.mapbox = function (access_token) {
         return new L.Control.Geocoder.Mapbox(access_token);
     };
@@ -896,9 +885,119 @@
             });
         }
     });
-
     L.Control.Geocoder.google = function (key) {
         return new L.Control.Geocoder.Google(key);
     };
+
+    L.Control.Geocoder.Geoserver = L.Class.extend({
+        options: {
+            // serviceUrl: '',
+            // typeName: '',
+            // sortBy: '',
+            // cqlFilterField: '',
+            service: 'WFS',
+            version: '1.1.0',
+            request: 'GetFeature',
+            outputFormat: 'application/json',
+            maxFeatures: '5',
+            srsName: 'EPSG:4326',
+            startIndex: '0',
+            cqlFilter: function(field, query){
+                var filters = [];
+                $.each(query.split(' '), function (){
+                    var filter = this.replace(/'/g, "''");
+                    if (filter.trim().length > 0) {
+                        filters.push("(" + field + "+ILIKE+%27%25" + filter + "%25%27)");
+                    }
+                })
+                return filters.join(' AND ');
+            }
+        },
+
+        initialize: function (options) {
+            L.Util.setOptions(this, options);
+        },
+
+        geocode: function (query, cb, context) {
+            var geocodingQueryParams = {
+                service: this.options.service,
+                version: this.options.version,
+                request: this.options.request,
+                outputFormat: 'application/json',
+                maxFeatures: '5',
+                typeName: this.options.typeName,
+                cql_filter: this.options.cqlFilter(this.options.cqlFilterField, query),
+                sortBy: this.options.sortBy,
+                srsName: this.options.srsName,
+                startIndex: '0'
+            }
+            var getParamString = function (obj, existingUrl, uppercase) {
+                var params = [];
+                for (var i in obj) {
+                    params.push((uppercase ? i.toUpperCase() : i) + '=' + (obj[i]));
+                }
+                return ((!existingUrl || existingUrl.indexOf('?') === -1) ? '?' : '&') + params.join('&');
+            };
+            var getJSON = function (url, params, callback) {
+                //var xmlHttp = new XMLHttpRequest();
+                if (window.XDomainRequest) {
+                    var xmlHttp = new XDomainRequest();
+                    xmlHttp.open("get", url + getParamString(params), true);
+                    xmlHttp.onload = function () {
+                        callback(JSON.parse(xmlHttp.responseText));
+                    };
+                    xmlHttp.send();
+                } else if (window.XMLHttpRequest) {
+                    var xmlHttp = new XMLHttpRequest();
+                    xmlHttp.open("GET", url + getParamString(params), true);
+                    xmlHttp.send(null);
+                    xmlHttp.onreadystatechange = function () {
+                        if (xmlHttp.readyState != 4) return;
+                        if (xmlHttp.status != 200 && req.status != 304) return;
+                        callback(JSON.parse(xmlHttp.response));
+                    };
+                }
+            };
+            var field = this.options.cqlFilterField;
+            getJSON(this.options.serviceUrl, geocodingQueryParams,
+                function (data) {
+                    var results = [];
+                    for (var i = data.features.length - 1; i >= 0; i--) {
+                        results[i] = {
+                            icon: undefined,
+                            name: data.features[i].properties[field],
+                            html: undefined,
+                            bbox: undefined,
+                            center: L.latLng(data.features[i].geometry.coordinates[1], data.features[i].geometry.coordinates[0]),
+                            properties: data.features[i].properties
+                        };
+                    }
+                    cb.call(context, results);
+                });
+        },
+
+        reverse: function (location, scale, cb, context) {
+            L.Control.Geocoder.nominatim({
+                parseGeocoderData: function (properties) {
+                    var name = [];
+                    if (properties.hasOwnProperty('road')) {
+                        name.push(properties['road']);
+                    } else if (properties.hasOwnProperty('pedestrian')) {
+                        name.push(properties['pedestrian']);
+                    } else if (properties.hasOwnProperty('suburb')) {
+                        name.push(properties['suburb']);
+                    }
+                    if (properties.hasOwnProperty('house_number')) {
+                        name.push(properties['house_number']);
+                    }
+                    return name.join(' ').substr(0, 150).toUpperCase();
+                }
+            }).reverse(location, scale, cb, context);
+        }
+    });
+    L.Control.Geocoder.geoserver = function (options) {
+        return new L.Control.Geocoder.Geoserver(options);
+    };
+
     return L.Control.Geocoder;
 }));
