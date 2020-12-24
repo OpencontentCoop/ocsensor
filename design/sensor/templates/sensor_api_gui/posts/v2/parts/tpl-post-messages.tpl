@@ -5,7 +5,7 @@
         {{if _messages.length > 0}}
 
             <div class="message">
-                {{for _messages ~currentUserId=currentUserId ~capabilities=capabilities}}
+                {{for _messages ~currentUserId=currentUserId ~capabilities=capabilities ~settings=settings}}
                     <div class="message-{{:_type}} panel panel-{{if _type == 'system'}}default{{else _type == 'private'}}warning{{else _type == 'public'}}success{{else}}primary{{/if}}">
                         <div class="panel-heading"{{if _type == 'system'}} style="border-bottom: none;"{{/if}}>
                             <div class="media">
@@ -17,7 +17,7 @@
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
                                         {{else _type == 'private'}}
-                                            {{if ~capabilities.is_approver && isResponseProposal && settings.ShowResponseProposal}}
+                                            {{if ~capabilities.is_approver && isResponseProposal && ~settings.ShowResponseProposal}}
                                                 <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-primary pull-right"
                                                    style="margin-left:5px"
                                                    title="{/literal}{"Crea risposta a partire da questa nota"|i18n('sensor/messages')}{literal}"><i class="fa fa-edit"></i></a>
@@ -51,7 +51,7 @@
                                         {{/if}}
                                     </p>
                                     {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
-                                    {{if _type == 'private' && isResponseProposal && settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
+                                    {{if _type == 'private' && isResponseProposal && ~settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
                                     {{if _type == 'public' && needModeration}} <strong class="label label-danger">In attesa di moderazione</strong>{{/if}}
                                 </div>
                             </div>
