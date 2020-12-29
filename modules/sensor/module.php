@@ -105,6 +105,12 @@ $ViewList['avatar'] = array(
     'functions' => array('use')
 );
 
+$ViewList['connector'] = array(
+    'script' => 'connector.php',
+    'params' => array(),
+    'functions' => array('config')
+);
+
 $FunctionList = array();
 $FunctionList['use'] = array();
 $FunctionList['debug'] = array();

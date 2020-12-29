@@ -6,6 +6,7 @@ use Opencontent\Sensor\Api\Values\Event as SensorEvent;
 use Opencontent\Sensor\Legacy\Repository;
 use Opencontent\Sensor\OpenApi;
 use Opencontent\Sensor\OpenApi\PostSerializer;
+use Opencontent\Sensor\OpenApi\UserSerializer;
 
 class SensorWebHookListener extends AbstractListener
 {
@@ -14,6 +15,8 @@ class SensorWebHookListener extends AbstractListener
     private $events;
 
     private $postSerializer;
+
+    private $userSerializer;
 
     public function __construct(Repository $repository)
     {
@@ -33,6 +36,7 @@ class SensorWebHookListener extends AbstractListener
             $endpointUrl
         );
         $this->postSerializer = new PostSerializer($openApiTools);
+        $this->userSerializer = new UserSerializer($openApiTools);
     }
 
     public function handle(EventInterface $event, $param = null)
@@ -48,6 +52,17 @@ class SensorWebHookListener extends AbstractListener
                 );
             }
 
+            $payload = [
+                'event' => $param->identifier,
+                'post' => $this->postSerializer->serialize($param->post),
+                'user' => $this->userSerializer->serialize($param->user),
+                'parameters' => $param->parameters,
+            ];
+            OCWebHookEmitter::emit(
+                SensorConnectorTrigger::IDENTIFIER,
+                $payload,
+                OCWebHookQueue::defaultHandler()
+            );
         }
     }
 

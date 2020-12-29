@@ -14,14 +14,14 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
     /**
      * @var \Opencontent\Sensor\Legacy\Repository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var \Opencontent\Sensor\OpenApi
      */
-    private $openApiTools;
+    protected $openApiTools;
 
-    private $baseUri;
+    protected $baseUri;
 
     public function __construct($action, ezcMvcRequest $request)
     {
@@ -41,7 +41,7 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
         );
     }
 
-    private function getHostURI()
+    protected function getHostURI()
     {
         $hostUri = $this->request->getHostURI();
         if (eZSys::isSSLNow()){
@@ -153,7 +153,7 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
         return $data;
     }
 
-    private function doExceptionResult(Exception $exception)
+    protected function doExceptionResult(Exception $exception)
     {
         $result = new ezcMvcResult;
         $result->variables['message'] = $exception->getMessage();

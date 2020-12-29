@@ -3,6 +3,7 @@
 [ApiProvider]
 ProviderClass[sensor_gui]=SensorGuiApiProvider
 ProviderClass[sensor]=SensorOpenApiProvider
+ProviderClass[sensor_connector]=SensorConnectorProvider
 
 [SensorGuiApiController_CacheSettings]
 ApplicationCache=disabled
@@ -10,6 +11,7 @@ ApplicationCache=disabled
 [RouteSettings]
 SkipFilter[]=SensorGuiApiController_endpoint
 SkipFilter[]=SensorOpenApiProvider_endpoint
+SkipFilter[]=SensorConnectorProvider_endpoint
 
 [SensorApiCompatController_CacheSettings]
 ApplicationCache=disabled
@@ -18,6 +20,9 @@ ApplicationCache=disabled
 ApplicationCache=disabled
 
 [SensorOpenApiController_CacheSettings]
+ApplicationCache=disabled
+
+[SensorConnectorController_CacheSettings]
 ApplicationCache=disabled
 
 [Authentication]

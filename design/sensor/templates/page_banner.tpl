@@ -72,6 +72,7 @@
         </div>
     </div>
 {/if}
+
 {if and( sensor_settings().ShowSmartGui, fetch('user','has_access_to',hash('module', 'sensor', 'function', 'manage'))|not() )}
     {include name="add_post" uri='design:sensor_api_gui/add/add_post.tpl'}
 {/if}
