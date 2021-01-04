@@ -142,6 +142,11 @@ body.sensor-add-post .panel {
         width: 45%;
     }
 
+    body.sensor-add-post .alpaca-control.checkbox {
+        display: block;
+        width: 100%;
+    }
+
     body.sensor-add-post .leaflet-touch .leaflet-bar a,
     body.sensor-add-post .leaflet-touch .leaflet-bar a:hover,
     body.sensor-add-post .leaflet-bar a,

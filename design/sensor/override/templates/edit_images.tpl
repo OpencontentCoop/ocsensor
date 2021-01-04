@@ -10,7 +10,7 @@
             {set $file_count = $attribute.content|count()}
         {/if}
         {if or($file_count|lt( $attribute.contentclass_attribute.data_int2 ), $attribute.contentclass_attribute.data_int2|eq(0) )}
-            <div class="clearfix upload-button-container text-right">
+            <div class="clearfix upload-button-container text-left">
                 <span class="btn btn-info fileinput-button">
                     <i class="fa fa-plus"></i>
                     <span>{'Add file'|i18n( 'extension/ocmultibinary' )}</span>

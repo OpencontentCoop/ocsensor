@@ -9,7 +9,7 @@ use Opencontent\Sensor\Api\Values\PostUpdateStruct;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\OpenApi;
 
-class SensorGuiApiController extends ezpRestMvcController  implements SensorOpenApiControllerInterface
+class SensorGuiApiController extends ezpRestMvcController implements SensorOpenApiControllerInterface
 {
     /**
      * @var ezpRestRequest
@@ -36,6 +36,15 @@ class SensorGuiApiController extends ezpRestMvcController  implements SensorOpen
             $this->getBaseUri()
         );
     }
+
+    /**
+     * @return ezpRestRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
 
     private function getHostURI()
     {
@@ -579,6 +588,18 @@ class SensorGuiApiController extends ezpRestMvcController  implements SensorOpen
         $stat = $this->repository->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
         $stat->setParameters($this->request->get);
         $result->variables = $stat->getData();
+
+        return $result;
+    }
+
+    public function doLoadUsers()
+    {
+        try {
+            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $result = $controller->loadUsers();
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
 
         return $result;
     }

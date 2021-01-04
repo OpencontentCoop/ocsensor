@@ -62,6 +62,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-delete'
             ), 1),
 
+            'sensorGuiApiUsersLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/users',
+                'SensorGuiApiController',
+                'loadUsers',
+                array('q' => '', 'limit' => 10, 'cursor' => '*'),
+                'http-get'
+            ), 1),
+
             'sensorGuiApiUserLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/users/:UserId',
                 'SensorGuiApiController',
