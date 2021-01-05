@@ -19,6 +19,8 @@
         'leaflet.0.7.2.css',
         'Control.Loading.css',
         'jquery.fileupload.css',
+        'alpaca.min.css',
+        'alpaca-custom.css',
         'sensor_add_post.css',
         'debug.css',
         'websitetoolbar.css'
@@ -43,8 +45,18 @@
         'jquery.ocdrawmap.js',
         'wise-leaflet-pip.js',
         'turf.min.js',
-        'ezjsc::jqueryio',
+        'jquery.opendataTools.js',
+        'handlebars.min.js',
+        'typeahead.bundle.js',
         'ezjsc::jqueryUI',
+        'ezjsc::jqueryio',
+        'jquery.opendataTools.js',
+        'jsrender.js',
+        'alpaca.js',
+        concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
+        'fields/Recaptcha.js',
+        'jquery.opendatabrowse.js',
+        'jquery.opendataform.js',
         'jquery.fileupload.js',
         'jquery.sensor_add_post.js'
     ))}

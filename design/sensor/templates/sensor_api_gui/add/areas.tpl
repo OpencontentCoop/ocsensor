@@ -1,8 +1,3 @@
-{def $areas = sensor_areas()}
-{if is_set( $areas['children'] )}
-    {set $areas = $areas['children']}
-{/if}
-
 {if ne( count( $areas ), 0)}
     <select {if ezini( 'SensorConfig', 'MoveMarkerOnSelectArea', 'ocsensor.ini' )|eq('enabled')}id="poi"{/if}
             class="form-control select-sensor-area{if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')} select-sensor-area-disabled" readonly="readonly" tabindex="-1{/if}"

@@ -6,7 +6,7 @@
               class="form-control"
               data-limit="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
               placeholder="Dettagli della segnalazione (massimo {ezini('SensorConfig','TextMaxLength','ocsensor.ini')} caratteri)"
-              tabindex="2"
+              tabindex="3"
               cols="70" rows="11"></textarea>
     <span>Specifica i dettagli della segnalazione</span>
 </label>

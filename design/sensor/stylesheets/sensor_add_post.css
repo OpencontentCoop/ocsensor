@@ -70,6 +70,7 @@ body.sensor-add-post .panel {
         position: absolute;
         top: 0;
         width: 100%;
+        z-index: 10;
     }
 
     body.sensor-add-post .leaflet-touch .leaflet-bar a,
@@ -562,7 +563,9 @@ span.classattribute-description {
 
 #add-post-gui .has-warning .form-control {
     background: #f2dede;
+    border: 2px solid #f90f00;
 }
 #add-post-gui .has-warning .form-control:focus{
     background: none !important;
+    border: 1px solid #ccc;
 }
