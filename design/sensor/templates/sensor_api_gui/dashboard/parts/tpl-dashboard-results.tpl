@@ -37,16 +37,19 @@
             <tr style="cursor:pointer" data-href="{{:accessPath}}/sensor/posts/{{:id}}" {{if (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
                 <td>
                     {{if privacy.identifier == 'private' || moderation.identifier == 'waiting'}}
-                      <p><i class="fa fa-lock"></i></p>
+                      <div><i class="fa fa-lock"></i></div>
                     {{/if}}
                     {{if comments.length > 0}}
-                      <p><i class="fa fa-comments-o{{if readingStatuses.unread_comments > 0}} faa-tada animated{{/if}}"> </i></p>
+                      <div><i class="fa fa-comments-o{{if readingStatuses.unread_comments > 0}} faa-tada animated{{/if}}"></i></div>
+                    {{/if}}
+                    {{if commentsToModerate.length > 0}}
+                      <div><i class="fa fa-commenting-o"></i></div>
                     {{/if}}
                     {{if privateMessages.length > 0}}
-                      <p><i class="fa fa-comments{{if readingStatuses.unread_private_messages > 0}} faa-tada animated{{/if}}"> </i></p>
+                      <div><i class="fa fa-comments{{if readingStatuses.unread_private_messages > 0}} faa-tada animated{{/if}}"></i></div>
                     {{/if}}
                     {{if readingStatuses.unread_timelines > 0}}
-                      <p><i class="fa fa-exclamation-triangle faa-tada animated"></i></p>
+                      <div><i class="fa fa-exclamation-triangle faa-tada animated"></i></div>
                     {{/if}}
                 </td>
                 <td><a href="{{:accessPath}}/sensor/posts/{{:id}}">{{:id}}</a></td>
@@ -60,7 +63,7 @@
                     {{/if}}
                 </td>
                 <td>
-                     <strong>{{:author.name}}{{if reporter.id != author.id}} ({{:reporter.name}}){{/if}}</strong>
+                     <strong>{{:author.name}}{{if reporter.id != author.id}} <span class="text-muted">{{if channel && channel.icon}}<i title="{{:channel.name}}" class="{{:channel.icon}}"></i> {{/if}}{{:reporter.name}}</span>{{/if}}</strong>
                      <p>{{:subject}}</p>
                      <ul class="list-inline">
                         {{if areas.length > 0}}

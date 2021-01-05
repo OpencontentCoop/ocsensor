@@ -1,5 +1,8 @@
 <?php
 
+use Opencontent\Sensor\Api\Values\Participant;
+use Opencontent\Sensor\Api\Values\Post\Channel;
+
 class SensorPostCsvExporter extends SearchQueryCSVExporter
 {
     const MAX_DIRECT_DOWNLOAD_ITEMS = 0;
@@ -23,7 +26,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     protected $searchPolicies;
 
     public $options = array(
-        'CSVDelimiter' => ',',
+        'CSVDelimiter' => ';',
         'CSVEnclosure' => '"'
     );
 
@@ -58,8 +61,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 //            'fiscal_code' => ezpI18n::tr('sensor/export', 'Codice Fiscale'),
             'category' => ezpI18n::tr('sensor/export', 'Categoria'),
             'category_child' => ezpI18n::tr('sensor/export', 'Categoria (descrittore)'),
+            'current_owner_group' => ezpI18n::tr('sensor/export', 'Gruppo incaricato'),
             'current_owner' => ezpI18n::tr('sensor/export', 'Incaricato'),
-            'comment' => ezpI18n::tr('sensor/export', 'Commenti')
+            'comment' => ezpI18n::tr('sensor/export', 'Commenti'),
+            'channel' => ezpI18n::tr('sensor/export', 'Canale'),
         );
 
         $this->filename = 'posts' . '_' . time();
@@ -126,8 +131,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 //                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
                 'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
-                'current_owner' => $post->owners->count() > 0 ? $post->owners->first()->name : '',
-                'comment' => $post->comments->count()
+                'current_owner_group' => implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_GROUP)),
+                'current_owner' => implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER)),
+                'comment' => $post->comments->count(),
+                'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
             );
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){

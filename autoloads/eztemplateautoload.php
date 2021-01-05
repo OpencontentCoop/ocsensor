@@ -13,5 +13,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_config_menu',
         'sensor_types',
         'sensor_is_moderation_enabled',
+        'sensor_channels',
     )
 );

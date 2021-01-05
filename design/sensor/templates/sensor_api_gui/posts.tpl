@@ -214,7 +214,7 @@ $(document).ready(function () {ldelim}
         query = [];
         var queryString = form.find('[name="query"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
         if (queryString.length > 0){
-            query.push("(subject = '" + queryString + "' or description = '" + queryString + "')");
+            query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "')");
             queryData.push({name: 'query', value: form.find('[name="query"]').val()});
         }
         var searchCategory = selectCategory.val();

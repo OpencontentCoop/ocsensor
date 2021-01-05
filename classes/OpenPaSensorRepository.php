@@ -206,6 +206,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HiddenOperatorName' => 'Operatore',
                 'HiddenOperatorEmail' => 'operator@example.it',
                 'AnnounceKitId' => $this->getAnnounceKitId(),
+                'MinimumIntervalFromLastPrivateMessageToFix' => isset($sensorIni['MinimumIntervalFromLastPrivateMessageToFix']) ? (int)$sensorIni['MinimumIntervalFromLastPrivateMessageToFix'] : -1,
             ));
         }
 

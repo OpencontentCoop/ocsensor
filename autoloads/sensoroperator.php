@@ -15,6 +15,7 @@ class SensorOperator
             'sensor_config_menu',
             'sensor_types',
             'sensor_is_moderation_enabled',
+            'sensor_channels',
         );
     }
 
@@ -41,6 +42,16 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_channels':
+            {
+                $channels = [];
+                foreach ($repository->getChannelService()->loadPostChannels() as $channel){
+                    $channels[] = $channel->name;
+                }
+                $operatorValue = $channels;
+                break;
+            }
+
             case 'sensor_is_moderation_enabled':
             {
                 $operatorValue = $repository->isModerationEnabled();

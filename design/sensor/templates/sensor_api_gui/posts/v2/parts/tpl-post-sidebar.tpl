@@ -197,6 +197,29 @@
     </div>
     {{/if}}
 
+    {{if settings.MinimumIntervalFromLastPrivateMessageToFix > 0}}
+    <div id="addNoteThenFix" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="clearfix" data-action-wrapper>
+                        <label for="noteForFix">{/literal}{'Aggiungi una nota sulla lavorazione per facilitare la redazione della risposta ufficiale'|i18n('sensor/messages')}{literal}</label>
+                        <textarea id="noteForFix" data-value="text" name="noteForFix" class="form-control" rows="4" required="required"></textarea>
+                        <input data-value="is_response_proposal" type="hidden" value="1" />
+                        {{for approvers}}<input data-value="participant_ids" type="hidden" value="{{:id}}" />{{/for}}
+                        <input class="btn send btn-bold pull-right"
+                               type="submit"
+                               style="margin-top:10px"
+                               data-actions="send_private_message,fix"
+                               data-parameters="text,participant_ids,is_response_proposal"
+                               value="{/literal}{'Aggiungi nota e imposta come intervento terminato'|i18n('sensor/messages')}{literal}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
 </script>
 
 <script id="tpl-post-add_area" type="text/x-jsrender">
@@ -336,7 +359,7 @@
 <script id="tpl-post-fix" type="text/x-jsrender">
 {{if capabilities.can_fix}}
     <div class="form-group" data-action-wrapper>
-        <input class="btn btn-md btn-default btn-block" type="submit" data-action="fix" value="{/literal}{'Intervento terminato'|i18n('sensor/post')}{literal}" />
+        <input class="btn btn-md btn-default btn-block" type="submit" data-action="{{if settings.MinimumIntervalFromLastPrivateMessageToFix > 0}}checkNoteAndFix{{else}}fix{{/if}}" value="{/literal}{'Intervento terminato'|i18n('sensor/post')}{literal}" />
     </div>
 {{/if}}
 </script>

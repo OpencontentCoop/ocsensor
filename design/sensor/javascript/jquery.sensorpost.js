@@ -83,10 +83,10 @@
                         var currentOwnerGroupId = null;
                         var currentOwnerUserId = null;
                         $.each(post.owners, function () {
-                            if (this.type === 'group'){
+                            if (this.type === 'group') {
                                 currentOwnerGroupId = this.id;
                             }
-                            if (this.type === 'user'){
+                            if (this.type === 'user') {
                                 currentOwnerUserId = this.id;
                             }
                         })
@@ -159,21 +159,21 @@
 
                         var userAssignSelect = renderData.find('#user-assign');
                         var groupAssignSelect = renderData.find('#group-assign');
-                        var onChangeUserAssignSelect = function(currentUser) {
+                        var onChangeUserAssignSelect = function (currentUser) {
                             if (parseInt(currentUser) > 0) {
                                 var currentGroupSelected = groupAssignSelect.val();
                                 $.get(plugin.settings.apiEndPoint + '/operators/' + currentUser, function (data) {
                                     if ($.inArray(parseInt(currentGroupSelected), data.groups) === -1) {
-                                        if (data.groups.length > 0){
+                                        if (data.groups.length > 0) {
                                             groupAssignSelect.val(data.groups[0]).trigger('change');
-                                        }else {
+                                        } else {
                                             groupAssignSelect.val('').trigger('change');
                                         }
                                     }
                                 });
                             }
                         };
-                        var onChangeGroupAssignSelect = function(currentGroup) {
+                        var onChangeGroupAssignSelect = function (currentGroup) {
                             if (parseInt(currentGroup) > 0) {
                                 var currentUserSelected = userAssignSelect.val();
                                 userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
@@ -181,14 +181,14 @@
                                     $.each(data, function () {
                                         var selected = parseInt(currentUserSelected) === parseInt(this.id);
                                         var newOption = new Option(this.name, this.id, selected, selected);
-                                        if (userAssignSelect.find('option[value="'+this.id+'"]').length === 0) {
+                                        if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
                                             userAssignSelect.append(newOption).trigger('change');
                                         }
                                     });
                                 });
                             }
                         };
-                        var resetUserAndGroupSelect = function() {
+                        var resetUserAndGroupSelect = function () {
                             userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
                             $.each(post.operatorsTree.children, function () {
                                 var selected = parseInt(post.currentOwnerUserId) === parseInt(this.id);
@@ -220,39 +220,39 @@
                         var messageReceivers = renderData.find('.private_message_receivers');
                         messageReceivers.find('.group_receivers').each(function () {
                             var groupSelector = $(this).parent().find('.group_select');
-                            if ($(this).find('li').length === 0){
+                            if ($(this).find('li').length === 0) {
                                 groupSelector.attr('disabled', 'disabled');
                                 groupSelector.next().addClass('text-muted');
-                                $('a[data-toggle_group="'+groupSelector.data('toggle_group')+'"]').addClass('hide');
-                            }else{
+                                $('a[data-toggle_group="' + groupSelector.data('toggle_group') + '"]').addClass('hide');
+                            } else {
                                 groupSelector.on('change', function () {
-                                    var group = $('[data-group="'+$(this).data('toggle_group')+'"]');
-                                    if ($(this).is(':checked')){
+                                    var group = $('[data-group="' + $(this).data('toggle_group') + '"]');
+                                    if ($(this).is(':checked')) {
                                         group.find('input').prop('checked', 'checked');
                                         group.removeClass('hide');
-                                    }else{
+                                    } else {
                                         group.find('input').prop('checked', false);
                                         group.addClass('hide');
                                     }
                                 });
-                                messageReceivers.find('[data-group="'+groupSelector.data('toggle_group')+'"] input').on('change', function () {
+                                messageReceivers.find('[data-group="' + groupSelector.data('toggle_group') + '"] input').on('change', function () {
                                     var group = $(this).parents('ul.group_receivers');
-                                    var groupSelector = messageReceivers.find('[data-toggle_group="'+group.data('group')+'"]');
+                                    var groupSelector = messageReceivers.find('[data-toggle_group="' + group.data('group') + '"]');
                                     var total = group.find('input').length;
                                     var actives = group.find('input:checked').length;
-                                    if (actives === 0){
+                                    if (actives === 0) {
                                         groupSelector.prop("indeterminate", false);
                                         groupSelector.prop('checked', false).trigger('change');
-                                    }else if (actives < total){
+                                    } else if (actives < total) {
                                         groupSelector.prop("indeterminate", true);
-                                    }else{
+                                    } else {
                                         groupSelector.prop("indeterminate", false);
                                     }
 
                                 });
                             }
                         });
-                        if (capabilities.is_approver){
+                        if (capabilities.is_approver) {
                             messageReceivers.find('input[data-toggle_group="owners"]').trigger('click');
                         }
                         renderData.find('input[data-value="is_response_proposal"]').on('click', function () {
@@ -263,8 +263,8 @@
                         if (capabilities.can_respond) {
                             renderData.find('a.create-response-draft').on('click', function (e) {
                                 var messageId = $(this).data('message');
-                                $.each(post.privateMessages, function(){
-                                    if (this.id == messageId){
+                                $.each(post.privateMessages, function () {
+                                    if (this.id === messageId) {
                                         renderData.find('.new_response textarea').val(this.text);
                                         renderData.find('[data-target="new_response"]').trigger('click');
                                     }
@@ -320,10 +320,45 @@
                             });
                         });
 
-                        renderData.find('[data-action]').on('click', function (e) {
-                            var action = $(this).data('action');
-                            var parameters = $(this).data('parameters');
-                            var wrapper = $(this).parents('[data-action-wrapper]');
+                        var timeIsGreater = function (date, seconds) {
+                            if (seconds < 0) return true;
+                            if (date < 0) return false;
+                            return date > (Math.round(+new Date() / 1000) - seconds);
+                        }
+
+                        var runAction = function (action, payload, confirmMessage, onSuccess, onError) {
+                            var confirmation = true;
+                            if (confirmMessage) {
+                                confirmation = confirm(confirmMessage);
+                            }
+                            if (plugin.actionStarted === false && confirmation) {
+                                //console.log(action, payload, confirmMessage);
+                                plugin.actionStarted = true;
+                                plugin.startLoading();
+                                $.ajax({
+                                    type: 'POST',
+                                    async: false, // per poter fermare le multi actions in caso di errore
+                                    url: plugin.settings.apiEndPoint + '/actions/' + post.id + '/' + action,
+                                    data: JSON.stringify(payload),
+                                    success: function (data) {
+                                        plugin.actionStarted = false;
+                                        if ($.isFunction(onSuccess)) {
+                                            onSuccess(data);
+                                        }
+                                    },
+                                    error: function (data) {
+                                        plugin.actionStarted = false;
+                                        if ($.isFunction(onError)) {
+                                            onError(data);
+                                        }
+                                    },
+                                    contentType: "application/json",
+                                    dataType: 'json'
+                                });
+                            }
+                        };
+
+                        var getActionPayload = function (wrapper, parameters) {
                             var payload = {};
                             if (typeof parameters !== 'undefined') {
                                 $.each(parameters.split(','), function () {
@@ -345,35 +380,71 @@
                                     }
                                 });
                             }
-                            var confirmation = true;
-                            if ($(this).data('confirmation')) {
-                                confirmation = confirm($(this).data('confirmation'));
+
+                            return payload;
+                        };
+
+                        renderData.find('[data-action]').on('click', function (e) {
+                            renderData.find('.modal').modal('hide');
+                            var action = $(this).data('action');
+                            if (action === 'checkNoteAndFix') {
+                                if (timeIsGreater(capabilities.last_private_message_timestamp, post.settings.MinimumIntervalFromLastPrivateMessageToFix)) {
+                                    action = 'fix';
+                                } else {
+                                    renderData.find('#addNoteThenFix').modal('show');
+                                    return false;
+                                }
                             }
-                            if (plugin.actionStarted === false && confirmation) {
-                                plugin.actionStarted = true;
-                                plugin.startLoading();
-                                $.ajax({
-                                    type: 'POST',
-                                    url: plugin.settings.apiEndPoint + '/actions/' + post.id + '/' + action,
-                                    data: JSON.stringify(payload),
-                                    success: function (data) {
-                                        plugin.load(post.id);
-                                        plugin.actionStarted = false;
-                                        if (plugin.settings.alertsEndPoint) {
-                                            $('#social_user_alerts').remove();
-                                            $.get(plugin.settings.alertsEndPoint, function (data) {
-                                                $('header').prepend(data);
-                                            });
+                            var parameters = $(this).data('parameters');
+                            var wrapper = $(this).parents('[data-action-wrapper]');
+                            var payload = getActionPayload(wrapper, parameters);
+                            runAction(action, payload, $(this).data('confirmation'),
+                                function (data){
+                                    plugin.load(post.id);
+                                    if (plugin.settings.alertsEndPoint) {
+                                        $('#social_user_alerts').remove();
+                                        $.get(plugin.settings.alertsEndPoint, function (data) {
+                                            $('header').prepend(data);
+                                        });
+                                    }
+                                },
+                                function (data){
+                                    plugin.error(data);
+                                    plugin.load(post.id);
+                                }
+                            );
+                            e.preventDefault();
+                        });
+
+                        renderData.find('[data-actions]').on('click', function (e) {
+                            renderData.find('.modal').modal('hide');
+                            var actions = $(this).data('actions').split(',');
+                            var parameters = $(this).data('parameters');
+                            var wrapper = $(this).parents('[data-action-wrapper]');
+                            var confirmMessage = $(this).data('confirmation');
+                            var hasError = false;
+                            $.each(actions, function () {
+                                if (!hasError) {
+                                    var action = this;
+                                    var payload = getActionPayload(wrapper, parameters);
+                                    runAction(action, payload, confirmMessage,
+                                        null,
+                                        function (data) {
+                                            hasError = true;
+                                            plugin.error(data);
+                                            plugin.load(post.id);
                                         }
-                                    },
-                                    error: function (data) {
-                                        plugin.actionStarted = false;
-                                        plugin.error(data);
-                                        plugin.load(post.id);
-                                    },
-                                    contentType: "application/json",
-                                    dataType: 'json'
-                                });
+                                    );
+                                }
+                            });
+                            if (!hasError) {
+                                plugin.load(post.id);
+                                if (plugin.settings.alertsEndPoint) {
+                                    $('#social_user_alerts').remove();
+                                    $.get(plugin.settings.alertsEndPoint, function (data) {
+                                        $('header').prepend(data);
+                                    });
+                                }
                             }
                             e.preventDefault();
                         });
@@ -392,7 +463,7 @@
                                     success: function () {
                                         if ($.isFunction(plugin.settings.onRemove)) {
                                             plugin.settings.onRemove.call(plugin.resultContainer.context, plugin);
-                                        }else {
+                                        } else {
                                             window.location = $.opendataTools.settings('accessPath') + '/sensor/posts';
                                         }
                                     },
@@ -432,8 +503,8 @@
                             var widget = $(this).parent();
                             widget.find('.widget-content').toggleClass('hide');
                             widget.find('.form-group').toggleClass('hide');
-                            if (widget.find('.form-group').hasClass('hide')){
-                                if (widget.find('.form-group').find('#user-assign').length > 0){
+                            if (widget.find('.form-group').hasClass('hide')) {
+                                if (widget.find('.form-group').find('#user-assign').length > 0) {
                                     resetUserAndGroupSelect();
                                 }
                             }
@@ -443,14 +514,14 @@
                         renderData.find('a.message-visibility').on('click', function (e) {
                             var that = $(this);
                             var type = that.data('type');
-                            if (that.hasClass('label-default')){
+                            if (that.hasClass('label-default')) {
                                 that.removeClass('label-default');
                                 that.addClass('label-simple');
-                                $('.message-'+type).hide();
-                            }else{
+                                $('.message-' + type).hide();
+                            } else {
                                 that.removeClass('label-simple');
                                 that.addClass('label-default');
-                                $('.message-'+type).show();
+                                $('.message-' + type).show();
                             }
                             e.preventDefault();
                         });
@@ -466,26 +537,23 @@
             var plugin = this;
             if (data.responseJSON) {
                 plugin.showAlert(data.responseJSON);
-            }else{
+            } else {
                 plugin.showAlert({error_message: data.responseText});
             }
 
             return plugin;
         },
 
-        showAlert: function(data){
+        showAlert: function (data) {
             var plugin = this;
             var content = $($.templates(this.settings.alertTpl).render(data));
-            var alerts = plugin.alertContainer.find('#social_user_alerts');
-            if (alerts.length === 0) {
-                plugin.alertContainer.prepend(content);
-            }else{
-                alerts.find('.errorList').append(content.find('.errorList').html());
-            }
+            plugin.removeAlert();
+            plugin.alertContainer.prepend(content);
+
             return plugin;
         },
 
-        removeAlert: function(){
+        removeAlert: function () {
             var plugin = this;
             plugin.alertContainer.find('#social_user_alerts').remove();
             return plugin;

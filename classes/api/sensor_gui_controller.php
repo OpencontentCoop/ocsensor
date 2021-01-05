@@ -255,6 +255,32 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 'identifier' => 'is_a',
                 'grant' => $user->type
             ];
+            $lastPrivateMessage = -1;
+            foreach ($post->privateMessages->messages as $message){
+                if ($message->creator->id == $user->id){
+                    $published = $message->published->format('U');
+                    if ($lastPrivateMessage < $published) {
+                        $lastPrivateMessage = $published;
+                    }
+                }
+            }
+            $result->variables[] = [
+                'identifier' => 'last_private_message_timestamp',
+                'grant' => $lastPrivateMessage
+            ];
+            $lastComment = -1;
+            foreach ($post->comments->messages as $message){
+                if ($message->creator->id == $user->id){
+                    $published = $message->published->format('U');
+                    if ($lastComment < $published) {
+                        $lastComment = $published;
+                    }
+                }
+            }
+            $result->variables[] = [
+                'identifier' => 'last_comment_timestamp',
+                'grant' => $lastComment
+            ];
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);

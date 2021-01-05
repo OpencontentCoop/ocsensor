@@ -1,12 +1,16 @@
 {if sensor_settings().HideTypeChoice}
     <input type="hidden" name="type" value="{sensor_types()[0].identifier}" />
 {else}
-<select name="type" class="form-control" tabindex="2">
-    <option value="{sensor_types()[0].identifier}">Scegli il tipo di segnalazione</option>
+<div class="post-subject">
+    <label class="form-group has-float-label">
+    <select name="type" class="form-control" tabindex="1">
         {foreach sensor_types() as $type}
-        <option value="{$type.identifier}">
-            {$type.name|wash()}
-        </option>
-    {/foreach}
-</select>
+            <option value="{$type.identifier}">
+                {$type.name|wash()}
+            </option>
+        {/foreach}
+    </select>
+    <span>Scegli il tipo di segnalazione</span>
+    </label>
+</div>
 {/if}

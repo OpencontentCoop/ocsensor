@@ -217,7 +217,16 @@
                     <textarea data-value="text" class="form-control" placeholder="{/literal}{'Risposta ufficiale'|i18n('sensor/messages')}{literal}" rows="7"></textarea>
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default pull-left">Annulla</a>
-                        <input class="btn send btn-bold pull-right" type="submit" data-action="add_response" data-parameters="text" value="{/literal}{'Pubblica la risposta ufficiale'|i18n('sensor/messages')}{literal}" />
+                        <div class="btn-group pull-right">
+                            <button class="btn send btn-bold" type="submit" data-actions="add_response,close" data-parameters="text">{/literal}{'Pubblica la risposta ufficiale e chiudi la segnalazione'|i18n('sensor/messages')}{literal}</button>
+                            <button type="button" class="btn btn-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Mostra altre opzioni</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-action="add_response" data-parameters="text">{/literal}{'Pubblica la risposta ufficiale e mantieni la segnalazione aperta'|i18n('sensor/messages')}{literal}</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             {{/if}}

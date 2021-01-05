@@ -61,7 +61,7 @@
 
     <div class="col-md-3 hide searchform">
         <div class="dashboard-search">
-            <form method="get" class="form">
+            <form method="get" class="form dashboard-form">
             	<button class="btn" type="reset" style="margin-bottom: 10px"><span class="fa fa-times"></span> Annulla ricerca</button>
                 <div class="form-group">
                     <label class="widget-title" for="searchId">{'Cerca per ID'|i18n('sensor/dashboard')}</label>
@@ -174,6 +174,18 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label class="widget-title"  for="searchChannel">{'Cerca per canale'|i18n('sensor/post')}</label>
+                    <select name="moderation"
+                            class="form-control"
+                            id='searchChannel'>
+                        <option></option>
+                        {foreach sensor_channels() as $channel}
+                            <option value="{$channel|wash()}">{$channel|wash()}</option>
+                        {/foreach}
+                    </select>
+                </div>
+
                 <button class="btn pull-right" type="submit"><span class="fa fa-search"></span> {'Cerca'|i18n('sensor/post')}</button>
                 <button class="btn btn-danger" type="reset"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/post')}</button>
             </form>
@@ -269,7 +281,7 @@ $(document).ready(function () {ldelim}
     {rdelim};
 {literal}
     $.views.helpers($.opendataTools.helpers);
-    var form = $('form');
+    var form = $('form.dashboard-form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
     var selectOwner = form.find('select[name="owner"]');
@@ -491,6 +503,10 @@ $(document).ready(function () {ldelim}
         var searchExpiry = form.find('#searchExpiry');
         if (searchExpiry.val().length > 0){
             query.push("(expiration range [" + searchExpiry.data('daterangepicker').startDate.format('YYYY-MM-DDTHH:mm:ss') + "Z," + searchExpiry.data('daterangepicker').endDate.format('YYYY-MM-DDTHH:mm:ss') + "Z] and workflow_status in [waiting,read,assigned,fixed])");
+        }
+        var searchChannel = form.find('#searchChannel').find(':selected').val();
+        if (searchChannel){
+            query.push("on_behalf_of_mode in [" + searchChannel + "]");
         }
 
         var participantRoles = [];

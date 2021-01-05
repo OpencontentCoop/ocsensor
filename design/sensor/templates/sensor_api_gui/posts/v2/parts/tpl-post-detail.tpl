@@ -10,6 +10,12 @@
         <li>{{:comments.length}} {/literal}{'commenti'|i18n('sensor/post')}{literal} - {{:responses.length}} {/literal}{'risposte ufficiali'|i18n('sensor/post')}{literal}</li>
     </ul>
 
+    {{if capabilities.is_a == 'sensor_operator' && reporter.id != author.id}}
+    <ul class="list-inline">
+        <li>{/literal}{'Segnalazione raccolta da'|i18n('sensor/post')}{literal} {{:reporter.name}}{{if channel && channel.icon}} {/literal}{'via'|i18n('sensor/post')}{literal} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}</li>
+    </ul>
+    {{/if}}
+
     {{if relatedItems && relatedItems.length > 0}}
     <ul class="list-inline">
         <li>{/literal}{'Segnalazioni correlate'|i18n('sensor/post')}{literal}</li>

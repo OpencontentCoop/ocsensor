@@ -431,19 +431,33 @@ table.list > tfoot > tr > td {
 }
 .post-result{
     margin: 45px 0 !important;
+    border: 1px solid #eee;
+    padding: 0 15px 15px;
+    border-radius:6px;
 }
 .post-result .post-title{
     min-height: 43px;
 }
-.post-result .post-title div{
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 23px;
+
+.post-result .post-title div {
+    margin-top: 10px;
+}
+@media (min-width: 500px) {
+    .post-result .post-title div {
+        display: table-cell;
+        vertical-align: middle;
+        font-size: 23px;
+        margin-top: 0;
+    }
 }
 .post-result .post-title div.post-identifier {
     white-space: nowrap;
     padding-right: 12px;
     font-size: 30px;
+}
+.post-result.service_teaser .service_photo figure,
+.post-result.service_teaser .service_details{
+    min-height: auto;
 }
 
 .d-flex{
