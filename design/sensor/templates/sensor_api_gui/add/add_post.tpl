@@ -30,13 +30,12 @@
 
                     <div class="post-content tab-content">
                         <div class="tab-pane active" role="tabpanel" id="step-text">
+                            {include uri='design:sensor_api_gui/add/type.tpl'}
+
                             <div class="post-subject">
                                 {include uri='design:sensor_api_gui/add/subject.tpl'}
                             </div>
                             <div class="step-content">
-                                <div class="step-part">
-                                    {include uri='design:sensor_api_gui/add/type.tpl'}
-                                </div>
                                 <div class="step-part">
                                     {include uri='design:sensor_api_gui/add/description.tpl'}
                                 </div>
