@@ -91,47 +91,57 @@ class SensorConnectorTrigger implements OCWebHookTriggerInterface
 
     public function isValidPayload($payload, $filters)
     {
-        $event = $payload['event'];
-        $postId = $payload['post']['id'];
-
-        $filters = json_decode($filters, true);
-        $operatorIdList = [];
-        if (isset($filters['operator'])) {
-            $operatorIdList = explode(',', $filters['operator']);
-        }
-
-        if (empty($operatorIdList)) {
-            $this->log($event, $postId, "Empty operator list");
-            return false;
-        }
-
-        if (!in_array($event, [
-            'on_assign',
-            'on_fix',
-            'on_add_observer',
-            'on_close'
-        ])) {
-            $this->log($event, $postId, "Unhandled event");
-            return false;
-        }
-
         try {
+            $event = $payload['event'];
+            $postId = $payload['post']['id'];
             $post = $this->repository->getPostService()->loadPost($postId);
-            $ownersAndObservers = array_merge(
-                $post->owners->getParticipantIdListByType(Participant::TYPE_USER),
-                $post->observers->getParticipantIdListByType(Participant::TYPE_USER)
-            );
-            foreach ($ownersAndObservers as $userId) {
-                if (in_array($userId, $operatorIdList)) {
-                    $this->log($event, $postId, "Ok: send webhook!");
-                    return true;
+
+            $filters = json_decode($filters, true);
+            $operatorIdList = [];
+            if (isset($filters['operator'])) {
+                $operatorIdList = explode(',', $filters['operator']);
+            }
+            if (empty($operatorIdList)) {
+                $this->log($event, $postId, "Empty operator list");
+                return false;
+            }
+
+            if ($event == 'on_assign') {
+                foreach ($payload['parameters']['owners'] as $owner) {
+                    if (in_array($owner, $operatorIdList)) {
+                        $this->log($event, $postId, "[SEND] Is owner");
+                        return true;
+                    }
+                }
+                foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
+                    if (in_array($userId, $operatorIdList)) {
+                        $payload['event'] = 'change_owner';
+                        $this->log($event, $postId, "[SEND] Was owner");
+                        return true;
+                    }
+                }
+            }elseif ($event == 'on_group_assign' || $event == 'auto_assign') {
+                foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
+                    if (in_array($userId, $operatorIdList)) {
+                        $payload['event'] = 'change_owner';
+                        $this->log($event, $postId, "[SEND] Was owner");
+                        return true;
+                    }
+                }
+            } elseif ($event == 'on_fix' || $event == 'on_close') {
+                foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
+                    if (in_array($userId, $operatorIdList)) {
+                        $this->log($event, $postId, "[SEND] Was owner or observer");
+                        return true;
+                    }
                 }
             }
+
         } catch (Exception $e) {
-            eZDebug::writeError($e->getMessage(), __METHOD__);
+            $this->log($event, $postId, $e->getMessage());
         }
 
-        $this->log($event, $postId, "Unhandled operator");
+        $this->log($event, $postId, '');
         return false;
     }
 

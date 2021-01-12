@@ -17,8 +17,10 @@ $options = $script->getOptions();
 $script->initialize();
 $script->setUseDebugAccumulators(true);
 
-$user = eZUser::fetchByName( 'urp' );
+$user = eZUser::fetchByName( 'admin' );
 eZUser::setCurrentlyLoggedInUser( $user , $user->attribute( 'contentobject_id' ) );
+
+$cli = eZCLI::instance();
 
 try {
 
@@ -36,11 +38,12 @@ try {
 
     foreach ($nodes as $node){
         $post = $repository->getPostService()->loadPost($node->attribute('contentobject_id'));
+        $cli->output($post->id);
         foreach ($post->observers->participants as $participant){
             if ($participant->type == Participant::TYPE_USER){
                 foreach ($participant->users as $user){
                     if ($user->type !== 'sensor_operator'){
-                        eZCLI::instance()->warning("Remove $participant->name from $post->id");
+                        $cli->warning("Remove $participant->name from $post->id");
                         $repository->getParticipantService()->addPostParticipant($post, $participant->id, $roleAuthor);
                         $repository->getPostService()->refreshPost($post);
                     }

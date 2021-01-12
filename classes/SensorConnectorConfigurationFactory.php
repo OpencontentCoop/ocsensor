@@ -31,16 +31,26 @@ class SensorConnectorConfigurationFactory
         throw new Exception("Sensor connect configuration not found");
     }
 
+    public function getConfigurationByIdentifier($identifier)
+    {
+        $configurations = $this->getConfigurations();
+        if (isset($configurations[$identifier])){
+            return new SensorConnectorConfiguration($configurations[$identifier]);
+        }
+
+        throw new Exception("Sensor connect configuration not found");
+    }
+
     public function getConfigurations()
     {
 
 return [
-    [
+    'prova' => [
         'identifier' => 'prova',
         'secret' => 'abcd',
         'userId' => 148
     ],
-    [
+    'test' => [
         'identifier' => 'test',
         'secret' => '123456',
         'userId' => 148
