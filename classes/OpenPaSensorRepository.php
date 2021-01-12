@@ -163,6 +163,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
             $this->addListener('*', new SensorWebHookListener($this));
+            $this->addListener('*', new SensorConnectorListener($this));
         }
 
         $this->addListener('*', new SensorFlashMessageListener($this));

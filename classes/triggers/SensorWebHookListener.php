@@ -10,13 +10,13 @@ use Opencontent\Sensor\OpenApi\UserSerializer;
 
 class SensorWebHookListener extends AbstractListener
 {
-    private $repository;
+    protected $repository;
 
-    private $events;
+    protected $events;
 
-    private $postSerializer;
+    protected $postSerializer;
 
-    private $userSerializer;
+    protected $userSerializer;
 
     public function __construct(Repository $repository)
     {
@@ -32,7 +32,7 @@ class SensorWebHookListener extends AbstractListener
         eZURI::transformURI($endpointUrl, true, 'full');
         $openApiTools = new OpenApi(
             $this->repository,
-            $siteUrl,
+            rtrim($siteUrl, '/'),
             $endpointUrl
         );
         $this->postSerializer = new PostSerializer($openApiTools);
@@ -51,18 +51,6 @@ class SensorWebHookListener extends AbstractListener
                     OCWebHookQueue::defaultHandler()
                 );
             }
-
-            $payload = [
-                'event' => $param->identifier,
-                'post' => $this->postSerializer->serialize($param->post),
-                'user' => $this->userSerializer->serialize($param->user),
-                'parameters' => $param->parameters,
-            ];
-            OCWebHookEmitter::emit(
-                SensorConnectorTrigger::IDENTIFIER,
-                $payload,
-                OCWebHookQueue::defaultHandler()
-            );
         }
     }
 

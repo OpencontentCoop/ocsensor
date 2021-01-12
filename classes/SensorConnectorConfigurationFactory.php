@@ -5,8 +5,6 @@ class SensorConnectorConfigurationFactory
 {
     private static $instance;
 
-    private $isEnabled;
-
     private function __construct()
     {
     }
@@ -20,24 +18,35 @@ class SensorConnectorConfigurationFactory
         return self::$instance;
     }
 
-    public function isEnabled()
-    {
-        return $this->isEnabled;
-    }
-
-    public function getConfiguration($identifier)
+    public function getConfigurationBySignature($signature, array $payload)
     {
         $configurations = $this->getConfigurations();
-        if (isset($configurations[$identifier])){
-            return new SensorConnectorConfiguration($configurations[$identifier]);
+        foreach ($configurations as $configurationData){
+            $configuration = new SensorConnectorConfiguration($configurationData);
+            if ($configuration->isValidPayload($signature, $payload)){
+                return $configuration;
+            }
         }
 
-        return new SensorConnectorConfiguration([]);
-        //throw new Exception("Configuration $identifier not found");
+        throw new Exception("Sensor connect configuration not found");
     }
 
     public function getConfigurations()
     {
+
+return [
+    [
+        'identifier' => 'prova',
+        'secret' => 'abcd',
+        'userId' => 148
+    ],
+    [
+        'identifier' => 'test',
+        'secret' => '123456',
+        'userId' => 148
+    ],
+];
+
         $data = eZSiteData::fetchByName('sensor_connector');
         if (!$data instanceof eZSiteData){
             $data = new eZSiteData([
@@ -66,7 +75,7 @@ class SensorConnectorConfigurationFactory
     public function addConfiguration(SensorConnectorConfiguration $configuration)
     {
         $configurations = $this->getConfigurations();
-        $configurations[$configuration->identifier] = $configuration;
+        $configurations[$configuration->getIdentifier()] = $configuration;
         $this->storeConfigurations($configurations);
     }
 }

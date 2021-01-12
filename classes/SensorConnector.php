@@ -5,24 +5,29 @@ use Opencontent\Sensor\OpenApi\Controller;
 
 class SensorConnector extends Controller
 {
-    private $currentEvent;
+    private $eventName;
 
-    private $currentPost;
+    private $rawPost;
 
-    private $currentUser;
+    private $rawUser;
 
-    private $currentParameters;
+    private $eventParameters;
+
+    private $currentPostPayload;
 
     public function run(SensorConnectorConfiguration $configuration)
     {
+        $payload = parent::getPayload();
+        $this->eventName = $payload['event'];
+        $this->eventParameters = $payload['parameters'];
+        $this->rawPost = $payload['post'];
+        $this->rawUser = $payload['user'];
+
         $result = new ezpRestMvcResult();
-        $this->setCurrentPayload();
-        if (!in_array($this->currentEvent, $this->getValidEvents())){
-            throw new InvalidArgumentException();
-        }
-        $this->setCurrentPost();
-        if ($this->currentEvent == 'on_assign'){
-            $remoteId = $configuration->generateRemoteId($this->currentPost['id']);
+        $this->setCurrentPostPayload();
+
+        if ($this->eventName == 'on_assign'){
+            $remoteId = $configuration->generateRemoteId($this->rawPost['id']);
             $exists = eZContentObject::fetchByRemoteID($remoteId);
             if ($exists instanceof eZContentObject){
                 $this->restController->postId = $exists->attribute('id');
@@ -39,44 +44,33 @@ class SensorConnector extends Controller
         return $result;
     }
 
-    private function getValidEvents()
+    private function setCurrentPostPayload()
     {
-        return [
-            'on_assign',
-        ];
-    }
-
-    private function setCurrentPost()
-    {
-        unset($this->currentPost['area']);
-        unset($this->currentPost['areas']);
-        unset($this->currentPost['type']);
-        unset($this->currentPost['image']);
-        $this->currentPost['is_private'] = true;
-        if (isset($this->currentPost['images'])) {
-            $images = [];
-            foreach ($this->currentPost['images'] as $image){
-                $images[] = [
-                    'filename' => basename($image),
-                    'file' => base64_encode(file_get_contents($image)),
-                ];
+        $images = [];
+        if (isset($this->rawPost['images'])) {
+            foreach ($this->rawPost['images'] as $image){
+                $imageFileContents = file_get_contents($image);
+                if ($imageFileContents) {
+                    $images[] = [
+                        'filename' => basename($image),
+                        'file' => base64_encode($imageFileContents),
+                    ];
+                }
             }
-            $this->currentPost['images'] = $images;
         }
-    }
-
-    private function setCurrentPayload()
-    {
-        $payload = parent::getPayload();
-        $this->currentEvent = $payload['event'];
-        $this->currentPost = $payload['post'];
-        $this->currentUser = $payload['post'];
-        $this->currentParameters = $payload['parameters'];
+        $this->currentPostPayload = [
+            'address' => $this->rawPost['address'],
+            'type' => $this->rawPost['type'],
+            'subject' => $this->rawPost['subject'],
+            'description' => $this->rawPost['description'],
+            'is_private' => true,
+            'images' => $images,
+        ];
     }
 
     protected function getPayload()
     {
-        return $this->currentPost;
+        return $this->currentPostPayload;
     }
 
 
