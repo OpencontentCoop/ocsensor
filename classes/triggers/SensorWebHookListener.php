@@ -18,6 +18,8 @@ class SensorWebHookListener extends AbstractListener
 
     protected $userSerializer;
 
+    protected $messageSerializer;
+
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
@@ -37,6 +39,7 @@ class SensorWebHookListener extends AbstractListener
         );
         $this->postSerializer = new PostSerializer($openApiTools);
         $this->userSerializer = new UserSerializer($openApiTools);
+        $this->messageSerializer = new OpenApi\MessageSerializer($openApiTools);
     }
 
     public function handle(EventInterface $event, $param = null)

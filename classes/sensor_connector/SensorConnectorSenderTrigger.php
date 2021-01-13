@@ -2,18 +2,32 @@
 
 use Opencontent\Sensor\Api\Values\Operator;
 use Opencontent\Sensor\Api\Values\Participant;
+use Opencontent\Sensor\OpenApi;
+use Opencontent\Sensor\OpenApi\PostSerializer;
 
-class SensorConnectorTrigger implements OCWebHookTriggerInterface
+class SensorConnectorSenderTrigger implements OCWebHookTriggerInterface
 {
-    const IDENTIFIER = 'sensor_connector';
+    const IDENTIFIER = 'sensor_connector_send';
 
     protected static $schema;
 
     protected $repository;
 
+    protected $postSerializer;
+
     public function __construct()
     {
         $this->repository = OpenPaSensorRepository::instance();
+        $siteUrl = '/';
+        eZURI::transformURI($siteUrl, true, 'full');
+        $endpointUrl = '/api/sensor';
+        eZURI::transformURI($endpointUrl, true, 'full');
+        $openApiTools = new OpenApi(
+            $this->repository,
+            rtrim($siteUrl, '/'),
+            $endpointUrl
+        );
+        $this->postSerializer = new PostSerializer($openApiTools);
     }
 
     public function getIdentifier()
@@ -23,14 +37,17 @@ class SensorConnectorTrigger implements OCWebHookTriggerInterface
 
     public function getName()
     {
-        return 'OpenSegnalazioni Connector';
+        return 'OpenSegnalazioni Connector Sender';
     }
 
     public function getDescription()
     {
         return
-            'Viene scatenato quando è coinvolto un operatore selezionato: il payload è un oggetto json Sensor Event (event, post, user, parameters). ' .
-            'Utilizzabile con un endpoint /api/sensor_connector/ verso un\'istanza di OpenSegnalazioni con OpenSegnalazioni Connector abilitato e configurato.';
+            'Crea segnalazioni in un\'istanza remota di OpenSegnalazioni e ne riceve i messaggi di chiusura ' .
+            'Viene scatenato quando è coinvolto un operatore configurato nei filtri. ' .
+            'Utilizzabile con un endpoint di un\'istanza remota di OpenSegnalazioni /api/sensor_connector/ ' .
+            'con OpenSegnalazioni Connector Receiver configurato e con cui deve condividere il secret. ' .
+            'Occorre inoltre impostare in headers X-Webhook-Trigger: <username-utente-remoto>';
     }
 
     public function canBeEnabled()
@@ -92,9 +109,10 @@ class SensorConnectorTrigger implements OCWebHookTriggerInterface
     public function isValidPayload($payload, $filters)
     {
         try {
-            $event = $payload['event'];
-            $postId = $payload['post']['id'];
-            $post = $this->repository->getPostService()->loadPost($postId);
+            $event = $payload['sensor_event'];
+            $postId = $payload['sensor_post']->id;
+            $post = $payload['sensor_post'];
+            $triggerName = self::IDENTIFIER;
 
             $filters = json_decode($filters, true);
             $operatorIdList = [];
@@ -102,36 +120,48 @@ class SensorConnectorTrigger implements OCWebHookTriggerInterface
                 $operatorIdList = explode(',', $filters['operator']);
             }
             if (empty($operatorIdList)) {
-                $this->log($event, $postId, "Empty operator list");
+                return false;
+            }
+
+            // avoid loop with receiver
+            if (in_array($this->repository->getCurrentUser()->id, $operatorIdList)) {
                 return false;
             }
 
             if ($event == 'on_assign') {
-                foreach ($payload['parameters']['owners'] as $owner) {
-                    if (in_array($owner, $operatorIdList)) {
-                        $this->log($event, $postId, "[SEND] Is owner");
-                        return true;
+                if (isset($payload['sensor_event_parameters']['owners'])) {
+                    foreach ($payload['sensor_event_parameters']['owners'] as $owner) {
+                        if (in_array($owner, $operatorIdList)) {
+                            $payload['event'] = SensorConnector::EVENT_OPEN;
+                            $payload['post'] = $this->postSerializer->serialize($post);
+                            $this->log($event, $postId, "[$triggerName] Current operator is owner");
+                            return true;
+                        }
                     }
                 }
                 foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
                     if (in_array($userId, $operatorIdList)) {
-                        $payload['event'] = 'change_owner';
-                        $this->log($event, $postId, "[SEND] Was owner");
+                        $payload['event'] = SensorConnector::EVENT_CLOSE;
+                        $payload['post'] = $this->postSerializer->serialize($post);
+                        $this->log($event, $postId, "[$triggerName] Operator was owner");
                         return true;
                     }
                 }
-            }elseif ($event == 'on_group_assign' || $event == 'auto_assign') {
+            } elseif ($event == 'on_group_assign' || $event == 'auto_assign') {
                 foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
                     if (in_array($userId, $operatorIdList)) {
-                        $payload['event'] = 'change_owner';
-                        $this->log($event, $postId, "[SEND] Was owner");
+                        $payload['event'] = SensorConnector::EVENT_CLOSE;
+                        $payload['post'] = $this->postSerializer->serialize($post);
+                        $this->log($event, $postId, "[$triggerName] Operator was owner");
                         return true;
                     }
                 }
             } elseif ($event == 'on_fix' || $event == 'on_close') {
                 foreach ($post->observers->getParticipantIdListByType(Participant::TYPE_USER) as $userId) {
                     if (in_array($userId, $operatorIdList)) {
-                        $this->log($event, $postId, "[SEND] Was owner or observer");
+                        $payload['event'] = SensorConnector::EVENT_CLOSE;
+                        $payload['post'] = $this->postSerializer->serialize($post);
+                        $this->log($event, $postId, "[$triggerName] Operator was owner or observer");
                         return true;
                     }
                 }
@@ -141,13 +171,12 @@ class SensorConnectorTrigger implements OCWebHookTriggerInterface
             $this->log($event, $postId, $e->getMessage());
         }
 
-        $this->log($event, $postId, '');
         return false;
     }
 
     private function log($event, $postId, $message)
     {
-        eZLog::write("[$postId][$event] $message", 'sensor_connector.log');
+        eZLog::write("[$postId] [$event] $message", 'sensor_connector.log');
     }
 
 }

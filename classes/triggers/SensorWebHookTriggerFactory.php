@@ -13,7 +13,8 @@ class SensorWebHookTriggerFactory implements OCWebHookTriggerFactoryInterface
             }
         }
 
-        $triggers[] = new SensorConnectorTrigger();
+        $triggers[] = new SensorConnectorSenderTrigger();
+        $triggers[] = new SensorConnectorReceiverTrigger();
 
         return $triggers;
     }
