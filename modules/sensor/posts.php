@@ -1,7 +1,6 @@
 <?php
 
 use Opencontent\Opendata\Api\ClassRepository;
-use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\NotFoundException;
 
@@ -40,10 +39,6 @@ if (!is_numeric($postId)) {
 
     try {
         $post = $repository->getSearchService()->searchPost($postId);
-
-        $readAction = new Action();
-        $readAction->identifier = 'read';
-        $repository->getActionService()->runAction($readAction, $post);
 
         $tpl->setVariable('post_id', (int)$postId);
 

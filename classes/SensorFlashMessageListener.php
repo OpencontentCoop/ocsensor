@@ -9,7 +9,6 @@ class SensorFlashMessageListener extends AbstractListener
 {
     private $repository;
 
-
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;

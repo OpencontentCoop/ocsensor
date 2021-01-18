@@ -173,6 +173,22 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 array(),
                 'http-post'
             ), 1),
+
+            'sensorGuiApiTodolist' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/inbox/:Identifier',
+                'SensorGuiApiController',
+                'loadInbox',
+                array('page' => 1, 'limit' => 10),
+                'http-get'
+            ), 1),
+
+            'sensorGuiApiBookmark' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/special/:Id/:Enable',
+                'SensorGuiApiController',
+                'loadSpecial',
+                array(),
+                'http-post'
+            ), 1),
         );
         return $routes;
     }

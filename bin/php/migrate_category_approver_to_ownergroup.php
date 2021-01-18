@@ -5,10 +5,12 @@ use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
 require 'autoload.php';
 
-$script = eZScript::instance(array('description' => ("Migrate category approver to owner_group\n\n"),
+$script = eZScript::instance(array(
+    'description' => ("Migrate category approver to owner_group\n\n"),
     'use-session' => false,
     'use-modules' => true,
-    'use-extensions' => true));
+    'use-extensions' => true)
+);
 
 $script->startup();
 

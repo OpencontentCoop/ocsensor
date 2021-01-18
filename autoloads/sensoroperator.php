@@ -1,5 +1,7 @@
 <?php
 
+use Opencontent\Opendata\Api\ClassRepository;
+
 class SensorOperator
 {
     function operatorList()
@@ -16,6 +18,9 @@ class SensorOperator
             'sensor_types',
             'sensor_is_moderation_enabled',
             'sensor_channels',
+            'sensor_post_class',
+            'sensor_operators',
+            'sensor_groups',
         );
     }
 
@@ -42,6 +47,21 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_groups':
+                $operatorValue = $repository->getGroupsTree();
+                break;
+
+            case 'sensor_operators':
+                $operatorValue = $repository->getOperatorsTree();
+                break;
+
+            case 'sensor_post_class':
+            {
+                $classRepository = new ClassRepository();
+                $operatorValue = $classRepository->load($repository->getPostContentClassIdentifier());
+                break;
+            }
+
             case 'sensor_channels':
             {
                 $channels = [];

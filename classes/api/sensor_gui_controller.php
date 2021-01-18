@@ -4,8 +4,7 @@ use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
 use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
-use Opencontent\Sensor\Api\Values\PostCreateStruct;
-use Opencontent\Sensor\Api\Values\PostUpdateStruct;
+use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\OpenApi;
 
@@ -37,15 +36,6 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         );
     }
 
-    /**
-     * @return ezpRestRequest
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-
     private function getHostURI()
     {
         $hostUri = $this->request->getHostURI();
@@ -64,6 +54,14 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         $uri = $hostUri . $apiPrefix . '/' . $apiName;
 
         return $uri;
+    }
+
+    /**
+     * @return ezpRestRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     public function doSettings()
@@ -140,9 +138,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         }
 
         try {
-            $apiPost = $this->openApiTools->replacePlaceholders(
-                $this->repository->getSearchService()->searchPost($this->Id)->jsonSerialize()
-            );
+            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $apiPost = $this->openApiTools->replacePlaceholders($post->jsonSerialize());
 
             $messages = [];
             foreach ($apiPost['timelineItems'] as $message) {
@@ -163,6 +160,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             }
             ksort($messages);
             $apiPost['_messages'] = array_values($messages);
+
+            $readAction = new Action();
+            $readAction->identifier = 'read';
+            $this->repository->getActionService()->runAction($readAction, $post);
 
             $result = new ezpRestMvcResult();
             $result->variables = $apiPost;
@@ -256,8 +257,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 'grant' => $user->type
             ];
             $lastPrivateMessage = -1;
-            foreach ($post->privateMessages->messages as $message){
-                if ($message->creator->id == $user->id){
+            foreach ($post->privateMessages->messages as $message) {
+                if ($message->creator->id == $user->id) {
                     $published = $message->published->format('U');
                     if ($lastPrivateMessage < $published) {
                         $lastPrivateMessage = $published;
@@ -269,8 +270,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 'grant' => $lastPrivateMessage
             ];
             $lastComment = -1;
-            foreach ($post->comments->messages as $message){
-                if ($message->creator->id == $user->id){
+            foreach ($post->comments->messages as $message) {
+                if ($message->creator->id == $user->id) {
                     $published = $message->published->format('U');
                     if ($lastComment < $published) {
                         $lastComment = $published;
@@ -299,16 +300,6 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         }
 
         return $result;
-    }
-
-    public function getPayload()
-    {
-        $input = file_get_contents("php://input");
-        $data = json_decode($input, true);
-        if (json_last_error() != JSON_ERROR_NONE) {
-            throw new InvalidArgumentException("Invalid json", 1);
-        }
-        return $data;
     }
 
     public function doUpdatePost()
@@ -475,6 +466,16 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    public function getPayload()
+    {
+        $input = file_get_contents("php://input");
+        $data = json_decode($input, true);
+        if (json_last_error() != JSON_ERROR_NONE) {
+            throw new InvalidArgumentException("Invalid json", 1);
+        }
+        return $data;
+    }
+
     public function doPostUpload()
     {
         try {
@@ -558,7 +559,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doTempUpload()
     {
         try {
-            if (!$this->repository->getPostRootNode()->attribute('can_create')){
+            if (!$this->repository->getPostRootNode()->attribute('can_create')) {
                 throw new \Opencontent\Opendata\Api\Exception\ForbiddenException('create', 'post');
             }
             $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
@@ -623,6 +624,44 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         try {
             $controller = new OpenApi\Controller($this->openApiTools, $this);
             $result = $controller->loadUsers();
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doLoadInbox()
+    {
+        try {
+            $result = new ezpRestMvcResult();
+            $todolist = new SensorInbox($this->repository);
+            $page = isset($this->request->get['page']) ? rawurldecode($this->request->get['page']) : $this->request->variables['page'];
+            $limit = isset($this->request->get['limit']) ? rawurldecode($this->request->get['limit']) : $this->request->variables['limit'];
+            $result->variables = $todolist->get($this->Identifier, $page, $limit);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doLoadSpecial()
+    {
+        try {
+            $result = new ezpRestMvcResult();
+            $this->repository->getSearchService()->searchPost($this->Id);
+            $enabled = (bool)$this->Enable;
+            $nodes = eZContentObjectTreeNode::fetchByContentObjectID($this->Id);
+            $userID = (int)$this->repository->getCurrentUser()->id;
+            foreach ($nodes as $node) {
+                if ($enabled) {
+                    $result->variables[] = eZContentBrowseBookmark::createNew($userID, $node->attribute('node_id'), $node->attribute('name'))->attribute('id');
+                } else {
+                    $nodeID = (int)$node->attribute('node_id');
+                    eZDB::instance()->query("DELETE FROM ezcontentbrowsebookmark WHERE node_id=$nodeID and user_id=$userID");
+                }
+            }
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }

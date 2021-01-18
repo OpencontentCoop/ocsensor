@@ -14,5 +14,8 @@ $eZTemplateOperatorArray[] = array(
         'sensor_types',
         'sensor_is_moderation_enabled',
         'sensor_channels',
+        'sensor_post_class',
+        'sensor_operators',
+        'sensor_groups',
     )
 );

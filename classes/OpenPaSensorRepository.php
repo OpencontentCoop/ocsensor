@@ -166,6 +166,14 @@ class OpenPaSensorRepository extends LegacyRepository
         }
 
         $this->addListener('*', new SensorFlashMessageListener($this));
+        if ($this->getSensorSettings()->get('SocketIsEnabled')) {
+            $this->addListener('*', new SensorSocketEmitterListener(
+                $this,
+                $this->getSensorSettings()->get('SocketSecret'),
+                $this->getSensorSettings()->get('SocketInternalUrl'),
+                $this->getSensorSettings()->get('SocketPort')
+            ));
+        }
 
         eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
 
@@ -181,6 +189,7 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         if ($this->settings === null) {
             $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
+            $socketIni = eZINI::instance('ocsensor.ini')->group('SocketSettings');
             $this->settings = new Settings(array(
                 'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
                 'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
@@ -207,6 +216,12 @@ class OpenPaSensorRepository extends LegacyRepository
                 'HiddenOperatorEmail' => 'operator@example.it',
                 'AnnounceKitId' => $this->getAnnounceKitId(),
                 'MinimumIntervalFromLastPrivateMessageToFix' => isset($sensorIni['MinimumIntervalFromLastPrivateMessageToFix']) ? (int)$sensorIni['MinimumIntervalFromLastPrivateMessageToFix'] : -1,
+                'SocketIsEnabled' => $socketIni['Enabled'] === 'true' || $socketIni['Enabled'] === true,
+                'SocketUri' => $socketIni['Url'],
+                'SocketPath' => $socketIni['Path'],
+                'SocketPort' => $socketIni['Port'],
+                'SocketInternalUrl' => $socketIni['InternalUrl'],
+                'SocketSecret' => $socketIni['Secret'],
             ));
         }
 

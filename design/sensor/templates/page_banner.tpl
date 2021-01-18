@@ -1,5 +1,16 @@
 {if is_set($social_pagedata)|not()}{def $social_pagedata = social_pagedata()}{/if}
-{if and( is_set( $module_result.content_info.persistent_variable.sensor_home ), $social_pagedata.banner_path )}
+
+{def $show_inbox_widget = cond(
+    and(
+        sensor_settings('SocketIsEnabled'),
+        ezini('SensorConfig', 'ShowInboxWidget', 'ocsensor.ini')|eq('enabled'),
+        fetch('user', 'has_access_to', hash('module','sensor','function','manage'))|not()
+    ),
+    true(),
+    false()
+)}
+
+{if and( $show_inbox_widget|not(), is_set( $module_result.content_info.persistent_variable.sensor_home ), $social_pagedata.banner_path )}
     <div class="full_page_photo hidden-xs" style='background-image: url({$social_pagedata.banner_path|ezroot()});'>
         <div class="container">
             <section class="call_to_action">
@@ -75,3 +86,4 @@
 {if sensor_settings().ShowSmartGui}
     {include name="add_post" uri='design:sensor_api_gui/add/add_post.tpl'}
 {/if}
+{undef $show_inbox_widget}

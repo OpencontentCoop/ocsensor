@@ -105,6 +105,14 @@ $ViewList['avatar'] = array(
     'functions' => array('use')
 );
 
+$ViewList['inbox'] = array(
+    'script' => 'inbox.php',
+    'params' => array(),
+    'unordered_params' => array(),
+    'functions' => array('manage')
+);
+
+
 $FunctionList = array();
 $FunctionList['use'] = array();
 $FunctionList['debug'] = array();

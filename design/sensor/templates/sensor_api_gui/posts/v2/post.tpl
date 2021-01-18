@@ -53,8 +53,3 @@ $(document).ready(function () {ldelim}
     {rdelim}, {$post_id});
 {rdelim});
 </script>
-<style>
-    @media screen and (min-width: 992px) {ldelim}
-        .select2-container{ldelim}max-width:196px;font-size:.875em{rdelim}
-    {rdelim}
-</style>
