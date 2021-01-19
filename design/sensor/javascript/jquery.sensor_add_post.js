@@ -100,6 +100,8 @@
         }).addTo(this.map);
         this.initMapEvents();
 
+        this.viewport = this.element.find('.viewport');
+
         this.markers = L.featureGroup().addTo(this.map);
         this.perimeters = L.featureGroup().addTo(this.map);
         this.globalBoundingPerimeter = false;
@@ -172,6 +174,7 @@
         this.debugNearest = this.settings.nearest_service.debug ? L.featureGroup().addTo(this.map) : false;
         this.debugGeocoder = this.settings.debug_geocoder ? L.featureGroup().addTo(this.map) : false;
 
+        this.refreshViewPort();
         this.refreshMap();
 
         if (this.settings.use_smart_gui) {
@@ -571,6 +574,7 @@
                 checkBehalfFields();
                 addPostGui.show().find('.post-subject input').focus();
                 behalfOfView.find('i').trigger('click');
+                plugin.refreshViewPort();
                 plugin.refreshMap();
             }
 
@@ -593,6 +597,8 @@
         },
 
         refreshMap: function () {
+            this.markers.clearLayers();
+            this.map.invalidateSize();
             if (this.settings.default_marker) {
                 this.setUserMarker(
                     new L.LatLng(this.settings.default_marker.coords[0], this.settings.default_marker.coords[1]),
@@ -602,12 +608,11 @@
                 );
             } else if (typeof this.settings.center_map === 'object') {
                 this.map.setView(this.settings.center_map, 15);
-            } else if (this.perimeters.getLayers().length === 0 && this.globalBoundingBox) {
-                this.map.setView(new L.LatLng(0, 0), 10);
+            } else if (this.globalBoundingBox) {
                 this.map.fitBounds(this.globalBoundingBox);
+            } else if(this.perimeters.getLayers().length > 0) {
+                this.map.fitBounds(this.perimeters.getBounds());
             }
-            this.markers.clearLayers();
-            this.map.invalidateSize();
         },
 
         initMapEvents: function () {
@@ -653,6 +658,22 @@
                         self.map.off('locationerror');
                     });
             });
+
+            $( window ).resize(function() {
+                self.refreshViewPort();
+            });
+        },
+
+        refreshViewPort: function(){
+            var windowWidth = $(window).width();
+            var editBoxWidth = $('#edit').width();
+            var viewportWidth = windowWidth - editBoxWidth;
+            //this.viewport.addClass('debug-viewport');
+            if (viewportWidth >= 600){
+                this.viewport.width(viewportWidth);
+            }else{
+                this.viewport.width('100%');
+            }
         },
 
         initSearch: function () {

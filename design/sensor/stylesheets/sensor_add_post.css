@@ -569,3 +569,8 @@ span.classattribute-description {
     background: none !important;
     border: 1px solid #ccc;
 }
+
+.debug-viewport{
+    border: 2px solid red;
+    z-index: 3000;
+}
