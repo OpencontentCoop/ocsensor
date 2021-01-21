@@ -21,6 +21,7 @@ class SensorOperator
             'sensor_post_class',
             'sensor_operators',
             'sensor_groups',
+            'sensor_posts_date_range',
         );
     }
 
@@ -59,6 +60,26 @@ class SensorOperator
             {
                 $classRepository = new ClassRepository();
                 $operatorValue = $classRepository->load($repository->getPostContentClassIdentifier());
+            }
+
+            case 'sensor_posts_date_range':
+            {
+                $first = $repository->getSearchService()->searchPosts('sort [published=>asc] limit 1', [], []);
+                if ($first->totalCount > 0){
+                    $first = $first->searchHits[0];
+                    $last = $repository->getSearchService()->searchPosts('sort [published=>desc] limit 1', [], [])->searchHits[0];
+                    /** @var \Opencontent\Sensor\Api\Values\Post $first */
+                    /** @var \Opencontent\Sensor\Api\Values\Post $last */
+                    $operatorValue = [
+                        'first' => $first->published->setTime(0,0)->format('c'),
+                        'last' => $last->published->setTime(23,0)->format('c')
+                    ];
+                }else{
+                    $operatorValue = [
+                        'first' => (new DateTime())->setTime(0,0)->format('c'),
+                        'last' => (new DateTime())->setTime(23,0)->format('c')
+                    ];
+                }
                 break;
             }
 

@@ -1,38 +1,29 @@
 {literal}
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function (){
         $('#chart').sensorChart({
-            enableDailyInterval: true,
-            enableRangeFilter: ['daily','weekly','monthly'],
-            load: function (chart, params) {
+            filters: ['area', 'category'],
+            load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
                     var series = [];
-                    $.each(response.series, function () {
-                        var seriesItem = this;
-                        var item = {
-                            name: seriesItem.name,
-                            data: []
-                        };
-                        $.each(seriesItem.data, function () {
-                           if (this.interval !== 'all'){
-                               item.data.push([this.interval * 1000, this.avg]);
-                           }
-                        });
-                        series.push(item);
-                    });
+                    var categories = [];
                     chart.highcharts({
                         chart: {
-                            type: 'area'
+                            type: 'column'
                         },
                         xAxis: {
-                            type: 'datetime',
-                            ordinal: false
+                            categories: categories,
+                            tickmarkPlacement: 'on',
+                            title: {
+                                enabled: false
+                            }
                         },
                         yAxis: {
+                            allowDecimals: false,
                             min: 0,
                             title: {
-                                text: '{/literal}{'Giorni'|i18n('sensor/chart')}{literal}'
+                                text: '{/literal}{'Numero'|i18n('sensor/chart')}{literal}'
                             },
                             stackLabels: {
                                 enabled: true,
@@ -46,13 +37,14 @@
                             shared: true
                         },
                         plotOptions: {
-                            area: {
+                            column: {
                                 stacking: 'normal',
-                                lineColor: '#666666',
-                                lineWidth: 1,
-                                marker: {
-                                    lineWidth: 1,
-                                    lineColor: '#666666'
+                                dataLabels: {
+                                    enabled: true,
+                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                    style: {
+                                        textShadow: '0 0 3px black'
+                                    }
                                 }
                             }
                         },
@@ -98,7 +90,7 @@
                                             $.each(params, function (key, value) {
                                                 queryData.push({name: key, value: value});
                                             })
-                                            window.location = '/sensor/posts#'+$.param(queryData);
+                                            window.location = '/sensor/posts#' + $.param(queryData);
                                         }
                                     }]
                                 }
@@ -107,9 +99,10 @@
                     });
                 });
             }
-        })
+        });
     })
 </script>
 {/literal}
 
-<div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}" data-description="{$current.description|wash()}" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
+<div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}"
+     data-description="{$current.description|wash()}" style="min-width: 310px; height: 800px; margin: 0 auto"></div>

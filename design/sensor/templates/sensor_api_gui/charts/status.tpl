@@ -1,117 +1,93 @@
 {literal}
-<script type="text/javascript">
-    $(function () {
-        var chart = $('#chart');
-        var areaFilter = $('#area-filter').removeClass('hide');
-        var categoryFilter = $('#category-filter').removeClass('hide');
-        var intervalFilter = $('#interval-filter');
-
-        $(".select").select2({
-            templateResult: function (item) {
-                var style = item.element ? $(item.element).attr('style') : '';
-                return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
-            }
-        });
-
-        $.each([areaFilter, categoryFilter, intervalFilter], function () {
-            this.find('select').on('change', function () {
-                chart.trigger('sensor:chart:filterchange');
-            });
-        });
-
-        chart.on('sensor:chart:filterchange', function () {
-            loadChart();
-        });
-
-        var loadChart = function () {
-            chart.html($('#spinner').html());
-            var params = {
-                'category': categoryFilter.find('select').val(),
-                'area': areaFilter.find('select').val(),
-                'interval': intervalFilter.find('select').val(),
-            };
-            $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
-                var series = [];
-                $.each(response.series, function () {
-                    series.push({
-                        name: this.status+ ' ' + this.count,
-                        y: this.percentage
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#chart').sensorChart({
+                filters: ['area', 'category'],
+                load: function (chart, params) {
+                    chart.html($('#spinner').html());
+                    $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
+                        var series = [];
+                        $.each(response.series, function () {
+                            series.push({
+                                name: this.status + ' ' + this.count,
+                                y: this.percentage
+                            });
+                        });
+                        chart.highcharts({
+                            chart: {
+                                type: 'pie'
+                            },
+                            title: {
+                                text: chart.data('name')
+                            },
+                            plotOptions: {
+                                series: {
+                                    dataLabels: {
+                                        enabled: true,
+                                        format: '{point.name}'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                            },
+                            series: [{
+                                name: chart.data('name'),
+                                colorByPoint: true,
+                                data: series
+                            }],
+                            exporting: {
+                                buttons: {
+                                    contextButton: {
+                                        menuItems: [{
+                                            textKey: 'downloadPNG',
+                                            onclick: function () {
+                                                this.exportChart();
+                                            }
+                                        }, {
+                                            textKey: 'downloadJPEG',
+                                            onclick: function () {
+                                                this.exportChart({
+                                                    type: 'image/jpeg'
+                                                });
+                                            }
+                                        }, {
+                                            textKey: 'downloadPDF',
+                                            onclick: function () {
+                                                this.exportChart({
+                                                    type: 'application/pdf'
+                                                });
+                                            }
+                                        }, {
+                                            textKey: 'downloadSVG',
+                                            onclick: function () {
+                                                this.exportChart({
+                                                    type: 'image/svg+xml'
+                                                });
+                                            }
+                                        }, {
+                                            separator: true
+                                        }, {
+                                            text: 'Vedi segnalazioni',
+                                            onclick: function () {
+                                                var queryData = [];
+                                                $.each(params, function (key, value) {
+                                                    queryData.push({name: key, value: value});
+                                                })
+                                                window.location = '/sensor/posts#' + $.param(queryData);
+                                            }
+                                        }]
+                                    }
+                                }
+                            }
+                        });
                     });
-                });
-                chart.highcharts({
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: chart.data('name')
-                    },
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.name}'
-                            }
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-                    },
-                    series: [{
-                        name: chart.data('name'),
-                        colorByPoint: true,
-                        data: series
-                    }],
-                    exporting: {
-                        buttons: {
-                            contextButton: {
-                                menuItems: [{
-                                    textKey: 'downloadPNG',
-                                    onclick: function () {
-                                        this.exportChart();
-                                    }
-                                }, {
-                                    textKey: 'downloadJPEG',
-                                    onclick: function () {
-                                        this.exportChart({
-                                            type: 'image/jpeg'
-                                        });
-                                    }
-                                }, {
-                                    textKey: 'downloadPDF',
-                                    onclick: function () {
-                                        this.exportChart({
-                                            type: 'application/pdf'
-                                        });
-                                    }
-                                }, {
-                                    textKey: 'downloadSVG',
-                                    onclick: function () {
-                                        this.exportChart({
-                                            type: 'image/svg+xml'
-                                        });
-                                    }
-                                }, {
-                                    separator: true
-                                }, {
-                                    text: 'Vedi segnalazioni',
-                                    onclick: function () {
-                                        var queryData = [];
-                                        $.each(params, function (key, value) {
-                                            queryData.push({name: key, value: value});
-                                        })
-                                        window.location = '/sensor/posts#'+$.param(queryData);
-                                    }
-                                }]
-                            }
-                        }
-                    }
-                });
+                }
             });
-        };
-        loadChart();
-    });
-</script>
+        })
+    </script>
 {/literal}
+<div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}"
+     style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-<div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
