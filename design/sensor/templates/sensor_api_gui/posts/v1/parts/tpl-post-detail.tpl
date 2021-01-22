@@ -1,7 +1,7 @@
 {literal}
 <script id="tpl-post-detail" type="text/x-jsrender">
 <div class="row">
-    {{if geoLocation.latitude && geoLocation.longitude}}
+    {{if geoLocation && geoLocation.latitude && geoLocation.longitude}}
     <div class="col-md-4">
       <aside class="widget">
         <div class="post-map" style="width: 100%; height: 200px;"

@@ -1,19 +1,52 @@
 <?php
 
-use Opencontent\Sensor\Api\Values\Participant as ParticipantAlias;
+use Opencontent\Sensor\Api\Values\Message\Comment;
+use Opencontent\Sensor\Api\Values\Message\CommentCollection;
+use Opencontent\Sensor\Api\Values\Message\PrivateMessage;
+use Opencontent\Sensor\Api\Values\Message\PrivateMessageCollection;
+use Opencontent\Sensor\Api\Values\Message\Response;
+use Opencontent\Sensor\Api\Values\Message\ResponseCollection;
+use Opencontent\Sensor\Api\Values\Message\TimelineItem;
+use Opencontent\Sensor\Api\Values\Message\TimelineItemCollection;
+use Opencontent\Sensor\Api\Values\Participant;
+use Opencontent\Sensor\Api\Values\ParticipantCollection;
+use Opencontent\Sensor\Api\Values\User;
+use Opencontent\Sensor\OpenApi;
+use Opencontent\Sensor\OpenApi\PostSerializer;
+use Opencontent\Sensor\Api\Values\Post;
 
-class SensorWebHookTrigger implements OCWebHookTriggerInterface
+class SensorWebHookTrigger implements OCWebHookTriggerInterface, OCWebHookCustomPayloadSerializerInterface, OCWebHookCustomEndpointSerializerInterface
 {
     protected static $schema;
+
     protected $identifier;
+
     protected $name;
+
     protected $repository;
+
+    private $postSerializer;
+
+    /**
+     * @var OpenApi
+     */
+    protected $api;
 
     public function __construct($identifier, $name)
     {
         $this->identifier = $identifier;
         $this->name = $name;
         $this->repository = OpenPaSensorRepository::instance();
+        $siteUrl = '/';
+        eZURI::transformURI($siteUrl,true, 'full');
+        $endpointUrl = '/api/sensor';
+        eZURI::transformURI($endpointUrl, true, 'full');
+        $this->api = new OpenApi(
+            $this->repository,
+            $siteUrl,
+            $endpointUrl
+        );
+        $this->postSerializer = new PostSerializer($this->api);
     }
 
     public function getIdentifier()
@@ -23,7 +56,7 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
 
     public function getDescription()
     {
-        return "Viene scatenato quando accade un evento di tipo '" . $this->getName() . "'. Il payload è un oggetto json API Sensor Post";
+        return "Viene scatenato quando accade un evento di tipo '" . $this->getName() . "'. Il payload di default è un oggetto json API Sensor Post";
     }
 
     public function getName()
@@ -115,7 +148,7 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
      * $postSerializer = new \Opencontent\Sensor\OpenApi\PostSerializer($openApiTools);
      * OCWebHookEmitter::emit('on_assign', $postSerializer->serialize($post), OCWebHookQueue::HANDLER_IMMEDIATE);
     */
-    public function isValidPayload($payload, $filters)
+    public function isValidPayload($post, $filters)
     {
         if ($this->identifier === 'on_create' || empty($filters)) {
             return true;
@@ -135,7 +168,6 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         }
 
         try {
-            $post = $this->repository->getPostService()->loadPost($payload['id']);
             $filteredByCategory = false;
             if (!empty($categoryIdList)) {
                 foreach ($post->categories as $category) {
@@ -150,7 +182,7 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
 
             $filteredByGroup = false;
             if (!empty($groupIdList)) {
-                foreach ($post->owners->getParticipantIdListByType(ParticipantAlias::TYPE_GROUP) as $groupId) {
+                foreach ($post->owners->getParticipantIdListByType(Participant::TYPE_GROUP) as $groupId) {
                     if (in_array('group-' . $groupId, $groupIdList)) {
                         $filteredByGroup = true;
                         break;
@@ -167,5 +199,166 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface
         }
 
         return false;
+    }
+
+    /*
+     * Code to test:
+	 * $post = OpenPaSensorRepository::instance()->getPostService()->loadPost(289);
+	 * $trigger = new SensorWebHookTrigger('test', 'Test');
+	 * $webhook = OCWebHook::fetch(3);
+	 * $payload = $trigger->serializeCustomPayload($post, $webhook);
+	 * print_r($webhook->getCustomPayloadParameters());
+	 * print_r($payload);
+     */
+    public function serializeCustomPayload($originalPayload, OCWebHook $webHook)
+    {
+        if (!$originalPayload instanceof Post){
+            return $originalPayload;
+        }
+
+        if ($webHook->hasCustomPayloadParameters()){
+            if ($customPayload = $this->compileCustomPayload($originalPayload, $webHook->getCustomPayloadParameters())){
+                return $customPayload;
+            }
+        }
+
+        return $this->postSerializer->serialize($originalPayload);
+    }
+
+    public function getPlaceholders()
+    {
+        $post = $this->postSerializer->serialize($this->getMockPost());
+        $keys = array_keys($post);
+        $keys = array_map(function ($a) {
+            return '{{post.' . $a . '}}';
+        }, $keys);
+
+        return $keys;
+    }
+
+    public function getHelpText()
+    {
+        $tpl = eZTemplate::factory();
+
+        $dummyPost = $this->getMockPost()->jsonSerialize();
+        unset($dummyPost['internalId']);
+        $tpl->setVariable('post', $dummyPost);
+        return $tpl->fetch('design:sensor/webhook_help_text.tpl');
+    }
+
+    public function serializeCustomEndpoint($originalEndpoint, $originalPayload, OCWebHook $webHook)
+    {
+        if (!$originalPayload instanceof Post){
+            return $originalEndpoint;
+        }
+
+        if ($webHook->hasCustomPayloadParameters()){
+            return $this->compileCustomVariable($originalEndpoint, $originalPayload);
+        }
+
+        return $originalEndpoint;
+    }
+
+    private function getMockPost()
+    {
+        $dummyPost = new Post();
+        $participants = new ParticipantCollection([new Participant()]);
+        $dummyPost->expirationInfo = new Post\ExpirationInfo();
+        $dummyPost->resolutionInfo = new Post\ResolutionInfo();
+        $dummyPost->type = new Post\Type();
+        $dummyPost->privacy = new Post\Status\Privacy();
+        $dummyPost->moderation = new Post\Status\Moderation();
+        $dummyPost->status = new Post\Status();
+        $dummyPost->workflowStatus = new Post\WorkflowStatus();
+        $dummyPost->participants = $participants;
+        $dummyPost->author = new User();
+        $dummyPost->reporter = new User();
+        $dummyPost->approvers = $participants;
+        $dummyPost->owners = $participants;
+        $dummyPost->observers = $participants;
+        $dummyPost->timelineItems = new TimelineItemCollection([new TimelineItem()]);
+        $dummyPost->privateMessages = new PrivateMessageCollection([new PrivateMessage()]);
+        $dummyPost->comments = new CommentCollection([new Comment()]);
+        $dummyPost->responses = new ResponseCollection([new Response()]);
+        $dummyPost->images = [new Post\Field\Image()];
+        $dummyPost->attachments = [new Post\Field\Attachment()];
+        $dummyPost->categories = [new Post\Field\Category()];
+        $dummyPost->geoLocation = new Post\Field\GeoLocation();
+        $dummyPost->areas = [new Post\Field\Area()];
+        $dummyPost->meta = [];
+        $dummyPost->channel = new Post\Channel();
+        $dummyPost->images = [new Post\Field\Image()];
+
+        return $dummyPost;
+    }
+
+    private function compileCustomPayload(Post $post, array $template)
+    {
+        $compiled = [];
+
+        foreach ($template as $key => $value){
+            $compiled[$key] = $this->compileCustomVariable($value, $post);
+        }
+
+        return $compiled;
+    }
+
+    private function compileCustomVariable($value, Post $post)
+    {
+        if (is_numeric($value)){
+            return $value;
+        }
+        if (is_scalar($value)) {
+            if (strpos($value, '{{') !== false) {
+                return $this->replacePlaceholder($value, $post);
+            }
+        }else {
+            $compiledValue = [];
+            foreach ($value as $key => $subValue) {
+                $compiledValue[$key] = $this->compileCustomVariable($subValue, $post);
+            }
+
+            return $compiledValue;
+        }
+
+        return $value;
+    }
+
+    private function replacePlaceholder($value, Post $post)
+    {
+        $placeholders = $this->getPlaceholders();
+        $serialized = $this->postSerializer->serialize($post);
+        $postArray = json_decode(json_encode($post), true);
+
+        preg_match_all('/\{{2}(.*?)\}{2}/is', $value,$matches);
+
+        foreach ($matches[0] as $index => $placeholder) {
+            if (in_array($placeholder, $placeholders)) {
+                $property = str_replace('post.', '', $matches[1][$index]);
+                if (isset($serialized[$property])) {
+                    $valueToReplace = $serialized[$property];
+                    $value = $this->replaceValue($placeholder, $valueToReplace, $value);
+                }
+            }else{
+                $valueToReplace = $this->api->replacePlaceholders(
+                    JmesPath\Env::search($matches[1][$index], $postArray)
+                );
+                $value = $this->replaceValue($placeholder, $valueToReplace, $value);
+            }
+        }
+
+        return $this->api->replacePlaceholders($value);
+    }
+
+    private function replaceValue($placeholder, $valueToReplace, $value)
+    {
+        if ($value == $placeholder){
+            return $valueToReplace;
+
+        }elseif (is_scalar($valueToReplace)){
+            return str_replace($placeholder, $valueToReplace, $value);
+        }
+
+        return str_replace($placeholder, json_encode($valueToReplace), $value);
     }
 }

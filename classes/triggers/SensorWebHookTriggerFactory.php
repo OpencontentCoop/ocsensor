@@ -12,6 +12,7 @@ class SensorWebHookTriggerFactory implements OCWebHookTriggerFactoryInterface
                 $triggers[] = new SensorWebHookTrigger($notificationType->identifier, $notificationType->name);
             }
         }
+        $triggers[] = new SensorWebHookTrigger('on_add_response', ezpI18n::tr('sensor/trigger', 'Inserimento di una risposta ufficiale'));
         return $triggers;
     }
 

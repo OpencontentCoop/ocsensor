@@ -23,14 +23,14 @@
     </ul>
     {{/if}}
 
-    {{if geoLocation.address}}
+    {{if geoLocation && geoLocation.address}}
     <ul class="list-inline">
         <li><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</li>
     </ul>
     {{/if}}
 
     <div class="row">
-        {{if geoLocation.latitude && geoLocation.longitude}}
+        {{if geoLocation && geoLocation.latitude && geoLocation.longitude}}
             <div class="col-md-{{if images.length}}6{{else}}10{{/if}}">
                 <div class="post-map" style="width: 100%; height: 300px;"
                      data-lat="{{:geoLocation.latitude}}"
@@ -38,8 +38,8 @@
              </div>
         {{/if}}
         {{if images.length}}
-        <div class="col-md-{{if geoLocation.latitude && geoLocation.longitude}}6{{else}}10{{/if}}">
-            <div id="carousel-{{:id}}" class="carousel slide{{if geoLocation.latitude && geoLocation.longitude}} medium{{else}} large{{/if}}" data-ride="carousel">
+        <div class="col-md-{{if geoLocation && geoLocation.latitude && geoLocation.longitude}}6{{else}}10{{/if}}">
+            <div id="carousel-{{:id}}" class="carousel slide{{if geoLocation && geoLocation.latitude && geoLocation.longitude}} medium{{else}} large{{/if}}" data-ride="carousel">
               <div class="carousel-inner" role="listbox">
                 {{for images ~capabilities=capabilities}}
                 <div class="item{{if #index == 0}} active{{/if}}">

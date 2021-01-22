@@ -4,8 +4,6 @@ use League\Event\AbstractListener;
 use League\Event\EventInterface;
 use Opencontent\Sensor\Api\Values\Event as SensorEvent;
 use Opencontent\Sensor\Legacy\Repository;
-use Opencontent\Sensor\OpenApi;
-use Opencontent\Sensor\OpenApi\PostSerializer;
 
 class SensorWebHookListener extends AbstractListener
 {
@@ -23,16 +21,9 @@ class SensorWebHookListener extends AbstractListener
                 $this->events[] = $notificationType->identifier;
             }
         }
-        $siteUrl = '/';
-        eZURI::transformURI($siteUrl,true, 'full');
-        $endpointUrl = '/api/sensor';
-        eZURI::transformURI($endpointUrl, true, 'full');
-        $openApiTools = new OpenApi(
-            $this->repository,
-            $siteUrl,
-            $endpointUrl
-        );
-        $this->postSerializer = new PostSerializer($openApiTools);
+        if (!in_array('on_add_response', $this->events)) {
+            $this->events[] = 'on_add_response';
+        }
     }
 
     public function handle(EventInterface $event, $param = null)
@@ -40,10 +31,9 @@ class SensorWebHookListener extends AbstractListener
         if ($param instanceof SensorEvent){
             if (in_array($param->identifier, $this->events)){
                 $this->repository->getLogger()->info("Emit '{$param->identifier}' to webhook on post {$param->post->id}");
-                $payload = $this->postSerializer->serialize($param->post);
                 OCWebHookEmitter::emit(
                     $param->identifier,
-                    $payload,
+                    $param->post,
                     OCWebHookQueue::defaultHandler()
                 );
             }

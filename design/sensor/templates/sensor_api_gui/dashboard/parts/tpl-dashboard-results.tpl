@@ -72,7 +72,7 @@
                         {{if categories.length > 0}}
                             <li><i class="fa fa-tags"></i> {{for categories}}{{:name}}{{/for}}</li>
                         {{/if}}
-                        {{if geoLocation.address}}
+                        {{if geoLocation && geoLocation.address}}
                             <li><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</li>
                         {{/if}}
                     </ul>

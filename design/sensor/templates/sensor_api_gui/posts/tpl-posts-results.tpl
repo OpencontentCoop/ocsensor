@@ -50,7 +50,7 @@
 
                 <div class="service_details {{if images.length > 0}}col-sm-9 col-md-9{{else}}col-sm-12 col-md-12{{/if}}">
                   <ul class="list-inline">
-                      {{if geoLocation.address}}
+                      {{if geoLocation && geoLocation.address}}
                           <li><small><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</small></li>
                       {{else areas.length > 0}}
                           <li><small><i class="fa fa-map-marker"></i> {{for areas}}{{:name}}{{/for}}</small></li>
