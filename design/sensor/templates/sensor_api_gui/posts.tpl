@@ -85,6 +85,21 @@ $(document).ready(function () {ldelim}
     {else}
         var centerMap = false;
     {/if}
+    var additionalWMSLayers = [];
+    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
+        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
+            {def $parts = $layer|explode('|')}
+                additionalWMSLayers.push({ldelim}
+                    baseUrl: '{$parts[0]}',
+                    version: '{$parts[1]}',
+                    layers: '{$parts[2]}',
+                    format: '{$parts[3]}',
+                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
+                    attribution: '{$parts[5]}'
+                {rdelim})
+            {undef $parts}
+        {/foreach}
+    {/if}
 {literal}
     $.views.helpers($.opendataTools.helpers);
     var form = $('#posts-search form');
@@ -423,8 +438,21 @@ $(document).ready(function () {ldelim}
         e.preventDefault();
     });
 
-    var tiles = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18,attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'});
-    var map = L.map('map').addLayer(tiles);
+    var map = L.map('map');
+    L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    if (additionalWMSLayers.length > 0) {
+        $.each(additionalWMSLayers, function(){
+            L.tileLayer.wms(this.baseUrl, {
+                layers: this.layers,
+                version: this.version,
+                format: this.format,
+                transparent: this.transparent,
+                attribution: this.attribution
+            }).addTo(map);
+        });
+    }
     map.scrollWheelZoom.disable();
     var markers = new L.markerClusterGroup();
     if (typeof centerMap === 'string') {

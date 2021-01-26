@@ -33,6 +33,21 @@
 {def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
 {def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 <script>
+var additionalWMSLayers = [];
+{if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
+    {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
+        {def $parts = $layer|explode('|')}
+            additionalWMSLayers.push({ldelim}
+                baseUrl: '{$parts[0]}',
+                version: '{$parts[1]}',
+                layers: '{$parts[2]}',
+                format: '{$parts[3]}',
+                transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
+                attribution: '{$parts[5]}'
+            {rdelim})
+        {undef $parts}
+    {/foreach}
+{/if}
 $(document).ready(function () {ldelim}
     $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
     $.opendataTools.settings('language', "{$current_language}");
@@ -49,7 +64,8 @@ $(document).ready(function () {ldelim}
         'settings': '{$settings|wash(javascript)}',
         'spinnerTpl': '#tpl-spinner',
         'postTpl': '#tpl-post',
-        'alertsEndPoint': '{'social_user/alert'|ezurl(no)}'
+        'alertsEndPoint': '{'social_user/alert'|ezurl(no)}',
+        'additionalWMSLayers': additionalWMSLayers
     {rdelim}, {$post_id});
 {rdelim});
 </script>

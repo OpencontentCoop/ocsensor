@@ -205,6 +205,22 @@
     var CenterMap = {if is_set($areas[0].geo.coords[0])}new L.latLng({$areas[0].geo.coords[0]}, {$areas[0].geo.coords[1]}){else}false{/if};
     var BoundingArea = {if is_set($areas[0].bounding_box)}'{$areas[0].bounding_box.geo_json}'{else}false{/if};
     $.opendataTools.settings('language', "{ezini('RegionalSettings', 'Locale')}");
+    var additionalWMSLayers = [];
+    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
+        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
+            {def $parts = $layer|explode('|')}
+                additionalWMSLayers.push({ldelim}
+                    baseUrl: '{$parts[0]}',
+                    version: '{$parts[1]}',
+                    layers: '{$parts[2]}',
+                    format: '{$parts[3]}',
+                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
+                    attribution: '{$parts[5]}'
+                {rdelim})
+            {undef $parts}
+        {/foreach}
+    {/if}
+
     $(document).ready(function () {ldelim}
         $('#sensor_full_map').sensorAddPost({ldelim}
             'use_smart_gui': true,
@@ -233,7 +249,8 @@
             {/if}
             'default_marker': PointsOfInterest,
             'center_map': CenterMap,
-            'bounding_area': BoundingArea
+            'bounding_area': BoundingArea,
+            'additionalWMSLayers': additionalWMSLayers
         {rdelim});
     {rdelim});
 </script>

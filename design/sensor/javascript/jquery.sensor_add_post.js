@@ -79,7 +79,8 @@
                 loadingControl: true
             },
             'use_smart_gui': false,
-            'default_user_placement': 0
+            'default_user_placement': 0,
+            'additionalWMSLayers': []
         };
 
     function Plugin(element, options) {
@@ -95,9 +96,21 @@
             this.element.attr('id'),
             this.settings.map_params
         ).setActiveArea('viewport');
+        var map = this.map;
         L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.map);
+        if (this.settings.additionalWMSLayers.length > 0) {
+            $.each(this.settings.additionalWMSLayers, function(){
+                L.tileLayer.wms(this.baseUrl, {
+                    layers: this.layers,
+                    version: this.version,
+                    format: this.format,
+                    transparent: this.transparent,
+                    attribution: this.attribution
+                }).addTo(map);
+            });
+        }
         this.initMapEvents();
 
         this.viewport = this.element.find('.viewport');

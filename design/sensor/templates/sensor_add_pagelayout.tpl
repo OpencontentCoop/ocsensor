@@ -38,6 +38,21 @@
 {def $nearestService = cond(ezini('GeoCoderSettings', 'NearestService', 'ocsensor.ini')|eq('enabled'), true(), false())}
 {def $show_map_debug = cond(and(ezhttp_hasvariable('debug', 'get'), fetch('user','has_access_to',hash('module','sensor','function','config'))), 'true', 'false')}
 <script>
+    var additionalWMSLayers = [];
+    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
+        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
+            {def $parts = $layer|explode('|')}
+                additionalWMSLayers.push({ldelim}
+                    baseUrl: '{$parts[0]}',
+                    version: '{$parts[1]}',
+                    layers: '{$parts[2]}',
+                    format: '{$parts[3]}',
+                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
+                    attribution: '{$parts[5]}'
+                {rdelim})
+            {undef $parts}
+        {/foreach}
+    {/if}
     $(document).ready(function () {ldelim}
         $(document).on('click', '#sensor_show_map_button', function () {ldelim}
             $(window).scrollTop(0);
@@ -71,7 +86,8 @@
             {/if}
             'default_marker': PointsOfInterest,
             'center_map': CenterMap,
-            'bounding_area': BoundingArea
+            'bounding_area': BoundingArea,
+            'additionalWMSLayers': additionalWMSLayers
         {rdelim});
     {rdelim});
 </script>

@@ -15,7 +15,8 @@
             'postTpl': '#tpl-post',
             'alertTpl': '#tpl-alerts',
             'onRemove': null,
-            'alertsEndPoint': false
+            'alertsEndPoint': false,
+            'additionalWMSLayers': []
         };
 
     function Plugin(element, options, postId) {
@@ -285,6 +286,17 @@
                             L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
+                            if (plugin.settings.additionalWMSLayers.length > 0) {
+                                $.each(plugin.settings.additionalWMSLayers, function(){
+                                    L.tileLayer.wms(this.baseUrl, {
+                                        layers: this.layers,
+                                        version: this.version,
+                                        format: this.format,
+                                        transparent: this.transparent,
+                                        attribution: this.attribution
+                                    }).addTo(map);
+                                });
+                            }
                         }
 
                         renderData.find("a.edit-message").on('click', function (e) {
