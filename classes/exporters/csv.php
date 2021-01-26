@@ -2,6 +2,7 @@
 
 use Opencontent\Sensor\Api\Values\Participant;
 use Opencontent\Sensor\Api\Values\Post\Channel;
+use Opencontent\Sensor\Legacy\SearchService;
 
 class SensorPostCsvExporter extends SearchQueryCSVExporter
 {
@@ -30,14 +31,17 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         'CSVEnclosure' => '"'
     );
 
+
     public function __construct(\Opencontent\Sensor\Legacy\Repository $repository)
     {
         $http = eZHTTPTool::instance();
         $this->repository = $repository;
 
         $this->queryParams = $http->attribute('get');
-        $this->queryString = $this->queryParams['q'];
-        $this->maxSearchLimit = \Opencontent\Sensor\Legacy\SearchService::MAX_LIMIT;
+        unset($this->queryParams['/sensor/dashboard/(export)']);
+
+        $this->queryString = isset($this->queryParams['query']) ? $this->queryParams['query'] : $this->queryParams['q'];
+        $this->maxSearchLimit = SearchService::MAX_LIMIT;
 
         unset($this->queryParams['capabilities']); //boost performance
         if (isset($this->queryParams['ignorePolicies']) && $this->queryParams['ignorePolicies']){
@@ -124,8 +128,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'created' => $post->published->format('d/m/Y H:i'),
                 'modified' => $post->modified->format('d/m/Y H:i'),
                 'expiring_date' => $post->expirationInfo->expirationDateTime->format('d/m/Y H:i'),
-                'resolution_time' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
-                'resolution_diff' => $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
+                'resolution_time' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
+                'resolution_diff' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
                 'title' => $post->subject,
                 'author' => $post->author->name,
 //                'fiscal_code' => $post->author->fiscalCode,
@@ -178,5 +182,76 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $tpl->setVariable('variables', $variables);
 
         return $tpl->fetch('design:sensor_api_gui/dashboard/download_paginate.tpl');
+    }
+
+    protected function tempFileName($filename)
+    {
+        return eZSys::storageDirectory() . '/export-csv/' . $filename . '.csv';
+    }
+
+    protected function tempFile($filename)
+    {
+        $filename = $this->tempFileName($filename);
+        $fileHandler = eZClusterFileHandler::instance($filename);
+        if (!$fileHandler->exists()) {
+            $fileHandler->storeContents(' ', 'exportcsv', 'text/csv');
+        }
+
+        return $fileHandler;
+    }
+
+    protected function handlePaginateDownload()
+    {
+        $fileHandler = $this->tempFile($this->filename);
+
+        $tempFilename = eZSys::storageDirectory() . '/export-csv/' . uniqid('exportaspaginate_') . '.temp';
+        $contents = $fileHandler->fetchContents();
+        if ($contents === ' '){
+            $contents = '';
+        }
+        if (!eZFile::create(basename($tempFilename), dirname($tempFilename), $contents)){
+            eZDebug::writeError("Fail creating $tempFilename", __METHOD__);
+        }
+
+        $output = fopen($tempFilename, 'a');
+        $result = $this->fetch();
+
+        $makeHeaders = $this->iteration == 0;
+
+        foreach ($result->searchHits as $item) {
+            $headers = $this->csvHeaders($item);
+            if ($makeHeaders) {
+                fputcsv(
+                    $output,
+                    $headers,
+                    $this->options['CSVDelimiter'],
+                    $this->options['CSVEnclosure']
+                );
+            }
+            $values = $this->transformItem($item);
+            fputcsv($output, array_values($values), $this->options['CSVDelimiter'], $this->options['CSVEnclosure']);
+            $makeHeaders = false;
+        }
+
+        $this->queryString = $result->nextPageQuery;
+
+        $fileHandler->storeContents( file_get_contents($tempFilename) );
+        unlink($tempFilename);
+
+        $data = array_merge(
+            $this->queryParams,
+            array(
+                'query' => $this->queryString,
+                'download_id' => $this->filename,
+                'iteration' => ++$this->iteration,
+                'last' => count( $result->searchHits ),
+                'count' => $this->count,
+                'limit' => $this->maxSearchLimit
+            )
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        eZExecution::cleanExit();
     }
 }

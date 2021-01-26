@@ -7,12 +7,11 @@
 
     <title>Exporting CSV</title>
 
-    <link href="//getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="//getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+            integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+            crossorigin="anonymous">
+    <script src={'javascript/jquery-1.10.2.min.js'|ezdesign()}></script>
+    <script src={'javascript/bootstrap.min.js'|ezdesign()}></script>
     <script>
         {literal}
         $(document).ready(function(){
@@ -40,7 +39,7 @@
                 }
             };
 
-            iterate({/literal}{ldelim}{foreach $variables as $key => $value}{$key}:{$value}{delimiter},{/delimiter}{/foreach}{rdelim}{literal});
+            iterate({/literal}{ldelim}{foreach $variables as $key => $value}'{$key}':{$value}{delimiter},{/delimiter}{/foreach}{rdelim}{literal});
         });
         {/literal}
     </script>
