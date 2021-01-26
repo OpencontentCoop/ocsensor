@@ -104,4 +104,11 @@ Subdir=templates
 Match[class_identifier]=sensor_root
 Match[attribute_identifier]=user_inactivity_days
 
+[post_edit_on_behalf_of_mode]
+Source=content/datatype/edit/ezselection.tpl
+MatchFile=edit_on_behalf_of_mode.tpl
+Subdir=templates
+Match[class_identifier]=sensor_post
+Match[attribute_identifier]=on_behalf_of_mode
+
  */ ?>
