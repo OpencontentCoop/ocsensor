@@ -1,5 +1,14 @@
+<form id="SearchForm">
+    <div class="input-group">
+        <input type="text" id="SearchText" class="form-control input-lg" value="" placeholder="Cerca nelle segnalazioni" />
+        <span class="input-group-btn">
+              <button type="submit" id="SearchButton" class="btn btn-primary btn-lg" title="{'Search'|i18n('design/ezwebin/content/search')}">
+                <span class="fa fa-search"></span>
+              </button>
+            </span>
+    </div>
+</form>
 <div class="" data-contents></div>
-
 
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
@@ -19,7 +28,7 @@
 {{/for}}
 </script>
 <script id="tpl-dashboard-spinner" type="text/x-jsrender">
-<div class="spinner text-center">
+<div class="spinner text-center" style="margin-top:10px">
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
     <span class="sr-only">Loading...</span>
 </div>
@@ -44,7 +53,7 @@
         </ul>
 	</div>
 	{{/if}}
-	<table class="table table-striped table-hover">
+	<table class="table table-striped table-hover"{{if pageCount == 1}} style="margin-top:40px"{{/if}}>
 	{{for searchHits}}
         <tr {{if (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
           <td style="vertical-align: middle;white-space: nowrap;" width="1">
@@ -130,7 +139,6 @@ $(document).ready(function () {ldelim}
     var template = $.templates('#tpl-dashboard-results');
     var spinner = $($.templates("#tpl-dashboard-spinner").render({}));
 
-
     var find = function (query, cb, context) {
         $.ajax({
             type: "GET",
@@ -162,8 +170,12 @@ $(document).ready(function () {ldelim}
     };
 
     var buildView = function() {
-
-        var paginatedQuery = 'limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
+        var searchText = '';
+        var queryString = $('#SearchText').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
+        if (queryString.length > 0){
+            searchText = "(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "') ";
+        }
+        var paginatedQuery = searchText + 'limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
         viewContainer.html(spinner);
         find(paginatedQuery, function (response) {
             queryPerPage[currentPage] = paginatedQuery;
@@ -250,6 +262,12 @@ $(document).ready(function () {ldelim}
 
     viewContainer.html(spinner);
     buildView();
+
+    $('#SearchForm').on('submit', function (e){
+        viewContainer.html(spinner);
+        buildView();
+        e.preventDefault();
+    });
 
 {/literal}
 {rdelim});
