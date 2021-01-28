@@ -39,6 +39,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
         $this->queryParams = $http->attribute('get');
         unset($this->queryParams['/sensor/dashboard/(export)']);
+        unset($this->queryParams['/sensor/export']);
 
         $this->queryString = isset($this->queryParams['query']) ? $this->queryParams['query'] : $this->queryParams['q'];
         $this->maxSearchLimit = SearchService::MAX_LIMIT;
@@ -177,6 +178,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         foreach ($variables as $key => $value){
             if (is_string($value) && $value != 'true' && $value != 'false'){ //@todo
                 $variables[$key] = '"' . $variables[$key] . '"';
+            }elseif (is_bool($value)){
+                $variables[$key] = (int)$variables[$key];
             }
         }
         $tpl->setVariable('variables', $variables);
