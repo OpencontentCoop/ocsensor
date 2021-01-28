@@ -282,21 +282,29 @@
                             var customIcon = L.MakiMarkers.icon({icon: "star", color: "#f00", size: "l"});
                             var postMarker = new L.Marker(latLng, {icon: customIcon});
                             postMarker.addTo(map);
-                            map.setView(latLng, 18);
-                            L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            map.setView(latLng, 17);
+                            var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                             }).addTo(map);
+                            var baseLayers = {
+                                'Mappa': osmLayer,
+                                'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                                })
+                            };
+                            var mapLayers = [];
                             if (plugin.settings.additionalWMSLayers.length > 0) {
                                 $.each(plugin.settings.additionalWMSLayers, function(){
-                                    L.tileLayer.wms(this.baseUrl, {
+                                    mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
                                         layers: this.layers,
                                         version: this.version,
                                         format: this.format,
                                         transparent: this.transparent,
                                         attribution: this.attribution
-                                    }).addTo(map);
+                                    });
                                 });
                             }
+                            L.control.layers(baseLayers, mapLayers).addTo(map);
                         }
 
                         renderData.find("a.edit-message").on('click', function (e) {
