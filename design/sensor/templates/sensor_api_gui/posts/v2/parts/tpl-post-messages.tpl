@@ -32,17 +32,26 @@
                                         {{else _type == 'public'}}
                                             {{if ~capabilities.can_moderate_comment && needModeration}}
                                                 <div class="pull-right" data-action-wrapper>
-                                                    <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-danger"
-                                                       data-action="moderate_comment" data-parameters="comment_id"
+                                                    <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-success"
+                                                       data-action="moderate_comment" data-parameters="comment_id,moderation"
                                                        style="margin-left:5px"
-                                                       title="{/literal}{"Rendi pubblico"|i18n('sensor/messages')}{literal}"><i class="fa fa-unlock"></i></a>
+                                                       title="{/literal}{"Rendi pubblico"|i18n('sensor/messages')}{literal}"><i class="fa fa-check"></i></a>
                                                    <input type="hidden" data-value="comment_id" value="{{:id}}" />
-                                               </div>
+                                                   <input type="hidden" data-value="moderation" value="approve" />
+                                                </div>
+                                                <div class="pull-right" data-action-wrapper>
+                                                    <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-danger"
+                                                       data-action="moderate_comment" data-parameters="comment_id,moderation"
+                                                       style="margin-left:5px"
+                                                       title="{/literal}{"Rigetta"|i18n('sensor/messages')}{literal}"><i class="fa fa-times"></i></a>
+                                                   <input type="hidden" data-value="comment_id" value="{{:id}}" />
+                                                   <input type="hidden" data-value="moderation" value="reject" />
+                                                </div>
                                             {{/if}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
                                                 <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
-                                            <strong>{{:creator.name}}</strong> ha aggiunto un commento {{if !needModeration}}pubblico{{/if}}
+                                            <strong>{{:creator.name}}</strong> ha aggiunto un commento {{if !needModeration && !isRejected}}pubblico{{/if}}
                                         {{else}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
                                                 <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
@@ -53,6 +62,7 @@
                                     {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
                                     {{if _type == 'private' && isResponseProposal && ~settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
                                     {{if _type == 'public' && needModeration}} <strong class="label label-danger">In attesa di moderazione</strong>{{/if}}
+                                    {{if _type == 'public' && isRejected}} <strong class="label label-danger">Rigettato</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
