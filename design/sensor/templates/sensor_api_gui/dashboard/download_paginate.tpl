@@ -34,8 +34,9 @@
                     });
                 }else{
                     $('.progress').hide();
-                    $('h2').html('File is ready');
+                    $('h2').html('Il file è pronto!');
                     $('.download').attr( 'href', endpoint+'?download=1&download_id='+data.download_id).show();
+                    $('.backtosite').show();
                 }
             };
 
@@ -52,14 +53,15 @@
 
     <div class="col-md-12">
 
-        <h2 class="console">Loading data...</h2>
+        <h2 class="console">Attendere il caricamento dei dati...</h2>
 
         <div class="progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">0%</div>
         </div>
 
         <div class="text-center">
-            <a href="#" class="download btn btn-success btn-lg" style="display: none">Download file</a>
+            <a href="#" class="download btn btn-success btn-lg" style="display: none">Scarica il file csv</a>
+            <p class="backtosite" style="margin-top:20px; display: none"><a href="/" class="btn btn-info btn-lg">Torna al sito</a></p>
         </div>
 
     </div>
