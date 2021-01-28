@@ -3,7 +3,7 @@
     $(document).ready(function () {
         $('#chart').sensorChart({
             enableDailyInterval: true,
-            enableRangeFilter: ['daily','weekly','monthly'],
+            enableRangeFilter: ['daily','weekly'],
             load: function (chart, params) {
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
@@ -23,7 +23,7 @@
                     });
                     chart.highcharts({
                         chart: {
-                            type: 'area'
+                            type: 'column'
                         },
                         xAxis: {
                             type: 'datetime',
@@ -46,13 +46,14 @@
                             shared: true
                         },
                         plotOptions: {
-                            area: {
+                            column: {
                                 stacking: 'normal',
-                                lineColor: '#666666',
-                                lineWidth: 1,
-                                marker: {
-                                    lineWidth: 1,
-                                    lineColor: '#666666'
+                                dataLabels: {
+                                    enabled: true,
+                                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+                                    style: {
+                                        textShadow: '0 0 3px black'
+                                    }
                                 }
                             }
                         },

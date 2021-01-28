@@ -4,7 +4,7 @@
         $('#chart').sensorChart({
             enableDailyInterval: true,
             filters: ['interval'],
-            enableRangeFilter: ['daily','weekly','monthly'],
+            enableRangeFilter: ['daily','weekly'],
             load: function (chart, params) {
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
