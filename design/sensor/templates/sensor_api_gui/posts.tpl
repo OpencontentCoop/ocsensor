@@ -44,6 +44,8 @@ $(document).ready(function () {ldelim}
         'search': '/api/sensor_gui/posts/search',
         'sensor': '/api/sensor_gui',
     {rdelim});
+    $.opendataTools.settings('canReadUsers', {cond(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), 'true', 'false')});
+
     var dateRangePickerLocale = {ldelim}
         "format": "{'DD/MM/YYYY'|i18n('sensor/datepicker')}",
         "separator": "{' - '|i18n('sensor/datepicker')}",
@@ -373,6 +375,7 @@ $(document).ready(function () {ldelim}
                     typeCss = 'danger';
                 }
                 post.typeCss = typeCss;
+                post.canReadUsers = $.opendataTools.settings('canReadUsers');
             });
             var renderData = $(template.render(response));
             viewContainer.html(renderData);

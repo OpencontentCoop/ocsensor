@@ -5,6 +5,7 @@ use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Core\PermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
+use Opencontent\Sensor\Legacy\Listeners\CategoryAutomaticAssignListener;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
@@ -110,6 +111,10 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->setScenarios($scenarios);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
+
+        if ($this->getSensorSettings()->get('CategoryAutomaticAssign')) {
+            $this->addListener('on_add_category', new CategoryAutomaticAssignListener($this));
+        }
 
         $notificationTypes = [];
         $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();

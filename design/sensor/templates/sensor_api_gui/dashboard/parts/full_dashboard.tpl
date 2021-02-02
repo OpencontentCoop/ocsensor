@@ -11,7 +11,6 @@
         <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> Cerca</button>
         <div class="bordered">
             <ul class="nav nav-pills" style="margin-bottom: 20px">
-
                 <li role="presentation">
                     <a href="#" data-status="waiting">
                         {"Da leggere"|i18n('sensor/dashboard')}
@@ -48,7 +47,6 @@
                         <span class="badge"></span>
                     </a>
                 </li>
-
                 <li role="presentation" class="pull-right">
                     <a id="export-url" href="{'sensor/dashboard/(export)/'|ezurl(no)}">
                         <i class="fa fa-download"></i> {"Esporta"|i18n('sensor/dashboard')}                        
@@ -190,8 +188,6 @@
                 <button class="btn btn-danger" type="reset"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/post')}</button>
             </form>
         </div>
-
-
     </div>
 </div>
 

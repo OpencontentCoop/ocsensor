@@ -53,7 +53,7 @@
         </ul>
 	</div>
 	{{/if}}
-	<table class="table table-striped table-hover"{{if pageCount == 1}} style="margin-top:40px"{{/if}}>
+	<table class="table table-striped table-hover"{{if pageCount <= 1}} style="margin-top:40px"{{/if}}>
 	{{for searchHits}}
         <tr {{if (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
           <td style="vertical-align: middle;white-space: nowrap;" width="1">

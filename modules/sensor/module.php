@@ -112,6 +112,13 @@ $ViewList['inbox'] = array(
     'functions' => array('manage')
 );
 
+$ViewList['user'] = array(
+    'script' => 'user.php',
+    'params' => array('ID'),
+    'unordered_params' => array(),
+    'functions' => array('behalf')
+);
+
 
 $FunctionList = array();
 $FunctionList['use'] = array();

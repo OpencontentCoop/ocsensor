@@ -25,7 +25,7 @@
     <span class="label label-primary" id="current-post-id">{{:id}}</span>
     {{:subject}}
   </h1>
-  <p class="lead"><strong>{{:type.name}}</strong> di {{:author.name}}</p>
+  <p class="lead"><strong>{{:type.name}}</strong> di {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}</p>
 </section>
 </script>
 {/literal}

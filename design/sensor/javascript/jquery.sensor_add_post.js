@@ -301,7 +301,7 @@
                             url: '/api/sensor_gui/users?q=%QUERY',
                             wildcard: '%QUERY',
                             transform: function (response) {
-                                console.log(response);
+                                //console.log(response);
                                 var data = [];
                                 $.each(response.items, function () {
                                     data.push(this);

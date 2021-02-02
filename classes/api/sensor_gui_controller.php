@@ -1,10 +1,10 @@
 <?php
 
+use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
 use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
-use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\OpenApi;
 
@@ -52,6 +52,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         $apiName = ezpRestPrefixFilterInterface::getApiProviderName();
         $apiPrefix = eZINI::instance('rest.ini')->variable('System', 'ApiPrefix');
         $uri = $hostUri . $apiPrefix . '/' . $apiName;
+
+        if (eZSys::isSSLNow()) {
+            $uri = str_replace('http:', 'https:', $uri);
+        }
 
         return $uri;
     }
@@ -178,13 +182,24 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : trim($this->request->get['q']);
-            $parameters = [
-                'executionTimes' => isset($this->request->get['executionTimes']),
-                'readingStatuses' => isset($this->request->get['readingStatuses']),
-                'capabilities' => isset($this->request->get['capabilities']),
-                'currentUserInParticipants' => isset($this->request->get['currentUserInParticipants']),
-                'format' => isset($this->request->get['format']) ? $this->request->get['format'] : 'json',
-            ];
+            $parameters = [];
+            if (isset($this->request->get['executionTimes'])){
+                $parameters['executionTimes'] = filter_var($this->request->get['executionTimes'], FILTER_VALIDATE_BOOLEAN);
+            }
+            if (isset($this->request->get['readingStatuses'])){
+                $parameters['readingStatuses'] = filter_var($this->request->get['readingStatuses'], FILTER_VALIDATE_BOOLEAN);
+            }
+            if (isset($this->request->get['capabilities'])){
+                $parameters['capabilities'] = filter_var($this->request->get['capabilities'], FILTER_VALIDATE_BOOLEAN);
+            }
+            if (isset($this->request->get['currentUserInParticipants'])){
+                $parameters['currentUserInParticipants'] = filter_var($this->request->get['currentUserInParticipants'], FILTER_VALIDATE_BOOLEAN);
+            }
+            if (isset($this->request->get['format'])){
+                $parameters['format'] = $this->request->get['format'];
+            }else{
+                $parameters['format'] = 'json';
+            }
             $result = new ezpRestMvcResult();
             $result->variables = $this->openApiTools->replacePlaceholders(
                 $this->repository->getSearchService()->searchPosts($query, $parameters)
@@ -281,6 +296,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $result->variables[] = [
                 'identifier' => 'last_comment_timestamp',
                 'grant' => $lastComment
+            ];
+            $result->variables[] = [
+                'identifier' => 'can_manage',
+                'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'manage')['accessWord'] != 'no'
             ];
 
         } catch (Exception $e) {

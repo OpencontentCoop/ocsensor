@@ -19,7 +19,7 @@
         </ul>
 	</div>
 	{{/if}}
-	<table class="table table-striped table-hover table-condensed">
+	<table class="table table-striped table-hover table-condensed"{{if pageCount <= 1}} style="margin-top:40px"{{/if}}>
         <thead>
             <tr>
                 <th></th>
@@ -34,21 +34,21 @@
         </thead>
         <tbody>
         {{for searchHits}}
-            <tr style="cursor:pointer" data-href="{{:accessPath}}/sensor/posts/{{:id}}" {{if (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
+            <tr style="cursor:pointer" data-href="{{:accessPath}}/sensor/posts/{{:id}}" {{if readingStatuses && (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
                 <td>
                     {{if privacy.identifier == 'private' || moderation.identifier == 'waiting'}}
                       <div><i class="fa fa-lock"></i></div>
                     {{/if}}
                     {{if comments.length > 0}}
-                      <div><i class="fa fa-comments-o{{if readingStatuses.unread_comments > 0}} faa-tada animated{{/if}}"></i></div>
+                      <div><i class="fa fa-comments-o{{if readingStatuses && readingStatuses.unread_comments > 0}} faa-tada animated{{/if}}"></i></div>
                     {{/if}}
                     {{if commentsToModerate.length > 0}}
                       <div><i class="fa fa-commenting-o"></i></div>
                     {{/if}}
                     {{if privateMessages.length > 0}}
-                      <div><i class="fa fa-comments{{if readingStatuses.unread_private_messages > 0}} faa-tada animated{{/if}}"></i></div>
+                      <div><i class="fa fa-comments{{if readingStatuses && readingStatuses.unread_private_messages > 0}} faa-tada animated{{/if}}"></i></div>
                     {{/if}}
-                    {{if readingStatuses.unread_timelines > 0}}
+                    {{if readingStatuses && readingStatuses.unread_timelines > 0}}
                       <div><i class="fa fa-exclamation-triangle faa-tada animated"></i></div>
                     {{/if}}
                 </td>

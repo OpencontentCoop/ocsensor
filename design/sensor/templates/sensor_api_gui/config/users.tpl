@@ -27,12 +27,11 @@
 <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/user/',ezini("UserSettings", "DefaultUserPlacement"))|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
 
 {literal}
-    <script id="tpl-data-spinner" type="text/x-jsrender">
+<script id="tpl-data-spinner" type="text/x-jsrender">
 <div class="col-xs-12 spinner text-center">
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
 </div>
-
-    </script>
+</script>
 <script id="tpl-data-results" type="text/x-jsrender">
 <div class="row">
     {{if totalCount == 0}}

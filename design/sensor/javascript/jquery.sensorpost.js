@@ -60,6 +60,7 @@
                         post.operatorsTree = JSON.parse(plugin.settings.operators);
                         post.groupsTree = JSON.parse(plugin.settings.groups);
                         post.settings = JSON.parse(plugin.settings.settings);
+                        post.canReadUsers = capabilities.can_manage;
 
                         var statusCss = 'info';
                         if (post.status.identifier === 'pending') {
