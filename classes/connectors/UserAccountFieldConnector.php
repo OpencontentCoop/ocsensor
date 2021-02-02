@@ -4,6 +4,13 @@ use Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector;
 
 class UserAccountFieldConnector extends FieldConnector
 {
+    public function getData()
+    {
+        $data = parent::getData();
+        return isset($data['email']) ? $data['email'] : null;
+    }
+
+
     public function getSchema()
     {
         return array(
@@ -24,9 +31,13 @@ class UserAccountFieldConnector extends FieldConnector
 
     public function setPayload($email)
     {
+        $user = null;
+        if ($this->getHelper()->hasParameter('object')) {
+            $user = eZUser::fetch((int)$this->getHelper()->getParameter('object'));
+        }
+
         // workaround per permettere modifica email
         if ($this->getHelper()->hasParameter('object') && eZMail::validate($email)) {
-            $user = eZUser::fetch((int)$this->getHelper()->getParameter('object'));
             if ($user instanceof eZUser && $user->attribute('email') !== $email) {
                 if (eZUser::fetchByEmail($email) instanceof eZUser) {
                     throw new Exception("Indirizzo email già in uso", 1);
@@ -50,8 +61,9 @@ class UserAccountFieldConnector extends FieldConnector
 
         $postData = [];
         $postData['email'] = $email;
-        if ($this->getHelper()->hasParameter('object')) {
-            $postData['id'] = $this->getHelper()->getParameter('object');
+        if ($user instanceof eZUser) {
+            $postData['id'] = $user->id();
+            $postData['login'] = $user->attribute('login');
         }else{
             $postData['login'] = $email;
         }
