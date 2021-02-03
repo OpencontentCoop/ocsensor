@@ -283,6 +283,7 @@
             });
 
             var behalfOf = addPostGui.find('#behalf-of');
+            var behalfOfChannel = addPostGui.find('#behalf-of-channel');
             var behalfOfSearch = addPostGui.find('#behalf-of-search');
             var behalfOfCreate = addPostGui.find('#behalf-of-create');
             var behalfOfView = addPostGui.find('#behalf-of-view');
@@ -352,6 +353,7 @@
                 behalfOfCreate.addClass('hide');
                 behalfOfView.addClass('hide').find('span').text('');
                 behalfOf.val('');
+                behalfOfChannel.val('');
                 behalfOfSearchInput.val('');
                 behalfOfAnonymous.attr('checked', false);
                 checkBehalfFields();
@@ -402,12 +404,11 @@
 
             function checkBehalfFields() {
                 var stepItemIcon = addPostGui.find('a[href="#step-behalf"] .add-icon');
-                if (behalfOf.val() !== ''){
+                if (behalfOf.val() !== '' && behalfOfChannel.val() !== ''){
                     stepItemIcon
                         .removeClass('fa-plus-circle text-primary')
                         .addClass('fa-check-circle text-success');
                 }else{
-                    addPostGui.find('#behalf-of-channel').val('');
                     stepItemIcon
                         .removeClass('fa-check-circle text-success')
                         .addClass('fa-plus-circle text-primary')
@@ -594,6 +595,7 @@
                 checkBehalfFields();
                 addPostGui.show().find('.post-subject input').focus();
                 behalfOfView.find('i').trigger('click');
+                behalfOfAnonymous.trigger('click');
                 plugin.refreshViewPort();
                 plugin.refreshMap();
             }
