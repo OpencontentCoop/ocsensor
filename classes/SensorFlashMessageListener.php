@@ -70,7 +70,7 @@ class SensorFlashMessageListener extends AbstractListener
                     }
                     break;
             }
-            if ($message) {
+            if ($message && $this->repository->getCurrentUser()->type == 'sensor_operator') {
                 $this->repository->getLogger()->info("Add flash alert for '{$param->identifier}'");
                 SensorUserInfo::addFlashAlert($message, 'info');
             }

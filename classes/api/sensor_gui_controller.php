@@ -1,5 +1,6 @@
 <?php
 
+use Opencontent\Opendata\Api\Exception\ForbiddenException;
 use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
@@ -183,21 +184,21 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         try {
             $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : trim($this->request->get['q']);
             $parameters = [];
-            if (isset($this->request->get['executionTimes'])){
+            if (isset($this->request->get['executionTimes'])) {
                 $parameters['executionTimes'] = filter_var($this->request->get['executionTimes'], FILTER_VALIDATE_BOOLEAN);
             }
-            if (isset($this->request->get['readingStatuses'])){
+            if (isset($this->request->get['readingStatuses'])) {
                 $parameters['readingStatuses'] = filter_var($this->request->get['readingStatuses'], FILTER_VALIDATE_BOOLEAN);
             }
-            if (isset($this->request->get['capabilities'])){
+            if (isset($this->request->get['capabilities'])) {
                 $parameters['capabilities'] = filter_var($this->request->get['capabilities'], FILTER_VALIDATE_BOOLEAN);
             }
-            if (isset($this->request->get['currentUserInParticipants'])){
+            if (isset($this->request->get['currentUserInParticipants'])) {
                 $parameters['currentUserInParticipants'] = filter_var($this->request->get['currentUserInParticipants'], FILTER_VALIDATE_BOOLEAN);
             }
-            if (isset($this->request->get['format'])){
+            if (isset($this->request->get['format'])) {
                 $parameters['format'] = $this->request->get['format'];
-            }else{
+            } else {
                 $parameters['format'] = 'json';
             }
             $result = new ezpRestMvcResult();
@@ -579,7 +580,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             if (!$this->repository->getPostRootNode()->attribute('can_create')) {
-                throw new \Opencontent\Opendata\Api\Exception\ForbiddenException('create', 'post');
+                throw new ForbiddenException('create', 'post');
             }
             $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
             $uploadHandler = $this->getUploadHandler('sensor_post/images', $uploadDir);
@@ -681,6 +682,72 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                     eZDB::instance()->query("DELETE FROM ezcontentbrowsebookmark WHERE node_id=$nodeID and user_id=$userID");
                 }
             }
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doScenarioSearch()
+    {
+        try {
+            if (eZUser::currentUser()->hasAccessTo('sensor', 'config')['accessWord'] == 'no') {
+                throw new ForbiddenException('read', 'scenario');
+            }
+
+            $parameters = [];
+            if (isset($this->request->get['trigger'])) {
+                $parameters['trigger'] = $this->request->get['trigger'];
+            }
+            if (isset($this->request->get['type'])) {
+                $parameters['type'] = $this->request->get['type'];
+            }
+            if (isset($this->request->get['category'])) {
+                $parameters['category'] = $this->request->get['category'];
+            }
+            if (isset($this->request->get['area'])) {
+                $parameters['area'] = $this->request->get['area'];
+            }
+            if (isset($this->request->get['reporter_group'])) {
+                $parameters['reporter_group'] = $this->request->get['reporter_group'];
+            }
+
+            $result = new ezpRestMvcResult();
+            $result->variables = $this->repository->getScenarioService()->searchScenarios($parameters);
+
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doCreateScenario()
+    {
+        try {
+            if (eZUser::currentUser()->hasAccessTo('sensor', 'config')['accessWord'] == 'no') {
+                throw new ForbiddenException('create', 'scenario');
+            }
+
+            $result = new ezpRestMvcResult();
+            $result->variables = [$this->repository->getScenarioService()->createScenario($this->getPayload())];
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doEditScenario()
+    {
+        try {
+            if (eZUser::currentUser()->hasAccessTo('sensor', 'config')['accessWord'] == 'no') {
+                throw new ForbiddenException('edit', 'scenario');
+            }
+
+            $result = new ezpRestMvcResult();
+            $result->variables = ['result' => $this->repository->getScenarioService()->editScenario($this->Id, $this->getPayload())];
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
