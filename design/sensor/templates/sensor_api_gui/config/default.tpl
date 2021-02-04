@@ -84,6 +84,7 @@
             <input type="checkbox" {if $sensor_settings.HideOperatorNames}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideOperatorNames"{else}disabled{/if}>
         </td>
     </tr>
+    {*
     <tr>
         <th>
             Assegnazione automatica in base alla categoria
@@ -104,6 +105,7 @@
             </td>
         </tr>
     {/if}
+    *}
     <tr>
         <th>Il segnalatore può riaprire una segnalazione chiusa</th>
         <td class="text-center">

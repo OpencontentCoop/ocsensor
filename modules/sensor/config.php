@@ -1,6 +1,9 @@
 <?php
 
 /** @var eZModule $Module */
+
+use Opencontent\Sensor\Legacy\Scenarios\SensorScenario;
+
 $Module = $Params['Module'];
 $Http = eZHTTPTool::instance();
 $Part = $Params['Part'] ? $Params['Part'] : 'default';
@@ -94,6 +97,8 @@ if ($Http->hasPostVariable('BrowseActionName')
 
 if ($Part == 'areas') {
     $tpl->setVariable('areas_parent_node', $repository->getAreasRootNode());
+    $tpl->setVariable('operators', json_encode($repository->getOperatorsTree()));
+    $tpl->setVariable('groups', json_encode($repository->getGroupsTree()));
 
 } elseif ($Part == 'users') {
     $tpl->setVariable('user_parent_node', $repository->getUserRootNode());
@@ -101,6 +106,9 @@ if ($Part == 'areas') {
 
 } elseif ($Part == 'categories') {
     $tpl->setVariable('categories_parent_node', $repository->getCategoriesRootNode());
+    $tpl->setVariable('areas', $repository->getAreasTree());
+    $tpl->setVariable('operators', json_encode($repository->getOperatorsTree()));
+    $tpl->setVariable('groups', json_encode($repository->getGroupsTree()));
 
 } elseif ($Part == 'operators') {
     $tpl->setVariable('operator_parent_node', $repository->getOperatorsRootNode());
@@ -109,6 +117,15 @@ if ($Part == 'areas') {
 } elseif ($Part == 'groups') {
     $tpl->setVariable('groups_parent_node', $repository->getGroupsRootNode());
     $tpl->setVariable('group_class', 'sensor_group');
+
+} elseif ($Part == 'automations') {
+    $tpl->setVariable('areas', $repository->getAreasTree());
+    $tpl->setVariable('categories', $repository->getCategoriesTree());
+    $tpl->setVariable('operators', $repository->getOperatorsTree());
+    $tpl->setVariable('groups', $repository->getGroupsTree());
+    $tpl->setVariable('types', $repository->getPostTypeService()->loadPostTypes());
+    $tpl->setVariable('events', SensorScenario::getAvailableEvents());
+    $tpl->setVariable('scenario_parent_node', $repository->getScenariosRootNode());
 
 } elseif ($Part == 'notifications') {
     if ($Http->hasPostVariable('StoreNotificationsText')) {

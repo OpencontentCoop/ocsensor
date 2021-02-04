@@ -9,10 +9,10 @@ use Opencontent\Sensor\Legacy\Listeners\CategoryAutomaticAssignListener;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
 use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
-use Opencontent\Sensor\Legacy\PostService\ScenarioInterface;
-use Opencontent\Sensor\Legacy\PostService\Scenarios;
+use Opencontent\Sensor\Legacy\Scenarios;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
@@ -36,8 +36,7 @@ class OpenPaSensorRepository extends LegacyRepository
     protected function __construct()
     {
         $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
-        $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ?
-            array_map('intval', $firstApproverScenario->getApprovers()) : [];
+        $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
 
         $permissionDefinitions = array();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
@@ -106,15 +105,11 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
         $this->setActionDefinitions($actionDefinitions);
 
-        $scenarios = [];
-        $scenarios[ScenarioInterface::LOW] = $firstApproverScenario;
-        $this->setScenarios($scenarios);
-
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
 
-        if ($this->getSensorSettings()->get('CategoryAutomaticAssign')) {
-            $this->addListener('on_add_category', new CategoryAutomaticAssignListener($this));
-        }
+//        if ($this->getSensorSettings()->get('CategoryAutomaticAssign')) {
+//            $this->addListener('on_add_category', new CategoryAutomaticAssignListener($this));
+//        }
 
         $notificationTypes = [];
         $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
@@ -156,6 +151,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->addListener('after_run_action', new SendMailListener($this));
 
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
+
+        $this->addListener('*', new ScenarioListener($this));
 
         $statisticsFactories = [];
         $statisticsFactories[] = new Statistics\StatusPercentage($this);
@@ -523,6 +520,11 @@ class OpenPaSensorRepository extends LegacyRepository
                 'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
                 'node' => false,
             ],
+//            'automations' => [
+//                'uri' => 'sensor/config/automations',
+//                'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
+//                'node' => false,
+//            ],
         ];
         /** @var eZContentObjectTreeNode[] $otherFolders */
         $otherFolders = (array)$this->getRootNode()->subTree(array(
@@ -532,14 +534,24 @@ class OpenPaSensorRepository extends LegacyRepository
                 'DepthOperator' => 'eq')
         );
         foreach ($otherFolders as $folder) {
-            if ($folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
-                && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')) {
+            if (
+                $folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
+                && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')
+                && $folder->attribute('contentobject_id') != $this->getScenariosRootNode()->attribute('contentobject_id')
+            ) {
                 $data['data-' . $folder->attribute('contentobject_id')] = [
                     'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
                     'label' => $folder->attribute('name'),
                     'node' => $folder,
                 ];
             }
+        }
+        if (eZUser::currentUser()->hasAccessTo('*', '*')['accessWord'] == 'yes'){
+            $data['automations'] = [
+                'uri' => 'sensor/config/automations',
+                'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
+                'node' => false,
+            ];
         }
 
         $data['notifications'] = [
@@ -549,6 +561,14 @@ class OpenPaSensorRepository extends LegacyRepository
         ];
 
         return $data;
+    }
+
+    public function getScenariosRootNode()
+    {
+        if (!isset($this->data['scenarios'])) {
+            $this->data['scenarios'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_scenarios')->attribute('main_node');
+        }
+        return $this->data['scenarios'];
     }
 
 }

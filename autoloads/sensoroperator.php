@@ -123,7 +123,7 @@ class SensorOperator
 
             case 'sensor_default_approvers':
             {
-                $scenario = new \Opencontent\Sensor\Legacy\PostService\Scenarios\FirstAreaApproverScenario($repository);
+                $scenario = new \Opencontent\Sensor\Legacy\Scenarios\FirstAreaApproverScenario($repository);
                 $ids = $scenario->getApprovers();
                 $ids = array_map('intval', $ids);
                 $data = array();

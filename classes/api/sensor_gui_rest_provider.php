@@ -189,6 +189,30 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 array(),
                 'http-post'
             ), 1),
+
+            'sensorGuiApiScenarioSearch' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/scenarios',
+                'SensorGuiApiController',
+                'scenarioSearch',
+                array(),
+                'http-get'
+            ), 1),
+
+            'sensorGuiApiScenarioCreate' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/scenarios',
+                'SensorGuiApiController',
+                'createScenario',
+                array(),
+                'http-post'
+            ), 1),
+
+            'sensorGuiApiScenarioEdit' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/scenarios/:Id',
+                'SensorGuiApiController',
+                'editScenario',
+                array(),
+                'http-put'
+            ), 1),
         );
         return $routes;
     }
