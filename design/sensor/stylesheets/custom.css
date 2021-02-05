@@ -655,3 +655,11 @@ select.select-sensor-area-disabled::-ms-expand {
         align-items: center;
     }
 }
+
+.leaflet-control-container .leaflet-bar a,
+.leaflet-control-container .leaflet-bar a:hover {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 1em;
+}

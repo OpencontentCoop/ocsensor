@@ -75,6 +75,8 @@ body.sensor-add-post .panel {
 
     body.sensor-add-post .leaflet-touch .leaflet-bar a,
     body.sensor-add-post .leaflet-touch .leaflet-bar a:hover,
+    body.sensor-add-post .leaflet-control-layers a,
+    body.sensor-add-post .leaflet-control-layers a:hover,
     body.sensor-add-post .leaflet-bar a,
     body.sensor-add-post .leaflet-bar a:hover {
         width: 52px;
@@ -152,10 +154,17 @@ body.sensor-add-post .panel {
     body.sensor-add-post .leaflet-touch .leaflet-bar a:hover,
     body.sensor-add-post .leaflet-bar a,
     body.sensor-add-post .leaflet-bar a:hover {
-        width: 26px;
-        height: 26px;
-        line-height: 26px;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
         font-size: 1em;
+    }
+
+    body.sensor-add-post .leaflet-control-layers a,
+    body.sensor-add-post .leaflet-control-layers a:hover
+    {
+        width: 36px;
+        height: 36px;
     }
 
     form#edit, #sensor_add_gui {

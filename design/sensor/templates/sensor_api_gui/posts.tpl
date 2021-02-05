@@ -463,7 +463,7 @@ $(document).ready(function () {ldelim}
             });
         });
     }
-    L.control.layers(baseLayers, mapLayers).addTo(map);
+    L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(map);
     map.scrollWheelZoom.disable();
     var markers = new L.markerClusterGroup();
     if (typeof centerMap === 'string') {

@@ -117,7 +117,7 @@
                 });
             });
         }
-        L.control.layers(baseLayers, mapLayers).addTo(this.map);
+        L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(this.map);
         this.initMapEvents();
 
         this.viewport = this.element.find('.viewport');

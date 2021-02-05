@@ -305,7 +305,7 @@
                                     });
                                 });
                             }
-                            L.control.layers(baseLayers, mapLayers).addTo(map);
+                            L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(map);
                         }
 
                         renderData.find("a.edit-message").on('click', function (e) {
