@@ -59,7 +59,8 @@ class SensorOperator
             case 'sensor_post_class':
             {
                 $classRepository = new ClassRepository();
-                $operatorValue = $classRepository->load($repository->getPostContentClassIdentifier());
+                $operatorValue = (array)$classRepository->load($repository->getPostContentClassIdentifier());
+                break;
             }
 
             case 'sensor_posts_date_range':
