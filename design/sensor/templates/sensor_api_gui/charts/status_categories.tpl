@@ -2,12 +2,27 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['area', 'category'],
+            filters: [],
+            enableRangeFilter: true,
+            rangeMax: {days: 365},
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
                     var series = [];
-                    var categories = [];
+                    $.each(response.series, function () {
+                        var seriesItem = this;
+                        var item = {
+                            name: seriesItem.name,
+                            data: []
+                        };
+                        $.each(seriesItem.data, function () {
+                            if (this.interval !== 'all') {
+                                item.data.push([this.interval, this.count]);
+                            }
+                        });
+                        series.push(item);
+                    });
+                    var categories = response.intervals;
                     chart.highcharts({
                         chart: {
                             type: 'column'
@@ -81,7 +96,7 @@
                                                 type: 'image/svg+xml'
                                             });
                                         }
-                                    }, {
+                                    }/*, {
                                         separator: true
                                     }, {
                                         text: 'Vedi segnalazioni',
@@ -92,7 +107,7 @@
                                             })
                                             window.location = '/sensor/posts#' + $.param(queryData);
                                         }
-                                    }]
+                                    }*/]
                                 }
                             }
                         }
