@@ -36,10 +36,11 @@ try {
 
     $repository = OpenPaSensorRepository::instance();
 
-    function runOnCategoryChildren(eZContentObjectTreeNode $child)
+    function runOnCategoryChildren(eZContentObjectTreeNode $child, $level = 0)
     {
         global $repository;
-        eZCLI::instance()->output(' - ' . $child->attribute('name') . '... ', false);
+        $space = str_pad(' ', $level*2);
+        eZCLI::instance()->output($space . '- ' . $child->attribute('name') . '... ', false);
 
 
         $dataMap = $child->dataMap();
@@ -61,7 +62,7 @@ try {
                 'criterion_category' => $child->attribute('contentobject_id'),
                 'criterion_area' => '',
                 'criterion_reporter_group' => '',
-                'random_owner' => empty($dataMap['owner']->toString()) && $this->repository->getSensorSettings()->get('CategoryAutomaticAssignToRandomOperator') ? '1' : '0'
+                'random_owner' => empty($dataMap['owner']->toString()) && $repository->getSensorSettings()->get('CategoryAutomaticAssignToRandomOperator') ? '1' : '0'
             ];
 
             $remoteId = SensorScenario::generateRemoteId($attributes);
@@ -82,7 +83,9 @@ try {
         }
 
         foreach ($child->children() as $subChild) {
-            runOnCategoryChildren($subChild);
+            $level++;
+            runOnCategoryChildren($subChild, $level);
+            $level--;
         }
     }
 

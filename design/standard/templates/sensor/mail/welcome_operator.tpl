@@ -14,7 +14,7 @@
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
                             <h3>
-                                {'%password_link_start%Clicca qui per generare la tua password personale%password_link_end%'|i18n('sensor/mail/post',,
+                                {'%password_link_start%Clicca qui per generare la tua password personale%password_link_end%'|i18n('sensor/mail/welcome_operator',,
                                 hash( '%password_link_start%', concat( '<a style="color: #ffffff !important" href=https://', $social_pagedata.site_url, $generate_password_link, '>' ), '%password_link_end%', '</a>' ))}
                             </h3>
                         </td>
@@ -22,15 +22,8 @@
                     <tr>
                         <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
                             <p>
-                                {'Per autenticarti nel sistema %login_link_start%clicca qui%login_link_end%'|i18n('sensor/mail/post',,
-                                    hash( '%login_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/user/login/>' ), '%login_link_end%', '</a>' ))}
-                            </p>
-                            <p>
-                                {"Una volta effettuata l'autenticazione"|i18n('sensor/mail/welcome_operator')}
-                                {'%dashboard_link_start%potrai vedere tutte le segnalazioni a te assegnate%dashboard_link_end%'|i18n('sensor/mail/post',,
-                                    hash( '%dashboard_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/sensor/dashboard/>' ), '%dashboard_link_end%', '</a>' ))}
-                                {'e %notification_link_start%potrai gestire le notifiche email%notification_link_end%'|i18n('sensor/mail/post',,
-                                    hash( '%notification_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/notification/settings/>' ), '%notification_link_end%', '</a>' ))}
+                                {'Se il bottone non dovesse funzionare incolla il seguente indirizzo nella barra degli indirizzi del tuo browser: %password_link'|i18n('sensor/mail/welcome_operator',,
+                                    hash( '%password_link', concat('https://', $social_pagedata.site_url, $generate_password_link) ))}
                             </p>
                         </td>
                     </tr>
