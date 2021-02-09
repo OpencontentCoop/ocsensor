@@ -7,6 +7,7 @@ use Opencontent\Sensor\Core\PermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
 use Opencontent\Sensor\Legacy\Listeners\CategoryAutomaticAssignListener;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
+use Opencontent\Sensor\Legacy\Listeners\WelcomeOperatorListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
@@ -153,6 +154,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
 
         $this->addListener('*', new ScenarioListener($this));
+        $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
 
         $statisticsFactories = [];
         $statisticsFactories[] = new Statistics\StatusPercentage($this);
