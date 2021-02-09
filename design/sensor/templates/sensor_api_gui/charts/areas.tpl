@@ -5,9 +5,13 @@
             enableDailyInterval: true,
             enableRangeFilter: ['daily','weekly','monthly'],
             load: function (chart, params){
-                chart.html($('#spinner').html());
+                var spinner = $('#spinner').html();
+                var pieChart = $('#pie-chart');
+                chart.html(spinner);
+                pieChart.html('');
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
                     var series = [];
+                    var pieData = [];
                     $.each(response.series, function () {
                         var seriesItem = this;
                         var item = {
@@ -17,9 +21,78 @@
                         $.each(seriesItem.data, function () {
                             if (this.interval !== 'all') {
                                 item.data.push([this.interval * 1000, this.count]);
+                            }else{
+                                pieData.push({name: seriesItem.name, y: this.count})
                             }
                         });
                         series.push(item);
+                    });
+                    pieChart.highcharts({
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: chart.data('description')
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        accessibility: {
+                            point: {
+                                valueSuffix: '%'
+                            }
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: chart.data('name'),
+                            colorByPoint: true,
+                            data: pieData
+                        }],
+                        exporting: {
+                            buttons: {
+                                contextButton: {
+                                    menuItems: [{
+                                        textKey: 'downloadPNG',
+                                        onclick: function () {
+                                            this.exportChart();
+                                        }
+                                    }, {
+                                        textKey: 'downloadJPEG',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'image/jpeg'
+                                            });
+                                        }
+                                    }, {
+                                        textKey: 'downloadPDF',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'application/pdf'
+                                            });
+                                        }
+                                    }, {
+                                        textKey: 'downloadSVG',
+                                        onclick: function () {
+                                            this.exportChart({
+                                                type: 'image/svg+xml'
+                                            });
+                                        }
+                                    }]
+                                }
+                            }
+                        }
                     });
                     chart.highcharts({
                         chart: {
@@ -60,7 +133,7 @@
                             }
                         },
                         title: {
-                            text: chart.data('description')
+                            text: ''
                         },
                         series: series,
                         exporting: {
@@ -115,5 +188,6 @@
 </script>
 {/literal}
 
+<div id="pie-chart" style="min-width: 310px; max-height: 800px; margin: 0 auto"></div>
 <div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}"
      data-description="{$current.description|wash()}" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
