@@ -3,3 +3,10 @@
 [FieldSettings]
 FieldConnectors[user/user_account]=UserAccountFieldConnector
 FieldConnectors[sensor_operator/account]=UserAccountFieldConnector
+FieldConnectors[sensor_scenario/triggers]=SensorScenarioTriggerFieldConnector
+FieldConnectors[sensor_scenario/criterion_type]=SensorScenarioCriterionTypeFieldConnector
+FieldConnectors[sensor_scenario/owner]=SensorScenarioOwnerFieldConnector
+FieldConnectors[sensor_scenario/observer]=SensorScenarioObserverFieldConnector
+
+[ClassSettings]
+ClassConnectors[sensor_scenario]=SensorScenarioClassConnector

@@ -131,6 +131,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
+            <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$scenario_parent_node.node_id}" data-add-class="sensor_scenario" href="#"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
             <p class="text-muted">
                 <strong>Attenzione:</strong> viene applicato lo scenario che coincide con il maggior numero di condizioni.<br/>
                 A parità di numero di condizioni viene applicato lo scenario con ID inferiore
@@ -138,8 +139,6 @@
         </div>
     </div>
     <div data-items></div>
-
-    <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$scenario_parent_node.node_id}" data-add-class="sensor_scenario" href="#"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
 </div>
 
 {literal}
@@ -149,6 +148,35 @@
 </div>
 </script>
 <script id="tpl-data-results" type="text/x-jsrender">
+{{if pageCount > 1}}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+            <ul class="pagination">
+
+                <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
+                    <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
+                        <i class="fa fa-arrow-left"></i>
+                        <span class="sr-only">Pagina precedente</span>
+                    </a>
+                </li>
+
+                {{for pages ~current=currentPage}}
+                    <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
+                {{/for}}
+
+                <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
+                    <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
+                        <span class="sr-only">Pagina successiva</span>
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+{{/if}}
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
@@ -225,7 +253,6 @@
     </div>
     {{/if}}
 </div>
-
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
@@ -294,6 +321,8 @@
                 if (value.length > 0) {
                     if ($.inArray(value, ['reporter_as_approver', 'reporter_as_owner', 'reporter_as_observer', 'random_owner']) > -1) {
                         query += value + ' = 1 and ';
+                    } else if ($(this).attr('name') === 'criterion_type') {
+                        query += $(this).attr('name') + ' = \'' + $(this).val() + '\' and ';
                     } else {
                         query += $(this).attr('name') + ' in [' + $(this).val() + '] and ';
                     }

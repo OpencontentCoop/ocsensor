@@ -365,7 +365,7 @@ class SensorBinaryUploadHandler
 
     function get_config_bytes($val)
     {
-        $val = (int)$val;
+        $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
         switch ($last) {
             case 'g':
