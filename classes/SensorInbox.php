@@ -54,7 +54,7 @@ class SensorInbox
             or (owner_id_list = '$currentUserId' and owner_user_id_list !range [*,*] and workflow_status in ['assigned']) 
             or ((approver_id_list = '$currentUserId' or owner_id_list = '$currentUserId') and workflow_status in ['assigned','fixed','closed'] and $unreadPrivateField range [1,*]) 
             or (approver_id_list = '$currentUserId' and unmoderated_comments range [1,*])
-            or ((approver_id_list = '$currentUserId' or owner_id_list = '$currentUserId') and $unreadCommentField range [1,*]) 
+            or ((approver_id_list = '$currentUserId' or owner_user_id_list = '$currentUserId') and $unreadCommentField range [1,*]) 
             $specialQuery           
         ) sort [modified=>desc]";
 

@@ -116,7 +116,7 @@ $ViewList['user'] = array(
     'script' => 'user.php',
     'params' => array('ID'),
     'unordered_params' => array(),
-    'functions' => array('behalf')
+    'functions' => array('manage')
 );
 
 

@@ -48,7 +48,7 @@
             <li role="presentation">
                 <a href="#" data-inboxidentifier="conversations">
                     <i class="fa fa-comments"></i>
-                    <span class="hidden-sm hidden-xs nav-label">Note private</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                    <span class="hidden-sm hidden-xs nav-label">Note private</span>{* <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
                 </a>
             </li>
             <li role="presentation">
