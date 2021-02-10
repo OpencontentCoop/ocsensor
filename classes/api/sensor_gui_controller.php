@@ -590,7 +590,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
             $files = [];
             foreach ($data[$uploadHandler->getOption('param_name')] as $file) {
-                if ($file->error) {
+                if (isset($file->error)) {
                     throw new Exception($file->error);
                 }
                 $filePath = $uploadHandler->getOption('upload_dir') . $file->name;
