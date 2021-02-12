@@ -18,7 +18,7 @@
                       {include uri='design:sensor/mail/parts/post_info.tpl'}
                     </td>
                 </tr>
-                {if and( sensor_settings('HideTimelineDetails')|not(), count( $event_details )|gt(0), is_set( $event_details.owners ) )}
+                {if and( sensor_settings('HideOperatorNames')|not(), sensor_settings('HideTimelineDetails')|not(), count( $event_details )|gt(0), is_set( $event_details.owners ) )}
                     <tr>
                         <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
                             <p><strong>{"Assegnata a"|i18n('sensor/mail/post')}:</strong> {foreach $event_details.owners as $owner_id}{fetch( content, object, hash( object_id, $owner_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
