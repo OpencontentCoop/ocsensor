@@ -6,16 +6,22 @@
 
             <div class="message">
                 {{for _messages ~currentUserId=currentUserId ~capabilities=capabilities ~settings=settings}}
-                    <div class="message-{{:_type}} panel panel-{{if _type == 'system'}}default{{else _type == 'private'}}warning{{else _type == 'public'}}success{{else}}primary{{/if}}">
-                        <div class="panel-heading"{{if _type == 'system'}} style="border-bottom: none;"{{/if}}>
+                    <div id="message-{{:id}}" class="message-{{:_type}} {{if _type == 'system'}}panel panel-default{{else _type == 'private'}}panel panel-warning{{else _type == 'public'}}panel panel-success{{else _type == 'response'}}panel panel-primary{{/if}}"
+                        {{if _type == 'audit'}}style="margin-bottom: 20px;display: none;"{{/if}}>
+                        <div{{if _type != 'audit'}} class="panel-heading"{{/if}}{{if _type == 'system' || _type == 'audit'}} style="border-bottom: none;"{{/if}}>
                             <div class="media">
+                                {{if _type != 'audit'}}
                                 <div class="pull-left">
                                     <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 50px; height: 50px; object-fit: cover;" />
                                 </div>
+                                {{/if}}
                                 <div class="media-body">
-                                    <p class="comment_name">
+                                    {{if _type != 'audit'}}<p class="comment_name">{{/if}}
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
+                                        {{else _type == 'audit'}}
+                                            <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover;" />
+                                            <small>{{:~formatDate(published, 'DD/MM/YYYY HH:mm')}} - {{:richText}}</small>
                                         {{else _type == 'private'}}
                                             {{if ~capabilities.is_approver && isResponseProposal && ~settings.ShowResponseProposal}}
                                                 <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-primary pull-right"
@@ -52,21 +58,23 @@
                                                 <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha aggiunto un commento {{if !needModeration && !isRejected}}pubblico{{/if}}
-                                        {{else}}
+                                        {{else _type != 'audit'}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
                                                 <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{/literal}{"Modifica"|i18n('sensor/messages')}{literal}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
                                             <strong>{{:creator.name}}</strong> ha risposto alla segnalazione
                                         {{/if}}
-                                    </p>
-                                    {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
+                                    {{if _type != 'audit'}}</p>{{/if}}
+                                    {{if _type != 'audit'}}
+                                        {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}
+                                    {{/if}}
                                     {{if _type == 'private' && isResponseProposal && ~settings.ShowResponseProposal}}- <strong>Proposta di risposta</strong>{{/if}}
                                     {{if _type == 'public' && needModeration}} <strong class="label label-danger">In attesa di moderazione</strong>{{/if}}
                                     {{if _type == 'public' && isRejected}} <strong class="label label-danger">Rigettato</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
-                      {{if _type != 'system'}}  
+                      {{if _type != 'system' && _type != 'audit'}}
                       <div class="panel-body">
                           {{if _type == 'private' && ~currentUserId == creator.id}}
                               <div id="edit-message-{{:id}}" style="display: none;" data-action-wrapper>

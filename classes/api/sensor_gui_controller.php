@@ -163,6 +163,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 $message['_type'] = 'response';
                 $messages[$message['id']] = $message;
             }
+            foreach ($apiPost['audits'] as $message) {
+                $message['_type'] = 'audit';
+                $messages[$message['id']] = $message;
+            }
             ksort($messages);
             $apiPost['_messages'] = array_values($messages);
 

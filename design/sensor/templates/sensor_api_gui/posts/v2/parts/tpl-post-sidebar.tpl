@@ -3,7 +3,7 @@
 
     <div class="widget">
         {{if capabilities.can_add_approver && groupsTree.children.length > 0}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger hide" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">Riferimento</strong>
         <ul class="list-unstyled widget-content">
@@ -189,10 +189,11 @@
     <div class="widget">
         <strong class="widget-title">{/literal}{'Visualizza'|i18n('sensor/post')}{literal}</strong>
         <div>
-            {{if comments.length > 0}}<a href="#" class="message-visibility label label-default" data-type="public">Commenti</a>{{/if}}
-            {{if responses.length > 0}}<a href="#" class="message-visibility label label-default" data-type="response">Risposte</a>{{/if}}
-            {{if timelineItems.length > 0}}<a href="#" class="message-visibility label label-default" data-type="system">Cronologia</a>{{/if}}
-            {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" data-type="private">Note</a>{{/if}}
+            {{if comments.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="public">Commenti</a>{{/if}}
+            {{if responses.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="response">Risposte</a>{{/if}}
+            {{if timelineItems.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="system">Cronologia</a>{{/if}}
+            {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="private">Note</a>{{/if}}
+            {{if audits.length > 0}}<a href="#" class="message-visibility label label-simple" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="audit">Audit</a>{{/if}}
         </div>
     </div>
     {{/if}}
