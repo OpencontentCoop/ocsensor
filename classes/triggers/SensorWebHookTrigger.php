@@ -297,7 +297,10 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface, OCWebHookCustom
         $compiled = [];
 
         foreach ($template as $key => $value){
-            $compiled[$key] = $this->compileCustomVariable($value, $post);
+            $compiledValue = $this->compileCustomVariable($value, $post);
+            if ($compiledValue) {
+                $compiled[$key] = $compiledValue;
+            }
         }
 
         return $compiled;
@@ -338,6 +341,8 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface, OCWebHookCustom
                 if (isset($serialized[$property])) {
                     $valueToReplace = $serialized[$property];
                     $value = $this->replaceValue($placeholder, $valueToReplace, $value);
+                }else{
+                    $value = null;
                 }
             }else{
                 $valueToReplace = $this->api->replacePlaceholders(
