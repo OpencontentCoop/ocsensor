@@ -28,7 +28,7 @@
             {/foreach}
             <li class="divider" style="border-bottom: 1px solid #ccc"></li>
             <li>
-                <a href="{'sensor/export/'|ezurl(no)}">
+                <a id="download-csv" href="{'sensor/export/'|ezurl(no)}">
                     <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
                 </a>
             </li>
@@ -47,8 +47,7 @@
                     <div class="col-md-4">
                         <div class="form-group hide" id="area-filter">
                             <label>{'Filtra per zona'|i18n('sensor/post')}</label>
-                            <select class="select form-control" name="area">
-                                <option></option>
+                            <select class="select form-control" name="area" multiple>
                                 {foreach $areas.children as $item}
                                     {*<option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>*}
                                     {foreach $item.children as $child}
@@ -142,7 +141,8 @@
             this.chartContainer = $(element);
             this.intervalFilter = this.settings.filtersContainer.find('#interval-filter');
             this.rangeFilter = this.settings.filtersContainer.find('#range-filter');
-
+            this.downloadButton = $('#download-csv');
+            this.downloadBaseHref = this.downloadButton.attr('href');
             var self = this;
 
             var initRange = function(){
@@ -242,6 +242,13 @@
                     }
                 }
                 self.settings.load(self.chartContainer, params);
+                var downloadQuery = [];
+                $.each(params, function (key,val){
+                    if (val && val.length > 0) {
+                        downloadQuery.push({name: key, value: val});
+                    }
+                });
+                self.downloadButton.attr('href', self.downloadBaseHref + '?' + $.param(downloadQuery));
             });
 
             self.chartContainer.trigger('sensor:chart:filterchange');

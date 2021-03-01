@@ -3,9 +3,12 @@
 use Opencontent\Sensor\Api\Values\Participant;
 use Opencontent\Sensor\Api\Values\Post\Channel;
 use Opencontent\Sensor\Legacy\SearchService;
+use Opencontent\Sensor\Legacy\Statistics\FiltersTrait;
 
 class SensorPostCsvExporter extends SearchQueryCSVExporter
 {
+    use FiltersTrait;
+
     const MAX_DIRECT_DOWNLOAD_ITEMS = 0;
 
     protected $queryParams;
@@ -44,6 +47,11 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $this->queryString = isset($this->queryParams['query']) ? $this->queryParams['query'] : $this->queryParams['q'];
         $this->maxSearchLimit = SearchService::MAX_LIMIT;
 
+        $categoryFilter = $this->getCategoryFilter();
+        $rangeFilter = $this->getRangeFilter();
+        $areaFilter = $this->getAreaFilter();
+        $this->queryString = "{$categoryFilter}{$rangeFilter}{$areaFilter}" . $this->queryString;
+
         unset($this->queryParams['capabilities']); //boost performance
         if (isset($this->queryParams['ignorePolicies']) && $this->queryParams['ignorePolicies']){
             $this->searchPolicies = [];
@@ -70,6 +78,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'current_owner' => ezpI18n::tr('sensor/export', 'Incaricato'),
             'comment' => ezpI18n::tr('sensor/export', 'Commenti'),
             'channel' => ezpI18n::tr('sensor/export', 'Canale'),
+            'area' => ezpI18n::tr('sensor/export', 'Zona'),
         );
 
         $this->filename = 'posts' . '_' . time();
@@ -93,6 +102,16 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 $this->download = true;
             }
         }
+    }
+
+    public function getParameter($name)
+    {
+        return eZHTTPTool::instance()->hasGetVariable($name) ? eZHTTPTool::instance()->getVariable($name) : null;
+    }
+
+    public function hasParameter($name)
+    {
+        return eZHTTPTool::instance()->hasGetVariable($name) && !empty(eZHTTPTool::instance()->getVariable($name));
     }
 
     public function fetch()
@@ -140,6 +159,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'current_owner' => implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER)),
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
+                'area' => count($post->areas) > 0 ? $post->areas[0]->name : '',
             );
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){
