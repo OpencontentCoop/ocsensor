@@ -38,7 +38,11 @@ if (!is_numeric($postId)) {
     }
 
     try {
-        $post = $repository->getSearchService()->searchPost($postId);
+
+        $repository->getSearchService()->searchPost(
+            $postId,
+            ['format' => 'geojson'] //boost perfomance only check access
+        );
 
         $tpl->setVariable('post_id', (int)$postId);
 

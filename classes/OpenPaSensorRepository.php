@@ -1,20 +1,22 @@
 <?php
 
+use Opencontent\Opendata\Api\ClassRepository;
+use Opencontent\Opendata\Api\Gateway\FileSystem;
+use Opencontent\Opendata\Api\Values\Content;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Core\PermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
-use Opencontent\Sensor\Legacy\Listeners\CategoryAutomaticAssignListener;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
-use Opencontent\Sensor\Legacy\Listeners\WelcomeOperatorListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
 use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
+use Opencontent\Sensor\Legacy\Listeners\WelcomeOperatorListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
-use Opencontent\Sensor\Legacy\Scenarios;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
+use Opencontent\Sensor\Legacy\Scenarios;
 use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
@@ -107,10 +109,6 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->setActionDefinitions($actionDefinitions);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
-
-//        if ($this->getSensorSettings()->get('CategoryAutomaticAssign')) {
-//            $this->addListener('on_add_category', new CategoryAutomaticAssignListener($this));
-//        }
 
         $notificationTypes = [];
         $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
@@ -263,7 +261,7 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getRootNode()
     {
         if (!isset($this->data['root']) || $this->data['root'] === null)
-            $this->data['root'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId())->attribute('main_node');
+            $this->data['root'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId())->attribute('main_node');
         return $this->data['root'];
     }
 
@@ -284,14 +282,14 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getOperatorsRootNode()
     {
         if (!isset($this->data['operators']))
-            $this->data['operators'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_operators')->attribute('main_node');
+            $this->data['operators'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_operators')->attribute('main_node');
         return $this->data['operators'];
     }
 
     public function getCategoriesRootNode()
     {
         if (!isset($this->data['categories']))
-            $this->data['categories'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_postcategories')->attribute('main_node');
+            $this->data['categories'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_postcategories')->attribute('main_node');
         return $this->data['categories'];
     }
 
@@ -305,7 +303,7 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getGroupsRootNode()
     {
         if (!isset($this->data['groups'])) {
-            $groups = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_groups');
+            $groups = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_groups');
             if (!$groups instanceof eZContentObject) {
                 eZDebug::writeError("Missing node whit remote id " . self::sensorRootRemoteId() . '_groups');
                 $groups = $this->getRootNode();
@@ -330,13 +328,22 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getPostRootNode()
     {
         if (!isset($this->data['posts']))
-            $this->data['posts'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_postcontainer')->attribute('main_node');
+            $this->data['posts'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_postcontainer')->attribute('main_node');
         return $this->data['posts'];
     }
 
     public function getPostContentClassIdentifier()
     {
         return 'sensor_post';
+    }
+
+    public function getPostApiClass()
+    {
+        if (!isset($this->data['post_api_class'])) {
+            $classRepository = new ClassRepository();
+            $this->data['post_api_class'] = $classRepository->load($this->getPostContentClassIdentifier());
+        }
+        return $this->data['post_api_class'];
     }
 
     public function getPostContentClass()
@@ -401,7 +408,7 @@ class OpenPaSensorRepository extends LegacyRepository
     public function isModerationEnabled()
     {
         $globalModeration = $this->getRootNodeAttribute('enable_moderation');
-        return ($globalModeration && $globalModeration->attribute( 'data_type_string' ) == 'ezboolean' && $globalModeration->attribute( 'data_int' ) == 1);
+        return ($globalModeration && $globalModeration->attribute('data_type_string') == 'ezboolean' && $globalModeration->attribute('data_int') == 1);
     }
 
     public static function clearCache()
@@ -425,7 +432,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 $notification = $this->getNotificationService()->getNotificationByIdentifier($identifier);
                 $this->getNotificationService()->addUserToNotification($user, $notification);
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             eZDebug::writeError($e->getMessage(), __METHOD__);
         }
     }
@@ -433,7 +440,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isHiddenPrivacyChoice()
     {
         $attribute = $this->getRootNodeAttribute('hide_privacy_choice');
-        if ($attribute instanceof eZContentObjectAttribute){
+        if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }
 
@@ -443,7 +450,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isHiddenTimelineDetails()
     {
         $attribute = $this->getRootNodeAttribute('hide_timeline_details');
-        if ($attribute instanceof eZContentObjectAttribute){
+        if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }
 
@@ -453,7 +460,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isHiddenTypeChoice()
     {
         $attribute = $this->getRootNodeAttribute('hide_type_choice');
-        if ($attribute instanceof eZContentObjectAttribute){
+        if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }
 
@@ -463,7 +470,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isShownSmartGui()
     {
         $attribute = $this->getRootNodeAttribute('show_smart_gui');
-        if ($attribute instanceof eZContentObjectAttribute){
+        if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }
 
@@ -473,7 +480,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isHiddenOperatorName()
     {
         $attribute = $this->getRootNodeAttribute('hide_operator_name');
-        if ($attribute instanceof eZContentObjectAttribute){
+        if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }
 
@@ -483,7 +490,7 @@ class OpenPaSensorRepository extends LegacyRepository
     private function getAnnounceKitId()
     {
         $attribute = $this->getRootNodeAttribute('announce_kit_id');
-        if ($attribute instanceof eZContentObjectAttribute && $attribute->hasContent()){
+        if ($attribute instanceof eZContentObjectAttribute && $attribute->hasContent()) {
             return $attribute->toString();
         }
 
@@ -549,7 +556,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 ];
             }
         }
-        if (eZUser::currentUser()->hasAccessTo('*', '*')['accessWord'] == 'yes'){
+        if (eZUser::currentUser()->hasAccessTo('*', '*')['accessWord'] == 'yes') {
             $data['automations'] = [
                 'uri' => 'sensor/config/automations',
                 'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
@@ -569,9 +576,22 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getScenariosRootNode()
     {
         if (!isset($this->data['scenarios'])) {
-            $this->data['scenarios'] = eZContentObject::fetchByRemoteID(self::sensorRootRemoteId() . '_scenarios')->attribute('main_node');
+            $this->data['scenarios'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_scenarios')->attribute('main_node');
         }
         return $this->data['scenarios'];
     }
 
+    private function fetchObjectRemoteID($id)
+    {
+        $storage = new FileSystem();
+        try {
+            $content = $storage->loadContent($id);
+            if ($content instanceof Content) {
+                return $content->getContentObject($this->getCurrentLanguage());
+            }
+        } catch (Exception $e) {
+
+        }
+        return eZContentObject::fetchByRemoteID($id);
+    }
 }

@@ -51,11 +51,7 @@
                         {if is_set($child.geo.coords[0])}
                             data-lat="{$child.geo.coords[0]}" data-lng="{$child.geo.coords[1]}"
                         {/if}
-                        {if $child.bounding_box}
-                            data-geojson='{$child.bounding_box.geo_json}'
-                            data-type="{$child.bounding_box.type}"
-                            data-color="{if $child.bounding_box.color}{$child.bounding_box.color}{else}#3388ff{/if}"
-                        {/if}
+                        {if $child.bounding_box}data-geojson{/if}
                         style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}"
                         {if and(ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled'),$child.bounding_box|not())}
                             disabled="disabled"

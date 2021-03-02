@@ -80,7 +80,8 @@
             },
             'use_smart_gui': false,
             'default_user_placement': 0,
-            'additionalWMSLayers': []
+            'additionalWMSLayers': [],
+            'area_cache_prefix': 'area-'
         };
 
     function Plugin(element, options) {
@@ -851,25 +852,39 @@
         initPerimeters: function () {
             var self = this;
 
-            $('[data-geojson]').each(function () {
-                var item = $(this);
+            var addPerimeter = function (id, data){
                 $.addGeoJSONLayer(
-                    item.data('geojson'),
+                    data.geoBounding.geoJson,
                     self.map,
                     self.perimeters, null, {
-                        color: item.data('color'),
+                        color: data.geoBounding.color,
                         weight: 2,
                         opacity: 0.4,
                         fillOpacity: 0.2
                     },
                     null,
                     function (feature, layer) {
-                        feature.properties._id = item.data('id');
+                        feature.properties._id = id;
                         layer.on('click', function (e) {
                             self.setUserMarker(e.latlng);
                         });
                     }
                 );
+            };
+
+            $('[data-geojson]').each(function () {
+                var item = $(this);
+                var perimeterUrl = '/api/sensor_gui/areas/' + item.data('id');
+                if (window.sessionStorage !== undefined && sessionStorage.getItem(self.settings.area_cache_prefix+perimeterUrl)) {
+                    addPerimeter(item.data('id'), JSON.parse(sessionStorage.getItem(self.settings.area_cache_prefix+perimeterUrl)));
+                }else {
+                    $.getJSON(perimeterUrl, function (data) {
+                        addPerimeter(item.data('id'), data);
+                        if (window.sessionStorage !== undefined){
+                            sessionStorage.setItem(self.settings.area_cache_prefix+perimeterUrl, JSON.stringify(data));
+                        }
+                    });
+                }
             });
 
             if (self.perimeters.getLayers().length > 0) {

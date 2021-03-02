@@ -193,7 +193,7 @@
             {{if responses.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="response">Risposte</a>{{/if}}
             {{if timelineItems.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="system">Cronologia</a>{{/if}}
             {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="private">Note</a>{{/if}}
-            {{if audits.length > 0}}<a href="#" class="message-visibility label label-simple" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="audit">Audit</a>{{/if}}
+            {{if audits && audits.length > 0}}<a href="#" class="message-visibility label label-simple" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="audit">Audit</a>{{/if}}
         </div>
     </div>
     {{/if}}

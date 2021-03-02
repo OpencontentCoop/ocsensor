@@ -116,7 +116,7 @@ $(document).ready(function () {ldelim}
     });
     var viewContainer = $('[data-contents]');
     var exportUrl = $('#export-url');
-    var limitPagination = 15;
+    var limitPagination = 10;
     var currentPage = 0;
     var queryPerPage = [];
     var template = $.templates('#tpl-posts-results');
@@ -283,6 +283,7 @@ $(document).ready(function () {ldelim}
         currentQueryId++;
         var ajaxTime = new Date().getTime();
         var currentPercentage;
+        map.loadingControl.addLoader('buildMarkers');
         geoRecursiveFind(currentQueryId, function (response) {
             if (response.features.length > 0) {
                 var geoLayer = L.geoJson(response, {
@@ -333,11 +334,12 @@ $(document).ready(function () {ldelim}
             mapSpinner.animate({'width': currentPercentage+'%'}, totalTime);
             if (currentPercentage >= 100){
                 mapSpinner.fadeOut(1000);
+                map.loadingControl.removeLoader('buildMarkers');
             }
         });
     };
 
-    var buildView = function() {
+    var buildView = function(callback, context) {
         var baseQuery = buildQueryFilters();
         var paginatedQuery = baseQuery + ' limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [published=>desc]';
         viewContainer.html(spinner);
@@ -413,6 +415,9 @@ $(document).ready(function () {ldelim}
                     }
                 }
             }
+            if ($.isFunction(callback)){
+                callback.call(context);
+            }
         });
     };
 
@@ -422,8 +427,7 @@ $(document).ready(function () {ldelim}
         form.find('[type="reset"]').addClass('hide');
         currentPage = 0;
         queryPerPage = [];
-        buildView();
-        buildMarkers();
+        buildView(function (){buildMarkers();});
     };
 
     form.find('[type="submit"]').on('click', function(e){
@@ -431,8 +435,7 @@ $(document).ready(function () {ldelim}
         currentPage = 0;
         queryPerPage = [];
         resetMarkers();
-        buildView();
-        buildMarkers();
+        buildView(function (){buildMarkers();});
         e.preventDefault();
     });
     form.find('[type="reset"]').on('click', function(e){
@@ -441,7 +444,7 @@ $(document).ready(function () {ldelim}
         e.preventDefault();
     });
 
-    var map = L.map('map');
+    var map = L.map('map', {loadingControl: true});
     var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);

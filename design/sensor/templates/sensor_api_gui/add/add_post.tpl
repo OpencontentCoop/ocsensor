@@ -223,6 +223,7 @@
 
     $(document).ready(function () {ldelim}
         $('#sensor_full_map').sensorAddPost({ldelim}
+            'area_cache_prefix': '{openpa_instance_identifier()}',
             'use_smart_gui': true,
             'geocoder': '{$geocoder}',
             'geocoder_params': {$geocoder_params|json_encode()},

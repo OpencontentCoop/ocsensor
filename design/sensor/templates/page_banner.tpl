@@ -21,7 +21,7 @@
     </div>
 {elseif and( is_set( $module_result.node_id ), $module_result.node_id|eq( sensor_postcontainer().node_id ) )}
     <div class="hidden-xs">
-        <div class="full_page_photo"><div id="map"></div><div id="map-spinner" style="position: absolute;bottom: 0;height: 2px;background: #f00;width: 0;z-index: 2000;"></div></div>
+        <div class="full_page_photo"><div id="map"></div><div id="map-spinner" style="position: absolute;bottom: 0;height: 2px;background: #f00;width: 0;z-index: 1000;"></div></div>
         <div style="background: #eee;padding-top: 15px" id="posts-search">
             <div class="container">
                 <form class="row" role="search">
