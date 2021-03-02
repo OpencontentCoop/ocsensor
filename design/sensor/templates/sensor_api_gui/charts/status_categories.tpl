@@ -1,3 +1,4 @@
+{ezscript_require( array('highcharts/pareto.js' ))}
 {literal}
 <script type="text/javascript">
     $(document).ready(function (){
@@ -8,11 +9,26 @@
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
-                    var series = [];
+                    var series = [{
+                        type: 'pareto',
+                        name: 'Pareto',
+                        yAxis: 1,
+                        zIndex: 10,
+                        baseSeries: 3,
+                        tooltip: {
+                            valueDecimals: 2,
+                            valueSuffix: '%'
+                        }
+                    }];
                     $.each(response.series, function () {
                         var seriesItem = this;
                         var item = {
                             name: seriesItem.name,
+                            type: 'column',
+                            yAxis: 0,
+                            zIndex: 2,
+                            visible: seriesItem.name !== 'Totale',
+                            showInLegend: seriesItem.name !== 'Totale',
                             data: []
                         };
                         $.each(seriesItem.data, function () {
@@ -23,6 +39,7 @@
                         series.push(item);
                     });
                     var categories = response.intervals;
+
                     chart.highcharts({
                         chart: {
                             type: 'column'
@@ -34,12 +51,13 @@
                                 enabled: false
                             }
                         },
-                        yAxis: {
-                            allowDecimals: false,
+                        yAxis: [{
                             min: 0,
                             title: {
                                 text: '{/literal}{'Numero'|i18n('sensor/chart')}{literal}'
                             },
+                            alignTicks: false,
+                            gridLineWidth: 0,
                             stackLabels: {
                                 enabled: true,
                                 style: {
@@ -47,7 +65,20 @@
                                     color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                                 }
                             }
-                        },
+                        },{
+                            title: {
+                                text: ''
+                            },
+                            minPadding: 0,
+                            maxPadding: 0,
+                            max: 100,
+                            min: 0,
+                            opposite: true,
+                            alignTicks: false,
+                            labels: {
+                                format: "{value}%"
+                            }
+                        }],
                         tooltip: {
                             shared: true
                         },

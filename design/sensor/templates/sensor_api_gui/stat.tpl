@@ -7,8 +7,8 @@
     'ezjsc::jqueryUI',
     'jQAllRangeSliders-withRuler-min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
-    'highcharts/charts/highcharts.js',
-    'highcharts/charts/modules/exporting.js' )
+    'highcharts/highcharts.js',
+    'highcharts/exporting.js' )
 )}
 <section class="hgroup">
     <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
@@ -159,8 +159,8 @@
                 };
                 if (self.settings.rangeMax) {
                     rangeParameters.defaultValues = {
-                        min: self.settings.rangeDateMax,
-                        max: (new Date()).setDate(self.settings.rangeDateMax.getDate() - self.settings.rangeMax.days)
+                        min: (new Date()).setDate(self.settings.rangeDateMax.getDate() - self.settings.rangeMax.days),
+                        max: self.settings.rangeDateMax
                     };
                     rangeParameters.range = {
                         min: self.settings.rangeMin,
@@ -171,7 +171,7 @@
                 if (!self.rangeFilter.data('is_init') === true) {
                     self.settings.filtersContainer.find("#range-slider").dateRangeSlider(
                         rangeParameters
-                    ).bind("valuesChanged", function (e, data) {
+                    ).bind("userValuesChanged", function (e, data) {
                         self.chartContainer.trigger('sensor:chart:filterchange');
                     });
                     if (self.settings.enableEventFilter) {
