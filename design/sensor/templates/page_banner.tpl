@@ -74,6 +74,49 @@
                                    value=""/>
                         </div>
                     </div>
+
+                    {if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="author"
+                                   class="form-control daterange"
+                                   placeholder="{'Autore'|i18n('sensor/post')}"
+                                   value=""/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <select name="owner"
+                                    class="select select-operator form-control"
+                                    data-placeholder="{'Incaricato'|i18n('sensor/post')}"
+                                    data-type="operators">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <select name="owner_group"
+                                    class="select select-group form-control"
+                                    data-placeholder="{'Gruppo incaricato'|i18n('sensor/post')}"
+                                    data-type="groups">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <select name="observer"
+                                    class="select select-operator form-control"
+                                    data-placeholder="{'Osservatore'|i18n('sensor/post')}"
+                                    data-type="operators">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                    {/if}
+
                     <div class="col-md-1" style="padding: 0">
                         <button type="submit" class="btn btn-info"><span class="fa fa-search"></span></button>
                         <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span></button>

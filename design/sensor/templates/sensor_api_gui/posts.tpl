@@ -29,7 +29,20 @@
 
 {include uri='design:sensor_api_gui/posts/tpl-posts-results.tpl'}
 {include uri='design:sensor_api_gui/posts/tpl-post-popup.tpl'}
-{include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
+{literal}
+<script id="tpl-spinner" type="text/x-jsrender">
+<div class="spinner text-center" style="margin-top:20px">
+    <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+</div>
+</script>
+<script id="tpl-post-tree-option" type="text/x-jsrender">
+{{for children}}
+    <option value="{{:id}}" style="padding-left:calc(10px*{{:level}});">{{:name}}</option>
+    {{include tmpl="#tpl-post-tree-option"/}}
+{{/for}}
+</script>
+{/literal}
 
 {def $current_language = ezini('RegionalSettings', 'Locale')}
 {def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
@@ -102,12 +115,17 @@ $(document).ready(function () {ldelim}
             {undef $parts}
         {/foreach}
     {/if}
+    var operators = '{$operators|wash(javascript)}';
+    var groups = '{$groups|wash(javascript)}';
 {literal}
     $.views.helpers($.opendataTools.helpers);
     var form = $('#posts-search form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
     var selectType = form.find('select[name="type"]');
+    var selectOwner = form.find('select[name="owner"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)));
+    var selectGroup = form.find('select[name="owner_group"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(groups)));
+    var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)))
     form.find("select").select2({
         templateResult: function (item) {
             var style = item.element ? $(item.element).attr('style') : '';
@@ -266,8 +284,33 @@ $(document).ready(function () {ldelim}
         if (searchPublished.val().length > 0){
             query.push("published range [" + searchPublished.data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm') + "," + searchPublished.data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm') + "]");
         }
-        location.hash = $.param(queryData);
 
+        if (selectOwner.length > 0) {
+            var searchOwner = selectOwner.find(':selected').val();
+            if (searchOwner) {
+                query.push("owner_user_id_list in [" + searchOwner + "]");
+            }
+        }
+        if (selectGroup.length > 0) {
+            var searchGroup = selectGroup.find(':selected').val();
+            if (searchGroup) {
+                query.push("owner_group_id_list in [" + searchGroup + "]");
+            }
+        }
+        if (selectObserver.length > 0) {
+            var searchObserver = selectObserver.find(':selected').val();
+            if (searchObserver) {
+                query.push("observer_id_list in [" + searchObserver + "]");
+            }
+        }
+        if (form.find('input[name="author"]').length > 0) {
+            var searchAuthor = form.find('input[name="author"]').val().replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
+            if (searchAuthor.length > 0) {
+                query.push("author_name = '" + searchAuthor + "'");
+            }
+        }
+
+        location.hash = $.param(queryData);
         return query.length > 0 ? query.join(' and ') + ' and ' : '';
     };
 
@@ -427,19 +470,23 @@ $(document).ready(function () {ldelim}
         form.find('[type="reset"]').addClass('hide');
         currentPage = 0;
         queryPerPage = [];
-        buildView(function (){buildMarkers();});
+        buildView(function (){
+            resetMarkers();
+            buildMarkers();
+        });
     };
 
     form.find('[type="submit"]').on('click', function(e){
         form.find('[type="reset"]').removeClass('hide');
         currentPage = 0;
         queryPerPage = [];
-        resetMarkers();
-        buildView(function (){buildMarkers();});
+        buildView(function (){
+            resetMarkers();
+            buildMarkers();
+        });
         e.preventDefault();
     });
     form.find('[type="reset"]').on('click', function(e){
-        resetMarkers();
         reset();
         e.preventDefault();
     });
@@ -495,7 +542,6 @@ $(document).ready(function () {ldelim}
             return params;
         }, {});
     }
-
     var hash = parseParams(location.hash);
     if (hash){
         $.each(hash, function (key, value) {

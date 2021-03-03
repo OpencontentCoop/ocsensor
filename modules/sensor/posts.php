@@ -10,11 +10,21 @@ $tpl = eZTemplate::factory();
 $postId = $Params['ID'];
 $repository = OpenPaSensorRepository::instance();
 
+
 if (!is_numeric($postId)) {
+
+    $access = eZUser::currentUser()->hasAccessTo( 'sensor', 'manage' );
+    $isOperator = $access['accessWord'] != 'no';
 
     $tpl->setVariable('areas', $repository->getAreasTree());
     $tpl->setVariable('categories', $repository->getCategoriesTree());
     $tpl->setVariable('types', $repository->getPostTypeService()->loadPostTypes());
+
+    $operators = $isOperator ? $repository->getOperatorsTree() : [];
+    $groups = $isOperator ? $repository->getGroupsTree() : [];
+    $tpl->setVariable('operators', json_encode($operators));
+    $tpl->setVariable('groups', json_encode($groups));
+
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');
     $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts.tpl');
