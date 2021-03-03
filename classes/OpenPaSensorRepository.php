@@ -147,6 +147,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $notificationTypes[] = new NotificationTypes\OnAddCommentToModerateNotificationType();
         $this->addListener('on_add_comment_to_moderate', new MailNotificationListener($this));
 
+        $this->addListener('on_create', new SendMailListener($this));
         $this->addListener('after_run_action', new SendMailListener($this));
 
         $this->getNotificationService()->setNotificationTypes($notificationTypes);
