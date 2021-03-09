@@ -4,4 +4,7 @@
 CategoryList[moderation]=Moderazione
 CategoryList[controls]=Abilitazioni
 
+[EditSettings]
+ExtensionDirectories[]=ocsensor
+
 */ ?>

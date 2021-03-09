@@ -37,7 +37,7 @@
             {elseif and( is_set( $success_remove ), is_set( $errors_remove ) )}
                 {if $success_remove}
                     <div class="alert alert-success">
-                        <h2>{'The following unactivated users have been successfully removed:'|i18n( 'design/admin/user/activations' )}</h2>
+                        <h5>{'The following unactivated users have been successfully removed:'|i18n( 'design/admin/user/activations' )}</h5>
                         <ul class="list-unstyled">
                             {foreach $success_remove as $name}
                                 <li>{$name|wash}</li>
@@ -52,7 +52,7 @@
                 {/if}
             {/if}
 
-            <h3 >{'Unactivated users (%users_count)'|i18n( 'design/admin/user',, hash( '%users_count', $unactivated_count ) )}</h3>
+            <h3 >{'Unactivated users (%users_count)'|i18n( 'design/admin/user',, hash( '%users_count', count($unactivated_users) ) )}</h3>
 
             <p class="table-preferences">
                 {switch match=$number_of_items}
@@ -77,7 +77,7 @@
                 {/switch}
             </p>
 
-            {if $unactivated_count}
+            {if count($unactivated_users)}
                 <table class="table table-striped">
                     <tr>
                         <th class="tight"></th>
@@ -118,7 +118,7 @@
             {/if}
 
 
-            {if $unactivated_count}
+            {if count($unactivated_users)}
                 <div class="clearfix">
                     <input class="btn btn-success" type="submit" name="ActivateButton" value="{'Activate selected users'|i18n( 'design/admin/user' )}" title="{'Activate selected users.'|i18n( 'design/admin/user' )}" />
                     <input class="btn btn-danger" type="submit" name="RemoveButton" value="{'Remove selected users'|i18n( 'design/admin/user' )}" title="{'Remove selected users.'|i18n( 'design/admin/user' )}" />
