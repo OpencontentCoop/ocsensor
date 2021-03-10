@@ -45,6 +45,7 @@
             <tbody>
             {{for searchHits}}
                 <tr>
+                    <th>{{:metadata.id}}</th>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
                     </td>

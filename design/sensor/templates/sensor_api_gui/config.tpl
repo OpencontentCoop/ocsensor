@@ -54,14 +54,14 @@
 </section>
 
 <div class="row">
-  <div class="col-md-3">
-    <ul class="nav nav-pills nav-stacked">
+  <div class="col-md-2 col-xs-1">
+    <ul id="inbox-menu" class="nav nav-pills nav-stacked">
       {foreach $menu as $suffix => $item}
-        <li role="presentation" {if $current_part|eq($suffix)}class="active"{/if}><a href="{$item.uri|ezurl(no)}">{$item.label|wash()}</a></li>
+        <li role="presentation" {if $current_part|eq($suffix)}class="active"{/if}><a href="{$item.uri|ezurl(no)}"><i class="{$item.icon}"></i> <span class="hidden-sm hidden-xs nav-label">{$item.label|wash()}</span></a></li>
       {/foreach}
     </ul>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-10 col-xs-10">
     {if $current_part|begins_with('data-')}
       {include uri=concat('design:sensor_api_gui/config/data.tpl') parent_node=$menu[$current_part].node}
     {else}
