@@ -78,6 +78,19 @@
                     {if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}
                     <div class="col-sm-2">
                         <div class="form-group">
+                            <select name="status"
+                                    class="select form-control"
+                                    data-placeholder="{'Stato'|i18n('sensor/post')}">
+                                <option></option>
+                                {foreach sensor_statuses() as $status}
+                                    <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
                             <input type="text"
                                    name="author"
                                    class="form-control daterange"
@@ -85,7 +98,7 @@
                                    value=""/>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <select name="owner"
                                     class="select select-operator form-control"
@@ -95,7 +108,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <select name="owner_group"
                                     class="select select-group form-control"
@@ -105,7 +118,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <select name="observer"
                                     class="select select-operator form-control"

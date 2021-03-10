@@ -22,6 +22,7 @@ class SensorOperator
             'sensor_operators',
             'sensor_groups',
             'sensor_posts_date_range',
+            'sensor_statuses',
         );
     }
 
@@ -40,6 +41,13 @@ class SensorOperator
                     'default' => false,
                 )
             ),
+            'sensor_statuses' => array(
+                'group' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => 'sensor',
+                )
+            ),
         );
     }
 
@@ -48,6 +56,10 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_statuses':
+                $operatorValue = $repository->getSensorPostStates($namedParameters['group']);
+                break;
+
             case 'sensor_groups':
                 $operatorValue = $repository->getGroupsTree();
                 break;

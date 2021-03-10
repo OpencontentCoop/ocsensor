@@ -18,5 +18,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_operators',
         'sensor_groups',
         'sensor_posts_date_range',
+        'sensor_statuses',
     )
 );
