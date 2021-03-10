@@ -164,6 +164,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\Users($this);
         $statisticsFactories[] = new Statistics\StatusPerCategory($this);
         $statisticsFactories[] = new Statistics\StatusPerOwnerGroup($this);
+        $statisticsFactories[] = new Statistics\PostAging($this);
         $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
 
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
@@ -505,36 +506,43 @@ class OpenPaSensorRepository extends LegacyRepository
                 'uri' => 'sensor/config',
                 'label' => ezpI18n::tr('sensor/config', 'Settings'),
                 'node' => false,
+                'icon' => 'fa fa-cogs',
             ],
             'users' => [
                 'uri' => 'sensor/config/users',
                 'label' => ezpI18n::tr('sensor/config', 'Utenti'),
                 'node' => false,
+                'icon' => 'fa fa-users',
             ],
             'operators' => [
                 'uri' => 'sensor/config/operators',
                 'label' => ezpI18n::tr('sensor/config', 'Operatori'),
                 'node' => false,
+                'icon' => 'fa fa-user-circle',
             ],
             'categories' => [
                 'uri' => 'sensor/config/categories',
                 'label' => ezpI18n::tr('sensor/config', 'Categorie'),
                 'node' => false,
+                'icon' => 'fa fa-tags',
             ],
             'areas' => [
                 'uri' => 'sensor/config/areas',
                 'label' => ezpI18n::tr('sensor/config', 'Zone'),
                 'node' => false,
+                'icon' => 'fa fa-map-marker',
             ],
             'groups' => [
                 'uri' => 'sensor/config/groups',
                 'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
                 'node' => false,
+                'icon' => 'fa fa-user-circle-o'
             ],
 //            'automations' => [
 //                'uri' => 'sensor/config/automations',
 //                'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
 //                'node' => false,
+//                'icon' => 'fa fa-android',
 //            ],
         ];
         /** @var eZContentObjectTreeNode[] $otherFolders */
@@ -554,6 +562,7 @@ class OpenPaSensorRepository extends LegacyRepository
                     'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
                     'label' => $folder->attribute('name'),
                     'node' => $folder,
+                    'icon' => 'fa fa-folder'
                 ];
             }
         }
@@ -562,6 +571,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'uri' => 'sensor/config/automations',
                 'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
                 'node' => false,
+                'icon' => 'fa fa-android',
             ];
         }
 
@@ -569,6 +579,7 @@ class OpenPaSensorRepository extends LegacyRepository
             'uri' => 'sensor/config/notifications',
             'label' => ezpI18n::tr('sensor/config', 'Testi notifiche'),
             'node' => false,
+            'icon' => 'fa fa-align-left',
         ];
 
         return $data;
