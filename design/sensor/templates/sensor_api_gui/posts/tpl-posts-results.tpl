@@ -4,6 +4,9 @@
 	{{if pageCount > 1}}
 	<div class="pagination-container text-center">
         <ul class="pagination">
+            <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} risultati</span></li>
+        </ul>
+        <ul class="pagination">
             <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                 <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                     <span class="text"><i class="fa fa-arrow-left"></i></span>
@@ -19,6 +22,24 @@
             </li>
         </ul>
 	</div>
+	{{else totalCount == 1}}
+	    <div class="pagination-container text-center">
+            <ul class="pagination">
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">Un risultato</span></li>
+            </ul>
+        </div>
+	{{else totalCount > 0}}
+	    <div class="pagination-container text-center">
+            <ul class="pagination">
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} risultati</span></li>
+            </ul>
+        </div>
+    {{else}}
+        <div class="pagination-container text-center">
+            <ul class="pagination">
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">Nessun risultato</span></li>
+            </ul>
+        </div>
 	{{/if}}
 
 	<table class="table table-striped table-hover">

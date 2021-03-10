@@ -126,6 +126,7 @@ $(document).ready(function () {ldelim}
     var selectOwner = form.find('select[name="owner"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)));
     var selectGroup = form.find('select[name="owner_group"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(groups)));
     var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)))
+    var selectStatus = form.find('select[name="status"]');
     form.find("select").select2({
         templateResult: function (item) {
             var style = item.element ? $(item.element).attr('style') : '';
@@ -307,6 +308,13 @@ $(document).ready(function () {ldelim}
             var searchAuthor = form.find('input[name="author"]').val().replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
             if (searchAuthor.length > 0) {
                 query.push("author_name = '" + searchAuthor + "'");
+            }
+        }
+
+        if (selectStatus.length > 0) {
+            var searchStatus = selectStatus.find(':selected').val();
+            if (searchStatus) {
+                query.push("status in [" + searchStatus + "]");
             }
         }
 
