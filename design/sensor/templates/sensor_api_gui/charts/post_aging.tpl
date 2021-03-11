@@ -3,7 +3,7 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['area', 'category'],
+            filters: ['area', 'category', 'group'],
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
@@ -70,7 +70,7 @@
                             text: chart.data('description')
                         },
                         legend: {
-                            enabled:false
+                            alignColumns:false
                         },
                         series: series,
                         exporting: {

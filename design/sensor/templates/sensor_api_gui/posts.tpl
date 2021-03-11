@@ -289,13 +289,13 @@ $(document).ready(function () {ldelim}
         if (selectOwner.length > 0) {
             var searchOwner = selectOwner.find(':selected').val();
             if (searchOwner) {
-                query.push("owner_user_id_list in [" + searchOwner + "]");
+                query.push("last_owner_user_id in [" + searchOwner + "]");
             }
         }
         if (selectGroup.length > 0) {
             var searchGroup = selectGroup.find(':selected').val();
             if (searchGroup) {
-                query.push("owner_group_id_list in [" + searchGroup + "]");
+                query.push("last_owner_group_id in [" + searchGroup + "]");
             }
         }
         if (selectObserver.length > 0) {

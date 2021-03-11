@@ -13,6 +13,7 @@ try {
     $tpl->setVariable('current', $current);
     $tpl->setVariable('areas', $repository->getAreasTree());
     $tpl->setVariable('categories', $repository->getCategoriesTree());
+    $tpl->setVariable('groups', $repository->getGroupsTree());
 
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');

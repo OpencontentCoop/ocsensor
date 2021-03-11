@@ -85,6 +85,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="form-group hide" id="group-filter">
+                            <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
+                            <select class="select form-control" name="group" multiple>
+                                {foreach $groups.children as $item}
+                                    <option value="{$item.id}">{$item.name|wash()}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row hide" id="range-filter">
                     <div class="col-md-3">
