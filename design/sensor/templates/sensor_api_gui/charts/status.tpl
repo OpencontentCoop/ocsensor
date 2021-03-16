@@ -24,13 +24,13 @@
                                 series: {
                                     dataLabels: {
                                         enabled: true,
-                                        format: '{point.name}'
+                                        format: '{point.name}: {point.y:.2f}%'
                                     }
                                 }
                             },
                             tooltip: {
                                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+                                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b><br/>'
                             },
                             series: [{
                                 name: chart.data('name'),
@@ -38,6 +38,8 @@
                                 data: series
                             }],
                             exporting: {
+                                sourceWidth: 1500,
+                                sourceHeight: 800,
                                 buttons: {
                                     contextButton: {
                                         menuItems: [{

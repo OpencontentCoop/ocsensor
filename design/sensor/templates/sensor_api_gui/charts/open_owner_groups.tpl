@@ -95,6 +95,12 @@
                                         textShadow: '0 0 3px black'
                                     }
                                 }
+                            },
+                            pareto: {
+                                dataLabels: {
+                                    enabled: true,
+                                    format: "{point.y:.1f}"
+                                }
                             }
                         },
                         title: {
@@ -102,6 +108,8 @@
                         },
                         series: series,
                         exporting: {
+                            sourceWidth: 1500,
+                            sourceHeight: 1000,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{

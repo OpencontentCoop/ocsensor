@@ -76,6 +76,8 @@
                             data: pieData
                         }],
                         exporting: {
+                            sourceWidth: 1500,
+                            sourceHeight: 800,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{
@@ -152,6 +154,8 @@
                         },
                         series: series,
                         exporting: {
+                            sourceWidth: 1500,
+                            sourceHeight: 800,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{

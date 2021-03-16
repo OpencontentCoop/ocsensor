@@ -74,6 +74,8 @@
                         },
                         series: series,
                         exporting: {
+                            sourceWidth: 1500,
+                            sourceHeight: 1000,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{

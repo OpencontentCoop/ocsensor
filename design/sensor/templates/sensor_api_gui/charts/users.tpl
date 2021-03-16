@@ -30,6 +30,11 @@
                             }
                         },
                         plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            },
                             series: {
                                 marker: {
                                     enabled: true
@@ -47,6 +52,8 @@
                             enabled: false
                         },
                         exporting: {
+                            sourceWidth: 1500,
+                            sourceHeight: 800,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{
@@ -85,37 +92,6 @@
         });
     })
 </script>
-{/literal}
-{literal}
-    <script type="text/javascript">
-        $(function () {
-            var chart = $('#chart');
-            var intervalFilter = $('#interval-filter').removeClass('hide');
-
-            $(".select").select2({
-                templateResult: function (item) {
-                    var style = item.element ? $(item.element).attr('style') : '';
-                    return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
-                }
-            });
-
-            $.each([intervalFilter], function () {
-                this.find('select').on('change', function () {
-                    chart.trigger('sensor:chart:filterchange');
-                });
-            });
-
-            chart.on('sensor:chart:filterchange', function () {
-                loadChart();
-            });
-
-
-            var loadChart = function () {
-
-            };
-            loadChart();
-        });
-    </script>
 {/literal}
 <div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}"
      data-description="{$current.description|wash()}" style="min-width: 310px; height: 800px; margin: 0 auto"></div>
