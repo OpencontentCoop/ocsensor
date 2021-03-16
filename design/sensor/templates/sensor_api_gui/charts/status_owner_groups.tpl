@@ -5,7 +5,7 @@
         $('#chart').sensorChart({
             filters: ['area', 'category', 'group'],
             enableRangeFilter: true,
-            rangeMax: {days: 365},
+            rangeMax: false,
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {

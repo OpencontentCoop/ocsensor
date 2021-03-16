@@ -7,6 +7,7 @@
     'ezjsc::jqueryUI',
     'jQAllRangeSliders-withRuler-min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+    'moment-with-locales.min.js',
     'highcharts/highcharts.js',
     'highcharts/exporting.js' )
 )}
@@ -245,8 +246,8 @@
                 });
                 if (self.settings.enableRangeFilter === true || $.inArray(params.interval, self.settings.enableRangeFilter) > -1) {
                     var dateValues = self.settings.filtersContainer.find("#range-slider").dateRangeSlider("values");
-                    params['start'] = dateValues.min.toISOString();
-                    params['end'] = dateValues.max.toISOString();
+                    params['start'] = moment(dateValues.min).hours(0).minutes(0).format('YYYY-MM-DD HH:mm');
+                    params['end'] = moment(dateValues.max).hours(23).minutes(59).format('YYYY-MM-DD HH:mm');
                     if (self.settings.enableEventFilter) {
                         params['event'] = self.settings.filtersContainer.find('#event-filter').find('select').val();
                     }
