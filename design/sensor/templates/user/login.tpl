@@ -33,6 +33,7 @@
 
 <hr />
 
+{if $login_modules_count|le(1)}
 <section id="login">
   <div class="row">
     <div class="col-sm-6 col-md-6 col-sm-offset-3 col-md-offset-3">
@@ -48,3 +49,4 @@
     </div>
   </div>
 </section>
+{/if}
