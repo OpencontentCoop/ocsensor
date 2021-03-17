@@ -24,23 +24,38 @@
     </div>
 
     {{if capabilities.can_send_private_message || !settings.HideTimelineDetails}}
-        {{if capabilities.can_assign || owners.length}}
+        {{if capabilities.can_assign || owners.length || latestOwner || latestOwnerGroup}}
         <div class="widget">
             {{if capabilities.can_assign}}
                 <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
             {{/if}}
             <strong class="widget-title">Incaricato</strong>
             <ul class="list-unstyled widget-content">
-            {{for owners}}
+            {{if owners.length}}
+                {{for owners}}
+                    <li>
+                        <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                        {{:name}}
+                    </li>
+                {{/for}}
+            {{else latestOwner || latestOwnerGroup}}
+                {{if latestOwner}}
                 <li>
-                    <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
-                    {{:name}}
+                    <img src="/sensor/avatar/{{:latestOwner.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                    <em>{{:latestOwner.name}}</em>
                 </li>
+                {{/if}}
+                {{if latestOwnerGroup}}
+                <li>
+                    <img src="/sensor/avatar/{{:latestOwnerGroup.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                    <em>{{:latestOwnerGroup.name}}</em>
+                </li>
+                {{/if}}
             {{else}}
                 <li>
                     <em class="text-muted">Non definito</em>
                 </li>
-            {{/for}}
+            {{/if}}
             </ul>
             {{include tmpl="#tpl-post-assign"/}}
         </div>

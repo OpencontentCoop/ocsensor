@@ -139,6 +139,14 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     function transformItem($post)
     {
         if ($post instanceof \Opencontent\Sensor\Api\Values\Post) {
+            $ownerGroup = $post->latestOwnerGroup ?
+                $post->latestOwnerGroup->name :
+                implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_GROUP));
+
+            $owner = $post->latestOwner instanceof Participant ?
+                $post->latestOwner->name :
+                implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER));
+
             $item = array(
                 'id' => $post->id,
                 'privacy' => $post->privacy->name,
@@ -155,8 +163,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 //                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
                 'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
-                'current_owner_group' => implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_GROUP)),
-                'current_owner' => implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER)),
+                'current_owner_group' => $ownerGroup,
+                'current_owner' => $owner,
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : '',
