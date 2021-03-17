@@ -51,7 +51,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $categoryFilter = $this->getCategoryFilter();
         $rangeFilter = $this->getRangeFilter();
         $areaFilter = $this->getAreaFilter();
-        $this->queryString = "{$categoryFilter}{$rangeFilter}{$areaFilter}" . $this->queryString;
+        $groupFilter = $this->getOwnerGroupFilter();
+        $this->queryString = "{$categoryFilter}{$rangeFilter}{$areaFilter}{$groupFilter}" . $this->queryString;
 
         unset($this->queryParams['capabilities']); //boost performance
         if (isset($this->queryParams['ignorePolicies']) && $this->queryParams['ignorePolicies']){
