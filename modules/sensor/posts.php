@@ -3,6 +3,8 @@
 use Opencontent\Opendata\Api\ClassRepository;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\NotFoundException;
+use Opencontent\Sensor\Api\Values\Message\AuditCollection;
+use Opencontent\Sensor\Legacy\PermissionService;
 
 /** @var eZModule $module */
 $module = $Params['Module'];
@@ -45,6 +47,56 @@ if (!is_numeric($postId)) {
     $postId = (int)$postId;
     if (!eZContentObject::fetch($postId)){
         return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
+    }
+
+    if (isset($Params['Offset']) && $Params['Offset'] === 'history'){
+        if (PermissionService::isSuperAdmin($repository->getCurrentUser())) {
+
+            $postSerialized = $repository->getSearchService()->searchPost((int)$postId)->jsonSerialize();
+            $tpl->setVariable('post', $postSerialized);
+
+            $messages = [];
+            foreach ($postSerialized['timelineItems'] as $message) {
+                $message['_type'] = 'system';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($postSerialized['privateMessages'] as $message) {
+                $message['_type'] = 'private';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($postSerialized['comments'] as $message) {
+                $message['_type'] = 'public';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($postSerialized['responses'] as $message) {
+                $message['_type'] = 'response';
+                $messages[$message['id']] = $message;
+            }
+            foreach ($postSerialized['audits'] as $message) {
+                $message['_type'] = 'audit';
+                $messages[$message['id']] = $message;
+            }
+            ksort($messages);
+            $tpl->setVariable('messages', $messages);
+
+            $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/history.tpl');
+            $Result['node_id'] = 0;
+
+            $contentInfoArray = array('url_alias' => 'sensor/post/' . $postId . '/history');
+            $contentInfoArray['persistent_variable'] = false;
+            if ($tpl->variable('persistent_variable') !== false) {
+                $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
+            }
+            $Result['content_info'] = $contentInfoArray;
+            $Result['path'] = array();
+
+            return $Result;
+
+        }else{
+
+            $module->redirectTo('/sensor/posts/' . $postId);
+            return;
+        }
     }
 
     try {
