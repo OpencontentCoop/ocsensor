@@ -3,7 +3,6 @@
 use Opencontent\Opendata\Api\ClassRepository;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\NotFoundException;
-use Opencontent\Sensor\Api\Values\Message\AuditCollection;
 use Opencontent\Sensor\Legacy\PermissionService;
 
 /** @var eZModule $module */
@@ -15,7 +14,7 @@ $repository = OpenPaSensorRepository::instance();
 
 if (!is_numeric($postId)) {
 
-    $access = eZUser::currentUser()->hasAccessTo( 'sensor', 'manage' );
+    $access = eZUser::currentUser()->hasAccessTo('sensor', 'manage');
     $isOperator = $access['accessWord'] != 'no';
 
     $tpl->setVariable('areas', $repository->getAreasTree());
@@ -45,11 +44,11 @@ if (!is_numeric($postId)) {
 } else {
 
     $postId = (int)$postId;
-    if (!eZContentObject::fetch($postId)){
+    if (!eZContentObject::fetch($postId)) {
         return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
     }
 
-    if (isset($Params['Offset']) && $Params['Offset'] === 'history'){
+    if (isset($Params['Offset']) && $Params['Offset'] === 'history') {
         if (PermissionService::isSuperAdmin($repository->getCurrentUser())) {
 
             $postSerialized = $repository->getSearchService()->searchPost((int)$postId)->jsonSerialize();
@@ -92,7 +91,7 @@ if (!is_numeric($postId)) {
 
             return $Result;
 
-        }else{
+        } else {
 
             $module->redirectTo('/sensor/posts/' . $postId);
             return;
@@ -101,10 +100,12 @@ if (!is_numeric($postId)) {
 
     try {
 
-        $repository->getSearchService()->searchPost(
-            $postId,
-            ['format' => 'geojson'] //boost perfomance only check access
-        );
+        if ($repository->getSearchService()->searchPosts(
+                'id = ' . $postId . ' limit 1',
+                ['format' => 'geojson']
+            )->totalCount === 0) {
+            throw new NotFoundException();
+        }
 
         $tpl->setVariable('post_id', (int)$postId);
 
@@ -125,11 +126,11 @@ if (!is_numeric($postId)) {
             $layoutVersion = eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'PostLayoutVersion');
         }
         $layoutPreference = eZPreferences::value('sensor_post_layout');
-        if ($layoutPreference){
+        if ($layoutPreference) {
             $layoutVersion = (int)$layoutPreference;
         }
 
-        $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/v'. $layoutVersion . '/post.tpl');
+        $Result['content'] = $tpl->fetch('design:sensor_api_gui/posts/v' . $layoutVersion . '/post.tpl');
         $Result['node_id'] = 0;
 
         $contentInfoArray = array('url_alias' => 'sensor/post/' . $postId);
