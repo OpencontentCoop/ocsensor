@@ -217,7 +217,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $tpl = eZTemplate::factory();
         foreach ($variables as $key => $value){
             if (is_string($value) && $value != 'true' && $value != 'false'){ //@todo
-                $variables[$key] = '"' . $variables[$key] . '"';
+                $variables[$key] = '"' . addcslashes($variables[$key], '"') . '"';
             }elseif (is_bool($value)){
                 $variables[$key] = (int)$variables[$key];
             }
