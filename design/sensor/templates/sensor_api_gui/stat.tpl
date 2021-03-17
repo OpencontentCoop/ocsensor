@@ -29,7 +29,7 @@
             {/foreach}
             <li class="divider" style="border-bottom: 1px solid #ccc"></li>
             <li>
-                <a id="download-csv" href="{'sensor/export/'|ezurl(no)}">
+                <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
                     <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
                 </a>
             </li>

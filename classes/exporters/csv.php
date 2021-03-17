@@ -2,6 +2,7 @@
 
 use Opencontent\Sensor\Api\Values\Participant;
 use Opencontent\Sensor\Api\Values\Post\Channel;
+use Opencontent\Sensor\Legacy\PermissionService;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\Legacy\Statistics\FiltersTrait;
 
@@ -79,6 +80,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'comment' => ezpI18n::tr('sensor/export', 'Commenti'),
             'channel' => ezpI18n::tr('sensor/export', 'Canale'),
             'area' => ezpI18n::tr('sensor/export', 'Zona'),
+            'response' => ezpI18n::tr('sensor/export', 'Risposta'),
         );
 
         $this->filename = 'posts' . '_' . time();
@@ -122,7 +124,11 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     public function fetchCount()
     {
         if ($this->count === null) {
-            $this->count = $this->repository->getSearchService()->searchPosts($this->queryString . ' and limit 1', $this->queryParams, $this->searchPolicies)->totalCount;
+            $searchQuery = '';
+            if (!empty($this->queryString)){
+                $searchQuery = $this->queryString . ' and ';
+            }
+            $this->count = $this->repository->getSearchService()->searchPosts($searchQuery . 'limit 1', $this->queryParams, $this->searchPolicies)->totalCount;
         }
         return $this->count;
     }
@@ -168,14 +174,20 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : '',
+                'response' => count($post->responses) > 0 ? $post->responses->last()->text : '',
             );
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){
                 $item['title'] = '***';
                 $item['author'] = '***';
+                $item['response'] = '***';
             }
 
-            if ($this->repository->getSensorSettings()->get('HideTimelineDetails')){
+            if (
+                ($this->repository->getSensorSettings()->get('HideTimelineDetails') || $this->repository->getSensorSettings()->get('HideOperatorNames'))
+                && $this->repository->getCurrentUser()->type == 'user'
+                && !PermissionService::isSuperAdmin($this->repository->getCurrentUser())
+            ){
                 $item['current_owner'] = '';
             }
 
