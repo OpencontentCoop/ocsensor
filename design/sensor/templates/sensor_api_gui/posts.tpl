@@ -57,7 +57,7 @@ $(document).ready(function () {ldelim}
         'search': '/api/sensor_gui/posts/search',
         'sensor': '/api/sensor_gui',
     {rdelim});
-    $.opendataTools.settings('canReadUsers', {cond(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), 'true', 'false')});
+    $.opendataTools.settings('canReadUsers', {cond(fetch('user', 'has_access_to', hash('module','sensor','function','user_list')), 'true', 'false')});
 
     var dateRangePickerLocale = {ldelim}
         "format": "{'DD/MM/YYYY'|i18n('sensor/datepicker')}",

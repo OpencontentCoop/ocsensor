@@ -306,6 +306,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 'identifier' => 'can_manage',
                 'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'manage')['accessWord'] != 'no'
             ];
+            $result->variables[] = [
+                'identifier' => 'can_read_user',
+                'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'user_list')['accessWord'] != 'no'
+            ];
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);

@@ -116,7 +116,7 @@ $ViewList['user'] = array(
     'script' => 'user.php',
     'params' => array('ID'),
     'unordered_params' => array(),
-    'functions' => array('manage')
+    'functions' => array('user_list')
 );
 
 
@@ -127,6 +127,7 @@ $FunctionList['config'] = array();
 $FunctionList['manage'] = array();
 $FunctionList['behalf'] = array();
 $FunctionList['ws_user'] = array();
+$FunctionList['user_list'] = array();
 
 $charts = array();
 foreach (OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true) as $item) {
