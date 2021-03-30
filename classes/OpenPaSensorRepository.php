@@ -163,6 +163,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\AvgTimes($this);
         $statisticsFactories[] = new Statistics\Users($this);
         $statisticsFactories[] = new Statistics\StatusPerCategory($this);
+        $statisticsFactories[] = new Statistics\TypePerCategory($this);
         $statisticsFactories[] = new Statistics\StatusPerOwnerGroup($this);
         $statisticsFactories[] = new Statistics\OpenPerOwnerGroup($this);
         $statisticsFactories[] = new Statistics\PostAging($this);
