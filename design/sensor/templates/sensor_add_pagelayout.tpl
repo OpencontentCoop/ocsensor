@@ -39,20 +39,16 @@
 {def $show_map_debug = cond(and(ezhttp_hasvariable('debug', 'get'), fetch('user','has_access_to',hash('module','sensor','function','config'))), 'true', 'false')}
 <script>
     var additionalWMSLayers = [];
-    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
-        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
-            {def $parts = $layer|explode('|')}
-                additionalWMSLayers.push({ldelim}
-                    baseUrl: '{$parts[0]}',
-                    version: '{$parts[1]}',
-                    layers: '{$parts[2]}',
-                    format: '{$parts[3]}',
-                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
-                    attribution: '{$parts[5]}'
-                {rdelim})
-            {undef $parts}
-        {/foreach}
-    {/if}
+    {foreach sensor_additional_map_layers() as $layer}
+        additionalWMSLayers.push({ldelim}
+            baseUrl: '{$layer.baseUrl}',
+            version: '{$layer.version}',
+            layers: '{$layer.layers}',
+            format: '{$layer.format}',
+            transparent: {cond($layer.transparent, 'true', 'false')},
+            attribution: '{$layer.attribution}'
+        {rdelim});
+    {/foreach}
     $(document).ready(function () {ldelim}
         $(document).on('click', '#sensor_show_map_button', function () {ldelim}
             $(window).scrollTop(0);

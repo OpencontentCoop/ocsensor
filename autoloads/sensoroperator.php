@@ -23,6 +23,7 @@ class SensorOperator
             'sensor_groups',
             'sensor_posts_date_range',
             'sensor_statuses',
+            'sensor_additional_map_layers',
         );
     }
 
@@ -56,6 +57,40 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_additional_map_layers':
+                $additionalLayers = [];
+                $sensorPostRoot = $repository->getPostRootNode();
+                $sensorPostRootDataMap = $sensorPostRoot->dataMap();
+                if (isset($sensorPostRootDataMap['additional_map_layers']) && $sensorPostRootDataMap['additional_map_layers']->hasContent()){
+                    /** @var \eZMatrix $additionalLayersMatrix */
+                    $additionalLayersMatrix = $sensorPostRootDataMap['additional_map_layers']->content();
+                    if ($additionalLayersMatrix instanceof eZMatrix) {
+                        $columns = (array)$additionalLayersMatrix->attribute('columns');
+                        $rows = (array)$additionalLayersMatrix->attribute('rows');
+                        $keys = array();
+                        foreach ($columns['sequential'] as $column) {
+                            $keys[] = $column['identifier'];
+                        }
+                        foreach ($rows['sequential'] as $row) {
+                            $additionalLayers[] = array_combine($keys, $row['columns']);
+                        }
+                    }
+                }elseif (eZINI::instance('ocsensor.ini')->hasVariable('GeoCoderSettings', 'AdditionalMapLayers')){
+                    foreach (eZINI::instance('ocsensor.ini')->variable('GeoCoderSettings', 'AdditionalMapLayers') as $layer){
+                        $parts = explode('|', $layer);
+                        $additionalLayers[] = [
+                            'baseUrl' =>  $parts[0],
+                            'version' =>  $parts[1],
+                            'layers' =>  $parts[2],
+                            'format' =>  $parts[3],
+                            'transparent' => $parts[4] == 'true',
+                            'attribution' => $parts[5],
+                        ];
+                    }
+                }
+                $operatorValue = $additionalLayers;
+                break;
+
             case 'sensor_statuses':
                 $operatorValue = $repository->getSensorPostStates($namedParameters['group']);
                 break;

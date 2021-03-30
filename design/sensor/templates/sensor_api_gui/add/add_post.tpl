@@ -206,20 +206,16 @@
     var BoundingArea = {if is_set($areas[0].bounding_box)}'{$areas[0].bounding_box.geo_json}'{else}false{/if};
     $.opendataTools.settings('language', "{ezini('RegionalSettings', 'Locale')}");
     var additionalWMSLayers = [];
-    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
-        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
-            {def $parts = $layer|explode('|')}
-                additionalWMSLayers.push({ldelim}
-                    baseUrl: '{$parts[0]}',
-                    version: '{$parts[1]}',
-                    layers: '{$parts[2]}',
-                    format: '{$parts[3]}',
-                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
-                    attribution: '{$parts[5]}'
-                {rdelim})
-            {undef $parts}
-        {/foreach}
-    {/if}
+    {foreach sensor_additional_map_layers() as $layer}
+    additionalWMSLayers.push({ldelim}
+        baseUrl: '{$layer.baseUrl}',
+        version: '{$layer.version}',
+        layers: '{$layer.layers}',
+        format: '{$layer.format}',
+        transparent: {cond($layer.transparent, 'true', 'false')},
+        attribution: '{$layer.attribution}'
+    {rdelim});
+    {/foreach}
 
     $(document).ready(function () {ldelim}
         $('#sensor_full_map').sensorAddPost({ldelim}

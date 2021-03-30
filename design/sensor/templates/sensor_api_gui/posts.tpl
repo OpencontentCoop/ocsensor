@@ -101,20 +101,16 @@ $(document).ready(function () {ldelim}
         var centerMap = false;
     {/if}
     var additionalWMSLayers = [];
-    {if ezini_hasvariable('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini')}
-        {foreach ezini('GeoCoderSettings', 'AdditionalMapLayers', 'ocsensor.ini') as $layer}
-            {def $parts = $layer|explode('|')}
-                additionalWMSLayers.push({ldelim}
-                    baseUrl: '{$parts[0]}',
-                    version: '{$parts[1]}',
-                    layers: '{$parts[2]}',
-                    format: '{$parts[3]}',
-                    transparent: {cond($parts[4]|eq('true'), 'true', 'false')},
-                    attribution: '{$parts[5]}'
-                {rdelim})
-            {undef $parts}
-        {/foreach}
-    {/if}
+    {foreach sensor_additional_map_layers() as $layer}
+    additionalWMSLayers.push({ldelim}
+        baseUrl: '{$layer.baseUrl}',
+        version: '{$layer.version}',
+        layers: '{$layer.layers}',
+        format: '{$layer.format}',
+        transparent: {cond($layer.transparent, 'true', 'false')},
+        attribution: '{$layer.attribution}'
+    {rdelim});
+    {/foreach}
     var operators = '{$operators|wash(javascript)}';
     var groups = '{$groups|wash(javascript)}';
 {literal}
