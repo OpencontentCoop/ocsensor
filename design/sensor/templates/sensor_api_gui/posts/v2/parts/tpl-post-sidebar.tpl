@@ -200,7 +200,7 @@
     </div>
     {{/if}}
 
-    {{if comments.length > 0 || responses.length > 0 || timelineItems.length > 0 || privateMessages.length > 0}}
+    {{if comments.length > 0 || responses.length > 0 || timelineItems.length > 0 || privateMessages.length > 0 || audits.length > 0}}
     <div class="widget">
         <strong class="widget-title">{/literal}{'Visualizza'|i18n('sensor/post')}{literal}</strong>
         <div>

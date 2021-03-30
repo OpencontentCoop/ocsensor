@@ -42,6 +42,8 @@ class SensorScenarioClassConnector extends ClassConnector
             'owner' => ['reporter_as_owner'],
         ];
 
+        $schema['properties']['expiry'] = $properties['expiry'];
+
         return $schema;
     }
 
@@ -53,6 +55,7 @@ class SensorScenarioClassConnector extends ClassConnector
         $options['fields']['owner_group']['dependencies']['reporter_as_owner'] = false;
         $options['fields']['owner']['dependencies']['reporter_as_owner'] = false;
         $options['fields']['random_owner']['dependencies']['owner'] = '';
+        $options['fields']['expiry']['type'] = 'integer';
 
         return $options;
     }

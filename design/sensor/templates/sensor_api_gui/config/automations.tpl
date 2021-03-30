@@ -190,6 +190,7 @@
                 <th>Evento</th>
                 <th>Condizioni</th>
                 <th>Assegnazioni</th>
+                <th>Scadenza</th>
                 <th></th>
                 <th></th>
             </thead>
@@ -235,6 +236,11 @@
                                 </li>
                             {{/if}}
                         </ul>
+                    </td>
+                    <td>
+                        {{if ~i18n(data, 'expiry')}}
+                            {{:~i18n(data, 'expiry')}} giorni
+                        {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}

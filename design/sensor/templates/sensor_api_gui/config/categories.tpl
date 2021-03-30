@@ -2,6 +2,9 @@
 {ezscript_require(array('select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js')))}
 <div class="tab-pane active" id="categories">
     <div data-items>
+        <ul class="list-inline text-right">
+            <li><a href="#" data-refresh><i class="fa fa-refresh"></i></a></li>
+        </ul>
         <table class="categories table table-hover"></table>
         <div class="scenarios panel panel-default" style="display: none">
             <div class="panel-heading">
@@ -16,6 +19,7 @@
                         <th>Gruppo di incaricati</th>
                         <th>Incaricato</th>
                         <th>Osservatore</th>
+                        <th>Scadenza</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -110,6 +114,11 @@
         {{/if}}
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_observer}}<em>Operatore segnalatore</em>{{/if}}
     </td>
+    <td class="expiry">
+        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.expiry}}
+            {{:area_{/literal}{$area.id|wash()}{literal}.expiry}} giorni
+        {{/if}}
+    </td>
     <td width="1">
         {{if area_{/literal}{$area.id|wash()}{literal}}}
             <a href="#" data-editscenario="{{:area_{/literal}{$area.id|wash()}{literal}.id}}"><i class="fa fa-pencil"></i></a>
@@ -138,6 +147,11 @@
         {{if default && default.assignments.observer.length}}{{for default.assignments.observer}}{{:name}} {{/for}}{{/if}}
         {{if default && default.assignments.reporter_as_observer}}<em>Operatore segnalatore</em>{{/if}}
     </td>
+    <td class="expiry">
+        {{if default && default.expiry}}
+            {{:default.expiry}} giorni
+        {{/if}}
+    </td>
     <td width="1">
         {{if default}}
             <a href="#" data-editscenario="{{:default.id}}"><i class="fa fa-pencil"></i></a>
@@ -154,6 +168,7 @@
     <td class="owner_group"></td>
     <td class="owner"></td>
     <td class="observer"></td>
+    <td class="expiry"></td>
     <td width="1"><a href="#" class="store-scenario"><i class="fa fa-save"></i></a></td>
     <td width="1"><a href="#" class="close-edit-scenario"><i class="fa fa-times"></i></a></td>
 </script>
@@ -279,7 +294,8 @@
                 criteria:{
                     category: [id],
                     area: [row.data('area')]
-                }
+                },
+                expiry: null
             };
             var hasContent = false;
             row.find('select').each(function (){
@@ -296,6 +312,10 @@
                 payload.assignments[$(this).attr('name')] = $(this).is(':checked');
                 if ($(this).is(':checked')) hasContent = true;
             });
+            var expiry = row.find('input[type="number"]').val();
+            if (expiry){
+                payload.expiry = parseInt(expiry);
+            }
             if (hasContent){
                 var endpoint = '/api/sensor_gui/scenarios';
                 if (scenarioId){
@@ -488,6 +508,10 @@
             if (data && data.assignments.reporter_as_observer){
                 reporterObserverCheckbox.attr('checked', true).trigger('change');
             }
+            var expiryInput = $('<input type="number" name="expiry" class="form-control"/>').appendTo(row.find('.expiry'));
+            if (data && data.expiry){
+                expiryInput.val(data.expiry);
+            }
         };
         var closeScenario = function(id, name){
             table.show();
@@ -585,6 +609,10 @@
         form.find('button[type="reset"]').on('click', function(e){
             form[0].reset();
             form.find('button[type="reset"]').addClass('hide');
+            loadContents();
+            e.preventDefault();
+        });
+        $('[data-refresh]').on('click', function(e){
             loadContents();
             e.preventDefault();
         });
