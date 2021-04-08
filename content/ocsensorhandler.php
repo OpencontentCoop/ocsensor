@@ -149,7 +149,9 @@ class ocsensorhandler extends eZContentObjectEditHandler
      */
     private function fetchObjectByFiscalCode($fiscalCode, $contentClassAttributeID, $contentObjectID)
     {
-        $query = "SELECT co.id
+        $fiscalCode = trim($fiscalCode);
+        if (!empty($fiscalCode)) {
+            $query = "SELECT co.id
 				FROM ezcontentobject co, ezcontentobject_attribute coa
 				WHERE co.id = coa.contentobject_id
 				AND co.current_version = coa.version								
@@ -158,12 +160,12 @@ class ocsensorhandler extends eZContentObjectEditHandler
 				AND UPPER(coa.data_text) = '" . eZDB::instance()->escapeString(strtoupper($fiscalCode)) . "'
 				ORDER BY co.published ASC";
 
-        $result = eZDB::instance()->arrayQuery($query);
-        if (isset($result[0]['id'])) {
-            $idList = array_column($result, 'id');
-            return OpenPABase::fetchObjects($idList);
+            $result = eZDB::instance()->arrayQuery($query);
+            if (isset($result[0]['id'])) {
+                $idList = array_column($result, 'id');
+                return OpenPABase::fetchObjects($idList);
+            }
         }
-
         return [];
     }
 
