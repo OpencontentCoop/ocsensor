@@ -247,10 +247,16 @@
                 rendered.find('[data-star]').on('click', function (e){
                     var self = $(this);
                     var id = self.data('star');
+                    var csrfToken;
+                    var tokenNode = document.getElementById('ezxform_token_js');
+                    if ( tokenNode ){
+                        csrfToken = tokenNode.getAttribute('title');
+                    }
                     if (self.hasClass('fa-star-o')){
                         $.ajax({
                             type: "POST",
                             url: '/api/sensor_gui/special/'+id+'/1',
+                            headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (response,textStatus,jqXHR) {
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);
@@ -273,6 +279,7 @@
                         $.ajax({
                             type: "POST",
                             url: '/api/sensor_gui/special/'+id+'/0',
+                            headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (response,textStatus,jqXHR) {
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);

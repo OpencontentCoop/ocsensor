@@ -550,11 +550,19 @@
                 if (address.val().length === 0 && latitude.val().length === 0 && longitude.val().length === 0) {
                     delete payload.address;
                 }
+
+                var csrfToken;
+                var tokenNode = document.getElementById('ezxform_token_js');
+                if ( tokenNode ){
+                    csrfToken = tokenNode.getAttribute('title');
+                }
+
                 $.ajax({
                     type: "POST",
                     url: '/api/sensor_gui/posts',
                     data: JSON.stringify(payload),
                     contentType: "application/json; charset=utf-8",
+                    headers: {'X-CSRF-TOKEN': csrfToken},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
                         window.location = '/sensor/posts/' + data.id

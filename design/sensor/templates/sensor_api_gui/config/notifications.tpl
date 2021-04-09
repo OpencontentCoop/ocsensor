@@ -96,13 +96,19 @@ $(document).ready(function(){
     	var form = $(this);
     	var url = form.attr('action');
     	form.find('button').data('original_text', form.find('button').text()).html('<i class="glyphicon glyphicon-floppy-save"></i>');
+		var csrfToken;
+		var tokenNode = document.getElementById('ezxform_token_js');
+		if ( tokenNode ){
+			csrfToken = tokenNode.getAttribute('title');
+		}
     	$.ajax({
-           type: "POST",
-           url: url,
-           data: form.serialize(),
-           success: function(){
-           		form.find('button').text(form.find('button').data('original_text'));
-           }
+			type: "POST",
+			url: url,
+			headers: {'X-CSRF-TOKEN': csrfToken},
+			data: form.serialize(),
+			success: function(){
+				form.find('button').text(form.find('button').data('original_text'));
+			}
         });
     	e.preventDefault();
 	});

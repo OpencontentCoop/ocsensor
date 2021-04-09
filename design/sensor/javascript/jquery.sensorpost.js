@@ -356,11 +356,19 @@
                                 //console.log(action, payload, confirmMessage);
                                 plugin.actionStarted = true;
                                 plugin.startLoading();
+
+                                var csrfToken;
+                                var tokenNode = document.getElementById('ezxform_token_js');
+                                if ( tokenNode ){
+                                    csrfToken = tokenNode.getAttribute('title');
+                                }
+
                                 $.ajax({
                                     type: 'POST',
                                     async: false, // per poter fermare le multi actions in caso di errore
                                     url: plugin.settings.apiEndPoint + '/actions/' + post.id + '/' + action,
                                     data: JSON.stringify(payload),
+                                    headers: {'X-CSRF-TOKEN': csrfToken},
                                     success: function (data) {
                                         plugin.actionStarted = false;
                                         if ($.isFunction(onSuccess)) {

@@ -238,10 +238,18 @@
                     if (scenarioId){
                         endpoint += '/'+scenarioId;
                     }
+
+                    var csrfToken;
+                    var tokenNode = document.getElementById('ezxform_token_js');
+                    if ( tokenNode ){
+                        csrfToken = tokenNode.getAttribute('title');
+                    }
+
                     $.ajax({
                         type: scenarioId ? 'PUT' : 'POST',
                         async: false,
                         url: endpoint,
+                        headers: {'X-CSRF-TOKEN': csrfToken},
                         data: JSON.stringify(payload),
                         success: function (data) {
                             loadScenario(id, name);
