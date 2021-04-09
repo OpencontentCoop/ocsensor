@@ -48,6 +48,7 @@
                     <th>{{:metadata.id}}</th>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
+                        {{if ~i18n(data, 'tag')}} <span class="label label-default">{{:~i18n(data, 'tag')}}</span>{{/if}}
                     </td>
                     <td width="1">
                         <span style="white-space:nowrap">

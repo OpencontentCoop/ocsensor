@@ -13,7 +13,21 @@ try {
     $tpl->setVariable('current', $current);
     $tpl->setVariable('areas', $repository->getAreasTree());
     $tpl->setVariable('categories', $repository->getCategoriesTree());
-    $tpl->setVariable('groups', $repository->getGroupsTree());
+
+    $groupsTag = [];
+    $groupTree = $repository->getGroupsTree();
+    $hasGroupsTag = false;
+    foreach ($groupTree->attribute('children') as $groupTreeItem) {
+        $groupTag = $groupTreeItem->attribute('group');
+        if (empty($groupTag)) {
+            $groupTag = $groupTreeItem->attribute('name');
+        }else{
+            $hasGroupsTag = true;
+        }
+        $groupsTag[$groupTag][] = $groupTreeItem;
+    }
+    $tpl->setVariable('has_group_tag', $hasGroupsTag);
+    $tpl->setVariable('groups', $groupsTag);
 
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');

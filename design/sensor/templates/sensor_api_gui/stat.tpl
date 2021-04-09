@@ -1,6 +1,7 @@
 {ezcss_require(array(
     'select2.min.css',
-    'iThing.css'
+    'iThing.css',
+    'bootstrap-toggle.min.css'
 ))}
 {ezscript_require( array(
     'ezjsc::jquery',
@@ -9,92 +10,117 @@
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
     'moment-with-locales.min.js',
     'highcharts/highcharts.js',
-    'highcharts/exporting.js' )
-)}
+    'highcharts/exporting.js',
+    'bootstrap-toggle.min.js'
+) )}
 <section class="hgroup">
+    <button class="navbar-toggle" data-target="#stat-menu" data-toggle="collapse" type="button" style="padding: 0;">
+        <span class="fa fa-caret-down fa-2x"></span>
+    </button>
     <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
 </section>
 
 <div class="row">
-
     <div class="col-md-3">
-        <ul class="nav nav-pills nav-stacked">
-            {foreach $list as $chart}
-                <li role="presentation"
-                    {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
-                    <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
-                        {$chart.name|wash()}
+        <div class="navbar-collapse collapse" id="stat-menu">
+            <ul class="nav nav-pills nav-stacked">
+                {foreach $list as $chart}
+                    <li role="presentation"
+                        {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
+                        <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
+                            {$chart.name|wash()}
+                        </a>
+                    </li>
+                {/foreach}
+                <li class="divider" style="border-bottom: 1px solid #ccc"></li>
+                <li>
+                    <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
+                        <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
                     </a>
                 </li>
-            {/foreach}
-            <li class="divider" style="border-bottom: 1px solid #ccc"></li>
-            <li>
-                <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
-                    <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
-                </a>
-            </li>
-            <li>
-                <a href="{'sensor/openapi/'|ezurl(no)}">
-                    <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
-                </a>
-            </li>
-        </ul>
+                <li>
+                    <a href="{'sensor/openapi/'|ezurl(no)}">
+                        <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-
     <div class="col-md-9">
         {if $current}
             <div id="chart-filters">
                 <div class="row" id="posts-search">
-                    <div class="col-md-4">
-                        <div class="form-group hide" id="area-filter">
-                            <label>{'Filtra per zona'|i18n('sensor/post')}</label>
-                            <select class="select form-control" name="area" multiple>
-                                {foreach $areas.children as $item}
-                                    {*<option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>*}
-                                    {foreach $item.children as $child}
-                                        <option value="{$child.id}"
-                                                style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
-                                    {/foreach}
+                    <div class="col-md-4 form-group hide" id="area-filter">
+                        <label>{'Filtra per zona'|i18n('sensor/post')}</label>
+                        <select class="select form-control" name="area" multiple>
+                            {foreach $areas.children as $item}
+                                {*<option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>*}
+                                {foreach $item.children as $child}
+                                    <option value="{$child.id}"
+                                            style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
                                 {/foreach}
-                            </select>
-                        </div>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group hide" id="category-filter">
+                        <label>{'Filtra per categoria'|i18n('sensor/post')}</label>
+                        <select class="select form-control" name="" multiple>
+                            {foreach $categories.children as $item}
+                                <option value="{$item.id}"
+                                        style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                                {foreach $item.children as $child}
+                                    <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                                {/foreach}
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group hide" id="maincategory-filter">
+                        <label>{'Filtra per macro categoria'|i18n('sensor/post')}</label>
+                        <select class="select form-control" name="">
+                            <option></option>
+                            {foreach $categories.children as $item}
+                                <option value="{$item.id}">{$item.name|wash()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="col-md-4 form-group hide" id="interval-filter">
+                        <label>{'Filtra per Intervallo di tempo'|i18n('sensor/post')}</label>
+                        <select class="select form-control" name="interval">
+                            <option value="daily" class="daily_interval" disabled>{'Giornaliero'|i18n('sensor/chart')}</option>
+                            <option value="weekly">{'Settimanale'|i18n('sensor/chart')}</option>
+                            <option value="monthly">{'Mensile'|i18n('sensor/chart')}</option>
+                            <option value="quarterly">{'Trimestrale'|i18n('sensor/chart')}</option>
+                            <option value="half-yearly">{'Semestrale'|i18n('sensor/chart')}</option>
+                            <option value="yearly" selected="selected">{'Annuale'|i18n('sensor/chart')}</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
-                        <div class="form-group hide" id="category-filter">
-                            <label>{'Filtra per categoria'|i18n('sensor/post')}</label>
-                            <select class="select form-control" name="" multiple>
-                                {foreach $categories.children as $item}
-                                    <option value="{$item.id}"
-                                            style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
-                                    {foreach $item.children as $child}
-                                        <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
-                                    {/foreach}
-                                {/foreach}
-                            </select>
+                        {if $has_group_tag}
+                        <div style="display: flex">
+                            <div>
+                        {/if}
+                                <div class="form-group hide" id="group-filter">
+                                    <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
+                                    <select class="select form-control" name="group" multiple>
+                                        {foreach $groups as $group => $items}
+                                            {if count($items)|gt(1)}<optgroup label="{$group|wash()}">{/if}
+                                            {foreach $items as $item}
+                                                <option value="{$item.id}">{$item.name|wash()}</option>
+                                            {/foreach}
+                                            {if count($items)|gt(1)}</optgroup>{/if}
+                                        {/foreach}
+                                    </select>
+                                </div>
+                        {if $has_group_tag}
+                            </div>
+                            <div>
+                                <div class="form-group hide" id="taggroup-filter" style="margin-left: 10px">
+                                    <label>{'Raggruppa'|i18n('sensor/post')}</label>
+                                    <input type="checkbox" data-toggleconfig />
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group hide" id="interval-filter">
-                            <label>{'Filtra per Intervallo di tempo'|i18n('sensor/post')}</label>
-                            <select class="select form-control" name="interval">
-                                <option value="daily" class="daily_interval" disabled>{'Giornaliero'|i18n('sensor/chart')}</option>
-                                <option value="weekly">{'Settimanale'|i18n('sensor/chart')}</option>
-                                <option value="monthly">{'Mensile'|i18n('sensor/chart')}</option>
-                                <option value="quarterly">{'Trimestrale'|i18n('sensor/chart')}</option>
-                                <option value="half-yearly">{'Semestrale'|i18n('sensor/chart')}</option>
-                                <option value="yearly" selected="selected">{'Annuale'|i18n('sensor/chart')}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group hide" id="group-filter">
-                            <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
-                            <select class="select form-control" name="group" multiple>
-                                {foreach $groups.children as $item}
-                                    <option value="{$item.id}">{$item.name|wash()}</option>
-                                {/foreach}
-                            </select>
-                        </div>
+                        {/if}
                     </div>
                 </div>
                 <div class="row hide" id="range-filter">
@@ -146,7 +172,6 @@
                 rangeDateMin: new Date('{/literal}{$posts_date_range['first']}{literal}'),
                 rangeDateMax: new Date('{/literal}{$posts_date_range['last']}{literal}')
             };
-
         function Plugin(element, options, postId) {
             this.settings = $.extend({}, defaults, options);
             this.chartContainer = $(element);
@@ -155,7 +180,13 @@
             this.downloadButton = $('#download-csv');
             this.downloadBaseHref = this.downloadButton.attr('href');
             var self = this;
-
+            this.settings.filtersContainer.find('[data-toggleconfig]').bootstrapToggle({
+              on: 'SI',
+              off: 'NO',
+              onstyle: 'success'
+            }).change(function(e) {
+                self.chartContainer.trigger('sensor:chart:filterchange');
+            });
             var initRange = function(){
                 var rangeParameters = {
                     // arrows: false,
@@ -178,7 +209,6 @@
                         max: self.settings.rangeMax
                     };
                 }
-
                 if (!self.rangeFilter.data('is_init') === true) {
                     self.settings.filtersContainer.find("#range-slider").dateRangeSlider(
                         rangeParameters
@@ -191,12 +221,10 @@
                     self.rangeFilter.data('is_init', true);
                 }
             };
-
             if (!this.settings.enableEventFilter){
                 this.settings.filtersContainer.find('#event-filter').parent().remove();
                 this.settings.filtersContainer.find("#range-slider").parent().removeClass('col-md-9').addClass('col-md-12');
             }
-
             if (this.settings.enableDailyInterval){
                 this.intervalFilter.find('.daily_interval').removeAttr('disabled');
             }else{
@@ -204,7 +232,6 @@
                     this.intervalFilter.find("select").val('yearly').trigger('change');
                 }
             }
-
             if (typeof this.settings.enableRangeFilter === 'object') {
                 this.intervalFilter.find("select").on('change', function () {
                     var interval = $(this).val();
@@ -223,26 +250,27 @@
                 this.rangeFilter.removeClass('hide');
                 initRange();
             }
-
             $.each(this.settings.filters, function (){
                 self.settings.filtersContainer.find('#'+this+'-filter').removeClass('hide');
             });
-
             this.settings.filtersContainer.find(".select").select2({
                 templateResult: function (item) {
                     var style = item.element ? $(item.element).attr('style') : '';
                     return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
                 }
             });
-
             this.settings.filtersContainer.find("select").on('change', function () {
                 self.chartContainer.trigger('sensor:chart:filterchange');
             });
-
             this.chartContainer.on('sensor:chart:filterchange', function () {
                 var params = {};
                 $.each(self.settings.filters, function (){
-                    params[this] = self.settings.filtersContainer.find('#'+this+'-filter').find('select').val()
+                    var filterContainer = self.settings.filtersContainer.find('#'+this+'-filter');
+                    if (filterContainer.find('select').length > 0){
+                        params[this] = filterContainer.find('select').val()
+                    }else if (filterContainer.find('input').is(':checked')){
+                        params[this] = 1;
+                    }
                 });
                 if (self.settings.enableRangeFilter === true || $.inArray(params.interval, self.settings.enableRangeFilter) > -1) {
                     var dateValues = self.settings.filtersContainer.find("#range-slider").dateRangeSlider("values");
@@ -261,12 +289,9 @@
                 });
                 self.downloadButton.attr('href', self.downloadBaseHref + '?' + $.param(downloadQuery));
             });
-
             self.chartContainer.trigger('sensor:chart:filterchange');
         }
-
         $.extend(Plugin.prototype, {});
-
         $.fn[pluginName] = function (options, postId) {
             return this.each(function () {
                 if (!$.data(this, 'plugin_' + pluginName)) {
@@ -275,8 +300,13 @@
                 }
             });
         };
-
     })(jQuery, window, document);
-
 </script>
+<style>
+    #posts-search label{display: block;white-space: nowrap;}
+    .toggle.btn{min-height: 32px;}
+    #stat-menu{max-height:none}
+    #stat-menu.collapsing ul.nav li{text-align: left}
+    #stat-menu.in ul.nav li{text-align: left}
+</style>
 {/literal}
