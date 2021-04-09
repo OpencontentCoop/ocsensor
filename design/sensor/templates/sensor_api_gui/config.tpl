@@ -93,11 +93,31 @@
     }).change(function(e) {
       var self = $(this);
       if (self.data('attribute')){
-        $.getJSON('{/literal}{'sensor/config/_set'|ezurl(no)}{literal}/?key='+self.data('attribute')+'&value='+self.prop('checked'), function(response){
-          if(response.result !== 'success'){
-            self.data('attribute', false);            
-            var revertValue = self.prop('checked') ? 'off' : 'on';            
-            self.bootstrapToggle(revertValue);            
+        var csrfToken;
+        var tokenNode = document.getElementById('ezxform_token_js');
+        if ( tokenNode ){
+          csrfToken = tokenNode.getAttribute('title');
+        }
+        $.ajax({
+          type: 'POST',
+          url: '{/literal}{'sensor/config/_set'|ezurl(no)}{literal}',
+          data: {
+            key: self.data('attribute'),
+            value: self.prop('checked')
+          },
+          headers: {'X-CSRF-TOKEN': csrfToken},
+          success: function (response) {
+            if(response.result !== 'success'){
+              self.data('attribute', false);
+              var revertValue = self.prop('checked') ? 'off' : 'on';
+              self.bootstrapToggle(revertValue);
+              self.prop('disabled', 'disabled');
+            }
+          },
+          error: function (data) {
+            self.data('attribute', false);
+            var revertValue = self.prop('checked') ? 'off' : 'on';
+            self.bootstrapToggle(revertValue);
             self.prop('disabled', 'disabled');
           }
         });

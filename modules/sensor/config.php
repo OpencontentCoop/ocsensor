@@ -20,41 +20,55 @@ if ($Part == '_set'){
             'message' => 'Unauthorized',
         ];
     }else{
-        $key = $Http->getVariable('key');
-        $value = intval($Http->getVariable('value') === 'true');        
-        $attribute = false;
-        switch($key){
-            case 'Moderation':
-                $attribute = 'enable_moderation';
-                break;
-            case 'HidePrivacyChoice':
-                $attribute = 'hide_privacy_choice';
-                break;
-            case 'HideTimelineDetails':
-                $attribute = 'hide_timeline_details';
-                break;
-            case 'HideTypeChoice':
-                $attribute = 'hide_type_choice';
-                break;
-            case 'ShowSmartGui':
-                $attribute = 'show_smart_gui';
-                break;
-            case 'HideOperatorNames':
-                $attribute = 'hide_operator_name';
-                break;
-        }        
-        if ($attribute){
-            $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);
-            if ($result){
+        $key = $Http->variable('key');
+        $value = intval($Http->variable('value') === 'true');
+        if (strpos($key, 'stat-access-') !== false) {
+            $permission = str_replace('stat-access-', '', $key);
+            try {
+                list($scope, $statIdentifier) = explode('-', $permission, 2);
+                $data = SensorStatisticAccess::instance()->setAccess($scope, $statIdentifier, $value);
                 $data = [
                     'result' => 'success',
-                    'attributes' => [$attribute => $value],
+                    'attributes' => [$permission => $value],
                 ];
-            }else{
-                $data['message'] = "Fail updating";    
+            } catch (Exception $e) {
+                $data['message'] = $e->getMessage();
             }
-        }else{
-            $data['message'] = "Attribute not found for key";
+        }else {
+            $attribute = false;
+            switch ($key) {
+                case 'Moderation':
+                    $attribute = 'enable_moderation';
+                    break;
+                case 'HidePrivacyChoice':
+                    $attribute = 'hide_privacy_choice';
+                    break;
+                case 'HideTimelineDetails':
+                    $attribute = 'hide_timeline_details';
+                    break;
+                case 'HideTypeChoice':
+                    $attribute = 'hide_type_choice';
+                    break;
+                case 'ShowSmartGui':
+                    $attribute = 'show_smart_gui';
+                    break;
+                case 'HideOperatorNames':
+                    $attribute = 'hide_operator_name';
+                    break;
+            }
+            if ($attribute) {
+                $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);
+                if ($result) {
+                    $data = [
+                        'result' => 'success',
+                        'attributes' => [$attribute => $value],
+                    ];
+                } else {
+                    $data['message'] = "Fail updating";
+                }
+            } else {
+                $data['message'] = "Attribute not found for key";
+            }
         }
     }
     header('Content-Type: application/json');
@@ -185,6 +199,11 @@ if ($Part == 'areas') {
         'SortBy' => array('published', false)
     ));
     $tpl->setVariable('sample_post_id', $samplePost[0] instanceof eZContentObjectTreeNode ? $samplePost[0]->attribute('contentobject_id') : 0);
+
+} elseif ($Part == 'statistics') {
+    $tpl->setVariable('stats', $repository->getStatisticsService()->getStatisticFactories(true));
+    $tpl->setVariable('scopes', SensorStatisticAccess::instance()->getScopes());
+    $tpl->setVariable('current_accesses', SensorStatisticAccess::instance()->getCurrentAccessHash());
 }
 
 $configMenu = $repository->getConfigMenu();

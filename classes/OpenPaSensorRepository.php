@@ -584,6 +584,13 @@ class OpenPaSensorRepository extends LegacyRepository
             'icon' => 'fa fa-align-left',
         ];
 
+        $data['statistics'] = [
+            'uri' => 'sensor/config/statistics',
+            'label' => ezpI18n::tr('sensor/config', 'Statistiche'),
+            'node' => false,
+            'icon' => 'fa fa-pie-chart',
+        ];
+
         return $data;
     }
 
