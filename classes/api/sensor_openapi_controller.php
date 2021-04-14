@@ -60,6 +60,21 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
         return $result;
     }
 
+    public function doAuth()
+    {
+        try {
+            $payload = $this->getPayload();
+
+            $result = new ezpRestMvcResult();
+            $result->variables = ['token' => SensorJwtManager::instance()->issueJWTToken($payload['username'], $payload['password'])];
+
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
     public function doAction()
     {
         try {
@@ -70,6 +85,7 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
                 throw new InvalidArgumentException("Invalid operationId " . $this->request->variables['operationId'], 1);
             }
 
+            header("X-Api-User: " . eZUser::currentUserID());
             return $controller->{$this->request->variables['operationId']}();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);

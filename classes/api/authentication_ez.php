@@ -15,7 +15,7 @@ class SensorApiAuthenticationEzFilter extends ezcAuthenticationFilter
             return self::STATUS_OK;
         }
         //echo '<pre>';var_dump(SensorApiAuthUser::authUser($credentials->id, $credentials->password));die();
-        if (SensorApiAuthUser::authUser($credentials->id, $credentials->password)) {
+        if (SensorApiAuthUser::authUser($credentials->id, $credentials->password) instanceof eZUser) {
             return self::STATUS_OK;
         }
 
@@ -35,6 +35,11 @@ class SensorApiAuthUser extends eZUser
 
     public static function authUser($login, $password, $authenticationMatch = false)
     {
-        return self::_loginUser($login, $password, $authenticationMatch) instanceof eZUser;
+        $user = self::_loginUser($login, $password, $authenticationMatch);
+        if (!$user instanceof eZUser){
+            self::loginFailed($user, $login);
+        }
+
+        return $user;
     }
 }

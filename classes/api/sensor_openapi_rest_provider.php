@@ -24,6 +24,15 @@ class SensorOpenApiProvider implements ezpRestProviderInterface
             ), 1),
         ];
 
+        if (SensorJwtManager::instance()->isJwtAuthEnabled()){
+            $routes['sensorOpenApiAuth'] = new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/auth',
+                'SensorOpenApiController',
+                'auth',
+                [],
+                'http-post'
+            ), 1);
+        }
 
         $repository = OpenPaSensorRepository::instance();
         $openApiTools = new \Opencontent\Sensor\OpenApi($repository);
@@ -44,14 +53,16 @@ class SensorOpenApiProvider implements ezpRestProviderInterface
                         }
                     }
                 }
-
-                $routes['sensorOpenApi' . ucfirst($operationId)] = new ezpRestVersionedRoute(new SensorApiRailsRoute(
-                    $pattern,
-                    'SensorOpenApiController',
-                    'action',
-                    $defaultValues,
-                    'http-' . $method
-                ), 1);
+                $routeId = 'sensorOpenApi' . ucfirst($operationId);
+                if (!isset($routes[$routeId])) {
+                    $routes[$routeId] = new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                        $pattern,
+                        'SensorOpenApiController',
+                        'action',
+                        $defaultValues,
+                        'http-' . $method
+                    ), 1);
+                }
             }
         }
 

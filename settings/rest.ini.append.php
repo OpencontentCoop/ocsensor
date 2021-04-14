@@ -10,6 +10,7 @@ ApplicationCache=disabled
 [RouteSettings]
 SkipFilter[]=SensorGuiApiController_endpoint
 SkipFilter[]=SensorOpenApiProvider_endpoint
+SkipFilter[]=SensorOpenApiProvider_auth
 
 [SensorApiCompatController_CacheSettings]
 ApplicationCache=disabled

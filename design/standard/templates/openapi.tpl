@@ -13,6 +13,7 @@
             window.ui = SwaggerUIBundle({ldelim}
                 url: {"/sensor/openapi.json"|ezurl(yes,full)},
                 dom_id: '#swagger-ui',
+                docExpansion: "none",
                 presets: [
                     SwaggerUIBundle.presets.apis,
                     SwaggerUIBundle.SwaggerUIStandalonePreset

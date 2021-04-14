@@ -2,15 +2,31 @@
 
 class SensorApiBasicAuthStyle extends ezpRestAuthenticationStyle implements ezpRestAuthenticationStyleInterface
 {
+    /**
+     * @param ezcMvcRequest $request
+     * @return ezcAuthentication|ezcMvcInternalRedirect
+     * @throws \Opencontent\Sensor\Api\Exception\UnauthorizedException
+     */
     public function setup(ezcMvcRequest $request)
     {
-        if ($request->authentication === null) {
+        $jwtManager = SensorJwtManager::instance();
+        if ($jwtManager->isJwtAuthEnabled()
+            && isset($request->raw['HTTP_AUTHORIZATION'])
+            && preg_match('/Bearer\s(\S+)/', $request->raw['HTTP_AUTHORIZATION'], $matches)) {
+            $jwt = $matches[1];
+            if ($userID = $jwtManager->getUserIdFromJWTToken($jwt)) {
+                $auth = new ezcAuthentication(new ezcAuthenticationIdCredentials($userID));
+                $auth->addFilter(new SensorApiAuthenticationEzFilter());
 
+                return $auth;
+            }
+        } elseif ($request->authentication === null) {
             eZSession::lazyStart();
-            $userID = eZSession::issetkey( 'eZUserLoggedInID', false ) ? eZSession::get( 'eZUserLoggedInID' ) : eZUser::anonymousId();
+            $userID = eZSession::issetkey('eZUserLoggedInID', false) ? eZSession::get('eZUserLoggedInID') : eZUser::anonymousId();
             if ($userID) {
                 $auth = new ezcAuthentication(new ezcAuthenticationIdCredentials($userID));
                 $auth->addFilter(new SensorApiAuthenticationEzFilter());
+
                 return $auth;
             }
 
@@ -40,4 +56,5 @@ class SensorApiBasicAuthStyle extends ezpRestAuthenticationStyle implements ezpR
             return eZUser::fetchByName($auth->credentials->id);
         }
     }
+
 }

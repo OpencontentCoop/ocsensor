@@ -73,7 +73,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             if ($this->repository->getCurrentUser()->id == eZUser::anonymousId()) {
-                throw new \Opencontent\Sensor\Api\Exception\UnauthorizedException();
+                throw new \Opencontent\Sensor\Api\Exception\ForbiddenException();
             }
             $result = new ezpRestMvcResult();
             $settings = [];
