@@ -24,6 +24,7 @@ class SensorOperator
             'sensor_posts_date_range',
             'sensor_statuses',
             'sensor_additional_map_layers',
+            'sensor_faqcontainer',
         );
     }
 
@@ -57,6 +58,10 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_faqcontainer':
+                return $operatorValue = $repository->getFaqRootNode();
+                break;
+
             case 'sensor_additional_map_layers':
                 $additionalLayers = [];
                 $sensorPostRoot = $repository->getPostRootNode();

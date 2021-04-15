@@ -27,9 +27,19 @@
   'fields/RelationBrowse.js',
   concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
   'fields/Recaptcha.js',
+  'fields/Ezxml.js',
   'jquery.opendataform.js',
   'bootstrap-toggle.min.js'
 ))}
+{def $plugin_list = ezini('EditorSettings', 'Plugins', 'ezoe.ini',,true() )
+     $ez_locale = ezini( 'RegionalSettings', 'Locale', 'site.ini')
+     $language = '-'|concat( $ez_locale )
+     $dependency_js_list = array( 'ezoe::i18n::'|concat( $language ) )}
+{foreach $plugin_list as $plugin}
+    {set $dependency_js_list = $dependency_js_list|append( concat( 'plugins/', $plugin|trim, '/editor_plugin.js' ))}
+{/foreach}
+<script id="tinymce_script_loader" type="text/javascript" src={"javascript/tiny_mce_jquery.js"|ezdesign} charset="utf-8"></script>
+{ezscript( $dependency_js_list )}
 {ezcss_load(array(
   'alpaca.min.css',
   'leaflet.0.7.2.css',

@@ -7,6 +7,7 @@ FieldConnectors[sensor_scenario/triggers]=SensorScenarioTriggerFieldConnector
 FieldConnectors[sensor_scenario/criterion_type]=SensorScenarioCriterionTypeFieldConnector
 FieldConnectors[sensor_scenario/owner]=SensorScenarioOwnerFieldConnector
 FieldConnectors[sensor_scenario/observer]=SensorScenarioObserverFieldConnector
+FieldConnectors[sensor_faq/answer]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 
 [ClassSettings]
 ClassConnectors[sensor_scenario]=SensorScenarioClassConnector

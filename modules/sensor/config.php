@@ -204,6 +204,11 @@ if ($Part == 'areas') {
     $tpl->setVariable('stats', $repository->getStatisticsService()->getStatisticFactories(true));
     $tpl->setVariable('scopes', SensorStatisticAccess::instance()->getScopes());
     $tpl->setVariable('current_accesses', SensorStatisticAccess::instance()->getCurrentAccessHash());
+
+} elseif ($Part == 'faq') {
+    $tpl->setVariable('faq_parent_node', $repository->getFaqRootNode());
+    $tpl->setVariable('faq_class', 'sensor_faq');
+    $tpl->setVariable('categories', $repository->getCategoriesTree());
 }
 
 $configMenu = $repository->getConfigMenu();

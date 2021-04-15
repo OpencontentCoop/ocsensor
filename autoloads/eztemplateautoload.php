@@ -20,5 +20,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_posts_date_range',
         'sensor_statuses',
         'sensor_additional_map_layers',
+        'sensor_faqcontainer',
     )
 );

@@ -559,6 +559,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 $folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
                 && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')
                 && $folder->attribute('contentobject_id') != $this->getScenariosRootNode()->attribute('contentobject_id')
+                && $folder->attribute('contentobject_id') != $this->getFaqRootNode()->attribute('contentobject_id')
             ) {
                 $data['data-' . $folder->attribute('contentobject_id')] = [
                     'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
@@ -591,6 +592,13 @@ class OpenPaSensorRepository extends LegacyRepository
             'icon' => 'fa fa-pie-chart',
         ];
 
+        $data['faq'] = [
+            'uri' => 'sensor/config/faq',
+            'label' => ezpI18n::tr('sensor/config', 'Faq'),
+            'node' => false,
+            'icon' => 'fa fa-question-circle',
+        ];
+
         return $data;
     }
 
@@ -614,5 +622,13 @@ class OpenPaSensorRepository extends LegacyRepository
 
         }
         return eZContentObject::fetchByRemoteID($id);
+    }
+
+    public function getFaqRootNode()
+    {
+        if (!isset($this->data['faq'])) {
+            $this->data['faq'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_faq')->attribute('main_node');
+        }
+        return $this->data['faq'];
     }
 }
