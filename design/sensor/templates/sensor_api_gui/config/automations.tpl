@@ -131,6 +131,7 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
+            <div class="pull-right" style="margin-left: 10px"><a class="btn btn-info" href="{concat('exportas/csv/sensor_scenario/',$scenario_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
             <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$scenario_parent_node.node_id}" data-add-class="sensor_scenario" href="#"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
             <p class="text-muted">
                 <strong>Attenzione:</strong> viene applicato lo scenario che coincide con il maggior numero di condizioni.<br/>

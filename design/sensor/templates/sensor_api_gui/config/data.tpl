@@ -59,9 +59,7 @@
                         {{/for}}
                         </span>
                     </td>
-                    <td width="1">
-                        <td width="1"><a href="#" data-object={{:metadata.id}}><i class="fa fa-eye"></i></a></td>
-                    </td>
+                    <td width="1"><a href="#" data-object={{:metadata.id}}><i class="fa fa-eye"></i></a></td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
                             <a href="#" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
