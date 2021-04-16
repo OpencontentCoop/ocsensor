@@ -83,7 +83,8 @@
             'default_marker': PointsOfInterest,
             'center_map': CenterMap,
             'bounding_area': BoundingArea,
-            'additionalWMSLayers': additionalWMSLayers
+            'additionalWMSLayers': additionalWMSLayers,
+            'persistentMetaKeys': ['{ezini('GeoCoderSettings', 'PersistentMetaKeys', 'ocsensor.ini')|implode("','")}']
         {rdelim});
     {rdelim});
 </script>

@@ -25,6 +25,7 @@ class SensorOperator
             'sensor_statuses',
             'sensor_additional_map_layers',
             'sensor_faqcontainer',
+            'is_sensor_public_field',
         );
     }
 
@@ -50,6 +51,12 @@ class SensorOperator
                     'default' => 'sensor',
                 )
             ),
+            'is_sensor_public_field' => array(
+                'field' => array(
+                    'type' => 'string',
+                    'required' => true,
+                )
+            ),
         );
     }
 
@@ -58,6 +65,11 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'is_sensor_public_field':
+                $attributes = $repository->getPublicPostContentClassAttributes();
+                return $operatorValue = isset($attributes[$namedParameters['field']]) ? $attributes[$namedParameters['field']] : false;
+                break;
+
             case 'sensor_faqcontainer':
                 return $operatorValue = $repository->getFaqRootNode();
                 break;

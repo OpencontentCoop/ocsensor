@@ -85,11 +85,13 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
                 throw new InvalidArgumentException("Invalid operationId " . $this->request->variables['operationId'], 1);
             }
 
-            header("X-Api-User: " . eZUser::currentUserID());
             return $controller->{$this->request->variables['operationId']}();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
+
+        header("X-Api-User: " . eZUser::currentUserID());
+        header("X-Api-Operation: " . $this->request->variables['operationId']);
 
         return $result;
     }
@@ -183,9 +185,12 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
             $errorType = $exception->getErrorType();
         }
 
+        $message = $exception->getMessage();
+        //$message = explode("\n", $exception->getTraceAsString());
+
         $result->status = new OcOpenDataErrorResponse(
             $serverErrorCode,
-            $exception->getMessage(),
+            $message,
             $errorType
         );
 

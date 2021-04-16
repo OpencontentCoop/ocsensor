@@ -101,9 +101,7 @@
 {include uri='design:page_head_google-site-verification.tpl'}
 
 <body>
-    {include uri='design:page_body_google_tag_manager.tpl'}
     {include uri='design:page_alert_cookie.tpl'}
-
     {include uri='design:page_header.tpl'}
 
 {/cache-block}

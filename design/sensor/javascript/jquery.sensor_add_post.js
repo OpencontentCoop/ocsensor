@@ -81,7 +81,8 @@
             'use_smart_gui': false,
             'default_user_placement': 0,
             'additionalWMSLayers': [],
-            'area_cache_prefix': 'area-'
+            'area_cache_prefix': 'area-',
+            'persistentMetaKeys': ['pingback_url', 'approver_id']
         };
 
     function Plugin(element, options) {
@@ -181,6 +182,15 @@
         this.inputAddress = $('input#input-address');
         this.searchButton = $('#input-address-button');
         this.inputMeta = $('textarea.ezcca-sensor_post_meta');
+        var currentMeta = JSON.parse(this.inputMeta.val() || '{}');
+        var persistentMeta = {};
+        $.each(this.settings.persistentMetaKeys, function (index, value){
+            if (currentMeta.hasOwnProperty(value)){
+                persistentMeta[value] = currentMeta[value];
+            }
+        });
+        this.persistentMeta = persistentMeta;
+
         this._debugMeta();
 
         if (this.settings.geoinput_splitted) {
@@ -219,6 +229,8 @@
                 .on('input change', function () {
                     checkTextFields()
                 });
+
+            var category = addPostGui.find('[name="category"]');
 
             var address = addPostGui.find('[name="address[address]"]')
                 .on('input change', function () {
@@ -1001,7 +1013,7 @@
             this.inputLat.val('').trigger('change');
             this.inputLng.val('').trigger('change');
             this.inputAddress.val('').trigger('change');
-            this.inputMeta.val('');
+            this.inputMeta.val(JSON.stringify(this.persistentMeta));
             this._debugMeta();
         },
 
@@ -1144,13 +1156,14 @@
 
         appendMeta: function (data) {
             var meta = JSON.parse(this.inputMeta.val() || '{}');
-            meta = $.extend({}, meta, data);
+            meta = $.extend({}, this.persistentMeta, meta, data);
             this.inputMeta.val(JSON.stringify(meta));
             this._debugMeta();
         },
 
         _debugMeta: function () {
             if (this.settings.debug_meta_info) {
+                var self = this;
                 var debugContainer = $('#debug-meta-info');
                 if (debugContainer.length === 0) {
                     debugContainer = $('<dl class="dl-horizontal hidden-xs" id="debug-meta-info"></dl>').css({
@@ -1165,8 +1178,12 @@
                 debugContainer.empty();
                 var meta = JSON.parse(this.inputMeta.val() || '{}');
                 $.each(meta, function (i, v) {
-                    debugContainer.append($('<dt>' + i + '</dt>'));
-                    debugContainer.append($('<dd>' + v + '</dd>'));
+                    var style = '';
+                    if ($.inArray(i, self.settings.persistentMetaKeys) > -1){
+                        style = ' style="background-color:#ccc"';
+                    }
+                    debugContainer.append($('<dt'+style+'>' + i + '</dt>'));
+                    debugContainer.append($('<dd'+style+'>' + v + '</dd>'));
                 });
             }
         },

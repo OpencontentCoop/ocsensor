@@ -59,6 +59,7 @@
                                     {include uri='design:sensor_api_gui/add/description.tpl'}
                                 </div>
                             </div>
+                            {include uri='design:sensor_api_gui/add/categories.tpl'}
                         </div>
                         {if $can_behalf}
                             <div class="tab-pane" role="tabpanel" id="step-behalf">
@@ -247,7 +248,8 @@
             'default_marker': PointsOfInterest,
             'center_map': CenterMap,
             'bounding_area': BoundingArea,
-            'additionalWMSLayers': additionalWMSLayers
+            'additionalWMSLayers': additionalWMSLayers,
+            'persistentMetaKeys': ['{ezini('GeoCoderSettings', 'PersistentMetaKeys', 'ocsensor.ini')|implode("','")}']
         {rdelim});
     {rdelim});
 </script>

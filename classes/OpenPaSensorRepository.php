@@ -631,4 +631,28 @@ class OpenPaSensorRepository extends LegacyRepository
         }
         return $this->data['faq'];
     }
+
+    public function getPublicPostContentClassAttributes()
+    {
+        if (!isset($this->data['post_class_data_map'])) {
+            $this->data['post_class_data_map'] = $this->getPostContentClass()->dataMap();
+        }
+        $attributeList = [];
+        foreach ($this->data['post_class_data_map'] as $identifier => $attribute) {
+            if ($attribute->attribute('category') == 'content' || $attribute->attribute('category') == '') {
+
+                if ($identifier == 'type' && $this->getSensorSettings()->get('HideTypeChoice')){
+                    continue;
+                }
+
+                if ($identifier == 'privacy' && $this->getSensorSettings()->get('HidePrivacyChoice')){
+                    continue;
+                }
+
+                $attributeList[$identifier] = $attribute;
+            }
+        }
+
+        return $attributeList;
+    }
 }
