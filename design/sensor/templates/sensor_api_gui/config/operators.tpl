@@ -43,10 +43,15 @@
             <tbody>
             {{for searchHits}}
                 <tr>
-                    <th>{{:metadata.id}}</th>
+                    <th width="1">{{:metadata.id}}</th>
+                    <td width="1">
+                        <img src="/sensor/avatar/{{:metadata.id}}" class="img-circle" style="width: 30px; height: 30px;max-width:none" />
+                    </td>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
-                        {{if ~i18n(data, 'struttura_di_competenza')}}<br /><small>{{for ~i18n(data, 'struttura_di_competenza')}}{{:~i18n(name)}} {{/for}}</small>{{/if}}
+                        {{if ~i18n(data, 'ruolo') || ~i18n(data, 'struttura_di_competenza')}}<br />{{/if}}
+                        {{if ~i18n(data, 'ruolo')}}<small>{{:~i18n(data, 'ruolo')}}</small>{{/if}}
+                        {{if ~i18n(data, 'struttura_di_competenza')}}<small>{{for ~i18n(data, 'struttura_di_competenza')}}{{:~i18n(name)}} {{/for}}</small>{{/if}}
                     </td>
                     <td width="1">
                         <span style="white-space:nowrap">

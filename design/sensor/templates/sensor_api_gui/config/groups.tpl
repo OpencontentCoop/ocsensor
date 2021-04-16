@@ -45,7 +45,10 @@
             <tbody>
             {{for searchHits}}
                 <tr>
-                    <th>{{:metadata.id}}</th>
+                    <th width="1">{{:metadata.id}}</th>
+                    <td width="1">
+                        <img src="/sensor/avatar/{{:metadata.id}}" class="img-circle" style="width: 30px; height: 30px;max-width:none" />
+                    </td>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
                         {{if ~i18n(data, 'tag')}} <span class="label label-default">{{:~i18n(data, 'tag')}}</span>{{/if}}
