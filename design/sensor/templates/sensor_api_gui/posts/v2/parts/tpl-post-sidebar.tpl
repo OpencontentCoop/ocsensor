@@ -91,6 +91,15 @@
     {{/if}}
 
     <div class="widget">
+        {{if capabilities.can_set_type}}
+            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+        {{/if}}
+        <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'type'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
+        <p class="widget-content">{{if type}}{{:type.name}}{{else}}<em class="text-muted">Non definito</em>{{/if}}</p>
+        {{include tmpl="#tpl-post-set_type"/}}
+    </div>
+
+    <div class="widget">
         {{if capabilities.can_add_area}}
             <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
         {{/if}}
@@ -268,6 +277,23 @@
             </select>
             <span class="input-group-btn">
                 <input data-action="add_category" data-parameters="category_id" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
+            </span>
+        </div>
+    </div>
+{{/if}}
+</script>
+
+<script id="tpl-post-set_type" type="text/x-jsrender">
+{{if capabilities.can_set_type}}
+    <div class="form-group hide" data-action-wrapper>
+        <div class="input-group d-flex">
+            <select data-value="type" data-placeholder="{/literal}{'Seleziona Tipo'|i18n('sensor/post')}{literal}" class="select form-control">
+                {/literal}{foreach sensor_types() as $type}
+                <option value="{$type.identifier|wash()}"{literal}{{if type.identifier == '{/literal}{$type.identifier|wash()}{literal}'}} selected="selected"{{/if}}{/literal}>{$type.name|wash()}</option>
+                {/foreach}{literal}
+            </select>
+            <span class="input-group-btn">
+                <input data-action="set_type" data-parameters="type" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Imposta'|i18n('sensor/post')}{literal}" />
             </span>
         </div>
     </div>

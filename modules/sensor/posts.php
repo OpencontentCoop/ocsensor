@@ -44,13 +44,15 @@ if (!is_numeric($postId)) {
 } else {
 
     $postId = (int)$postId;
-    if (!eZContentObject::fetch($postId)) {
+    $contentObject = eZContentObject::fetch($postId);
+    if (!$contentObject) {
         return $module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
     }
 
     if (isset($Params['Offset']) && $Params['Offset'] === 'history') {
         if (PermissionService::isSuperAdmin($repository->getCurrentUser())) {
 
+            eZSearch::addObject($contentObject, true);
             $postSerialized = $repository->getSearchService()->searchPost((int)$postId)->jsonSerialize();
             $tpl->setVariable('post', $postSerialized);
 
