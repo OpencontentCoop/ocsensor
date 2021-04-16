@@ -82,6 +82,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'channel' => ezpI18n::tr('sensor/export', 'Canale'),
             'area' => ezpI18n::tr('sensor/export', 'Zona'),
             'response' => ezpI18n::tr('sensor/export', 'Risposta'),
+            'response_count' => ezpI18n::tr('sensor/export', 'Risposte'),
+            'message_count' => ezpI18n::tr('sensor/export', 'Note'),
         );
 
         $this->filename = 'posts' . '_' . time();
@@ -140,7 +142,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     }
 
     /**
-     * @param \Opencontent\Sensor\Api\Values\Post $item
+     * @param \Opencontent\Sensor\Api\Values\Post $post
      * @return array
      */
     function transformItem($post)
@@ -175,7 +177,9 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : '',
-                'response' => count($post->responses) > 0 ? $post->responses->last()->text : '',
+                'response' => $post->responses->count() > 0 ? $post->responses->last()->text : '',
+                'response_count' => $post->responses->count(),
+                'message_count' => $post->privateMessages->count(),
             );
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){
@@ -194,6 +198,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
             return $item;
         }
+
+        return [];
     }
 
     protected function startPaginateDownload()
@@ -272,7 +278,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                     $this->options['CSVEnclosure']
                 );
             }
-            $values = $this->transformItem($item);
+            $serialized = $this->transformItem($item);
+            if (!empty($serialized)){
+                $values[] = $serialized;
+            }
             fputcsv($output, array_values($values), $this->options['CSVDelimiter'], $this->options['CSVEnclosure']);
             $makeHeaders = false;
         }
