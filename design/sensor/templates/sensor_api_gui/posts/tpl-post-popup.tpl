@@ -14,7 +14,7 @@
         <li><small><i class="fa fa-comments"></i> {{:comment_count}} {/literal}{'commenti'|i18n('sensor/post')}{literal}</small></li>
         <li><small><i class="fa fa-comment"></i> {{:response_count}} {/literal}{'risposte ufficiali'|i18n('sensor/post')}{literal}</small></li>
     </ul>
-    <p><a href="{{:accessPath}}/sensor/posts/{{:id}}" class="pull-right btn btn-info btn-sm" style="color:#fff">{/literal}{'Dettagli'|i18n('sensor/post')}{literal}</a></p>
+    <p><a href="{{:accessPath}}/sensor/posts/{{:id}}" class="btn btn-info btn-sm" style="color:#fff">{/literal}{'Dettagli'|i18n('sensor/post')}{literal}</a></p>
 </div>
 </script>
 {/literal}

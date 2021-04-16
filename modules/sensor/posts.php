@@ -102,7 +102,11 @@ if (!is_numeric($postId)) {
 
         if ($repository->getSearchService()->searchPosts(
                 'id = ' . $postId . ' limit 1',
-                ['format' => 'geojson']
+                [
+                    'executionTimes' => false,
+                    'readingStatuses' => false,
+                    'capabilities' => false,
+                ]
             )->totalCount === 0) {
             throw new NotFoundException();
         }

@@ -2,6 +2,7 @@
 
 use Firebase\JWT\JWT;
 use Opencontent\Sensor\Api\Exception\UnauthorizedException;
+use Opencontent\Sensor\Legacy\PermissionService;
 
 class SensorJwtManager
 {
@@ -26,6 +27,7 @@ class SensorJwtManager
      *
      * Command to generate key pair:
      * openssl genrsa -des3 -out private.pem 2048
+     * openssl genrsa -out private.pem 2048
      * openssl rsa -in private.pem -outform PEM -pubout -out public.pem
      */
     private function __construct()
@@ -73,14 +75,43 @@ class SensorJwtManager
             throw new UnauthorizedException('Invalid credentials');
         }
 
+        $currentUser = OpenPaSensorRepository::instance()->getCurrentUser();
         $now = time();
+
+        $role = $currentUser->type;
+        if ($role !== 'user'){
+            $role = 'sensor-' . $role;
+        }
+        $allowedRoles = [$role];
+        $defaultRole = $role;
+        if ($currentUser->behalfOfMode){
+            $allowedRoles[] = 'sensor-behalf_of';
+        }
+        if (PermissionService::isSuperAdmin($currentUser)){
+            $allowedRoles[] = 'sensor-admin';
+            $defaultRole = 'sensor-admin';
+        }
+
         $payload = array(
             "iss" => $this->issuer,
             "aud" => $this->issuer,
             "iat" => $now,
             "nbf" => $now,
             "exp" => $now + $this->tokenTTL,
-            "uid" => $user->id()
+            "uid" => $user->id(),
+            "name" => $currentUser->name,
+            "nickname" => $user->Login,
+            "email" => $currentUser->email,
+            "email_verified" => true,
+            "phone_number" => $currentUser->phone,
+            "phone_number_verified" => false,
+            "fiscal_code" => $currentUser->fiscalCode,
+            "https://hasura.io/jwt/claims" => [
+                "x-hasura-allowed-roles" => $allowedRoles,
+                "x-hasura-default-role" => $defaultRole,
+                "x-hasura-user-id" => $user->id(),
+                "x-hasura-tenant" => OpenPABase::getCurrentSiteaccessIdentifier()
+            ]
         );
 
         $jwt = JWT::encode($payload, $this->privateKey, $this->alg);

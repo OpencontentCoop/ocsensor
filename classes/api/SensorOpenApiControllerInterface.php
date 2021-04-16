@@ -6,5 +6,8 @@ interface SensorOpenApiControllerInterface
 
     public function getPayload();
 
+    /**
+     * @return ezcMvcRequest
+     */
     public function getRequest();
 }
