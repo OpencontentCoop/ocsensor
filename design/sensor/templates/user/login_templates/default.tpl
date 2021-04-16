@@ -67,7 +67,7 @@
 </form>
 <div class='text-center'>
     <hr class='hr-normal'>
-    <a href={'/user/forgotpassword'|ezurl}>{'Forgot your password?'|i18n( 'design/ocbootstrap/user/login' )}</a>
+    <a href={if ezmodule( 'userpaex' )}{'/userpaex/forgotpassword'|ezurl}{else}{"/user/forgotpassword"|ezurl}{/if}>{'Forgot your password?'|i18n( 'design/ocbootstrap/user/login' )}</a>
 </div>
 
 {ezscript_require(array("password-score/password.js"))}
