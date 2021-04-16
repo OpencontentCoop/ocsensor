@@ -74,6 +74,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanAddImage();
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRemoveImage();
         $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
+        $permissionDefinitions[] = new PermissionDefinitions\CanSetType();
         $this->setPermissionDefinitions($permissionDefinitions);
 
         $actionDefinitions = array();
@@ -106,6 +107,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\AddImageAction();
         $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
         $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
+        $actionDefinitions[] = new ActionDefinitions\SetType();
         $this->setActionDefinitions($actionDefinitions);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
