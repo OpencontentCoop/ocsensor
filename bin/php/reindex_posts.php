@@ -11,7 +11,13 @@ $script = eZScript::instance(array(
 
 $script->startup();
 
-$options = $script->getOptions();
+$options = $script->getOptions(
+    '[user:]',
+    '',
+    array(
+        'user' => 'Filter by user id',
+    )
+);
 $script->initialize();
 $script->setUseDebugAccumulators(true);
 
@@ -23,7 +29,16 @@ try {
 
     $repository = OpenPaSensorRepository::instance();
     $cli->output('Fetching objects... ', false);
-    $objects = $repository->getPostContentClass()->objectList();
+    $conditions = ['contentclass_id' => $repository->getPostContentClass()->attribute('id')];
+    if ($options['user']){
+        $conditions['owner_id'] = (int)$options['user'];
+    }
+    $objects = eZPersistentObject::fetchObjectList(
+        eZContentObject::definition(),
+        null,
+        $conditions,
+        ['published' => 'desc']
+    );
     $objectsCount = count($objects);
     $cli->warning($objectsCount);
 
