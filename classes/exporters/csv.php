@@ -268,6 +268,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
         $makeHeaders = $this->iteration == 0;
 
+        /** @var Opencontent\Sensor\Api\Values\Post $item */
         foreach ($result->searchHits as $item) {
             $headers = $this->csvHeaders($item);
             if ($makeHeaders) {
@@ -278,11 +279,10 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                     $this->options['CSVEnclosure']
                 );
             }
-            $serialized = $this->transformItem($item);
-            if (!empty($serialized)){
-                $values[] = $serialized;
+            $values = $this->transformItem($item);
+            if (!empty($values)){
+                fputcsv($output, array_values($values), $this->options['CSVDelimiter'], $this->options['CSVEnclosure']);
             }
-            fputcsv($output, array_values($values), $this->options['CSVDelimiter'], $this->options['CSVEnclosure']);
             $makeHeaders = false;
         }
 
