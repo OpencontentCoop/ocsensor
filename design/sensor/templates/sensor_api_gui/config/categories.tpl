@@ -31,6 +31,7 @@
 </div>
 
 <div class="categories-buttons">
+    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_categories'|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
     <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$categories_parent_node.node_id}" data-add-class="sensor_category" href="{concat('add/new/sensor_category/?parent=',$categories_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
 </div>
 

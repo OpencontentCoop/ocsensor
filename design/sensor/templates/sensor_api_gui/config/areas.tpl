@@ -25,7 +25,7 @@
     </div>
 </div>
 <div class="areas-buttons">
-    <div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/sensor_area/',$areas_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_areas'|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
 </div>
 
 {literal}
