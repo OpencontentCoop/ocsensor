@@ -233,6 +233,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'SocketPort' => $socketIni['Port'],
                 'SocketInternalUrl' => $socketIni['InternalUrl'],
                 'SocketSecret' => $socketIni['Secret'],
+                'AllowChangeApprover' => isset($sensorIni['AllowChangeApprover']) ? $sensorIni['AllowChangeApprover'] == 'enabled' : false,
             ));
         }
 

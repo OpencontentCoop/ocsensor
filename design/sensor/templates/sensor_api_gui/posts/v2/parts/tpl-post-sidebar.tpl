@@ -3,7 +3,7 @@
 
     <div class="widget">
         {{if capabilities.can_add_approver && groupsTree.children.length > 0}}
-            <a href="#" class="pull-right action-trigger hide" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger{{if !settings.AllowChangeApprover}} hide{{/if}}" data-reverse="Annulla">Modifica</a>
         {{/if}}
         <strong class="widget-title">Riferimento</strong>
         <ul class="list-unstyled widget-content">
