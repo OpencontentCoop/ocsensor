@@ -28,7 +28,7 @@
     <div class='form-group'>
         <div class='controls with-icon-over-input'>
             <input type="text" autofocus="" autocomplete="off" name="Login"
-                   placeholder="{"Username"|i18n("design/ocbootstrap/user/login",'User name')}" class="form-control"
+                   placeholder="{"Username"|i18n("design/ocbootstrap/user/login",'User name')} o {"Email"|i18n("design/ocbootstrap/user/login",'User name')}" class="form-control"
                    data-rule-required="true" value="{$User:login|wash}">
             <i class='icon-user text-muted'></i>
         </div>

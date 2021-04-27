@@ -14,6 +14,7 @@ use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
 use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
 use Opencontent\Sensor\Legacy\Listeners\WelcomeOperatorListener;
+use Opencontent\Sensor\Legacy\Listeners\WelcomeUserListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Legacy\Scenarios;
@@ -156,6 +157,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
         $this->addListener('*', new ScenarioListener($this));
         $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
+        $this->addListener('on_generate_user', new WelcomeUserListener($this));
 
         $statisticsFactories = [];
         $statisticsFactories[] = new Statistics\StatusPercentage($this);

@@ -5,6 +5,8 @@ use Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnectorFact
 use Opencontent\Opendata\Api\ContentRepository;
 use Opencontent\Opendata\Api\EnvironmentLoader;
 use Opencontent\Opendata\Rest\Client\PayloadBuilder;
+use Opencontent\Sensor\Api\Values\Event;
+use Opencontent\Sensor\Api\Values\Post;
 
 class BehalfUserClassConnector extends ClassConnector
 {
@@ -116,6 +118,17 @@ class BehalfUserClassConnector extends ClassConnector
         }
 
         $this->cleanup();
+
+        try {
+            $repository = OpenPaSensorRepository::instance();
+            $event = new Event();
+            $event->identifier = 'on_generate_user';
+            $event->post = new Post();
+            $event->user = $repository->getUserService()->loadUser((int)$result['content']['metadata']['id']);
+            $repository->getEventService()->fire($event);
+        }catch (Exception $e){
+
+        }
 
         return $result;
     }
