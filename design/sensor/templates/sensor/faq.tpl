@@ -2,7 +2,7 @@
   'jquery.opendataTools.js',
   'jsrender.js'
 ))}
-<form class="row form hide">
+<form class="row form hide" data-faq-search>
     <div class="col-xs-12">
         <div class="input-group">
             <input type="text" class="form-control" data-search="q" placeholder="{'Cerca nelle faq'|i18n('sensor/config')}">
@@ -17,9 +17,22 @@
         </div>
     </div>
 </form>
-<div style="margin: 20px 0"
-     data-parent="{sensor_faqcontainer().node_id}"
-     data-classes="sensor_faq"></div>
+<div class="row" style="margin-top: 20px">
+    {if sensor_settings().ShowFaqCategories}
+    <div class="col-md-3 hide" data-categoryfilter>
+        <div class="list-group">
+        {foreach sensor_categories()['children'] as $item}
+            <a class="list-group-item hide"
+               data-categoryidlist="{$item.id}{if count($item.children)|gt(0)},{foreach $item.children as $child}{$child.id}{delimiter},{/delimiter}{/foreach}{/if}"
+               href="#">{$item.name|wash()}</a>
+        {/foreach}
+        </div>
+    </div>
+    {/if}
+    <div class="col-md-12"
+         data-root="{sensor_faqcontainer().node_id}"
+         data-classes="sensor_faq"></div>
+</div>
 
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
@@ -42,6 +55,7 @@
             <div id="collapse-{{:metadata.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{:metadata.id}}">
               <div class="panel-body">
                 {{if ~i18n(data, 'answer')}}{{:~i18n(data, 'answer')}}{{/if}}
+                {{if ~i18n(data, 'category')}}<div class="text-right"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
               </div>
             </div>
           </div>
@@ -78,33 +92,65 @@
 <script>
 $.views.helpers($.opendataTools.helpers);
 $(document).ready(function () {
-    var resultsContainer = $('[data-parent]');
-    var form = resultsContainer.prev();
-    var subtree = resultsContainer.data('parent');
+    var resultsContainer = $('[data-root]');
+    var form = $('[data-faq-search]');
+    var subtree = resultsContainer.data('root');
     var classes = resultsContainer.data('classes');
     var currentPage = 0;
     var queryPerPage = [];
-    var limitPagination = 100;
+    var limitPagination = 50;
     var template = $.templates('#tpl-data-results');
     var spinner = $($.templates("#tpl-data-spinner").render({}));
+    var isLoadedCategoryMenu = false;
     var buildQuery = function () {
         var classQuery = '';
         if (classes.length) {
-            classQuery = 'classes [' + classes + ']';
+            classQuery = 'classes [' + classes + '] facets [category.id]';
         }
         var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
         var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
         if (searchText.length > 0) {
             query += " and q = '\"" + searchText + "\"'";
         }
+        var categoryList = [];
+        $("[data-categoryidlist].active").each(function (){
+            categoryList = $.merge(categoryList, ($(this).data('categoryidlist')+'').split(','));
+        })
+        if (categoryList.length > 0){
+            query += " and category.id in [" + categoryList.join(',') + "]";
+        }
         query += ' sort [priority=>desc,published=>asc]';
         return query;
     };
+    var loadCategoryMenu = function (facets){
+        if (!isLoadedCategoryMenu){
+            var countGroup = 0;
+            $("[data-categoryidlist]").each(function (){
+                var self = $(this);
+                var categoryList = (self.data('categoryidlist')+'').split(',');
+                $.each(facets, function (id, count){
+                    if ($.inArray(id+'', categoryList) > -1 && self.hasClass('hide')){
+                        self.removeClass('hide').on('click', function (e){
+                            $(this).toggleClass('active');
+                            loadContents();
+                            e.preventDefault();
+                        });
+                        countGroup++
+                    }
+                })
+            })
+            if (countGroup > 1) {
+                $('[data-categoryfilter]').removeClass('hide')
+                resultsContainer.removeClass('col-md-12').addClass('col-md-9')
+            }
+        }
+    }
     var loadContents = function () {
         var baseQuery = buildQuery();
         var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage * limitPagination;
         resultsContainer.html(spinner);
         $.opendataTools.find(paginatedQuery, function (response) {
+            loadCategoryMenu(response.facets[0].data);
             if (response.totalCount > 0){
                 form.removeClass('hide');
             }
@@ -187,14 +233,14 @@ $(document).ready(function () {
 });
 </script>
 <style>
-.panel-default > .panel-heading{
+#accordion .panel-default > .panel-heading{
     position: relative;
     padding-right: 30px;
 }
-.panel-heading a{
+#accordion .panel-heading a{
     display: block;
 }
-.panel-heading a:after {
+#accordion .panel-heading a:after {
     font-family: 'Glyphicons Halflings';
     content: "\e113";
     float: right;
@@ -203,8 +249,20 @@ $(document).ready(function () {
     right: 10px;
     top: 30%;
 }
-.panel-heading a.collapsed:after {
+#accordion .panel-heading a.collapsed:after {
     content: "\e114";
 }
+/*.panel-collapse>.list-group .list-group-item:first-child {border-top-right-radius: 0;border-top-left-radius: 0;}*/
+/*.panel-collapse>.list-group .list-group-item {border-width: 1px 0;}*/
+/*.panel-collapse>.list-group {margin-bottom: 0;}*/
+/*.panel-collapse .list-group-item {border-radius:0;}*/
+
+/*.panel-collapse .list-group .list-group {margin: 0;margin-top: 10px;}*/
+/*.panel-collapse .list-group-item li.list-group-item {margin: 0 -15px;border-top: 1px solid #ddd !important;border-bottom: 0;padding-left: 30px;}*/
+/*.panel-collapse .list-group-item li.list-group-item:last-child {padding-bottom: 0;}*/
+
+/*.panel-collapse div.list-group div.list-group{margin: 0;}*/
+/*.panel-collapse div.list-group .list-group a.list-group-item {border-top: 1px solid #ddd !important;border-bottom: 0;padding-left: 30px;}*/
+/*.panel-collapse .list-group-item li.list-group-item {border-top: 1px solid #DDD !important;}*/
 </style>
 {/literal}

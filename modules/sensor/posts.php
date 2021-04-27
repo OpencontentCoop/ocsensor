@@ -115,8 +115,7 @@ if (!is_numeric($postId)) {
 
         $tpl->setVariable('post_id', (int)$postId);
 
-        $areas = SensorOperator::removeGeoJsonFromAreaList($repository->getAreasTree());
-        $tpl->setVariable('areas', json_encode($areas));
+        $tpl->setVariable('areas', json_encode($repository->getAreasTree()));
         $tpl->setVariable('categories', json_encode($repository->getCategoriesTree()));
         $tpl->setVariable('operators', json_encode($repository->getOperatorsTree()));
         $tpl->setVariable('groups', json_encode($repository->getGroupsTree()));

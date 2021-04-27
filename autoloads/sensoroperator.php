@@ -1,7 +1,6 @@
 <?php
 
 use Opencontent\Opendata\Api\ClassRepository;
-use Opencontent\Sensor\Legacy\Utils\TreeNodeItem;
 
 class SensorOperator
 {
@@ -215,7 +214,7 @@ class SensorOperator
             } break;
 
             case 'sensor_areas':
-                $operatorValue = self::removeGeoJsonFromAreaList($repository->getAreasTree());
+                $operatorValue = $repository->getAreasTree();
             break;
 
             case 'sensor_categories':
@@ -224,22 +223,5 @@ class SensorOperator
 
         }
         return null;
-    }
-
-    public static function removeGeoJsonFromAreaList($areas)
-    {
-        $areas = json_decode(json_encode($areas), true);
-        foreach ($areas['children'] as $index => $area){
-            if (isset($area['bounding_box']['geo_json'])) {
-                $areas['children'][$index]['bounding_box']['geo_json'] = [];
-            }
-            foreach ($area['children'] as $subIndex => $subArea){
-                if (isset($subArea['bounding_box']['geo_json'])) {
-                    $areas['children'][$index]['children'][$subIndex]['bounding_box']['geo_json'] = [];
-                }
-            }
-        }
-
-        return $areas;
     }
 } 
