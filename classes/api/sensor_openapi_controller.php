@@ -98,15 +98,29 @@ class SensorOpenApiController extends ezpRestMvcController implements SensorOpen
 
     public function doGetFile()
     {
+        $sensorIni = eZINI::instance('ocsensor.ini');
         try {
             list($id, $version, $language) = explode('-', $this->attributeIdentifier, 3);
             $attribute = eZContentObjectAttribute::fetch($id, $version, $language);
             if ($attribute instanceof eZContentObjectAttribute) {
 
                 $readAllPostPolicies = null;
-                if (eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'AccessApiFilesByIP') === 'enabled'){
+                if ($sensorIni->variable('SensorConfig', 'AccessApiFilesByIP') === 'enabled'){
                     $ip = eZSys::clientIP();
-                    if (in_array($ip, eZINI::instance('ocsensor.ini')->variable('SensorConfig', 'AccessApiFilesIPList'))){
+                    if (in_array($ip, $sensorIni->variable('SensorConfig', 'AccessApiFilesIPList'))){
+                        $readAllPostPolicies = [
+                            'accessWord' => 'limited',
+                            'policies' => [
+                                'custom1' => ['Class' => [$this->repository->getPostContentClass()->attribute('id')]]
+                            ]
+                        ];
+                    }
+                }
+
+                if ($sensorIni->variable('SensorConfig', 'AccessApiFilesByHeader') == 'enabled'){
+                    $headerKey = 'HTTP_' . strtoupper(str_replace('-', '_', $sensorIni->variable('SensorConfig', 'AccessApiFilesHeaderKey')));
+                    $headerSecret = isset($this->getRequest()->raw[$headerKey]) ? $this->getRequest()->raw[$headerKey] : false;
+                    if ($headerSecret == $sensorIni->variable('SensorConfig', 'AccessApiFilesHeaderValue')){
                         $readAllPostPolicies = [
                             'accessWord' => 'limited',
                             'policies' => [
