@@ -1,11 +1,10 @@
+{ezscript_require( array('highcharts/pareto.js' ))}
 {literal}
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['area', 'category', 'interval'],
-            enableDailyInterval: true,
-            enableRangeFilter: ['daily','weekly','monthly'],
-            load: function (chart, params) {
+            filters: ['area', 'category', 'group'],
+            load: function (chart, params){
                 chart.html($('#spinner').html());
                 $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
                     var series = [];
@@ -13,30 +12,37 @@
                         var seriesItem = this;
                         var item = {
                             name: seriesItem.name,
+                            type: 'column',
                             data: []
                         };
                         $.each(seriesItem.data, function () {
                             if (this.interval !== 'all') {
-                                item.data.push([this.interval * 1000, this.count]);
+                                var count = this.count == 0 ? null : this.count;
+                                item.data.push([this.interval, count]);
                             }
                         });
                         series.push(item);
                     });
+                    var categories = response.intervals;
+
                     chart.highcharts({
                         chart: {
                             type: 'column'
                         },
                         xAxis: {
-                            type: 'datetime',
-                            ordinal: false,
-                            tickmarkPlacement: 'on'
+                            categories: categories,
+                            tickmarkPlacement: 'on',
+                            title: {
+                                enabled: false
+                            }
                         },
                         yAxis: {
-                            allowDecimals: false,
                             min: 0,
                             title: {
                                 text: '{/literal}{'Numero'|i18n('sensor/chart')}{literal}'
                             },
+                            alignTicks: false,
+                            gridLineWidth: 0,
                             stackLabels: {
                                 enabled: true,
                                 style: {
@@ -63,10 +69,13 @@
                         title: {
                             text: chart.data('description')
                         },
+                        legend: {
+                            alignColumns:false
+                        },
                         series: series,
                         exporting: {
                             sourceWidth: 1500,
-                            sourceHeight: 800,
+                            sourceHeight: 1000,
                             buttons: {
                                 contextButton: {
                                     menuItems: [{
@@ -95,7 +104,7 @@
                                                 type: 'image/svg+xml'
                                             });
                                         }
-                                    }, {
+                                    }/*, {
                                         separator: true
                                     }, {
                                         text: 'Vedi segnalazioni',
@@ -106,7 +115,7 @@
                                             })
                                             window.location = '/sensor/posts#' + $.param(queryData);
                                         }
-                                    }]
+                                    }*/]
                                 }
                             }
                         }

@@ -50,7 +50,17 @@
         {if $current}
             <div id="chart-filters">
                 <div class="row" id="posts-search">
-                    <div class="col-md-4 form-group hide" id="area-filter">
+                    <div class="col-md-3 form-group hide" id="type-filter">
+                        <label>{'Filtra per tipo'|i18n('sensor/post')}</label>
+                        <select class="select form-control" name="type" multiple>
+                            {foreach sensor_types() as $type}
+                                <option value="{$type.identifier}">
+                                    {$type.name|wash()}
+                                </option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group hide" id="area-filter">
                         <label>{'Filtra per zona'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="area" multiple>
                             {foreach $areas.children as $item}
@@ -62,7 +72,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="col-md-4 form-group hide" id="category-filter">
+                    <div class="col-md-3 form-group hide" id="category-filter">
                         <label>{'Filtra per categoria'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="" multiple>
                             {foreach $categories.children as $item}
@@ -74,7 +84,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="col-md-4 form-group hide" id="maincategory-filter">
+                    <div class="col-md-3 form-group hide" id="maincategory-filter">
                         <label>{'Filtra per macro categoria'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="">
                             <option></option>
@@ -83,7 +93,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="col-md-4 form-group hide" id="interval-filter">
+                    <div class="col-md-3 form-group hide" id="interval-filter">
                         <label>{'Filtra per Intervallo di tempo'|i18n('sensor/post')}</label>
                         <select class="select form-control" name="interval">
                             <option value="daily" class="daily_interval" disabled>{'Giornaliero'|i18n('sensor/chart')}</option>
@@ -94,7 +104,7 @@
                             <option value="yearly" selected="selected">{'Annuale'|i18n('sensor/chart')}</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {if $has_group_tag}
                         <div style="display: flex">
                             <div>
@@ -185,7 +195,7 @@
         var pluginName = 'sensorChart',
             defaults = {
                 filtersContainer: $('#chart-filters'),
-                filters: ['area', 'category', 'interval'],
+                filters: ['type', 'area', 'category', 'interval'],
                 enableDailyInterval: false,
                 enableEventFilter: false,
                 enableRangeFilter: false,
