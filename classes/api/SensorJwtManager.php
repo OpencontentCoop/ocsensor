@@ -75,7 +75,9 @@ class SensorJwtManager
             throw new UnauthorizedException('Invalid credentials');
         }
 
-        $currentUser = OpenPaSensorRepository::instance()->getCurrentUser();
+        $currentUser = OpenPaSensorRepository::instance()
+            ->getUserService()
+                ->loadUser($user->id());
         $now = time();
 
         $role = $currentUser->type;
