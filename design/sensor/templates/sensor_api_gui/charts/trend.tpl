@@ -1,5 +1,6 @@
 {literal}
 <script type="text/javascript">
+
     $(document).ready(function () {
         $('#chart').sensorChart({
             filters: ['area', 'maincategory', 'group', 'interval'],
@@ -25,7 +26,7 @@
                     });
                     chart.highcharts({
                         chart: {
-                            type: 'column'
+                            type: 'area'
                         },
                         xAxis: {
                             type: 'datetime',
@@ -43,7 +44,7 @@
                             shared: true
                         },
                         plotOptions: {
-                            column: {
+                            area: {
                                 dataLabels: {
                                     enabled: true,
                                     color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black'
