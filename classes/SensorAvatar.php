@@ -16,7 +16,8 @@ class SensorAvatar
      */
     public static function getAvatar($id)
     {
-        $cacheFileHandler = eZClusterFileHandler::instance(eZSys::cacheDirectory() . '/avatars/' . $id . '.png');
+        $cachePath = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'avatars', $id . '.png'));
+        $cacheFileHandler = eZClusterFileHandler::instance($cachePath);
         $cacheFileHandler->processCache(
             function ($file, $mtime, $identifier) {
             },
