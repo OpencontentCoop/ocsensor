@@ -41,6 +41,16 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
         $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
+        if (!empty($restrictResponders)){
+            /** @var eZContentObject[] $responderObjectList */
+            $responderObjectList = eZContentObject::fetchIDArray($restrictResponders);
+            $restrictResponders = [];
+            foreach ($responderObjectList as $responderObject){
+                if (in_array($responderObject->attribute('class_identifier'), ['user', 'sensor_operator'])){
+                    $restrictResponders[] = $responderObject->attribute('id');
+                }
+            }
+        }
 
         $permissionDefinitions = array();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();

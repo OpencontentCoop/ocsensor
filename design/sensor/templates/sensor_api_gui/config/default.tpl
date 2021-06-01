@@ -127,9 +127,21 @@
     </tr>
     *}
     <tr>
-        <th>Quando viene terminato un intervento, reimposta sempre come riferimento {foreach $default_approvers as $approver}{include uri='design:content/view/sensor_person.tpl' sensor_person=$approver}{delimiter}, {/delimiter}{/foreach}</th>
+        <th>
+            Quando viene terminato un intervento, reimposta sempre come riferimento {foreach $default_approvers as $approver}{include uri='design:content/view/sensor_person.tpl' sensor_person=$approver}{delimiter}, {/delimiter}{/foreach}
+            {def $force_is_enabled = cond($sensor_settings.ForceUrpApproverOnFix, true(), false())}
+            {if $force_is_enabled}
+                {set $force_is_enabled = false()}
+                {foreach $default_approvers as $approver}
+                    {if array('user', 'sensor_operator')|contains($approver.class_identifier)}
+                        {set $force_is_enabled = true()}
+                    {/if}
+                {/foreach}
+                {if $force_is_enabled|not}<p class="text-danger">Questa configurazione non è applicabile in base al riferimento predefinito configurato</p>{/if}
+            {/if}
+        </th>
         <td class="text-center">
-            <input type="checkbox" {if $sensor_settings.ForceUrpApproverOnFix}checked{/if} disabled data-toggleconfig>
+            <input type="checkbox" {if $force_is_enabled}checked{/if} disabled data-toggleconfig>
         </td>
     </tr>
     <tr>

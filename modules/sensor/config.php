@@ -79,7 +79,7 @@ if ($Part == '_set'){
 if ($Http->hasPostVariable('SelectDefaultApprover')) {
     eZContentBrowse::browse(array('action_name' => 'SelectDefaultApprover',
         'return_type' => 'ObjectID',
-        'class_array' => eZUser::fetchUserClassNames(),
+        'class_array' => array_merge(eZUser::fetchUserClassNames(), ['sensor_group']),
         'start_node' => $repository->getOperatorsRootNode()->attribute('node_id'),
         'cancel_page' => '/sensor/config',
         'from_page' => '/sensor/config'), $Module);
