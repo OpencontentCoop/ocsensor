@@ -25,7 +25,10 @@
     <span class="label label-primary" id="current-post-id">{{:id}}</span>
     {{:subject}}
   </h1>
-  <p class="lead"><strong>{{:type.name}}</strong> di {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}</p>
+  <p class="lead"><strong>{{:type.name}}</strong> di
+    {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a> {{if author.phone}}<a style="font-size:.6em" href="tel:{{:author.phone}}"><i class="fa fa-phone-square"></i> {{:author.phone}}</a>{{/if}}
+    {{else}}{{:author.name}}{{/if}}
+  </p>
 </section>
 </script>
 {/literal}
