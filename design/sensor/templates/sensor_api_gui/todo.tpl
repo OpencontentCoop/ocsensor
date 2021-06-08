@@ -1,7 +1,3 @@
-{if sensor_settings('SocketIsEnabled')}
-    <script src="{sensor_settings('SocketUri')}/socket.io/socket.io.js"></script>
-    <script>var Socket = io({if sensor_settings('SocketPath')}{ldelim}path:'{sensor_settings('SocketPath')}/socket.io'{rdelim}{else}'{sensor_settings('SocketUri')}'{/if});</script>
-{/if}
 {ezcss_require(array(
     'plugins/blueimp/blueimp-gallery.css',
     'jquery.fileupload.css',

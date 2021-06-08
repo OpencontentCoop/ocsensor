@@ -8,7 +8,7 @@ use Opencontent\Sensor\Legacy\Repository;
 
 class SensorSocketEmitterListener extends AbstractListener
 {
-    private $repository;
+    protected $repository;
 
     private $secret;
 
@@ -46,7 +46,8 @@ class SensorSocketEmitterListener extends AbstractListener
                 $this->send([
                     'identifier' => $param->identifier,
                     'data' => [
-                        'id' => $param->post->id,
+                        'id' => (int)$param->post->id,
+                        'creator' => (int)$param->post->reporter->id,
                         'users' => $param->post->participants->getParticipantIdListByType(Participant::TYPE_USER),
                         'groups' => $param->post->participants->getParticipantIdListByType(Participant::TYPE_GROUP),
                     ]
@@ -55,7 +56,7 @@ class SensorSocketEmitterListener extends AbstractListener
         }
     }
 
-    private function send($data)
+    protected function send($data)
     {
         $requestBody = json_encode($data);
         $signature = base64_encode(hash_hmac('sha256', $requestBody, $this->secret, true));

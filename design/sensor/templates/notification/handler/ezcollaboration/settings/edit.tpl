@@ -13,6 +13,27 @@
 
                 <table class="table table-striped">
 
+                    {if and(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), sensor_settings('SocketIsEnabled'))}
+                    <tr id="desktop-notification-settings" class="hide">
+                        <td width="1"><i class="fa fa-desktop"></i></td>
+                        <td>
+                            <span class="notificationPermissionStatus granted hide">
+                                {'Notifiche desktop abilitate'|i18n('sensor/settings')}
+                                <br/>
+                                <small>{'Utilizza le impostazioni del browser per disabilitare le notifiche desktop'|i18n('sensor/settings')}</small>
+                            </span>
+                            <span class="notificationPermissionStatus denied hide">
+                                {'Notifiche desktop disabilitate'|i18n('sensor/settings')}
+                                <br/>
+                                <small>{'Utilizza le impostazioni del browser per permettere l\'abilitazione le notifiche desktop'|i18n('sensor/settings')}</small>
+                            </span>
+                            <span class="notificationPermissionStatus default hide">
+                                <a href="#" class="enableNotificationButton btn btn-xs btn-success">{'Abilita le notifiche desktop'|i18n('sensor/settings')}</a>
+                            </span>
+                        </td>
+                    </tr>
+                    {/if}
+
                     {foreach $current_handler.info.notification-types as $type}
 
                         {if $access_groups|contains($type.group)}

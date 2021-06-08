@@ -62,8 +62,16 @@
         'jquery.opendatabrowse.js',
         'jquery.opendataform.js',
         'jquery.fileupload.js',
-        'jquery.sensor_add_post.js'
+        'jquery.sensor_add_post.js',
+        'jquery.sensor_notifications.js'
     ))}
+
+    {if and(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), sensor_settings('SocketIsEnabled'))}
+        <script src="{sensor_settings('SocketUri')}/socket.io/socket.io.js"></script>
+        <script>var Socket = typeof io === 'undefined' ? null : io({if sensor_settings('SocketPath')}{ldelim}path:'{sensor_settings('SocketPath')}/socket.io'{rdelim}{else}'{sensor_settings('SocketUri')}'{/if});</script>
+    {else}
+        <script>var Socket = null;</script>
+    {/if}
 
 {cache-block expiry=86400 ignore_content_expiry keys=array( $current_user.contentobject_id, $access_type.name )}
 {def $social_pagedata = social_pagedata()}
