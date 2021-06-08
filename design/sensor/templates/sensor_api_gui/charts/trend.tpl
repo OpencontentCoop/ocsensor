@@ -26,7 +26,7 @@
                     });
                     chart.highcharts({
                         chart: {
-                            type: 'area'
+                            type: 'column'
                         },
                         xAxis: {
                             type: 'datetime',
@@ -44,7 +44,7 @@
                             shared: true
                         },
                         plotOptions: {
-                            area: {
+                            column: {
                                 dataLabels: {
                                     enabled: true,
                                     color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black'
