@@ -119,6 +119,11 @@ $ViewList['user'] = array(
     'functions' => array('user_list')
 );
 
+$ViewList['stat_source'] = array(
+    'script' => 'stat_source.php',
+    'params' => array('Repository'),
+    'functions' => array('debug')
+);
 
 $FunctionList = array();
 $FunctionList['use'] = array();

@@ -129,22 +129,11 @@ class SensorOperator
 
             case 'sensor_posts_date_range':
             {
-                $first = $repository->getSearchService()->searchPosts('sort [published=>asc] limit 1', [], []);
-                if ($first->totalCount > 0){
-                    $first = $first->searchHits[0];
-                    $last = $repository->getSearchService()->searchPosts('sort [published=>desc] limit 1', [], [])->searchHits[0];
-                    /** @var \Opencontent\Sensor\Api\Values\Post $first */
-                    /** @var \Opencontent\Sensor\Api\Values\Post $last */
-                    $operatorValue = [
-                        'first' => $first->published->setTime(0,0)->format('c'),
-                        'last' => $last->published->setTime(23,0)->format('c')
-                    ];
-                }else{
-                    $operatorValue = [
-                        'first' => (new DateTime())->setTime(0,0)->format('c'),
-                        'last' => (new DateTime())->setTime(23,0)->format('c')
-                    ];
-                }
+                $bounds = self::getPostsDateBounds();
+                $operatorValue = [
+                    'first' => $bounds['first']->format('c'),
+                    'last' => $bounds['last']->format('c')
+                ];
                 break;
             }
 
@@ -223,5 +212,32 @@ class SensorOperator
 
         }
         return null;
+    }
+
+    /**
+     * @return DateTime[]
+     */
+    public static function getPostsDateBounds()
+    {
+        $repository = OpenPaSensorRepository::instance();
+        try {
+            $first = $repository->getSearchService()->searchPosts('sort [published=>asc] limit 1', [], []);
+            if ($first->totalCount > 0) {
+                $first = $first->searchHits[0];
+                $last = $repository->getSearchService()->searchPosts('sort [published=>desc] limit 1', [], [])->searchHits[0];
+                /** @var \Opencontent\Sensor\Api\Values\Post $first */
+                /** @var \Opencontent\Sensor\Api\Values\Post $last */
+                return [
+                    'first' => $first->published->setTime(0, 0),
+                    'last' => $last->published->setTime(23, 0)
+                ];
+            }
+        }catch (Exception $e){
+            eZDebug::writeError($e->getMessage(), __METHOD__);
+        }
+        return [
+            'first' => (new DateTime())->setTime(0,0),
+            'last' => (new DateTime())->setTime(23,0)
+        ];
     }
 } 

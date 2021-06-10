@@ -3,16 +3,25 @@
     'iThing.css',
     'bootstrap-toggle.min.css'
 ))}
-{ezscript_require( array(
+{def $requires = array(
     'ezjsc::jquery',
     'ezjsc::jqueryUI',
     'jQAllRangeSliders-withRuler-min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
     'moment-with-locales.min.js',
-    'highcharts/highcharts.js',
-    'highcharts/exporting.js',
     'bootstrap-toggle.min.js'
-) )}
+)}
+{if $current.render_settings.use_highstock}
+    {set $requires = $requires|merge(array(
+        'highstock/highstock.js'
+    ))}
+{else}
+    {set $requires = $requires|merge(array(
+        'highcharts/highcharts.js',
+        'highcharts/exporting.js'
+    ))}
+{/if}
+{ezscript_require($requires)}
 <section class="hgroup">
     <button class="navbar-toggle" data-target="#stat-menu" data-toggle="collapse" type="button" style="padding: 0;">
         <span class="fa fa-caret-down fa-2x"></span>

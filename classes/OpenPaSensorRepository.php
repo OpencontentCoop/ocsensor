@@ -168,6 +168,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->addListener('*', new ScenarioListener($this));
         $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
         $this->addListener('on_generate_user', new WelcomeUserListener($this));
+        $this->addListener('on_create', new SensorDailyReportListener());
+        $this->addListener('on_close', new SensorDailyReportListener());
 
         $statisticsFactories = [];
         $statisticsFactories[] = new Statistics\StatusPercentage($this);
@@ -183,6 +185,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $statisticsFactories[] = new Statistics\PostAging($this);
         $statisticsFactories[] = new Statistics\Trend($this);
         $statisticsFactories[] = new Statistics\ExecutionTrend($this);
+        $statisticsFactories[] = new Statistics\ClosingTrend($this);
+        $statisticsFactories[] = new Statistics\ClosingTrendPerGroup($this);
         $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
 
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
