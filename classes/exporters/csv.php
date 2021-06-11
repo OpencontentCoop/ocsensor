@@ -148,11 +148,11 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     function transformItem($post)
     {
         if ($post instanceof \Opencontent\Sensor\Api\Values\Post) {
-            $ownerGroup = $post->latestOwnerGroup ?
+            $ownerGroup = $post->latestOwnerGroup instanceof Participant && $post->status->identifier == 'close'?
                 $post->latestOwnerGroup->name :
                 implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_GROUP));
 
-            $owner = $post->latestOwner instanceof Participant ?
+            $owner = $post->latestOwner instanceof Participant && $post->status->identifier == 'close'?
                 $post->latestOwner->name :
                 implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER));
 

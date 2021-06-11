@@ -104,7 +104,7 @@
                                     class="select select-operator form-control"
                                     data-placeholder="{'Incaricato'|i18n('sensor/post')}"
                                     data-type="operators">
-                                <option></option>
+                                <option value="'0'" style="font-style: italic">Nessun operatore incaricato</option>
                             </select>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                                     class="select select-group form-control"
                                     data-placeholder="{'Gruppo incaricato'|i18n('sensor/post')}"
                                     data-type="groups">
-                                <option></option>
+                                <option value="'0'" style="font-style: italic">Nessun gruppo incaricato</option>
                             </select>
                         </div>
                     </div>

@@ -38,23 +38,27 @@
                         {{:name}}
                     </li>
                 {{/for}}
-            {{else latestOwner || latestOwnerGroup}}
-                {{if latestOwner}}
-                <li>
-                    <img src="/sensor/avatar/{{:latestOwner.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
-                    <em>{{:latestOwner.name}}</em>
-                </li>
-                {{/if}}
-                {{if latestOwnerGroup}}
-                <li>
-                    <img src="/sensor/avatar/{{:latestOwnerGroup.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
-                    <em>{{:latestOwnerGroup.name}}</em>
-                </li>
-                {{/if}}
             {{else}}
+                {{if capabilities.can_assign}}
                 <li>
                     <em class="text-muted">Non definito</em>
                 </li>
+                {{/if}}
+                {{if latestOwner || latestOwnerGroup}}
+                    <li style="opacity:.5;margin-top: 5px;"><strong style="margin-bottom: 5px;" class="widget-title"><small>Ultima assegnazione</small></strong></li>
+                    {{if latestOwner}}
+                    <li style="opacity:.5;font-size: .875em;">
+                        <img src="/sensor/avatar/{{:latestOwner.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                        <em>{{:latestOwner.name}}</em>
+                    </li>
+                    {{/if}}
+                    {{if latestOwnerGroup}}
+                    <li style="opacity:.5;font-size: .875em;">
+                        <img src="/sensor/avatar/{{:latestOwnerGroup.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                        <em>{{:latestOwnerGroup.name}}</em>
+                    </li>
+                    {{/if}}
+                {{/if}}
             {{/if}}
             </ul>
             {{include tmpl="#tpl-post-assign"/}}

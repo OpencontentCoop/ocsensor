@@ -54,6 +54,39 @@ try {
     $progressBar->finish();
     $cli->output();
 
+    $customRepository = new SensorDailyReportRepository();
+    $customRepository->truncate();
+    $processLength = $customRepository->countSearchableObjects();
+    $cli->warning('Reindex ' . $processLength . '  object of repository ' . $customRepository->getIdentifier());
+    if ($processLength > 0) {
+        $percentageAdvancementStep = 100 / $processLength;
+    } else {
+        $percentageAdvancementStep = 0;
+    }
+
+    $progressBarOptions = array(
+        'emptyChar' => ' ',
+        'barChar' => '='
+    );
+    $progressBar = new ezcConsoleProgressbar($output, $processLength, $progressBarOptions);
+    $progressBar->start();
+    $length = 50;
+    $offset = 0;
+    do {
+        $items = $customRepository->fetchSearchableObjectList($length, $offset);
+        foreach ($items as $item) {
+            $progressBar->advance();
+            if (!$customRepository->index($item)){
+                $errors[$customRepository->getIdentifier()][] = $item;
+            }
+        }
+
+        $offset += $length;
+    } while (count($items) == $length);
+
+    $progressBar->finish();
+    $cli->notice();
+
     $script->shutdown();
 } catch (Exception $e) {
     $errCode = $e->getCode();

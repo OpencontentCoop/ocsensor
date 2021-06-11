@@ -124,6 +124,7 @@ $(document).ready(function () {ldelim}
     var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)))
     var selectStatus = form.find('select[name="status"]');
     form.find("select").select2({
+        allowClear: true,
         templateResult: function (item) {
             var style = item.element ? $(item.element).attr('style') : '';
             return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
