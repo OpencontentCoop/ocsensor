@@ -15,6 +15,7 @@
                         var seriesItem = this;
                         var item = {
                             name: seriesItem.name,
+                            color: seriesItem.color,
                             data: []
                         };
                         $.each(seriesItem.data, function () {

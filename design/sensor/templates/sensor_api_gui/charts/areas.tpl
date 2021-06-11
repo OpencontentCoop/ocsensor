@@ -16,13 +16,14 @@
                         var seriesItem = this;
                         var item = {
                             name: seriesItem.name,
+                            color: seriesItem.color,
                             data: []
                         };
                         $.each(seriesItem.data, function () {
                             if (this.interval !== 'all') {
                                 item.data.push([this.interval * 1000, this.count]);
                             }else{
-                                pieData.push({name: seriesItem.name, y: this.count})
+                                pieData.push({name: seriesItem.name, y: this.count, color: seriesItem.color})
                             }
                         });
                         series.push(item);

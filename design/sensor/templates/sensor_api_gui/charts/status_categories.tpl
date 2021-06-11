@@ -15,6 +15,7 @@
                         yAxis: 1,
                         zIndex: 10,
                         baseSeries: 3,
+                        color: response.series[2].color,
                         tooltip: {
                             valueDecimals: 2,
                             valueSuffix: '%'
@@ -24,6 +25,7 @@
                         var seriesItem = this;
                         var item = {
                             name: seriesItem.name,
+                            color: seriesItem.color,
                             type: 'column',
                             yAxis: 0,
                             zIndex: 2,

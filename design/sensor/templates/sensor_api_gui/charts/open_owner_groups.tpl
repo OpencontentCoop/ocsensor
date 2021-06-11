@@ -15,6 +15,7 @@
                         yAxis: 1,
                         zIndex: 10,
                         baseSeries: 1,
+                        color: '#333',
                         tooltip: {
                             valueDecimals: 2,
                             valueSuffix: '%'
@@ -25,6 +26,7 @@
                         if (seriesItem.name === 'Aperta') {
                             var item = {
                                 name: seriesItem.name,
+                                color: seriesItem.color,
                                 type: 'column',
                                 yAxis: 0,
                                 zIndex: 2,

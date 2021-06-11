@@ -118,18 +118,18 @@
                         <div style="display: flex">
                             <div>
                         {/if}
-                                <div class="form-group hide" id="group-filter">
-                                    <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
-                                    <select class="select form-control" name="group" multiple>
-                                        {foreach $groups as $group => $items}
-                                            {if count($items)|gt(1)}<optgroup label="{$group|wash()}">{/if}
-                                            {foreach $items as $item}
-                                                <option value="{$item.id}">{$item.name|wash()}</option>
-                                            {/foreach}
-                                            {if count($items)|gt(1)}</optgroup>{/if}
-                                        {/foreach}
-                                    </select>
-                                </div>
+                        <div class="form-group hide" id="group-filter">
+                            <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
+                            <select class="select form-control" name="group" multiple>
+                                {foreach $groups as $group => $items}
+                                    {if count($items)|gt(1)}<optgroup label="{$group|wash()}">{/if}
+                                    {foreach $items as $item}
+                                        <option value="{$item.id}">{$item.name|wash()}</option>
+                                    {/foreach}
+                                    {if count($items)|gt(1)}</optgroup>{/if}
+                                {/foreach}
+                            </select>
+                        </div>
                         {if $has_group_tag}
                             </div>
                             <div>

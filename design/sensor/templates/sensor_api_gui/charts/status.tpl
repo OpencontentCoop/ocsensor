@@ -2,15 +2,24 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#chart').sensorChart({
-                filters: ['type', 'area', 'category'],
+                filters: ['type', 'area', 'category', 'group'],
                 load: function (chart, params) {
                     chart.html($('#spinner').html());
+                    var barChart = $('#bar-chart');
+                    barChart.html('');
                     $.getJSON('/api/sensor_gui/stat/' + chart.data('identifier'), params, function (response) {
                         var series = [];
+                        var barSeries = [];
                         $.each(response.series, function () {
                             series.push({
                                 name: this.status + ' ' + this.count,
-                                y: this.percentage
+                                y: this.percentage,
+                                color: this.color
+                            });
+                            barSeries.push({
+                                name: this.status,
+                                data: [this.count],
+                                color: this.color
                             });
                         });
                         chart.highcharts({
@@ -84,6 +93,38 @@
                                 }
                             }
                         });
+                        barChart.highcharts({
+                            chart: {
+                                type: 'column'
+                            },
+                            xAxis: {
+                                categories: [chart.data('name')],
+                                title: {
+                                    text: ''
+                                }
+                            },
+                            yAxis: {
+                                allowDecimals: false,
+                                min: 0,
+                                title: {
+                                    text: '{/literal}{'Numero'|i18n('sensor/chart')}{literal}'
+                                }
+                            },
+                            tooltip: {
+                                shared: true
+                            },
+                            plotOptions: {
+                                column: {
+                                    dataLabels: {
+                                        enabled: true,
+                                    }
+                                }
+                            },
+                            title: {
+                                text: ''
+                            },
+                            series: barSeries
+                        });
                     });
                 }
             });
@@ -92,4 +133,4 @@
 {/literal}
 <div id="chart" data-identifier="{$current.identifier}" data-name="{$current.name|wash()}"
      style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
+<div id="bar-chart" style="max-height: 800px; margin: 0 auto"></div>
