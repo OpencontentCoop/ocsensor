@@ -479,9 +479,7 @@
             row.css('opacity', '.2');
             var action = 'add_response,close';
             runContextAction(postId, action, {'text': text}, false, function () {
-                if (action === 'close') {
-                    row.remove();
-                }
+                row.remove();
             }, function (data) {
                 if (data.responseJSON) {
                     alert(data.responseJSON.error_message);
