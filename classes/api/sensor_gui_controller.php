@@ -136,6 +136,51 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    public function doLoadPostByIdWithCapabilities()
+    {
+        $user = $this->repository->getCurrentUser();
+        $post = $this->repository->getSearchService()->searchPost($this->Id);
+        $result = new ezpRestMvcResult();
+        $result->variables = [
+            'capabilities' => $this->loadApiUserPostCapabilities($user, $post),
+            'post' => $this->loadApiPost($post),
+        ];
+        $this->repository->getActionService()->runAction(new Action('read'), $post);
+
+        return $result;
+    }
+
+    private function loadApiPost($post)
+    {
+        $apiPost = $this->openApiTools->replacePlaceholders($post->jsonSerialize());
+
+        $messages = [];
+        foreach ($apiPost['timelineItems'] as $message) {
+            $message['_type'] = 'system';
+            $messages[$message['id']] = $message;
+        }
+        foreach ($apiPost['privateMessages'] as $message) {
+            $message['_type'] = 'private';
+            $messages[$message['id']] = $message;
+        }
+        foreach ($apiPost['comments'] as $message) {
+            $message['_type'] = 'public';
+            $messages[$message['id']] = $message;
+        }
+        foreach ($apiPost['responses'] as $message) {
+            $message['_type'] = 'response';
+            $messages[$message['id']] = $message;
+        }
+        foreach ($apiPost['audits'] as $message) {
+            $message['_type'] = 'audit';
+            $messages[$message['id']] = $message;
+        }
+        ksort($messages);
+        $apiPost['_messages'] = array_values($messages);
+
+        return $apiPost;
+    }
+
     public function doLoadPostById()
     {
         if ($this->Id === 'search') {
@@ -144,36 +189,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
         try {
             $post = $this->repository->getSearchService()->searchPost($this->Id);
-            $apiPost = $this->openApiTools->replacePlaceholders($post->jsonSerialize());
-
-            $messages = [];
-            foreach ($apiPost['timelineItems'] as $message) {
-                $message['_type'] = 'system';
-                $messages[$message['id']] = $message;
-            }
-            foreach ($apiPost['privateMessages'] as $message) {
-                $message['_type'] = 'private';
-                $messages[$message['id']] = $message;
-            }
-            foreach ($apiPost['comments'] as $message) {
-                $message['_type'] = 'public';
-                $messages[$message['id']] = $message;
-            }
-            foreach ($apiPost['responses'] as $message) {
-                $message['_type'] = 'response';
-                $messages[$message['id']] = $message;
-            }
-            foreach ($apiPost['audits'] as $message) {
-                $message['_type'] = 'audit';
-                $messages[$message['id']] = $message;
-            }
-            ksort($messages);
-            $apiPost['_messages'] = array_values($messages);
-
-            $readAction = new Action();
-            $readAction->identifier = 'read';
-            $this->repository->getActionService()->runAction($readAction, $post);
-
+            $apiPost = $this->loadApiPost($post);
+            $this->repository->getActionService()->runAction(new Action('read'), $post);
             $result = new ezpRestMvcResult();
             $result->variables = $apiPost;
         } catch (Exception $e) {
@@ -235,6 +252,77 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    private function loadApiUserPostCapabilities($user, $post)
+    {
+        $data = $this->repository->getPermissionService()
+            ->loadUserPostPermissionCollection($user, $post)->jsonSerialize();
+
+        $data[] = [
+            'identifier' => 'can_behalf_of',
+            'grant' => $user->behalfOfMode
+        ];
+        $data[] = [
+            'identifier' => 'is_approver',
+            'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_APPROVER)->getUserById($user->id)
+        ];
+        $data[] = [
+            'identifier' => 'is_owner',
+            'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OWNER)->getUserById($user->id)
+        ];
+        $data[] = [
+            'identifier' => 'is_observer',
+            'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OBSERVER)->getUserById($user->id)
+        ];
+        $data[] = [
+            'identifier' => 'is_author',
+            'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_AUTHOR)->getUserById($user->id)
+        ];
+        $data[] = [
+            'identifier' => 'has_moderation',
+            'grant' => $user->moderationMode
+        ];
+        $data[] = [
+            'identifier' => 'is_a',
+            'grant' => $user->type
+        ];
+        $lastPrivateMessage = -1;
+        foreach ($post->privateMessages->messages as $message) {
+            if ($message->creator->id == $user->id) {
+                $published = $message->published->format('U');
+                if ($lastPrivateMessage < $published) {
+                    $lastPrivateMessage = $published;
+                }
+            }
+        }
+        $data[] = [
+            'identifier' => 'last_private_message_timestamp',
+            'grant' => $lastPrivateMessage
+        ];
+        $lastComment = -1;
+        foreach ($post->comments->messages as $message) {
+            if ($message->creator->id == $user->id) {
+                $published = $message->published->format('U');
+                if ($lastComment < $published) {
+                    $lastComment = $published;
+                }
+            }
+        }
+        $data[] = [
+            'identifier' => 'last_comment_timestamp',
+            'grant' => $lastComment
+        ];
+        $data[] = [
+            'identifier' => 'can_manage',
+            'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'manage')['accessWord'] != 'no'
+        ];
+        $data[] = [
+            'identifier' => 'can_read_user',
+            'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'user_list')['accessWord'] != 'no'
+        ];
+
+        return $data;
+    }
+
     public function doLoadUserPostCapabilities()
     {
         try {
@@ -242,74 +330,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $post = $this->repository->getPostService()->loadPost($this->Id);
             if ($this->UserId == 'current') {
                 $user = $this->repository->getCurrentUser();
-                $result->variables = $this->repository->getPermissionService()->loadCurrentUserPostPermissionCollection($post)->jsonSerialize();
             } else {
                 $user = $this->repository->getUserService()->loadUser($this->UserId);
-                $result->variables = $this->repository->getPermissionService()->loadUserPostPermissionCollection($user, $post)->jsonSerialize();
             }
-
-            $result->variables[] = [
-                'identifier' => 'can_behalf_of',
-                'grant' => $user->behalfOfMode
-            ];
-            $result->variables[] = [
-                'identifier' => 'is_approver',
-                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_APPROVER)->getUserById($user->id)
-            ];
-            $result->variables[] = [
-                'identifier' => 'is_owner',
-                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OWNER)->getUserById($user->id)
-            ];
-            $result->variables[] = [
-                'identifier' => 'is_observer',
-                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_OBSERVER)->getUserById($user->id)
-            ];
-            $result->variables[] = [
-                'identifier' => 'is_author',
-                'grant' => !!$post->participants->getParticipantsByRole(ParticipantRole::ROLE_AUTHOR)->getUserById($user->id)
-            ];
-            $result->variables[] = [
-                'identifier' => 'has_moderation',
-                'grant' => $user->moderationMode
-            ];
-            $result->variables[] = [
-                'identifier' => 'is_a',
-                'grant' => $user->type
-            ];
-            $lastPrivateMessage = -1;
-            foreach ($post->privateMessages->messages as $message) {
-                if ($message->creator->id == $user->id) {
-                    $published = $message->published->format('U');
-                    if ($lastPrivateMessage < $published) {
-                        $lastPrivateMessage = $published;
-                    }
-                }
-            }
-            $result->variables[] = [
-                'identifier' => 'last_private_message_timestamp',
-                'grant' => $lastPrivateMessage
-            ];
-            $lastComment = -1;
-            foreach ($post->comments->messages as $message) {
-                if ($message->creator->id == $user->id) {
-                    $published = $message->published->format('U');
-                    if ($lastComment < $published) {
-                        $lastComment = $published;
-                    }
-                }
-            }
-            $result->variables[] = [
-                'identifier' => 'last_comment_timestamp',
-                'grant' => $lastComment
-            ];
-            $result->variables[] = [
-                'identifier' => 'can_manage',
-                'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'manage')['accessWord'] != 'no'
-            ];
-            $result->variables[] = [
-                'identifier' => 'can_read_user',
-                'grant' => eZUser::currentUser()->hasAccessTo('sensor', 'user_list')['accessWord'] != 'no'
-            ];
+            $result->variables = $this->loadApiUserPostCapabilities($user, $post);
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -474,18 +498,20 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doPostAction()
     {
         try {
+            $actions = explode(',', $this->Action);
             $post = $this->repository->getSearchService()->searchPost($this->Id);
             $payload = $this->getPayload();
 
-            $action = new \Opencontent\Sensor\Api\Action\Action();
-            $action->identifier = $this->Action;
-            foreach ($payload as $key => $value) {
-                $action->setParameter($key, $value);
+            foreach ($actions as $action) {
+                $action = new Action($action);
+                foreach ($payload as $key => $value) {
+                    $action->setParameter($key, $value);
+                }
+                $this->repository->getActionService()->runAction($action, $post);
             }
 
-            $this->repository->getActionService()->runAction($action, $post);
-            $result = new ezpRestMvcResult();
-            $result->variables = ['action' => $action->identifier];
+            $result = $this->doLoadPostByIdWithCapabilities();
+            $result->variables['action'] = $actions;
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -508,7 +534,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $post = $this->repository->getSearchService()->searchPost($this->Id);
-            $action = new \Opencontent\Sensor\Api\Action\Action();
+            $action = new Action();
             $action->identifier = $this->Action;
 
             $classAttributeIdentifier = 'sensor_post/attachment';

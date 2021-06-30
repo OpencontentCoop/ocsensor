@@ -205,6 +205,7 @@ class SensorInbox
         $data = [];
         /** @var Post $post */
         foreach ($results->searchHits as $post) {
+            $contextActions = [];
             $lastUserAccess = $post->readingStatuses['last_access_timestamp'];
             $actions = [];
             if (!(bool)$post->readingStatuses['has_read']
@@ -308,6 +309,15 @@ class SensorInbox
                 $actions[] = $action;
             }
 
+            if (in_array('respond_and_close_post', $actions)){
+                $contextActions[] = [
+                    'identifier' => 'context-close',
+                    'data' => [
+                        'last_private_note' => $post->privateMessages->last()
+                    ]
+                ];
+            }
+
             $data[] = [
                 'id' => (int)$post->id,
                 'is_special' => in_array($post->id, $specialIdList),
@@ -324,6 +334,7 @@ class SensorInbox
                 'has_read' => (bool)$post->readingStatuses['has_read'],
                 'actions' => $actions,
                 'action' => $this->getActionText($action),
+                'contextActions' => $contextActions,
                 'category' => count($post->categories) > 0 ? $post->categories[0]->name: null,
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : null,
                 'owners' => [

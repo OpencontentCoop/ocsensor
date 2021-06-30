@@ -105,10 +105,12 @@
                     <td colspan="6" style="border-bottom: 1px solid #ddd">
                         <ul class="list-inline pull-left">
                             <li><a href="#" data-closepreview><i class="fa fa-arrow-left"></i></a></li>
+                            <li><a href="#" data-refreshpreview><i class="fa fa-refresh"></i></a></li>
+                            <li><span class="preview-action"></span></li>
                         </ul>
                         <ul class="list-inline pull-right">
-                            <li><span class="preview-action"></span></li>
-                            <li><a href="#" data-refreshpreview><i class="fa fa-refresh"></i></a></li>
+                            <li><a href="#" data-previouspreview><i class="fa fa-chevron-left text-muted"></i></a></li>
+                            <li><a href="#" data-nextpreview><i class="fa fa-chevron-right text-muted"></i></a></li>
                         </ul>
                     </td>
                 </tr>
@@ -127,6 +129,31 @@
     </div>
 </div>
 
+<div id="respondInboxForm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="clearfix" data-action-wrapper>
+                    <label for="responseInbox">{'Risposta ufficiale'|i18n('sensor/messages')}</label>
+                    <textarea id="responseInbox" name="text" class="form-control" rows="4" required="required"></textarea>
+                    <input class="btn respond btn-bold pull-right"
+                           type="submit"
+                           style="margin-top:10px"
+                           value="{'Pubblica risposta ufficiale e chiudi la segnalazione'|i18n('sensor/messages')}" />
+                    <div class="pull-right">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="keepResponse" checked="checked" />
+                                {'Tieni risposta in memoria'|i18n('sensor/messages')}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {literal}
 <script>
     $(document).ready(function () {
@@ -134,6 +161,9 @@
         $.views.helpers($.extend({}, $.opendataTools.helpers, {
             'fromNow': function (value) {
                 return moment(new Date(value)).fromNow();
+            },
+            'last_response': function () {
+                return getStoredResponse();
             },
             'progressiveDate': function (value) {
                 var date = moment(new Date(value));
@@ -159,8 +189,10 @@
         var limit = 20;
         var currentPage = 1;
         var postPreview = $('#post-preview');
+        var apiEndPoint = '/api/sensor_gui';
+        var respondInboxForm = $('#respondInboxForm');
         var sensorPostViewer = postPreview.sensorPost({
-            'apiEndPoint': '/api/sensor_gui',
+            'apiEndPoint': apiEndPoint,
             'sensorPostDefinition': '{/literal}{sensor_post_class()|json_encode()|wash(javascript)}{literal}',
             'currentUserId': {/literal}{fetch(user,current_user).contentobject_id|int()}{literal},
             'areas': '{/literal}{sensor_areas()|json_encode()|wash(javascript)}{literal}',
@@ -206,7 +238,14 @@
             menu.find('[data-inboxidentifier="'+identifier+'"]').find('.badge').text(data.count);
             data.limit = limit;
             if (data.count === 0){
-                body.html(templateEmpty.render(data));
+                var renderedEmpty = $(templateEmpty.render(data));
+                renderedEmpty.find('[data-reload]').on('click', function (e){
+                    getList(identifier, currentPage, limit, function (data){
+                        renderList(identifier, data);
+                    });
+                    e.preventDefault();
+                });
+                body.html(renderedEmpty);
             }else{
                 data.start = data.current_page === 1 ? 1 : limit * (data.current_page - 1) + 1;
                 data.end = data.current_page === 1 ? limit : limit * data.current_page;
@@ -300,8 +339,49 @@
                     var row = $(e.currentTarget);
                     var target = $(e.target);
                     var action = row.find('.todo-action').text();
-                    if (!$(e.target).hasClass('fa-star') && !$(e.target).hasClass('fa-star-o')){
+                    if (!$(e.target).hasClass('fa-star') && !$(e.target).hasClass('fa-star-o') && !$(e.target).hasClass('todo_action')){
                         showPreview(row.data('previewid'), action);
+                    }
+                });
+                rendered.find('tr').hover(
+                    function (){
+                        $(this).find('.todo-actions').removeClass('hide');
+                        $(this).find('.todo-date').css('visibility', 'hidden');
+                    },
+                    function (){
+                        $(this).find('.todo-actions').addClass('hide');
+                        $(this).find('.todo-date').css('visibility', 'visible');
+                    }
+                );
+                rendered.find('[data-todo_action="close"]').on('click', function (e){
+                    respondInboxForm.find('.respond').data('postId', $(this).parents('tr[data-previewid]').data('previewid'));
+                    respondInboxForm.find('[name="text"]').val(getStoredResponse());
+                    respondInboxForm.modal('show');
+                    e.preventDefault();
+                });
+                rendered.find('[data-todo_action="close_with_last"]').on('click', function (e){
+                    var postId = $(this).parents('tr[data-previewid]').data('previewid');
+                    var text = getStoredResponse();
+                    doCloseContextAction(postId, text);
+                    e.preventDefault();
+                });
+                rendered.find('[data-todo_action="close_with_note"]').on('click', function (e){
+                    var postId = $(this).parents('tr[data-previewid]').data('previewid');
+                    var text = $(this).data('response');
+                    doCloseContextAction(postId, text);
+                    e.preventDefault();
+                });
+                rendered.find('.has-tooltip').tooltip({
+                    show: {
+                        effect: false
+                    },
+                    content: function (callback) {
+                        callback($(this).prop('title'));
+                    },
+                    position: {
+                        my: "center top+5",
+                        at: "center bottom",
+                        collision: "flipfit"
                     }
                 });
                 body.html(rendered);
@@ -344,11 +424,142 @@
             preview.hide();
             postPreview.html('');
         };
+        var setPrevPreview = function (postId){
+            var prevRow = body.find('tr[data-previewid="'+postId+'"]').prev();
+            if (prevRow.length > 0){
+                preview.find('[data-previouspreview]')
+                    .data('id', prevRow.data('previewid'))
+                    .data('action', prevRow.find('.todo-action').text())
+                    .find('i').removeClass('text-muted');
+            }else{
+                preview.find('[data-previouspreview]')
+                    .data('id', false)
+                    .data('action', false)
+                    .find('i').addClass('text-muted');
+            }
+        };
+        var setNextPreview = function (postId){
+            var nextRow = body.find('tr[data-previewid="'+postId+'"]').next();
+            if (nextRow.length > 0){
+                preview.find('[data-nextpreview]')
+                    .data('id', nextRow.data('previewid'))
+                    .data('action', nextRow.find('.todo-action').text())
+                    .find('i').removeClass('text-muted');
+            }else{
+                preview.find('[data-nextpreview]')
+                    .data('id', false)
+                    .data('action', false)
+                    .find('i').addClass('text-muted');
+            }
+            return false;
+        };
+        preview.find('[data-previouspreview]').on('click', function (e){
+            if ($(this).data('id')) {
+                showPreview($(this).data('id'), $(this).data('action'));
+            }
+            e.preventDefault();
+        });
+        preview.find('[data-nextpreview]').on('click', function (e){
+            if ($(this).data('id')) {
+                showPreview($(this).data('id'), $(this).data('action'));
+            }
+            e.preventDefault();
+        });
         var showPreview = function (postId, action){
             body.hide();
             preview.find('.preview-action').text(action);
+            setPrevPreview(postId);
+            setNextPreview(postId);
             preview.show();
             sensorPostViewer.removeAlert().startLoading().load(postId);
+        };
+
+        var doCloseContextAction = function (postId, text){
+            var row = body.find('tr[data-previewid="'+postId+'"]');
+            row.css('opacity', '.2');
+            var action = 'add_response,close';
+            runContextAction(postId, action, {'text': text}, false, function () {
+                if (action === 'close') {
+                    row.remove();
+                }
+            }, function (data) {
+                if (data.responseJSON) {
+                    alert(data.responseJSON.error_message);
+                } else {
+                    alert(data.responseText);
+                }
+                row.css('opacity', '1');
+            });
+        };
+        respondInboxForm.find('.respond').on('click', function (e){
+            var container = $(this).parents('.modal');
+            container.modal('hide');
+            var text = container.find('[name="text"]').val();
+            var keep = container.find('[name="keepResponse"]').is(':checked');
+            if (keep){
+                if (text.length > 0) {
+                    storeResponse(text);
+                }else{
+                    removeStoredResponse(text);
+                }
+            }
+            var postId = $(this).data('postId');
+            doCloseContextAction(postId, text);
+            e.preventDefault();
+        });
+        var storeResponse = function (text){
+            if (window.sessionStorage !== undefined){
+                sessionStorage.setItem('todo-response', text);
+            }
+            $('[data-todo_action="close_with_last"]').each(function (){
+                $(this).removeClass('hide').attr('title', $(this).data('base_title')+'<em>'+text+'</em>');
+            })
+        }
+        var removeStoredResponse = function(){
+            if (window.sessionStorage !== undefined){
+                sessionStorage.removeItem('todo-response');
+            }
+            $('[data-todo_action="close_with_last"]').each(function (){
+                $(this).addClass('hide').attr('title', false);
+            })
+        }
+        var getStoredResponse = function (){
+            return (window.sessionStorage !== undefined) ? sessionStorage.getItem('todo-response') : null
+        }
+        var isRunningContextAction = false;
+        var runContextAction = function (postId, action, payload, confirmMessage, onSuccess, onError) {
+            isRunningContextAction = true;
+            var confirmation = true;
+            if (confirmMessage) {
+                confirmation = confirm(confirmMessage);
+            }
+            if (confirmation) {
+                var csrfToken;
+                var tokenNode = document.getElementById('ezxform_token_js');
+                if ( tokenNode ){
+                    csrfToken = tokenNode.getAttribute('title');
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: apiEndPoint + '/actions/' + postId + '/' + action,
+                    data: JSON.stringify(payload),
+                    headers: {'X-CSRF-TOKEN': csrfToken},
+                    success: function (data) {
+                        if ($.isFunction(onSuccess)) {
+                            onSuccess(data);
+                        }
+                        isRunningContextAction = false;
+                    },
+                    error: function (data) {
+                        if ($.isFunction(onError)) {
+                            onError(data);
+                        }
+                        isRunningContextAction = false;
+                    },
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+            }
         };
 
         refreshMenu();
@@ -375,7 +586,9 @@
                     $.each(menuItems, function (){
                         refreshMenuItem(this);
                     })
-                    body.find('[data-reload]').trigger('click');
+                    if (!isRunningContextAction) {
+                        body.find('[data-reload]').trigger('click');
+                    }
                 })
             })
         }

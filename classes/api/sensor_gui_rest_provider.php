@@ -221,6 +221,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 array(),
                 'http-get'
             ), 1),
+
+            'sensorGuiApiPostLoadWithCapabilities' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/posts_and_capabilities/:Id',
+                'SensorGuiApiController',
+                'loadPostByIdWithCapabilities',
+                array(),
+                'http-get'
+            ), 1),
         );
         return $routes;
     }

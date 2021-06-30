@@ -13,6 +13,11 @@ if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
     $id = (int)$Params['Id'];
     $cacheFileHandler = SensorAvatar::getAvatar($id);
     $filesize = $cacheFileHandler->size();
+    if ($filesize === 0){
+        $cacheFileHandler->delete();
+        $cacheFileHandler = SensorAvatar::getAvatar($id);
+        $filesize = $cacheFileHandler->size();
+    }
     $mtime = $cacheFileHandler->mtime();
     $datatype = $cacheFileHandler->dataType();
 
