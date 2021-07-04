@@ -79,7 +79,11 @@ class SensorSocketEmitterListener extends AbstractListener
         $response = curl_exec($ch);
         curl_close($ch);
 
-        $this->repository->getLogger()->info("Emit '{$data['identifier']}' to socket on post {$data['data']['id']} with signature {$signature}: " . var_export($response, 1));
+        if (!$response){
+            $this->repository->getLogger()->error("Invalid response emitting '{$data['identifier']}' to socket on post {$data['data']['id']} with signature {$signature}: " . var_export($response, 1));
+        }else {
+            $this->repository->getLogger()->info("Emit '{$data['identifier']}' to socket on post {$data['data']['id']} with signature {$signature}: " . var_export($response, 1));
+        }
 
         return $response;
     }

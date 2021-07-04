@@ -43,6 +43,7 @@ class SensorScenarioClassConnector extends ClassConnector
         ];
 
         $schema['properties']['expiry'] = $properties['expiry'];
+        $schema['properties']['category'] = $properties['category'];
 
         return $schema;
     }

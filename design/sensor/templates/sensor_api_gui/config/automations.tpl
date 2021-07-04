@@ -128,6 +128,21 @@
                 </select>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="criterion_category">{'Categoria'|i18n('sensor/post')}</label>
+                <select class="select form-control" name="category.id" id="category" data-placeholder="Qualsiasi">
+                    <option></option>
+                    {foreach $categories.children as $item}
+                        <option value="{$item.id}"
+                                style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                        {foreach $item.children as $child}
+                            <option value="{$child.id}" style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                        {/foreach}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
@@ -236,6 +251,11 @@
                                     {{if ~i18n(data, 'reporter_as_observer')}}<em>Operatore segnalatore</em>{{/if}}
                                 </li>
                             {{/if}}
+                            {{if ~i18n(data, 'category')}}
+                                <li><strong>Categoria:</strong>
+                                    {{if ~i18n(data, 'category')}}{{for ~i18n(data, 'category')}}{{:~i18n(name)}} {{/for}}{{/if}}
+                                </li>
+                            {{/if}}
                         </ul>
                     </td>
                     <td>
@@ -334,7 +354,7 @@
                         query += $(this).attr('name') + ' in [' + $(this).val() + '] and ';
                     }
                 }
-                console.log($(this).attr('name'), $(this).val());
+                // console.log($(this).attr('name'), $(this).val());
             });
             query += 'classes [sensor_scenario] ';
             query += 'sort [raw[criteria_count_i]=>desc,id=>asc]';
