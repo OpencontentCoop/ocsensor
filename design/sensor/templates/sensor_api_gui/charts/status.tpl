@@ -3,7 +3,10 @@
     $(document).ready(function (){
         var isPieLoaded = false;
         $('#chart').sensorChart({
+            filters: ['type', 'area', 'category', 'interval', 'group'],
             enableDailyInterval: true,
+            enableRangeFilter: ['daily','weekly'],
+            rangeMax: false,
             load: function (chart, params){
                 var spinner = $('#spinner').html();
                 var pieChart = $('#pie-chart');
@@ -121,13 +124,14 @@
                     }
                     chart.highcharts({
                         chart: {
-                            type: 'column',
-                            zoomType: 'x',
-                            resetZoomButton: {
-                                position: {
-                                    align: 'left'
-                                }
-                            }
+                            type: 'column'
+                            // type: 'column',
+                            // zoomType: 'x',
+                            // resetZoomButton: {
+                            //     position: {
+                            //         align: 'left'
+                            //     }
+                            // }
                         },
                         xAxis: {
                             type: 'datetime',
