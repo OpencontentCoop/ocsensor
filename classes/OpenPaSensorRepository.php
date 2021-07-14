@@ -218,6 +218,7 @@ class OpenPaSensorRepository extends LegacyRepository
         if ($this->settings === null) {
             $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
             $socketIni = eZINI::instance('ocsensor.ini')->group('SocketSettings');
+            $geocodeIni = eZINI::instance('ocsensor.ini')->group('GeoCoderSettings');
             $this->settings = new Settings(array(
                 'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
                 'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
@@ -253,6 +254,8 @@ class OpenPaSensorRepository extends LegacyRepository
                 'AllowChangeApprover' => isset($sensorIni['AllowChangeApprover']) ? $sensorIni['AllowChangeApprover'] == 'enabled' : false,
                 'ShowFaqCategories' => isset($sensorIni['ShowFaqCategories']) ? $sensorIni['ShowFaqCategories'] == 'enabled' : true,
                 'UseStatCalculatedColor' => isset($sensorIni['UseStatCalculatedColor']) ? $sensorIni['UseStatCalculatedColor'] == 'enabled' : true,
+                'MarkerMustBeInArea' => isset($geocodeIni['MarkerMustBeInArea']) ? $geocodeIni['MarkerMustBeInArea'] == 'enabled' : false,
+                'MarkerOutOfBoundsAlert' => $geocodeIni['MarkerOutOfBoundsAlert'],
             ));
         }
 
