@@ -124,7 +124,7 @@
                     }
                     chart.highcharts({
                         chart: {
-                            type: 'area'
+                            type: 'column'
                         },
                         xAxis: {
                             type: 'datetime',
