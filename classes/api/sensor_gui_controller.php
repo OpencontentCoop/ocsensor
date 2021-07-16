@@ -692,7 +692,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $todolist = new SensorInbox($this->repository);
             $page = isset($this->request->get['page']) ? rawurldecode($this->request->get['page']) : $this->request->variables['page'];
             $limit = isset($this->request->get['limit']) ? rawurldecode($this->request->get['limit']) : $this->request->variables['limit'];
-            $result->variables = $todolist->get($this->Identifier, $page, $limit);
+            $filters = isset($this->request->get['filters']) ? $this->request->get['filters'] : [];
+            $result->variables = $todolist->get($this->Identifier, $page, $limit, $filters);
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }

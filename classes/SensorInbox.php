@@ -10,35 +10,55 @@ class SensorInbox
 {
     private $repository;
 
+    private $page = 1;
+
+    private $limit = 10;
+
+    private $filterQuery = '';
+
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function get($identifier, $page = 1, $limit = 10)
+    public function get($identifier, $page = 1, $limit = 10, $filters = [])
     {
+        $this->page = $page;
+        $this->limit = $limit;
+        $filtersQueries = [];
+        foreach ($filters as $filter){
+            if (isset($filter['value']) && !empty($filter['value'])){
+                $filtersQueries[] = $filter['field'] . " = '" .  $filter['value'] . "'";
+            }
+        };
+        if (!empty($filtersQueries)) {
+            $this->filterQuery = ' and ' . implode(' and ', $filtersQueries) . ' and ';
+        }
+
         switch ($identifier) {
             case 'todolist':
-                return $this->getTodolist($page, $limit);
+                return $this->getTodolist();
 
             case 'special':
-                return $this->getSpecial($page, $limit);
+                return $this->getSpecial();
 
             case 'conversations':
-                return $this->getConversations($page, $limit);
+                return $this->getConversations();
 
             case 'moderate':
-                return $this->getModerate($page, $limit);
+                return $this->getModerate();
 
             case 'closed':
-                return $this->getClosed($page, $limit);
+                return $this->getClosed();
         }
 
         throw new RuntimeException("Invalid inbox identifier: $identifier");
     }
 
-    private function getTodolist($page = 1, $limit = 10)
+    private function getTodolist()
     {
+        $page = $this->page;
+        $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $unreadCommentField = "user_{$currentUserId}_unread_comments";
         $unreadPrivateField = "user_{$currentUserId}_unread_private_messages_as_receiver";
@@ -56,7 +76,7 @@ class SensorInbox
             or (approver_id_list = '$currentUserId' and unmoderated_comments range [1,*])
             or ((approver_id_list = '$currentUserId' or owner_user_id_list = '$currentUserId') and $unreadCommentField range [1,*]) 
             $specialQuery           
-        ) sort [modified=>desc]";
+        ) {$this->filterQuery} sort [modified=>desc]";
 
         $query .= " limit $limit offset " . ($page - 1) * $limit;
 
@@ -78,13 +98,15 @@ class SensorInbox
         ];
     }
 
-    private function getSpecial($page = 1, $limit = 10)
+    private function getSpecial()
     {
+        $page = $this->page;
+        $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
         if (count($specialIdList) > 0) {
             $query = 'id in [' . implode(',', $specialIdList) . '] sort [modified=>desc]';
-            $query .= " limit $limit offset " . ($page - 1) * $limit;
+            $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
             $results = $this->repository->getSearchService()->searchPosts(
                 $query,
                 [
@@ -108,14 +130,16 @@ class SensorInbox
         ];
     }
 
-    private function getConversations($page = 1, $limit = 10)
+    private function getConversations()
     {
+        $page = $this->page;
+        $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $unreadPrivateField = "user_{$currentUserId}_private_messages";
 
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
         $query = "$unreadPrivateField range [1,*] sort [modified=>desc]";
-        $query .= " limit $limit offset " . ($page - 1) * $limit;
+        $query .= "{$this->filterQuery}  limit $limit offset " . ($page - 1) * $limit;
 
         $results = $this->repository->getSearchService()->searchPosts(
             $query,
@@ -135,13 +159,15 @@ class SensorInbox
         ];
     }
 
-    private function getModerate($page = 1, $limit = 10)
+    private function getModerate()
     {
+        $page = $this->page;
+        $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
 
         $query = "approver_id_list = '$currentUserId' and unmoderated_comments range [1,*] sort [modified=>desc]";
-        $query .= " limit $limit offset " . ($page - 1) * $limit;
+        $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
 
         $results = $this->repository->getSearchService()->searchPosts(
             $query,
@@ -161,13 +187,15 @@ class SensorInbox
         ];
     }
 
-    private function getClosed($page = 1, $limit = 10)
+    private function getClosed()
     {
+        $page = $this->page;
+        $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
 
         $query = "workflow_status = 'closed' sort [modified=>desc]";
-        $query .= " limit $limit offset " . ($page - 1) * $limit;
+        $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
 
         $results = $this->repository->getSearchService()->searchPosts(
             $query,

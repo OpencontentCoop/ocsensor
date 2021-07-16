@@ -59,6 +59,16 @@
                     <span class="hidden-sm hidden-xs nav-label">Chiuse</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
+            <li class="divider hidden-xs hidden-sm"><hr /></li>
+            <li class="hidden-xs hidden-sm">
+                <label for="filter-type">Filtra per tipo</label>
+                <select class="form-control" data-filter="type" id="filter-type" data-placeholder="Filtra per tipo">
+                    <option></option>
+                    {foreach sensor_types() as $type}
+                        <option value="{$type.identifier|wash()}">{$type.name|wash()}</option>
+                    {/foreach}
+                </select>
+            </li>
         </ul>
     </div>
     <div class="col-md-10 col-xs-10">
@@ -205,15 +215,28 @@
             'alertsEndPoint': '{/literal}{'social_user/alert'|ezurl(no)}{literal}'
         }).data('plugin_sensorPost');
 
+        var filterSelectors = $('[data-filter]');
         var getList = function (identifier, page, limit, cb, context) {
             menu.find('[data-inboxidentifier="'+identifier+'"]').find('.badge').html('<i class="fa fa-refresh fa-spin"></i>');
             page = page || 1;
+            var filters = [];
+            filterSelectors.each(function (){
+                var field = $(this).data('filter');
+                var value = $(this).val();
+                if (value.length > 0){
+                    filters.push({
+                        field: field,
+                        value: value
+                    });
+                }
+            });
             $.ajax({
                 type: "GET",
                 url: '/api/sensor_gui/inbox/'+identifier,
                 data: {
                     page: page,
-                    limit: limit
+                    limit: limit,
+                    filters: filters
                 },
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -234,6 +257,10 @@
                 }
             });
         };
+        filterSelectors.on('change', function (e) {
+            refreshMenu();
+            menu.find('li.active a').trigger('click');
+        });
         var renderList = function(identifier, data){
             menu.find('[data-inboxidentifier="'+identifier+'"]').find('.badge').text(data.count);
             data.limit = limit;
