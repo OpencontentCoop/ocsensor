@@ -209,6 +209,10 @@ if ($Part == 'areas') {
     $tpl->setVariable('faq_parent_node', $repository->getFaqRootNode());
     $tpl->setVariable('faq_class', 'sensor_faq');
     $tpl->setVariable('categories', $repository->getCategoriesTree());
+
+} elseif ($Part == 'reports' && $repository->getReportsRootNode()) {
+    $tpl->setVariable('report_parent_node', $repository->getReportsRootNode());
+    $tpl->setVariable('report_class', 'sensor_report');
 }
 
 $configMenu = $repository->getConfigMenu();

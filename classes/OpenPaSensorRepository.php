@@ -587,6 +587,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')
                 && $folder->attribute('contentobject_id') != $this->getScenariosRootNode()->attribute('contentobject_id')
                 && $folder->attribute('contentobject_id') != $this->getFaqRootNode()->attribute('contentobject_id')
+                && ($this->getReportsRootNode() && $folder->attribute('contentobject_id') != $this->getReportsRootNode()->attribute('contentobject_id'))
             ) {
                 $data['data-' . $folder->attribute('contentobject_id')] = [
                     'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
@@ -603,6 +604,14 @@ class OpenPaSensorRepository extends LegacyRepository
                 'node' => false,
                 'icon' => 'fa fa-android',
             ];
+            if ($this->getReportsRootNode()) {
+                $data['reports'] = [
+                    'uri' => 'sensor/config/reports',
+                    'label' => ezpI18n::tr('sensor/config', 'Reports'),
+                    'node' => false,
+                    'icon' => 'fa fa-line-chart',
+                ];
+            }
         }
 
         $data['notifications'] = [
@@ -635,6 +644,15 @@ class OpenPaSensorRepository extends LegacyRepository
             $this->data['scenarios'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_scenarios')->attribute('main_node');
         }
         return $this->data['scenarios'];
+    }
+
+    public function getReportsRootNode()
+    {
+        if (!isset($this->data['reports'])) {
+            $reportsObject = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_reports');
+            $this->data['reports'] = $reportsObject instanceof eZContentObject ? $reportsObject->attribute('main_node') : false;
+        }
+        return $this->data['reports'];
     }
 
     private function fetchObjectRemoteID($id)

@@ -125,6 +125,13 @@ $ViewList['stat_source'] = array(
     'functions' => array('debug')
 );
 
+$ViewList['report'] = array(
+    'script' => 'report.php',
+    'params' => array('RemoteId', 'Action', 'SlideId'),
+    'unordered_params' => array(),
+    'functions' => array('report')
+);
+
 $FunctionList = array();
 $FunctionList['use'] = array();
 $FunctionList['debug'] = array();
@@ -133,6 +140,7 @@ $FunctionList['manage'] = array();
 $FunctionList['behalf'] = array();
 $FunctionList['ws_user'] = array();
 $FunctionList['user_list'] = array();
+$FunctionList['report'] = array();
 
 $charts = array();
 foreach (OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true) as $item) {

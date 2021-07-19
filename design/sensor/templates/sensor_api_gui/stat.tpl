@@ -12,7 +12,6 @@
     'bootstrap-toggle.min.js'
 ))}
 
-{*{def $engine = 'google_charts'}*}
 {def $engine = 'highcharts'}
 
 <section class="hgroup">
@@ -153,6 +152,12 @@
             </div>
             <div class="tab-pane active" id="panel-{$current.identifier}">
                 {include uri=concat('design:sensor_api_gui/charts/',$engine, '.tpl') stat=$current}
+                {if fetch('user', 'has_access_to', hash('module','*','function','*'))}
+                <p class="text-right">
+                    <input style="width: 0;border: none;padding: 0;cursor: none;height: 0;position: absolute;right: 20px;top:5px" type="text" id="link" />
+                    <a id="linkButton" href="#" class="btn btn-sm btn-info">Copia link</a>
+                </p>
+                {/if}
             </div>
         {/if}
     </div>
@@ -293,6 +298,7 @@
                     }
                 }
                 self.settings.load(self.chartContainer, params);
+                $('#link').val('{/literal}{'/api/sensor/stats'|ezurl(no,full)}{literal}/' + self.chartContainer.data('identifier') + '?' + $.param(params));
                 var downloadQuery = [];
                 $.each(params, function (key,val){
                     if (val && val.length > 0) {
@@ -302,6 +308,13 @@
                 self.downloadButton.attr('href', self.downloadBaseHref + '?' + $.param(downloadQuery));
             });
             self.chartContainer.trigger('sensor:chart:filterchange');
+
+            $("#linkButton").on("click", function (e){
+                var copyText = document.querySelector("#link");
+                copyText.select();
+                document.execCommand("copy");
+                e.preventDefault();
+            });
         }
         $.extend(Plugin.prototype, {});
         $.fn[pluginName] = function (options, postId) {

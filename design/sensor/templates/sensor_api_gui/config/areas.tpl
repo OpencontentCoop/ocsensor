@@ -31,7 +31,7 @@
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
 <tr>
-    <td colspan="7" class="text-center">
+    <td colspan="8" class="text-center">
         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
     </td>
 </tr>
@@ -39,6 +39,7 @@
 <script id="tpl-data-results" type="text/x-jsrender">
 {{for children ~parent_node_id=node_id ~baseUrl=baseUrl ~redirect=redirect ~locale=locale}}
 <tr>
+  <th width="1">{{:id}}</th>
   <td>
       <span style="padding-left:{{:(level*20)}}px">
         {{if level == 0}}<strong>{{/if}}

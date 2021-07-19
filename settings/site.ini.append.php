@@ -32,4 +32,7 @@ class=SensorAvatar
 [UserContextHash]
 IncludeCurrentUserId=enabled
 
+[RoleSettings]
+PolicyOmitList[]=sensor/report
+
 */ ?>
