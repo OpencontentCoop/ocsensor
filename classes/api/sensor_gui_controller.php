@@ -665,10 +665,15 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
     public function doLoadStat()
     {
-        $result = new ezpRestMvcResult();
-        $stat = $this->repository->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
-        $stat->setParameters($this->request->get);
-        $result->variables = $stat->getData();
+        try {
+            $result = new ezpRestMvcResult();
+            $stat = $this->repository->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
+            $stat->setParameters($this->request->get);
+            $format = isset($this->request->get['format']) ? $this->request->get['format'] : 'data';
+            $result->variables = $stat->getDataByFormat($format);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
 
         return $result;
     }

@@ -3,25 +3,18 @@
     'iThing.css',
     'bootstrap-toggle.min.css'
 ))}
-{def $requires = array(
+{ezscript_require(array(
     'ezjsc::jquery',
     'ezjsc::jqueryUI',
     'jQAllRangeSliders-withRuler-min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
     'moment-with-locales.min.js',
     'bootstrap-toggle.min.js'
-)}
-{if $current.render_settings.use_highstock}
-    {set $requires = $requires|merge(array(
-        'highstock/highstock.js'
-    ))}
-{else}
-    {set $requires = $requires|merge(array(
-        'highcharts/highcharts.js',
-        'highcharts/exporting.js'
-    ))}
-{/if}
-{ezscript_require($requires)}
+))}
+
+{*{def $engine = 'google_charts'}*}
+{def $engine = 'highcharts'}
+
 <section class="hgroup">
     <button class="navbar-toggle" data-target="#stat-menu" data-toggle="collapse" type="button" style="padding: 0;">
         <span class="fa fa-caret-down fa-2x"></span>
@@ -159,7 +152,7 @@
                 </div>
             </div>
             <div class="tab-pane active" id="panel-{$current.identifier}">
-                {include uri=concat('design:sensor_api_gui/charts/',$current.identifier, '.tpl') stat=$current}
+                {include uri=concat('design:sensor_api_gui/charts/',$engine, '.tpl') stat=$current}
             </div>
         {/if}
     </div>
@@ -175,30 +168,6 @@
 {def $posts_date_range = sensor_posts_date_range()}
 {literal}
 <script>
-    const timezone = new Date().getTimezoneOffset()
-    Highcharts.setOptions({
-        global: {
-            timezoneOffset: timezone
-        },
-        lang: {
-            loading: 'Sto caricando...',
-            months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
-            weekdays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Venerdì', 'Sabato', 'Domenica'],
-            shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-            exportButtonTitle: "Esporta",
-            printButtonTitle: "Importa",
-            rangeSelectorFrom: "Da",
-            rangeSelectorTo: "A",
-            rangeSelectorZoom: "Periodo",
-            downloadPNG: 'Download immagine PNG',
-            downloadJPEG: 'Download immagine JPEG',
-            downloadPDF: 'Download documento PDF',
-            downloadSVG: 'Download immagine SVG',
-            printChart: 'Stampa grafico',
-            thousandsSep: ".",
-            decimalPoint: ','
-        }
-    });
     ;(function ($, window, document, undefined) {
         'use strict';
         var pluginName = 'sensorChart',
