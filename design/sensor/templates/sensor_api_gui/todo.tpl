@@ -63,7 +63,7 @@
             <li class="hidden-xs hidden-sm">
                 <label for="filter-type">Filtra per tipo</label>
                 <select class="form-control" data-filter="type" id="filter-type" data-placeholder="Filtra per tipo">
-                    <option></option>
+                    <option value="">Tutti</option>
                     {foreach sensor_types() as $type}
                         <option value="{$type.identifier|wash()}">{$type.name|wash()}</option>
                     {/foreach}

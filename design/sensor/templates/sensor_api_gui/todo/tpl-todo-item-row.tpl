@@ -89,13 +89,13 @@
         background: #ddd;
     }
     .ui-tooltip {
-        padding: 3px 5px;
+        padding: 5px 8px;
         position: absolute;
         z-index: 9999;
         max-width: 300px;
         background: #666;
         color: #fff;
-        font-size: 0.7em;
+        font-size: 1em;
         border-radius: 5px;
     }
 </style>
