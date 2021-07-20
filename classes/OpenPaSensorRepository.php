@@ -257,6 +257,8 @@ class OpenPaSensorRepository extends LegacyRepository
                 'UseStatCalculatedColor' => isset($sensorIni['UseStatCalculatedColor']) ? $sensorIni['UseStatCalculatedColor'] == 'enabled' : true,
                 'MarkerMustBeInArea' => isset($geocodeIni['MarkerMustBeInArea']) ? $geocodeIni['MarkerMustBeInArea'] == 'enabled' : false,
                 'MarkerOutOfBoundsAlert' => $geocodeIni['MarkerOutOfBoundsAlert'],
+                'UseInboxContextActions' => isset($sensorIni['UseInboxContextActions']) ? $sensorIni['UseInboxContextActions'] == 'enabled' : true,
+                'UseInboxFilters' => isset($sensorIni['UseInboxFilters']) ? $sensorIni['UseInboxFilters'] == 'enabled' : true,
             ));
         }
 

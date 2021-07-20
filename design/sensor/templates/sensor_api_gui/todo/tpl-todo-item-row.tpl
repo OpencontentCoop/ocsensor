@@ -27,7 +27,7 @@
             </div>
         </div>
     </td>
-    <td width="1" style="vertical-align:middle;white-space:nowrap{{if has_read == 0}};font-weight:bold{{/if}}">
+    <td width="1" style="position:relative;vertical-align:middle;white-space:nowrap{{if has_read == 0}};font-weight:bold{{/if}}">
         <div{{if contextActions.length > 0}} class="todo-date"{{/if}}>
             {{:~progressiveDate(modified_datetime)}}
         </div>

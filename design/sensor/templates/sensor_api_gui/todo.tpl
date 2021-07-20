@@ -59,6 +59,7 @@
                     <span class="hidden-sm hidden-xs nav-label">Chiuse</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
+            {if sensor_settings('UseInboxFilters')}
             <li class="divider hidden-xs hidden-sm"><hr /></li>
             <li class="hidden-xs hidden-sm">
                 <label for="filter-type">Filtra per tipo</label>
@@ -69,6 +70,7 @@
                     {/foreach}
                 </select>
             </li>
+            {/if}
         </ul>
     </div>
     <div class="col-md-10 col-xs-10">

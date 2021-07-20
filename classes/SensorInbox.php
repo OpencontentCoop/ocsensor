@@ -362,7 +362,7 @@ class SensorInbox
                 'has_read' => (bool)$post->readingStatuses['has_read'],
                 'actions' => $actions,
                 'action' => $this->getActionText($action),
-                'contextActions' => $contextActions,
+                'contextActions' => $this->repository->getSensorSettings()->get('UseInboxContextActions') ? $contextActions : [],
                 'category' => count($post->categories) > 0 ? $post->categories[0]->name: null,
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : null,
                 'owners' => [
