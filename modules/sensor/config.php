@@ -211,6 +211,7 @@ if ($Part == 'areas') {
     $tpl->setVariable('categories', $repository->getCategoriesTree());
 
 } elseif ($Part == 'reports' && $repository->getReportsRootNode()) {
+    $Http->setSessionVariable("LastAccessesURI", '/sensor/config/reports');
     $tpl->setVariable('report_parent_node', $repository->getReportsRootNode());
     $tpl->setVariable('report_class', 'sensor_report');
 }

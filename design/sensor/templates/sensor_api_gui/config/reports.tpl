@@ -35,6 +35,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </thead>
             <tbody>
             {{for searchHits ~baseUrl=baseUrl}}
@@ -56,6 +57,12 @@
                     </td>
                     <td width="1">
                         <a href="#" data-report="{{:metadata.mainNodeId}}"><i class="fa fa-folder-open"></i></a>
+                    </td>
+                    <td width="1" style="text-align: center;">
+                        <form method="post" action="/content/copysubtree/{{:metadata.mainNodeId}}" style="text-align: center;display: inline;">
+                            <input type="hidden" name="SelectedNodeID" value="{/literal}{$report_parent_node.node_id}{literal}" />
+                            <button class="btn btn-link btn-sm" style="padding:0" type="submit" name="CopyButton"><i class="fa fa-copy"></i></button>
+                        </form>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -127,7 +134,6 @@
             <thead>
                 <th width="1">#</th>
                 <th>Titolo</th>
-                <th>Testo</th>
                 <th>Link</th>
                 <th>Priorità</th>
                 <th></th>
@@ -141,9 +147,6 @@
                     </th>
                     <td>
                         {{:~i18n(data, 'title')}}
-                    </td>
-                    <td>
-                        {{if ~i18n(data, 'text')}}{{:~i18n(data, 'text')}}{{/if}}
                     </td>
                     <td>
                         {{if ~i18n(data, 'link')}}{{:~i18n(data, 'link')}}{{/if}}
@@ -202,7 +205,9 @@
         var resultsContainer = wrapper.find('[data-items]');
         var limitPagination = 20;
         var currentPage = 0;
+        var currentPageReport = 0;
         var queryPerPage = [];
+        var queryPerPageReport = [];
         var reportsTemplate = $.templates('#tpl-data-reports');
         var reportTemplate = $.templates('#tpl-data-report');
         var spinner = $($.templates("#tpl-data-spinner").render({}));
@@ -219,21 +224,21 @@
             var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage * limitPagination;
             resultsContainer.html(spinner);
             $.opendataTools.find(paginatedQuery, function (response) {
-                queryPerPage[currentPage] = paginatedQuery;
+                queryPerPageReport[currentPageReport] = paginatedQuery;
                 response.reportNodeId = nodeId;
-                response.currentPage = currentPage;
-                response.prevPage = currentPage - 1;
-                response.nextPage = currentPage + 1;
+                response.currentPage = currentPageReport;
+                response.prevPage = currentPageReport - 1;
+                response.nextPage = currentPageReport + 1;
                 var pagination = response.totalCount > 0 ? Math.ceil(response.totalCount / limitPagination) : 0;
                 var pages = [];
                 var i;
                 for (i = 0; i < pagination; i++) {
-                    queryPerPage[i] = baseQuery + ' and limit ' + limitPagination + ' offset ' + (limitPagination * i);
+                    queryPerPageReport[i] = baseQuery + ' and limit ' + limitPagination + ' offset ' + (limitPagination * i);
                     pages.push({'query': i, 'page': (i + 1)});
                 }
                 response.pages = pages;
                 response.pageCount = pagination;
-                response.prevPageQuery = jQuery.type(queryPerPage[response.prevPage]) === "undefined" ? null : queryPerPage[response.prevPage];
+                response.prevPageQuery = jQuery.type(queryPerPageReport[response.prevPage]) === "undefined" ? null : queryPerPageReport[response.prevPage];
                 var renderData = $(reportTemplate.render(response));
                 resultsContainer.html(renderData);
                 renderData.find('[data-edit]').on('click', function(e){
@@ -265,8 +270,8 @@
                     e.preventDefault();
                 });
                 resultsContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
-                    currentPage = $(this).data('page');
-                    if (currentPage >= 0) loadReport(nodeId);
+                    currentPageReport = $(this).data('page');
+                    if (currentPageReport >= 0) loadReport(nodeId);
                     $('html, body').stop().animate({
                         scrollTop: form.offset().top
                     }, 1000);
@@ -300,6 +305,7 @@
                     }
                 }
                 renderData.find('#closeReportItem').on('click', function(e){
+                    currentPageReport = 0;
                     loadReports();
                     e.preventDefault();
                 });

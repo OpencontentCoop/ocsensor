@@ -1,7 +1,10 @@
 {def $social_pagedata = social_pagedata()}
-{ezcss_require(array('reveal.css', 'reveal-white.css'))}
+{def $css = array('reveal.css', 'reveal-white.css')}
+{if sensor_settings('UseStatCalculatedColor')|not()}
+    {set $css = $css|append('highcharts.css')}
+{/if}
+{ezcss_require($css)}
 {ezscript_require(array('highstock/highstock.js', 'highcharts/pareto.js', 'reveal.js'))}
-
 <div class="reveal">
     <div class="slides">
         <section>
@@ -16,7 +19,11 @@
                     {def $has_text = cond($item|has_attribute('text'), true(), false())}
                     {def $has_link = cond($item|has_attribute('link'), true(), false())}
                     {if $has_text}
-                        <div class="slide-content-item slide-text col-md-{if $has_link}6 r-fit-text{else}12 r-fit-text text-center{/if}">{attribute_view_gui attribute=$item|attribute('text')}</div>
+                        {def $text_length = $item|attribute('text').content.output.output_text|strip_tags()|count_chars()}
+                        <div class="slide-content-item slide-text col-md-{if $has_link}6{else}12 text-center{/if} {if $text_length|gt(80)} r-fit-text{/if}">
+                            {attribute_view_gui attribute=$item|attribute('text')}
+                        </div>
+                        {undef $text_length}
                     {/if}
                     {if $has_link}
                         <div class="slide-content-item slide-chart col-md-{if $has_text}6{else}12{/if}">
