@@ -19,7 +19,7 @@
                     {def $has_text = cond($item|has_attribute('text'), true(), false())}
                     {def $has_link = cond($item|has_attribute('link'), true(), false())}
                     {if $has_text}
-                        {def $text_length = $item|attribute('text').content.output.output_text|strip_tags()|count_chars()}
+                        {def $text_length = $item|attribute('text').content.output.output_text|strip_tags()|trim()|count_chars()}
                         <div class="slide-content-item slide-text col-md-{if $has_link}6{else}12 text-center{/if} {if $text_length|gt(80)} r-fit-text{/if}">
                             {attribute_view_gui attribute=$item|attribute('text')}
                         </div>

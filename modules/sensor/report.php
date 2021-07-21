@@ -68,36 +68,17 @@ if ($report instanceof eZContentObject && $report->attribute('class_identifier')
             $item = eZContentObject::fetch((int)$slideId);
             $data = [];
             if ($item instanceof eZContentObject && $item->mainParentNodeID() == $report->mainNodeID()){
-                $itemDataMap = $item->dataMap();
-                if (isset($itemDataMap['link']) && $itemDataMap['link']->hasContent()){
-                    $link = trim($itemDataMap['link']->toString());
-                    $urlParts = parse_url($link);
-                    $statIdentifier = isset($urlParts['path']) ? basename($urlParts['path']) : false;
-                    $parameters = [];
-                    if (isset($urlParts['query'])) {
-                        parse_str($urlParts['query'], $parameters);
-                    }
-                    if ($statIdentifier){
-                        $stats = $repository->getStatisticsService()->getStatisticFactories(true);
-                        foreach ($stats as $stat){
-                            if ($stat->getIdentifier() == $statIdentifier){
-                                $stat->setParameters($parameters);
-                                $format = isset($parameters['format']) ? $parameters['format'] : 'data';
-                                $data = $stat->getDataByFormat($format);
-                            }
-                        }
-                    }
-                    header('Content-Type: application/json');
-                    echo json_encode( $data );
-                    eZExecution::cleanExit();
-                }
+                $data = SensorReport::getItemData($item);
             }
+            header('Content-Type: application/json');
+            echo json_encode( $data );
+            eZExecution::cleanExit();
         }
         $reportNode = $report->mainNode();
         $tpl->setVariable('items', $reportNode->subTree([
             'Depth' => 1,
             'DepthOperator' => 'eq',
-            'SortBy' => ['attribute', false, 'sensor_report_item/priority'],
+            'SortBy' => ['attribute', true, 'sensor_report_item/priority'],
             'Limitation' => []
         ]));
         $Result = array();

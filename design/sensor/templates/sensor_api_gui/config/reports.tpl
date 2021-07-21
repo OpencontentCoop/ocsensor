@@ -32,6 +32,8 @@
                 <th>Link</th>
                 <th>Password</th>
                 <th class="text-center">Abilitato</th>
+                <th>Staticizzato il</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -55,6 +57,9 @@
                     <td class="text-center">
                         {{if ~i18n(data, 'enabled')}}<i class="fa fa-check"></i>{{/if}}
                     </td>
+                    <td>
+                        {{if ~i18n(data, 'static_at')}}{{:~formatDate(~i18n(data, 'static_at'), 'DD/MM/YYYY HH:mm')}}{{/if}}
+                    </td>
                     <td width="1">
                         <a href="#" data-report="{{:metadata.mainNodeId}}"><i class="fa fa-folder-open"></i></a>
                     </td>
@@ -73,6 +78,9 @@
                         {{if metadata.userAccess.canRemove}}
                             <a href="#" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
                         {{/if}}
+                    </td>
+                    <td width="1">
+                        <a href="#" data-make_static="{{:metadata.id}}"><i class="fa fa-cloud-download"></i></a>
                     </td>
                 </tr>
             {{/for}}
@@ -136,6 +144,7 @@
                 <th>Titolo</th>
                 <th>Link</th>
                 <th>Priorità</th>
+                <th>Static?</th>
                 <th></th>
                 <th></th>
             </thead>
@@ -151,8 +160,11 @@
                     <td>
                         {{if ~i18n(data, 'link')}}{{:~i18n(data, 'link')}}{{/if}}
                     </td>
-                    <td>
+                    <td class="text-center">
                         {{:~i18n(data, 'priority')}}
+                    </td>
+                    <td class="text-center">
+                        {{if ~i18n(data, 'data').length > 0}}<i class="fa fa-check"></i>{{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -216,7 +228,7 @@
         var buildReportQuery = function (nodeId) {
             var query = '';
             query += 'classes [sensor_report_item] subtree ['+nodeId+'] ';
-            query += 'sort [priority=>desc]';
+            query += 'sort [priority=>asc]';
             return query;
         };
         var loadReport = function (nodeId) {
@@ -386,6 +398,14 @@
                             loadReports();
                         }
                     });
+                    e.preventDefault();
+                });
+                renderData.find('[data-make_static]').on('click', function(e){
+                    $(this).find('i').addClass('fa-spin');
+                    $id = $(this).data('make_static');
+                    $.get('/sensor/config/reports', {make_static: $id}, function (){
+                        loadReports();
+                    })
                     e.preventDefault();
                 });
                 resultsContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {

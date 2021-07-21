@@ -212,6 +212,39 @@ if ($Part == 'areas') {
 
 } elseif ($Part == 'reports' && $repository->getReportsRootNode()) {
     $Http->setSessionVariable("LastAccessesURI", '/sensor/config/reports');
+    if ($Http->hasGetVariable('make_static')){
+        $reportId = $Http->getVariable('make_static');
+        $report = eZContentObject::fetch((int)$reportId);
+        $store = false;
+        if ($report instanceof eZContentObject && $report->attribute('class_identifier') == 'sensor_report') {
+            $reportNode = $report->mainNode();
+            if ($reportNode instanceof eZContentObjectTreeNode) {
+                /** @var eZContentObjectTreeNode[] $items */
+                $items = $reportNode->subTree([
+                    'Depth' => 1,
+                    'DepthOperator' => 'eq',
+                    'SortBy' => ['attribute', true, 'sensor_report_item/priority'],
+                    'Limitation' => []
+                ]);
+                foreach ($items as $item) {
+                    $data = SensorReport::generateItemData($item->object(), true);
+                    if (!empty($data)){
+                        $store = true;
+                    }
+                }
+            }
+            if ($store){
+                $reportDataMap = $report->dataMap();
+                if (isset($reportDataMap['static_at'])){
+                    $reportDataMap['static_at']->fromString(time());
+                    $reportDataMap['static_at']->store();
+                    eZSearch::addObject($report, true);
+                }
+            }
+        }
+        echo (int)$store;
+        eZExecution::cleanExit();
+    }
     $tpl->setVariable('report_parent_node', $repository->getReportsRootNode());
     $tpl->setVariable('report_class', 'sensor_report');
 }
