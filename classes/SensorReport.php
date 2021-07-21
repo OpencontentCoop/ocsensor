@@ -37,7 +37,7 @@ class SensorReport
                         $stats = OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true);
                         foreach ($stats as $stat) {
                             if ($stat->getIdentifier() == $statIdentifier) {
-                                $stat->setParameters($parameters);
+                                $stat->init()->setParameters($parameters);
                                 $format = isset($parameters['format']) ? $parameters['format'] : 'data';
                                 $data = $stat->getDataByFormat($format);
                             }
