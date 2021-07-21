@@ -233,7 +233,7 @@
         };
         var loadReport = function (nodeId) {
             var baseQuery = buildReportQuery(nodeId);
-            var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage * limitPagination;
+            var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPageReport * limitPagination;
             resultsContainer.html(spinner);
             $.opendataTools.find(paginatedQuery, function (response) {
                 queryPerPageReport[currentPageReport] = paginatedQuery;
