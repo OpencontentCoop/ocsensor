@@ -8,25 +8,28 @@
 <div class="reveal">
     <div class="slides">
         <section>
-            <img src="{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90">
+            <img src="{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90"
+                 width="90">
             <h3>{attribute_view_gui attribute=$report|attribute('title')}</h3>
             {attribute_view_gui attribute=$report|attribute('intro')}
         </section>
         {foreach $items as $index => $item}
-            <section data-background-image="{$social_pagedata.logo_path|ezroot(no)}" data-background-size="100px" data-background-position="top left">
+            <section data-background-image="{$social_pagedata.logo_path|ezroot(no)}" data-background-size="100px"
+                     data-background-position="top left">
                 <h4>{attribute_view_gui attribute=$item|attribute('title')}</h4>
                 <div class="slide-content row">
                     {def $has_text = cond($item|has_attribute('text'), true(), false())}
                     {def $has_link = cond($item|has_attribute('link'), true(), false())}
                     {if $has_text}
                         {def $text_length = $item|attribute('text').content.output.output_text|strip_tags()|trim()|count_chars()}
-                        <div class="slide-content-item slide-text col-md-{if $has_link}6{else}12 text-center{/if} {if $text_length|gt(80)} r-fit-text{/if}">
+                        <div class="slide-content-item slide-text col-sm-{if $has_link}6{else}12 text-center{/if} {if $text_length|gt(80)} r-fit-text{/if}">
                             {attribute_view_gui attribute=$item|attribute('text')}
                         </div>
                         {undef $text_length}
                     {/if}
                     {if $has_link}
-                        <div class="slide-content-item slide-chart col-md-{if $has_text}6{else}12{/if}">
+                        <div class="slide-content-item slide-chart col-sm-{if $has_text}6{else}12{/if}"
+                             style="height:500px">
                             <div class="chart row" data-slide="{$item.contentobject_id}"></div>
                         </div>
                     {/if}
@@ -62,30 +65,38 @@
             decimalPoint: ','
         }
     });
-    $(document).ready(function (){
-        $('.chart').each(function (){
-            var container = $(this);
+    $(document).ready(function () {
+
+        var loadChart = function (section) {
+            var container = $(section).find('.chart');
+            if (container.length === 0 || container.data('loaded')) return;
+            container.data('loaded', true);
             var slide = container.data('slide');
-            $.getJSON('{/literal}{concat('/sensor/report/', $report.remote_id)|ezurl(no)}{literal}/s/'+slide, function (response) {
+            $.getJSON('{/literal}{concat('/sensor/report/', $report.remote_id)|ezurl(no)}{literal}/s/' + slide, function (response) {
                 var chartLength = response.length;
-                if (chartLength > 1){
+                if (chartLength > 1) {
                     container.parents('.slide-content').find('.slide-content-item').removeClass('col-md-6').removeClass('r-fit-text').removeAttr('style').addClass('col-md-12');
                 }
-                var chartClass = 12/chartLength;
-                $.each(response, function (){
-                    var chart = $('<div id="s-'+slide+'" class="col-md-'+chartClass+'" style="min-width: 310px; height: 500px; margin: 0 auto"></div>').appendTo(container);
+                var chartClass = 12 / chartLength;
+                var height = 500 / chartLength;
+                $.each(response, function () {
+                    var chart = $('<div id="s-' + slide + '" class="col-sm-' + chartClass + '" style="min-width: 310px; height: ' + height + 'px; margin: 0 auto"></div>').appendTo(container);
                     this.config.title.text = '';
-                    if (this.type === 'stockChart'){
-                        Highcharts.stockChart('s-'+slide, this.config);
-                    }else {
+                    if (this.type === 'stockChart') {
+                        Highcharts.stockChart('s-' + slide, this.config);
+                    } else {
                         chart.highcharts(this.config);
                     }
                 })
             });
-        });
+        };
+
         Reveal.initialize({
             center: true,
             history: false
+        });
+        Reveal.on('slidechanged', function (event) {
+            loadChart(event.currentSlide)
         });
     });
 </script>
