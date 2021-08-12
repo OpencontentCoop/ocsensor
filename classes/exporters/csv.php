@@ -44,6 +44,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $this->queryParams = $http->attribute('get');
         unset($this->queryParams['/sensor/dashboard/(export)']);
         unset($this->queryParams['/sensor/export']);
+        unset($this->queryParams['format']);
 
         $this->queryString = isset($this->queryParams['query']) ? $this->queryParams['query'] : $this->queryParams['q'];
         $this->maxSearchLimit = SearchService::MAX_LIMIT;
