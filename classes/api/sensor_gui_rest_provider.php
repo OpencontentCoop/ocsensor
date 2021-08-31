@@ -222,10 +222,26 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-get'
             ), 1),
 
+            'sensorGuiApiAreaDisabledCategories' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/areas/:Id/disabled_categories',
+                'SensorGuiApiController',
+                'postAreaDisabledCategories',
+                array(),
+                'http-post'
+            ), 1),
+
             'sensorGuiApiPostLoadWithCapabilities' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/posts_and_capabilities/:Id',
                 'SensorGuiApiController',
                 'loadPostByIdWithCapabilities',
+                array(),
+                'http-get'
+            ), 1),
+
+            'sensorGuiApiLoadDefaultArea' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/default_area',
+                'SensorGuiApiController',
+                'loadDefaultArea',
                 array(),
                 'http-get'
             ), 1),

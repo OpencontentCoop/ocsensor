@@ -87,6 +87,7 @@
 
     function Plugin(element, options) {
         this.element = $(element);
+        this.selectedArea = 0;
         this.settings = $.extend({}, defaults, options);
 
         this.settings.geoinput_splitted = false;
@@ -217,6 +218,10 @@
 
         initSmartGui: function () {
             var plugin = this;
+
+            $.get('/api/sensor_gui/default_area', function (response){
+                plugin.selectedArea = response.id;
+            });
 
             var addPostGui = $('#add-post-gui');
 
@@ -536,6 +541,20 @@
                 e.preventDefault();
             })
 
+            plugin.selectArea.on('change sensor-set-area', function (){
+                var current = plugin.selectArea.val();
+                category.find('[data-avoid_areas]').each(function (){
+                    if ($(this).data('avoid_areas').indexOf(parseInt(current)) >= 0){
+                        $(this).attr('disabled', 'disabled').hide();
+                        if ($(this).is(':selected')){
+                            category.val('');
+                        }
+                    }else{
+                        $(this).attr('disabled', false).show();
+                    }
+                })
+            });
+
             addPostGui.find('form').on('submit', function (e) {
                 var self = $(this);
                 if (self.data('disabled') === true) {
@@ -619,12 +638,20 @@
                 behalfOfAnonymous.trigger('click');
                 plugin.refreshViewPort();
                 plugin.refreshMap();
+                if (plugin.selectedArea > 0){
+                    plugin.selectArea.val(plugin.selectedArea).trigger('change');
+                }
             }
 
-            $('a[href="/sensor/add"]').on('click', function (e) {
+            var addButton = $('a[href="/sensor/add"]');
+            addButton.on('click', function (e) {
                 showAddPostGui();
                 e.preventDefault();
             });
+            var hash = window.location.hash;
+            if (hash === '#add'){
+                addButton.trigger('click');
+            }
 
             $('.close-add-post').on('click', function (e) {
                 addPostGui.hide();
@@ -1006,7 +1033,7 @@
         },
 
         setArea: function (areaId) {
-            this.selectArea.val(areaId);
+            this.selectArea.val(areaId).trigger('sensor-set-area');
         },
 
         clearGeo: function () {

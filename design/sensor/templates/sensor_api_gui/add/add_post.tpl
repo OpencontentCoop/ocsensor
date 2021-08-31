@@ -59,7 +59,6 @@
                                     {include uri='design:sensor_api_gui/add/description.tpl'}
                                 </div>
                             </div>
-                            {include uri='design:sensor_api_gui/add/categories.tpl'}
                         </div>
                         {if $can_behalf}
                             <div class="tab-pane" role="tabpanel" id="step-behalf">
@@ -124,6 +123,8 @@
                             </div>
                         </div>
                     </div>
+
+                    {include uri='design:sensor_api_gui/add/categories.tpl'}
 
                     <div class="post-privacy">
                         {if sensor_settings().HidePrivacyChoice}

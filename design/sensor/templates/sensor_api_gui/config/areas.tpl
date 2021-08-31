@@ -22,6 +22,15 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div class="categories panel panel-default" style="display: none">
+            <div class="panel-heading">
+                <a class="close pull-right close-categories" href="#"><i class="fa fa-times"></i></a>
+                Categorie abilitate per la zona <strong data-placeholder="name"></strong>
+            </div>
+            <table class="table table-hover">
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div class="areas-buttons">
@@ -53,6 +62,7 @@
     {{/for}}
   </td>
   <td width="1"><a href="#" data-object="{{:id}}"><i class="fa fa-eye"></i></a></td>
+  <td width="1">{{if level > 0}}<a href="#" data-categories="{{:id}}" data-name="{{:name}}"><i class="fa fa-tags"></i></a>{{/if}}</td>
   <td width="1">{{if level > 0}}<a href="#" data-scenarios="{{:id}}" data-name="{{:name}}"><i class="fa fa-android"></i></a>{{/if}}</td>
   <td width="1">
   {{if can_edit}}
@@ -69,7 +79,6 @@
       <a href="{{:~baseUrl}}/websitetoolbar/sort/{{:node_id}}"><i class="fa fa-sort-alpha-asc "></i>
     {{/if}}
   </td>
-
   <td width="1">
     {{if can_create && level == 0}}
     <a data-create-parent="{{:node_id}}" data-create-class="{{:type}}" href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
@@ -110,7 +119,7 @@
     <td width="1"></td>
 </tr>
 </script>
-    <script id="tpl-edit-scenario-row" type="text/x-jsrender">
+<script id="tpl-edit-scenario-row" type="text/x-jsrender">
     <td class="approver"></td>
     <!--<td class="owner_group"></td>
     <td class="owner"></td>-->
@@ -118,6 +127,35 @@
     <td width="1"><a href="#" class="store-scenario"><i class="fa fa-save"></i></a></td>
     <td width="1"><a href="#" class="close-edit-scenario"><i class="fa fa-times"></i></a></td>
     <td width="1"></td>
+</script>
+<script id="tpl-area-categories" type="text/x-jsrender">
+{{for children ~areaId=areaId ~parentId=id tmpl="#tpl-area-category" /}}
+</script>
+<script id="tpl-area-category" type="text/x-jsrender">
+<tr>
+  <td width="1">
+    <input type="hidden" name="AreaCategory[{{:~areaId}}][]" value="{{:id}}" />
+    <input type="checkbox"
+           data-categoryparent="{{:~parentId}}"
+           data-category="{{:id}}"
+           id="category-{{:id}}"
+           name="AreaEnableCategory[{{:~areaId}}][]"
+           value="{{:id}}"
+           {{if disabled_relations.indexOf(~areaId) == -1}}checked="checked" {{/if}}/>
+  </td>
+  <td>
+      <label for="category-{{:id}}" style="font-weight:normal;display:block;cursor:pointer">
+      <span style="padding-left:{{:(level*20)}}px">
+        {{if level == 0}}<strong>{{/if}}
+        {{:name}}
+        {{if level == 0}}</strong>{{/if}}
+      </span>
+      </label>
+  </td>
+</tr>
+{{if children.length > 0}}
+    {{for children ~areaId=~areaId ~parentId=id tmpl="#tpl-area-category" /}}
+{{/if}}
 </script>
 <script>
     $.views.helpers($.opendataTools.helpers);
@@ -128,16 +166,20 @@
             var buttons = $('.categories-buttons');
             var scenario = resultsContainer.find('.scenarios');
             var scenarioTable = scenario.find('table tbody');
+            var categories = resultsContainer.find('.categories');
+            var categoriesTable = categories.find('table tbody');
             var form = resultsContainer.prev();
             var selfCursor, nextCursor;
             var template = $.templates('#tpl-data-results');
             var spinner = $($.templates("#tpl-data-spinner").render({}));
             var scenarioTemplate = $.templates('#tpl-scenario-results');
             var scenarioEditTemplate = $.templates('#tpl-edit-scenario-row');
+            var categoriesTemplate = $.templates('#tpl-area-categories');
             var operators = JSON.parse('{/literal}{$operators|wash(javascript)}{literal}');
             var groups = JSON.parse('{/literal}{$groups|wash(javascript)}{literal}');
 
             var loadScenario = function(id, name){
+                closeCategories();
                 table.hide();
                 buttons.hide();
                 scenario.find('[data-placeholder="name"]').text(name);
@@ -427,6 +469,77 @@
                 e.preventDefault();
             });
 
+            var loadCategories = function (id, name) {
+                closeScenario();
+                table.hide();
+                buttons.hide();
+                categories.find('[data-placeholder="name"]').text(name);
+                categories.show();
+                categoriesTable.html(spinner);
+                $.getJSON('/api/sensor_gui/category_tree', function (response) {
+                    response.areaId = parseInt(id);
+                    var renderData = $(categoriesTemplate.render(response));
+                    categoriesTable.html(renderData);
+                    categoriesTable.find('[data-category]').on('change', function(e){
+                        var catId = $(this).data('category');
+                        var parentCatId = $(this).data('categoryparent');
+                        var isChecked = $(this).is(':checked');
+                        if (!isChecked) {
+                            categoriesTable.find('[data-categoryparent="' + catId + '"]').prop('checked', false);
+                        }else if (isChecked) {
+                            categoriesTable.find('[data-category="' + parentCatId + '"]').prop('checked', true);
+                        }
+                        setTimeout(function() {
+                            storeAreaCategories(id, name);
+                        }, 20);
+                    });
+                });
+            };
+            var storeAreaCategories = function (id, name){
+                categories.css('opacity', '0.7');
+                var disabledCategories = [];
+                categoriesTable.find('[data-category]').each(function (){
+                    if (!$(this).is(':checked')){
+                        disabledCategories.push($(this).val());
+                    }
+                })
+                var csrfToken;
+                var tokenNode = document.getElementById('ezxform_token_js');
+                if (tokenNode) {
+                    csrfToken = tokenNode.getAttribute('title');
+                }
+                var endpoint = '/api/sensor_gui/areas/'+id+'/disabled_categories';
+                $.ajax({
+                    type: 'POST',
+                    async: false,
+                    url: endpoint,
+                    headers: {'X-CSRF-TOKEN': csrfToken},
+                    data: JSON.stringify(disabledCategories),
+                    success: function (data) {
+                        //loadCategories(id, name);
+                        categories.css('opacity', '1');
+                    },
+                    error: function (data) {
+                        alert(data.responseJSON.error_message);
+                        categories.css('opacity', '1');
+                        loadCategories(id, name);
+                    },
+                    contentType: "application/json",
+                    dataType: 'json'
+                });
+
+            };
+            var closeCategories = function(id, name){
+                table.show();
+                buttons.hide();
+                categories.find('[data-placeholder]').text('');
+                categories.hide();
+            };
+            $('.close-categories').on('click', function(e){
+                closeCategories();
+                e.preventDefault();
+            });
+
             var loadContents = function(){
                 table.html(spinner);
                 $.getJSON('/api/sensor_gui/area_tree', function (response) {
@@ -500,6 +613,10 @@
                     });
                     renderData.find('[data-scenarios]').on('click', function(e){
                         loadScenario($(this).data('scenarios'), $(this).data('name'));
+                        e.preventDefault();
+                    });
+                    renderData.find('[data-categories]').on('click', function(e){
+                        loadCategories($(this).data('categories'), $(this).data('name'));
                         e.preventDefault();
                     });
                 });

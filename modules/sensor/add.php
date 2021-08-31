@@ -3,6 +3,11 @@
 $module = $Params['Module'];
 $http = eZHTTPTool::instance();
 
+if (OpenPaSensorRepository::instance()->getSensorSettings()->get('ShowSmartGui')){
+    $module->redirectTo('/#add');
+    return;
+}
+
 $node = OpenPaSensorRepository::instance()->getPostRootNode();
 $class = OpenPaSensorRepository::instance()->getPostContentClass();
 

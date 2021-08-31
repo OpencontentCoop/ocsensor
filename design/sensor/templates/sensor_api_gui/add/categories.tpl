@@ -6,16 +6,16 @@
     {/if}
     {if ne( count( $categories ), 0)}
         <label class="form-group has-float-label" style="margin-top: 30px;">
-            <select class="form-control" name="category">
-                {if $category_field.is_required|not()}<option></option>{/if}
+            <select class="form-control" name="category"{if $category_field.is_required} required{/if}>
+                {if $category_field.is_required|not()}<option data-avoid_areas="[]"></option>{/if}
                 {foreach $categories as $item}
                     {if count($item.children)|eq(0)}
-                        <option value="{$item.id}">{$item.name|wash()}</option>
+                        <option data-avoid_areas="{$item.disabled_relations|json_encode}" value="{$item.id}">{$item.name|wash()}</option>
                     {else}
-                        <optgroup label="{$item.name|wash()}">
+                        <optgroup data-avoid_areas="{$item.disabled_relations|json_encode}" label="{$item.name|wash()}">
                     {/if}
                     {foreach $item.children as $child}
-                        <option value="{$child.id}">{$child.name|wash()}</option>
+                        <option data-avoid_areas="{$child.disabled_relations|json_encode}" value="{$child.id}">{$child.name|wash()}</option>
                     {/foreach}
                     {if count($item.children)|gt(0)}
                         </optgroup>

@@ -807,4 +807,29 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
         return $result;
     }
+
+    public function doPostAreaDisabledCategories()
+    {
+        try {
+            $area = $this->repository->getAreaService()->loadArea($this->Id);
+
+            $result = new ezpRestMvcResult();
+            $this->repository->getAreaService()->disableCategories($area, $this->getPayload());
+
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doLoadDefaultArea()
+    {
+        $result = new ezpRestMvcResult();
+        $selectedAreaId = eZHTTPTool::instance()->hasSessionVariable(SensorModuleFunctions::SESSION_SELECTED_AREA) ?
+            (int)eZHTTPTool::instance()->sessionVariable(SensorModuleFunctions::SESSION_SELECTED_AREA) : 0;
+        $result->variables = ['id' => $selectedAreaId];
+
+        return $result;
+    }
 }

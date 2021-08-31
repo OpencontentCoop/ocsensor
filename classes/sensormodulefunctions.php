@@ -4,6 +4,8 @@ class SensorModuleFunctions
 {
     const GLOBAL_PREFIX = 'global-';
 
+    const SESSION_SELECTED_AREA = 'sensor_selected_area';
+
     public static function onClearObjectCache($nodeList)
     {
         return $nodeList;
@@ -125,6 +127,13 @@ class SensorModuleFunctions
         $cacheFile = self::GLOBAL_PREFIX . $fileName . '.php';
         $cachePath = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'sensor', $currentSiteAccess, $cacheFile));
         return $cachePath;
+    }
+
+    public static function onRequestInput()
+    {
+        if (isset($_GET['area'])){
+            eZHTTPTool::instance()->setSessionVariable(self::SESSION_SELECTED_AREA, (int)$_GET['area']);
+        }
     }
 
 }

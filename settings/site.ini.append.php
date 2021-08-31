@@ -9,6 +9,7 @@ ExtensionAutoloadPath[]=ocsensor
 [Event]
 Listeners[]=content/cache@SensorModuleFunctions::onClearObjectCache
 Listeners[]=social_user/signup@SensorNotificationHelper::onSocialUserSignup
+Listeners[]=request/input@SensorModuleFunctions::onRequestInput
 
 [Cache]
 CacheItems[]=sensor
