@@ -781,9 +781,26 @@
                 }
             });
 
+            var isResettingInput = function (which, val){
+                return (
+                    (which === 8 ||which === 46 )
+                    && val.length === 0
+                );
+            }
+
+            var clearGeoInputs = function (){
+                self.clearGeo();
+                self.selectArea.val('');
+                self.markers.clearLayers();
+            }
+
             if (self.settings.geoinput_autocomplete){
                 self.inputAddress.on('keyup', function (e) {
-                    if (
+
+                    if (isResettingInput(e.which, $(this).val())) {
+                        clearGeoInputs();
+
+                    } else if (
                         e.which === 8 || //del
                         e.which === 46 || //canc
                         e.which === 222 || //quote
@@ -792,6 +809,7 @@
                         (e.which >= 96 && e.which <= 105) //numbers
                     ){
                         self.searchButton.trigger('click');
+
                     } else if (e.which === 40) { //arrow down
                         if (suggestionSelected) {
                             suggestionSelected.removeClass(suggestionSelectedClass);
@@ -822,6 +840,12 @@
                         if (suggestionSelected && suggestionSelected.hasClass(suggestionSelectedClass)){
                             self.inputAddress.val(suggestionSelected.text());
                         }
+                    }
+                });
+            }else{
+                self.inputAddress.on('keyup', function (e) {
+                    if (isResettingInput(e.which, $(this).val())) {
+                        clearGeoInputs();
                     }
                 });
             }
