@@ -1,4 +1,20 @@
 <div class="tab-pane active" id="reports">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-left">
+                <div class="checkbox">
+                    <label>
+                        <input id="hide-archive" type="checkbox" checked="checked" /> {'Nascondi archiviati'|i18n('sensor/config')}
+                    </label>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-danger" id="addReport" data-add-parent="{$report_parent_node.node_id}" data-add-class="sensor_report" href="#">
+                    <i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}
+                </a>
+            </div>
+        </div>
+    </div>
     <div data-items></div>
 </div>
 
@@ -9,15 +25,6 @@
 </div>
 </script>
 <script id="tpl-data-reports" type="text/x-jsrender">
-<div class="row">
-    <div class="col-xs-12">
-        <div class="pull-right">
-            <a class="btn btn-danger" id="addReport" data-add-parent="{/literal}{$report_parent_node.node_id}{literal}" data-add-class="sensor_report" href="#">
-                {/literal}<i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}{literal}
-            </a>
-        </div>
-    </div>
-</div>
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
@@ -33,6 +40,7 @@
                 <th>Password</th>
                 <th class="text-center">Abilitato</th>
                 <th>Staticizzato il</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -61,7 +69,7 @@
                         {{if ~i18n(data, 'static_at')}}{{:~formatDate(~i18n(data, 'static_at'), 'DD/MM/YYYY HH:mm')}}{{/if}}
                     </td>
                     <td width="1">
-                        <a href="#" data-report="{{:metadata.mainNodeId}}"><i class="fa fa-folder-open"></i></a>
+                        <a href="#" title="Esplora" data-report="{{:metadata.mainNodeId}}"><i class="fa fa-folder-open"></i></a>
                     </td>
                     <td width="1" style="text-align: center;">
                         <form method="post" action="/content/copysubtree/{{:metadata.mainNodeId}}" style="text-align: center;display: inline;">
@@ -71,16 +79,23 @@
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
-                            <a href="#" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
+                            <a href="#" title="Modifica" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
                         {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canRemove}}
-                            <a href="#" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
+                            <a href="#" title="Elimina" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
                         {{/if}}
                     </td>
                     <td width="1">
-                        <a href="#" data-make_static="{{:metadata.id}}"><i class="fa fa-cloud-download"></i></a>
+                        <a href="#" title="Staticizza" data-make_static="{{:metadata.id}}"><i class="fa fa-cloud-download"></i></a>
+                    </td>
+                    <td width="1">
+                        {{if metadata.userAccess.canEdit}}
+                            <a href="#" title="{{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}Rimuovi dall'archivio{{else}}Archivia{{/if}}" data-change_visibility="{{:metadata.id}}">
+                                {{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}<i class="fa fa-eye"></i>{{else}}<i class="fa fa-eye-slash"></i>{{/if}}
+                            </a>
+                        {{/if}}
                     </td>
                 </tr>
             {{/for}}
@@ -223,7 +238,8 @@
         var reportsTemplate = $.templates('#tpl-data-reports');
         var reportTemplate = $.templates('#tpl-data-report');
         var spinner = $($.templates("#tpl-data-spinner").render({}));
-        var reportBaseUrl = {/literal}{'/sensor/report'|ezurl(yes,full)}{literal}
+        var reportBaseUrl = {/literal}{'/sensor/report'|ezurl(yes,full)}{literal};
+        var hideArchiveSelector = $('#hide-archive');
 
         var buildReportQuery = function (nodeId) {
             var query = '';
@@ -342,6 +358,9 @@
         var buildReportsQuery = function () {
             var query = '';
             query += 'classes [sensor_report] ';
+            if (hideArchiveSelector.is(':checked')){
+                query += ' and state = \'privacy.public\' ';
+            }
             query += 'sort [published=>desc]';
             return query;
         };
@@ -408,6 +427,14 @@
                     })
                     e.preventDefault();
                 });
+                renderData.find('[data-change_visibility]').on('click', function(e){
+                    $(this).find('i').addClass('fa-spin');
+                    $id = $(this).data('change_visibility');
+                    $.get('/sensor/config/reports', {change_visibility: $id}, function (){
+                        loadReports();
+                    })
+                    e.preventDefault();
+                });
                 resultsContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
                     currentPage = $(this).data('page');
                     if (currentPage >= 0) loadReports();
@@ -460,6 +487,12 @@
                 });
             });
         };
+
+        hideArchiveSelector.on('change', function (){
+            currentPageReport = 0;
+            loadReports();
+        });
+
         loadReports();
 
     });

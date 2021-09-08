@@ -244,6 +244,24 @@ if ($Part == 'areas') {
         }
         echo (int)$store;
         eZExecution::cleanExit();
+    }elseif ($Http->hasGetVariable('change_visibility')){
+        $reportId = $Http->getVariable('change_visibility');
+        $report = eZContentObject::fetch((int)$reportId);
+        $store = false;
+        if ($report instanceof eZContentObject && $report->attribute('class_identifier') == 'sensor_report') {
+            $store = true;
+            $privacyStates = $repository->getSensorPostStates('privacy');
+            $public = $privacyStates['privacy.public'];
+            $private = $privacyStates['privacy.private'];
+            if (in_array($public->attribute('id'), $report->attribute('state_id_array'))){
+                $report->assignState($private);
+            }else{
+                $report->assignState($public);
+            }
+            eZSearch::addObject($report, true);
+        }
+        echo (int)$store;
+        eZExecution::cleanExit();
     }
     $tpl->setVariable('report_parent_node', $repository->getReportsRootNode());
     $tpl->setVariable('report_class', 'sensor_report');
