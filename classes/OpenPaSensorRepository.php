@@ -79,7 +79,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $permissionDefinitions[] = new PermissionDefinitions\CanAddAttachment();
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveAttachment();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign();
+        $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign($firstApproverScenario->getApprovers());
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
         $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
         $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanAddImage();
