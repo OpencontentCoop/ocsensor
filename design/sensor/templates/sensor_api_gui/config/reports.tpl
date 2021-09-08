@@ -55,6 +55,13 @@
                     </th>
                     <td>
                         {{:~i18n(data, 'title')}}
+                        {{if ~i18n(data, 'override_link_parameters')}}
+                            <ul class="list-unstyled" style="font-size: .8em;">
+                            {{for ~i18n(data, 'override_link_parameters')}}
+                                <li><strong>{{:key}}:</strong> {{:value}}</li>
+                            {{/for}}
+                            </ul>
+                        {{/if}}
                     </td>
                     <td>
                         <a href="{{:~baseUrl}}/{{:metadata.remoteId}}">Link al report</a>

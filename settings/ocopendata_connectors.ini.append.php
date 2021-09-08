@@ -13,3 +13,5 @@ FieldConnectors[sensor_report_item/text]=\Opencontent\Ocopendata\Forms\Connector
 
 [ClassSettings]
 ClassConnectors[sensor_scenario]=SensorScenarioClassConnector
+ClassConnectors[sensor_report]=SensorReportClassConnector
+ClassConnectors[sensor_report_item]=SensorReportItemClassConnector
