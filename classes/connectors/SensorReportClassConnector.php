@@ -43,8 +43,10 @@ class SensorReportClassConnector extends ClassConnector
     {
         if ($object->attribute('class_identifier') == 'sensor_report_item') {
             $dataMap = $object->dataMap();
-            if (isset($dataMap['link']) && $dataMap['link']->hasContent()) {
-                $doUpdate = false;
+            if (isset($dataMap['avoid_override'])
+                && (int)$dataMap['avoid_override']->attribute('data_int') === 0
+                && isset($dataMap['link'])
+                && $dataMap['link']->hasContent()) {
                 $link = $dataMap['link']->toString();
                 $newLink = $this->overrideLink($link, $overrideParameters);
                 if ($link !== $newLink) {

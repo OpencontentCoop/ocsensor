@@ -6,7 +6,8 @@ class SensorReportItemClassConnector extends SensorReportClassConnector
     {
         $submitData = $this->getSubmitData();
 
-        if (isset($submitData['link'])){
+        $avoidOverride = isset($submitData['avoid_override']) && $submitData['avoid_override'] === 'true';
+        if (isset($submitData['link']) && !$avoidOverride){
             $submitData['link'] = $this->applyOverride($submitData['link']);
         }
 

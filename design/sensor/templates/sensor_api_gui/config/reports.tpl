@@ -100,7 +100,7 @@
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
                             <a href="#" title="{{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}Rimuovi dall'archivio{{else}}Archivia{{/if}}" data-change_visibility="{{:metadata.id}}">
-                                {{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}<i class="fa fa-eye"></i>{{else}}<i class="fa fa-eye-slash"></i>{{/if}}
+                                {{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}<i class="fa fa-times"></i>{{else}}<i class="fa fa-check"></i>{{/if}}
                             </a>
                         {{/if}}
                     </td>
@@ -477,23 +477,24 @@
                         }
                     }
                 }
-                renderData.find('#addReport').on('click', function(e){
-                    $('#item').opendataFormCreate({
-                        class: $(this).data('add-class'),
-                        parent: $(this).data('add-parent')
-                    },{
-                        onBeforeCreate: function(){
-                            $('#modal').modal('show');
-                        },
-                        onSuccess: function () {
-                            $('#modal').modal('hide');
-                            loadReports();
-                        }
-                    });
-                    e.preventDefault();
-                });
             });
         };
+
+        $('#addReport').on('click', function(e){
+            $('#item').opendataFormCreate({
+                class: $(this).data('add-class'),
+                parent: $(this).data('add-parent')
+            },{
+                onBeforeCreate: function(){
+                    $('#modal').modal('show');
+                },
+                onSuccess: function () {
+                    $('#modal').modal('hide');
+                    loadReports();
+                }
+            });
+            e.preventDefault();
+        });
 
         hideArchiveSelector.on('change', function (){
             currentPageReport = 0;
