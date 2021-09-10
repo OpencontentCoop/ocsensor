@@ -1,5 +1,5 @@
 <div class="tab-pane active" id="reports">
-    <div class="row">
+    <div class="row" id="reports-buttons">
         <div class="col-xs-12">
             <div class="pull-left">
                 <div class="checkbox">
@@ -247,6 +247,7 @@
         var spinner = $($.templates("#tpl-data-spinner").render({}));
         var reportBaseUrl = {/literal}{'/sensor/report'|ezurl(yes,full)}{literal};
         var hideArchiveSelector = $('#hide-archive');
+        var reportsButtons = $('#reports-buttons');
 
         var buildReportQuery = function (nodeId) {
             var query = '';
@@ -255,6 +256,7 @@
             return query;
         };
         var loadReport = function (nodeId) {
+            reportsButtons.hide();
             var baseQuery = buildReportQuery(nodeId);
             var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPageReport * limitPagination;
             resultsContainer.html(spinner);
@@ -372,6 +374,7 @@
             return query;
         };
         var loadReports = function () {
+            reportsButtons.show();
             var baseQuery = buildReportsQuery();
             var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage * limitPagination;
             resultsContainer.html(spinner);

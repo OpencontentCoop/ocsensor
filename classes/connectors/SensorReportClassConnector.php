@@ -79,9 +79,22 @@ class SensorReportClassConnector extends ClassConnector
         $queryParts = explode('&', $query);
         foreach ($queryParts as $queryPart) {
             $keyValue = explode('=', $queryPart, 2);
-            $parameters[$keyValue[0]] = $keyValue[1];
+            $key = $this->cleanString($keyValue[0]);
+            $value = rawurldecode($keyValue[1]);
+            $parameters[$key] = $value;
         }
         return $parameters;
+    }
+
+    private function cleanString($string)
+    {
+        $string = rawurldecode($string);
+        if (strpos($string, '%') !== false){
+            $parts = explode('%', $string, 2);
+            $string = $parts[0] . '[]';
+        }
+
+        return $string;
     }
 
     private function buildUrl(array $parts)
