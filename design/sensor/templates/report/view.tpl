@@ -78,7 +78,7 @@
                     container.parents('.slide-content').find('.slide-content-item').removeClass('col-md-6').removeClass('r-fit-text').removeAttr('style').addClass('col-md-12');
                 }
                 var chartClass = 12 / chartLength;
-                var height = 500 / chartLength;
+                var height = 500; // / chartLength;
                 $.each(response, function () {
                     var chartContainer = $('<div class="col-sm-' + chartClass + '"></div>').appendTo(container);
                     var chart = $('<div id="s-' + slide + '" style="height: ' + height + 'px; margin: 0 auto"></div>').appendTo(chartContainer);

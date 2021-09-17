@@ -1,15 +1,19 @@
 <div class="tab-pane active" id="reports">
     <div class="row" id="reports-buttons">
         <div class="col-xs-12">
-            <div class="pull-left">
+            <div class="col-sm-3">
                 <div class="checkbox">
                     <label>
                         <input id="hide-archive" type="checkbox" checked="checked" /> {'Nascondi archiviati'|i18n('sensor/config')}
                     </label>
                 </div>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-danger" id="addReport" data-add-parent="{$report_parent_node.node_id}" data-add-class="sensor_report" href="#">
+            <div class="col-sm-6">
+                <label style="font-weight: normal;display: inline;">Filtra per staticizzati nel periodo </label>
+                <input type="text" class="form-control daterange" style="width: 200px;display: inline-block;">
+            </div>
+            <div class="col-sm-3">
+                <a class="btn btn-danger pull-right" id="addReport" data-add-parent="{$report_parent_node.node_id}" data-add-class="sensor_report" href="#">
                     <i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}
                 </a>
             </div>
@@ -17,7 +21,8 @@
     </div>
     <div data-items></div>
 </div>
-
+{ezcss_require(array('daterangepicker.css'))}
+{ezscript_require(array('daterangepicker.js'))}
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
 <div class="col-xs-12 spinner text-center">
@@ -370,6 +375,10 @@
             if (hideArchiveSelector.is(':checked')){
                 query += ' and state = \'privacy.public\' ';
             }
+            var searchStaticAt = $('.daterange');
+            if (searchStaticAt.val().length > 0){
+                query += " and static_at range [" + searchStaticAt.data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm') + "," + searchStaticAt.data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm') + "] ";
+            }
             query += 'sort [published=>desc]';
             return query;
         };
@@ -501,6 +510,17 @@
 
         hideArchiveSelector.on('change', function (){
             currentPageReport = 0;
+            loadReports();
+        });
+
+        $('.daterange').daterangepicker({
+            autoUpdateInput: false,
+            opens: 'left'
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            loadReports();
+        }).on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
             loadReports();
         });
 

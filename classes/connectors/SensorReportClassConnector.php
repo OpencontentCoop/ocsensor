@@ -48,7 +48,10 @@ class SensorReportClassConnector extends ClassConnector
                 && isset($dataMap['link'])
                 && $dataMap['link']->hasContent()) {
                 $link = $dataMap['link']->toString();
-                $newLink = $this->overrideLink($link, $overrideParameters);
+                $avoidOverrideFieldsString = isset($dataMap['avoid_override_fields']) ? $dataMap['avoid_override_fields']->toString() : '';
+                $avoidOverrideFields = explode(',', $avoidOverrideFieldsString);
+                $avoidOverrideFields = array_map('trim', $avoidOverrideFields);
+                $newLink = $this->overrideLink($link, $overrideParameters, $avoidOverrideFields);
                 if ($link !== $newLink) {
                     $dataMap['link']->fromString($newLink);
                     $dataMap['link']->store();
@@ -58,13 +61,14 @@ class SensorReportClassConnector extends ClassConnector
         }
     }
 
-    protected function overrideLink($link, array $overrideParameters)
+    protected function overrideLink($link, array $overrideParameters, array $avoidOverrideFields)
     {
         $link = parse_url($link);
         if (isset($link['query'])) {
             $parameters = $this->httpParseQuery($link['query']);
             foreach ($parameters as $key => $value) {
-                $parameters[$key] = isset($overrideParameters[$key]) ? $overrideParameters[$key] : $value;
+                $parameters[$key] = isset($overrideParameters[$key]) && !in_array($key, $avoidOverrideFields) ?
+                    $overrideParameters[$key] : $value;
 
             }
             $link['query'] = http_build_query($parameters);
