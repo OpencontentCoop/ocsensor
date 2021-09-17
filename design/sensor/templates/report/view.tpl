@@ -4,7 +4,7 @@
     {set $css = $css|append('highcharts.css')}
 {/if}
 {ezcss_require($css)}
-{ezscript_require(array('highstock/highstock.js', 'highcharts/pareto.js', 'reveal.js'))}
+{ezscript_require(array('highstock/highstock.js', 'highcharts/pareto.js', 'highstock/exporting.js', 'reveal.js'))}
 <div class="reveal">
     <div class="slides">
         <section>
@@ -22,14 +22,14 @@
                     {def $has_link = cond($item|has_attribute('link'), true(), false())}
                     {if $has_text}
                         {def $text_length = $item|attribute('text').content.output.output_text|strip_tags()|trim()|count_chars()}
-                        <div class="slide-content-item slide-text col-sm-{if $has_link}6{else}12 text-center{/if} {if $text_length|gt(80)} r-fit-text{/if}">
+                        <div class="slide-content-item slide-text col-sm-{if $has_link}6{else}12 text-center{/if} {*if $text_length|gt(80)} r-fit-text{/if*}">
                             {attribute_view_gui attribute=$item|attribute('text')}
                         </div>
                         {undef $text_length}
                     {/if}
                     {if $has_link}
                         <div class="slide-content-item slide-chart col-sm-{if $has_text}6{else}12{/if}"
-                             style="height:500px">
+                             style="height:500px;">
                             <div class="chart row" data-slide="{$item.contentobject_id}"></div>
                         </div>
                     {/if}
@@ -80,8 +80,20 @@
                 var chartClass = 12 / chartLength;
                 var height = 500 / chartLength;
                 $.each(response, function () {
-                    var chart = $('<div id="s-' + slide + '" class="col-sm-' + chartClass + '" style="min-width: 310px; height: ' + height + 'px; margin: 0 auto"></div>').appendTo(container);
+                    var chartContainer = $('<div class="col-sm-' + chartClass + '"></div>').appendTo(container);
+                    var chart = $('<div id="s-' + slide + '" style="height: ' + height + 'px; margin: 0 auto"></div>').appendTo(chartContainer);
                     this.config.title.text = '';
+                    this.config.exporting = {
+                        buttons: {
+                            contextButton: {
+                                symbol: 'url(/extension/ocsensor/design/standard/images/fullscreen.png)',
+                                menuItems: null,
+                                onclick: function () {
+                                    this.fullscreen.toggle();
+                                }
+                            }
+                        }
+                    };
                     if (this.type === 'stockChart') {
                         Highcharts.stockChart('s-' + slide, this.config);
                     } else {
@@ -93,11 +105,20 @@
 
         Reveal.initialize({
             center: true,
-            history: false
+            history: false,
+            width: '100%',
+            height: '100%',
+            minScale: 0.2,
+            maxScale: 2.0
         });
         Reveal.on('slidechanged', function (event) {
             loadChart(event.currentSlide)
         });
     });
 </script>
+<style>
+    .highcharts-button-symbol{
+        transform: translate(0,0) !important;
+    }
+</style>
 {/literal}
