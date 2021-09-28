@@ -39,7 +39,9 @@
         {/foreach}
     </div>
 </div>
-<a target="_blank" style="position: absolute;z-index: 100000;top: 10px;right: 10px;" class="btn btn-sm btn-info" href="{$print_uri}">Versione stampabile</a>
+{if ezini('HighchartsExport', 'Server', 'ocsensor.ini')|eq('enabled')}
+    <a target="_blank" style="position: absolute;z-index: 100000;top: 10px;right: 10px;" class="btn btn-sm btn-info" href="{$print_uri}">Versione stampabile</a>
+{/if}
 {literal}
 <script>
     const timezone = new Date().getTimezoneOffset()
