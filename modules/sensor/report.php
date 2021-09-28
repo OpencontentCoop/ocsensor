@@ -75,27 +75,50 @@ if ($report instanceof eZContentObject && $report->attribute('class_identifier')
             eZExecution::cleanExit();
         }
         $reportNode = $report->mainNode();
+        $tpl->setVariable('report_id', $remoteId);
+        $tpl->setVariable('print_uri', '/sensor/report/' . $remoteId . '?print');
         $tpl->setVariable('items', $reportNode->subTree([
             'Depth' => 1,
             'DepthOperator' => 'eq',
             'SortBy' => ['attribute', true, 'sensor_report_item/priority'],
             'Limitation' => []
         ]));
-        $Result = array();
-        $Result['persistent_variable'] = $tpl->variable('persistent_variable');
-        $Result['content'] = $tpl->fetch('design:report/view.tpl');
-        $Result['node_id'] = 0;
 
-        $contentInfoArray = array('url_alias' => 'sensor/report/' . $remoteId);
-        $contentInfoArray['persistent_variable'] = false;
-        if ($tpl->variable('persistent_variable') !== false) {
-            $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
+        if ($http->hasVariable('print')) {
+            echo $tpl->fetch('design:report/print.tpl');
+            eZDisplayDebug();
+            eZExecution::cleanExit();
+        }elseif ($http->hasVariable('image')){
+            $image = $http->variable('image');
+            list($objectId, $attributeId, $attributeVersion, $filename) = explode('-', $image, 4);
+            $contentObject = eZContentObject::fetch((int)$objectId);
+            if ($contentObject instanceof eZContentObject && $contentObject->attribute('class_identifier') == 'sensor_report_item') {
+                $contentObjectAttribute = eZContentObjectAttribute::fetch($attributeId, $attributeVersion, true);
+                if ($contentObjectAttribute instanceof eZContentObjectAttribute) {
+                    $fileInfo = OCMultiBinaryType::storedSingleFileInformation($contentObjectAttribute, $filename);
+                    OCMultiBinaryType::handleSingleDownload($contentObjectAttribute, $filename);
+                    $fileHandler = new eZFilePassthroughHandler();
+                    $fileHandler->handleFileDownload($contentObject, $contentObjectAttribute, eZBinaryFileHandler::TYPE_FILE, $fileInfo);
+                }
+            }
+        }else {
+
+            $Result = array();
+            $Result['persistent_variable'] = $tpl->variable('persistent_variable');
+            $Result['content'] = $tpl->fetch('design:report/view.tpl');
+            $Result['node_id'] = 0;
+
+            $contentInfoArray = array('url_alias' => 'sensor/report/' . $remoteId);
+            $contentInfoArray['persistent_variable'] = false;
+            if ($tpl->variable('persistent_variable') !== false) {
+                $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
+            }
+            $Result['content_info'] = $contentInfoArray;
+            $Result['path'] = array();
+            $Result['pagelayout'] = 'design:report/pagelayout.tpl';
+
+            return $Result;
         }
-        $Result['content_info'] = $contentInfoArray;
-        $Result['path'] = array();
-        $Result['pagelayout'] = 'design:report/pagelayout.tpl';
-
-        return $Result;
     }
 }
 
