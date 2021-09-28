@@ -91,7 +91,7 @@ class SensorReport
                     'scale' => '1',
                     'constr' => $item['type'] == 'highcharts' ? 'Chart' : 'StockChart'
                 ]);
-                $url = eZINI::instance('ocsensor.ini')->hasVariable('HighchartsExport', 'Uri');
+                $url = eZINI::instance('ocsensor.ini')->variable('HighchartsExport', 'Uri');
                 $headers = [];
                 $headers[] = 'Content-Type: application/json';
                 $headers[] = 'Content-Length: ' . strlen($postData);
