@@ -59,9 +59,9 @@
                         {{:metadata.mainNodeId}}
                     </th>
                     <td>
-                        {{:~i18n(data, 'title')}}
+                        <span data-title="{{:metadata.mainNodeId}}">{{:~i18n(data, 'title')}}</span>
                         {{if ~i18n(data, 'override_link_parameters')}}
-                            <ul class="list-unstyled" style="font-size: .8em;">
+                            <ul class="list-unstyled" style="font-size: .8em;" data-override="{{:metadata.mainNodeId}}">
                             {{for ~i18n(data, 'override_link_parameters')}}
                                 <li><strong>{{:key}}:</strong> {{:value}}</li>
                             {{/for}}
@@ -145,7 +145,8 @@
 <script id="tpl-data-report" type="text/x-jsrender">
 <div class="row">
     <div class="col-xs-8">
-        <span class="h3">Report #{{:reportNodeId}}</span>
+        <h3>Report #{{:reportNodeId}} {{:reportTitle}}</h3>
+        {{if reportOverride}}<ul class="list-inline">{{:reportOverride}}</ul>{{/if}}
     </div>
     <div class="col-xs-4">
         <div class="pull-right">
@@ -171,7 +172,7 @@
                 <th>Titolo</th>
                 <th>Link</th>
                 <th>Priorità</th>
-                <th>Static?</th>
+                <th>Static</th>
                 <th></th>
                 <th></th>
             </thead>
@@ -183,6 +184,13 @@
                     </th>
                     <td>
                         {{:~i18n(data, 'title')}}
+                        <ul class="list-unstyled" style="font-size: .8em;">
+                        {{if ~i18n(data, 'avoid_override') == 1}}
+                            <li><strong>Nessuna sovrascrittura</strong></li>
+                        {{else ~i18n(data, 'avoid_override_fields')}}
+                            <li>Non sovrascrivere <strong>{{:~i18n(data, 'avoid_override_fields').split(',').join(', ')}}</strong></li>
+                        {{/if}}
+                        </ul>
                     </td>
                     <td>
                         {{if ~i18n(data, 'link')}}{{:~i18n(data, 'link')}}{{/if}}
@@ -262,12 +270,16 @@
         };
         var loadReport = function (nodeId) {
             reportsButtons.hide();
+            var reportTitle = $('[data-title="'+nodeId+'"]').text();
+            var reportOverride = $('[data-override="'+nodeId+'"]').html();
             var baseQuery = buildReportQuery(nodeId);
             var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPageReport * limitPagination;
             resultsContainer.html(spinner);
             $.opendataTools.find(paginatedQuery, function (response) {
                 queryPerPageReport[currentPageReport] = paginatedQuery;
                 response.reportNodeId = nodeId;
+                response.reportTitle = reportTitle;
+                response.reportOverride = reportOverride;
                 response.currentPage = currentPageReport;
                 response.prevPage = currentPageReport - 1;
                 response.nextPage = currentPageReport + 1;
