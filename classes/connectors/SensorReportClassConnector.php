@@ -85,8 +85,17 @@ class SensorReportClassConnector extends ClassConnector
             $keyValue = explode('=', $queryPart, 2);
             $key = $this->cleanString($keyValue[0]);
             $value = rawurldecode($keyValue[1]);
-            $parameters[$key] = $value;
+            if (strpos($key, '[]') !== false){
+                $arrayKey = str_replace('[]', '', $key);
+                if (!isset($parameters[$arrayKey])){
+                    $parameters[$arrayKey] = [];
+                }
+                $parameters[$arrayKey][] = $value;
+            }else {
+                $parameters[$key] = $value;
+            }
         }
+
         return $parameters;
     }
 
