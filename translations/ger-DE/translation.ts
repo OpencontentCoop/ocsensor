@@ -182,7 +182,7 @@
         </message>
         <message>
             <source>Scadenza</source>
-            <translation>Stichtag</translation>
+            <translation>Fälligkeit</translation>
         </message>
         <message>
             <source>Autore</source>
@@ -665,11 +665,11 @@
         </message>
         <message>
             <source>in giorni</source>
-            <translation></translation>
+            <translation>in Tagen</translation>
         </message>
         <message>
             <source>Imposta</source>
-            <translation></translation>
+            <translation>Einstellen</translation>
         </message>
         <message>
             <source>Azioni</source>
@@ -681,7 +681,7 @@
         </message>
         <message>
             <source>Assegna</source>
-            <translation>Übermittle</translation>
+            <translation>Zuweisen</translation>
         </message>
         <message>
             <source>Riassegna</source>
@@ -697,19 +697,19 @@
         </message>
         <message>
             <source>Forza chiusura</source>
-            <translation>Sofort beenden</translation>
+            <translation>Beendigung aufheben</translation>
         </message>
         <message>
             <source>Chiudi</source>
-            <translation>Abmelden</translation>
+            <translation>Schließen</translation>
         </message>
         <message>
             <source>Rendi la segnalazione privata</source>
-            <translation>Machen Privat</translation>
+            <translation>Den Bericht als privat schalten</translation>
         </message>
         <message>
             <source>Rendi la segnalazione pubblica</source>
-            <translation>Machen Publik</translation>
+            <translation>Meldung öffentlich machen</translation>
         </message>
         <message>
             <source>Approva</source>
