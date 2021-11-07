@@ -26,7 +26,7 @@ $longitude = $attribute.content.longitude|explode(',')|implode('.')}
         </button>
       </span>
     </div>
-    <div class="list-group" id="input-results" style="position: absolute;z-index: 1;width: 100%;"></div>
+    <div class="list-group" id="input-results" style="position: absolute;z-index: 1;width: 100%;max-height: 197px;overflow-y: auto;"></div>
 </div>
 
 <input type="hidden" name="ezgml_hidden_address_{$attribute.id}" value="{$attribute.content.address}"

@@ -899,7 +899,7 @@
             version: '1.1.0',
             request: 'GetFeature',
             outputFormat: 'application/json',
-            maxFeatures: '5',
+            maxFeatures: '15',
             srsName: 'EPSG:4326',
             startIndex: '0',
             cqlFilter: function(field, query){
@@ -924,7 +924,7 @@
                 version: this.options.version,
                 request: this.options.request,
                 outputFormat: 'application/json',
-                maxFeatures: '5',
+                maxFeatures: '15',
                 typeName: this.options.typeName,
                 cql_filter: this.options.cqlFilter(this.options.cqlFilterField, query),
                 sortBy: this.options.sortBy,

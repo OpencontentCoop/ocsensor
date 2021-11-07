@@ -17,7 +17,7 @@
             </button>
         </span>
     </div>
-    <div class="list-group" id="input-results" style="position: absolute;z-index: 1;width: 100%;"></div>
+    <div class="list-group" id="input-results" style="position: absolute;z-index: 1;width: 100%;max-height: 197px;overflow-y: auto;"></div>
     <input type="hidden" name="address[latitude]" value="" id="latitude" />
     <input type="hidden" name="address[longitude]" value="" id="longitude" />
     <textarea class="ezcca-sensor_post_meta" style="display: none" name="meta"></textarea>
