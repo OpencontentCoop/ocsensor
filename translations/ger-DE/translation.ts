@@ -628,12 +628,36 @@
     <context>
         <name>sensor/post</name>
         <message>
+            <source>Cerca per ID</source>
+            <translation>Suche nach ID</translation>
+        </message>
+        <message>
+            <source>Cerca per autore</source>
+            <translation>Suche nach Verfasser/in</translation>
+        </message>
+        <message>
+            <source>Cerca per oggetto</source>
+            <translation>Suche nach Betreff</translation>
+        </message>
+        <message>
+            <source>Data creazione (inizio)</source>
+            <translation>Erstellungsdatum (Beginn)</translation>
+        </message>
+        <message>
+            <source>Data creazione (fine)</source>
+            <translation>Erstellungsdatum (Ende)</translation>
+        </message>
+        <message>
+            <source>In scadenza</source>
+            <translation>Auslaufend</translation>
+        </message>
+        <message>
             <source>Cerca per area tematica</source>
             <translation>Suche nach Themenbereiche</translation>
         </message>
         <message>
             <source>Cerca per assegnatario</source>
-            <translation>Suche nach Zugewiesen</translation>
+            <translation>Suche nach Beauftragter</translation>
         </message>
         <message>
             <source>Quartiere/Zona</source>

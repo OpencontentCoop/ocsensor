@@ -111,16 +111,16 @@
       <div class="well dashboard-search">
         <form method="get" action="{'sensor/dashboard/post'|ezurl(no)}" class="form">
           <div class="form-group">
-            <label class="" for="searchId">Cerca per ID</label>
-            <input type="text" value="{if is_set($filters.id)}{$filters.id|wash()}{/if}" placeholder="Cerca per ID" name="filters[id]" id="searchId" class="form-control">
+            <label class="" for="searchId">{'Cerca per ID'|i18n('sensor/post')}</label>
+            <input type="text" value="{if is_set($filters.id)}{$filters.id|wash()}{/if}" placeholder="{'Cerca per ID'|i18n('sensor/post')}" name="filters[id]" id="searchId" class="form-control">
           </div>
           <div class="form-group">
-            <label class="" for="searchCreatorId">Cerca per autore</label>
-            <input type="text" value="{if is_set($filters.creator_id)}{$filters.creator_id|wash()}{/if}" placeholder="Cerca per autore" name="filters[creator_id]" id="searchCreatorId" class="form-control">
+            <label class="" for="searchCreatorId">{'Cerca per autore'|i18n('sensor/post')}</label>
+            <input type="text" value="{if is_set($filters.creator_id)}{$filters.creator_id|wash()}{/if}" placeholder="{'Cerca per autore'|i18n('sensor/post')}" name="filters[creator_id]" id="searchCreatorId" class="form-control">
           </div>
           <div class="form-group">
-            <label class="" for="searchSubject">Cerca per oggetto</label>
-            <input type="text" value="{if is_set($filters.subject)}{$filters.subject|wash()}{/if}" placeholder="Cerca per oggetto" name="filters[subject]" id="searchSubject" class="form-control">
+            <label class="" for="searchSubject">{'Cerca per oggetto'|i18n('sensor/post')}</label>
+            <input type="text" value="{if is_set($filters.subject)}{$filters.subject|wash()}{/if}" placeholder="{'Cerca per oggetto'|i18n('sensor/post')}" name="filters[subject]" id="searchSubject" class="form-control">
           </div>
           {def $fake_relation_list = array()}
           {if is_set( $filters.category )}
@@ -130,7 +130,7 @@
           {/if}
           {def $fake_attribute = hash( 'content', hash( 'relation_list', $fake_relation_list ) )}      
           <div class="form-group">
-            <label class="" for="searchCategory">Cerca per area tematica</label>
+            <label class="" for="searchCategory">{'Cerca per area tematica'|i18n('sensor/post')}</label>
             <select data-placeholder="{'Cerca per area tematica'|i18n('sensor/post')}" name="filters[category][]" class="select form-control" id='searchCategory'>
               <option value="">{'Cerca per area tematica'|i18n('sensor/post')}</option>
               {foreach sensor_root_handler().categories.tree as $category}
@@ -139,7 +139,7 @@
             </select>
           </div>          
           <div class="form-group">
-            <label class="" for="searchowner">Cerca per assegnatario</label>
+            <label class="" for="searchowner">{'Cerca per assegnatario'|i18n('sensor/post')}</label>
             <select data-placeholder="{'Cerca per assegnatario'|i18n('sensor/post')}" name="filters[owner]" class="remote-select form-control" id='searchowner' data-value="operators">
               {if is_set( $filters.owner )}
                <option value="{$filters.owner}" selected="selected">{include uri='design:content/view/sensor_person.tpl' sensor_person=fetch( content, object, hash(object_id, $filters.owner) )}</option>
@@ -149,21 +149,21 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="from" class="">Data creazione (inizio)</label>
-            <input type="text" class="form-control from_picker" name="filters[creation_range][from]" placeholder="Data creazione (inizio)" value="{if is_set($filters.creation_range.from)}{$filters.creation_range.from|wash()}{/if}" />
+            <label for="from" class="">{'Data creazione (inizio)'|i18n('sensor/post')}</label>
+            <input type="text" class="form-control from_picker" name="filters[creation_range][from]" placeholder="{'Data creazione (inizio)'|i18n('sensor/post')}" value="{if is_set($filters.creation_range.from)}{$filters.creation_range.from|wash()}{/if}" />
           </div>
           <div class="form-group">
-            <label for="to" class="">Data creazione (fine)</label>
-            <input class="form-control to_picker" type="text" name="filters[creation_range][to]" placeholder="Data creazione (fine)" value="{if is_set($filters.creation_range.to)}{$filters.creation_range.to|wash()}{/if}" />
+            <label for="to" class="">{'Data creazione (fine)'|i18n('sensor/post')}</label>
+            <input class="form-control to_picker" type="text" name="filters[creation_range][to]" placeholder="{'Data creazione (fine)'|i18n('sensor/post')}" value="{if is_set($filters.creation_range.to)}{$filters.creation_range.to|wash()}{/if}" />
           </div>
-          <button class="btn btn-info" type="submit"><span class="fa fa-search"></span> Cerca</button>
-          <a class="btn btn-danger pull-right" title="Reset" href="{'sensor/dashboard/post'|ezurl(no)}"><span class="fa fa-close"></span> Annulla</a>      
+          <button class="btn btn-info" type="submit"><span class="fa fa-search"></span> {'Cerca'|i18n('sensor/config')}</button>
+          <a class="btn btn-danger pull-right" title="Reset" href="{'sensor/dashboard/post'|ezurl(no)}"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/add')}</a>
         </form>
       </div>
 
       {if $expiring_items|count()}
       <aside class="widget" style="height: 570px;overflow-y: auto">
-        <h4 class="section_header">In scadenza</h4>
+        <h4 class="section_header">{'In scadenza'|i18n('sensor/post')}</h4>
           <ul class="media-list">
           {foreach $expiring_items as $item}              
             <li class="media">

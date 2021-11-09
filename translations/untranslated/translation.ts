@@ -871,6 +871,30 @@
 <context>
     <name>sensor/post</name>
     <message>
+        <source>Cerca per ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cerca per autore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cerca per oggetto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data creazione (inizio)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Data creazione (fine)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In scadenza</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Cerca per area tematica</source>
         <translation type="unfinished"></translation>
     </message>
