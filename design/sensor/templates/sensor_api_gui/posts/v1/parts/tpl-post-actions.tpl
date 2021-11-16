@@ -69,7 +69,7 @@
 {{/if}}
 </script>
 <script id="tpl-tree-option" type="text/x-jsrender">
-<option value="{{:id}}" style="padding-left:calc(10px*{{:level}});{{if level == 0}}font-weight: bold;{{/if}}">
+<option value="{{:id}}" {{if !is_enabled}}disabled="disabled"{{/if}} style="padding-left:calc(10px*{{:level}});{{if level == 0}}font-weight: bold;{{/if}}">
    {{:name}} {{if type == 'sensor_category' && group}}({{:group}}){{/if}}
 </option>
 {{for children}}

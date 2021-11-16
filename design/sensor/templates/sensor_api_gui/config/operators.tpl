@@ -70,22 +70,21 @@
                                 <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-bell"></i> <span class="caret"></span>
                                 </button>
-                                <ul class="notification-dropdown-menu dropdown-menu">
-                                </ul>
+                                <ul class="notification-dropdown-menu dropdown-menu"></ul>
                             </div>
                         </div>
                     </td>
                     <td width="1" class="text-center">
-                        <a class="btn btn-link btn-xs text-black" href="{{:baseUrl}}/social_user/setting/{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
+                        <a class="btn btn-link btn-xs text-black" data-user_access_edit="{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
-                            <a href="#" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
+                            <a href="#" data-edit="{{:metadata.id}}"><i class="fa fa-pencil"></i></a>
                         {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canRemove}}
-                            <a href="#" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
+                            <a href="#" data-remove="{{:metadata.id}}"><i class="fa fa-trash"></i></a>
                         {{/if}}
                     </td>
                 </tr>
@@ -331,7 +330,24 @@
                         });
                         e.preventDefault();
                     });
-
+                    renderData.find('[data-user_access_edit]').on('click', function(e){
+                        $('#item').opendataForm({
+                            user: $(this).data('user_access_edit')
+                        },{
+                            connector: 'operator-settings',
+                            onBeforeCreate: function(){
+                                $('#modal').modal('show');
+                                setTimeout(function() {
+                                    $('#modal .leaflet-container').trigger('click');
+                                }, 1000);
+                            },
+                            onSuccess: function () {
+                                $('#modal').modal('hide');
+                                loadContents();
+                            }
+                        });
+                        e.preventDefault();
+                    });
                     renderData.find('.fa-user').each(function () {
                         var self = $(this);
                         var id = $(this).data('user');

@@ -9,6 +9,7 @@
             'currentUserId': 0,
             'areas': '',
             'categories': '',
+            'operators': '',
             'settings': '',
             'alertContainerSelector': 'header',
             'spinnerTpl': '#tpl-spinner',
@@ -204,6 +205,7 @@
                     $.each(post.operatorsTree.children, function () {
                         var selected = parseInt(post.currentOwnerUserId) === parseInt(this.id);
                         var newOption = new Option(this.name, this.id, selected, selected);
+                        newOption.disabled = !this.is_enabled;
                         if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
                             userAssignSelect.append(newOption);
                         }
