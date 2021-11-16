@@ -48,7 +48,6 @@ class SensorReport
                 }
             }
             if (isset($itemDataMap['data']) && $store) {
-
                 if (isset($itemDataMap['images'])) {
                     $images = [];
                     $imageUrlList = self::generateItemImages($data);
@@ -64,6 +63,9 @@ class SensorReport
                     if (!empty($images)) {
                         $itemDataMap['images']->fromString(implode('|', $images));
                         $itemDataMap['images']->store();
+                        foreach ($images as $image){
+                            @unlink($image);
+                        }
                     }
                 }
 
@@ -75,7 +77,7 @@ class SensorReport
         return $data;
     }
 
-    private static function generateItemImages(array $data)
+    public static function generateItemImages(array $data)
     {
         $images = [];
         foreach ($data as $item){
@@ -87,8 +89,8 @@ class SensorReport
             ){
                 $postData = json_encode([
                     'async' => true,
-                    'infile' => json_encode($item['config']),
-                    'scale' => '1',
+                    'infile' => $item['config'],
+                    'width' => '800',
                     'constr' => $item['type'] == 'highcharts' ? 'Chart' : 'StockChart'
                 ]);
                 $url = eZINI::instance('ocsensor.ini')->variable('HighchartsExport', 'Uri');
@@ -111,9 +113,13 @@ class SensorReport
                 $response = curl_exec($ch);
                 if ($response) {
                     $info = curl_getinfo($ch);
-                    $link = $url . '/' . substr($response, $info['header_size']);
-
-                    $images[] = $link;
+                    $responseData = substr($response, $info['header_size']);
+                    if (strpos($responseData, 'error') !== false){
+                        eZDebug::writeError($responseData, __METHOD__);
+                    }else {
+                        $link = $url . '/' . $responseData;
+                        $images[] = $link;
+                    }
                 }else{
                     $errorMessage = curl_error($ch);
                     eZDebug::writeError($errorMessage, __METHOD__);
