@@ -153,9 +153,11 @@
             <div class="tab-pane active" id="panel-{$current.identifier}">
                 {include uri=concat('design:sensor_api_gui/charts/',$engine, '.tpl') stat=$current}
                 {if fetch('user', 'has_access_to', hash('module','*','function','*'))}
-                    <div class="input-group">
-                        <input class="form-control form-control-sm" type="text" id="link" />
-                        <a id="linkButton" href="#" class="input-group-addon btn-info">Copia link</a>
+                    <div id="editor-helper">
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" type="text" id="link" />
+                            <a id="linkButton" href="#" class="input-group-addon btn-info">Copia link</a>
+                        </div>
                     </div>
                 {/if}
             </div>

@@ -10,6 +10,14 @@
                 $.getJSON('/api/sensor/stats/' + chart.data('identifier'), params, function (response) {
                     $.each(response, function () {
                         Highcharts.stockChart('chart', this.config);
+                        if (this.hasOwnProperty('filterLegend') && this.filterLegend.hasOwnProperty('groups')){
+                            var editorHelper = $('#editor-helper');
+                            var helpList = $('<ul class="list-group" style="margin-top: 20px"></ul>').appendTo(editorHelper);
+                            helpList.append('<li class="list-group-item" style="font-weight: bold">Lista degli id dei gruppi e dei macrogruppi per la preselezione <code>&group[]=...&group[]=...<id></code></li>');
+                            $.each(this.filterLegend.groups, function (){
+                                helpList.append('<li class="list-group-item"><span class="pull-right" style="font-weight: bold">'+ this.id+ '</span> ' + this.name+'</li>');
+                            })
+                        }
                     })
                 });
             }
