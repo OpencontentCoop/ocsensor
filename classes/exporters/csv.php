@@ -73,6 +73,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'resolution_time' => ezpI18n::tr('sensor/export', 'Data risoluzione'),
             'resolution_diff' => ezpI18n::tr('sensor/export', 'Tempo di risoluzione'),
             'title' => ezpI18n::tr('sensor/export', 'Titolo'),
+            'description' => ezpI18n::tr('sensor/export', 'Descrizione'),
             'author' => ezpI18n::tr('sensor/export', 'Autore'),
 //            'fiscal_code' => ezpI18n::tr('sensor/export', 'Codice Fiscale'),
             'category' => ezpI18n::tr('sensor/export', 'Categoria'),
@@ -169,6 +170,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'resolution_time' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
                 'resolution_diff' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
                 'title' => $post->subject,
+                'description' => preg_replace("/[\r\n]+/", "\n", $post->description),
                 'author' => $post->author->name,
 //                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
@@ -185,6 +187,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){
                 $item['title'] = '***';
+                $item['description'] = '***';
                 $item['author'] = '***';
                 $item['response'] = '***';
             }
