@@ -112,7 +112,7 @@ $(document).ready(function () {ldelim}
     {rdelim});
     {/foreach}
     var operators = '{$operators|wash(javascript)}';
-    var groups = '{$groups|wash(javascript)}';
+    var groups = '{$grouped_groups|wash(javascript)}';
 {literal}
     $.views.helpers($.opendataTools.helpers);
     var form = $('#posts-search form');
@@ -121,7 +121,7 @@ $(document).ready(function () {ldelim}
     var selectType = form.find('select[name="type"]');
     var selectOwner = form.find('select[name="owner"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)));
     var selectGroup = form.find('select[name="owner_group"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(groups)));
-    var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)))
+    var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)));
     var selectStatus = form.find('select[name="status"]');
     form.find("select").select2({
         allowClear: true,
@@ -214,7 +214,7 @@ $(document).ready(function () {ldelim}
     };
 
     var geoRecursiveFind = function (queryId, cb, context) {
-        var query = buildQueryFilters() + ' sort [published=>desc]';
+        var query = buildQueryFilters(true) + ' sort [published=>desc]';
         var features = [];
         var getSubRequest = function (query) {
             geoFind(query, function (data) {
@@ -242,7 +242,7 @@ $(document).ready(function () {ldelim}
         getSubRequest(query);
     };
 
-    var buildQueryFilters = function () {
+    var buildQueryFilters = function (onlyActive) {
         var queryData = [];
         query = [];
         var queryString = form.find('[name="query"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
@@ -312,7 +312,11 @@ $(document).ready(function () {ldelim}
             var searchStatus = selectStatus.find(':selected').val();
             if (searchStatus) {
                 query.push("status in [" + searchStatus + "]");
+            }else if (onlyActive) {
+                query.push("status in [open,pending]");
             }
+        }else if (onlyActive) {
+            query.push("status in [open,pending]");
         }
 
         location.hash = $.param(queryData);

@@ -22,9 +22,47 @@ if (!is_numeric($postId)) {
     $tpl->setVariable('types', $repository->getPostTypeService()->loadPostTypes());
 
     $operators = $isOperator ? $repository->getOperatorsTree() : [];
-    $groups = $isOperator ? $repository->getGroupsTree() : [];
     $tpl->setVariable('operators', json_encode($operators));
+
+    $groupTree = $repository->getGroupsTree();
+    $tree = [];
+    $groupTagCounter = [];
+    foreach ($groupTree->attribute('children') as $groupTreeItem) {
+        $groupTag = $groupTreeItem->attribute('group');
+        $groupTreeItem = $groupTreeItem->toArray();
+        if (empty($groupTag)) {
+            $groupTreeItem['is_tag_group'] = false;
+            $tree[$groupTreeItem['id']] = $groupTreeItem;
+        }else{
+            if (isset($groupTagCounter[$groupTag])){
+                $groupTagId = $groupTagCounter[$groupTag];
+            }else{
+                $groupTagId = $groupTagCounter[$groupTag] = count($groupTagCounter) + 1;
+            }
+            $groupTreeItem['level'] = 1;
+            if (isset($tree[$groupTagId])){
+                $tree[$groupTagId]['children'][] = $groupTreeItem;
+            }else{
+                $tree[$groupTagId] = [
+                    'name' => $groupTag,
+                    'id' => $groupTagId,
+                    'is_tag_group' => true,
+                    'level' => 0,
+                    'children' => [$groupTreeItem]
+                ];
+            }
+        }
+    }
+    foreach ($tree as $index => $group){
+        if ($group['is_tag_group']){
+            $tree[$index]['id'] = implode(',', array_column($group['children'], 'id'));
+        }
+    }
+
+    $groups = $isOperator ? $groupTree : [];
     $tpl->setVariable('groups', json_encode($groups));
+    $groupedGroups = $isOperator ? ['children' => array_values($tree)] : [];
+    $tpl->setVariable('grouped_groups', json_encode($groupedGroups));
 
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');
