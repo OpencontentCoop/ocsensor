@@ -299,7 +299,7 @@ $(document).ready(function () {ldelim}
         capabilities: true,
         currentUserInParticipants: true
     };
-
+    var bookmarkedIdList = [];
     var preferencePrefix = participantFilters.data('participant_filters');
     participantFilters.find('button').each(function () {
         var button = $(this);
@@ -626,12 +626,72 @@ $(document).ready(function () {ldelim}
                 }else{
                     post.lastTimelineItem = false;
                 }
+
+                post.isSpecial = bookmarkedIdList.indexOf(this.id) > -1;
             });
             var renderData = $(template.render(response));
             viewContainer.html(renderData);
 
-            viewContainer.find('tr[data-href]').on('click', function (e) {
-                document.location = $(this).data('href');
+            // viewContainer.find('tr[data-href]').on('click', function (e) {
+            //     document.location = $(this).data('href');
+            // });
+
+            viewContainer.find('[data-star]').on('click', function (e){
+                var self = $(this);
+                var id = self.data('star');
+                var csrfToken;
+                var tokenNode = document.getElementById('ezxform_token_js');
+                if ( tokenNode ){
+                    csrfToken = tokenNode.getAttribute('title');
+                }
+                if (self.hasClass('fa-star-o')){
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/sensor_gui/special/'+id+'/1',
+                        headers: {'X-CSRF-TOKEN': csrfToken},
+                        success: function (response,textStatus,jqXHR) {
+                            if(response.error_message || response.error_code){
+                                console.log(response.error_message);
+                            }else {
+                                self.removeClass('fa-star-o text-muted');
+                                self.addClass('fa-star text-primary');
+                                bookmarkedIdList.push(id);
+                            }
+                        },
+                        error: function (jqXHR) {
+                            var error = {
+                                error_code: jqXHR.status,
+                                error_message: jqXHR.statusText
+                            };
+                            console.log(error.error_message);
+                        }
+                    });
+                }else{
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/sensor_gui/special/'+id+'/0',
+                        headers: {'X-CSRF-TOKEN': csrfToken},
+                        success: function (response,textStatus,jqXHR) {
+                            if(response.error_message || response.error_code){
+                                console.log(response.error_message);
+                            }else {
+                                self.addClass('fa-star-o text-muted');
+                                self.removeClass('fa-star text-primary');
+                                var index = bookmarkedIdList.indexOf(id);
+                                if (index > -1) {
+                                    bookmarkedIdList.splice(index, 1);
+                                }
+                            }
+                        },
+                        error: function (jqXHR) {
+                            var error = {
+                                error_code: jqXHR.status,
+                                error_message: jqXHR.statusText
+                            };
+                            console.log(error.error_message);
+                        }
+                    });
+                }
             });
 
             viewContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
@@ -689,7 +749,11 @@ $(document).ready(function () {ldelim}
         e.preventDefault();
     });
 
-    reset();
+    $.get('/api/sensor_gui/specials', function (response){
+        bookmarkedIdList = response;
+        reset();
+    })
+
 
 {/literal}
 {rdelim});

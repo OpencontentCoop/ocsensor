@@ -22,7 +22,7 @@
 	<table class="table table-striped table-hover table-condensed"{{if pageCount <= 1}} style="margin-top:40px"{{/if}}>
         <thead>
             <tr>
-                <th></th>
+                <th colspan="2"></th>
                 <th>ID</th>
                 <th>Stato</th>
                 <th>Autore e oggetto</th>
@@ -52,6 +52,7 @@
                       <div><i class="fa fa-exclamation-triangle faa-tada animated"></i></div>
                     {{/if}}
                 </td>
+                <td><i style="font-size:1.2em" data-star="{{:id}}" class="fa fa-star{{if isSpecial}} text-primary{{else}}-o text-muted{{/if}}"></i></td>
                 <td><a href="{{:accessPath}}/sensor/posts/{{:id}}">{{:id}}</a></td>
                 <td style="white-space:nowrap">
                     {{if workflowStatus.identifier == 'waiting'}}Da leggere

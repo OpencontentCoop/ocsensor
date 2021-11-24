@@ -182,6 +182,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-get'
             ), 1),
 
+            'sensorGuiApiBookmarkedPostsLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/specials',
+                'SensorGuiApiController',
+                'loadSpecialIdList',
+                array(),
+                'http-get'
+            ), 1),
+
             'sensorGuiApiBookmark' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/special/:Id/:Enable',
                 'SensorGuiApiController',

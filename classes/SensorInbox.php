@@ -215,14 +215,16 @@ class SensorInbox
         ];
     }
 
-    private function fetchSpecialIdListForUser($userID, $offset = false, $limit = false)
+    public function fetchSpecialIdListForUser($userID, $offset = false, $limit = false)
     {
+        $userID = (int)$userID;
         $query = "SELECT ezcontentobject_tree.contentobject_id as id 
                     FROM ezcontentobject_tree INNER JOIN ezcontentbrowsebookmark ON (ezcontentobject_tree.node_id = ezcontentbrowsebookmark.node_id)
                     WHERE ezcontentbrowsebookmark.user_id = $userID";
         $list = eZDB::instance()->arrayQuery($query);
 
-        return array_column($list, 'id');
+        $list = array_column($list, 'id');
+        return array_map('intval', $list);
     }
 
     private function serializeSearchResult($context, SearchResults $results, $specialIdList)

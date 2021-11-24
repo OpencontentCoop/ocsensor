@@ -706,6 +706,13 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    public function doLoadSpecialIdList()
+    {
+        $result = new ezpRestMvcResult();
+        $result->variables = (new SensorInbox($this->repository))->fetchSpecialIdListForUser($this->repository->getCurrentUser()->id);
+        return $result;
+    }
+
     public function doLoadSpecial()
     {
         try {
