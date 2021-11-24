@@ -10,6 +10,11 @@
 {/if}
 {ezscript_require($requires)}
 
+{def $exportServer = false()}
+{if ezini('HighchartsExport', 'Server', 'ocsensor.ini')|eq('enabled')}
+    {set $exportServer = ezini('HighchartsExport', 'Uri', 'ocsensor.ini')}
+{/if}
+
 {literal}<script>
 const timezone = new Date().getTimezoneOffset()
 Highcharts.setOptions({
@@ -41,6 +46,7 @@ var getExportingConfig = function (width, height){
     return {
         sourceWidth: 1500,
         sourceHeight: 800,
+        {/literal}{if $exportServer}url: "{$exportServer|wash()}",{/if}{literal}
         buttons: {
             contextButton: {
                 menuItems: [{

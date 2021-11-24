@@ -3,13 +3,19 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>{attribute_view_gui attribute=$report|attribute('title')}</title>
     <meta http-equiv="Content-language" content="it-IT">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     {literal}
     <style type="text/css">
-        @page { margin: 0 }
-        body { margin: 0 }
+        @page {
+            margin: 0;
+            size: A4 landscape;
+        }
+        body {
+            margin: 0;
+            counter-reset: section;
+        }
         .sheet {
             margin: 0;
             overflow: hidden;
@@ -66,9 +72,32 @@
         section {
             page-break-after: always;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .slide-content{
-            text-align: center;
+        section:after {
+            counter-increment: section;
+            content: counter(section);
+            white-space: nowrap;
+            z-index: 20;
+            position: absolute;
+            bottom: 8pt;
+            right: 12pt;
+            width: 100%;
+            text-align: right;
+            font-size: 12pt;
+        }
+        section.mainpage:after{
+            visibility: hidden;
+        }
+        .images{
+            flex-grow: 1;
+            display: flex;
+        }
+        .image{
+            display: flex;
+            align-items: center;
         }
         .object-center {
             margin: 0 auto;
@@ -80,29 +109,22 @@
         img{
             max-width: 100%;
         }
-        .image-container{
-            width: 100%;
-        }
-        .image-container:before{
-            content: " ";
-            display: table;
-        }
-        .image-column{
-            width: 50%;
-            float: left;
-        }
         .text{
             font-size: .8em;
+            text-align: center;
         }
         ul, ol, dl{
             text-align: left;
+        }
+        #debug{
+            display: none;
         }
     </style>
     {/literal}
 </head>
 <body class="A4 landscape">
 <div class="slides">
-    <section class="sheet padding-10mm">
+    <section class="sheet padding-10mm mainpage">
         <img src="{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90">
         <h3>{attribute_view_gui attribute=$report|attribute('title')}</h3>
         {attribute_view_gui attribute=$report|attribute('intro')}
@@ -110,36 +132,23 @@
     {foreach $items as $index => $item}
         <section class="sheet padding-10mm">
             <h4>{attribute_view_gui attribute=$item|attribute('title')}</h4>
-            <div class="slide-content">
-                {if $item|has_attribute('text')}
-                    <div class="text">
-                        {attribute_view_gui attribute=$item|attribute('text')}
-                    </div>
-                {/if}
-                {if $item|has_attribute('images')}
+            {if $item|has_attribute('text')}
+                <div class="text">
+                    {attribute_view_gui attribute=$item|attribute('text')}
+                </div>
+            {/if}
+            {if $item|has_attribute('images')}
+                <div class="images">
                     {def $attribute = $item|attribute('images')}
                     {def $images = $item|attribute('images').content}
-                    {if count($images)|eq(1)}
-                        {foreach $images as $file}
-                            <p style="text-align: center">
-                                <img alt="{$item.name|wash()}" src="{concat( 'sensor/report/',$report_id,'?image=', $attribute.contentobject_id, '-', $attribute.id,'-', $attribute.version , '-', $file.filename )|ezurl(no)}" />
-                            </p>
-                        {/foreach}
-                    {else}
-                        <div class="image-container">
-                            {foreach $images as $file}
-                            <div class="image-column">
-                                <p style="text-align: center">
-                                    <img alt="{$item.name|wash()}" src="{concat( 'sensor/report/',$report_id,'?image=', $attribute.contentobject_id, '-', $attribute.id,'-', $attribute.version , '-', $file.filename )|ezurl(no)}" />
-                                </p>
-                            </div>
-                            {/foreach}
-                        </div>
-                    {/if}
-
-                    {undef $attribute $images}
-                {/if}
-            </div>
+                    {foreach $images as $file}
+                    <div class="image">
+                        <img alt="{$item.name|wash()}" src="{concat( 'sensor/report/',$report_id,'?image=', $attribute.contentobject_id, '-', $attribute.id,'-', $attribute.version , '-', $file.filename )|ezurl(no)}" />
+                    </div>
+                    {/foreach}
+                </div>
+                {undef $attribute $images}
+            {/if}
         </section>
     {/foreach}
 </div>

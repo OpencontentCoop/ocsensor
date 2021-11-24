@@ -87,10 +87,18 @@ class SensorReport
                 && eZINI::instance('ocsensor.ini')->hasVariable('HighchartsExport', 'Server')
                 && eZINI::instance('ocsensor.ini')->variable('HighchartsExport', 'Server') == 'enabled'
             ){
+                $chartConfig = $item['config'];
+                $chartConfig['exporting'] = [
+                    'sourceWidth' => 1500,
+                    'sourceHeight' => 800,
+                ];
+                if (isset($chartConfig['title']['text'])){
+                    $chartConfig['title']['text'] = '';
+                }
                 $postData = json_encode([
                     'async' => true,
-                    'infile' => $item['config'],
-                    'width' => '800',
+                    'infile' => $chartConfig,
+                    'type' => 'png',
                     'constr' => $item['type'] == 'highcharts' ? 'Chart' : 'StockChart'
                 ]);
                 $url = eZINI::instance('ocsensor.ini')->variable('HighchartsExport', 'Uri');

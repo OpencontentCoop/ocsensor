@@ -23,14 +23,23 @@ $script->setUseDebugAccumulators(true);
 
 $cli = eZCLI::instance();
 
-$conditions = ['contentclass_id' => eZContentClass::classIDByIdentifier('sensor_report_item')];
-/** @var eZContentObject[] $objects */
-$objects = eZPersistentObject::fetchObjectList(
-    eZContentObject::definition(),
-    null,
-    $conditions,
-    ['published' => 'desc']
-);
+$selected = (int)$options['id'];
+if ($selected > 0){
+    $objects = [];
+    $object = eZContentObject::fetch($selected);
+    if ($object instanceof eZContentObject){
+        $objects = [$object];
+    }
+}else {
+    $conditions = ['contentclass_id' => eZContentClass::classIDByIdentifier('sensor_report_item')];
+    /** @var eZContentObject[] $objects */
+    $objects = eZPersistentObject::fetchObjectList(
+        eZContentObject::definition(),
+        null,
+        $conditions,
+        ['published' => 'desc']
+    );
+}
 $objectsCount = count($objects);
 $cli->warning($objectsCount);
 
