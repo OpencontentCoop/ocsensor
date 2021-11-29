@@ -158,6 +158,9 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 $post->latestOwner->name :
                 implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_USER));
 
+            $description = preg_replace("/[\r\n]+/", "\n", $post->description);
+            $description = html_entity_decode($description);
+
             $item = array(
                 'id' => $post->id,
                 'privacy' => $post->privacy->name,
@@ -170,7 +173,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'resolution_time' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->resolutionDateTime->format('d/m/Y H:i') : '',
                 'resolution_diff' => $post->resolutionInfo && $post->resolutionInfo->resolutionDateTime instanceof DateTime ? $post->resolutionInfo->text : '',
                 'title' => $post->subject,
-                'description' => preg_replace("/[\r\n]+/", "\n", $post->description),
+                'description' => $description,
                 'author' => $post->author->name,
 //                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
