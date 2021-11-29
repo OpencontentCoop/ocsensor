@@ -5,6 +5,8 @@ use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
 class OperatorSettingsConnector extends AbstractBaseConnector
 {
+    use CustomStatAccessTrait;
+
     private static $isLoaded;
 
     private $language;
@@ -15,9 +17,9 @@ class OperatorSettingsConnector extends AbstractBaseConnector
     private $user;
 
     /**
-     * @var SocialUser
+     * @var \Opencontent\Sensor\Api\Values\User
      */
-    private $socialUser;
+    private $sensorUser;
 
     /**
      * @var OpenPaSensorRepository
@@ -44,19 +46,9 @@ class OperatorSettingsConnector extends AbstractBaseConnector
             if ($this->user->contentObject()->attribute('class_identifier') != $this->repository->getOperatorContentClass()->attribute('identifier')) {
                 throw new Exception('User is not an operator');
             }
-            $this->socialUser = SocialUser::instance($this->user);
+            $this->sensorUser = $this->repository->getUserService()->loadFromEzUser($this->user);
             self::$isLoaded = true;
         }
-    }
-
-    protected function getData()
-    {
-        return [
-            'block_mode' => $this->socialUser->hasBlockMode(),
-            'sensor_deny_comment' => $this->socialUser->hasDenyCommentMode(),
-            'sensor_can_behalf_of' => $this->socialUser->hasCanBehalfOfMode(),
-            'moderate' => $this->socialUser->hasModerationMode(),
-        ];
     }
 
     protected function getSchema()
@@ -69,7 +61,18 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'sensor_deny_comment' => ['type' => 'boolean'],
                 'sensor_can_behalf_of' => ['type' => 'boolean'],
                 'moderate' => ['type' => 'boolean'],
-            ]
+                'restrict_mode' => ['type' => 'boolean'],
+                'stats' => [
+                    'type' => 'object',
+                    'title' => 'Accesso individuale alle statistiche',
+                    'properties' => [
+                        'stat' => [
+                            'type' => 'array',
+                            'enum' => array_keys($this->getStats()),
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -81,8 +84,8 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                     "class" => 'opendata-connector',
                     "action" => $this->getHelper()->getServiceUrl('action', $this->getHelper()->getParameters()),
                     "method" => "post",
-                    "enctype" => "multipart/form-data"
-                ]
+                    "enctype" => "multipart/form-data",
+                ],
             ],
             'helper' => 'Username: ' . $this->user->Login . ' &middot; Email: ' . $this->user->Email,
             'hideInitValidationError' => true,
@@ -91,7 +94,18 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'sensor_deny_comment' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di commentare'],
                 'sensor_can_behalf_of' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di inserire segnalazioni per conto di altri'],
                 'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
-            ]
+                'restrict_mode' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di visualizzare le segnalazioni in cui non è coinvolto (incluse le statistiche)'],
+                'stats' => [
+                    'fields' => [
+                        'stat' => [
+                            'hideNone' => true,
+                            'multiple' => true,
+                            'type' => 'checkbox',
+                            'optionLabels' => array_values($this->getStats()),
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -99,7 +113,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
     {
         return [
             'parent' => 'bootstrap-edit',
-            'locale' => 'it_IT'
+            'locale' => 'it_IT',
         ];
     }
 
@@ -110,31 +124,44 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $denyComment = $data['sensor_deny_comment'] === 'true';
         $cabBehalf = $data['sensor_can_behalf_of'] === 'true';
         $moderate = $data['moderate'] === 'true';
+        $restrictMode = $data['restrict_mode'] === 'true';
+        $stats = isset($data['stats']['stat']) ? $data['stats']['stat'] : [];
 
-        $changeEnabling = $blockMode !== $this->socialUser->hasBlockMode();
-        $this->socialUser->setBlockMode($blockMode);
-        $this->socialUser->setDenyCommentMode($denyComment);
-        $this->socialUser->setCanBehalfOfMode($cabBehalf);
-        $this->socialUser->setModerationMode($moderate);
+        $changeEnabling = $blockMode !== $this->sensorUser->isEnabled;
+        $this->repository->getUserService()->setBlockMode($this->sensorUser, $blockMode);
+        $this->repository->getUserService()->setCommentMode($this->sensorUser, !$denyComment);
+        $this->repository->getUserService()->setModerationMode($this->sensorUser, $moderate);
+        $this->repository->getUserService()->setBehalfOfMode($this->sensorUser, $cabBehalf);
+        $this->repository->getUserService()->setRestrictMode($this->sensorUser, $restrictMode);
+
+        $this->grantStatData($this->sensorUser->id, $stats);
 
         if ($changeEnabling) {
             TreeNode::clearCache($this->repository->getOperatorsRootNode()->attribute('node_id'));
             TreeNode::clearCache($this->repository->getGroupsRootNode()->attribute('node_id'));
         }
-
-        $userSettings = [
-            'block_mode' => $this->socialUser->hasBlockMode(),
-            'sensor_deny_comment' => $this->socialUser->hasDenyCommentMode(),
-            'sensor_can_behalf_of' => $this->socialUser->hasCanBehalfOfMode(),
-            'moderate' => $this->socialUser->hasModerationMode(),
-        ];
-
-        $this->repository->getLogger()->info("Modified info for user {$this->user->Login} #" . $this->user->id(), $userSettings);
+        $userSettings = $this->getData();
+        $this->sensorUser = $this->repository->getUserService()->loadFromEzUser($this->user);
+        $this->repository->getLogger()->info("Modified info for operator {$this->user->Login} #" . $this->user->id(), $userSettings);
 
         return [
             'message' => 'success',
             'method' => 'update',
-            'content' => $userSettings
+            'content' => $userSettings,
+        ];
+    }
+
+    protected function getData()
+    {
+        return [
+            'block_mode' => $this->sensorUser->isEnabled === false,
+            'sensor_deny_comment' => $this->sensorUser->commentMode === false,
+            'sensor_can_behalf_of' => $this->sensorUser->behalfOfMode,
+            'moderate' => $this->sensorUser->moderationMode,
+            'restrict_mode' => $this->sensorUser->restrictMode,
+            'stats' => [
+                'stat' => $this->getStatData($this->sensorUser->id),
+            ],
         ];
     }
 

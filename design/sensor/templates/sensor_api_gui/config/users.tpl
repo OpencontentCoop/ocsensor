@@ -1,4 +1,14 @@
 <form class="row form">
+    {if count($user_groups)}
+        <div class="col-xs-12 col-md-4">
+            <select class="form-control" name="user_group">
+                <option selected="selected" value="{$user_parent_node.node_id}">Filtra per gruppo di utenti</option>
+                {foreach $user_groups as $user_group}
+                    <option value="{$user_group.node_id}">{$user_group.name|wash()}</option>
+                {/foreach}
+            </select>
+        </div>
+    {/if}
     <div class="col-xs-12 col-md-6">
         <div class="input-group">
             <input type="text" class="form-control" data-search="q" placeholder="{'Cerca'|i18n('sensor/config')}">
@@ -13,7 +23,7 @@
         </div>
     </div>
     {if fetch( 'user', 'has_access_to', hash( 'module', 'user', 'function', 'activation' ) )}
-    <div class="col-xs-12 col-md-6 text-right">
+    <div class="col-xs-12 col-md-2 text-right">
         <a class="btn btn-sm btn-primary" href="{'user/unactivated'|ezurl(no)}">{'Unactivated users'|i18n('design/admin/parts/user/menu')}</a>
     </div>
     {/if}
@@ -70,7 +80,7 @@
                         </div>
                     </td>
                     <td width="1">
-                        <a class="btn btn-link btn-xs text-black" href="{{:baseUrl}}/social_user/setting/{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
+                        <a class="btn btn-link btn-xs text-black" data-user_access_edit="{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -195,11 +205,16 @@
                     if (classes.length) {
                         classQuery = 'classes [' + classes + ']';
                     }
-                    var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
+                    var query = classQuery;
                     var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
                     if (searchText.length > 0) {
                         query += " and q = '\"" + searchText + "\"'";
                     }
+                    var subtreeSelect = form.find('[name="user_group"]');
+                    if (subtreeSelect.length > 0){
+                        subtree = subtreeSelect.val();
+                    }
+                    query += ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']'
                     query += ' sort [last_name=>asc,name=>asc]';
 
                     return query;
@@ -300,6 +315,25 @@
                             var user = $(this).data('user');
                             var menu = $(this).find('.notification-dropdown-menu');
                             buildNotificationMenu(user, menu);
+                        });
+
+                        renderData.find('[data-user_access_edit]').on('click', function(e){
+                            $('#item').opendataForm({
+                                user: $(this).data('user_access_edit')
+                            },{
+                                connector: 'user-settings',
+                                onBeforeCreate: function(){
+                                    $('#modal').modal('show');
+                                    setTimeout(function() {
+                                        $('#modal .leaflet-container').trigger('click');
+                                    }, 1000);
+                                },
+                                onSuccess: function () {
+                                    $('#modal').modal('hide');
+                                    loadContents();
+                                }
+                            });
+                            e.preventDefault();
                         });
 
                         renderData.find('.fa-user').each(function () {

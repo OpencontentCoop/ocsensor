@@ -1,156 +1,169 @@
 <?php
-$Module = array('name' => 'Sensor');
+$Module = ['name' => 'Sensor'];
 
-$ViewList = array();
-$ViewList['home'] = array(
+$ViewList = [];
+$ViewList['home'] = [
     'script' => 'home.php',
-    'functions' => array('use')
-);
+    'functions' => ['use'],
+];
 
-$ViewList['info'] = array(
+$ViewList['info'] = [
     'script' => 'info.php',
-    'params' => array('Page'),
-    'functions' => array('use')
-);
+    'params' => ['Page'],
+    'functions' => ['use'],
+];
 
-$ViewList['posts'] = array(
+$ViewList['posts'] = [
     'script' => 'posts.php',
-    'params' => array('ID', 'Offset'),
-    'functions' => array('use')
-);
+    'params' => ['ID', 'Offset'],
+    'functions' => ['use'],
+];
 
-$ViewList['add'] = array(
+$ViewList['add'] = [
     'script' => 'add.php',
-    'params' => array(),
-    'functions' => array('use')
-);
+    'params' => [],
+    'functions' => ['use'],
+];
 
-$ViewList['copy'] = array(
+$ViewList['copy'] = [
     'script' => 'copy.php',
-    'params' => array('Id'),
-    'functions' => array('use')
-);
+    'params' => ['Id'],
+    'functions' => ['use'],
+];
 
-$ViewList['edit'] = array(
+$ViewList['edit'] = [
     'script' => 'edit.php',
-    'params' => array('ID'),
-    'functions' => array('use')
-);
+    'params' => ['ID'],
+    'functions' => ['use'],
+];
 
-$ViewList['dashboard'] = array(
+$ViewList['dashboard'] = [
     'script' => 'dashboard.php',
-    'params' => array("Part", "Group", "Export"),
-    'unordered_params' => array(
+    'params' => ["Part", "Group", "Export"],
+    'unordered_params' => [
         "list" => "List",
-        "offset" => "Offset"
-    ),
-    'functions' => array('use')
-);
+        "offset" => "Offset",
+    ],
+    'functions' => ['use'],
+];
 
-$ViewList['redirect'] = array(
+$ViewList['redirect'] = [
     'script' => 'redirect.php',
-    'params' => array('View'),
-    'functions' => array('use')
-);
+    'params' => ['View'],
+    'functions' => ['use'],
+];
 
-$ViewList['test_mail'] = array(
+$ViewList['test_mail'] = [
     'script' => 'test_mail.php',
-    'params' => array('Type', 'Id', 'Param', 'Param2'),
-    'functions' => array('debug')
-);
+    'params' => ['Type', 'Id', 'Param', 'Param2'],
+    'functions' => ['debug'],
+];
 
-$ViewList['config'] = array(
+$ViewList['config'] = [
     'script' => 'config.php',
-    'params' => array("Part"),
-    'unordered_params' => array('offset' => 'Offset'),
-    'functions' => array('config')
-);
+    'params' => ["Part"],
+    'unordered_params' => ['offset' => 'Offset'],
+    'functions' => ['config'],
+];
 
-$ViewList['notifications'] = array(
+$ViewList['notifications'] = [
     'script' => 'notifications.php',
-    'params' => array('UserId', 'Type', 'SubType'),
-    'functions' => array('config')
-);
+    'params' => ['UserId', 'Type', 'SubType'],
+    'functions' => ['config'],
+];
 
-$ViewList['stat'] = array(
+$ViewList['stat'] = [
     'script' => 'stat.php',
-    'params' => array('ChartIdentifier'),
-    'unordered_params' => array(),
-    'functions' => array('stat')
-);
+    'params' => ['ChartIdentifier'],
+    'unordered_params' => [],
+    'functions' => ['stat'],
+];
 
-$ViewList['openapi'] = array(
+$ViewList['openapi'] = [
     'script' => 'openapi.php',
-    'params' => array(),
-    'unordered_params' => array(),
-    'functions' => array('use')
-);
+    'params' => [],
+    'unordered_params' => [],
+    'functions' => ['use'],
+];
 
-$ViewList['openapi.json'] = array(
+$ViewList['openapi.json'] = [
     'script' => 'openapi.php',
-    'params' => array(),
-    'unordered_params' => array(),
-    'functions' => array('use')
-);
+    'params' => [],
+    'unordered_params' => [],
+    'functions' => ['use'],
+];
 
-$ViewList['export'] = array(
+$ViewList['export'] = [
     'script' => 'export.php',
-    'params' => array(),
-    'functions' => array('use')
-);
+    'params' => [],
+    'functions' => ['use'],
+];
 
-$ViewList['avatar'] = array(
+$ViewList['avatar'] = [
     'script' => 'avatar.php',
-    'params' => array('Id'),
-    'functions' => array('use')
-);
+    'params' => ['Id'],
+    'functions' => ['use'],
+];
 
-$ViewList['inbox'] = array(
+$ViewList['inbox'] = [
     'script' => 'inbox.php',
-    'params' => array(),
-    'unordered_params' => array(),
-    'functions' => array('manage')
-);
+    'params' => [],
+    'unordered_params' => [],
+    'functions' => ['manage'],
+];
 
-$ViewList['user'] = array(
+$ViewList['user'] = [
     'script' => 'user.php',
-    'params' => array('ID'),
-    'unordered_params' => array(),
-    'functions' => array('user_list')
-);
+    'params' => ['ID'],
+    'unordered_params' => [],
+    'functions' => ['user_list'],
+];
 
-$ViewList['stat_source'] = array(
+$ViewList['stat_source'] = [
     'script' => 'stat_source.php',
-    'params' => array('Repository'),
-    'functions' => array('debug')
-);
+    'params' => ['Repository'],
+    'functions' => ['debug'],
+];
 
-$ViewList['report'] = array(
+$ViewList['report'] = [
     'script' => 'report.php',
-    'params' => array('RemoteId', 'Action', 'SlideId'),
-    'unordered_params' => array(),
-    'functions' => array('report')
-);
+    'params' => ['RemoteId', 'Action', 'SlideId'],
+    'unordered_params' => [],
+    'functions' => ['report'],
+];
+$ViewList['alert'] = [
+    'script' => 'alert.php',
+    'ui_context' => 'administration',
+    'params' => [],
+    'functions' => ['use'],
+];
 
-$FunctionList = array();
-$FunctionList['use'] = array();
-$FunctionList['debug'] = array();
-$FunctionList['config'] = array();
-$FunctionList['manage'] = array();
-$FunctionList['behalf'] = array();
-$FunctionList['ws_user'] = array();
-$FunctionList['user_list'] = array();
-$FunctionList['report'] = array();
+$FunctionList = [];
+$FunctionList['use'] = [];
+$FunctionList['debug'] = [];
+$FunctionList['config'] = [];
+$FunctionList['manage'] = [];
+$FunctionList['behalf'] = [];
+$FunctionList['ws_user'] = [];
+$FunctionList['user_list'] = [];
+$FunctionList['report'] = [];
 
-$charts = array();
+$charts = [];
 foreach (OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true) as $item) {
-    $charts[$item->getName()] = array('Name' => $item->getName(), 'value' => $item->getIdentifier());
+    $charts[$item->getName()] = ['Name' => $item->getName(), 'value' => $item->getIdentifier()];
 }
-$chartList = array(
+$chartList = [
     'name' => 'ChartList',
-    'values' => $charts
-);
+    'values' => $charts,
+];
 
-$FunctionList['stat'] = array(
+$FunctionList['stat'] = [
     'ChartList' => $chartList,
-);
+];
+
+$FunctionList['category_access'] = [
+    'Node' => [
+        'name' => 'Node',
+        'values' => [],
+    ],
+];

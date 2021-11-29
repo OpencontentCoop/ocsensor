@@ -61,7 +61,11 @@ class SensorInbox
         $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $unreadCommentField = "user_{$currentUserId}_unread_comments";
-        $unreadPrivateField = "user_{$currentUserId}_unread_private_messages_as_receiver";
+        if ($this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')){
+            $unreadPrivateField = "user_{$currentUserId}_unread_private_messages";
+        }else {
+            $unreadPrivateField = "user_{$currentUserId}_unread_private_messages_as_receiver";
+        }
 
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
         $specialQuery = '';
@@ -270,11 +274,13 @@ class SensorInbox
             foreach ($post->privateMessages->messages as $message) {
                 $doCount = true;
                 if ($context == 'todolist'){
-                    $doCount = $message->getReceiverById($userId);
-                    if (!$doCount) {
-                        foreach ($groupIdList as $groupId) {
-                            if (!$doCount) {
-                                $doCount = $message->getReceiverById($groupId);
+                    if (!$this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')) {
+                        $doCount = $message->getReceiverById($userId);
+                        if (!$doCount) {
+                            foreach ($groupIdList as $groupId) {
+                                if (!$doCount) {
+                                    $doCount = $message->getReceiverById($groupId);
+                                }
                             }
                         }
                     }

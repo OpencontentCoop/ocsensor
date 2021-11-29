@@ -26,6 +26,7 @@ class SensorOperator
             'sensor_additional_map_layers',
             'sensor_faqcontainer',
             'is_sensor_public_field',
+            'sensor_edit_category_access',
         );
     }
 
@@ -65,6 +66,22 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_edit_category_access':
+                $attributes = $repository->getPublicPostContentClassAttributes();
+                $categoryNodeIdList = isset($attributes['category']) ? 'all' : 'none';
+                $policy = eZUser::currentUser()->hasAccessTo('sensor', 'category_access');
+                if ($policy['accessWord'] == 'limited'){
+                    $categoryNodeIdList = [];
+                    foreach ($policy['policies'] as $policyItem){
+                        if (isset($policyItem['Node'])){
+                            $categoryNodeIdList = array_merge($categoryNodeIdList, $policyItem['Node']);
+                        }
+                    }
+                }
+                $operatorValue = $categoryNodeIdList;
+
+                break;
+
             case 'is_sensor_public_field':
                 $attributes = $repository->getPublicPostContentClassAttributes();
                 return $operatorValue = isset($attributes[$namedParameters['field']]) ? $attributes[$namedParameters['field']] : false;

@@ -2,6 +2,9 @@
 <script id="tpl-post-title" type="text/x-jsrender">
 <section class="hgroup">
   <div class="pull-right">
+    <a class="btn btn-default btn-lg button-icon"
+         title="{/literal}{'Salva in pdf'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"
+         href="/sensor/posts/{{:id}}/pdf"><i class="fa fa-file-pdf-o"></i></a>
     {{if capabilities.can_edit}}
       <a class="btn btn-default btn-lg button-icon"
          title="{/literal}{'Modifica'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"

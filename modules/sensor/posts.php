@@ -11,7 +11,6 @@ $tpl = eZTemplate::factory();
 $postId = $Params['ID'];
 $repository = OpenPaSensorRepository::instance();
 
-
 if (!is_numeric($postId)) {
 
     $access = eZUser::currentUser()->hasAccessTo('sensor', 'manage');
@@ -149,6 +148,12 @@ if (!is_numeric($postId)) {
                 ]
             )->totalCount === 0) {
             throw new NotFoundException();
+        }
+
+        if (isset($Params['Offset']) && $Params['Offset'] === 'pdf') {
+            $pdf = SensorPdfExport::instance($repository, $postId);
+            $pdf->generate();
+            eZExecution::cleanExit();
         }
 
         $tpl->setVariable('post_id', (int)$postId);

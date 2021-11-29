@@ -90,6 +90,42 @@ class SensorStatisticAccess
         return $this->roles[$scope];
     }
 
+    private function getSingleStatRole($statisticIdentifier)
+    {
+        $roleName = 'Sensor Single Stat Access ' . $statisticIdentifier;
+
+        $role = eZRole::fetchByName($roleName);
+        if (!$role instanceof eZRole) {
+            $role = eZRole::create($roleName);
+            $role->store();
+            $role->appendPolicy('sensor', 'stat', ['ChartList' => [$statisticIdentifier]]);
+        }
+
+        return $role;
+    }
+
+    public function assignAccessToStat($userId, $statisticIdentifier)
+    {
+        $this->getSingleStatRole($statisticIdentifier)->assignToUser((int)$userId);
+    }
+
+    public function revokeAccessToStat($userId, $statisticIdentifier)
+    {
+        $this->getSingleStatRole($statisticIdentifier)->removeUserAssignment((int)$userId);
+    }
+
+    public function hasAccessToStat($userId, $statisticIdentifier)
+    {
+        $role = $this->getSingleStatRole($statisticIdentifier);
+        $userId = (int)$userId;
+        $query = "SELECT count(*) FROM ezuser_role WHERE role_id='$role->ID' AND contentobject_id='$userId'";
+        /** @var eZDBInterface $db */
+        $db = eZDB::instance();
+        $result = $db->arrayQuery($query);
+
+        return $result[0]['count'] > 0;
+    }
+
     public function getCurrentAccessHash()
     {
         $list = [];

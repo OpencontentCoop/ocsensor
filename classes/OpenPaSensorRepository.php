@@ -259,6 +259,8 @@ class OpenPaSensorRepository extends LegacyRepository
                 'MarkerOutOfBoundsAlert' => $geocodeIni['MarkerOutOfBoundsAlert'],
                 'UseInboxContextActions' => isset($sensorIni['UseInboxContextActions']) ? $sensorIni['UseInboxContextActions'] == 'enabled' : true,
                 'UseInboxFilters' => isset($sensorIni['UseInboxFilters']) ? $sensorIni['UseInboxFilters'] == 'enabled' : true,
+                'AllowAdditionalMemberGroups' => isset($sensorIni['AllowAdditionalMemberGroups']) ? $sensorIni['AllowAdditionalMemberGroups'] == 'enabled' : true,
+                'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
             ));
         }
 
@@ -532,50 +534,52 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getConfigMenu()
     {
-        $data = [
-            'default' => [
-                'uri' => 'sensor/config',
-                'label' => ezpI18n::tr('sensor/config', 'Settings'),
-                'node' => false,
-                'icon' => 'fa fa-cogs',
-            ],
-            'users' => [
-                'uri' => 'sensor/config/users',
-                'label' => ezpI18n::tr('sensor/config', 'Utenti'),
-                'node' => false,
-                'icon' => 'fa fa-users',
-            ],
-            'operators' => [
-                'uri' => 'sensor/config/operators',
-                'label' => ezpI18n::tr('sensor/config', 'Operatori'),
-                'node' => false,
-                'icon' => 'fa fa-user-circle',
-            ],
-            'categories' => [
-                'uri' => 'sensor/config/categories',
-                'label' => ezpI18n::tr('sensor/config', 'Categorie'),
-                'node' => false,
-                'icon' => 'fa fa-tags',
-            ],
-            'areas' => [
-                'uri' => 'sensor/config/areas',
-                'label' => ezpI18n::tr('sensor/config', 'Zone'),
-                'node' => false,
-                'icon' => 'fa fa-map-marker',
-            ],
-            'groups' => [
-                'uri' => 'sensor/config/groups',
-                'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
-                'node' => false,
-                'icon' => 'fa fa-user-circle-o'
-            ],
-//            'automations' => [
-//                'uri' => 'sensor/config/automations',
-//                'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
-//                'node' => false,
-//                'icon' => 'fa fa-android',
-//            ],
+        $data = [];
+        $data['default'] = [
+            'uri' => 'sensor/config',
+            'label' => ezpI18n::tr('sensor/config', 'Settings'),
+            'node' => false,
+            'icon' => 'fa fa-cogs',
         ];
+        $data['users'] = [
+            'uri' => 'sensor/config/users',
+            'label' => ezpI18n::tr('sensor/config', 'Utenti'),
+            'node' => false,
+            'icon' => 'fa fa-user',
+        ];
+        if ($this->getSensorSettings()->get('AllowAdditionalMemberGroups')){
+            $data['user_groups'] = [
+                'uri' => 'sensor/config/user_groups',
+                'label' => ezpI18n::tr('sensor/config', 'Gruppi di utenti'),
+                'node' => false,
+                'icon' => 'fa fa-group',
+            ];
+        }
+        $data['operators'] = [
+            'uri' => 'sensor/config/operators',
+            'label' => ezpI18n::tr('sensor/config', 'Operatori'),
+            'node' => false,
+            'icon' => 'fa fa-user-circle',
+        ];
+        $data['groups'] = [
+            'uri' => 'sensor/config/groups',
+            'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
+            'node' => false,
+            'icon' => 'fa fa-user-circle-o'
+        ];
+        $data['categories'] = [
+            'uri' => 'sensor/config/categories',
+            'label' => ezpI18n::tr('sensor/config', 'Categorie'),
+            'node' => false,
+            'icon' => 'fa fa-tags',
+        ];
+        $data['areas'] = [
+            'uri' => 'sensor/config/areas',
+            'label' => ezpI18n::tr('sensor/config', 'Zone'),
+            'node' => false,
+            'icon' => 'fa fa-map-marker',
+        ];
+
         /** @var eZContentObjectTreeNode[] $otherFolders */
         $otherFolders = (array)$this->getRootNode()->subTree(array(
                 'ClassFilterType' => 'include',
@@ -583,22 +587,22 @@ class OpenPaSensorRepository extends LegacyRepository
                 'Depth' => 1,
                 'DepthOperator' => 'eq')
         );
-        foreach ($otherFolders as $folder) {
-            if (
-                $folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
-                && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')
-                && $folder->attribute('contentobject_id') != $this->getScenariosRootNode()->attribute('contentobject_id')
-                && $folder->attribute('contentobject_id') != $this->getFaqRootNode()->attribute('contentobject_id')
-                && ($this->getReportsRootNode() && $folder->attribute('contentobject_id') != $this->getReportsRootNode()->attribute('contentobject_id'))
-            ) {
-                $data['data-' . $folder->attribute('contentobject_id')] = [
-                    'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
-                    'label' => $folder->attribute('name'),
-                    'node' => $folder,
-                    'icon' => 'fa fa-folder'
-                ];
-            }
-        }
+//        foreach ($otherFolders as $folder) {
+//            if (
+//                $folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
+//                && $folder->attribute('contentobject_id') != $this->getGroupsRootNode()->attribute('contentobject_id')
+//                && $folder->attribute('contentobject_id') != $this->getScenariosRootNode()->attribute('contentobject_id')
+//                && $folder->attribute('contentobject_id') != $this->getFaqRootNode()->attribute('contentobject_id')
+//                && ($this->getReportsRootNode() && $folder->attribute('contentobject_id') != $this->getReportsRootNode()->attribute('contentobject_id'))
+//            ) {
+//                $data['data-' . $folder->attribute('contentobject_id')] = [
+//                    'uri' => 'sensor/config/' . 'data-' . $folder->attribute('contentobject_id'),
+//                    'label' => $folder->attribute('name'),
+//                    'node' => $folder,
+//                    'icon' => 'fa fa-folder'
+//                ];
+//            }
+//        }
         if (eZUser::currentUser()->hasAccessTo('*', '*')['accessWord'] == 'yes') {
             $data['automations'] = [
                 'uri' => 'sensor/config/automations',
@@ -701,5 +705,28 @@ class OpenPaSensorRepository extends LegacyRepository
         }
 
         return $attributeList;
+    }
+
+    public function getMembersAvailableGroups()
+    {
+        $defaultUserPlacement = (int)\eZINI::instance()->variable("UserSettings", "DefaultUserPlacement");
+        $availableGroups = [];
+        if ($this->getSensorSettings()->get('AllowAdditionalMemberGroups')) {
+            /** @var eZContentObjectTreeNode[] $groups */
+            $groups = eZContentObjectTreeNode::subTreeByNodeID([
+                'ClassFilterType' => 'include',
+                'ClassFilterArray' => ['user_group'],
+                'Limitation' => [],
+            ], $defaultUserPlacement);
+            foreach ($groups as $group) {
+                if ($this->getOperatorsRootNode()->attribute('contentobject_id') != $group->attribute('contentobject_id')) {
+                    $availableGroups[$group->attribute('contentobject_id')] = [
+                        'name' => $group->attribute('name'),
+                        'node_id' => $group->attribute('node_id'),
+                    ];
+                }
+            }
+        }
+        return $availableGroups;
     }
 }

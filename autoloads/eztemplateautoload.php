@@ -22,5 +22,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_additional_map_layers',
         'sensor_faqcontainer',
         'is_sensor_public_field',
+        'sensor_edit_category_access',
     )
 );

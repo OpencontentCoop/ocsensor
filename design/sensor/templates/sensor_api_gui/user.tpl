@@ -33,6 +33,9 @@
 {def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 
 {literal}
+<style>
+    td.isSpecial i{display: none}
+</style>
 <script>
     $(document).ready(function () {
         $.views.helpers($.opendataTools.helpers);

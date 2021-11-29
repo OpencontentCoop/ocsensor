@@ -1,14 +1,4 @@
 <form class="row form">
-    {if count($groups)}
-        <div class="col-xs-12 col-md-4">
-            <select class="form-control" name="operator_group">
-                <option selected="selected" value="">Filtra per gruppo di operatori</option>
-                {foreach $groups.children as $group}
-                    <option value="{$group.id}">{$group.name|wash()}</option>
-                {/foreach}
-            </select>
-        </div>
-    {/if}
     <div class="col-xs-12 col-md-6">
         <div class="input-group">
             <input type="text" class="form-control" data-search="q" placeholder="{'Cerca'|i18n('sensor/config')}">
@@ -24,15 +14,16 @@
     </div>
 </form>
 <div style="margin: 20px 0"
-     data-parent="{$operator_parent_node.node_id}"
-     data-classes="{$operator_class.identifier}"
+     data-parent="{$user_groups_parent_node_id}"
+     data-classes="{$user_groups_class}"
      data-limit="20"
-     data-redirect="/sensor/config/operators"></div>
+     data-redirect="/sensor/config/user_groups"></div>
 
-<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/',$operator_class.identifier,'/',$operator_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/',$user_groups_class,'/',$user_groups_parent_node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
 <div class="pull-right">
-    <a class="btn btn-danger" id="add" data-add-parent="{$operator_parent_node.node_id}" data-add-class="sensor_operator" href="{concat('add/new/sensor_operator/?parent=',$operator_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')} {$operator_class.name}</a>
+    <a class="btn btn-danger" id="add" data-add-parent="{$user_groups_parent_node_id}" data-add-class="{$user_groups_class}" href="{concat('add/new/', $user_groups_class, '/?parent=',$user_groups_parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi gruppo'|i18n('sensor/config')}</a>
 </div>
+
 
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
@@ -54,38 +45,8 @@
             {{for searchHits}}
                 <tr>
                     <th width="1">{{:metadata.id}}</th>
-                    <td width="1">
-                        <img src="/sensor/avatar/{{:metadata.id}}" class="img-circle" style="width: 30px; height: 30px;max-width:none" />
-                    </td>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
-                        {{if ~i18n(data, 'ruolo') || ~i18n(data, 'struttura_di_competenza')}}<br />{{/if}}
-                        {{if ~i18n(data, 'ruolo')}}<small>{{:~i18n(data, 'ruolo')}}</small>{{/if}}
-                        {{if ~i18n(data, 'struttura_di_competenza')}}<small>{{for ~i18n(data, 'struttura_di_competenza')}}{{:~i18n(name)}} {{/for}}</small>{{/if}}
-                    </td>
-                    <td width="1">
-                        <span style="white-space:nowrap">
-                        {{for translations}}
-                            {{if active}}
-                                <a href="{{:baseUrl}}/content/edit/{{:id}}/f/{{:language}}"><img style="max-width:none" src="/share/icons/flags/{{:language}}.gif" /></a>
-                            {{else}}
-                                <a href="{{:baseUrl}}/content/edit/{{:id}}/a"><img style="max-width:none;opacity:0.2" src="/share/icons/flags/{{:language}}.gif" /></a>
-                            {{/if}}
-                        {{/for}}
-                        </span>
-                    </td>
-                    <td width="1">
-                        <div class="notification-dropdown-container dropdown" data-user="{{:metadata.id}}">
-                            <div class="button-group">
-                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-bell"></i> <span class="caret"></span>
-                                </button>
-                                <ul class="notification-dropdown-menu dropdown-menu"></ul>
-                            </div>
-                        </div>
-                    </td>
-                    <td width="1" class="text-center">
-                        <a class="btn btn-link btn-xs text-black" data-user_access_edit="{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -147,9 +108,6 @@
                 },{
                     onBeforeCreate: function(){
                         $('#modal').modal('show');
-                        setTimeout(function() {
-                            $('#modal .leaflet-container').trigger('click');
-                        }, 1000);
                     },
                     onSuccess: function () {
                         $('#modal').modal('hide');
@@ -159,7 +117,6 @@
                 e.preventDefault();
             });
 
-            var notificationUrl = "{/literal}{'sensor/notifications'|ezurl(no)}/{literal}";
             var resultsContainer = $('[data-parent]');
             var form = resultsContainer.prev();
             var limitPagination = resultsContainer.data('limit');
@@ -170,76 +127,17 @@
             var queryPerPage = [];
             var template = $.templates('#tpl-data-results');
             var spinner = $($.templates("#tpl-data-spinner").render({}));
-
-            var onOptionClick = function (event) {
-                var $target = $(event.currentTarget);
-                var identifier = $target.data('identifier');
-                var user = $target.data('user');
-                var menu = $target.parents('.notification-dropdown-container .notification-dropdown-menu');
-
-                $(event.target).blur();
-                var enable = $(event.target).prop('checked');
-                if ($(event.target).attr('type') === 'checkbox') {
-                    jQuery.ajax({
-                        url: notificationUrl + user + '/' + identifier,
-                        type: enable ? 'post' : 'delete',
-                        success: function (response) {
-                            buildNotificationMenu(user, menu);
-                        }
-                    });
-                }
-
-                event.stopPropagation();
-                event.preventDefault();
-            };
-
-            var buildNotificationMenu = function (user, menu) {
-                menu.html('<li style="padding: 50px; text-align: center; font-size: 2em;"><i class="fa fa-gear fa-spin fa2x"></i></li>');
-                $.get(notificationUrl + user, function (response) {
-                    if (response.result && response.result === 'success') {
-                        menu.html('');
-                        var add = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="all" tabIndex="-1"><input type="checkbox"/><b> Attiva tutto</b></a></li>');
-                        add.find('a').on('click', function (e) {
-                            onOptionClick(e)
-                        });
-                        menu.append(add);
-                        var remove = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="none" tabIndex="-1"><input type="checkbox"/><b> Disattiva tutto</b></a></li>');
-                        remove.find('a').on('click', function (e) {
-                            onOptionClick(e)
-                        });
-                        menu.append(remove);
-                        $.each(response.data, function () {
-                            var item = $('<li><a href="#" class="small" data-user="' + user + '" data-identifier="' + this.identifier + '" tabIndex="-1"><input type="checkbox"/>&nbsp;' + this.name + '</a></li>');
-                            if (this.enabled) {
-                                item.find('input').attr('checked', true);
-                            }
-                            item.find('a').on('click', function (e) {
-                                onOptionClick(e)
-                            });
-                            menu.append(item);
-                        })
-                    } else {
-                        console.log(response);
-                    }
-                });
-            };
+            var operatorsId = {/literal}{$operator_parent_object_id}{literal};
 
             var buildQuery = function () {
                 var classQuery = '';
                 if (classes.length) {
                     classQuery = 'classes [' + classes + ']';
                 }
-                var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
+                var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + '] and id != ' + operatorsId;
                 var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
                 if (searchText.length > 0) {
                     query += " and q = '" + searchText + "'";
-                }
-                var groupSelect = form.find('[name="operator_group"]');
-                if (groupSelect.length > 0){
-                    var group = groupSelect.val();
-                    if (group.length > 0) {
-                        query += ' and struttura_di_competenza.id in [' + group + ']';
-                    }
                 }
                 query += ' sort [name=>asc]';
 
@@ -266,15 +164,7 @@
                     response.pageCount = pagination;
 
                     response.prevPageQuery = jQuery.type(queryPerPage[response.prevPage]) === "undefined" ? null : queryPerPage[response.prevPage];
-                    response.showType = classes.split(',').length > 1;
                     $.each(response.searchHits, function () {
-                        if (this.metadata.classIdentifier === 'place') {
-                            var osmParts = this.metadata.remoteId.split('-');
-                            if (osmParts.length === 2) {
-                                this.placeOsmDetailUrl = 'https://nominatim.openstreetmap.org/details?osmtype=' + osmParts[0].toUpperCase().charAt(0) + '&osmid=' + osmParts[1];
-                            }
-                        }
-                        this.showType = classes.split(',').length > 1;
                         this.baseUrl = $.opendataTools.settings('accessPath');
                         var self = this;
                         this.languages = $.opendataTools.settings('languages');
@@ -292,32 +182,16 @@
                         this.translations = translations;
                         this.redirect = redirect;
                         this.locale = $.opendataTools.settings('language');
-                        var stateIdentifier = false;
-                        $.each(this.metadata.stateIdentifiers, function () {
-                            var parts = this.split('.');
-                            if (parts[0] === 'privacy') {
-                                stateIdentifier = parts[1];
-                            }
-                        });
-                        this.visibility = stateIdentifier;
                     });
                     var renderData = $(template.render(response));
                     resultsContainer.html(renderData);
 
-                    resultsContainer.find('.notification-dropdown-container').on('show.bs.dropdown', function () {
-                        var user = $(this).data('user');
-                        var menu = $(this).find('.notification-dropdown-menu');
-                        buildNotificationMenu(user, menu);
-                    });
                     renderData.find('[data-edit]').on('click', function(e){
                         $('#item').opendataFormEdit({
                             object: $(this).data('edit')
                         },{
                             onBeforeCreate: function(){
                                 $('#modal').modal('show');
-                                setTimeout(function() {
-                                    $('#modal .leaflet-container').trigger('click');
-                                }, 1000);
                             },
                             onSuccess: function () {
                                 $('#modal').modal('hide');
@@ -340,41 +214,13 @@
                             'alpaca': {
                                 "connector": {
                                     "config": {
-                                        "connector": 'remove-operator'
+                                        "connector": 'delete-user-group'
                                     }
                                 }
                             }
                         });
                         e.preventDefault();
                     });
-                    renderData.find('[data-user_access_edit]').on('click', function(e){
-                        $('#item').opendataForm({
-                            user: $(this).data('user_access_edit')
-                        },{
-                            connector: 'operator-settings',
-                            onBeforeCreate: function(){
-                                $('#modal').modal('show');
-                                setTimeout(function() {
-                                    $('#modal .leaflet-container').trigger('click');
-                                }, 1000);
-                            },
-                            onSuccess: function () {
-                                $('#modal').modal('hide');
-                                loadContents();
-                            }
-                        });
-                        e.preventDefault();
-                    });
-                    renderData.find('.fa-user').each(function () {
-                        var self = $(this);
-                        var id = $(this).data('user');
-                        $.get('/api/sensor_gui/operators/' + id, function (data) {
-                            if(!data.isEnabled){
-                                self.parent().html('<span class="fa-stack"><i class="fa fa-user fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>');
-                            }
-                        })
-                    });
-
                     resultsContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
                         currentPage = $(this).data('page');
                         if (currentPage >= 0) loadContents();

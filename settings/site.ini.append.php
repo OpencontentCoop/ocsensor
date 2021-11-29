@@ -35,5 +35,6 @@ IncludeCurrentUserId=enabled
 
 [RoleSettings]
 PolicyOmitList[]=sensor/report
+PolicyOmitList[]=sensor/alert
 
 */ ?>

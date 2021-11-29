@@ -15,7 +15,6 @@ if ( $currentUser->isAnonymous() )
 else
 {
     $repository = OpenPaSensorRepository::instance();
-    $currentSensorUser = SensorUserInfo::current();
     if (isset($Params['UserParameters']['export'])){
         $export = new SensorPostCsvExporter($repository);
         try{
@@ -23,7 +22,7 @@ else
             eZExecution::cleanExit();
 
         }catch (Exception $e){
-            $currentSensorUser->addFlashAlert($e->getMessage(), 'error');
+            $repository->getUserService()->addAlert($repository->getCurrentUser(), $e->getMessage(), 'error');
             $module->redirectTo('/sensor/dashboard');
             return;
         }

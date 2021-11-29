@@ -117,6 +117,12 @@ if ($Part == 'areas') {
 } elseif ($Part == 'users') {
     $tpl->setVariable('user_parent_node', $repository->getUserRootNode());
     $tpl->setVariable('user_classes', eZUser::fetchUserClassNames());
+    $tpl->setVariable('user_groups', $repository->getMembersAvailableGroups());
+
+} elseif ($Part == 'user_groups') {
+    $tpl->setVariable('user_groups_parent_node_id', (int)\eZINI::instance()->variable("UserSettings", "DefaultUserPlacement"));
+    $tpl->setVariable('user_groups_class', 'user_group');
+    $tpl->setVariable('operator_parent_object_id', $repository->getOperatorsRootNode()->attribute('contentobject_id'));
 
 } elseif ($Part == 'categories') {
     $tpl->setVariable('categories_parent_node', $repository->getCategoriesRootNode());
@@ -127,6 +133,7 @@ if ($Part == 'areas') {
 } elseif ($Part == 'operators') {
     $tpl->setVariable('operator_parent_node', $repository->getOperatorsRootNode());
     $tpl->setVariable('operator_class', eZContentClass::fetchByIdentifier('sensor_operator'));
+    $tpl->setVariable('groups', $repository->getGroupsTree());
 
 } elseif ($Part == 'groups') {
     $tpl->setVariable('groups_parent_node', $repository->getGroupsRootNode());

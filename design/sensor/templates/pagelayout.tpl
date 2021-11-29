@@ -175,7 +175,7 @@
 <script>
     {literal}
     $(document).ready(function(){
-        $.get({/literal}{'social_user/alert'|ezurl()}{literal}, function(data){
+        $.get({/literal}{'sensor/alert'|ezurl()}{literal}, function(data){
             $('header').prepend(data)
         });
     });
