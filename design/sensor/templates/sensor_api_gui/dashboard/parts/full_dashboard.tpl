@@ -632,11 +632,11 @@ $(document).ready(function () {ldelim}
             var renderData = $(template.render(response));
             viewContainer.html(renderData);
 
-            // viewContainer.find('tr[data-href]').on('click', function (e) {
-            //     document.location = $(this).data('href');
-            // });
+            viewContainer.find('td[data-href]').css('cursor', 'pointer').on('click', function (e) {
+                document.location = $(this).data('href');
+            });
 
-            viewContainer.find('[data-star]').on('click', function (e){
+            viewContainer.find('[data-star]').css('cursor', 'pointer').on('click', function (e){
                 var self = $(this);
                 var id = self.data('star');
                 var csrfToken;

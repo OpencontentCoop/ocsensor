@@ -89,8 +89,8 @@ class OperatorSettingsConnector extends AbstractBaseConnector
             'fields' => [
                 'block_mode' => ['type' => 'checkbox', 'rightLabel' => 'Blocca utente'],
                 'sensor_deny_comment' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di commentare'],
-                'sensor_can_behalf_of' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
-                'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di inserire segnalazioni per conto di altri'],
+                'sensor_can_behalf_of' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di inserire segnalazioni per conto di altri'],
+                'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
             ]
         ];
     }

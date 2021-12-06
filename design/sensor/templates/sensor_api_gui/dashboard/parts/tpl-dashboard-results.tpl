@@ -34,7 +34,7 @@
         </thead>
         <tbody>
         {{for searchHits}}
-            <tr style="cursor:pointer" data-href="{{:accessPath}}/sensor/posts/{{:id}}" {{if readingStatuses && (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
+            <tr data-href="{{:accessPath}}/sensor/posts/{{:id}}" {{if readingStatuses && (readingStatuses.unread_comments + readingStatuses.unread_private_messages + readingStatuses.unread_responses) > 0}}class="danger"{{/if}}>
                 <td>
                     {{if privacy.identifier == 'private' || moderation.identifier == 'waiting'}}
                       <div><i class="fa fa-lock"></i></div>
@@ -54,7 +54,7 @@
                 </td>
                 <td><i style="font-size:1.2em" data-star="{{:id}}" class="fa fa-star{{if isSpecial}} text-primary{{else}}-o text-muted{{/if}}"></i></td>
                 <td><a href="{{:accessPath}}/sensor/posts/{{:id}}">{{:id}}</a></td>
-                <td style="white-space:nowrap">
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}" style="white-space:nowrap">
                     {{if workflowStatus.identifier == 'waiting'}}Da leggere
                     {{else workflowStatus.identifier == 'read'}}In attesa di assegnazione
                     {{else workflowStatus.identifier == 'assigned'}}Assegnato
@@ -63,7 +63,7 @@
                     {{else workflowStatus.identifier == 'reopened'}}Riaperto
                     {{/if}}
                 </td>
-                <td>
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}">
                      <strong>{{:author.name}}{{if reporter.id != author.id}} <span class="text-muted">{{if channel && channel.icon}}<i title="{{:channel.name}}" class="{{:channel.icon}}"></i> {{/if}}{{:reporter.name}}</span>{{/if}}</strong>
                      <p>{{:subject}}</p>
                      <ul class="list-inline">
@@ -78,25 +78,25 @@
                         {{/if}}
                     </ul>
                 </td>
-                <td>
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}">
                     <span style="white-space:nowrap">{{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</span>
                     {{if workflowStatus.identifier != 'closed'}}<br /><span class="label label-{{:expirationInfo.label}}" title="{{:~formatDate(expirationInfo.expirationDateTime, 'DD/MM/YYYY HH:mm')}}">{{:expirationInfo.text}}</span>{{/if}}
                 </td>
-                <td>
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}">
                     <ul class="list-inline">
                         {{for approvers}}
                             <li><img title="{{:name}}" src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
                         {{/for}}
                     </ul>
                 </td>
-                <td>
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}">
                     <ul class="list-inline">
                         {{for owners ~count=owners.length}}
                             <li><img title="{{:name}}" src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
                         {{/for}}
                     </ul>
                 </td>
-                <td>
+                <td data-href="{{:accessPath}}/sensor/posts/{{:id}}">
                     <ul class="list-inline">
                         {{for observers ~count=owners.length}}
                             <li><img title="{{:name}}" src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
