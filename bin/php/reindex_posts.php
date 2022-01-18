@@ -6,7 +6,7 @@ set_time_limit(0);
 require 'autoload.php';
 
 $script = eZScript::instance(array(
-        'description' => ("Make all posts private\n\n"),
+        'description' => ("Reindex all posts\n\n"),
         'use-session' => false,
         'use-modules' => true,
         'use-extensions' => true)

@@ -139,13 +139,18 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadPostByIdWithCapabilities()
     {
         $user = $this->repository->getCurrentUser();
-        $post = $this->repository->getSearchService()->searchPost($this->Id);
-        $result = new ezpRestMvcResult();
-        $result->variables = [
-            'capabilities' => $this->loadApiUserPostCapabilities($user, $post),
-            'post' => $this->loadApiPost($post),
-        ];
-        $this->repository->getActionService()->runAction(new Action('read'), $post);
+        try {
+//            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $post = $this->repository->getPostService()->loadPost($this->Id);
+            $result = new ezpRestMvcResult();
+            $result->variables = [
+                'capabilities' => $this->loadApiUserPostCapabilities($user, $post),
+                'post' => $this->loadApiPost($post),
+            ];
+            $this->repository->getActionService()->runAction(new Action('read'), $post);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
 
         return $result;
     }

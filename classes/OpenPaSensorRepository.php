@@ -170,6 +170,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $this->addListener('on_generate_user', new WelcomeUserListener($this));
         $this->addListener('on_create', new SensorDailyReportListener());
         $this->addListener('on_close', new SensorDailyReportListener());
+        $this->addListener('on_update_operator', new SensorReindexer());
 
         $statisticsFactories = [];
         $statisticsFactories[] = new Statistics\StatusPercentage($this);

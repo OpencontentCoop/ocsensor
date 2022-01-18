@@ -60,8 +60,8 @@
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
                         {{if ~i18n(data, 'ruolo') || ~i18n(data, 'struttura_di_competenza')}}<br />{{/if}}
+                        {{if ~i18n(data, 'struttura_di_competenza')}}{{for ~i18n(data, 'struttura_di_competenza')}}<small class="label label-default">{{:~i18n(name)}}</small> {{/for}}{{/if}}
                         {{if ~i18n(data, 'ruolo')}}<small>{{:~i18n(data, 'ruolo')}}</small>{{/if}}
-                        {{if ~i18n(data, 'struttura_di_competenza')}}<small>{{for ~i18n(data, 'struttura_di_competenza')}}{{:~i18n(name)}} {{/for}}</small>{{/if}}
                     </td>
                     <td width="1">
                         <span style="white-space:nowrap">
