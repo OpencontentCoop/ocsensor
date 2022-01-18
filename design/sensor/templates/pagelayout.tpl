@@ -1,5 +1,5 @@
 {def $user_hash  = concat( $current_user.role_id_list|implode( ',' ), ',', $current_user.limited_assignment_value_list|implode( ',' ) )}
-
+{def $has_container = cond(is_set($module_result.content_info.persistent_variable.has_container), true(), false())}
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -117,14 +117,14 @@
     {include uri='design:page_banner.tpl'}
 
 <div class="main">
-    <div class="container">
+    {if $has_container|not()}<div class="container">{/if}
         {$module_result.content}
 
         {if and( $current_user.is_logged_in|not(), $social_pagedata.need_login|not )}
             {include uri='design:page_login.tpl'}
         {/if}
 
-    </div>
+        {if $has_container|not()}</div>{/if}
 
 {cache-block expiry=86400 ignore_content_expiry keys=array( $access_type.name, $user_hash )}
 

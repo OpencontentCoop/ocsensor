@@ -1,3 +1,4 @@
+{ezpagedata_set('has_container', true())}
 {ezcss_require(array(
     'select2.min.css',
     'iThing.css',
@@ -13,41 +14,42 @@
 ))}
 
 {def $engine = 'highcharts'}
-
+<div class="container">
 <section class="hgroup">
-    <button class="navbar-toggle" data-target="#stat-menu" data-toggle="collapse" type="button" style="padding: 0;">
-        <span class="fa fa-caret-down fa-2x"></span>
-    </button>
     <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
-</section>
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="navbar-collapse collapse" id="stat-menu">
-            <ul class="nav nav-pills nav-stacked">
-                {foreach $list as $chart}
-                    <li role="presentation"
-                        {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
-                        <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
-                            {$chart.name|wash()}
-                        </a>
-                    </li>
-                {/foreach}
-                <li class="divider" style="border-bottom: 1px solid #ccc"></li>
-                <li>
-                    <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
-                        <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
+    <div class="dropdown pull-right">
+        <button class="btn btn-default dropdown-toggle" type="button" id="chartDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            {foreach $list as $chart}
+                {if and( $current, $current.identifier|eq($chart.identifier))}
+                    {$chart.name|wash()}
+                {/if}
+            {/foreach}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="chartDropdownMenu">
+            {foreach $list as $chart}
+                <li {if and( $current, $current.identifier|eq($chart.identifier))}class="active"{/if}>
+                    <a href="{concat('sensor/stat/',$chart.identifier)|ezurl(no)}">
+                        {$chart.name|wash()}
                     </a>
                 </li>
-                <li>
-                    <a href="{'sensor/openapi/'|ezurl(no)}">
-                        <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
-                    </a>
-                </li>
-            </ul>
-        </div>
+            {/foreach}
+            <li role="separator" class="divider"></li>
+            <li>
+                <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
+                    <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
+                </a>
+            </li>
+            <li>
+                <a href="{'sensor/openapi/'|ezurl(no)}">
+                    <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
+                </a>
+            </li>
+        </ul>
     </div>
-    <div class="col-md-9">
+
+    <div class="col-md-12" style="padding-top: 40px;">
         {if $current}
             <div id="chart-filters">
                 <div class="row" id="posts-search">
@@ -106,22 +108,37 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        {if $has_group_tag}
-                        <div style="display: flex">
-                            <div>
-                        {/if}
+
                         <div class="form-group hide" id="group-filter">
                             <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
                             <select class="select form-control" name="group" multiple>
                                 {foreach $groups as $group => $items}
-                                    {if count($items)|gt(1)}<optgroup label="{$group|wash()}">{/if}
                                     {foreach $items as $item}
                                         <option value="{$item.id}">{$item.name|wash()}</option>
                                     {/foreach}
-                                    {if count($items)|gt(1)}</optgroup>{/if}
                                 {/foreach}
                             </select>
                         </div>
+
+                        {if $has_group_tag}
+                        <div style="display: flex">
+                            <div>
+                        {/if}
+                                <div class="form-group hide" id="groupwithtag-filter" data-field="group">
+                                    <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
+                                    <select class="select form-control" name="group" multiple>
+                                        {def $tag_group_id = 0}
+                                        {foreach $groups as $group => $items}
+                                            {if count($items)|gt(1)}
+                                                {set $tag_group_id = $tag_group_id|inc()}
+                                                <option value="{$tag_group_id}" style="font-weight: bold">{$group|wash()}</option>
+                                            {/if}
+                                            {foreach $items as $item}
+                                                <option value="{$item.id}"{if count($items)|gt(1)} style="margin-left: 20px"{/if}>{$item.name|wash()}</option>
+                                            {/foreach}
+                                        {/foreach}
+                                    </select>
+                                </div>
                         {if $has_group_tag}
                             </div>
                             <div>
@@ -150,20 +167,27 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane active" id="panel-{$current.identifier}">
-                {include uri=concat('design:sensor_api_gui/charts/',$engine, '.tpl') stat=$current}
-                {if fetch('user', 'has_access_to', hash('module','*','function','*'))}
-                    <div id="editor-helper">
-                        <div class="input-group">
-                            <input class="form-control form-control-sm" type="text" id="link" />
-                            <a id="linkButton" href="#" class="input-group-addon btn-info">Copia link</a>
-                        </div>
-                    </div>
-                {/if}
-            </div>
         {/if}
     </div>
 
+</section>
+</div>
+
+<div class="container-fluid" style="padding: 0 40px">
+<div class="row">
+    {if $current}
+    <div class="tab-pane active" id="panel-{$current.identifier}">
+        {include uri=concat('design:sensor_api_gui/charts/',$engine, '.tpl') stat=$current}
+        {if fetch('user', 'has_access_to', hash('module','*','function','*'))}
+            <div id="editor-helper">
+                <div class="input-group">
+                    <input class="form-control form-control-sm" type="text" id="link" />
+                    <a id="linkButton" href="#" class="input-group-addon btn-info">Copia link</a>
+                </div>
+            </div>
+        {/if}
+    </div>
+    {/if}
 </div>
 
 <div id="spinner" class="hide">
@@ -284,11 +308,15 @@
             this.chartContainer.on('sensor:chart:filterchange', function () {
                 var params = {};
                 $.each(self.settings.filters, function (){
+                    var filterField = this;
                     var filterContainer = self.settings.filtersContainer.find('#'+this+'-filter');
+                    if (filterContainer.data('field')){
+                        filterField = filterContainer.data('field')
+                    }
                     if (filterContainer.find('select').length > 0){
-                        params[this] = filterContainer.find('select').val()
+                        params[filterField] = filterContainer.find('select').val()
                     }else if (filterContainer.find('input').is(':checked')){
-                        params[this] = 1;
+                        params[filterField] = 1;
                     }
                 });
                 if (self.settings.enableRangeFilter === true || $.inArray(params.interval, self.settings.enableRangeFilter) > -1) {
@@ -337,3 +365,4 @@
     #stat-menu.in ul.nav li{text-align: left}
 </style>
 {/literal}
+</div>
