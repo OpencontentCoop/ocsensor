@@ -28,6 +28,7 @@ class ezfIndexSensorUser extends ezfIndexSensor implements ezfIndexPlugin
         $values['creation_day_i'] = date('Yz', $published);
         $weekNum = date('W', $published);
         $weekNum = $weekNum == 53 ? 52 : $weekNum;
+        $weekNum = $weekNum == 52 && intval($month) == 1 ? '01' : 52;
         $values['creation_week_i'] = date('Y', $published) . $weekNum;
         $values['creation_month_i'] = date('Ym', $published);
         $values['creation_quarter_i'] = $year . $quarter;
