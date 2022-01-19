@@ -27,15 +27,12 @@
         this.alertContainer = $(this.settings.alertContainerSelector);
         this.actionStarted = false;
         this.spinner = $($.templates(this.settings.spinnerTpl).render({}));
-        $.views.helpers($.opendataTools.helpers);
-
         $(document).on('show.bs.collapse', '#collapseConversation', function (e) {
             Cookies.set('collapseConversation', 1);
         });
         $(document).on('hide.bs.collapse', '#collapseConversation', function (e) {
             Cookies.set('collapseConversation', 0);
         });
-
         if (parseInt(postId) > 0) {
             this.removeAlert().startLoading().load(postId);
         }
@@ -607,7 +604,7 @@
                     e.preventDefault();
                 });
             }else{
-                location.href = '/sensor/posts/'+postId;
+                location.href = $.opendataTools.settings('accessPath')+'/sensor/posts/'+postId;
             }
         },
 

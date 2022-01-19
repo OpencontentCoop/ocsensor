@@ -28,7 +28,7 @@
     <div class='form-group'>
         <div class='controls with-icon-over-input'>
             <input type="text" autofocus="" autocomplete="off" name="Login"
-                   placeholder="{"Username"|i18n("design/ocbootstrap/user/login",'User name')} o {"Email"|i18n("design/ocbootstrap/user/login",'User name')}" class="form-control"
+                   placeholder="{"Email"|i18n("design/ocbootstrap/user/login",'User name')}" class="form-control"
                    data-rule-required="true" value="{$User:login|wash}">
             <i class='icon-user text-muted'></i>
         </div>
@@ -41,12 +41,12 @@
             <i class='icon-lock text-muted'></i>
         </div>
     </div>
-    <div class='checkbox'>
+    {*<div class='checkbox'>
         <label for='remember_me'>
             <input id='remember_me' type="checkbox" tabindex="1" name="Cookie"
                    id="id4"/>{"Remember me"|i18n("design/ocbootstrap/user/login")}
         </label>
-    </div>
+    </div>*}
     <button class='btn btn-lg btn-primary center-block'
             name="LoginButton">
         {if ezini_hasvariable(concat('LoginTemplate_', $login_module_setting), 'ButtonText', 'app.ini')}

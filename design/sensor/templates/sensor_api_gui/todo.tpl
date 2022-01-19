@@ -14,13 +14,9 @@
     'leaflet.0.7.2.js',
     'Leaflet.MakiMarkers.js',
     'jquery.opendataTools.js',
-    'jsrender.js',
+    'jsrender.js', 'jsrender.helpers.js',
     'jquery.sensorpost.js'
 ))}
-
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 
 {include uri='design:sensor_api_gui/todo/tpl-todo-item-row.tpl'}
 {include uri='design:sensor_api_gui/todo/tpl-todo-rows.tpl'}
@@ -32,39 +28,39 @@
             <li role="presentation" class="active">
                 <a href="#" data-inboxidentifier="todolist">
                     <i class="fa fa-inbox"></i>
-                    <span class="hidden-sm hidden-xs nav-label">In arrivo</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                        <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Incoming')}</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#" data-inboxidentifier="special">
                     <i class="fa fa-star"></i>
-                    <span class="hidden-sm hidden-xs nav-label">Speciali</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Specials')}</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#" data-inboxidentifier="conversations">
                     <i class="fa fa-comments"></i>
-                    <span class="hidden-sm hidden-xs nav-label">Note private</span>{* <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
+                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Private notes')}</span>{* <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
                 </a>
             </li>
             <li role="presentation">
                 <a href="#" data-inboxidentifier="moderate">
                     <i class="fa fa-commenting-o"></i>
-                    <span class="hidden-sm hidden-xs nav-label">Da moderare</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('To moderate')}</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#" data-inboxidentifier="closed">
                     <i class="fa fa-close"></i>
-                    <span class="hidden-sm hidden-xs nav-label">Chiuse</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Close')}</span> {*<span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
                 </a>
             </li>
             {if sensor_settings('UseInboxFilters')}
             <li class="divider hidden-xs hidden-sm"><hr /></li>
             <li class="hidden-xs hidden-sm">
-                <label for="filter-type">Filtra per tipo</label>
-                <select class="form-control" data-filter="type" id="filter-type" data-placeholder="Filtra per tipo">
-                    <option value="">Tutti</option>
+                <label for="filter-type">{sensor_translate('Filter by type')}</label>
+                <select class="form-control" data-filter="type" id="filter-type" data-placeholder="{sensor_translate('Filter by type')}">
+                    <option value="">{sensor_translate('All')}</option>
                     {foreach sensor_types() as $type}
                         <option value="{$type.identifier|wash()}">{$type.name|wash()}</option>
                     {/foreach}
@@ -146,17 +142,17 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="clearfix" data-action-wrapper>
-                    <label for="responseInbox">{'Risposta ufficiale'|i18n('sensor/messages')}</label>
+                    <label for="responseInbox">{sensor_translate('Official response')}</label>
                     <textarea id="responseInbox" name="text" class="form-control" rows="4" required="required"></textarea>
                     <input class="btn respond btn-bold pull-right"
                            type="submit"
                            style="margin-top:10px"
-                           value="{'Pubblica risposta ufficiale e chiudi la segnalazione'|i18n('sensor/messages')}" />
+                           value="{sensor_translate('Store the official response and close the issue')}" />
                     <div class="pull-right">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="keepResponse" checked="checked" />
-                                {'Tieni risposta in memoria'|i18n('sensor/messages')}
+                                {sensor_translate('Remember answer')}
                             </label>
                         </div>
                     </div>
@@ -169,30 +165,6 @@
 {literal}
 <script>
     $(document).ready(function () {
-        moment.locale('{/literal}{$moment_language}{literal}');
-        $.views.helpers($.extend({}, $.opendataTools.helpers, {
-            'fromNow': function (value) {
-                return moment(new Date(value)).fromNow();
-            },
-            'last_response': function () {
-                return getStoredResponse();
-            },
-            'progressiveDate': function (value) {
-                var date = moment(new Date(value));
-                var today = moment();
-                var yesterday = moment().subtract(1, 'day');
-                if (date.isSame(today, "day")){
-                    return date.format('HH:mm')
-                }
-                if (date.isSame(yesterday, "day")){
-                    return 'Ieri, ' + date.format('HH:mm')
-                }
-                if (date.isSame(new Date(), "month")){
-                    return date.format('D MMM')
-                }
-                return date.format('DD/MM/YY')
-            }
-        }));
         var menu = $('#inbox-menu');
         var body = $('#inbox');
         var preview = $('#preview');

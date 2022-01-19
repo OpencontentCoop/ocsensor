@@ -21,13 +21,13 @@
                     {if and( count( $event_details )|gt(0), is_set( $event_details.observers ) )}
                         <tr>
                             <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
-                                <p><strong>{"Osservatore"|i18n('sensor/mail/post')}:</strong> {foreach $event_details.observers as $observer_id}{fetch( content, object, hash( object_id, $observer_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
+                                <p><strong>{sensor_translate('Observer')}:</strong> {foreach $event_details.observers as $observer_id}{fetch( content, object, hash( object_id, $observer_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
                             </td>
                         </tr>
                     {/if}
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
-                            <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla segnalazione"|i18n('sensor/mail/post')}</a></h3>
+                            <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{sensor_translate('Go to the issue')}</a></h3>
                         </td>
                     </tr>
                     <tr>

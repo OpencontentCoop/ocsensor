@@ -77,7 +77,7 @@ $(document).ready(function () {
                             } else {
                                 var notification = new Notification(title, options);
                                 notification.onclick = function (event) {
-                                    var pageURL = '/sensor/posts/' + this.data.id;
+                                    var pageURL = $.opendataTools.settings('accessPath')+'/sensor/posts/' + this.data.id;
                                     event.preventDefault();
                                     location.href = pageURL;
                                 }

@@ -9,17 +9,17 @@
         <div class="scenarios panel panel-default" style="display: none">
             <div class="panel-heading">
                 <a class="close pull-right close-scenario" href="#"><i class="fa fa-times"></i></a>
-                Impostazioni all'assegnazione della categoria <strong data-placeholder="name"></strong>
+                {sensor_translate('Enable automations on category assignment', 'config')} <strong data-placeholder="name"></strong>
             </div>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Zona</th>
-                        <th>Riferimento</th>
-                        <th>Gruppo di incaricati</th>
-                        <th>Incaricato</th>
-                        <th>Osservatore</th>
-                        <th>Scadenza</th>
+                        <th>{sensor_translate('Area', 'config')}</th>
+                        <th>{sensor_translate('Reference for the citizen', 'config')}</th>
+                        <th>{sensor_translate('Group of operators in charge', 'config')}</th>
+                        <th>{sensor_translate('Operator in charge', 'config')}</th>
+                        <th>{sensor_translate('Observer', 'config')}</th>
+                        <th>{sensor_translate('Expirations', 'config')}</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -31,8 +31,8 @@
 </div>
 
 <div class="categories-buttons">
-    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_categories'|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-    <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$categories_parent_node.node_id}" data-add-class="sensor_category" href="{concat('add/new/sensor_category/?parent=',$categories_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
+    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_categories'|ezurl(no)}">{sensor_translate('Export to CSV', 'config')}</a></div>
+    <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$categories_parent_node.node_id}" data-add-class="sensor_category" href="{concat('add/new/sensor_category/?parent=',$categories_parent_node.node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {sensor_translate('Add new', 'config')}</a></div>
 </div>
 
 {literal}
@@ -44,7 +44,7 @@
 </tr>
 </script>
 <script id="tpl-data-results" type="text/x-jsrender">
-{{for children ~parent_node_id=node_id ~can_create=can_create ~baseUrl=baseUrl ~redirect=redirect ~locale=locale}}
+{{for children ~parent_node_id=node_id}}
 <tr>
   <th width="1">{{:id}}</th>
   <td>
@@ -54,10 +54,14 @@
         {{if level == 0}}</strong>{{/if}}
       </span>
   </td>
-  <td>
-	{{for languages}}
-	    <img src="/share/icons/flags/{{:#data}}.gif" />
-    {{/for}}
+  <td width="1">
+    <span style="white-space:nowrap">
+	{{for translations ~languages=languages}}
+	    {{if ~inArray(#data, ~languages)}}
+	        <img style="max-width:none;" src="/share/icons/flags/{{:#data}}.gif" />
+	    {{/if}}
+	{{/for}}
+	</span>
   </td>
   <td width="1"><a href="#" data-object="{{:id}}"><i class="fa fa-eye"></i></a></td>
   <td width="1"><a href="#" data-scenarios="{{:id}}" data-name="{{:name}}"><i class="fa fa-android"></i></a></td>
@@ -73,12 +77,12 @@
   </td>
   <td width="1">
     {{if children.length > 0}}
-      <a href="{{:~baseUrl}}/websitetoolbar/sort/{{:node_id}}"><i class="fa fa-sort-alpha-asc "></i>
+      <a href="{{:baseUrl}}/websitetoolbar/sort/{{:node_id}}"><i class="fa fa-sort-alpha-asc "></i>
     {{/if}}
   </td>
   <td width="1">
-    {{if ~can_create && level == 0}}
-    <a data-create-parent="{{:node_id}}" data-create-class="{{:type}}" href="{{:~baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
+    {{if can_create && level == 0}}
+    <a data-create-parent="{{:node_id}}" data-create-class="{{:type}}" href="{{:baseUrl}}/openpa/add/{{:type}}/?parent={{:node_id}}"><i class="fa fa-plus"></i></a>
     {{/if}}
   </td>
 </tr>
@@ -95,7 +99,7 @@
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.approver.length}}
             {{for area_{/literal}{$area.id|wash()}{literal}.assignments.approver}}{{:name}} {{/for}}
         {{/if}}
-        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_approver}}<em>Operatore segnalatore</em>{{/if}}
+        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_approver}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
     </td>
     <td class="owner_group">
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.owner_group.length}}
@@ -106,14 +110,14 @@
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.owner.length}}
             {{for area_{/literal}{$area.id|wash()}{literal}.assignments.owner}}{{:name}} {{/for}}
         {{/if}}
-        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_owner}}<em>Operatore segnalatore</em>{{/if}}
-        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.random_owner}}<em>Operatore casuale</em>{{/if}}
+        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_owner}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
+        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.random_owner}}<em>{{:~sensorTranslate('Random operator')}}</em>{{/if}}
     </td>
     <td class="observer">
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.observer.length}}
             {{for area_{/literal}{$area.id|wash()}{literal}.assignments.observer}}{{:name}} {{/for}}
         {{/if}}
-        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_observer}}<em>Operatore segnalatore</em>{{/if}}
+        {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.assignments.reporter_as_observer}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
     </td>
     <td class="expiry">
         {{if area_{/literal}{$area.id|wash()}{literal} && area_{/literal}{$area.id|wash()}{literal}.expiry}}
@@ -134,19 +138,19 @@
     <td><em>default</em></td>
     <td class="approver">
         {{if default && default.assignments.approver.length}}{{for default.assignments.approver}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_approver}}<em>Operatore segnalatore</em>{{/if}}
+        {{if default && default.assignments.reporter_as_approver}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
     </td>
     <td class="owner_group">
         {{if default && default.assignments.owner_group.length}}{{for default.assignments.owner_group}}{{:name}} {{/for}}{{/if}}
     </td>
     <td class="owner">
         {{if default && default.assignments.owner.length}}{{for default.assignments.owner}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_owner}}<em>Operatore segnalatore</em>{{/if}}
+        {{if default && default.assignments.reporter_as_owner}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
         {{if default && default.assignments.random_owner}}<em>Operatore casuale</em>{{/if}}
     </td>
     <td class="observer">
         {{if default && default.assignments.observer.length}}{{for default.assignments.observer}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_observer}}<em>Operatore segnalatore</em>{{/if}}
+        {{if default && default.assignments.reporter_as_observer}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
     </td>
     <td class="expiry">
         {{if default && default.expiry}}
@@ -174,7 +178,6 @@
     <td width="1"><a href="#" class="close-edit-scenario"><i class="fa fa-times"></i></a></td>
 </script>
 <script>
-    $.views.helpers($.opendataTools.helpers);
     $(document).ready(function () {
 
         $('#add').on('click', function(e){
@@ -435,9 +438,9 @@
             }
         };
         var loadScenarioEdit = function(row, data){
-            var approverSelect = $('<select name="approver" data-placeholder="Nessuno"></select>').appendTo(row.find('.approver'));
+            var approverSelect = $('<select name="approver" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.approver'));
             loadDataInSelect(approverSelect, 1, data ? data.assignments.approver : []);
-            var reporterApproverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_approver" /> Imposta l\'operatore segnalatore</label>')
+            var reporterApproverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_approver" /> '+$.sensorTranslate.translate('Set the operator who opened the issue')+'</label>')
                 .appendTo(row.find('.approver'))
                 .find('input');
             reporterApproverCheckbox.on('change', function (e){
@@ -450,9 +453,9 @@
             if (data && data.assignments.reporter_as_approver){
                 reporterApproverCheckbox.attr('checked', true);
             }
-            var ownerGroupSelect = $('<select name="owner_group" data-placeholder="Nessuno"></select>').appendTo(row.find('.owner_group'));
+            var ownerGroupSelect = $('<select name="owner_group" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.owner_group'));
             loadDataInSelect(ownerGroupSelect, 1, data ? data.assignments.owner_group : []);
-            var ownerSelect = $('<select name="owner" data-placeholder="Nessuno"></select>').appendTo(row.find('.owner'));
+            var ownerSelect = $('<select name="owner" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.owner'));
             loadDataInSelect(ownerSelect, 2, data ? data.assignments.owner : []);
 
             ownerGroupSelect.on('select2:select', function (e) {
@@ -462,10 +465,10 @@
                 onChangeOwnerSelect($(e.currentTarget).val(), ownerGroupSelect);
             });
 
-            var reporterOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_owner" /> Imposta l\'operatore segnalatore</label>')
+            var reporterOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_owner" /> '+$.sensorTranslate.translate('Set the operator who opened the issue')+'</label>')
                 .appendTo(row.find('.owner'))
                 .find('input');
-            var randomOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="random_owner" /> Imposta un operatore casuale</label>')
+            var randomOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="random_owner" /> '+$.sensorTranslate.translate('Set a random operator')+'</label>')
                 .appendTo(row.find('.owner'))
                 .find('input');
             reporterOwnerCheckbox.on('change', function (e){
@@ -509,9 +512,9 @@
                    randomOwnerCheckbox.attr('checked', false).attr('disabled', true);
                }
             });
-            var observerSelect = $('<select name="observer" data-placeholder="Nessuno" multiple></select>').appendTo(row.find('.observer'));
+            var observerSelect = $('<select name="observer" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'" multiple></select>').appendTo(row.find('.observer'));
             loadDataInSelect(observerSelect, 3, data ? data.assignments.observer : []);
-            var reporterObserverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_observer" /> Aggiungi l\'operatore segnalatore</label>')
+            var reporterObserverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_observer" /> '+$.sensorTranslate.translate('Add the operator who opened the issue')+'</label>')
                 .appendTo(row.find('.observer'))
                 .find('input');
             if (data && data.assignments.reporter_as_observer){
@@ -536,9 +539,18 @@
         var loadContents = function(){
             table.html(spinner);
             $.getJSON('/api/sensor_gui/category_tree', function (response) {
-                response.baseUrl = $.opendataTools.settings('accessPath');
-                response.redirect = $.opendataTools.settings('accessPath')+'/sensor/config/categories';
-                response.locale = $.opendataTools.settings('language');
+                var decorate = function (elem){
+                    elem.baseUrl = $.opendataTools.settings('accessPath');
+                    elem.redirect = $.opendataTools.settings('accessPath')+'/sensor/config/categories';
+                    elem.locale = $.opendataTools.settings('language');
+                    elem.translations = $.opendataTools.settings('languages');
+                };
+                $.each(response.children, function (){
+                  decorate(this);
+                    $.each(this.children, function (){
+                        decorate(this);
+                    })
+                })
                 var renderData = $(template.render(response));
                 table.html(renderData);
 

@@ -2,11 +2,11 @@
 {ezscript_require(array('select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js')))}
 <div class="tab-pane active" id="automations">
     <div class="row" id="criteria-search">
-        <h5 class="text-muted" style="padding-left: 15px">Filtra per condizione</h5>
+        <h5 class="text-muted" style="padding-left: 15px">{sensor_translate('Filter by condition', 'config')}</h5>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="triggers">{'Evento'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="triggers" id="triggers" data-placeholder="Qualsiasi">
+                <select class="select form-control" name="triggers" id="triggers" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $events as $identifier => $name}
                         <option value="{$identifier|wash()}">{$name|wash()}</option>
@@ -16,8 +16,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="criterion_area">{'Zona'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="criterion_area.id" id="criterion_area" data-placeholder="Qualsiasi">
+                <label for="criterion_area">{sensor_translate('Area', 'config')}</label>
+                <select class="select form-control" name="criterion_area.id" id="criterion_area" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $areas.children as $item}
                         {*<option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>*}
@@ -31,8 +31,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="criterion_category">{'Categoria'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="criterion_category.id" id="criterion_category" data-placeholder="Qualsiasi">
+                <label for="criterion_category">{sensor_translate('Category', 'config')}</label>
+                <select class="select form-control" name="criterion_category.id" id="criterion_category" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $categories.children as $item}
                         <option value="{$item.id}"
@@ -46,8 +46,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="criterion_type">{'Tipologia'|i18n('sensor/post')}</label>
-                <select class="form-control" name="criterion_type" id="criterion_type" data-placeholder="Qualsiasi">
+                <label for="criterion_type">{sensor_translate('Type', 'config')}</label>
+                <select class="form-control" name="criterion_type" id="criterion_type" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $types as $type}
                         <option value="{$type.identifier}">{$type.name|wash()}</option>
@@ -57,8 +57,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="criterion_reporter_group">{'Gruppo del segnalatore'|i18n('sensor/post')}</label>
-                <select class="form-control" name="criterion_reporter_group.id" id="criterion_reporter_group" data-placeholder="Qualsiasi">
+                <label for="criterion_reporter_group">{sensor_translate('Reporter group', 'config')}</label>
+                <select class="form-control" name="criterion_reporter_group.id" id="criterion_reporter_group" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $groups.children as $item}
                         <option value="{$item.id}">{$item.name|wash()}</option>
@@ -68,14 +68,14 @@
         </div>
     </div>
     <div class="row" id="assignments-search">
-        <h5 class="text-muted" style="padding-left: 15px">Filtra per assegnazione</h5>
+        <h5 class="text-muted" style="padding-left: 15px">{sensor_translate('Filter by assignment', 'config')}</h5>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="approver">{'Riferimento'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="approver.id" id="approver" data-placeholder="Qualsiasi">
+                <label for="approver">{sensor_translate('Reference for the citizen', 'config')}</label>
+                <select class="select form-control" name="approver.id" id="approver" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
-                    <option value="reporter_as_approver">Operatore segnalatore</option>
-                    <optgroup label="Gruppi">
+                    <option value="reporter_as_approver">{sensor_translate('Operator who opened the issue', 'config')}</option>
+                    <optgroup label="{sensor_translate('Groups', 'config')}">
                         {foreach $groups.children as $item}
                             <option value="{$item.id}">{$item.name|wash()}</option>
                         {/foreach}
@@ -85,8 +85,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="owner_group">{'Gruppo incaricato'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="owner_group.id" id="owner_group" data-placeholder="Qualsiasi">
+                <label for="owner_group">{sensor_translate('Group of operators in charge', 'config')}</label>
+                <select class="select form-control" name="owner_group.id" id="owner_group" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $groups.children as $item}
                         <option value="{$item.id}">{$item.name|wash()}</option>
@@ -96,12 +96,12 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="owner">{'Incaricato'|i18n('sensor/post')}</label>
-                <select class="form-control" name="owner.id" id="owner" data-placeholder="Qualsiasi">
+                <label for="owner">{sensor_translate('Operator in charge', 'config')}</label>
+                <select class="form-control" name="owner.id" id="owner" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
-                    <option value="reporter_as_owner">Operatore segnalatore</option>
-                    <option value="random_owner">Operatore casuale</option>
-                    <optgroup label="Operatori">
+                    <option value="reporter_as_owner">{sensor_translate('Operator who opened the issue', 'config')}</option>
+                    <option value="random_owner">{sensor_translate('Random operator', 'config')}</option>
+                    <optgroup label="{sensor_translate('Operators', 'config')}">
                         {foreach $operators.children as $item}
                             <option value="{$item.id}">{$item.name|wash()}</option>
                         {/foreach}
@@ -111,10 +111,10 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="observer">{'Osservatore'|i18n('sensor/post')}</label>
-                <select class="form-control" name="observer.id" id="observer" data-placeholder="Qualsiasi">
+                <label for="observer">{sensor_translate('Observer', 'config')}</label>
+                <select class="form-control" name="observer.id" id="observer" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
-                    <option value="reporter_as_observer">Operatore segnalatore</option>
+                    <option value="reporter_as_observer">{sensor_translate('Operator who opened the issue', 'config')}</option>
                     <optgroup label="Gruppi">
                         {foreach $groups.children as $item}
                             <option value="{$item.id}">{$item.name|wash()}</option>
@@ -130,8 +130,8 @@
         </div>
         <div class="col-md-3">
             <div class="form-group">
-                <label for="criterion_category">{'Categoria'|i18n('sensor/post')}</label>
-                <select class="select form-control" name="category.id" id="category" data-placeholder="Qualsiasi">
+                <label for="criterion_category">{sensor_translate('Category', 'config')}</label>
+                <select class="select form-control" name="category.id" id="category" data-placeholder="{sensor_translate('Any', 'config')}">
                     <option></option>
                     {foreach $categories.children as $item}
                         <option value="{$item.id}"
@@ -146,11 +146,11 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-            <div class="pull-right" style="margin-left: 10px"><a class="btn btn-info" href="{concat('exportas/csv/sensor_scenario/',$scenario_parent_node.node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
-            <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$scenario_parent_node.node_id}" data-add-class="sensor_scenario" href="#"><i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}</a></div>
+            <div class="pull-right" style="margin-left: 10px"><a class="btn btn-info" href="{concat('exportas/csv/sensor_scenario/',$scenario_parent_node.node_id)|ezurl(no)}">{sensor_translate('Export to CSV', 'config')}</a></div>
+            <div class="pull-right"><a class="btn btn-danger" id="add" data-add-parent="{$scenario_parent_node.node_id}" data-add-class="sensor_scenario" href="#"><i class="fa fa-plus"></i> {sensor_translate('Add new', 'config')}</a></div>
             <p class="text-muted">
-                <strong>Attenzione:</strong> viene applicato lo scenario che coincide con il maggior numero di condizioni.<br/>
-                A parità di numero di condizioni viene applicato lo scenario con ID inferiore
+                <strong>{sensor_translate('Warning:', 'config')}</strong> {sensor_translate('the scenario that coincides with the greatest number of conditions is executed.', 'config')}<br/>
+                {sensor_translate('Under the same number of conditions, the scenario with the lower ID is applied', 'config')}
             </p>
         </div>
     </div>
@@ -167,13 +167,13 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
 
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
 
@@ -183,7 +183,7 @@
 
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -196,17 +196,17 @@
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
-            <i class="fa fa-times"></i> {/literal}{'Nessun contenuto'|i18n('sensor')}{literal}
+            <i class="fa fa-times"></i> {{:~sensorTranslate('No content')}}
         </div>
     {{else}}
     <div class="col-xs-12">
         <table class="table table-striped">
             <thead>
                 <th width="1">#</th>
-                <th>Evento</th>
-                <th>Condizioni</th>
-                <th>Assegnazioni</th>
-                <th>Scadenza</th>
+                <th>{{:~sensorTranslate('Event')}}</th>
+                <th>{{:~sensorTranslate('Conditions')}}</th>
+                <th>{{:~sensorTranslate('Assignments')}}</th>
+                <th>{{:~sensorTranslate('Expiration')}}</th>
                 <th></th>
                 <th></th>
             </thead>
@@ -221,38 +221,38 @@
                     </td>
                     <td>
                         <ul class="list-unstyled">
-                            {{if ~i18n(data, 'criterion_area')}}<li><strong>Zona:</strong> {{for ~i18n(data, 'criterion_area')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
-                            {{if ~i18n(data, 'criterion_category')}}<li><strong>Categoria:</strong> {{for ~i18n(data, 'criterion_category')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
-                            {{if ~i18n(data, 'criterion_type')}}<li><strong>Tipologia:</strong> {{:~i18n(data, 'criterion_type')}}</li>{{/if}}
-                            {{if ~i18n(data, 'criterion_reporter_group')}}<li><strong>Gruppo del segnalatore:</strong> {{for ~i18n(data, 'criterion_reporter_group')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
+                            {{if ~i18n(data, 'criterion_area')}}<li><strong>{{:~sensorTranslate('Area')}}:</strong> {{for ~i18n(data, 'criterion_area')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
+                            {{if ~i18n(data, 'criterion_category')}}<li><strong>{{:~sensorTranslate('Category')}}:</strong> {{for ~i18n(data, 'criterion_category')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
+                            {{if ~i18n(data, 'criterion_type')}}<li><strong>{{:~sensorTranslate('Type')}}:</strong> {{:~i18n(data, 'criterion_type')}}</li>{{/if}}
+                            {{if ~i18n(data, 'criterion_reporter_group')}}<li><strong>{{:~sensorTranslate('Group of operator who opened the issue')}}:</strong> {{for ~i18n(data, 'criterion_reporter_group')}}{{:~i18n(name)}} {{/for}}</li>{{/if}}
                         </ul>
                     </td>
                     <td>
                         <ul class="list-unstyled">
                             {{if ~i18n(data, 'approver') || ~i18n(data, 'reporter_as_approver')}}
-                                <li><strong>Riferimento:</strong>
+                                <li><strong>{{:~sensorTranslate('Reference for the citizen')}}:</strong>
                                 {{if ~i18n(data, 'approver')}}{{for ~i18n(data, 'approver')}}{{:~i18n(name)}} {{/for}}{{/if}}
-                                {{if ~i18n(data, 'reporter_as_approver')}}<em>Operatore segnalatore</em>{{/if}}
+                                {{if ~i18n(data, 'reporter_as_approver')}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
                                 </li>
                             {{/if}}
                             {{if ~i18n(data, 'owner_group')}}
-                                <li><strong>Gruppo incaricato:</strong> {{for ~i18n(data, 'owner_group')}}{{:~i18n(name)}} {{/for}}</li>
+                                <li><strong>{{:~sensorTranslate('Group of operators in charge')}}:</strong> {{for ~i18n(data, 'owner_group')}}{{:~i18n(name)}} {{/for}}</li>
                             {{/if}}
                             {{if ~i18n(data, 'owner') || ~i18n(data, 'reporter_as_owner') || ~i18n(data, 'random_owner')}}
-                                <li><strong>Incaricato:</strong>
+                                <li><strong>{{:~sensorTranslate('Operator in charge')}}:</strong>
                                     {{if ~i18n(data, 'owner')}}{{for ~i18n(data, 'owner')}}{{:~i18n(name)}} {{/for}}{{/if}}
-                                    {{if ~i18n(data, 'reporter_as_owner')}}<em>Operatore segnalatore</em>{{/if}}
-                                    {{if ~i18n(data, 'random_owner')}}<em>Operatore casuale</em>{{/if}}
+                                    {{if ~i18n(data, 'reporter_as_owner')}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
+                                    {{if ~i18n(data, 'random_owner')}}<em>{{:~sensorTranslate('Random operator')}}</em>{{/if}}
                                 </li>
                             {{/if}}
                             {{if ~i18n(data, 'observer') || ~i18n(data, 'reporter_as_observer')}}
-                                <li><strong>Osservatore:</strong>
+                                <li><strong>{{:~sensorTranslate('Observer')}}:</strong>
                                     {{if ~i18n(data, 'observer')}}{{for ~i18n(data, 'observer')}}{{:~i18n(name)}} {{/for}}{{/if}}
-                                    {{if ~i18n(data, 'reporter_as_observer')}}<em>Operatore segnalatore</em>{{/if}}
+                                    {{if ~i18n(data, 'reporter_as_observer')}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
                                 </li>
                             {{/if}}
                             {{if ~i18n(data, 'category')}}
-                                <li><strong>Categoria:</strong>
+                                <li><strong>{{:~sensorTranslate('Category')}}:</strong>
                                     {{if ~i18n(data, 'category')}}{{for ~i18n(data, 'category')}}{{:~i18n(name)}} {{/for}}{{/if}}
                                 </li>
                             {{/if}}
@@ -260,7 +260,7 @@
                     </td>
                     <td>
                         {{if ~i18n(data, 'expiry')}}
-                            {{:~i18n(data, 'expiry')}} giorni
+                            {{:~i18n(data, 'expiry')}} {{:~sensorTranslate('days')}}
                         {{/if}}
                     </td>
                     <td width="1">
@@ -283,13 +283,13 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
 
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
 
@@ -299,7 +299,7 @@
 
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -312,12 +312,6 @@
 </script>
 
 <script>
-    $.views.helpers($.extend({}, $.opendataTools.helpers, {
-        'eventName': function (value) {
-            var text = $('select#triggers option[value="'+value+'"]').text();
-            return text ? text : value;
-        }
-    }));
     $(document).ready(function () {
         var wrapper = $('#automations');
         var resultsContainer = wrapper.find('[data-items]');

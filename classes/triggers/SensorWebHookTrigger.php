@@ -56,7 +56,9 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface, OCWebHookCustom
 
     public function getDescription()
     {
-        return "Viene scatenato quando accade un evento di tipo '" . $this->getName() . "'. Il payload di default è un oggetto json API Sensor Post";
+        return SensorTranslationHelper::instance()->translate("Triggered on '%name' event. The default payload is a json API Sensor Post object", false, [
+            '%name' => $this->getName()
+        ]);
     }
 
     public function getName()

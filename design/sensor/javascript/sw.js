@@ -1,5 +1,5 @@
 self.addEventListener('notificationclick', (event) => {
-    var pageURL = '/sensor/posts/' + event.notification.data.id;
+    var pageURL = $.opendataTools.settings('accessPath')+'/sensor/posts/' + event.notification.data.id;
     const urlToOpen = new URL(pageURL, self.location.origin).href;
     const promiseChain = clients.matchAll({
         type: 'window',

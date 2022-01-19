@@ -23,24 +23,24 @@ Highcharts.setOptions({
     },
     lang: {
         loading: 'Sto caricando...',
-        months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
-        weekdays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'],
-        shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
-        exportButtonTitle: "Esporta",
-        printButtonTitle: "Importa",
-        rangeSelectorFrom: "Da",
-        rangeSelectorTo: "A",
-        rangeSelectorZoom: "Periodo",
-        downloadPNG: 'Download immagine PNG',
-        downloadJPEG: 'Download immagine JPEG',
-        downloadPDF: 'Download documento PDF',
-        downloadSVG: 'Download immagine SVG',
-        printChart: 'Stampa grafico',
+        months: $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_'),
+        weekdays: $.sensorTranslate.translate('Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday').split('_'),
+        shortMonths: $.sensorTranslate.translate('Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec').split('_'),
+        exportButtonTitle: $.sensorTranslate.translate('Export'),
+        printButtonTitle: $.sensorTranslate.translate('Print'),
+        rangeSelectorFrom: $.sensorTranslate.translate('From'),
+        rangeSelectorTo: $.sensorTranslate.translate('To'),
+        rangeSelectorZoom: $.sensorTranslate.translate('Time range'),
+        downloadPNG: $.sensorTranslate.translate('Download PNG image'),
+        downloadJPEG: $.sensorTranslate.translate('Download JPG image'),
+        downloadPDF: $.sensorTranslate.translate('Download PDF document'),
+        downloadSVG: $.sensorTranslate.translate('Download SVG'),
+        printChart: $.sensorTranslate.translate('Print chart'),
         viewFullscreen: 'Visualizza a schermo intero',
         thousandsSep: ".",
         decimalPoint: ','
     }
-});
+})
 var getExportingConfig = function (width, height){
     var sourceWidth = width || 1500;
     var sourceHeight = height || 800;

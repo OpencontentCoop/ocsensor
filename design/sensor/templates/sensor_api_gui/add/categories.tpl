@@ -28,7 +28,7 @@
                     {/if}
                 {/foreach}
             </select>
-            <span>Scegli la categoria</span>
+            <span>{sensor_translate('Choose the category')}</span>
         </label>
     {/if}
 {/if}

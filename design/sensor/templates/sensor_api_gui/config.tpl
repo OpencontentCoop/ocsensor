@@ -1,11 +1,8 @@
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 {ezscript_require(array(
   'ezjsc::jqueryUI',
   'ezjsc::jqueryio',
   'jquery.opendataTools.js',
-  'jsrender.js',
+  'jsrender.js', 'jsrender.helpers.js',
   'handlebars.min.js',
   'moment-with-locales.min.js',
   'jquery.fileupload.js',
@@ -38,7 +35,7 @@
 {foreach $plugin_list as $plugin}
     {set $dependency_js_list = $dependency_js_list|append( concat( 'plugins/', $plugin|trim, '/editor_plugin.js' ))}
 {/foreach}
-<script id="tinymce_script_loader" type="text/javascript" src={"javascript/tiny_mce_jquery.js"|ezdesign} charset="utf-8"></script>
+<script charset="utf-8" id="tinymce_script_loader" type="text/javascript" src={"javascript/tiny_mce_jquery.js"|ezdesign}></script>
 {ezscript( $dependency_js_list )}
 {ezcss_load(array(
   'alpaca.min.css',
@@ -52,15 +49,11 @@
   'bootstrap-toggle.min.css'
 ))}
 <script>
-  $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-  $.opendataTools.settings('language', "{$current_language}");
-  $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-  $.opendataTools.settings('locale', "{$moment_language}");
   $.opendataTools.settings('endpoint',{ldelim}'search': '{'/opendata/api/useraware/search/'|ezurl(no,full)}/'{rdelim});
 </script>
 
 <section class="hgroup">
-  <h1>{'Settings'|i18n('sensor/menu')}</h1>
+  <h1>{sensor_translate('Settings')}</h1>
 </section>
 
 <div class="row">

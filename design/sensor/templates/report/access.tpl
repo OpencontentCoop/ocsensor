@@ -9,10 +9,13 @@
             <h4>{$report.name|wash()}</h4>
             <form class="form" method="post" autocomplete="off" style="max-width: 300px;margin: 0 auto;">
                 <div class="form-group">
-                    <label class="hide" for="ReportAccess">Password di access</label>
-                    <input class="form-control input-lg" autocomplete="new-password" type="password" name="ReportAccess-{$report.remote_id|wash()}" id="ReportAccess-{$report.remote_id|wash()}" placeholder="Inserisci la password di accesso" />
+                    <label class="hide" for="{concat('ReportAccess-', $report.remote_id)}">{sensor_translate('Password', 'report')}</label>
+                    <input class="form-control input-lg" autocomplete="new-password" type="password"
+                           id="{concat('ReportAccess-', $report.remote_id)}"
+                           name="{concat('ReportAccess-', $report.remote_id)}"
+                           placeholder="{sensor_translate('Enter the report password', 'report')}" />
                 </div>
-                <button class="btn btn-lg btn-default">Accedi</button>
+                <button class="btn btn-lg btn-success">{sensor_translate('View the report', 'report')}</button>
             </form>
         </section>
     </div>

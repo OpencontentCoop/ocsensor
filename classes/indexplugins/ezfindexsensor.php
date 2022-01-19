@@ -2,6 +2,7 @@
 
 use Opencontent\Sensor\Legacy\PostService\PostBuilder;
 use Opencontent\Sensor\Legacy\PostService;
+use Opencontent\Sensor\Legacy\SearchService\SolrMapper;
 
 class ezfIndexSensor implements ezfIndexPlugin
 {
@@ -41,7 +42,7 @@ class ezfIndexSensor implements ezfIndexPlugin
                             if ($collaborationItem instanceof eZCollaborationItem) {
                                 $builder = new PostBuilder($repository, $contentObject, $collaborationItem);
                                 $post = $builder->build();
-                                $mapper = new \Opencontent\Sensor\Legacy\SearchService\SolrMapper($repository, $post);
+                                $mapper = new SolrMapper($repository, $post);
                                 foreach ($mapper->mapToIndex() as $key => $value) {
                                     $this->addField($docList[$languageCode], $key, $value);
                                 }

@@ -5,13 +5,16 @@
               required
               class="form-control"
               data-limit="{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}"
-              placeholder="Dettagli della segnalazione (massimo {ezini('SensorConfig','TextMaxLength','ocsensor.ini')} caratteri)"
+              placeholder="{sensor_translate('Details (maximum %count characters)', '', hash('%count', ezini('SensorConfig','TextMaxLength','ocsensor.ini')))}"
               tabindex="3"
               cols="70" rows="11"></textarea>
-    <span>Specifica i dettagli della segnalazione</span>
+    <span>{sensor_translate('Describe the details of the issue')}</span>
 </label>
 <p id="description-counter" class="text-muted post-help">
-    Hai a disposizione <span>{ezini('SensorConfig','TextMaxLength','ocsensor.ini')}</span> caratteri su {ezini('SensorConfig','TextMaxLength','ocsensor.ini')}
+    {sensor_translate('You have %count characters out of %total', '', hash(
+        '%count', concat('<span>', ezini('SensorConfig','TextMaxLength','ocsensor.ini'), '</span>'),
+        '%total', ezini('SensorConfig','TextMaxLength','ocsensor.ini')
+    ))}
 </p>
 <script type="text/javascript">
     {literal}

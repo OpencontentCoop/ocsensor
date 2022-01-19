@@ -66,12 +66,12 @@
             'debug_bounding_area': {$show_map_debug},
             'debug_meta_info': {$show_map_debug},
             'debug_geocoder': {$show_map_debug},
-            'strict_in_area_alert': "{ezini('GeoCoderSettings', 'MarkerOutOfBoundsAlert', 'ocsensor.ini')}",
+            'strict_in_area_alert': "{sensor_translate(ezini('GeoCoderSettings', 'MarkerOutOfBoundsAlert', 'ocsensor.ini'))}",
             'no_suggestion_message': "{ezini('GeoCoderSettings', 'NoSuggestionMessage', 'ocsensor.ini')}",
             {if $nearestService}
             'nearest_service': {ldelim}
-                'strict_in_area_alert': "{'La località selezionata non è coperta dal servizio'|i18n('sensor/config')}",
-                'no_suggestion_message': "{'Nessun risultato'|i18n('sensor/config')}",
+                'strict_in_area_alert': "{sensor_translate('The selected location is not covered by the service ')}",
+                'no_suggestion_message': "{sensor_translate('No results')}",
                 'debug': {cond(or($show_map_debug|eq('true'), ezini('GeoCoderSettings', 'NearestServiceDebug', 'ocsensor.ini')|eq('enabled')), 'true', 'false')},
                 'url': '{ezini('GeoCoderSettings', 'NearestServiceUrl', 'ocsensor.ini')}',
                 'typeName': '{ezini('GeoCoderSettings', 'NearestServiceTypeName', 'ocsensor.ini')}',

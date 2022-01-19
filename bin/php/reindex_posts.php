@@ -67,10 +67,6 @@ try {
         $percentageAdvancementStep = 0;
     }
 
-    $progressBarOptions = array(
-        'emptyChar' => ' ',
-        'barChar' => '='
-    );
     $progressBar = new ezcConsoleProgressbar($output, $processLength, $progressBarOptions);
     $progressBar->start();
     $length = 50;

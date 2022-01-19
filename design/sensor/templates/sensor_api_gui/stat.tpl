@@ -18,7 +18,7 @@
     <button class="navbar-toggle" data-target="#stat-menu" data-toggle="collapse" type="button" style="padding: 0;">
         <span class="fa fa-caret-down fa-2x"></span>
     </button>
-    <h1>{'Statistiche'|i18n('sensor/chart')}</h1>
+    <h1>{sensor_translate('Statistics')}</h1>
 </section>
 
 <div class="row">
@@ -36,12 +36,12 @@
                 <li class="divider" style="border-bottom: 1px solid #ccc"></li>
                 <li>
                     <a id="download-csv" href="{if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}{'/sensor/dashboard/(export)'|ezurl(no)}{else}{'/sensor/export'|ezurl(no)}{/if}">
-                        <i class="fa fa-download"></i> {"Esporta in formato CSV"|i18n('sensor/dashboard')}
+                        <i class="fa fa-download"></i> {sensor_translate('Export in CSV')}
                     </a>
                 </li>
                 <li>
                     <a href="{'sensor/openapi/'|ezurl(no)}">
-                        <i class="fa fa-external-link-square"></i> {"Consulta in formato JSON"|i18n('sensor/dashboard')}
+                        <i class="fa fa-external-link-square"></i> {sensor_translate('Json API')}
                     </a>
                 </li>
             </ul>
@@ -52,7 +52,7 @@
             <div id="chart-filters">
                 <div class="row" id="posts-search">
                     <div class="col-md-3 form-group hide" id="type-filter">
-                        <label>{'Filtra per tipo'|i18n('sensor/post')}</label>
+                        <label>{sensor_translate('Filter by type')}</label>
                         <select class="select form-control" name="type" multiple>
                             {foreach sensor_types() as $type}
                                 <option value="{$type.identifier}">
@@ -62,7 +62,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group hide" id="area-filter">
-                        <label>{'Filtra per zona'|i18n('sensor/post')}</label>
+                        <label>{sensor_translate('Filter by area')}</label>
                         <select class="select form-control" name="area" multiple>
                             {foreach $areas.children as $item}
                                 {*<option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>*}
@@ -74,7 +74,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group hide" id="category-filter">
-                        <label>{'Filtra per categoria'|i18n('sensor/post')}</label>
+                        <label>{sensor_translate('Filter by category')}</label>
                         <select class="select form-control" name="" multiple>
                             {foreach $categories.children as $item}
                                 <option value="{$item.id}"
@@ -86,7 +86,7 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group hide" id="maincategory-filter">
-                        <label>{'Filtra per macro categoria'|i18n('sensor/post')}</label>
+                        <label>{sensor_translate('Filter by macro category')}</label>
                         <select class="select form-control" name="">
                             <option></option>
                             {foreach $categories.children as $item}
@@ -95,14 +95,14 @@
                         </select>
                     </div>
                     <div class="col-md-3 form-group hide" id="interval-filter">
-                        <label>{'Filtra per Intervallo di tempo'|i18n('sensor/post')}</label>
+                        <label>{sensor_translate('Filter by time interval')}</label>
                         <select class="select form-control" name="interval">
-                            <option value="daily" class="daily_interval" disabled>{'Giornaliero'|i18n('sensor/chart')}</option>
-                            <option value="weekly">{'Settimanale'|i18n('sensor/chart')}</option>
-                            <option value="monthly">{'Mensile'|i18n('sensor/chart')}</option>
-                            <option value="quarterly">{'Trimestrale'|i18n('sensor/chart')}</option>
-                            <option value="half-yearly">{'Semestrale'|i18n('sensor/chart')}</option>
-                            <option value="yearly" selected="selected">{'Annuale'|i18n('sensor/chart')}</option>
+                            <option value="daily" class="daily_interval" disabled>{sensor_translate('Daily')}</option>
+                            <option value="weekly">{sensor_translate('Weekly')}</option>
+                            <option value="monthly">{sensor_translate('Monthly')}</option>
+                            <option value="quarterly">{sensor_translate('Quarterly')}</option>
+                            <option value="half-yearly">{sensor_translate('Half-yearly')}</option>
+                            <option value="yearly" selected="selected">{sensor_translate('Yearly')}</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -111,7 +111,7 @@
                             <div>
                         {/if}
                         <div class="form-group hide" id="group-filter">
-                            <label>{'Filtra per gruppo di incaricati'|i18n('sensor/post')}</label>
+                            <label>{sensor_translate('Filter by group in charge')}</label>
                             <select class="select form-control" name="group" multiple>
                                 {def $tag_group_id = 0}
                                 {foreach $groups as $group => $items}
@@ -129,7 +129,7 @@
                             </div>
                             <div>
                                 <div class="form-group hide" id="taggroup-filter" style="margin-left: 10px">
-                                    <label>{'Raggruppa'|i18n('sensor/post')}</label>
+                                    <label>{sensor_translate('Group')}</label>
                                     <input type="checkbox" data-toggleconfig />
                                 </div>
                             </div>
@@ -140,11 +140,11 @@
                 <div class="row hide" id="range-filter">
                     <div class="col-md-3">
                         <div class="form-group" id="event-filter" style="margin-top: 15px;">
-                            <label>{'Seleziona evento'|i18n('sensor/post')}</label>
+                            <label>{sensor_translate('Select event')}</label>
                             <select class="form-control" name="event">
-                                <option value="open">{'Creazione'|i18n('sensor/chart')}</option>
-                                <option value="fix">{'Fine lavorazione'|i18n('sensor/chart')}</option>
-                                <option value="close">{'Chiusura'|i18n('sensor/chart')}</option>
+                                <option value="open">{sensor_translate('Creating')}</option>
+                                <option value="fix">{sensor_translate('Fixing')}</option>
+                                <option value="close">{sensor_translate('Closing')}</option>
                             </select>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                     <div id="editor-helper">
                         <div class="input-group">
                             <input class="form-control form-control-sm" type="text" id="link" />
-                            <a id="linkButton" href="#" class="input-group-addon btn-info">Copia link</a>
+                            <a id="linkButton" href="#" class="input-group-addon btn-info">{sensor_translate('Copy link')}</a>
                         </div>
                     </div>
                 {/if}
@@ -188,7 +188,7 @@
                 enableEventFilter: false,
                 enableRangeFilter: false,
                 load: function (){},
-                months: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
+                months: $.sensorTranslate.translate('Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec').split('_'),
                 rangeMin: {days: 2},
                 rangeMax: {days: 60},
                 rangeDateMin: new Date('{/literal}{$posts_date_range['first']}{literal}'),

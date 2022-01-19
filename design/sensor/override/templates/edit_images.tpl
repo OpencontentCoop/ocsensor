@@ -26,10 +26,8 @@
     </div>
 {/default}
 
-
 {ezscript_require( array( 'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI', 'jquery.fileupload.js','jquery.ocmultibinary.js') )}
 {ezcss_require( 'jquery.fileupload.css' )}
-
 
 <script>
     $(document).ready(function () {ldelim}

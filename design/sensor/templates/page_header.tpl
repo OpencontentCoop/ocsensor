@@ -6,7 +6,7 @@
                     <span class="nb_left pull-left">
                         <span class="fa fa-reorder"></span>
                     </span>
-                    <span class="nb_right pull-right hidden-xs">Menu</span>
+                    <span class="nb_right pull-right hidden-xs">{sensor_translate('Menu')}</span>
                 </a>
                 <a class="navbar-brand" href="{'/'|ezurl(no)}">
                     <img class="hidden-xs" src="{$social_pagedata.logo_path|ezroot(no)}" alt="{$social_pagedata.site_title}" height="90" width="90">
@@ -18,4 +18,3 @@
         </div>
     </div>
 </header>
-{*<img alt="SensorCivico" src={"sensor_border.png"|ezimage()} style="position: absolute; top: 0; right: 0; border: 0;">*}

@@ -1,9 +1,8 @@
 {if eq($current_user.contentobject_id,$anonymous_user_id)}
-
     {if $embed_content}
         {if is_set($parameters.post_id)}
             <div class="alert">
-                <p class="lead">Per accedere alla segnalazione devi essere autenticato.</p>
+                <p class="lead">{sensor_translate('To access the content you must be authenticated.')}</p>
             </div>
         {/if}
         {$embed_content}

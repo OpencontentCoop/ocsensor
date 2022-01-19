@@ -2,7 +2,7 @@
 {ezcss_require(array('dataTables.bootstrap.css','responsive.dataTables.min.css'))}
 
 <section class="hgroup">
-    <h1>{'Sorgente statistiche'|i18n('sensor/chart')}</h1>
+    <h1>{sensor_translate('Statistics source')}</h1>
 </section>
 
 <div class="datatable-container">
@@ -11,7 +11,6 @@
 
 <script>
 {literal}
-moment.locale('it');
 var settings = {
     endpoint: '{/literal}{concat('/customdatatable/',$repository)|ezurl(no)}{literal}',
     columns: JSON.parse('{/literal}{$columns|json_encode()}{literal}')

@@ -1,7 +1,7 @@
 <div id="post" class="post-gui" style="position: relative;min-height: 400px;">
     <section class="hgroup">
         <h1>
-            <span class="label label-default">Cronologia</span>
+            <span class="label label-default">{sensor_translate('Timeline')}</span>
             <a href="{concat('/sensor/posts/', $post.id)|ezurl(no)}" class="label label-primary">{$post.id|wash()}</a>
             {$post.subject|wash()}
         </h1>

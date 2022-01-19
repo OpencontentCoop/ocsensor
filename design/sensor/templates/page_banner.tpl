@@ -26,12 +26,12 @@
             <form class="row" role="search">
                 <div class="col-xs-12 col-sm-2">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="query" value="" placeholder="{'Ricerca testuale'|i18n('sensor/post')}">
+                        <input type="text" class="form-control" name="query" value="" placeholder="{sensor_translate('Search text')}">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-2">
                     <div class="form-group" id="area-filter">
-                        <select class="select form-control" name="area" data-placeholder="{'Area'|i18n('sensor/post')}">
+                        <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
                             <option></option>
                             {foreach $module_result.content_info.persistent_variable.areas.children as $item}
                                 <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-3">
                     <div class="form-group" id="category-filter">
-                        <select class="select form-control" name="category" data-placeholder="{'Categoria'|i18n('sensor/post')}" multiple="multiple">
+                        <select class="select form-control" name="category" data-placeholder="{sensor_translate('Category')}" multiple="multiple">
                             {foreach $module_result.content_info.persistent_variable.categories.children as $item}
                                 <option value="{$item.id}"
                                         style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-2">
                     <div class="form-group" id="type-filter">
-                        <select class="select form-control" name="type" data-placeholder="{'Tipo'|i18n('sensor/post')}">
+                        <select class="select form-control" name="type" data-placeholder="{sensor_translate('Type')}">
                             <option></option>
                             {foreach $module_result.content_info.persistent_variable.types as $item}
                                 <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
@@ -71,7 +71,7 @@
                         <input type="text"
                                name="published"
                                class="form-control daterange"
-                               placeholder="{'Data creazione'|i18n('sensor/post')}"
+                               placeholder="{sensor_translate('Creation date')}"
                                value=""/>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                     <div class="form-group">
                         <select name="status"
                                 class="select form-control"
-                                data-placeholder="{'Stato'|i18n('sensor/post')}">
+                                data-placeholder="{sensor_translate('Status')}">
                             <option></option>
                             {foreach sensor_statuses() as $status}
                                 <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
@@ -95,7 +95,7 @@
                         <input type="text"
                                name="author"
                                class="form-control daterange"
-                               placeholder="{'Autore'|i18n('sensor/post')}"
+                               placeholder="{sensor_translate('Author')}"
                                value=""/>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <div class="form-group">
                         <select name="owner"
                                 class="select select-operator form-control"
-                                data-placeholder="{'Incaricato'|i18n('sensor/post')}"
+                                data-placeholder="{sensor_translate('Operator in charge')}"
                                 data-type="operators">
                             <option value="'0'" style="font-style: italic">Nessun operatore incaricato</option>
                         </select>
@@ -113,7 +113,7 @@
                     <div class="form-group">
                         <select name="owner_group"
                                 class="select select-group form-control"
-                                data-placeholder="{'Gruppo incaricato'|i18n('sensor/post')}"
+                                data-placeholder="{sensor_translate('Group in charge')}"
                                 data-type="groups">
                             <option value="'0'" style="font-style: italic">Nessun gruppo incaricato</option>
                         </select>
@@ -123,7 +123,7 @@
                     <div class="form-group">
                         <select name="observer"
                                 class="select select-operator form-control"
-                                data-placeholder="{'Osservatore'|i18n('sensor/post')}"
+                                data-placeholder="{sensor_translate('Observer')}"
                                 data-type="operators">
                             <option></option>
                         </select>
@@ -132,8 +132,8 @@
                 {/if}
 
                 <div class="col-xs-12 col-md-1" style="white-space: nowrap">
-                    <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> <span class="hidden-sm hidden-md hidden-lg">Cerca</span></button>
-                    <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span> <span class="hidden-sm hidden-md hidden-lg">Annulla</span></button>
+                    <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Search')}</span></button>
+                    <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Cancel')}</span></button>
                 </div>
             </form>
         </div>

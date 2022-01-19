@@ -9,7 +9,7 @@
 		   align, center ) )}
 {pdf(newline)}
 
-{pdf(text, concat('<b>Segnalazione numero ', $post_id, '</b>')|wash(pdf), hash(size, 14))}
+{pdf(text, concat('<b>', sensor_translate('Issue number'), ' ', $post_id, '</b>')|wash(pdf), hash(size, 14))}
 {pdf(newline)}
 
 {foreach $attributes as $name => $value}
@@ -27,7 +27,7 @@
 {/if}
 
 {if count($comments)}
-	{pdf(text, '<b>Commenti alla segnalazione</b>'|wash(pdf), hash(size, 14))}
+	{pdf(text, concat('<b>', sensor_translate('Issue comments'), '</b>')|wash(pdf), hash(size, 14))}
 	{pdf(newline)}
 
 	{foreach $comments as $comment}
@@ -41,7 +41,7 @@
 {/if}
 
 {if count($notes)}
-	{pdf(text, '<b>Note private alla segnalazione</b>'|wash(pdf), hash(size, 14))}
+	{pdf(text, concat('<b>', sensor_translate('Issue private notes'), '</b>')|wash(pdf), hash(size, 14))}
 	{pdf(newline)}
 
 	{foreach $notes as $comment}
@@ -56,7 +56,7 @@
 
 {if count($images)}
 	{pdf( 'new_page' )}
-	{pdf(text, '<b>Immagini allegate alla segnalazione</b>'|wash(pdf), hash(size, 14))}
+	{pdf(text, concat('<b>', sensor_translate('Issue images'), '</b>')|wash(pdf), hash(size, 14))}
 	{pdf(newline)}
 
 	{foreach $images as $image}
@@ -64,4 +64,4 @@
 	{/foreach}
 {/if}
 
-{pdf(footer, hash( text, concat('Stampato ', currentdate()|l10n( datetime ))|wash(pdf), size, 7, align, "right" ) ) }
+{pdf(footer, hash( text, concat(sensor_translate('Print'), ' ', currentdate()|l10n( datetime ))|wash(pdf), size, 7, align, "right" ) ) }

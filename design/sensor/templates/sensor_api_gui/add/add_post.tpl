@@ -6,9 +6,9 @@
 
 <div id="add-post-gui">
     <div id="sensor_full_map"></div>
-    <a id="sensor_hide_map_button" class="visible-xs-block btn btn-default btn-lg" href="#">Nascondi mappa</a>
+    <a id="sensor_hide_map_button" class="visible-xs-block btn btn-default btn-lg" href="#">{sensor_translate('Hide map')}</a>
     <a class="btn btn-default btn-lg visible-xs-block" id="mylocation-mobile-button"
-       title="{'Gets your current position if your browser support GeoLocation and you grant this website access to it! Most accurate if you have a built in gps in your Internet device! Also note that you might still have to type in address manually!'|i18n('extension/ezgmaplocation/datatype')}">
+       title="{sensor_translate('Detect my location')}">
         <i class="fa fa-compass"></i>
     </a>
     <form id="edit" class="post-edit col-md-6 col-xs-12">
@@ -25,24 +25,24 @@
 
                     <ul class="list-inline text-left step-nav" role="tablist">
                         <li role="presentation" class="nav-item active">
-                            <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="Aggiungi testo" style="position: relative">
+                            <a href="#step-text" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-text" role="tab" title="{sensor_translate('Issue info')}" style="position: relative">
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-pencil fa-2x text-muted"></i>
                             </a>
                         </li>
                         {if $can_behalf}
                             <li role="presentation" class="nav-item">
-                                <a tabindex="4" href="#step-behalf" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-behalf" role="tab" title="Informazioni sul segnalatore" style="position: relative">
+                                <a tabindex="4" href="#step-behalf" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-behalf" role="tab" title="{sensor_translate('Reporter info')}" style="position: relative">
                                     <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-user fa-2x text-muted"></i>
                                 </a>
                             </li>
                         {/if}
                         <li role="presentation" class="nav-item">
-                            <a tabindex="5" href="#step-geo" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-geo" role="tab" title="Aggiungi geolocalizzazione" style="position: relative">
+                            <a tabindex="5" href="#step-geo" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-geo" role="tab" title="{sensor_translate('Location info')}" style="position: relative">
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
-                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-image" role="tab" title="Aggiungi immagini" style="position: relative">
+                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-image" role="tab" title="{sensor_translate('Images')}" style="position: relative">
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-image fa-2x text-muted"></i>
                             </a>
                         </li>
@@ -69,20 +69,20 @@
                             <div class="step-content">
                                 <div class="step-part">
                                     <p class="lead hidden-xs">
-                                        Scegli un punto sulla mappa o digita un indirizzo e clicca sulla lente.<br />
-                                        Per inserire la tua posizione corrente clicca sulla bussola.<br />
+                                        {sensor_translate('Choose a point on the map or enter an address and click on the lens.')}<br />
+                                        {sensor_translate('To enter your current position click on the compass.')}<br />
                                     </p>
-                                    <p class="lead visible-xs">Digita un indirizzo e clicca sulla lente o clicca sulla cartina per visualizzare la mappa</p>
+                                    <p class="lead visible-xs">{sensor_translate('Type an address and click on the lens or click on the map to view the map')}</p>
                                     {include uri='design:sensor_api_gui/add/geoLocation.tpl'}
                                 {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|ne('enabled')}
                                 </div>
                                 <div class="step-part">
-                                    <p class="lead">Seleziona la zona di riferimento</p>
+                                    <p class="lead">{sensor_translate('Select the reference area')}</p>
                                 {/if}
                                 {include uri='design:sensor_api_gui/add/areas.tpl'}
                                 </div>
                                 <p class="drag-marker-help lead hidden-xs" style="display: none">
-                                    Puoi trascinare il marker sulla mappa per selezionare la posizione in maniera più precisa
+                                    {sensor_translate('You can drag the marker on the map to select the location more precisely')}
                                 </p>
                             </div>
                         </div>
@@ -90,8 +90,8 @@
                             <div class="step-content">
                                 <div class="step-part">
                                     <p class="lead hidden-xs">
-                                        Puoi aggiungere fino a tre immagini in formato png o jpg<br />
-                                        Per rimuovere un'immagine allegata clicca sul cestino
+                                        {sensor_translate('You can add up to three images in png or jpg format')}<br />
+                                        {sensor_translate('To remove an attached image click on the trash can')}
                                     </p>
                                     <div class="row">
                                         <div class="col-xs-3">
@@ -132,25 +132,25 @@
                         {else}
                             <div class="row">
                                 <div class="col-xs-8 col-md-6">
-                                    <p class="lead">Consenti la pubblicazione:</p>
+                                    <p class="lead">{sensor_translate('Allow publishing:')}</p>
                                 </div>
                                 <div class="col-xs-2 col-md-2">
                                     <label class="radio" style="font-size: 1.3em;margin-top: 20px">
-                                        <input required type="radio" name="is_private" value="" />Sì
+                                        <input required type="radio" name="is_private" value="" />{sensor_translate('Yes')}
                                     </label>
                                 </div>
                                 <div class="col-xs-2 col-md-1">
                                     <label class="radio" style="font-size: 1.3em;margin-top: 20px">
-                                        <input required type="radio" name="is_private" value="1" />No
+                                        <input required type="radio" name="is_private" value="1" />{sensor_translate('No')}
                                     </label>
                                 </div>
                             </div>
 
-                            <p class="is_private" style="display: none"><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                            <p class="is_private" style="display: none"><i class="fa fa-lock"></i> {sensor_translate('Only the %site team will be able to read this report', '', hash('%site', social_pagedata().logo_title))}</p>
                             {if sensor_is_moderation_enabled()}
-                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione quando il team di {social_pagedata().logo_title} la approverà</p>
+                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> {sensor_translate('Everyone will be able to read this report when the %site team approves it', '', hash('%site', social_pagedata().logo_title))}</p>
                             {else}
-                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> Tutti potranno leggere questa segnalazione</p>
+                                <p class="is_public" style="display: none"><i class="fa fa-globe"></i> {sensor_translate('Everyone will be able to read this report')}</p>
                             {/if}
 
                         {/if}
@@ -158,20 +158,20 @@
 
                     <div class="row post-send">
                         <div class="col-xs-6">
-                            <a href="#" class="close-add-post btn btn-default btn-lg">Annulla</a>
+                            <a href="#" class="close-add-post btn btn-default btn-lg">{sensor_translate('Cancel')}</a>
                         </div>
                         <div class="col-xs-6 text-right">
-                            <a href="#" class="btn btn-default btn-lg next-step" tabindex="11">Avanti</a>
-                            <button type="submit" class="btn btn-primary btn-lg" style="display: none" tabindex="11">Invia</button>
+                            <a href="#" class="btn btn-default btn-lg next-step" tabindex="11">{sensor_translate('Next')}</a>
+                            <button type="submit" class="btn btn-primary btn-lg" style="display: none" tabindex="11">{sensor_translate('Send')}</button>
                         </div>
                     </div>
 
                     <div>
                         {if sensor_settings().HidePrivacyChoice}
-                            <p><i class="fa fa-lock"></i> Solo il team di {social_pagedata().logo_title} potrà leggere questa segnalazione</p>
+                            <p><i class="fa fa-lock"></i> {sensor_translate('Only the %site team will be able to read this report', '', hash('%site', social_pagedata().logo_title))}</p>
                         {/if}
                         <p class="text-muted post-help">
-                            {'I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%'|i18n('sensor/add', '', hash(
+                            {sensor_translate('The texts and images inserted must comply with the policies established for %open_privacy_url%privacy%close_privacy_url% and %open_terms_url% the terms of use %close_terms_url%', '', hash(
                             '%open_privacy_url%', concat('<a href="','/sensor/redirect/info,privacy'|ezurl(no,full), '">'),
                             '%close_privacy_url%', '</a>',
                             '%open_terms_url%', concat('<a href="','/sensor/redirect/info,terms'|ezurl(no,full), '">'),
@@ -182,7 +182,7 @@
 
                     <div id="post-spinner" class="text-center" style="display: none">
                         <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-                        <span class="sr-only">Loading...</span>
+                        <span class="sr-only">{sensor_translate('Loading...')}</span>
                     </div>
                 </div>
             </div>
@@ -229,12 +229,12 @@
             'debug_bounding_area': {$show_map_debug},
             'debug_meta_info': {$show_map_debug},
             'debug_geocoder': {$show_map_debug},
-            'strict_in_area_alert': "{ezini('GeoCoderSettings', 'MarkerOutOfBoundsAlert', 'ocsensor.ini')}",
+            'strict_in_area_alert': "{sensor_translate(ezini('GeoCoderSettings', 'MarkerOutOfBoundsAlert', 'ocsensor.ini'))}",
             'no_suggestion_message': "{ezini('GeoCoderSettings', 'NoSuggestionMessage', 'ocsensor.ini')}",
             {if $nearestService}
             'nearest_service': {ldelim}
-                'strict_in_area_alert': "{'La località selezionata non è coperta dal servizio'|i18n('sensor/config')}",
-                'no_suggestion_message': "{'Nessun risultato'|i18n('sensor/config')}",
+                'strict_in_area_alert': "{sensor_translate('The selected location is not covered by the service ')}",
+                'no_suggestion_message': "{sensor_translate('No results')}",
                 'debug': {cond(or($show_map_debug|eq('true'), ezini('GeoCoderSettings', 'NearestServiceDebug', 'ocsensor.ini')|eq('enabled')), 'true', 'false')},
                 'url': '{ezini('GeoCoderSettings', 'NearestServiceUrl', 'ocsensor.ini')}',
                 'typeName': '{ezini('GeoCoderSettings', 'NearestServiceTypeName', 'ocsensor.ini')}',

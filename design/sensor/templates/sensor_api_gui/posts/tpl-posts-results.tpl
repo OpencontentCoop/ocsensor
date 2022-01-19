@@ -4,7 +4,7 @@
 	{{if pageCount > 1}}
 	<div class="pagination-container text-center">
         <ul class="pagination">
-            <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} risultati</span></li>
+            <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} {{:~sensorTranslate('issues')}}</span></li>
         </ul>
         <ul class="pagination">
             <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
@@ -25,19 +25,19 @@
 	{{else totalCount == 1}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item disabled"><span class="text" style="cursor: auto;">Un risultato</span></li>
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:~sensorTranslate('One issue')}}/span></li>
             </ul>
         </div>
 	{{else totalCount > 0}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} risultati</span></li>
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} {{:~sensorTranslate('issues')}}</span></li>
             </ul>
         </div>
     {{else}}
         <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item disabled"><span class="text" style="cursor: auto;">Nessun risultato</span></li>
+                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:~sensorTranslate('No issues')}}</span></li>
             </ul>
         </div>
 	{{/if}}
@@ -49,16 +49,16 @@
                  <div class="col-sm-12">
                     <h2 class="post-title">
                         <div class="post-identifier">
-                            <span class="label label-{{:statusCss}}">{{:status.name}}</span>
-                            <a href="{{:accessPath}}/sensor/posts/{{:id}}" class="label label-primary">{{:id}}</a>
+                            <span class="label label-{{:statusCss}}">{{:~sensorTranslate(status.identifier, 'status')}}</span>
+                            <a href="{{:~accessPath("/sensor/posts/")}}{{:id}}" class="label label-primary">{{:id}}</a>
                         </div>
                         <div>{{:subject}}</div>
                     </h2>
                     <ul class="list-inline">
-                      <li>{{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<i class="fa fa-lock"></i> {{/if}}<strong>{{:type.name}}</strong> di {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}</li>
-                      <li><small><i class="fa fa-clock-o"></i> {/literal}{'Pubblicata il'|i18n('sensor/post')}{literal} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
+                      <li>{{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<i class="fa fa-lock"></i> {{/if}}<strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong> &middot; {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}</li>
+                      <li><small><i class="fa fa-clock-o"></i> {{:~sensorTranslate('Created at')}} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
                       {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}
-                          <li><small><i class="fa fa-clock-o"></i> {/literal}{'Ultima modifica del'|i18n('sensor/post')}{literal} {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>
+                          <li><small><i class="fa fa-clock-o"></i> {{:~sensorTranslate('Last modified at')}} {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>
                       {{/if}}
                   </ul>
                  </div>
@@ -81,7 +81,7 @@
                       {{/if}}
                   </ul>
                   <p class="lead" style="white-space:pre-wrap;font-size: 18px;line-height: 1.25;">{{:description}}</p>
-                  <a href="{{:accessPath}}/sensor/posts/{{:id}}" class="btn btn-default btn-bold pull-right btn-sm">{/literal}{"Dettagli"|i18n('sensor/dashboard')}{literal}</a>
+                  <a href="{{:~accessPath("/sensor/posts/")}}{{:id}}" class="btn btn-default btn-bold pull-right btn-sm">{{:~sensorTranslate('Details')}}</a>
               </div>
             </div>
         </div>

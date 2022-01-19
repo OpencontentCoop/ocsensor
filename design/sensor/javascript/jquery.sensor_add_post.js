@@ -349,7 +349,7 @@
             var behalfOfAnonymous = addPostGui.find('#behalf-of-anonymous')
                 .attr('checked', false)
                 .on('change', function () {
-                    var userName = 'Utente anonimo';
+                    var userName = $.sensorTranslate.translate('Anonymous user');
                     var userId = $(this).data('userid');
                     if ($(this).is(':checked')) {
                         behalfOfSearch.addClass('hide');
@@ -596,7 +596,7 @@
                     headers: {'X-CSRF-TOKEN': csrfToken},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        window.location = '/sensor/posts/' + data.id
+                        window.location = $.opendataTools.settings('accessPath')+'/sensor/posts/' + data.id
                     },
                     error: function (jqXHR) {
                         var error = jqXHR.responseJSON;
@@ -643,7 +643,7 @@
                 }
             }
 
-            var addButton = $('a[href="/sensor/add"]');
+            var addButton = $('a[href$="/sensor/add"]');
             addButton.on('click', function (e) {
                 showAddPostGui();
                 e.preventDefault();

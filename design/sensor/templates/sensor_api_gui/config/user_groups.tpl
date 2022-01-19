@@ -1,7 +1,7 @@
 <form class="row form">
     <div class="col-xs-12 col-md-6">
         <div class="input-group">
-            <input type="text" class="form-control" data-search="q" placeholder="{'Cerca'|i18n('sensor/config')}">
+            <input type="text" class="form-control" data-search="q" placeholder="{sensor_translate('Search', 'config')}">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-success">
                     <i class="fa fa-search"></i>
@@ -19,9 +19,9 @@
      data-limit="20"
      data-redirect="/sensor/config/user_groups"></div>
 
-<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/',$user_groups_class,'/',$user_groups_parent_node_id)|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+<div class="pull-left"><a class="btn btn-info" href="{concat('exportas/csv/',$user_groups_class,'/',$user_groups_parent_node_id)|ezurl(no)}">{sensor_translate('Export to CSV', 'config')}</a></div>
 <div class="pull-right">
-    <a class="btn btn-danger" id="add" data-add-parent="{$user_groups_parent_node_id}" data-add-class="{$user_groups_class}" href="{concat('add/new/', $user_groups_class, '/?parent=',$user_groups_parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {'Aggiungi gruppo'|i18n('sensor/config')}</a>
+    <a class="btn btn-danger" id="add" data-add-parent="{$user_groups_parent_node_id}" data-add-class="{$user_groups_class}" href="{concat('add/new/', $user_groups_class, '/?parent=',$user_groups_parent_node_id)|ezurl(no)}"><i class="fa fa-plus"></i> {sensor_translate('Add new', 'config')}</a>
 </div>
 
 
@@ -36,7 +36,7 @@
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
-            <i class="fa fa-times"></i> {/literal}{'Nessun contenuto'|i18n('sensor')}{literal}
+            <i class="fa fa-times"></i> {{:~sensorTranslate('No content')}}
         </div>
     {{else}}
     <div class="col-xs-12">
@@ -47,6 +47,15 @@
                     <th width="1">{{:metadata.id}}</th>
                     <td>
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
+                    </td>
+                    <td width="1">
+                        <span style="white-space:nowrap">
+                        {{for translations}}
+                            {{if active}}
+                                <img style="max-width:none" src="/share/icons/flags/{{:language}}.gif" />
+                            {{/if}}
+                        {{/for}}
+                        </span>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -69,13 +78,13 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
 
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
 
@@ -85,7 +94,7 @@
 
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -98,7 +107,6 @@
 
 </script>
     <script>
-        $.views.helpers($.opendataTools.helpers);
         $(document).ready(function () {
 
             $('#add').on('click', function(e){
@@ -168,9 +176,7 @@
                         this.baseUrl = $.opendataTools.settings('accessPath');
                         var self = this;
                         this.languages = $.opendataTools.settings('languages');
-                        var currentTranslations = $(this.languages).filter($.map(this.data, function (value, key) {
-                            return key;
-                        }));
+                        var currentTranslations = this.metadata.languages;
                         var translations = [];
                         $.each($.opendataTools.settings('languages'), function () {
                             translations.push({

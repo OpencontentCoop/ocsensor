@@ -70,6 +70,22 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-get'
             ), 1),
 
+            'sensorGuiApiUserLocaleLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/users/current/locale',
+                'SensorGuiApiController',
+                'loadCurrentUserLocale',
+                array(),
+                'http-get'
+            ), 1),
+
+            'sensorGuiApiUserLocalePut' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/users/current/locale/:LanguageCode',
+                'SensorGuiApiController',
+                'postCurrentUserLocale',
+                array(),
+                'http-post'
+            ), 1),
+
             'sensorGuiApiUserLoad' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/users/:UserId',
                 'SensorGuiApiController',

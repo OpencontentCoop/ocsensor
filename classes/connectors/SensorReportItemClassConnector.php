@@ -34,7 +34,7 @@ class SensorReportItemClassConnector extends SensorReportClassConnector
             $parentNode = eZContentObjectTreeNode::fetch((int)$parentNodeId);
             if ($parentNode instanceof eZContentObjectTreeNode) {
                 $parentContent = \Opencontent\Opendata\Api\Values\Content::createFromEzContentObject($parentNode->object());
-                $env = new DefaultEnvironmentSettings();
+                $env = new SensorDefaultEnvironmentSettings();
                 $content = $env->filterContent($parentContent);
                 if (isset($content['data'][$this->getHelper()->getSetting('language')]['override_link_parameters'])){
                     $overrideParameters = $this->parseOverrideParameters(

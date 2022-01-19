@@ -17,7 +17,7 @@ $longitude = $attribute.content.longitude|explode(',')|implode('.')}
             <i class="fa fa-search"></i>
         </button>
         <button tabindex="-1" class="btn btn-default hidden-xs" type="button" id="mylocation-button"
-                value="{'Rileva la mia posizione'|i18n('sensor/add')}"
+                value="{sensor_translate('Detect my location')}"
                 title="{'Gets your current position if your browser support GeoLocation and you grant this website access to it! Most accurate if you have a built in gps in your Internet device! Also note that you might still have to type in address manually!'|i18n('extension/ezgmaplocation/datatype')}">
             <i class="fa fa-location-arrow"></i>
         </button>

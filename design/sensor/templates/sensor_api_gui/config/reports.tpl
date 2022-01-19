@@ -4,17 +4,17 @@
             <div class="col-sm-3">
                 <div class="checkbox">
                     <label>
-                        <input id="hide-archive" type="checkbox" checked="checked" /> {'Nascondi archiviati'|i18n('sensor/config')}
+                        <input id="hide-archive" type="checkbox" checked="checked" /> {sensor_translate('Hide archived')}
                     </label>
                 </div>
             </div>
             <div class="col-sm-6">
-                <label style="font-weight: normal;display: inline;">Filtra per staticizzati nel periodo </label>
+                <label style="font-weight: normal;display: inline;">{sensor_translate('Filter by static in the time range')} </label>
                 <input type="text" class="form-control daterange" style="width: 200px;display: inline-block;">
             </div>
             <div class="col-sm-3">
                 <a class="btn btn-danger pull-right" id="addReport" data-add-parent="{$report_parent_node.node_id}" data-add-class="sensor_report" href="#">
-                    <i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}
+                    <i class="fa fa-plus"></i> {sensor_translate('Add new', 'config')}
                 </a>
             </div>
         </div>
@@ -33,18 +33,18 @@
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
-            <i class="fa fa-times"></i> {/literal}{'Nessun contenuto'|i18n('sensor')}{literal}
+            <i class="fa fa-times"></i> {{:~sensorTranslate('No content')}}
         </div>
     {{else}}
     <div class="col-xs-12">
         <table class="table table-striped">
             <thead>
                 <th width="1">#</th>
-                <th>Titolo</th>
-                <th>Link</th>
-                <th>Password</th>
-                <th class="text-center">Abilitato</th>
-                <th>Staticizzato il</th>
+                <th>{{:~sensorTranslate('Title')}}</th>
+                <th>{{:~sensorTranslate('Link')}}</th>
+                <th>{{:~sensorTranslate('Password')}}</th>
+                <th class="text-center">{{:~sensorTranslate('Enabled')}}</th>
+                <th>{{:~sensorTranslate('Static on')}}</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -69,7 +69,7 @@
                         {{/if}}
                     </td>
                     <td>
-                        <a href="{{:~baseUrl}}/{{:metadata.remoteId}}">Link al report</a>
+                        <a href="{{:~baseUrl}}/{{:metadata.remoteId}}">{{:~sensorTranslate('Report link')}}</a>
                     </td>
                     <td>
                         {{if ~i18n(data, 'password')}}<code>{{:~i18n(data, 'password')}}</code>{{/if}}
@@ -84,10 +84,12 @@
                         <a href="#" title="Esplora" data-report="{{:metadata.mainNodeId}}"><i class="fa fa-folder-open"></i></a>
                     </td>
                     <td width="1" style="text-align: center;">
+                        {{if metadata.userAccess.canEdit}}
                         <form method="post" action="/content/copysubtree/{{:metadata.mainNodeId}}" style="text-align: center;display: inline;">
                             <input type="hidden" name="SelectedNodeID" value="{/literal}{$report_parent_node.node_id}{literal}" />
                             <button class="btn btn-link btn-sm" style="padding:0" type="submit" name="CopyButton"><i class="fa fa-copy"></i></button>
                         </form>
+                        {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
@@ -100,11 +102,13 @@
                         {{/if}}
                     </td>
                     <td width="1">
-                        <a href="#" title="Staticizza" data-make_static="{{:metadata.id}}"><i class="fa fa-cloud-download"></i></a>
+                        {{if metadata.userAccess.canEdit}}
+                            <a href="#" title="Staticizza" data-make_static="{{:metadata.id}}"><i class="fa fa-cloud-download"></i></a>
+                        {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
-                            <a href="#" title="{{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}Rimuovi dall'archivio{{else}}Archivia{{/if}}" data-change_visibility="{{:metadata.id}}">
+                            <a href="#" title="{{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}{{:~sensorTranslate('Unarchive')}}{{else}}{{:~sensorTranslate('Archive')}}{{/if}}" data-change_visibility="{{:metadata.id}}">
                                 {{if metadata.stateIdentifiers.indexOf('privacy.private') > -1}}<i class="fa fa-times"></i>{{else}}<i class="fa fa-check"></i>{{/if}}
                             </a>
                         {{/if}}
@@ -119,12 +123,12 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
                 {{for pages ~current=currentPage}}
@@ -132,7 +136,7 @@
                 {{/for}}
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -151,10 +155,10 @@
     <div class="col-xs-4">
         <div class="pull-right">
             <a class="btn btn-danger" id="addReportItem" data-add-parent="{{:reportNodeId}}" data-add-class="sensor_report_item" href="#">
-                {/literal}<i class="fa fa-plus"></i> {'Aggiungi'|i18n('sensor/config')}{literal}
+                <i class="fa fa-plus"></i> {{:~sensorTranslate('Add new', 'config')}}
             </a>
             <a class="btn btn-info" href="#" id="closeReportItem">
-                <i class="fa fa-times"></i> Chiudi
+                <i class="fa fa-times"></i> {{:~sensorTranslate('Close')}}
             </a>
         </div>
     </div>
@@ -162,17 +166,17 @@
 <div class="row">
     {{if totalCount == 0}}
         <div class="col-xs-12 text-center">
-            <i class="fa fa-times"></i> {/literal}{'Nessun contenuto'|i18n('sensor')}{literal}
+            <i class="fa fa-times"></i> {{:~sensorTranslate('No content')}}
         </div>
     {{else}}
     <div class="col-xs-12">
         <table class="table table-striped">
             <thead>
                 <th width="1">#</th>
-                <th>Titolo</th>
-                <th>Link</th>
-                <th>Priorità</th>
-                <th>Static</th>
+                <th>{{:~sensorTranslate('Title')}}</th>
+                <th>{{:~sensorTranslate('Link')}}</th>
+                <th>{{:~sensorTranslate('Priority')}}</th>
+                <th style="white-space:nowrap">{{:~sensorTranslate('Is static')}}</th>
                 <th></th>
                 <th></th>
             </thead>
@@ -221,12 +225,12 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
                 {{for pages ~current=currentPage}}
@@ -234,7 +238,7 @@
                 {{/for}}
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -246,7 +250,6 @@
 </script>
 
 <script>
-    $.views.helpers($.opendataTools.helpers);
     $(document).ready(function () {
         var wrapper = $('#reports');
         var resultsContainer = wrapper.find('[data-items]');

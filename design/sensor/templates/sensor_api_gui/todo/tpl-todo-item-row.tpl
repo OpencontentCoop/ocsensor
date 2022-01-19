@@ -42,12 +42,12 @@
 </tr>
 </script>
 <script id="tpl-todo-item-context-close" type="text/x-jsrender">
-    <a href="#" data-todo_action="close" class="todo_action has-tooltip" title="chiudi">
+    <a href="#" data-todo_action="close" class="todo_action has-tooltip" title="{{:~sensorTranslate('Close')}}">
         <i class="fa fa-close fa-2x todo_action"></i>
     </a>
 
     {{if data.last_private_note}}
-    <a href="#" data-todo_action="close_with_note" class="has-tooltip todo_action" title="chiudi con nota dell'operatore:<br /><em>{{:data.last_private_note.text}}</em>" data-response="{{:data.last_private_note.text}}">
+    <a href="#" data-todo_action="close_with_note" class="has-tooltip todo_action" title="{{:~sensorTranslate("Close with operator's note:")}}<br /><em>{{:data.last_private_note.text}}</em>" data-response="{{:data.last_private_note.text}}">
         <span class="fa-stack todo_action">
           <i class="fa fa-comment fa-stack-2x todo_action"></i>
           <i class="fa fa-close fa-stack-1x fa-inverse todo_action"></i>
@@ -55,7 +55,7 @@
     </a>
     {{/if}}
 
-    <a href="#" data-todo_action="close_with_last" class="{{if !~last_response()}}hide{{/if}} has-tooltip todo_action" data-base_title="chiudi con ultima risposta usata:<br />" title="chiudi con ultima risposta usata:<br /><em>{{:~last_response()}}</em>">
+    <a href="#" data-todo_action="close_with_last" class="{{if !~last_response()}}hide{{/if}} has-tooltip todo_action" data-base_title="{{:~sensorTranslate('Close with last answer:')}}<br />" title="{{:~sensorTranslate('Close with last answer:')}}<br /><em>{{:~last_response()}}</em>">
         <span class="fa-stack todo_action">
           <i class="fa fa-comment-o fa-stack-2x todo_action"></i>
           <i class="fa fa-close fa-stack-1x todo_action"></i>

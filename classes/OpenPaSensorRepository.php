@@ -1,8 +1,6 @@
 <?php
 
 use Opencontent\Opendata\Api\ClassRepository;
-use Opencontent\Opendata\Api\Gateway\FileSystem;
-use Opencontent\Opendata\Api\Values\Content;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
@@ -39,6 +37,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
     protected function __construct()
     {
+        $this->language = eZLocale::currentLocaleCode();
         $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
         $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
         if (!empty($restrictResponders)){
@@ -118,7 +117,7 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\AddImageAction();
         $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
         $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
-        $actionDefinitions[] = new ActionDefinitions\SetType();
+        $actionDefinitions[] = new ActionDefinitions\SetTypeAction();
         $this->setActionDefinitions($actionDefinitions);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
@@ -263,6 +262,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'AllowAdditionalMemberGroups' => isset($sensorIni['AllowAdditionalMemberGroups']) ? $sensorIni['AllowAdditionalMemberGroups'] == 'enabled' : true,
                 'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
                 'HasCategoryPredictor' => SensorCategoryPredictor::instance()->isEnabled(),
+                'SiteLanguages' => isset($sensorIni['SiteLanguages']) ? explode(',', $sensorIni['SiteLanguages']) : [],
             ));
         }
 
@@ -275,24 +275,6 @@ class OpenPaSensorRepository extends LegacyRepository
             $this->user = $this->getUserService()->loadUser(eZUser::currentUserID());
 
         return $this->user;
-    }
-
-    public function setCurrentLanguage($language)
-    {
-        $this->language = $language;
-//@todo
-//        if ($this->language != eZLocale::currentLocaleCode()) {
-//            $GLOBALS["eZLocaleStringDefault"] = $this->language;
-//            //@todo svuotare cachce translations?
-//        }
-    }
-
-    public function getCurrentLanguage()
-    {
-        if ($this->language === null)
-            return eZLocale::currentLocaleCode();
-
-        return $this->language;
     }
 
     public function getRootNode()
@@ -536,59 +518,60 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getConfigMenu()
     {
+        $translations = SensorTranslationHelper::instance();
         $data = [];
         $data['default'] = [
             'uri' => 'sensor/config',
-            'label' => ezpI18n::tr('sensor/config', 'Settings'),
+            'label' => $translations->translate('Settings'),
             'node' => false,
             'icon' => 'fa fa-cogs',
         ];
         $data['users'] = [
             'uri' => 'sensor/config/users',
-            'label' => ezpI18n::tr('sensor/config', 'Utenti'),
+            'label' => $translations->translate('Users'),
             'node' => false,
             'icon' => 'fa fa-user',
         ];
         if ($this->getSensorSettings()->get('AllowAdditionalMemberGroups')){
             $data['user_groups'] = [
                 'uri' => 'sensor/config/user_groups',
-                'label' => ezpI18n::tr('sensor/config', 'Gruppi di utenti'),
+                'label' => $translations->translate('User groups'),
                 'node' => false,
                 'icon' => 'fa fa-group',
             ];
         }
         $data['operators'] = [
             'uri' => 'sensor/config/operators',
-            'label' => ezpI18n::tr('sensor/config', 'Operatori'),
+            'label' => $translations->translate('Operators'),
             'node' => false,
             'icon' => 'fa fa-user-circle',
         ];
         $data['groups'] = [
             'uri' => 'sensor/config/groups',
-            'label' => ezpI18n::tr('sensor/config', 'Gruppi'),
+            'label' => $translations->translate('Operator groups'),
             'node' => false,
             'icon' => 'fa fa-user-circle-o'
         ];
         $data['categories'] = [
             'uri' => 'sensor/config/categories',
-            'label' => ezpI18n::tr('sensor/config', 'Categorie'),
+            'label' => $translations->translate('Categories'),
             'node' => false,
             'icon' => 'fa fa-tags',
         ];
         $data['areas'] = [
             'uri' => 'sensor/config/areas',
-            'label' => ezpI18n::tr('sensor/config', 'Zone'),
+            'label' => $translations->translate('Areas'),
             'node' => false,
             'icon' => 'fa fa-map-marker',
         ];
 
-        /** @var eZContentObjectTreeNode[] $otherFolders */
-        $otherFolders = (array)$this->getRootNode()->subTree(array(
-                'ClassFilterType' => 'include',
-                'ClassFilterArray' => array('folder'),
-                'Depth' => 1,
-                'DepthOperator' => 'eq')
-        );
+//        /** @var eZContentObjectTreeNode[] $otherFolders */
+//        $otherFolders = (array)$this->getRootNode()->subTree(array(
+//                'ClassFilterType' => 'include',
+//                'ClassFilterArray' => array('folder'),
+//                'Depth' => 1,
+//                'DepthOperator' => 'eq')
+//        );
 //        foreach ($otherFolders as $folder) {
 //            if (
 //                $folder->attribute('contentobject_id') != $this->getCategoriesRootNode()->attribute('contentobject_id')
@@ -608,37 +591,43 @@ class OpenPaSensorRepository extends LegacyRepository
         if (eZUser::currentUser()->hasAccessTo('*', '*')['accessWord'] == 'yes') {
             $data['automations'] = [
                 'uri' => 'sensor/config/automations',
-                'label' => ezpI18n::tr('sensor/config', 'Automazioni'),
+                'label' => $translations->translate('Automations'),
                 'node' => false,
                 'icon' => 'fa fa-android',
             ];
             if ($this->getReportsRootNode()) {
                 $data['reports'] = [
                     'uri' => 'sensor/config/reports',
-                    'label' => ezpI18n::tr('sensor/config', 'Reports'),
+                    'label' => $translations->translate('Reports'),
                     'node' => false,
                     'icon' => 'fa fa-line-chart',
                 ];
             }
+            $data['translations'] = [
+                'uri' => 'sensor/config/translations',
+                'label' => $translations->translate('Translations'),
+                'node' => false,
+                'icon' => 'fa fa-language',
+            ];
         }
 
         $data['notifications'] = [
             'uri' => 'sensor/config/notifications',
-            'label' => ezpI18n::tr('sensor/config', 'Testi notifiche'),
+            'label' => $translations->translate('Notification texts'),
             'node' => false,
             'icon' => 'fa fa-align-left',
         ];
 
         $data['statistics'] = [
             'uri' => 'sensor/config/statistics',
-            'label' => ezpI18n::tr('sensor/config', 'Statistiche'),
+            'label' => $translations->translate('Statistics'),
             'node' => false,
             'icon' => 'fa fa-pie-chart',
         ];
 
         $data['faq'] = [
             'uri' => 'sensor/config/faq',
-            'label' => ezpI18n::tr('sensor/config', 'Faq'),
+            'label' => $translations->translate('Faq'),
             'node' => false,
             'icon' => 'fa fa-question-circle',
         ];
@@ -665,15 +654,15 @@ class OpenPaSensorRepository extends LegacyRepository
 
     private function fetchObjectRemoteID($id)
     {
-        $storage = new FileSystem();
-        try {
-            $content = $storage->loadContent($id);
-            if ($content instanceof Content) {
-                return $content->getContentObject($this->getCurrentLanguage());
-            }
-        } catch (Exception $e) {
-
-        }
+//        $storage = new FileSystem();
+//        try {
+//            $content = $storage->loadContent($id);
+//            if ($content instanceof Content) {
+//                return $content->getContentObject($this->getCurrentLanguage());
+//            }
+//        } catch (Exception $e) {
+//
+//        }
         return eZContentObject::fetchByRemoteID($id);
     }
 

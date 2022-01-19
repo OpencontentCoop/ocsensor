@@ -4,7 +4,7 @@
         <tr>
             <td colspan="5">
             <ul class="list-inline pull-left">
-                <li><a data-reload href="#" title="Ricarica"><i class="fa fa-refresh"></i></a></li>
+                <li><a data-reload href="#" title="{{:~sensorTranslate('Reload')}}"><i class="fa fa-refresh"></i></a></li>
             </ul>
             </td>
         </tr>
@@ -13,7 +13,7 @@
         <tr>
             <td class="text-center">
                 <p class="lead" style="padding-top:20px">
-                    Nessuna segnalazione trovata...
+                    {{:~sensorTranslate('No issue found...')}}
                 </p>
             </td>
         </tr>

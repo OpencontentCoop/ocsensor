@@ -32,6 +32,7 @@
 
     {ezscript_load(array(
         'modernizr.custom.48287.js',
+        'sensor::translations',
         'ezjsc::jquery',
         'bootstrap.min.js',
         'isotope/jquery.isotope.min.js',
@@ -55,7 +56,8 @@
         'ezjsc::jqueryUI',
         'ezjsc::jqueryio',
         'jquery.opendataTools.js',
-        'jsrender.js',
+        'jsrender.js', 'jsrender.helpers.js',
+        'moment-with-locales.min.js',
         'alpaca.js',
         concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
         'fields/Recaptcha.js',
@@ -102,6 +104,23 @@
             <link rel="icon" href="{$favicon}" type="image/x-icon" />
         {/if}
     {/if}
+    <script>
+        {def $current_language = ezini('RegionalSettings', 'Locale')}
+        {def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
+        {def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
+        $(document).ready(function (){ldelim}
+            $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
+            $.opendataTools.settings('language', "{$current_language}");
+            $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
+            $.opendataTools.settings('locale', "{$moment_language}");
+            moment.locale('{$moment_language}');
+            $.ajaxSetup({ldelim}
+                headers : {ldelim}
+                    'X-SiteAccess' : '{$access_type.name}'
+                {rdelim}
+            {rdelim});
+        {rdelim})
+    </script>
 </head>
 
 
@@ -109,7 +128,7 @@
 {include uri='design:page_head_google-site-verification.tpl'}
 
 <body>
-    {include uri='design:page_alert_cookie.tpl'}
+    {*include uri='design:page_alert_cookie.tpl'*} {* non serve più *}
     {include uri='design:page_header.tpl'}
 
 {/cache-block}

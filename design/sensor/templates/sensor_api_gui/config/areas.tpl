@@ -6,15 +6,15 @@
         <div class="scenarios panel panel-default" style="display: none">
             <div class="panel-heading">
                 <a class="close pull-right close-scenario" href="#"><i class="fa fa-times"></i></a>
-                Impostazioni alla creazione di una segnalazione nella zona <strong data-placeholder="name"></strong>
+                {sensor_translate('Enable automations on creating an issue in area', 'config')} <strong data-placeholder="name"></strong>
             </div>
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Riferimento</th>
-                        <!--<th>Gruppo di incaricati</th>
-                        <th>Incaricato</th>-->
-                        <th>Osservatore</th>
+                        <th>{sensor_translate('Reference for the citizen', 'config')}</th>
+                        <!--<th>{sensor_translate('Group of operators in charge', 'config')}</th>
+                        <th>{sensor_translate('Operator in charge', 'config')}</th>-->
+                        <th>{sensor_translate('Observer', 'config')}</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -25,7 +25,7 @@
         <div class="categories panel panel-default" style="display: none">
             <div class="panel-heading">
                 <a class="close pull-right close-categories" href="#"><i class="fa fa-times"></i></a>
-                Categorie abilitate per la zona <strong data-placeholder="name"></strong>
+                {sensor_translate('Categories enabled for area', 'config')} <strong data-placeholder="name"></strong>
             </div>
             <table class="table table-hover">
                 <tbody></tbody>
@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="areas-buttons">
-    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_areas'|ezurl(no)}">{'Esporta in CSV'|i18n('sensor/config')}</a></div>
+    <div class="pull-left"><a class="btn btn-info" href="{'exportas/custom/sensor_areas'|ezurl(no)}">{sensor_translate('Export to CSV', 'config')}</a></div>
 </div>
 
 {literal}
@@ -58,7 +58,7 @@
   </td>
   <td>
 	{{for languages}}
-	    <img src="/share/icons/flags/{{:#data}}.gif" />
+	    <img src="/share/icons/flags/{{:#data}}.gif" style="max-width: none;" />
     {{/for}}
   </td>
   <td width="1"><a href="#" data-object="{{:id}}"><i class="fa fa-eye"></i></a></td>
@@ -94,19 +94,19 @@
 <tr>
     <td class="approver">
         {{if default && default.assignments.approver.length}}{{for default.assignments.approver}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_approver}}<em>Operatore segnalatore</em>{{/if}}
+        {{if default && default.assignments.reporter_as_approver}}<em>{{:}}</em>{{/if}}
     </td>
     <!--<td class="owner_group">
         {{if default && default.assignments.owner_group.length}}{{for default.assignments.owner_group}}{{:name}} {{/for}}{{/if}}
     </td>
     <td class="owner">
         {{if default && default.assignments.owner.length}}{{for default.assignments.owner}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_owner}}<em>Operatore segnalatore</em>{{/if}}
-        {{if default && default.assignments.random_owner}}<em>Operatore casuale</em>{{/if}}
+        {{if default && default.assignments.reporter_as_owner}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
+        {{if default && default.assignments.random_owner}}<em>{{:~sensorTranslate('Random operator')}}</em>{{/if}}
     </td>-->
     <td class="observer">
         {{if default && default.assignments.observer.length}}{{for default.assignments.observer}}{{:name}} {{/for}}{{/if}}
-        {{if default && default.assignments.reporter_as_observer}}<em>Operatore segnalatore</em>{{/if}}
+        {{if default && default.assignments.reporter_as_observer}}<em>{{:~sensorTranslate('Operator who opened the issue')}}</em>{{/if}}
     </td>
     <td width="1">
         {{if default}}
@@ -158,7 +158,6 @@
 {{/if}}
 </script>
 <script>
-    $.views.helpers($.opendataTools.helpers);
     $(document).ready(function () {
         $('[data-items]').each(function(){
             var resultsContainer = $(this);
@@ -375,9 +374,9 @@
                 }
             };
             var loadScenarioEdit = function(row, data){
-                var approverSelect = $('<select name="approver" data-placeholder="Nessuno"></select>').appendTo(row.find('.approver'));
+                var approverSelect = $('<select name="approver" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.approver'));
                 loadDataInSelect(approverSelect, 1, data ? data.assignments.approver : []);
-                var reporterApproverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_approver" /> Imposta l\'operatore segnalatore</label>')
+                var reporterApproverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_approver" /> '+$.sensorTranslate.translate('Set the operator who opened the issue')+'</label>')
                     .appendTo(row.find('.approver'))
                     .find('input');
                 reporterApproverCheckbox.on('change', function (e){
@@ -390,9 +389,9 @@
                 if (data && data.assignments.reporter_as_approver){
                     reporterApproverCheckbox.attr('checked', true);
                 }
-                var ownerGroupSelect = $('<select name="owner_group" data-placeholder="Nessuno"></select>').appendTo(row.find('.owner_group'));
+                var ownerGroupSelect = $('<select name="owner_group" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.owner_group'));
                 loadDataInSelect(ownerGroupSelect, 1, data ? data.assignments.owner_group : []);
-                var ownerSelect = $('<select name="owner" data-placeholder="Nessuno"></select>').appendTo(row.find('.owner'));
+                var ownerSelect = $('<select name="owner" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'"></select>').appendTo(row.find('.owner'));
                 loadDataInSelect(ownerSelect, 2, data ? data.assignments.owner : []);
 
                 ownerGroupSelect.on('select2:select', function (e) {
@@ -402,10 +401,10 @@
                     onChangeOwnerSelect($(e.currentTarget).val(), ownerGroupSelect);
                 });
 
-                var reporterOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_owner" /> Imposta l\'operatore segnalatore</label>')
+                var reporterOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_owner" /> '+$.sensorTranslate.translate('Set the operator who opened the issue')+'</label>')
                     .appendTo(row.find('.owner'))
                     .find('input');
-                var randomOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="random_owner" /> Imposta un operatore casuale</label>')
+                var randomOwnerCheckbox = $('<label class="checkbox"><input type="checkbox" name="random_owner" /> '+$.sensorTranslate.translate('Set a random operator')+'</label>')
                     .appendTo(row.find('.owner'))
                     .find('input');
                 reporterOwnerCheckbox.on('change', function (e){
@@ -449,9 +448,9 @@
                         randomOwnerCheckbox.attr('checked', false).attr('disabled', true);
                     }
                 });
-                var observerSelect = $('<select name="observer" data-placeholder="Nessuno" multiple></select>').appendTo(row.find('.observer'));
+                var observerSelect = $('<select name="observer" data-placeholder="'+$.sensorTranslate.translate('Nobody')+'" multiple></select>').appendTo(row.find('.observer'));
                 loadDataInSelect(observerSelect, 2, data ? data.assignments.observer : []);
-                var reporterObserverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_observer" /> Aggiungi l\'operatore segnalatore</label>')
+                var reporterObserverCheckbox = $('<label class="checkbox"><input type="checkbox" name="reporter_as_observer" /> '+$.sensorTranslate.translate('Add the operator who opened the issue')+'</label>')
                     .appendTo(row.find('.observer'))
                     .find('input');
                 if (data && data.assignments.reporter_as_observer){

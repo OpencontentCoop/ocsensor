@@ -35,11 +35,13 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         'CSVEnclosure' => '"'
     );
 
+    private $translator;
 
     public function __construct(\Opencontent\Sensor\Legacy\Repository $repository)
     {
         $http = eZHTTPTool::instance();
         $this->repository = $repository;
+        $this->translator = SensorTranslationHelper::instance();
 
         $this->queryParams = $http->attribute('get');
         unset($this->queryParams['/sensor/dashboard/(export)']);
@@ -62,30 +64,30 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
         $this->csvHeaders = array(
             // https://answers.microsoft.com/en-us/office/forum/office_2013_release-excel/how-to-change-the-way-excel-scans-a-textcsv-file/24741ea7-5490-4d9a-a6b0-7728098330a2?auth=1
-            'id' => ezpI18n::tr('sensor/export', 'Id'),
-            'privacy' => ezpI18n::tr('sensor/export', 'Privacy'),
-            'moderation' => ezpI18n::tr('sensor/export', 'Moderazione'),
-            'type' => ezpI18n::tr('sensor/export', 'Tipo'),
-            'current_status' => ezpI18n::tr('sensor/export', 'Stato corrente'),
-            'created' => ezpI18n::tr('sensor/export', 'Creato il'),
-            'modified' => ezpI18n::tr('sensor/export', 'Ultima modifica del'),
-            'expiring_date' => ezpI18n::tr('sensor/export', 'Scadenza'),
-            'resolution_time' => ezpI18n::tr('sensor/export', 'Data risoluzione'),
-            'resolution_diff' => ezpI18n::tr('sensor/export', 'Tempo di risoluzione'),
-            'title' => ezpI18n::tr('sensor/export', 'Titolo'),
-            'description' => ezpI18n::tr('sensor/export', 'Descrizione'),
-            'author' => ezpI18n::tr('sensor/export', 'Autore'),
-//            'fiscal_code' => ezpI18n::tr('sensor/export', 'Codice Fiscale'),
-            'category' => ezpI18n::tr('sensor/export', 'Categoria'),
-            'category_child' => ezpI18n::tr('sensor/export', 'Categoria (descrittore)'),
-            'current_owner_group' => ezpI18n::tr('sensor/export', 'Gruppo incaricato'),
-            'current_owner' => ezpI18n::tr('sensor/export', 'Incaricato'),
-            'comment' => ezpI18n::tr('sensor/export', 'Commenti'),
-            'channel' => ezpI18n::tr('sensor/export', 'Canale'),
-            'area' => ezpI18n::tr('sensor/export', 'Zona'),
-            'response' => ezpI18n::tr('sensor/export', 'Risposta'),
-            'response_count' => ezpI18n::tr('sensor/export', 'Risposte'),
-            'message_count' => ezpI18n::tr('sensor/export', 'Note'),
+            'id' => $this->translator->translate('ID'),
+            'privacy' =>  $this->translator->translate('Privacy'),
+            'moderation' =>  $this->translator->translate('Moderation'),
+            'type' =>  $this->translator->translate('Type'),
+            'current_status' =>  $this->translator->translate('Status'),
+            'created' =>  $this->translator->translate('Created at'),
+            'modified' =>  $this->translator->translate('Last modified at'),
+            'expiring_date' =>  $this->translator->translate('Expiry'),
+            'resolution_time' =>  $this->translator->translate('Closing date'),
+            'resolution_diff' =>  $this->translator->translate('Resolution time'),
+            'title' =>  $this->translator->translate('Subject'),
+            'description' =>  $this->translator->translate('Description'),
+            'author' =>  $this->translator->translate('Author'),
+//            'fiscal_code' =>  $this->translator->translate('Codice Fiscale'),
+            'category' =>  $this->translator->translate('Category'),
+            'category_child' =>  $this->translator->translate('Child category'),
+            'current_owner_group' =>  $this->translator->translate('Group in charge'),
+            'current_owner' =>  $this->translator->translate('Operator in charge'),
+            'comment' =>  $this->translator->translate('Comments'),
+            'channel' =>  $this->translator->translate('Channel'),
+            'area' =>  $this->translator->translate('Area'),
+            'response' =>  $this->translator->translate('Official response'),
+            'response_count' =>  $this->translator->translate('Responses'),
+            'message_count' =>  $this->translator->translate('Responses'),
         );
 
         $this->filename = 'posts' . '_' . time();

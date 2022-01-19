@@ -13,22 +13,22 @@
 </div>
 
 <label class="form-group has-float-label">
-    <span>Cerca o crea utente</span>
+    <span>{sensor_translate('Search or create user')}</span>
 </label>
 <div id="behalf-of-search">
     <div class="input-group">
-        <input placeholder="{'Cerca tra gli utenti registrati'|i18n('sensor/add')}"
+        <input placeholder="{sensor_translate('Search registered user')}"
                id="behalf-of-search-input"
                class="form-control"
                type="text"
                size="70" />
         <span class="input-group-btn">
-            <a id="behalf-of-create-button" href="#" class="btn btn-default"><i class="fa fa-plus"></i> {'Crea utente'|i18n('sensor/add')}</a>
+            <a id="behalf-of-create-button" href="#" class="btn btn-default"><i class="fa fa-plus"></i> {sensor_translate('Create user')}</a>
         </span>
     </div>
     <div class="checkbox" style="width: 100%;">
         <label>
-            <input type="checkbox" id="behalf-of-anonymous" data-userid="{ezini('UserSettings', 'AnonymousUserID')}"> Non si dispongono informazioni sul segnalatore
+            <input type="checkbox" id="behalf-of-anonymous" data-userid="{ezini('UserSettings', 'AnonymousUserID')}"> {sensor_translate('There is no information about the reporter')}
         </label>
     </div>
 </div>

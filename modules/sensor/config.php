@@ -12,20 +12,20 @@ $currentUser = eZUser::currentUser();
 $repository = OpenPaSensorRepository::instance();
 $root = $repository->getRootNode();
 
-if ($Part == '_set'){
+if ($Part == '_set') {
     $rootObject = $root->object();
-    if (!$rootObject->canEdit()){
+    if (!$rootObject->canEdit()) {
         $data = [
             'result' => 'fail',
             'message' => 'Unauthorized',
         ];
-    }else{
+    } else {
         $key = $Http->variable('key');
         $value = intval($Http->variable('value') === 'true');
         if (strpos($key, 'stat-access-') !== false) {
             $permission = str_replace('stat-access-', '', $key);
             try {
-                list($scope, $statIdentifier) = explode('-', $permission, 2);
+                [$scope, $statIdentifier] = explode('-', $permission, 2);
                 $data = SensorStatisticAccess::instance()->setAccess($scope, $statIdentifier, $value);
                 $data = [
                     'result' => 'success',
@@ -34,7 +34,7 @@ if ($Part == '_set'){
             } catch (Exception $e) {
                 $data['message'] = $e->getMessage();
             }
-        }else {
+        } else {
             $attribute = false;
             switch ($key) {
                 case 'Moderation':
@@ -57,7 +57,14 @@ if ($Part == '_set'){
                     break;
             }
             if ($attribute) {
-                $result = eZContentFunctions::updateAndPublishObject($rootObject, ['attributes' => [$attribute => $value]]);
+                $version = $rootObject->currentVersion();
+                $availableLanguages = $version->translationList(false, false);
+                foreach ($availableLanguages as $languageCode) {
+                    $result = eZContentFunctions::updateAndPublishObject($rootObject, [
+                        'attributes' => [$attribute => $value],
+                        'language' => $languageCode,
+                    ]);
+                }
                 if ($result) {
                     $data = [
                         'result' => 'success',
@@ -72,17 +79,17 @@ if ($Part == '_set'){
         }
     }
     header('Content-Type: application/json');
-    echo json_encode( $data );
+    echo json_encode($data);
     eZExecution::cleanExit();
 }
 
 if ($Http->hasPostVariable('SelectDefaultApprover')) {
-    eZContentBrowse::browse(array('action_name' => 'SelectDefaultApprover',
+    eZContentBrowse::browse(['action_name' => 'SelectDefaultApprover',
         'return_type' => 'ObjectID',
         'class_array' => array_merge(eZUser::fetchUserClassNames(), ['sensor_group']),
         'start_node' => $repository->getOperatorsRootNode()->attribute('node_id'),
         'cancel_page' => '/sensor/config',
-        'from_page' => '/sensor/config'), $Module);
+        'from_page' => '/sensor/config'], $Module);
     return;
 }
 
@@ -98,8 +105,13 @@ if ($Http->hasPostVariable('BrowseActionName')
             /** @var eZContentObjectAttribute[] $areaDataMap */
             $areaDataMap = $firstAreaObject->attribute('data_map');
             if (isset($areaDataMap['approver'])) {
-                $params = array('attributes' => array('approver' => implode('-', $objectIdList)));
-                $result = eZContentFunctions::updateAndPublishObject($firstAreaObject, $params);
+                $params = ['attributes' => ['approver' => implode('-', $objectIdList)]];
+                $version = $rootObject->currentVersion();
+                $availableLanguages = $version->translationList(false, false);
+                foreach ($availableLanguages as $languageCode) {
+                    $params['language'] = $languageCode;
+                    $result = eZContentFunctions::updateAndPublishObject($firstAreaObject, $params);
+                }
                 $Module->redirectTo('/sensor/config');
 
                 return;
@@ -160,22 +172,21 @@ if ($Part == 'areas') {
     $tpl->setVariable('notification_types', $repository->getNotificationService()->getNotificationTypes());
     $tpl->setVariable('participant_roles', $repository->getParticipantService()->loadParticipantRoleCollection()->getArrayCopy());
 
-    $allLanguages = eZContentLanguage::fetchList();
+    $allLanguages = eZPersistentObject::fetchObjectList(eZContentLanguage::definition(), null, ['locale' => ['!=', 'ita-PA']]);
     $allLanguageLocales = eZContentLanguage::fetchLocaleList();
     $siteaccessList = array_column(eZSiteAccess::siteaccessList(), 'name');
-    $languages = array();
+    $languages = [];
     $ini = eZINI::instance();
     $locale = eZLocale::instance();
     $host = eZINI::instance()->variable('SiteSettings', 'SiteURL');
 
-    $currentLanguage = array(
-        $locale->localeCode() => array(
+    $currentLanguage = [
+        $locale->localeCode() => [
             'url' => '//' . $host,
             'name' => $locale->languageName(),
-            'locale' => $locale->localeCode()
-        )
-    );
-
+            'locale' => $locale->localeCode(),
+        ],
+    ];
     if ($ini->hasVariable('RegionalSettings', 'TranslationSA') && count($ini->variable('RegionalSettings', 'TranslationSA')) > 0) {
         $translationSiteAccesses = $ini->variable('RegionalSettings', 'TranslationSA');
         foreach ($translationSiteAccesses as $siteAccessName => $translationName) {
@@ -183,11 +194,11 @@ if ($Part == 'areas') {
                 $host = eZSiteAccess::getIni($siteAccessName)->variable('SiteSettings', 'SiteURL');
                 $locale = eZSiteAccess::getIni($siteAccessName)->variable('RegionalSettings', 'ContentObjectLocale');
                 if (in_array($locale, $allLanguageLocales)) {
-                    $languages[$locale] = array(
+                    $languages[$locale] = [
                         'url' => '//' . $host,
                         'name' => $translationName,
-                        'locale' => $locale
-                    );
+                        'locale' => $locale,
+                    ];
                 }
             }
         }
@@ -199,12 +210,12 @@ if ($Part == 'areas') {
     $tpl->setVariable('languages', $languages);
     $tpl->setVariable('all_languages', $allLanguages);
     $tpl->setVariable('texts', $texts);
-    $samplePost = $repository->getPostRootNode()->subtree(array(
+    $samplePost = $repository->getPostRootNode()->subtree([
         'Limit' => 1,
         'ClassFilterType' => 'include',
-        'ClassFilterInclude' => array('sensor_post'),
-        'SortBy' => array('published', false)
-    ));
+        'ClassFilterArray' => ['sensor_post'],
+        'SortBy' => ['published', false],
+    ]);
     $tpl->setVariable('sample_post_id', $samplePost[0] instanceof eZContentObjectTreeNode ? $samplePost[0]->attribute('contentobject_id') : 0);
 
 } elseif ($Part == 'statistics') {
@@ -219,7 +230,7 @@ if ($Part == 'areas') {
 
 } elseif ($Part == 'reports' && $repository->getReportsRootNode()) {
     $Http->setSessionVariable("LastAccessesURI", '/sensor/config/reports');
-    if ($Http->hasGetVariable('make_static')){
+    if ($Http->hasGetVariable('make_static')) {
         $reportId = $Http->getVariable('make_static');
         $report = eZContentObject::fetch((int)$reportId);
         $store = false;
@@ -231,18 +242,18 @@ if ($Part == 'areas') {
                     'Depth' => 1,
                     'DepthOperator' => 'eq',
                     'SortBy' => ['attribute', true, 'sensor_report_item/priority'],
-                    'Limitation' => []
+                    'Limitation' => [],
                 ]);
                 foreach ($items as $item) {
                     $data = SensorReport::generateItemData($item->object(), true);
-                    if (!empty($data)){
+                    if (!empty($data)) {
                         $store = true;
                     }
                 }
             }
-            if ($store){
+            if ($store) {
                 $reportDataMap = $report->dataMap();
-                if (isset($reportDataMap['static_at'])){
+                if (isset($reportDataMap['static_at'])) {
                     $reportDataMap['static_at']->fromString(time());
                     $reportDataMap['static_at']->store();
                     eZSearch::addObject($report, true);
@@ -251,7 +262,7 @@ if ($Part == 'areas') {
         }
         echo (int)$store;
         eZExecution::cleanExit();
-    }elseif ($Http->hasGetVariable('change_visibility')){
+    } elseif ($Http->hasGetVariable('change_visibility')) {
         $reportId = $Http->getVariable('change_visibility');
         $report = eZContentObject::fetch((int)$reportId);
         $store = false;
@@ -260,9 +271,9 @@ if ($Part == 'areas') {
             $privacyStates = $repository->getSensorPostStates('privacy');
             $public = $privacyStates['privacy.public'];
             $private = $privacyStates['privacy.private'];
-            if (in_array($public->attribute('id'), $report->attribute('state_id_array'))){
+            if (in_array($public->attribute('id'), $report->attribute('state_id_array'))) {
                 $report->assignState($private);
-            }else{
+            } else {
                 $report->assignState($public);
             }
             eZSearch::addObject($report, true);
@@ -272,30 +283,77 @@ if ($Part == 'areas') {
     }
     $tpl->setVariable('report_parent_node', $repository->getReportsRootNode());
     $tpl->setVariable('report_class', 'sensor_report');
+
+} elseif ($Part == 'translations') {
+
+    $translationsHelper = SensorTranslationHelper::instance();
+
+    if ($Http->hasPostVariable('AddCustom')) {
+        $translationsHelper->addCustomTranslation(
+            $Http->postVariable('Key'),
+            $Http->postVariable('Languages')
+        );
+        $Module->redirectTo('/sensor/config/translations');
+        return;
+    }
+    if ($Http->hasPostVariable('RemoveCustom')) {
+        $keys = array_keys((array)$Http->postVariable('RemoveKeys'));
+        $translationsHelper->removeCustomTranslations($keys);
+        $Module->redirectTo('/sensor/config/translations');
+        return;
+    }
+
+
+    $staticTranslations = [];
+    $customTranslations = [];
+    $availableLanguages = [];
+    $languageCodeList = eZContentLanguage::fetchLocaleList();
+    foreach ($languageCodeList as $languageCode){
+        $static = $translationsHelper->loadStaticTranslations($languageCode);
+        $custom = $translationsHelper->loadCustomTranslations($languageCode);
+        if ($static){
+            $availableLanguages[] = $languageCode;
+            foreach ($static as $context => $values){
+                foreach ($values as $key => $value){
+                    $staticTranslations[$key][$languageCode] = $value;
+                }
+            }
+            foreach ($custom as $context => $values){
+                foreach ($values as $key => $value){
+                    $customTranslations[$key][$languageCode] = $value;
+                }
+            }
+        }
+    }
+    ksort($staticTranslations);
+    $tpl->setVariable('static_translations', $staticTranslations);
+    $tpl->setVariable('custom_translations', $customTranslations);
+    $tpl->setVariable('available_languages', $availableLanguages);
+    $tpl->setVariable('current_locale_code', eZLocale::currentLocaleCode());
 }
 
 $configMenu = $repository->getConfigMenu();
-if (!isset($configMenu[$Part])){
+if (!isset($configMenu[$Part])) {
     return $Module->handleError(eZError::KERNEL_NOT_FOUND, 'kernel');
 }
 $tpl->setVariable('current_part', $Part);
 $tpl->setVariable('menu', $configMenu);
 $tpl->setVariable('root', $root);
 $tpl->setVariable('post_container_node', $repository->getPostRootNode());
-$tpl->setVariable('moderation_is_enabled',  $repository->isModerationEnabled());
+$tpl->setVariable('moderation_is_enabled', $repository->isModerationEnabled());
 $tpl->setVariable('current_user', $currentUser);
-$tpl->setVariable('persistent_variable', array());
+$tpl->setVariable('persistent_variable', []);
 $tpl->setVariable('sensor_settings', $repository->getSensorSettings()->jsonSerialize());
 
-$Result = array();
+$Result = [];
 $Result['persistent_variable'] = $tpl->variable('persistent_variable');
 $Result['content'] = $tpl->fetch('design:sensor_api_gui/config.tpl');
 $Result['node_id'] = 0;
 
-$contentInfoArray = array('url_alias' => 'sensor/config');
+$contentInfoArray = ['url_alias' => 'sensor/config'];
 $contentInfoArray['persistent_variable'] = false;
 if ($tpl->variable('persistent_variable') !== false) {
     $contentInfoArray['persistent_variable'] = $tpl->variable('persistent_variable');
 }
 $Result['content_info'] = $contentInfoArray;
-$Result['path'] = array();
+$Result['path'] = [];

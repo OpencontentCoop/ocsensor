@@ -1,11 +1,11 @@
 {ezscript_require(array(
   'jquery.opendataTools.js',
-  'jsrender.js'
+  'jsrender.js', 'jsrender.helpers.js'
 ))}
 <form class="row form hide" data-faq-search>
     <div class="col-xs-12">
         <div class="input-group">
-            <input type="text" class="form-control" data-search="q" placeholder="{'Cerca nelle faq'|i18n('sensor/config')}">
+            <input type="text" class="form-control" data-search="q" placeholder="{sensor_translate('Search in faq')}">
             <span class="input-group-btn">
                 <button type="submit" class="btn btn-success">
                     <i class="fa fa-search"></i>
@@ -65,12 +65,12 @@
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
-        <div class="pagination-container text-center" aria-label="Esempio di navigazione della pagina">
+        <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
                 {{for pages ~current=currentPage}}
@@ -79,7 +79,7 @@
 
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -90,7 +90,6 @@
 {{/if}}
 </script>
 <script>
-$.views.helpers($.opendataTools.helpers);
 $(document).ready(function () {
     var resultsContainer = $('[data-root]');
     var form = $('[data-faq-search]');

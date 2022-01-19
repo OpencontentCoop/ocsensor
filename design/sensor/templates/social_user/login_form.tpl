@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 text-center">
             <h1 style="margin-bottom: 1em">
-                {'In order to partecipate, you need to be registered!'|i18n('social_user/signin')}
+                {sensor_translate('In order to partecipate, you need to be registered!', 'login')}
             </h1>
         </div>
     </div>
@@ -22,16 +22,16 @@
                         {if ezini_hasvariable('LoginTemplate_default', 'Title', 'app.ini')}
                             {ezini('LoginTemplate_default', 'Title', 'app.ini')|wash()}
                         {else}
-                            {'Are you already a member?'|i18n('social_user/signin')}
+                            {sensor_translate('Are you already a member?', 'login')}
                         {/if}
                     </h3>
                     {if ezini_hasvariable('LoginTemplate_default', 'Text', 'app.ini')}
                         <p class="text-center">{ezini('LoginTemplate_default', 'Text', 'app.ini')|wash()}</p>
                     {else}
-                        <p><strong>{'Log in now!'|i18n('social_user/signin')}</strong></p>
+                        <p><strong>{sensor_translate('Log in now!', 'login')}</strong></p>
                     {/if}
                     <div class="text-center">
-                        <a href="{'/user/login/'|ezurl(no)}" class="btn btn-success btn-lg">{'Login'|i18n('social_user/signin')}</a>
+                        <a href="{'/user/login/'|ezurl(no)}" class="btn btn-success btn-lg">{sensor_translate('Login', 'login')}</a>
                     </div>
                 </div>
             {else}
@@ -52,9 +52,9 @@
             <div class="signin">
                 <div class="social_sign">
                     <h3>
-                        {'Are you already a member?'|i18n('social_user/signin')}<br />
-                        <strong>{'Log in now!'|i18n('social_user/signin')}</strong>
-                        <a style="background:#5cb85c;font-size: 0.7em;padding: 18px 2px;" href="{'/user/login/'|ezurl(no)}" class="btn btn-success btn-lg">{'Login'|i18n('social_user/signin')}</a>
+                        {sensor_translate('Are you already a member?', 'login')}<br />
+                        <strong>{sensor_translate('Log in now!')}</strong>
+                        <a style="background:#5cb85c;font-size: 0.7em;padding: 18px 2px;" href="{'/user/login/'|ezurl(no)}" class="btn btn-success btn-lg">{sensor_translate('Login', 'login')}</a>
                     </h3>
                 </div>
             </div>
@@ -63,9 +63,9 @@
             <div class="signup">
                 <div class="social_sign">
                     <h3>
-                        <strong>{'Are you not registered yet?'|i18n('social_user/signup')}</strong><br />
-                        {'It takes just 5 seconds to register!'|i18n('social_user/signup')}
-                        <a style="background:#f0ad4e;font-size: 0.7em;padding: 18px 2px;" href="{'/user/register/'|ezurl(no)}" class="btn btn-success btn-lg">{'Subscribe'|i18n('social_user/signup')}</a>
+                        <strong>{sensor_translate('Are you not registered yet?', 'login')}</strong><br />
+                        {sensor_translate('It takes just 5 seconds to register!', 'login')}
+                        <a style="background:#f0ad4e;font-size: 0.7em;padding: 18px 2px;" href="{'/user/register/'|ezurl(no)}" class="btn btn-success btn-lg">{sensor_translate('Subscribe', 'login')}</a>
                     </h3>
                 </div>
             </div>

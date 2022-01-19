@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Exporting CSV</title>
+    <title>CSV Exporting</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
             integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
@@ -53,15 +53,15 @@
 
     <div class="col-md-12">
 
-        <h2 class="console">Attendere il caricamento dei dati...</h2>
+        <h2 class="console">{sensor_translate('Loading...')}</h2>
 
         <div class="progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">0%</div>
         </div>
 
         <div class="text-center">
-            <a href="#" class="download btn btn-success btn-lg" style="display: none">Scarica il file csv</a>
-            <p class="backtosite" style="margin-top:20px; display: none"><a href="/" class="btn btn-info btn-lg">Torna al sito</a></p>
+            <a href="#" class="download btn btn-success btn-lg" style="display: none">{sensor_translate('Download file')}</a>
+            <p class="backtosite" style="margin-top:20px; display: none"><a href="/" class="btn btn-info btn-lg">{sensor_translate('Back to site')}</a></p>
         </div>
 
     </div>

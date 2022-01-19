@@ -3,23 +3,23 @@
 
     <p class="lead" style="white-space:pre-wrap;">{{:description}}</p>
     <ul class="list-inline">
-        <li>{/literal}{'Pubblicata il'|i18n('sensor/post')}{literal} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</li>
+        <li>{{:~sensorTranslate('Created at')}} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</li>
         {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}
-            <li>{/literal}{'Ultima modifica del'|i18n('sensor/post')}{literal} {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</li>
+            <li>{{:~sensorTranslate('Last modified at')}} {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</li>
         {{/if}}
-        <li>{{:comments.length}} {/literal}{'commenti'|i18n('sensor/post')}{literal} - {{:responses.length}} {/literal}{'risposte ufficiali'|i18n('sensor/post')}{literal}</li>
+        <li>{{:comments.length}} {{:~sensorTranslate('comments')}} - {{:responses.length}} {{:~sensorTranslate('official replies')}}    </li>
     </ul>
 
     {{if (capabilities.is_a == 'sensor_operator' || capabilities.can_behalf_of) && reporter.id != author.id}}
     <ul class="list-inline">
-        <li>{/literal}{'Segnalazione raccolta da'|i18n('sensor/post')}{literal} {{:reporter.name}}{{if channel && channel.icon}} {/literal}{'via'|i18n('sensor/post')}{literal} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}</li>
+        <li>{{:~sensorTranslate('Issue reported by')}} {{:reporter.name}}{{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}</li>
     </ul>
     {{/if}}
 
     {{if relatedItems && relatedItems.length > 0}}
     <ul class="list-inline">
-        <li>{/literal}{'Segnalazioni correlate'|i18n('sensor/post')}{literal}</li>
-        {{for relatedItems}}<li><a href="/sensor/posts/{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
+        <li>{{:~sensorTranslate('Related issues')}}</li>
+        {{for relatedItems}}<li><a href={{:~accessPath("/sensor/posts/")}}{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
     </ul>
     {{/if}}
 
@@ -48,7 +48,7 @@
                     <div data-action-wrapper>
                         <input type="hidden" data-value="files" value="{{:original}}" />
                         <a href="#" style="position:absolute;bottom:3px; right:3px; z-index:1000"
-                           data-action="remove_image" data-parameters="files" data-confirmation="{/literal}{"Confermi l'eliminazione dell'immagine?"|i18n('sensor/post')|wash()}{literal}"
+                           data-action="remove_image" data-parameters="files" data-confirmation="{{:~sensorTranslate('Are you sure to delete this image?')}}"
                            class="btn btn-danger btn-icon"><i class="fa fa-trash"></i></a>
                     </div>
                   {{/if}}

@@ -14,11 +14,12 @@ class SensorStatisticAccess
 
     private function __construct()
     {
+        $translations = SensorTranslationHelper::instance();
         $this->statisticsService = OpenPaSensorRepository::instance()->getStatisticsService();
         $this->scopes = [
-            'anonymous' => ezpI18n::tr('sensor/config', 'Utente anonimo'),
-            'reporter' => ezpI18n::tr('sensor/config', 'Utente autenticato'),
-            'operator' => ezpI18n::tr('sensor/config', 'Operatore'),
+            'anonymous' => $translations->translate('Anonymous user'),
+            'reporter' => $translations->translate('Authenticated user'),
+            'operator' => $translations->translate('Operator'),
         ];
         $this->assignments = [
             'anonymous' => (int)eZINI::instance()->variable('UserSettings','AnonymousUserID'),

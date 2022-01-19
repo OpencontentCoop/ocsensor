@@ -1,5 +1,5 @@
 <form id="notificationForm" class="form" action="{'sensor/config/notifications'|ezurl(no)}" method="post">
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">		
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 	{foreach $all_languages as $language}
 		<div class="panel panel-default"{if is_set($languages[$language.locale])|not()} style="display: none;"{/if}>
 			<div class="panel-heading" role="tab" id="heading-{$language.locale}">
@@ -39,7 +39,7 @@
 										</p>
 										<p>
 											<label for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_text">{"Testo"|i18n('sensor/settings')}</label>
-											<textarea for="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_text" class="form-control" row="2"
+											<textarea id="{$notification_type.identifier}_role_{$participant_role.id}_{$language.locale}_text" class="form-control" row="2"
 													  name="NotificationsText[{$notification_type.identifier}][role_{$participant_role.id}][text][{$language.locale}]">{$texts[$notification_type.identifier][concat('role_',$participant_role.id)][text][$language.locale]|wash()}</textarea>
 										</p>
 									</td>
@@ -56,17 +56,17 @@
 	</div>
 	<div class="clearfix" style="margin: 10px 0">
 		<input type="hidden" name="StoreNotificationsText" value="1">
-		<button class="btn btn-success btn-lg pull-right" name="StoreNotificationsText" type="submit">{"Salva"|i18n('sensor/settings')}</button>
+		<button class="btn btn-success btn-lg pull-right" name="StoreNotificationsText" type="submit">{sensor_translate('Store')}</button>
 	</div>
 </form>
 <form id="notificationFormReset" class="form" action="{'sensor/config/notifications'|ezurl(no)}" method="post">
-	<button class="btn btn-danger btn-sm" name="ResetNotificationsText" type="submit">{"Reimposta i valori di default"|i18n('sensor/settings')}</button>
+	<button class="btn btn-danger btn-sm" style="margin-top: -90px;" name="ResetNotificationsText" type="submit">{sensor_translate('Reset factory settings')}</button>
 </form>
 <div class="modal fade" tabindex="-1" role="dialog" id="preview">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{sensor_translate('Close')}"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"></h4>
       </div>
       <div class="modal-body"></div>      

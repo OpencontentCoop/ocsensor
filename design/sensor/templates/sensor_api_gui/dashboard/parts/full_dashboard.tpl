@@ -1,55 +1,55 @@
 <div class="row" style="text-align:center;margin: 20px 0">
     <div class="col-md-12" data-participant_filters="sensor_participant_filter">
-        <p><strong>{"Mostra solo le segnalazioni nelle quali partecipo come:"|i18n('sensor/dashboard')}</strong></p>
-        <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{"Riferimento per il cittadino"|i18n('sensor/dashboard')}</button>
-        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{"Incaricato"|i18n('sensor/dashboard')}</button>
-        <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{"Osservatore"|i18n('sensor/dashboard')}</button>
+        <p><strong>{sensor_translate("Show only issues I participate in such as:")}</strong></p>
+        <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{sensor_translate('Reference for the citizen')}</button>
+        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{sensor_translate('Operator in charge')}</button>
+        <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{sensor_translate('Observer')}</button>
     </div>
 </div>
 <div class="row post-gui">
     <div class="col-md-12">
-        <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> Cerca</button>
+        <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> {sensor_translate('Search', 'config')}</button>
         <div class="bordered">
             <ul class="nav nav-pills" style="margin-bottom: 20px">
                 <li role="presentation">
                     <a href="#" data-status="waiting">
-                        {"Da leggere"|i18n('sensor/dashboard')}
+                        {sensor_translate('Unread')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#" data-status="read">
-                        {"In attesa di assegnazione"|i18n('sensor/dashboard')}
+                        {sensor_translate('Pending')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#" data-status="assigned">
-                        {"Assegnato"|i18n('sensor/dashboard')}
+                        {sensor_translate('Assigned')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#" data-status="fixed">
-                        {"Intervento terminato"|i18n('sensor/dashboard')}
+                        {sensor_translate('Fixed')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#" data-status="closed">
-                        {"Chiuso"|i18n('sensor/dashboard')}
+                        {sensor_translate('Closed')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation">
                     <a href="#" data-status="reopened">
-                        {"Riaperto"|i18n('sensor/dashboard')}
+                        {sensor_translate('Reopen')}
                         <span class="badge"></span>
                     </a>
                 </li>
                 <li role="presentation" class="pull-right">
                     <a id="export-url" href="{'sensor/dashboard/(export)/'|ezurl(no)}">
-                        <i class="fa fa-download"></i> {"Esporta"|i18n('sensor/dashboard')}                        
+                        <i class="fa fa-download"></i> {sensor_translate('Export to CSV', 'config')}
                     </a>
                 </li>
             </ul>
@@ -60,9 +60,9 @@
     <div class="col-md-3 hide searchform">
         <div class="dashboard-search">
             <form method="get" class="form dashboard-form">
-            	<button class="btn" type="reset" style="margin-bottom: 10px"><span class="fa fa-times"></span> Annulla ricerca</button>
+            	<button class="btn" type="reset" style="margin-bottom: 10px"><span class="fa fa-times"></span> {sensor_translate('Cancel')}</button>
                 <div class="form-group">
-                    <label class="widget-title" for="searchId">{'Cerca per ID'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title" for="searchId">{sensor_translate('Find by ID')}</label>
                     <input type="number" value=""
                            name="id"
                            id="searchId"
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchAuthor">{'Cerca per autore'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchAuthor">{sensor_translate('Find by author')}</label>
                     <input type="text" value=""
                            name="author"
                            id="searchAuthor"
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchSubject">{'Cerca per oggetto'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchSubject">{sensor_translate('Find by subject')}</label>
                     <input type="text" value=""
                            name="subject"
                            id="searchSubject"
@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchCategory">{'Cerca per categoria'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchCategory">{sensor_translate('Find by category')}</label>
                     <select name="category"
                             class="select form-control"
                             id='searchCategory'>
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchArea">{'Cerca per zona'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchArea">{sensor_translate('Find by area')}</label>
                     <select name="area"
                             class="select form-control"
                             id='searchArea'>
@@ -104,7 +104,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchAddress">{'Cerca per indirizzo'|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchAddress">{sensor_translate('Find by address')}</label>
                     <input type="text" value=""
                            name="address"
                            id="searchAddress"
@@ -112,7 +112,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchOwner">{'Cerca per incaricato'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchOwner">{sensor_translate('Find by operator in charge')}</label>
                     <select name="owner"
                             class="select select-operator form-control"
                             data-type="operators"
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchObserver">{'Cerca per osservatore'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchObserver">{sensor_translate('Find by observer')}</label>
                     <select name="observer"
                             class="select select-operator form-control"
                             data-type="operators"
@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchPublished" class="">{'Data creazione'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchPublished" class="">{sensor_translate('Find by creation date')}</label>
                     <input type="text"
                            name="published"
                            class="form-control daterange"
@@ -141,7 +141,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchExpiry" class="">{"Scadenza"|i18n('sensor/dashboard')}</label>
+                    <label class="widget-title"  for="searchExpiry" class="">{sensor_translate('Find by expiry')}</label>
                     <input type="text"
                            name="expiry"
                            class="form-control daterange"
@@ -150,42 +150,42 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchPrivacy">{'Cerca per visibilità'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchPrivacy">{sensor_translate('Find by visibility')}</label>
                     <select name="privacy"
                             class="form-control"
                             id='searchPrivacy'>
                         <option></option>
-                        <option value="private">{'Privato'|i18n('sensor/post')}</option>
-                        <option value="public">{'Pubblico'|i18n('sensor/post')}</option>
+                        <option value="private">{sensor_translate('Private')}</option>
+                        <option value="public">{sensor_translate('Public')}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchModeration">{'Cerca per moderazione'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchModeration">{sensor_translate('Find by moderation')}</label>
                     <select name="moderation"
                             class="form-control"
                             id='searchModeration'>
                         <option></option>
-                        <option value="skipped">{'Non necessita di moderazione'|i18n('sensor/post')}</option>
-                        <option value="waiting">{'In attesa di moderazione'|i18n('sensor/post')}</option>
-                        <option value="accepted">{'Moderato'|i18n('sensor/post')}</option>
+                        <option value="skipped">{sensor_translate('Without moderation')}</option>
+                        <option value="waiting">{sensor_translate('Waiting for moderation')}</option>
+                        <option value="accepted">{sensor_translate('Already moderate')}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="widget-title"  for="searchChannel">{'Cerca per canale'|i18n('sensor/post')}</label>
+                    <label class="widget-title"  for="searchChannel">{sensor_translate('Find by channel')}</label>
                     <select name="moderation"
                             class="form-control"
                             id='searchChannel'>
                         <option></option>
                         {foreach sensor_channels() as $channel}
-                            <option value="{$channel|wash()}">{$channel|wash()}</option>
+                            <option value="{$channel|wash()}">{sensor_translate($channel, 'channel')|wash()}</option>
                         {/foreach}
                     </select>
                 </div>
 
-                <button class="btn pull-right" type="submit"><span class="fa fa-search"></span> {'Cerca'|i18n('sensor/post')}</button>
-                <button class="btn btn-danger" type="reset"><span class="fa fa-close"></span> {'Annulla'|i18n('sensor/post')}</button>
+                <button class="btn pull-right" type="submit"><span class="fa fa-search"></span> {sensor_translate('Search')}</button>
+                <button class="btn btn-danger" type="reset"><span class="fa fa-close"></span> {sensor_translate('Cancel')}</button>
             </form>
         </div>
     </div>
@@ -205,12 +205,8 @@
     'Leaflet.MakiMarkers.js',
     'daterangepicker.js',
     'jquery.opendataTools.js',
-    'jsrender.js'
+    'jsrender.js', 'jsrender.helpers.js'
 ))}
-
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 
 {include uri='design:sensor_api_gui/dashboard/parts/tpl-dashboard-results.tpl'}
 {include uri='design:sensor_api_gui/dashboard/parts/tpl-dashboard-spinner.tpl'}
@@ -225,10 +221,6 @@ $(document).ready(function () {ldelim}
        $('.searchform').removeClass('hide');
     {rdelim});
 
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-    $.opendataTools.settings('language', "{$current_language}");
-    $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-    $.opendataTools.settings('locale', "{$moment_language}");
     $.opendataTools.settings('endpoint',{ldelim}
         'search': '/api/sensor_gui/posts/search',
         'sensor': '/api/sensor_gui',
@@ -276,7 +268,6 @@ $(document).ready(function () {ldelim}
         'settings': '{$settings|wash(javascript)}'
     {rdelim};
 {literal}
-    $.views.helpers($.opendataTools.helpers);
     var form = $('form.dashboard-form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');

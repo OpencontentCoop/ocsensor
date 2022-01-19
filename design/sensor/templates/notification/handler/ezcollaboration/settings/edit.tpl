@@ -18,17 +18,17 @@
                         <td width="1"><i class="fa fa-desktop"></i></td>
                         <td>
                             <span class="notificationPermissionStatus granted hide">
-                                {'Notifiche desktop abilitate'|i18n('sensor/settings')}
+                                {sensor_translate('Desktop notifications enabled')}
                                 <br/>
-                                <small>{'Utilizza le impostazioni del browser per disabilitare le notifiche desktop'|i18n('sensor/settings')}</small>
+                                <small>{sensor_translate('Use your browser settings to disable desktop notifications')}</small>
                             </span>
                             <span class="notificationPermissionStatus denied hide">
-                                {'Notifiche desktop disabilitate'|i18n('sensor/settings')}
+                                {sensor_translate('Desktop notifications disabled')}
                                 <br/>
-                                <small>{'Utilizza le impostazioni del browser per permettere l\'abilitazione le notifiche desktop'|i18n('sensor/settings')}</small>
+                                <small>{sensor_translate('Use your browser settings to allow desktop notifications to be enabled')}</small>
                             </span>
                             <span class="notificationPermissionStatus default hide">
-                                <a href="#" class="enableNotificationButton btn btn-xs btn-success">{'Abilita le notifiche desktop'|i18n('sensor/settings')}</a>
+                                <a href="#" class="enableNotificationButton btn btn-xs btn-success">{sensor_translate('Enable desktop notifications')}</a>
                             </span>
                         </td>
                     </tr>
@@ -48,9 +48,7 @@
                             </td>
                             <td>
                                 {$type.name|wash}
-                                {if is_set($type.description)}
-                                    <br/>
-                                    <small>{$type.description|wash()}</small>{/if}
+                                {if is_set($type.description)}<br/><small>{$type.description|wash()}</small>{/if}
                             </td>
                             <td style="vertical-align: middle">
                                 <div class="{$type.identifier} hide desktopNotificationType">
@@ -63,7 +61,7 @@
                 </table>
                 <div class="panel-footer">
                     <input class="button btn btn-xs btn-success" type="submit" name="Store"
-                           value="{'Salva le impostazioni'|i18n('sensor/settings')}"/>
+                           value="{sensor_translate('Save your settings')}"/>
                 </div>
             </div>
         {/if}

@@ -3,7 +3,7 @@
 <form method="post" action={"/notification/settings/"|ezurl}>
 
     <section class="hgroup">
-      <h1>{"Impostazioni delle notifiche"|i18n('sensor/settings')}</h1>
+      <h1>{sensor_translate("Notification settings")}</h1>
     </section>
 
     {let handlers=fetch('notification','handler_list')}

@@ -10,7 +10,7 @@
             </option>
         {/foreach}
     </select>
-    <span>Scegli il tipo di segnalazione</span>
+    <span>{sensor_translate('Choose the type of issue')}</span>
     </label>
 </div>
 {/if}

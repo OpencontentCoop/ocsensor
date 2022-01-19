@@ -40,9 +40,9 @@
       <div class="signup">
         <div class="social_sign">
           <h3>
-            <strong>{'Are you not registered yet?'|i18n('social_user/signup')}</strong><br />
-            {'It takes just 5 seconds to register!'|i18n('social_user/signup')}
-            <a style="background:#f0ad4e;font-size: 0.7em;padding: 18px 2px;" href="{'/user/register/'|ezurl(no)}" class="btn btn-success btn-lg">{'Subscribe'|i18n('social_user/signup')}</a>
+            <strong>{sensor_translate('Are you not registered yet?', 'login')}</strong><br />
+            {sensor_translate('It takes just 5 seconds to register!', 'login')}
+            <a style="background:#f0ad4e;font-size: 0.7em;padding: 18px 2px;" href="{'/user/register/'|ezurl(no)}" class="btn btn-success btn-lg">{sensor_translate('Subscribe', 'login')}</a>
           </h3>
         </div>
       </div>

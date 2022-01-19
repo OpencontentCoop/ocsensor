@@ -20,12 +20,12 @@
                     </tr>
                     <tr>
                         <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
-                            <p><strong>{"Assegnata a"|i18n('sensor/mail/post')}:</strong> {$collaboration_item.content.helper.owner_name|wash()}</p>
+                            <p><strong>{sensor_translate('In charge of')}:</strong> {$collaboration_item.content.helper.owner_name|wash()}</p>
                         </td>
                     </tr>
                     <tr>
                         <td align='center' bgcolor='#f90f00' valign='top'>
-                            <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Vai alla seganalazione"|i18n('sensor/mail/post')}</a></h3>
+                            <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{sensor_translate('Read the issue')}</a></h3>
                         </td>
                     </tr>
                     <tr>

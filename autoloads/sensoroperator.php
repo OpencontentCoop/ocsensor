@@ -27,6 +27,7 @@ class SensorOperator
             'sensor_faqcontainer',
             'is_sensor_public_field',
             'sensor_edit_category_access',
+            'sensor_translate',
         );
     }
 
@@ -58,6 +59,22 @@ class SensorOperator
                     'required' => true,
                 )
             ),
+            'sensor_translate' => array(
+                'string' => array(
+                    'type' => 'string',
+                    'required' => true,
+                ),
+                'context' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => null,
+                ),
+                'replacements' => array(
+                    'type' => 'array',
+                    'required' => false,
+                    'default' => [],
+                )
+            ),
         );
     }
 
@@ -66,6 +83,15 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_translate':
+                $operatorValue = SensorTranslationHelper::instance()->translate(
+                    $namedParameters['string'],
+                    $namedParameters['context'],
+                    $namedParameters['replacements'],
+                    $repository->getCurrentLanguage()
+                );
+                break;
+
             case 'sensor_edit_category_access':
                 $attributes = $repository->getPublicPostContentClassAttributes();
                 $categoryNodeIdList = isset($attributes['category']) ? 'all' : 'none';

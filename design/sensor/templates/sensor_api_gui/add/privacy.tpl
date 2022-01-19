@@ -47,10 +47,10 @@
         {/literal}
     </style>
     <p>
-        <strong style="margin-bottom: 10px">Consenti la pubblicazione di questa segnalazione::</strong>
+        <strong style="margin-bottom: 10px">{sensor_translate('Allow publishing:')}</strong>
     </p>
     <div class="btn-group" data-toggle="buttons">
-        <label class="btn"><input type="radio" name="is_private" value="1"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><span> Sì</span></label>
-        <label class="btn"><input type="radio" name="is_private" value="0"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><span> No</span></label>
+        <label class="btn"><input type="radio" name="is_private" value="1"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><span> {sensor_translate('Yes')}</span></label>
+        <label class="btn"><input type="radio" name="is_private" value="0"><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-check-circle-o fa-2x"></i><span> {sensor_translate('No')}</span></label>
     </div>
 {/if}

@@ -33,8 +33,8 @@
         white-space: nowrap;
         vertical-align: top;
         cursor: pointer;
-        background-color: none;
-        border: 0px solid
+        background: none;
+        border: 0 solid
         #c8c8c8;
         border-radius: 3px;
         -webkit-user-select: none;
@@ -43,15 +43,12 @@
         -o-user-select: none;
         user-select: none;
     }
-
     div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
         -webkit-box-shadow: none;
         box-shadow: none;
     }
     {/literal}
     </style>
-
-
     <p>
         <strong style="margin-bottom: 10px">{$attribute.contentclass_attribute.name}:</strong>
     </p>

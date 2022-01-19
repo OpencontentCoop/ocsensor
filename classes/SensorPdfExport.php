@@ -7,11 +7,13 @@ class SensorPdfExport
 {
     private $post;
     private $repository;
+    private $translator;
 
     private function __construct(OpenPaSensorRepository $repository, Post $post)
     {
         $this->post = $post;
         $this->repository = $repository;
+        $this->translator = SensorTranslationHelper::instance();
     }
 
     public static function instance(OpenPaSensorRepository $repository, $postId)
@@ -52,11 +54,11 @@ class SensorPdfExport
         }
 
         $attributes = [
-            'Data di pubblicazione' => [$this->post->published->format('d/m/Y H:i')],
-            'Tipologia' => [$this->post->type->label],
-            'Oggetto della segnalazione' => [$this->post->subject],
-            'Dettagli della segnalazione' =>  [preg_replace('/\s+/', ' ', $this->post->description)],
-            'Collocazione geografica' => $this->post->geoLocation instanceof Post\Field\GeoLocation ?
+            $this->translator->translate('Creation date') => [$this->post->published->format('d/m/Y H:i')],
+            $this->translator->translate('Type') => [$this->post->type->label],
+            $this->translator->translate('Object of issue') => [$this->post->subject],
+            $this->translator->translate('Description of issue') =>  [preg_replace('/\s+/', ' ', $this->post->description)],
+            $this->translator->translate('Location info') => $this->post->geoLocation instanceof Post\Field\GeoLocation ?
                 [$this->post->geoLocation->address, '(lat: ' . $this->post->geoLocation->latitude . ', lng: ' . $this->post->geoLocation->longitude . ')'] : [],
         ];
 

@@ -8,7 +8,7 @@
             <div class="col-xs-12 col-md-6">
                 <div class="input-group">
                     <input type="text" class="form-control" data-search="q"
-                           placeholder="{'Cerca utente'|i18n('sensor/config')}">
+                           placeholder="{sensor_translate('Find user')}">
                     <span class="input-group-btn">
                 <button type="submit" class="btn btn-success">
                     <i class="fa fa-search"></i>
@@ -36,13 +36,9 @@
 </div>
 {ezscript_require(array(
     'jquery.opendataTools.js',
-    'jsrender.js',
+    'jsrender.js', 'jsrender.helpers.js',
     'moment-with-locales.min.js'
 ))}
-<script>
-    $.opendataTools.settings('language', "{$current_language}");
-    $.opendataTools.settings('locale', "{$moment_language}");
-</script>
 {literal}
 <script id="tpl-data-spinner" type="text/x-jsrender">
 <div class="col-xs-12 spinner text-center">
@@ -53,17 +49,17 @@
 <div class="row">
     {{if count == 0}}
         <div class="col-xs-12 text-center">
-            <i class="fa fa-times"></i> {/literal}{'Nessun contenuto'|i18n('sensor')}{literal}
+            <i class="fa fa-times"></i> {{:~sensorTranslate('No content')}}
         </div>
     {{else}}
     <div class="col-xs-12">
         <table class="table table-striped">
             <thead>
-                <th>{/literal}{'Nome'|i18n('sensor')}{literal}</th>
-                <th>{/literal}{'Codice fiscale'|i18n('sensor')}{literal}</th>
-                <th>{/literal}{'Email'|i18n('sensor')}{literal}</th>
-                <th>{/literal}{'Telefono'|i18n('sensor')}{literal}</th>
-                <th>{/literal}{'Ultimo accesso'|i18n('sensor')}{literal}</th>
+                <th>{{:~sensorTranslate('Name')}}</th>
+                <th>{{:~sensorTranslate('Fiscal code')}}</th>
+                <th>{{:~sensorTranslate('Email')}}</th>
+                <th>{{:~sensorTranslate('Phone')}}</th>
+                <th>{{:~sensorTranslate('Last access')}}</th>
                 <th width="1"></th>
             </thead>
             <tbody>
@@ -94,12 +90,12 @@
                 <li class="page-item {{if !prev}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prev}}data-page="{{>prev}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
-                        <span class="sr-only">Pagina precedente</span>
+                        <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
                 <li class="page-item {{if !next}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if next}}data-page="{{>next}}"{{/if}} href="#">
-                        <span class="sr-only">Pagina successiva</span>
+                        <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
@@ -111,7 +107,6 @@
 
 </script>
     <script>
-        $.views.helpers($.opendataTools.helpers);
         $(document).ready(function () {
             $('[data-parent]').each(function () {
                 var resultsContainer = $(this);

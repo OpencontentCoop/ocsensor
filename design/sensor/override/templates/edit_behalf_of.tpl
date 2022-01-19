@@ -7,18 +7,18 @@
 
     <div class="{if $current}hide{/if}" id="behalf-of-search">
         <div class="input-group">
-            <input placeholder="{'Cerca tra gli utenti registrati'|i18n('sensor/add')}"
+            <input placeholder="{sensor_translate('Search registered user')}"
                    id="behalf-of-search-input"
                    class="{$html_class}"
                    type="text"
                    size="70" />
             <span class="input-group-btn">
-                <a id="behalf-of-create-button" href="#" class="btn btn-default"><i class="fa fa-plus"></i> {'Crea utente'|i18n('sensor/add')}</a>
+                <a id="behalf-of-create-button" href="#" class="btn btn-default"><i class="fa fa-plus"></i> {sensor_translate('Create user')}</a>
             </span>
         </div>
         <div class="checkbox" style="width: 100%;">
             <label>
-                <input type="checkbox" id="behalf-of-anonymous" data-userid="{ezini('UserSettings', 'AnonymousUserID')}"> Non si dispongono informazioni sul segnalatore
+                <input type="checkbox" id="behalf-of-anonymous" data-userid="{ezini('UserSettings', 'AnonymousUserID')}"> {sensor_translate('There is no information about the reporter')}
             </label>
         </div>
     </div>
@@ -38,7 +38,7 @@
   'ezjsc::jqueryUI',
   'ezjsc::jqueryio',
   'jquery.opendataTools.js',
-  'jsrender.js',
+  'jsrender.js', 'jsrender.helpers.js',
   'alpaca.js',
   concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
   'fields/Recaptcha.js',
@@ -119,7 +119,7 @@
                         'form': {
                             'buttons': {
                                 'submit': {
-                                    'value': 'Crea',
+                                    'value': $.sensorTranslate.translate('Create'),
                                     'styles': 'btn btn-sm btn-success pull-right'
                                 },
                                 'reset': {
@@ -130,7 +130,7 @@
                                         $('#behalf-of').val('');
                                         $('#behalf-of-search-input').val('');
                                     },
-                                    'value': 'Annulla',
+                                    'value': $.sensorTranslate.translate('Cancel'),
                                     'styles': 'btn btn-sm btn-danger pull-left'
                                 }
                             }
@@ -141,7 +141,7 @@
             e.preventDefault();
         });
         $('#behalf-of-anonymous').attr('checked', false).on('change', function (){
-            var userName = 'Utente anonimo';
+            var userName = $.sensorTranslate.translate('Anonymous user');
             var userId = $(this).data('userid');
             if ($(this).is(':checked')) {
                 $('#behalf-of-search').addClass('hide');

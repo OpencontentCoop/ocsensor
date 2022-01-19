@@ -1,7 +1,15 @@
 {cache-block ignore_content_expiry keys=array( $identifier )}
   <section class="hgroup">
     <h1>
-      {$attribute.contentclass_attribute_name|wash()}
+      {if $attribute.contentclass_attribute_identifier|eq('faq')}
+        {sensor_translate('Faq')}
+      {elseif $attribute.contentclass_attribute_identifier|eq('privacy')}
+        {sensor_translate('Privacy')}
+      {elseif $attribute.contentclass_attribute_identifier|eq('terms')}
+        {sensor_translate('Terms of use')}
+      {else}
+        {$attribute.contentclass_attribute_name|wash()}
+      {/if}
     </h1>
   </section>
 

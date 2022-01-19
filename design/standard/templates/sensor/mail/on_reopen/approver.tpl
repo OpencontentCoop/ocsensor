@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td align='center' valign='top'>
-                        <h4 style='color: #f90f00 !important'>{'Dettagli della segnalazione'|i18n('sensor/mail/post')}</h4>
+                        <h4 style='color: #f90f00 !important'>{sensor_translate('Details')}</h4>
                     </td>
                 </tr>
                 <tr>
@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <td align='center' bgcolor='#f90f00' valign='top'>
-                        <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{"Leggi la segnalazione"|i18n('sensor/mail/post')}</a></h3>
+                        <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{sensor_translate('Read the issue')}</a></h3>
                     </td>
                 </tr>
                 <tr>

@@ -3,9 +3,9 @@
 
     <div class="widget">
         {{if capabilities.can_add_approver && groupsTree.children.length > 0}}
-            <a href="#" class="pull-right action-trigger{{if !settings.AllowChangeApprover}} hide{{/if}}" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger{{if !settings.AllowChangeApprover}} hide{{/if}}" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">Riferimento</strong>
+        <strong class="widget-title">{{:~sensorTranslate('Reference for the citizen')}}</strong>
         <ul class="list-unstyled widget-content">
         {{for approvers}}
             <li>
@@ -14,7 +14,7 @@
             </li>
         {{else}}
             <li>
-                <em class="text-muted">Non definito</em>
+                <em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
             </li>
         {{/for}}
         </ul>
@@ -27,9 +27,9 @@
         {{if capabilities.can_assign || owners.length || latestOwner || latestOwnerGroup}}
         <div class="widget">
             {{if capabilities.can_assign}}
-                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
             {{/if}}
-            <strong class="widget-title">Incaricato</strong>
+            <strong class="widget-title">{{:~sensorTranslate('Group and operator in charge')}}</strong>
             <ul class="list-unstyled widget-content">
             {{if owners.length}}
                 {{for owners}}
@@ -41,11 +41,11 @@
             {{else}}
                 {{if capabilities.can_assign}}
                 <li>
-                    <em class="text-muted">Non definito</em>
+                    <em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
                 </li>
                 {{/if}}
                 {{if latestOwner || latestOwnerGroup}}
-                    <li style="opacity:.5;margin-top: 5px;"><strong style="margin-bottom: 5px;" class="widget-title"><small>Ultima assegnazione</small></strong></li>
+                    <li style="opacity:.5;margin-top: 5px;"><strong style="margin-bottom: 5px;" class="widget-title"><small>{{:~sensorTranslate('Last assignment')}}</small></strong></li>
                     {{if latestOwner}}
                     <li style="opacity:.5;font-size: .875em;">
                         <img src="/sensor/avatar/{{:latestOwner.id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
@@ -68,9 +68,9 @@
         {{if capabilities.can_add_observer || observers.length}}
         <div class="widget">
             {{if capabilities.can_add_observer}}
-                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
             {{/if}}
-            <strong class="widget-title">Osservatori</strong>
+            <strong class="widget-title">{{:~sensorTranslate('Observers')}}</strong>
             <ul class="list-unstyled widget-content">
             {{for observers ~capabilities=capabilities}}
                 <li data-action-wrapper>
@@ -79,13 +79,13 @@
                     {{if ~capabilities.can_remove_observer}}
                     <a href="#"
                        data-action="remove_observer" data-parameters="participant_id"
-                       title="{/literal}{'Rimuovi osservatore'|i18n('sensor/messages')}{literal}"><i class="fa fa-times"></i></a>
+                       title="{{:~sensorTranslate('Remove observer')}}"><i class="fa fa-times"></i></a>
                     <input type="hidden" value="{{:id}}" data-value="participant_id" />
                     {{/if}}
                 </li>
             {{else}}
                 <li>
-                    <em class="text-muted">Non definito</em>
+                    <em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
                 </li>
             {{/for}}
             </ul>
@@ -96,37 +96,37 @@
 
     <div class="widget">
         {{if capabilities.can_set_type}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'type'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
-        <p class="widget-content">{{if type}}{{:type.name}}{{else}}<em class="text-muted">Non definito</em>{{/if}}</p>
+        <strong class="widget-title">{{:~sensorTranslate('Type')}}</strong>
+        <p class="widget-content">{{if type}}{{:type.name}}{{else}}<em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>{{/if}}</p>
         {{include tmpl="#tpl-post-set_type"/}}
     </div>
 
     <div class="widget">
         {{if capabilities.can_add_area}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'area'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
-        <p class="widget-content">{{for areas}}{{:name}}{{else}}<em class="text-muted">Non definito</em>{{/for}}</p>
+        <strong class="widget-title">{{:~sensorTranslate('Area')}}</strong>
+        <p class="widget-content">{{for areas}}{{:name}}{{else}}<em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>{{/for}}</p>
         {{include tmpl="#tpl-post-add_area"/}}
     </div>
 
     <div class="widget">
         {{if capabilities.can_add_category}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">{{for sensorPost.fields}}{{if identifier == 'category'}}{{:~i18n(name)}}{{/if}}{{/for}}</strong>
-        <p class="widget-content">{{for categories}}{{:name}}{{else}}<em class="text-muted">Non definito</em>{{/for}}</p>
+        <strong class="widget-title">{{:~sensorTranslate('Category')}}</strong>
+        <p class="widget-content">{{for categories}}{{:name}}{{else}}<em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>{{/for}}</p>
         {{include tmpl="#tpl-post-add_category"/}}
     </div>
 
     {{if capabilities.can_send_private_message}}
         <div class="widget">
             {{if capabilities.can_set_expiry}}
-                <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+                <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
             {{/if}}
-            <strong class="widget-title">{/literal}{'Scadenza'|i18n('sensor/post')}{literal}</strong>
+            <strong class="widget-title">{{:~sensorTranslate('Expiry')}}</strong>
             <p class="widget-content">{{:~formatDate(expirationInfo.expirationDateTime, 'DD/MM/YYYY HH:mm')}}</p>
             {{include tmpl="#tpl-post-set_expiry"/}}
         </div>
@@ -134,14 +134,14 @@
 
     <div class="widget">
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">{/literal}{'Visibilità'|i18n('sensor/post')}{literal}</strong>
-        <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}<i class="fa fa-globe"></i> Pubblico{{else}}<i class="fa fa-lock"></i> Privato{{/if}}</p>
+        <strong class="widget-title">{{:~sensorTranslate('Visibility')}}</strong>
+        <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}<i class="fa fa-globe"></i> {{:~sensorTranslate('public', 'privacy')}}{{else}}<i class="fa fa-lock"></i> {{:~sensorTranslate('private', 'privacy')}}{{/if}}</p>
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <div class="form-group hide" data-action-wrapper>
-                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}accepted{{else}}waiting{{/if}}" />
-                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}Rendi pubblico{{else}}Rendi privato{{/if}}" />
+                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('accepted', 'moderation')}}{{else}}{{:~sensorTranslate('waiting', 'moderation')}}{{/if}}" />
+                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('Make public')}}{{else}}{{:~sensorTranslate('make private')}}{{/if}}" />
             </div>
         {{/if}}
     </div>
@@ -149,9 +149,9 @@
 
     <div class="widget">
         {{if capabilities.can_add_attachment}}
-            <a href="#" class="pull-right action-trigger" data-reverse="Annulla">Modifica</a>
+            <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
-        <strong class="widget-title">{/literal}{'Allegati'|i18n('sensor/messages')}{literal}</strong>
+        <strong class="widget-title">{{:~sensorTranslate('Attachments')}}</strong>
         <div class="widget-content" data-action-wrapper>
             {{if attachments.length > 0}}
                 <ul class="list-unstyled" style="margin:0">
@@ -170,11 +170,11 @@
                 {{if capabilities.can_remove_attachment}}
                     <button class="btn btn-link text-danger" type="submit" style="margin-left: -10px;"
                             data-action="remove_attachment" data-parameters="files">
-                        <i class="fa fa-trash"></i> {/literal}{'Rimuovi file selezionati'|i18n('sensor/messages')}{literal}
+                        <i class="fa fa-trash"></i> {{:~sensorTranslate('Remove selected attachmentes')}}
                     </button>
                 {{/if}}
             {{else}}
-            <em class="text-muted">Nessun allegato</em>
+            <em class="text-muted">{{:~sensorTranslate('No attachments')}}</em>
             {{/if}}
         </div>
         {{if capabilities.can_add_attachment}}
@@ -182,7 +182,7 @@
                 <div class="clearfix upload-button-container">
                     <span class="btn btn-sm btn-default fileinput-button">
                         <i class="fa fa-plus"></i>
-                        <span>{/literal}{'Aggiungi allegato'|i18n('sensor/messages')}{literal}</span>
+                        <span>{{:~sensorTranslate('Add attachment')}}</span>
                         <input class="upload" name="files" type="file" />
                     </span>
                 </div>
@@ -195,7 +195,7 @@
 
     {{if capabilities.can_auto_assign || capabilities.can_fix || capabilities.can_force_fix || capabilities.can_close || capabilities.can_reopen}}
     <div class="widget">
-        <strong class="widget-title">{/literal}{'Azioni'|i18n('sensor/post')}{literal}</strong>
+        <strong class="widget-title">{{:~sensorTranslate('Actions')}}</strong>
         <div class="row">
             <div class="text-right col-md-10 col-md-offset-2">
                 
@@ -215,13 +215,13 @@
 
     {{if comments.length > 0 || responses.length > 0 || timelineItems.length > 0 || privateMessages.length > 0 || audits.length > 0}}
     <div class="widget">
-        <strong class="widget-title">{/literal}{'Visualizza'|i18n('sensor/post')}{literal}</strong>
+        <strong class="widget-title">{{:~sensorTranslate('Show')}}</strong>
         <div>
-            {{if comments.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="public">Commenti</a>{{/if}}
-            {{if responses.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="response">Risposte</a>{{/if}}
-            {{if timelineItems.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="system">Cronologia</a>{{/if}}
-            {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="private">Note</a>{{/if}}
-            {{if audits && audits.length > 0}}<a href="#" class="message-visibility label label-simple" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="audit">Audit</a>{{/if}}
+            {{if comments.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="public">{{:~sensorTranslate('Comments')}}</a>{{/if}}
+            {{if responses.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="response">{{:~sensorTranslate('Responses')}}</a>{{/if}}
+            {{if timelineItems.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="system">{{:~sensorTranslate('Timeline')}}</a>{{/if}}
+            {{if privateMessages.length > 0}}<a href="#" class="message-visibility label label-default" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="private">{{:~sensorTranslate('Notes')}}</a>{{/if}}
+            {{if audits && audits.length > 0}}<a href="#" class="message-visibility label label-simple" style="padding: 5px 7px 6px;margin: 0 1px 5px 0;display: inline-block;" data-type="audit">{{:~sensorTranslate('Audit')}}</a>{{/if}}
         </div>
     </div>
     {{/if}}
@@ -232,7 +232,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="clearfix" data-action-wrapper>
-                        <label for="noteForFix">{/literal}{'Aggiungi una nota sulla lavorazione per facilitare la redazione della risposta ufficiale'|i18n('sensor/messages')}{literal}</label>
+                        <label for="noteForFix">{{:~sensorTranslate('Add a note on processing to facilitate the drafting of the official response ')}}</label>
                         <textarea id="noteForFix" data-value="text" name="noteForFix" class="form-control" rows="4" required="required"></textarea>
                         <input data-value="is_response_proposal" type="hidden" value="1" />
                         {{for approvers}}<input data-value="participant_ids" type="hidden" value="{{:id}}" />{{/for}}
@@ -241,7 +241,7 @@
                                style="margin-top:10px"
                                data-actions="send_private_message,fix"
                                data-parameters="text,participant_ids,is_response_proposal"
-                               value="{/literal}{'Aggiungi nota e imposta come intervento terminato'|i18n('sensor/messages')}{literal}" />
+                               value="{{:~sensorTranslate('Add note and set as fixed')}}" />
                     </div>
                 </div>
             </div>
@@ -255,14 +255,14 @@
 {{if capabilities.can_add_area}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
-            <select data-value="area_id" data-placeholder="{/literal}{'Seleziona Zona'|i18n('sensor/post')}{literal}" class="select form-control">
+            <select data-value="area_id" data-placeholder="{{:~sensorTranslate('Select area')}}" class="select form-control">
                 <option></option>
                 {{for areasTree.children}}
                     {{include tmpl="#tpl-tree-option"/}}
                 {{/for}}
             </select>
             <span class="input-group-btn">
-                <input data-action="add_area" data-parameters="area_id" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
+                <input data-action="add_area" data-parameters="area_id" class="btn btn-sm btn-default" type="submit" value="{{:~sensorTranslate('Select')}}" />
             </span>
         </div>
     </div>
@@ -293,14 +293,14 @@
 {{if capabilities.can_add_category}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
-            <select data-value="category_id" data-placeholder="{/literal}{'Seleziona categoria'|i18n('sensor/post')}{literal}" class="select form-control">
+            <select data-value="category_id" data-placeholder="{{:~sensorTranslate('Select category')}}" class="select form-control">
                 <option></option>
                 {{for categoriesTree.children}}
                     {{include tmpl="#tpl-tree-option"/}}
                 {{/for}}
             </select>
             <span class="input-group-btn">
-                <input data-action="add_category" data-parameters="category_id" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
+                <input data-action="add_category" data-parameters="category_id" class="btn btn-sm btn-default" type="submit" value="{{:~sensorTranslate('Select')}}" />
             </span>
         </div>
         {{if settings.HasCategoryPredictor && capabilities.can_add_category}}
@@ -319,13 +319,13 @@
 {{if capabilities.can_set_type}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
-            <select data-value="type" data-placeholder="{/literal}{'Seleziona Tipo'|i18n('sensor/post')}{literal}" class="select form-control">
+            <select data-value="type" data-placeholder="{{:~sensorTranslate('Select type')}}" class="select form-control">
                 {/literal}{foreach sensor_types() as $type}
                 <option value="{$type.identifier|wash()}"{literal}{{if type.identifier == '{/literal}{$type.identifier|wash()}{literal}'}} selected="selected"{{/if}}{/literal}>{$type.name|wash()}</option>
                 {/foreach}{literal}
             </select>
             <span class="input-group-btn">
-                <input data-action="set_type" data-parameters="type" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Imposta'|i18n('sensor/post')}{literal}" />
+                <input data-action="set_type" data-parameters="type" class="btn btn-sm btn-default" type="submit" value="{{:~sensorTranslate('Select')}}" />
             </span>
         </div>
     </div>
@@ -347,7 +347,7 @@
         <div class="input-group">
             <input type="number" data-value="expiry_days" class="form-control" value="{{:expirationInfo.days}}" style="height: 30px;"/>
             <span class="input-group-btn">
-                <input data-action="set_expiry" data-parameters="expiry_days" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Imposta giorni'|i18n('sensor/post')}{literal}" />
+                <input data-action="set_expiry" data-parameters="expiry_days" class="btn btn-sm btn-default" type="submit" value="{{:~sensorTranslate('Set days')}}" />
             </span>
         </div>
     </div>
@@ -358,7 +358,7 @@
 {{if capabilities.can_add_approver}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
-            <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona gruppo'|i18n('sensor/post')}{literal}" class="select form-control">
+            <select data-value="participant_ids" data-placeholder="{{:~sensorTranslate('Select group')}}" class="select form-control">
                 <option></option>
                 {{if groupsTree.children.length > 0}}
                 {{for groupsTree.children}}
@@ -376,7 +376,7 @@
                 {literal}
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="add_approver" data-parameters="participant_ids" value="{/literal}{'Imposta'|i18n('sensor/post')}{literal}" />
+                <input class="btn btn-sm btn-default" type="submit" data-action="add_approver" data-parameters="participant_ids" value="{{:~sensorTranslate('Select')}}" />
             </span>
         </div>
     </div>
@@ -388,15 +388,15 @@
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
             {{if groupsTree.children.length > 0}}
-            <select id="group-assign" data-current="{{:currentOwnerGroupId}}" data-value="group_ids" data-placeholder="{/literal}{'Gruppo'|i18n('sensor/post')}{literal}" class="select form-control reset-on-close">
+            <select id="group-assign" data-current="{{:currentOwnerGroupId}}" data-value="group_ids" data-placeholder="{{:~sensorTranslate('Group')}}" class="select form-control reset-on-close">
                 <option></option>
             </select>
             {{/if}}
-            <select id="user-assign" data-current="{{:currentOwnerUserId}}" data-value="participant_ids" data-placeholder="{/literal}{'Operatore'|i18n('sensor/post')}{literal}" class="select form-control reset-on-close">
+            <select id="user-assign" data-current="{{:currentOwnerUserId}}" data-value="participant_ids" data-placeholder="{{:~sensorTranslate('Operator')}}" class="select form-control reset-on-close">
                 <option></option>
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids,group_ids" value="{{if owners.length == 0}}{/literal}{'Assegna'|i18n('sensor/post')}{literal}{{else}}{/literal}{'Riassegna'|i18n('sensor/post')}{/literal}{{/if}}" />
+                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids,group_ids" value="{{if owners.length == 0}}{{:~sensorTranslate('Assign')}}{{else}}{{:~sensorTranslate('Reassign')}}{{/if}}" />
             </span>
         </div>
     </div>
@@ -407,14 +407,14 @@
 {{if capabilities.can_add_observer}}
     <div class="form-group hide" data-action-wrapper>
         <div class="input-group d-flex">
-            <select data-value="participant_ids" data-placeholder="{/literal}{'Seleziona operatore'|i18n('sensor/post')}{literal}" class="select form-control">
+            <select data-value="participant_ids" data-placeholder="{{:~sensorTranslate('Select operator')}}" class="select form-control">
                 <option></option>
                 {{for operatorsTree.children}}
                     {{include tmpl="#tpl-tree-option"/}}
                 {{/for}}
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="add_observer" data-parameters="participant_ids" value="{/literal}{'Aggiungi'|i18n('sensor/post')}{literal}" />
+                <input class="btn btn-sm btn-default" type="submit" data-action="add_observer" data-parameters="participant_ids" value="{{:~sensorTranslate('Select')}}" />
             </span>
         </div>
     </div>
@@ -426,21 +426,21 @@
     <div class="form-group" data-action-wrapper>
         <input type="hidden" data-value="participant_ids" value="{{:currentUserId}}" />
         <input class="btn {{if workflowStatus.identifier == 'assigned'}}btn-danger{{else}}btn-default{{/if}} btn-md btn-block" type="submit" data-action="auto_assign" data-parameters="participant_ids"
-               value="{/literal}{'Prendi in carico'|i18n('sensor/post')}{literal}" />
+               value="{{:~sensorTranslate('Take charge')}}" />
     </div>
 {{/if}}
 </script>
 <script id="tpl-post-fix" type="text/x-jsrender">
 {{if capabilities.can_fix}}
     <div class="form-group" data-action-wrapper>
-        <input class="btn btn-md btn-default btn-block" type="submit" data-action="{{if settings.MinimumIntervalFromLastPrivateMessageToFix > 0}}checkNoteAndFix{{else}}fix{{/if}}" value="{/literal}{'Intervento terminato'|i18n('sensor/post')}{literal}" />
+        <input class="btn btn-md btn-default btn-block" type="submit" data-action="{{if settings.MinimumIntervalFromLastPrivateMessageToFix > 0}}checkNoteAndFix{{else}}fix{{/if}}" value="{{:~sensorTranslate('Set as fixed')}}" />
     </div>
 {{/if}}
 </script>
 <script id="tpl-post-force_fix" type="text/x-jsrender">
 {{if capabilities.can_force_fix}}
     <div class="form-group" data-action-wrapper>
-        <input class="btn btn-md btn-default btn-block" type="submit" data-action="force_fix" value="{/literal}{'Forza intervento terminato'|i18n('sensor/post')}{literal}" />
+        <input class="btn btn-md btn-default btn-block" type="submit" data-action="force_fix" value="{{:~sensorTranslate('Force as fixed')}}" />
     </div>
 {{/if}}
 </script>
@@ -449,9 +449,9 @@
     <div class="form-group" data-action-wrapper>
         <input class="btn btn-md btn-default btn-block"
                type="submit"
-               {{if responses.length == 0}}data-confirmation="{/literal}{'Non ci sono risposte ufficiali inserite: sei sicuro di voler chiudere la segnalazione?'|i18n( 'sensor/messages' )|wash(javascript)}{literal}"{{/if}}
+               {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
                data-action="close"
-               value="{/literal}{'Chiudi'|i18n('sensor/post')}{literal}" />
+               value="{{:~sensorTranslate('Close issue')}}" />
     </div>
 {{/if}}
 </script>
@@ -461,7 +461,7 @@
         <input class="btn btn-md btn-default btn-block"
                type="submit"
                data-action="reopen"
-               value="{/literal}{'Riapri'|i18n('sensor/post')}{literal}" />
+               value="{{:~sensorTranslate('Reopen issue')}}" />
     </div>
 {{/if}}
 </script>

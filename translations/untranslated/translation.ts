@@ -1,1107 +1,1963 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0">
-<context>
-    <name>design/admin/collaboration</name>
+  <context>
+    <name>sensor</name>
     <message>
-        <source>Approval</source>
-        <translation type="unfinished"></translation>
+      <source>%count issues</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>design/admin/collaboration/view/element/ezapprove_comment</name>
     <message>
-        <source>Posted: %1</source>
-        <translation type="unfinished"></translation>
+      <source>%password_link_start%Click here to generate your personal password%password_link_end%</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>design/admin/content/edit</name>
     <message>
-        <source>Send for publishing</source>
-        <translation type="unfinished"></translation>
+      <source>A issue close near to your home was closed:</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Publish the contents of the draft that is being edited. The draft will become the published version of the object.</source>
-        <translation type="unfinished"></translation>
+      <source>A issue for your %sitename account has been registered</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Store draft</source>
-        <translation type="unfinished"></translation>
+      <source>A new user has registered</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Store the contents of the draft that is being edited and continue editing. Use this button to periodically save your work while editing.</source>
-        <translation type="unfinished"></translation>
+      <source>Actions</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Store draft and exit</source>
-        <translation type="unfinished"></translation>
+      <source>Add a note on processing to facilitate the drafting of the official response</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Store the draft that is being edited and exit from edit mode. Use when you need to exit your work and return later to continue.</source>
-        <translation type="unfinished"></translation>
+      <source>Add attachment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Discard draft</source>
-        <translation type="unfinished"></translation>
+      <source>Add comment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Are you sure you want to discard the draft?</source>
-        <translation type="unfinished"></translation>
+      <source>Add image</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Discard the draft that is being edited. This will also remove the translations that belong to the draft (if any).</source>
-        <translation type="unfinished"></translation>
+      <source>Add message</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Toggle fullscreen editing!</source>
-        <translation type="unfinished"></translation>
+      <source>Add new</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Edit &lt;%object_name&gt; (%class_name)</source>
-        <translation type="unfinished"></translation>
+      <source>Add note</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Translating content from %from_lang to %to_lang</source>
-        <translation type="unfinished"></translation>
+      <source>Add note and set as fixed</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Back to edit</source>
-        <translation type="unfinished"></translation>
+      <source>Add official response</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Required data is either missing or is invalid</source>
-        <translation type="unfinished"></translation>
+      <source>Add private message</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>The following locations are invalid</source>
-        <translation type="unfinished"></translation>
+      <source>Add the operator who opened the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>The following data is invalid according to the custom validation rules</source>
-        <translation type="unfinished"></translation>
+      <source>added a comment</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>design/admin/content/edit_attribute</name>
     <message>
-        <source>not translatable</source>
-        <translation type="unfinished"></translation>
+      <source>added a reponse</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>required</source>
-        <translation type="unfinished"></translation>
+      <source>Aging of issues</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>information collector</source>
-        <translation type="unfinished"></translation>
+      <source>All</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>design/admin/node/view/full</name>
     <message>
-        <source>Edit</source>
-        <translation type="unfinished"></translation>
+      <source>Allow public comments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Remove</source>
-        <translation type="unfinished"></translation>
+      <source>Allow publishing:</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>design/standard/content/datatype</name>
     <message>
-        <source>No relation</source>
-        <translation type="unfinished"></translation>
+      <source>Already moderate</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Parent node</source>
-        <translation type="unfinished"></translation>
+      <source>and</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Allowed classes</source>
-        <translation type="unfinished"></translation>
+      <source>Anonymous user</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Any</source>
-        <translation type="unfinished"></translation>
+      <source>Any</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>There are no objects of allowed classes</source>
-        <translation type="unfinished"></translation>
+      <source>Archive</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Create new object with name</source>
-        <translation type="unfinished"></translation>
+      <source>Are you already a member?</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Invert selection.</source>
-        <translation type="unfinished"></translation>
+      <source>Are you not registered yet?</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
+      <source>Are you sure to delete this image?</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="unfinished"></translation>
+      <source>Are you sure you remove this content?</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Section</source>
-        <translation type="unfinished"></translation>
+      <source>Are you sure you want to add a comment visible to the author of the report?</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>The related objects will be edited in the same language as this object. If such translations do not exist they will be created, based on the source language of your choice.</source>
-        <translation type="unfinished"></translation>
+      <source>Area</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Translation base</source>
-        <translation type="unfinished"></translation>
+      <source>Areas</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Order</source>
-        <translation type="unfinished"></translation>
+      <source>Assign</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Edit &lt;%object_name&gt; [%object_class]</source>
-        <translation type="unfinished"></translation>
+      <source>Assigned</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>This object is already translated, the existing translation will be used.</source>
-        <translation type="unfinished"></translation>
+      <source>Assigned to %name</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>This object is not translated, please select the language the new translation will be based on.</source>
-        <translation type="unfinished"></translation>
+      <source>Assigning a issue to a group</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>None</source>
-        <translation type="unfinished"></translation>
+      <source>Assigning the type to issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>There are no related objects.</source>
-        <translation type="unfinished"></translation>
+      <source>Assignment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Remove selected</source>
-        <translation type="unfinished"></translation>
+      <source>Assignment of a issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Edit selected</source>
-        <translation type="unfinished"></translation>
+      <source>Assignments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Add objects</source>
-        <translation type="unfinished"></translation>
+      <source>Attachments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Create new object</source>
-        <translation type="unfinished"></translation>
+      <source>Audit</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Published</source>
-        <translation type="unfinished"></translation>
+      <source>Authenticated user</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>No</source>
-        <translation type="unfinished"></translation>
+      <source>Author</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
+      <source>Author and subject</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Find objects</source>
-        <translation type="unfinished"></translation>
+      <source>Automations</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Current image</source>
-        <translation type="unfinished"></translation>
+      <source>Average execution times</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Preview</source>
-        <translation type="unfinished"></translation>
+      <source>Average of execution times on days</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Filename</source>
-        <translation type="unfinished"></translation>
+      <source>Back to site</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>MIME type</source>
-        <translation type="unfinished"></translation>
+      <source>Bring to the attention of</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Size</source>
-        <translation type="unfinished"></translation>
+      <source>By accessing the system, you can check the resolution of your issues and insert new ones</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>There is no image file.</source>
-        <translation type="unfinished"></translation>
+      <source>Cancel</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Remove image</source>
-        <translation type="unfinished"></translation>
+      <source>Categories</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>New image file for upload</source>
-        <translation type="unfinished"></translation>
+      <source>Categories enabled for area</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Alternative image text</source>
-        <translation type="unfinished"></translation>
+      <source>Category</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>extension/ezgmaplocation/datatype</name>
     <message>
-        <source>Find address</source>
-        <translation type="unfinished"></translation>
+      <source>Category assignment to issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Restore</source>
-        <translation type="unfinished"></translation>
+      <source>Change</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Restores location and address values to what it was on page load.</source>
-        <translation type="unfinished"></translation>
+      <source>Channel</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Latitude</source>
-        <translation type="unfinished"></translation>
+      <source>Check the resolution trend</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Longitude</source>
-        <translation type="unfinished"></translation>
+      <source>Child category</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>My current location</source>
-        <translation type="unfinished"></translation>
+      <source>Choose a point on the map or enter an address and click on the lens.</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Gets your current position if your browser support GeoLocation and you grant this website access to it! Most accurate if you have a built in gps in your Internet device! Also note that you might still have to type in address manually!</source>
-        <translation type="unfinished"></translation>
+      <source>Choose the category</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>kernel/user/register</name>
     <message>
-        <location filename="test_mail.php" line="48"/>
-        <source>Registration info</source>
-        <translation type="unfinished"></translation>
+      <source>Choose the type of issue</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/add</name>
     <message>
-        <source>I testi e le immagini inserite dovranno rispettare le policy stabilite per %open_privacy_url%la privacy%close_privacy_url% e %open_terms_url%i termini di utilizzo%close_terms_url%</source>
-        <translation type="unfinished"></translation>
+      <source>Close</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Salva</source>
-        <translation type="unfinished"></translation>
+      <source>Close issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Annulla</source>
-        <translation type="unfinished"></translation>
+      <source>Close with last answer:</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rileva la mia posizione</source>
-        <translation type="unfinished"></translation>
+      <source>Close with operator's note:</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Segnalatore</source>
-        <translation type="unfinished"></translation>
+      <source>Closed</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Nome e cognome del segnalatore</source>
-        <translation type="unfinished"></translation>
+      <source>Closed by %name</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/config</name>
     <message>
-        <source>Moderazione attivata</source>
-        <translation type="unfinished"></translation>
+      <source>Closing</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Impostazioni</source>
-        <translation type="unfinished"></translation>
+      <source>Closing a issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Modifica impostazioni generali</source>
-        <translation type="unfinished"></translation>
+      <source>Closing date</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Modifica informazioni Sensor</source>
-        <translation type="unfinished"></translation>
+      <source>Closing the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Utenti</source>
-        <translation type="unfinished"></translation>
+      <source>Closure</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Operatori</source>
-        <translation type="unfinished"></translation>
+      <source>Comment text</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Categorie</source>
-        <translation type="unfinished"></translation>
+      <source>Comment to a issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Punti sulla mappa</source>
-        <translation type="unfinished"></translation>
+      <source>Comment to moderate</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Cerca</source>
-        <translation type="unfinished"></translation>
+      <source>comments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Esporta in CSV</source>
-        <translation type="unfinished"></translation>
+      <source>Comments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi</source>
-        <translation type="unfinished"></translation>
+      <source>Conditions</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>L&apos;utente può inserire segnalazioni per conto di altri</source>
-        <translation type="unfinished"></translation>
+      <source>Copy link</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Blocca</source>
-        <translation type="unfinished"></translation>
+      <source>Create</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Sblocca</source>
-        <translation type="unfinished"></translation>
+      <source>Create issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi %classname</source>
-        <translation type="unfinished"></translation>
+      <source>Create response from this note</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/dashboard</name>
     <message>
-        <location filename="helper.php" line="305"/>
-        <source>Da leggere</source>
-        <translation type="unfinished"></translation>
+      <source>Create user</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="helper.php" line="311"/>
-        <source>In corso</source>
-        <translation type="unfinished"></translation>
+      <source>Created at</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="helper.php" line="317"/>
-        <source>Chiuse</source>
-        <translation type="unfinished"></translation>
+      <source>Creating</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Le mie segnalazioni</source>
-        <translation type="unfinished"></translation>
+      <source>Creating a issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Segnalazioni da leggere, in corso e chiuse</source>
-        <translation type="unfinished"></translation>
+      <source>Creation date</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Legenda:</source>
-        <translation type="unfinished"></translation>
+      <source>Daily</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>indica la presenza di commenti</source>
-        <translation type="unfinished"></translation>
+      <source>day</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>indica la presenza di messaggi privati</source>
-        <translation type="unfinished"></translation>
+      <source>days</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>indica la presenza di variazioni in cronologia non lette</source>
-        <translation type="unfinished"></translation>
+      <source>Delete</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Esporta CSV</source>
-        <translation type="unfinished"></translation>
+      <source>Describe the details of the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Esporta risultati CSV</source>
-        <translation type="unfinished"></translation>
+      <source>Description</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Dettagli</source>
-        <translation type="unfinished"></translation>
+      <source>Description of issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Oggetto</source>
-        <translation type="unfinished"></translation>
+      <source>Desktop notifications disabled</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Commenti</source>
-        <translation type="unfinished"></translation>
+      <source>Desktop notifications enabled</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>In carico a</source>
-        <translation type="unfinished"></translation>
+      <source>Details</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Creata</source>
-        <translation type="unfinished"></translation>
+      <source>Details (maximum %count characters)</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Modificata</source>
-        <translation type="unfinished"></translation>
+      <source>Detect my location</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Scadenza</source>
-        <translation type="unfinished"></translation>
+      <source>Displays the ajax input interface</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Autore</source>
-        <translation type="unfinished"></translation>
+      <source>Download file</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/expiring</name>
     <message>
-        <location filename="post.php" line="318"/>
-        <source>Scade fra</source>
-        <translation type="unfinished"></translation>
+      <source>Download JPG image</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="321"/>
-        <source>Scaduto da</source>
-        <translation type="unfinished"></translation>
+      <source>Download PDF document</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="641"/>
-        <source>anno</source>
-        <translation type="unfinished"></translation>
+      <source>Download PNG image</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="644"/>
-        <source>anni</source>
-        <translation type="unfinished"></translation>
+      <source>Download SVG</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="647"/>
-        <source>mese</source>
-        <translation type="unfinished"></translation>
+      <source>Duplicate</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="650"/>
-        <source>mesi</source>
-        <translation type="unfinished"></translation>
+      <source>E-mail</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="653"/>
-        <source>giorno</source>
-        <translation type="unfinished"></translation>
+      <source>Edit</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="656"/>
-        <source>giorni</source>
-        <translation type="unfinished"></translation>
+      <source>Email</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="659"/>
-        <source>ora</source>
-        <translation type="unfinished"></translation>
+      <source>Enable automations on category assignment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="662"/>
-        <source>ore</source>
-        <translation type="unfinished"></translation>
+      <source>Enable automations on creating an issue in area</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="665"/>
-        <source>minuto</source>
-        <translation type="unfinished"></translation>
+      <source>Enable desktop notifications</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="668"/>
-        <source>minuti</source>
-        <translation type="unfinished"></translation>
+      <source>Enabled</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="671"/>
-        <source>secondo</source>
-        <translation type="unfinished"></translation>
+      <source>Enter the report password</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="674"/>
-        <source>secondi</source>
-        <translation type="unfinished"></translation>
+      <source>Event</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="705"/>
-        <source>meno di un minuto</source>
-        <translation type="unfinished"></translation>
+      <source>Everyone will be able to read this report</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="716"/>
-        <source>e</source>
-        <translation type="unfinished"></translation>
+      <source>Everyone will be able to read this report when the %site team approves it</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/export</name>
     <message>
-        <location filename="csv.php" line="21"/>
-        <source>ID</source>
-        <translation type="unfinished"></translation>
+      <source>Exclusive recipients of private notes</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="22"/>
-        <source>Privacy</source>
-        <translation type="unfinished"></translation>
+      <source>Expiration</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="23"/>
-        <source>Moderazione</source>
-        <translation type="unfinished"></translation>
+      <source>Expirations</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="24"/>
-        <source>Tipo</source>
-        <translation type="unfinished"></translation>
+      <source>Expired since</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="25"/>
-        <source>Stato corrente</source>
-        <translation type="unfinished"></translation>
+      <source>Expires in</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="26"/>
-        <source>Creato il</source>
-        <translation type="unfinished"></translation>
+      <source>Expiry</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="27"/>
-        <source>Ultima modifica del</source>
-        <translation type="unfinished"></translation>
+      <source>Export</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="28"/>
-        <source>Scadenza</source>
-        <translation type="unfinished"></translation>
+      <source>Export in CSV</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="29"/>
-        <source>Data risoluzione</source>
-        <translation type="unfinished"></translation>
+      <source>Export to CSV</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="30"/>
-        <source>Tempo di risoluzione</source>
-        <translation type="unfinished"></translation>
+      <source>Faq</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="31"/>
-        <source>Titolo</source>
-        <translation type="unfinished"></translation>
+      <source>Favourite language</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="32"/>
-        <source>Autore</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by area</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="33"/>
-        <source>Categoria</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by assignment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="34"/>
-        <source>Incaricato</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by category</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="csv.php" line="35"/>
-        <source>Commenti</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by condition</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/mail/post</name>
     <message>
-        <source>Nuova segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by group</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>E&apos; stata registrata una nuova segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by group in charge</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Dettagli della segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by macro category</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Leggi la segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by operator group</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Per vedere tutte le tue segnalazioni clicca %dashboard_link_start%qui%dashboard_link_end%</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by static in the time range</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Per disabilitare le notifiche email clicca %notification_link_start%qui%notification_link_end%</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by time interval</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Segnalazione chiusa da operatore</source>
-        <translation type="unfinished"></translation>
+      <source>Filter by type</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La segnalazione è stata chiusa dall&apos;operatore</source>
-        <translation type="unfinished"></translation>
+      <source>Find by address</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Puoi decidere se chiudere la segnalazione o assegnarla a un altro operatore</source>
-        <translation type="unfinished"></translation>
+      <source>Find by area</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Vai alla segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Find by author</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La tua segnalazione è stata registrata</source>
-        <translation type="unfinished"></translation>
+      <source>Find by category</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La tua segnalazione sarà presa in carico da un operatore al più presto</source>
-        <translation type="unfinished"></translation>
+      <source>Find by channel</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Controlla l&apos;andamento della risoluzione</source>
-        <translation type="unfinished"></translation>
+      <source>Find by creation date</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La tua segnalazione è stata presa in carico</source>
-        <translation type="unfinished"></translation>
+      <source>Find by expiry</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Assegnata a</source>
-        <translation type="unfinished"></translation>
+      <source>Find by ID</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La tua segnalazione è stata risolta</source>
-        <translation type="unfinished"></translation>
+      <source>Find by moderation</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Visualizza la storia della tua segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Find by observer</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Vai alla segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Find by operator in charge</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Segnalazione risolta</source>
-        <translation type="unfinished"></translation>
+      <source>Find by subject</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>La segnalazione è stata risolta</source>
-        <translation type="unfinished"></translation>
+      <source>Find by visibility</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Visualizza la storia della segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Find in issues</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Ti è stata assegnata una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>Find user</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Puoi decidere se risolvere la segnalazione o assegnarla a un altro operatore</source>
-        <translation type="unfinished"></translation>
+      <source>Fiscal code</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/mail/registration</name>
     <message>
-        <source>%privacy_link_start%Informazioni sulla privacy%privacy_link_end%</source>
-        <translation type="unfinished"></translation>
+      <source>Fixed</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>%terms_link_start%Termini di utilizzo%terms_link_end%</source>
-        <translation type="unfinished"></translation>
+      <source>Fixed by %name</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/menu</name>
     <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
+      <source>Fixing</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Accedi</source>
-        <translation type="unfinished"></translation>
+      <source>Fixing the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Segnala</source>
-        <translation type="unfinished"></translation>
+      <source>Force as fixed</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/messages</name>
     <message>
-        <source>Da:</source>
-        <translation type="unfinished"></translation>
+      <source>From</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>a:</source>
-        <translation type="unfinished"></translation>
+      <source>General Settings</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Salva</source>
-        <translation type="unfinished"></translation>
+      <source>Go to the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>RISPOSTA DEL RESPONSABILE</source>
-        <translation type="unfinished"></translation>
+      <source>Group</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Commenti</source>
-        <translation type="unfinished"></translation>
+      <source>Group and operator in charge</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi un commento</source>
-        <translation type="unfinished"></translation>
+      <source>Group in charge</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Pubblica il commento</source>
-        <translation type="unfinished"></translation>
+      <source>Group of operator who opened the issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Risposte ufficiali</source>
-        <translation type="unfinished"></translation>
+      <source>Group of operators in charge</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi risposta ufficiale</source>
-        <translation type="unfinished"></translation>
+      <source>Groups</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Risposta ufficiale</source>
-        <translation type="unfinished"></translation>
+      <source>Half-yearly</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Pubblica la risposta ufficiale</source>
-        <translation type="unfinished"></translation>
+      <source>Hide archived</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Messaggi privati</source>
-        <translation type="unfinished"></translation>
+      <source>Hide map</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi messaggio</source>
-        <translation type="unfinished"></translation>
+      <source>Hide publication consent from the reporter</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Invia messaggio</source>
-        <translation type="unfinished"></translation>
+      <source>Hide the choice of the type of issue from the reporter</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Chi può leggere questo messaggio?</source>
-        <translation type="unfinished"></translation>
+      <source>Hide the detailed timeline from the public</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Solo te stesso</source>
-        <translation type="unfinished"></translation>
+      <source>Hide the operators name from the public</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Attenzione il commento sarà visibile a tutti. Per inviare un messaggio visibile solo al team usa il bottone \"Messaggi privati\".</source>
-        <translation type="unfinished"></translation>
+      <source>Hit enter to search</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/notification</name>
     <message>
-        <location filename="notificationhelper.php" line="358"/>
-        <source>Creazione di una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>hour</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="362"/>
-        <source>Ricevi una notifica alla creazione di una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>hours</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="371"/>
-        <source>Assegnazione di una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>ID</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="375"/>
-        <source>Ricevi una notifica quando una tua segnalazione Ã¨ assegnata a un responsabile</source>
-        <translation type="unfinished"></translation>
+      <source>If the button does not work, paste the following address in the address bar of your browser: %password_link</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="410"/>
-        <source>Chiusura di una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>If the option is activated, only the acceptance and closure events will be shown in the history</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="414"/>
-        <source>Ricevi una notifica quando una tua segnalazione Ã¨ stata chiusa</source>
-        <translation type="unfinished"></translation>
+      <source>If the option is activated, the reporter is not asked to choose the type of issue</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="426"/>
-        <source>Riapertura di una segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>If the option is enabled, the names of the operators will be replaced with a generic string</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="430"/>
-        <source>Ricevi una notifica alla riapertura di una tua segnalazione</source>
-        <translation type="unfinished"></translation>
+      <source>If the option is enabled, the reporter is not asked for consent to make the issue public: operators will not be able to make it public in any way.</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="notificationhelper.php" line="488"/>
-        <source>Ricevi la notifica via mail</source>
-        <translation type="unfinished"></translation>
+      <source>If this option is enabled, authenticated users can post comments to public issyes</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/post</name>
     <message>
-        <source>Cerca per categoria</source>
-        <translation type="unfinished"></translation>
+      <source>If this option is enabled, new issues are not publicly visible</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Cerca per incaricato</source>
-        <translation type="unfinished"></translation>
+      <source>If this option is enabled, you can select which operators can read each note</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Zona</source>
-        <translation type="unfinished"></translation>
+      <source>Images</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Seleziona Zona</source>
-        <translation type="unfinished"></translation>
+      <source>In charge of</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Associa</source>
-        <translation type="unfinished"></translation>
+      <source>In general,%count issues have been resolved</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Categoria</source>
-        <translation type="unfinished"></translation>
+      <source>In order to partecipate, you need to be registered!</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Seleziona categoria</source>
-        <translation type="unfinished"></translation>
+      <source>Inbox</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Assegna al responsabile dell&apos;area selezionata</source>
-        <translation type="unfinished"></translation>
+      <source>Incoming</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Scadenza</source>
-        <translation type="unfinished"></translation>
+      <source>Informations</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>in giorni</source>
-        <translation type="unfinished"></translation>
+      <source>Involvement of a reference for the citizen</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Imposta</source>
-        <translation type="unfinished"></translation>
+      <source>Involvement of an observer</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Azioni</source>
-        <translation type="unfinished"></translation>
+      <source>Is static</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Seleziona operatore</source>
-        <translation type="unfinished"></translation>
+      <source>Issue comments</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Assegna</source>
-        <translation type="unfinished"></translation>
+      <source>Issue fixed</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Riassegna</source>
-        <translation type="unfinished"></translation>
+      <source>Issue images</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Aggiungi cc</source>
-        <translation type="unfinished"></translation>
+      <source>Issue info</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Intervento terminato</source>
-        <translation type="unfinished"></translation>
+      <source>Issue number</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Forza chiusura</source>
-        <translation type="unfinished"></translation>
+      <source>Issue private notes</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Chiudi</source>
-        <translation type="unfinished"></translation>
+      <source>Issue reported by</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rendi la segnalazione privata</source>
-        <translation type="unfinished"></translation>
+      <source>issues</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rendi la segnalazione pubblica</source>
-        <translation type="unfinished"></translation>
+      <source>Issues</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Approva</source>
-        <translation type="unfinished"></translation>
+      <source>It takes just 5 seconds to register!</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Rifiuta</source>
-        <translation type="unfinished"></translation>
+      <source>Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Elimina moderazione</source>
-        <translation type="unfinished"></translation>
+      <source>January_February_March_April_May_June_July_August_September_October_November_December</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Pubblicata il</source>
-        <translation type="unfinished"></translation>
+      <source>Json API</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Ultima modifica del</source>
-        <translation type="unfinished"></translation>
+      <source>La zona selezionata non è coperta dal servizio</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>In carico a</source>
-        <translation type="unfinished"></translation>
+      <source>Last access</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>commenti</source>
-        <translation type="unfinished"></translation>
+      <source>Last assignment</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>risposte ufficiali</source>
-        <translation type="unfinished"></translation>
+      <source>Last modified at</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Soggetti coinvolti</source>
-        <translation type="unfinished"></translation>
+      <source>Legend:</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Cronologia</source>
-        <translation type="unfinished"></translation>
+      <source>Link</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/robot message</name>
     <message>
-        <location filename="timelinehelper.php" line="249"/>
-        <source>Completata da %name</source>
-        <translation type="unfinished"></translation>
+      <source>List of category ids for api selection</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="258"/>
-        <source>Letta da %name</source>
-        <translation type="unfinished"></translation>
+      <source>Loading...</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="267"/>
-        <source>Chiusa da %name</source>
-        <translation type="unfinished"></translation>
+      <source>Location info</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="276"/>
-        <source>Assegnata a %name</source>
-        <translation type="unfinished"></translation>
+      <source>Log in now!</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="285"/>
-        <source>Riaperta da %name</source>
-        <translation type="unfinished"></translation>
+      <source>Login</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="299"/>
-        <source>Completata</source>
-        <translation type="unfinished"></translation>
+      <source>Logout</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="303"/>
-        <source>Letta</source>
-        <translation type="unfinished"></translation>
+      <source>Make private</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="307"/>
-        <source>Chiusa</source>
-        <translation type="unfinished"></translation>
+      <source>Make public</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="311"/>
-        <source>Assegnata</source>
-        <translation type="unfinished"></translation>
+      <source>Menu</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="timelinehelper.php" line="315"/>
-        <source>Riaperta</source>
-        <translation type="unfinished"></translation>
+      <source>minute</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/role_name</name>
     <message>
-        <location filename="post.php" line="783"/>
-        <source>Standard</source>
-        <translation type="unfinished"></translation>
+      <source>minutes</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="784"/>
-        <source>Osservatore</source>
-        <translation type="unfinished"></translation>
+      <source>Moderation</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="785"/>
-        <source>In carico a</source>
-        <translation type="unfinished"></translation>
+      <source>Modified at</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="786"/>
-        <source>Riferimento per il cittadino</source>
-        <translation type="unfinished"></translation>
+      <source>month</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="post.php" line="787"/>
-        <source>Autore</source>
-        <translation type="unfinished"></translation>
+      <source>Monthly</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/settings</name>
     <message>
-        <location filename="sensorcollaborationhandler.php" line="12"/>
-        <location filename="sensorcollaborationhandler.php" line="27"/>
-        <source>Notifiche Sensor</source>
-        <translation type="unfinished"></translation>
+      <source>months</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Notifiche aggiornamento segnalazioni</source>
-        <translation type="unfinished"></translation>
+      <source>My activities</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Azione</source>
-        <translation type="unfinished"></translation>
+      <source>Name</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Salva le impostazioni</source>
-        <translation type="unfinished"></translation>
+      <source>Navigation</source>
+      <translation type="unfinished"/>
     </message>
     <message>
-        <source>Impostazioni delle notifiche</source>
-        <translation type="unfinished"></translation>
+      <source>New %count users have been registered</source>
+      <translation type="unfinished"/>
     </message>
-</context>
-<context>
-    <name>sensor/workflow/event</name>
     <message>
-        <location filename="sensortype.php" line="12"/>
-        <source>Workflow Sensor</source>
-        <translation type="unfinished"></translation>
+      <source>News</source>
+      <translation type="unfinished"/>
     </message>
-</context>
+    <message>
+      <source>Next</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Next page</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No attachments</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No content</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No issue found...</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No issues</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Nobody</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Not specified</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Notes</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Notification settings</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Notification texts</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Notifications</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues by aging time buckets</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues by area</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues by status</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues by type</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of issues open and closed by time interval</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Number of reports for processing times</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Object of issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Object of the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Observer</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Observers</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>official replies</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Official response</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>One issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Only the %site team will be able to read this report</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Open for group of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Open issues by entering date</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Open issues for groups of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Open over time</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>OpenSegnalazioni Notifications</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>OpenSegnalazioni Settings</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operator</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operator groups</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operator in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operator who opened the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operators</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Password</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Pending</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Percentage of issues closed by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Percentage of messages closed by group of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Phone</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Posta o Fax</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Prevent the area selection</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Previous</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Previous page</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Print</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Print chart</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Printable version</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Priority</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Privacy</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Private</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Private message</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Private notes</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Processing</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Processing times</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Profile</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Propose as an official response</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Public</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Publication of an official response</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Quarterly</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Random operator</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Read</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Read by %name</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Read the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reading</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reassign</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification for creating a issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification to the reopening of your issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when a comment is added to moderate</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when a comment is added to your report</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when a operator has completed the activity concerning your issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when an observer is involved in a report</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when you are the recipient of a private message</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when your issue has been closed</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when your issue is assigned to a manager</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a notification when your issue is assigned to a new reference for the citizen</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive a periodic update notification</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receive notification when a issue is assigned to your group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Receivers</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reference</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reference for the citizen</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reject</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Rejected</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Related issues</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reload</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Remember answer</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Remove observer</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Remove selected attachmentes</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reopen</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reopen by %name</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reopen issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reopening a report</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reponse proposal</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Report link</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reporter</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reporter group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reporter info</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reports</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Reset factory settings</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Resolution time</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Responses</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Save as pdf</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Save your settings</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Search</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Search in faq</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Search or create user</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Search registered user</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Search text</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>second</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>seconds</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>See all issues</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select area</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select event</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select operator</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select the reference area</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Select type</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Send</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Set a random operator</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Set as fixed</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Set days</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Set each new issue as private</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Set the operator who opened the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Settings</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show only issues I participate in such as:</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show other options</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Specials</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Sportello Fisico</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Standard</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Static on</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Statistics</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Statistics source</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Status</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Status by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Status for group of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Status of issues by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Status of issues for groups of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Store</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Store comment</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Store the official response and close the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Store the official response and keep the issue open</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Su_Mo_Tu_We_Th_Fr_Sa</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Subject</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Subscribe</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Subscriptions</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Subscriptions trend</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Take charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Taken in charge by %name</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Telefono</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Terms of use</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The areas most affected by new issues are:</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The comment will also be visible to the author of the report.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The comment will be moderated.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The comment will be public.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>the issue contains comments</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>the issue contains comments pending moderation</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>the issue contains private messages</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>the issue contains unread timeline</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The new input interface is exposed to the reporter</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The reference for the citizen can reopen a closed issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The reporter can reopen a closed issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>the scenario that coincides with the greatest number of conditions is executed.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The selected location is not covered by the service</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The texts and images inserted must comply with the policies established for %open_privacy_url%privacy%close_privacy_url% and %open_terms_url% the terms of use %close_terms_url%</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The whole working group can read the note; a notification will be sent only to the selected participants</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>There are no official replies entered: are you sure you want to close the report?</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>There is no information about the reporter</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>This configuration is not applicable</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>This link is valid up to %1</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>This option identifies the operator who takes charge of the issues in the first instance</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Time range</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Timeline</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Title</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To access the content you must be authenticated.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To disable notifications click %notification_link_start% here %notification_link_end%</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To enter your current position click on the compass.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To moderate</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To remove an attached image click on the trash can</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Translations</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Trend by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Trend by group of operators in charge</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Trend opening/closing</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Triggered on '%name' event. The default payload is a json API Sensor Post object</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Type</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Type an address and click on the lens or click on the map to view the map</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Type assignment to issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Type by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Type of issues by category</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Undefined</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Under the same number of conditions, the scenario with the lower ID is applied</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Unread</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Update notification</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Use your browser settings to allow desktop notifications to be enabled</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Use your browser settings to disable desktop notifications</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>User groups</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Users</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>via</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>View the history of issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>View the report</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Visibility</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Waiting for moderation</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Warning:</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Warning: you have no active notification and you will not receive any email. You can enable notifications on the page dedicated to %open_notification_url%notificationsettings%close_notification_url%.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Webhooks</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Weekly</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Welcome</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>When an issue is fixed, it always resets the reference for the citizen</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>When approved, the comment will also be visible to the author of the report.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>When approved, the comment will be public.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Without moderation</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Write the subject of the issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>year</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Yearly</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>years</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Yes</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>You can add up to three images in png or jpg format</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>You can drag the marker on the map to select the location more precisely</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>You have %count characters out of %total</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Your email address has been registered in the %sitename team</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Your issues have been resolved:</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Zone assignment to issue</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
+  <context>
+    <name>sensor/moderation</name>
+    <message>
+      <source>accepted</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>refused</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>skipped</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>waiting</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
+  <context>
+    <name>sensor/status</name>
+    <message>
+      <source>close</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>open</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>pending</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
+  <context>
+    <name>sensor/privacy</name>
+    <message>
+      <source>private</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>public</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
+  <context>
+    <name>sensor/type</name>
+    <message>
+      <source>reclamo</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>segnalazione</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>suggerimento</source>
+      <translation type="unfinished"/>
+    </message>
+  </context>
 </TS>

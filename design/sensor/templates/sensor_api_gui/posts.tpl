@@ -17,7 +17,7 @@
     'Leaflet.MakiMarkers.js',
     'daterangepicker.js',
     'jquery.opendataTools.js',
-    'jsrender.js'
+    'jsrender.js', 'jsrender.helpers.js'
 ))}
 
 
@@ -43,16 +43,8 @@
 {{/for}}
 </script>
 {/literal}
-
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 <script>
 $(document).ready(function () {ldelim}
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-    $.opendataTools.settings('language', "{$current_language}");
-    $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-    $.opendataTools.settings('locale', "{$moment_language}");
     $.opendataTools.settings('endpoint',{ldelim}
         'search': '/api/sensor_gui/posts/search',
         'sensor': '/api/sensor_gui',
@@ -69,27 +61,10 @@ $(document).ready(function () {ldelim}
         "customRangeLabel": "{'Personalizza'|i18n('sensor/datepicker')}",
         "weekLabel": "{'W'|i18n('sensor/datepicker')}",
         "daysOfWeek": [
-            "{'Do'|i18n('sensor/datepicker')}",
-            "{'Lu'|i18n('sensor/datepicker')}",
-            "{'Ma'|i18n('sensor/datepicker')}",
-            "{'Me'|i18n('sensor/datepicker')}",
-            "{'Gi'|i18n('sensor/datepicker')}",
-            "{'Ve'|i18n('sensor/datepicker')}",
-            "{'Sa'|i18n('sensor/datepicker')}"
+            $.sensorTranslate.translate('Su_Mo_Tu_We_Th_Fr_Sa').split('_')
         ],
         "monthNames": [
-            "{'Gennaio'|i18n('sensor/datepicker')}",
-            "{'Febbraio'|i18n('sensor/datepicker')}",
-            "{'Marzo'|i18n('sensor/datepicker')}",
-            "{'Aprile'|i18n('sensor/datepicker')}",
-            "{'Maggio'|i18n('sensor/datepicker')}",
-            "{'Giugno'|i18n('sensor/datepicker')}",
-            "{'Luglio'|i18n('sensor/datepicker')}",
-            "{'Agosto'|i18n('sensor/datepicker')}",
-            "{'Settembre'|i18n('sensor/datepicker')}",
-            "{'Ottobre'|i18n('sensor/datepicker')}",
-            "{'Novembre'|i18n('sensor/datepicker')}",
-            "{'Dicembre'|i18n('sensor/datepicker')}"
+            $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_')
         ],
         "firstDay": {'1'|i18n('sensor/datepicker')}
     {rdelim};
@@ -114,7 +89,6 @@ $(document).ready(function () {ldelim}
     var operators = '{$operators|wash(javascript)}';
     var groups = '{$grouped_groups|wash(javascript)}';
 {literal}
-    $.views.helpers($.opendataTools.helpers);
     var form = $('#posts-search form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');

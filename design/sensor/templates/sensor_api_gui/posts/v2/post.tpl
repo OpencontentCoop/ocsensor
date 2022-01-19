@@ -16,7 +16,7 @@
     'leaflet.0.7.2.js',
     'Leaflet.MakiMarkers.js',
     'jquery.opendataTools.js',
-    'jsrender.js',
+    'jsrender.js', 'jsrender.helpers.js',
     'jquery.sensorpost.js'
 ))}
 
@@ -29,9 +29,6 @@
 {include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
 {include uri='design:sensor_api_gui/posts/tpl-post-gallery.tpl'}
 
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 <script>
 var additionalWMSLayers = [];
 {foreach sensor_additional_map_layers() as $layer}
@@ -45,10 +42,6 @@ additionalWMSLayers.push({ldelim}
 {rdelim});
 {/foreach}
 $(document).ready(function () {ldelim}
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-    $.opendataTools.settings('language', "{$current_language}");
-    $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-    $.opendataTools.settings('locale', "{$moment_language}");
     $('#post').sensorPost({ldelim}
         'apiEndPoint': '/api/sensor_gui',
         'sensorPostDefinition': '{$sensor_post|wash(javascript)}',

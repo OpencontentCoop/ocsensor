@@ -5,7 +5,7 @@
 
 {ezscript_require(array(
     'jquery.opendataTools.js',
-    'jsrender.js',
+    'jsrender.js', 'jsrender.helpers.js',
     'moment-with-locales.min.js'
 ))}
 
@@ -13,9 +13,9 @@
     <div class="col-md-12">
         <form id="SearchForm">
             <div class="input-group">
-                <input type="text" id="SearchText" class="form-control input-lg" value="" placeholder="Cerca nelle segnalazioni" />
+                <input type="text" id="SearchText" class="form-control input-lg" value="" placeholder="{sensor_translate('Search text')}" />
                 <span class="input-group-btn">
-              <button type="submit" id="SearchButton" class="btn btn-primary btn-lg" title="{'Search'|i18n('design/ezwebin/content/search')}">
+              <button type="submit" id="SearchButton" class="btn btn-primary btn-lg" title="{sensor_translate('Search')}">
                 <span class="fa fa-search"></span>
               </button>
             </span>
@@ -28,17 +28,12 @@
 {include uri='design:sensor_api_gui/dashboard/parts/tpl-dashboard-results.tpl'}
 {include uri='design:sensor_api_gui/dashboard/parts/tpl-dashboard-spinner.tpl'}
 
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
-
 {literal}
 <style>
     td.isSpecial i{display: none}
 </style>
 <script>
     $(document).ready(function () {
-        $.views.helpers($.opendataTools.helpers);
         var limitPagination = 15;
         var currentPage = 0;
         var queryPerPage = [];
@@ -47,10 +42,6 @@
         var spinner = $($.templates("#tpl-dashboard-spinner").render({}));
 
         {/literal}
-        $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-        $.opendataTools.settings('language', "{$current_language}");
-        $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-        $.opendataTools.settings('locale', "{$moment_language}");
         $.opendataTools.settings('endpoint',{ldelim}
             'search': '/api/sensor_gui/posts/search',
             'sensor': '/api/sensor_gui',

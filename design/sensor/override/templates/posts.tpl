@@ -7,10 +7,10 @@
         'offset', $view_parameters.offset,
         'sort_by', hash( 'published', 'desc' ),
         'facet', array(
-            hash( 'field', solr_subfield('area', 'name', 'string'), 'name', 'Zona', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', solr_field('type', 'string'), 'name', 'Tipo', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', solr_subfield('category', 'name', 'Categoria', 'limit', 500, 'sort', 'alpha' ),
-            hash( 'field', solr_meta_field('object_states'), 'name', 'Stato', 'limit', 500, 'sort', 'alpha' )
+            hash( 'field', solr_subfield('area', 'name', 'string'), 'name', sensor_translate('Area'), 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_field('type', 'string'), 'name', sensor_translate('Type'), 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_subfield('category', 'name', sensor_translate('Category'), 'limit', 500, 'sort', 'alpha' ),
+            hash( 'field', solr_meta_field('object_states'), 'name', sensor_translate('Status'), 'limit', 500, 'sort', 'alpha' )
         ),
         'limit', $page_limit
     ),
@@ -18,25 +18,16 @@
     $node.url_alias,
 )}
 
-{*
-ezscript_require(array('ezjsc::jquery', 'plugins/chosen.jquery.js'))}
-{ezcss_require('plugins/chosen.css')}
-<script>{literal}$(document).ready(function(){$("select.chosen").chosen({width:'100%'});});{/literal}</script>
-*}
-
 <section class="service_teasers">
-
     {foreach $data.contents as $item}
         {include name=posts_item uri='design:sensor/post/list_item.tpl' node=$item}
     {/foreach}
-
     {include name=navigator
-    uri='design:navigator/google.tpl'
-    page_uri=$node.url_alias
-    item_count=$data.count
-    view_parameters=$view_parameters
-    item_limit=$page_limit}
-
+             uri='design:navigator/google.tpl'
+             page_uri=$node.url_alias
+             item_count=$data.count
+             view_parameters=$view_parameters
+             item_limit=$page_limit}
 </section>
 
 {if fetch( 'user', 'has_access_to', hash( 'module', 'sensor', 'function', 'config' ) )}
@@ -44,7 +35,7 @@ ezscript_require(array('ezjsc::jquery', 'plugins/chosen.jquery.js'))}
         <div class="container">
             <form class="form-horizontal" role="search" action={concat('facet/proxy/', $node.node_id)|ezurl()}>
                 <div class="col-md-2">
-                    <input id="searchfacet" data-content="Premi invio per cercare" type="text" class="form-control" placeholder="Cerca" name="query" value="{$data.query|wash()}">
+                    <input id="searchfacet" data-content="{sensor_translate('Hit enter to search')}" type="text" class="form-control" placeholder="{sensor_translate('Search')}" name="query" value="{$data.query|wash()}">
                 </div>
                 {if $data.navigation|count}
                     {foreach $data.navigation as $name => $items}
@@ -74,7 +65,7 @@ ezscript_require(array('ezjsc::jquery', 'plugins/chosen.jquery.js'))}
                 {/if}
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-info"><span class="fa fa-search"></span></button>
-                    <a href={$node.url_alias|ezurl()} title="Reset" class="btn btn-danger"><span class="fa fa-close"></span></a>
+                    <a href="{$node.url_alias|ezurl(no)}" title="Reset" class="btn btn-danger"><span class="fa fa-close"></span></a>
                 </div>
             </form>
         </div>

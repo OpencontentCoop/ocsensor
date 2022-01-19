@@ -52,8 +52,9 @@
         'ezjsc::jqueryUI',
         'ezjsc::jqueryio',
         'jquery.opendataTools.js',
-        'jsrender.js',
+        'jsrender.js', 'jsrender.helpers.js',
         'alpaca.js',
+        'moment-with-locales.min.js',
         concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
         'fields/Recaptcha.js',
         'jquery.opendatabrowse.js',
@@ -63,7 +64,6 @@
     ))}
     
     <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>    
     <script src="{'javascript/respond.min.js'|ezdesign(no)}"></script>
     <![endif]-->
 

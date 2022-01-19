@@ -4,6 +4,7 @@ use Opencontent\Opendata\Api\Exception\ForbiddenException;
 use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
+use Opencontent\Sensor\Api\Exception\InvalidInputException;
 use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Legacy\SearchService;
@@ -250,6 +251,39 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $apiUser = $this->openApiTools->replacePlaceholders($user->jsonSerialize());
             $result = new ezpRestMvcResult();
             $result->variables = $apiUser;
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doLoadCurrentUserLocale()
+    {
+        try {
+            $user = $this->repository->getCurrentUser();
+            $result = new ezpRestMvcResult();
+            $result->variables = ['locale' => $user->language];
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
+    public function doPostCurrentUserLocale()
+    {
+        try {
+            $user = $this->repository->getCurrentUser();
+            $language = $this->LanguageCode;
+            if (!in_array($language, $this->repository->getSensorSettings()->get('SiteLanguages'))){
+                throw new InvalidInputException("Language $language not found");
+            }
+
+            eZPreferences::setValue('sensor_language', $language, $user->id);
+            $result = new ezpRestMvcResult();
+            $result->variables = ['locale' => $language];
+
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }

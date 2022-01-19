@@ -1,8 +1,8 @@
 <form id="SearchForm">
     <div class="input-group">
-        <input type="text" id="SearchText" class="form-control input-lg" value="" placeholder="Cerca nelle segnalazioni" />
+        <input type="text" id="SearchText" class="form-control input-lg" value="" placeholder="{sensor_translate('Find in issues')}" />
         <span class="input-group-btn">
-              <button type="submit" id="SearchButton" class="btn btn-primary btn-lg" title="{'Search'|i18n('design/ezwebin/content/search')}">
+              <button type="submit" id="SearchButton" class="btn btn-primary btn-lg" title="{sensor_translate('Search')}">
                 <span class="fa fa-search"></span>
               </button>
             </span>
@@ -14,11 +14,8 @@
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
     'moment-with-locales.min.js',
     'jquery.opendataTools.js',
-    'jsrender.js'
+    'jsrender.js', 'jsrender.helpers.js'
 ))}
-{def $current_language = ezini('RegionalSettings', 'Locale')}
-{def $current_locale = fetch( 'content', 'locale' , hash( 'locale_code', $current_language ))}
-{def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 
 {literal}
 <script id="tpl-tree-option" type="text/x-jsrender">
@@ -74,8 +71,8 @@
               </li>
             </ul>
             <ul class="list-inline">
-              <li><small><strong>{/literal}{"Creata"|i18n('sensor/dashboard')}{literal}</strong> {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
-              {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}<li><small><strong>{/literal}{"Modificata"|i18n('sensor/dashboard')}{literal}</strong> {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>{{/if}}
+              <li><small><strong>{{:~sensorTranslate('Created at')}}</strong> {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
+              {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}<li><small><strong>{{:~sensorTranslate('Modified at')}}</strong> {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>{{/if}}
               {{if categories.length > 0}}
                 <li><small><i class="fa fa-tags"></i> {{for categories}}{{:name}}{{/for}}</small></li>
               {{/if}}
@@ -88,7 +85,7 @@
             </p>
           </td>
           <td class="text-center" style="vertical-align: middle;">
-              <p><a href="{{:accessPath}}/sensor/posts/{{:id}}" class="btn btn-info btn-sm">{/literal}{"Dettagli"|i18n('sensor/dashboard')}{literal}</a></p>
+              <p><a href="{{:~accessPath("/sensor/posts/")}}{{:id}}" class="btn btn-info btn-sm">{{:~sensorTranslate('Details')}}</a></p>
           </td>
         </tr>
 	{{/for}}
@@ -116,10 +113,6 @@
 {/literal}
 <script>
 $(document).ready(function () {ldelim}
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
-    $.opendataTools.settings('language', "{$current_language}");
-    $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
-    $.opendataTools.settings('locale', "{$moment_language}");
     $.opendataTools.settings('endpoint',{ldelim}
         'search': '/api/sensor_gui/posts/search',
         'sensor': '/api/sensor_gui',
@@ -131,7 +124,6 @@ $(document).ready(function () {ldelim}
         'settings': '{$settings|wash(javascript)}'
     {rdelim};
 {literal}
-    $.views.helpers($.opendataTools.helpers);
     var viewContainer = $('[data-contents]');
     var limitPagination = 15;
     var currentPage = 0;
