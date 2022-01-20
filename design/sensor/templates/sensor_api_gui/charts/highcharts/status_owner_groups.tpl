@@ -3,7 +3,7 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['area', 'category', 'groupwithtag', 'taggroup'],
+            filters: ['area', 'category', 'group', 'taggroup'],
             enableRangeFilter: true,
             rangeMax: false,
             load: function (chart, params){

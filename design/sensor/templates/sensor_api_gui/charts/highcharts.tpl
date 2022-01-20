@@ -36,6 +36,7 @@ Highcharts.setOptions({
         downloadPDF: 'Download documento PDF',
         downloadSVG: 'Download immagine SVG',
         printChart: 'Stampa grafico',
+        viewFullscreen: 'Visualizza a schermo intero',
         thousandsSep: ".",
         decimalPoint: ','
     }
@@ -74,6 +75,11 @@ var getExportingConfig = function (width, height){
                         this.exportChart({
                             type: 'image/svg+xml'
                         });
+                    }
+                }, 'separator' , {
+                    textKey: 'viewFullscreen',
+                    onclick: function () {
+                        this.fullscreen.toggle();
                     }
                 }]
             }
