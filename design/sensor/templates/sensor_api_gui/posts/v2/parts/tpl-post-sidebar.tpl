@@ -269,6 +269,26 @@
 {{/if}}
 </script>
 
+<script id="tpl-category-predictions" type="text/x-jsrender">
+<p><em>Suggerimenti</em></p>
+<div class="list-group category-predictions">
+{{for predictions}}
+    <a href="#" class="list-group-item" data-category_prediction="{{:id}}" style="padding:7px 10px">
+        {{if score}}<i class="fa fa pull-right {{if score > 75}}text-success fa-circle{{else score > 50}}text-success fa-circle-o{{else}}text-danger fa-circle-o{{/if}}" style="margin-top: 4px;" title="{{:score}}%"></i>{{/if}}
+        <b>{{:name}}</b>
+    </a>
+    {{if children.length}}
+    {{for children}}
+        <a href="#" class="list-group-item" data-category_prediction="{{:id}}" style="padding: 7px 10px 7px 25px;">
+            {{if score}}<i class="fa fa pull-right {{if score > 75}}text-success fa-circle{{else score > 50}}text-success fa-circle-o{{else}}text-danger fa-circle-o{{/if}}" style="margin-top: 4px;" title="{{:score}}%"></i>{{/if}}
+            {{:name}}
+        </a>
+    {{/for}}
+    {{/if}}
+{{/for}}
+</div>
+</script>
+
 <script id="tpl-post-add_category" type="text/x-jsrender">
 {{if capabilities.can_add_category}}
     <div class="form-group hide" data-action-wrapper>
@@ -283,6 +303,14 @@
                 <input data-action="add_category" data-parameters="category_id" class="btn btn-sm btn-default" type="submit" value="{/literal}{'Associa'|i18n('sensor/post')}{literal}" />
             </span>
         </div>
+        {{if settings.HasCategoryPredictor && capabilities.can_add_category}}
+        <div class="predictor hide" style="margin-top:10px">
+            <div class="text-center spinner" style="margin-top:20px">
+                <i class="fa fa-magic fa-2x faa-passing animated"></i>
+            </div>
+            <div class="predictions" style="font-size: 0.875em;"></div>
+        </div>
+        {{/if}}
     </div>
 {{/if}}
 </script>

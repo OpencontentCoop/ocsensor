@@ -253,6 +253,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 array(),
                 'http-get'
             ), 1),
+
+            'sensorGuiApiPredictCategories' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/predict/:Id/categories',
+                'SensorGuiApiController',
+                'predictCategories',
+                array(),
+                'http-get'
+            ), 1),
         );
         return $routes;
     }

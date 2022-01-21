@@ -15,6 +15,7 @@
             'spinnerTpl': '#tpl-spinner',
             'postTpl': '#tpl-post',
             'alertTpl': '#tpl-alerts',
+            'categoryPredictionTpl': '#tpl-category-predictions',
             'onRemove': null,
             'alertsEndPoint': false,
             'additionalWMSLayers': []
@@ -525,6 +526,51 @@
                     e.preventDefault();
                 });
 
+                var loadCategoryPredictions = function (predictorContainer){
+                    var spinner = predictorContainer.find('.spinner');
+                    var predictions = predictorContainer.find('.predictions');
+                    predictorContainer.removeClass('hide');
+                    if (predictions.find('.category-predictions').length === 0) {
+                        spinner.removeClass('hide');
+                        var postId = renderData.find('#current-post-id').text();
+                        $.ajax({
+                            type: 'GET',
+                            url: plugin.settings.apiEndPoint + '/predict/' + postId + '/categories',
+                            success: function (data) {
+                                var content = $.templates(plugin.settings.categoryPredictionTpl).render({predictions: data});
+                                predictions.html(content);
+                                predictions.find('[data-category_prediction]').on('click', function (e){
+                                    var category = $(this).data('category_prediction');
+                                    runAction('add_category', {category_id: category}, false,
+                                        function (data){
+                                            plugin.render(data.capabilities, data.post);
+                                            if (plugin.settings.alertsEndPoint) {
+                                                $('#social_user_alerts').remove();
+                                                $.get(plugin.settings.alertsEndPoint, function (data) {
+                                                    $('header').prepend(data);
+                                                });
+                                            }
+                                        },
+                                        function (data){
+                                            plugin.error(data);
+                                            plugin.load(post.id);
+                                        }
+                                    );
+
+
+                                    e.preventDefault();
+                                })
+                                spinner.addClass('hide');
+                            },
+                            error: function () {
+                                spinner.addClass('hide');
+                            },
+                            contentType: "application/json",
+                            dataType: 'json'
+                        });
+                    }
+                };
+
                 renderData.find('.sidebar a.action-trigger').on('click', function (e) {
                     var reverse = $(this).data('reverse');
                     var direct = $(this).text();
@@ -533,9 +579,14 @@
                     var widget = $(this).parent();
                     widget.find('.widget-content').toggleClass('hide');
                     widget.find('.form-group').toggleClass('hide');
+                    var predictorContainer = widget.find('.predictor');
                     if (widget.find('.form-group').hasClass('hide')) {
                         if (widget.find('.form-group').find('#user-assign').length > 0) {
                             resetUserAndGroupSelect();
+                        }
+                    }else{
+                        if (predictorContainer.length > 0) {
+                            loadCategoryPredictions(predictorContainer);
                         }
                     }
                     e.preventDefault();

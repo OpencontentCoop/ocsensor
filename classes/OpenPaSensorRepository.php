@@ -262,6 +262,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'UseInboxFilters' => isset($sensorIni['UseInboxFilters']) ? $sensorIni['UseInboxFilters'] == 'enabled' : true,
                 'AllowAdditionalMemberGroups' => isset($sensorIni['AllowAdditionalMemberGroups']) ? $sensorIni['AllowAdditionalMemberGroups'] == 'enabled' : true,
                 'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
+                'HasCategoryPredictor' => SensorCategoryPredictor::instance()->isEnabled(),
             ));
         }
 

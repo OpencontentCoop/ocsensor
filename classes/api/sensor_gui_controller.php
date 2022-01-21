@@ -844,4 +844,17 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
         return $result;
     }
+
+    public function doPredictCategories()
+    {
+        $result = new ezpRestMvcResult();
+        try {
+            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $predictor = SensorCategoryPredictor::instance();
+            $result->variables = $predictor->predict($post->id, $post->subject, $post->description);;
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+        return $result;
+    }
 }
