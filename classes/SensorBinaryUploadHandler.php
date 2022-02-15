@@ -367,15 +367,16 @@ class SensorBinaryUploadHandler
     {
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
+        $intval = intval(trim($val));
         switch ($last) {
             case 'g':
-                $val *= 1024;
+                $intval *= 1024;
             case 'm':
-                $val *= 1024;
+                $intval *= 1024;
             case 'k':
-                $val *= 1024;
+                $intval *= 1024;
         }
-        return $this->fix_integer_overflow($val);
+        return $this->fix_integer_overflow($intval);
     }
 
     protected function validate($uploaded_file, $file, $error, $index)

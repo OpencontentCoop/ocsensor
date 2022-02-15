@@ -283,13 +283,13 @@ class SensorWebHookTrigger implements OCWebHookTriggerInterface, OCWebHookCustom
         $dummyPost->comments = new CommentCollection([new Comment()]);
         $dummyPost->responses = new ResponseCollection([new Response()]);
         $dummyPost->images = [new Post\Field\Image()];
+        $dummyPost->files = [new Post\Field\File()];
         $dummyPost->attachments = [new Post\Field\Attachment()];
         $dummyPost->categories = [new Post\Field\Category()];
         $dummyPost->geoLocation = new Post\Field\GeoLocation();
         $dummyPost->areas = [new Post\Field\Area()];
         $dummyPost->meta = [];
         $dummyPost->channel = new Post\Channel();
-        $dummyPost->images = [new Post\Field\Image()];
 
         return $dummyPost;
     }

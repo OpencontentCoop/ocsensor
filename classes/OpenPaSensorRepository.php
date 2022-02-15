@@ -5,6 +5,7 @@ use Opencontent\Sensor\Api\Exception\BaseException;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Core\PermissionDefinitions;
+use Opencontent\Sensor\Legacy\PermissionDefinitions as LegacyPermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
 use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
@@ -72,19 +73,21 @@ class OpenPaSensorRepository extends LegacyRepository
             );
         }
         //$permissionDefinitions[] = new PermissionDefinitions\CanRead();
-        $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRead();
-        $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanEdit();
-        $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRemove();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRead();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanEdit();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemove();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddAttachment();
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveAttachment();
         $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
         $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign($firstApproverScenario->getApprovers());
         $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
         $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
-        $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanAddImage();
-        $permissionDefinitions[] = new \Opencontent\Sensor\Legacy\PermissionDefinitions\CanRemoveImage();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddImage();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveImage();
         $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
         $permissionDefinitions[] = new PermissionDefinitions\CanSetType();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddFile();
+        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
         $this->setPermissionDefinitions($permissionDefinitions);
 
         $actionDefinitions = array();
@@ -118,6 +121,8 @@ class OpenPaSensorRepository extends LegacyRepository
         $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
         $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
         $actionDefinitions[] = new ActionDefinitions\SetTypeAction();
+        $actionDefinitions[] = new ActionDefinitions\AddFileAction();
+        $actionDefinitions[] = new ActionDefinitions\RemoveFileAction();
         $this->setActionDefinitions($actionDefinitions);
 
         $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
@@ -217,6 +222,8 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getSensorSettings()
     {
         if ($this->settings === null) {
+            $imagesAttribute = $this->getPostContentClassAttribute('images');
+            $filesAttribute = $this->getPostContentClassAttribute('files');
             $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
             $socketIni = eZINI::instance('ocsensor.ini')->group('SocketSettings');
             $geocodeIni = eZINI::instance('ocsensor.ini')->group('GeoCoderSettings');
@@ -263,6 +270,8 @@ class OpenPaSensorRepository extends LegacyRepository
                 'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
                 'HasCategoryPredictor' => SensorCategoryPredictor::instance()->isEnabled(),
                 'SiteLanguages' => isset($sensorIni['SiteLanguages']) ? explode(',', $sensorIni['SiteLanguages']) : [],
+                'UploadMaxNumberOfImages' => $imagesAttribute instanceof eZContentClassAttribute ? $imagesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
+                'UploadMaxNumberOfFiles' => $filesAttribute instanceof eZContentClassAttribute ? $filesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
             ));
         }
 
@@ -377,7 +386,7 @@ class OpenPaSensorRepository extends LegacyRepository
         if (!isset($this->data['post_class_data_map'])) {
             $this->data['post_class_data_map'] = $this->getPostContentClass()->dataMap();
         }
-        return $this->data['post_class_data_map'][$identifier];
+        return isset($this->data['post_class_data_map'][$identifier]) ? $this->data['post_class_data_map'][$identifier] : false;
     }
 
     public function getUserRootNode()

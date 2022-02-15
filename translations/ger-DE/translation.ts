@@ -1899,6 +1899,26 @@
       <source>Zone assignment to issue</source>
       <translation>Zonenzuordnung zu Ausgabe</translation>
     </message>
+    <message>
+      <source>Files</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>You can add up to three files in pdf format</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To remove an attached file click on the trash can</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Are you sure to delete this file?</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Add file</source>
+      <translation type="unfinished"/>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

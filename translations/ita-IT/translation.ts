@@ -1349,7 +1349,7 @@
     </message>
     <message>
       <source>Reopen by %name</source>
-      <translation>Reopen by %name</translation>
+      <translation>Riaperta da %name</translation>
     </message>
     <message>
       <source>Reopen issue</source>
@@ -1898,6 +1898,26 @@
     <message>
       <source>Zone assignment to issue</source>
       <translation>Assegnazione della zona alla segnalazione</translation>
+    </message>
+    <message>
+      <source>Files</source>
+      <translation>File allegati</translation>
+    </message>
+    <message>
+      <source>You can add up to three files in pdf format</source>
+      <translation>Puoi aggiungere fino a tre file in formato pdf</translation>
+    </message>
+    <message>
+      <source>To remove an attached file click on the trash can</source>
+      <translation>Per rimuovere un file allegato clicca sul cestino</translation>
+    </message>
+    <message>
+      <source>Are you sure to delete this file?</source>
+      <translation>Sei sicuro di rimuovere questo file?</translation>
+    </message>
+    <message>
+      <source>Add file</source>
+      <translation>Aggiungi file</translation>
     </message>
   </context>
   <context>

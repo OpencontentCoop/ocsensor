@@ -219,10 +219,6 @@
         initSmartGui: function () {
             var plugin = this;
 
-            $.get('/api/sensor_gui/default_area', function (response){
-                plugin.selectedArea = response.id;
-            });
-
             var addPostGui = $('#add-post-gui');
 
             var subject = addPostGui.find('[name="subject"]')
@@ -258,7 +254,7 @@
                 formData: function (form) {
                     return form.serializeArray();
                 },
-                url: '/api/sensor_gui/upload-temp',
+                url: '/api/sensor_gui/upload-temp/images',
                 autoUpload: true,
                 dataType: 'json',
                 limitMultiFileUploads: 1,
@@ -291,7 +287,7 @@
                                 $(this).find('input[name="images[' + $(this).data('index') + '][filename]"]').val('');
                                 checkUploadImages();
                             }).find('i').show();
-                        placeholder.find('input[name="images[' + index + '][file]"]').val(this.file);
+                        placeholder.find('input[name="images[' + index + '][file]"]').val(this.filepath);
                         placeholder.find('input[name="images[' + index + '][filename]"]').val(this.filename);
                     });
                     uploadImage.find('.upload-button-container').show();
@@ -299,6 +295,62 @@
                     checkUploadImages();
                 }
             });
+
+            var uploadFile = addPostGui.find('#add_file');
+            if (uploadFile.length > 0) {
+                uploadFile.find('.upload').fileupload({
+                    dropZone: null,
+                    formData: function (form) {
+                        return form.serializeArray();
+                    },
+                    url: '/api/sensor_gui/upload-temp/files',
+                    autoUpload: true,
+                    dataType: 'json',
+                    limitMultiFileUploads: 1,
+                    change: function (e, data) {
+                        if (addPostGui.find('.file-empty').length === 0) {
+                            return false;
+                        }
+                    },
+                    submit: function () {
+                        uploadFile.find('.upload-button-container').hide();
+                        uploadFile.find('.upload-button-spinner').show();
+                    },
+                    error: function (data) {
+                        alert(data.error_message);
+                        uploadFile.find('.upload-button-container').show();
+                        uploadFile.find('.upload-button-spinner').hide();
+                    },
+                    done: function (e, data) {
+                        $.each(data.result, function () {
+                            var placeholder = addPostGui.find('.file-empty').first();
+                            var index = placeholder.data('index');
+                            placeholder
+                                .css('background-image', "url('data:" + this.mime + ";base64," + this.file + "')")
+                                .css('background-position', 'center center')
+                                .css('background-repeat', 'no-repeat')
+                                .css('background-size', 'auto')
+                                .attr('title', this.filename)
+                                .removeClass('file-empty')
+                                .on('click', function () {
+                                    $(this)
+                                        .css('background-image', "")
+                                        .attr('title', "")
+                                        .addClass('file-empty')
+                                        .find('i').hide();
+                                    $(this).find('input[name="files[' + $(this).data('index') + '][file]"]').val('');
+                                    $(this).find('input[name="files[' + $(this).data('index') + '][filename]"]').val('');
+                                    checkUploadFiles();
+                                }).find('i').show();
+                            placeholder.find('input[name="files[' + index + '][file]"]').val(this.filepath);
+                            placeholder.find('input[name="files[' + index + '][filename]"]').val(this.filename);
+                        });
+                        uploadFile.find('.upload-button-container').show();
+                        uploadFile.find('.upload-button-spinner').hide();
+                        checkUploadFiles();
+                    }
+                });
+            }
 
             var behalfOf = addPostGui.find('#behalf-of');
             var behalfOfChannel = addPostGui.find('#behalf-of-channel');
@@ -487,6 +539,22 @@
                 }
             }
 
+            function checkUploadFiles() {
+                if (addPostGui.find('.file-empty').length === 0) {
+                    addPostGui.find('a[href="#step-file"]').find('.add-icon')
+                        .removeClass('fa-plus-circle text-primary')
+                        .addClass('fa-check-circle text-success');
+                    uploadFile.find('.upload').attr('disabled', 'disabled');
+                    uploadFile.find('.fileinput-button').hide();
+                } else {
+                    addPostGui.find('a[href="#step-file"]').find('.add-icon')
+                        .addClass('fa-plus-circle text-primary')
+                        .removeClass('fa-check-circle text-success');
+                    uploadFile.find('.upload').removeAttr('disabled');
+                    uploadFile.find('.fileinput-button').show();
+                }
+            }
+
             function showTextValidation() {
                 if (subject.val().length === 0) {
                     subject.parent().addClass('has-warning')
@@ -511,7 +579,7 @@
                     e.preventDefault();
                     return false;
                 }
-                if ($(this).attr('href') === '#step-image') {
+                if ($(this).hasClass('last-tab')) {
                     addPostGui.find('.next-step').hide().next().show();
                 }
             });
@@ -578,6 +646,17 @@
                         payload.images.splice(index, 1);
                     })
                 }
+                if (uploadFile.length > 0) {
+                    if (addPostGui.find('.file-empty').length === 3) {
+                        delete payload.files;
+                    } else {
+                        var files = payload.files;
+                        $(addPostGui.find('.file-empty').get().reverse()).each(function () {
+                            var index = parseInt($(this).data('index'));
+                            payload.files.splice(index, 1);
+                        })
+                    }
+                }
                 if (address.val().length === 0 && latitude.val().length === 0 && longitude.val().length === 0) {
                     delete payload.address;
                 }
@@ -620,27 +699,30 @@
             });
 
             var showAddPostGui = function () {
-                $('#social_user_alerts').remove();
-                $('html').addClass('sensor-add-post');
-                $('body').addClass('sensor-add-post').css('overflow', 'hidden');
-                addPostGui.find('form').trigger("reset");
-                subject.val('');
-                description.val('').trigger('keyup');
-                address.val('');
-                latitude.val('');
-                longitude.val('');
-                checkTextFields();
-                checkMapFields();
-                checkUploadImages();
-                checkBehalfFields();
-                addPostGui.show().find('.post-subject input').focus();
-                behalfOfView.find('i').trigger('click');
-                behalfOfAnonymous.trigger('click');
-                plugin.refreshViewPort();
-                plugin.refreshMap();
-                if (plugin.selectedArea > 0){
-                    plugin.selectArea.val(plugin.selectedArea).trigger('change');
-                }
+                $.get('/api/sensor_gui/default_area', function (response){
+                    plugin.selectedArea = response.id;
+                    $('#social_user_alerts').remove();
+                    $('html').addClass('sensor-add-post');
+                    $('body').addClass('sensor-add-post').css('overflow', 'hidden');
+                    addPostGui.find('form').trigger("reset");
+                    subject.val('');
+                    description.val('').trigger('keyup');
+                    address.val('');
+                    latitude.val('');
+                    longitude.val('');
+                    checkTextFields();
+                    checkMapFields();
+                    checkUploadImages();
+                    checkBehalfFields();
+                    addPostGui.show().find('.post-subject input').focus();
+                    behalfOfView.find('i').trigger('click');
+                    behalfOfAnonymous.trigger('click');
+                    plugin.refreshViewPort();
+                    plugin.refreshMap();
+                    if (plugin.selectedArea > 0){
+                        plugin.selectArea.val(plugin.selectedArea).trigger('change');
+                    }
+                });
             }
 
             var addButton = $('a[href$="/sensor/add"]');

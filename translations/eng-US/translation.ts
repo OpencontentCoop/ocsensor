@@ -1899,6 +1899,26 @@
       <source>Zone assignment to issue</source>
       <translation>Zone assignment to issue</translation>
     </message>
+    <message>
+      <source>Files</source>
+      <translation>Files</translation>
+    </message>
+    <message>
+      <source>You can add up to three files in pdf format</source>
+      <translation>You can add up to three files in pdf format</translation>
+    </message>
+    <message>
+      <source>To remove an attached file click on the trash can</source>
+      <translation>To remove an attached file click on the trash can</translation>
+    </message>
+    <message>
+      <source>Are you sure to delete this file?</source>
+      <translation>Are you sure to delete this file?</translation>
+    </message>
+    <message>
+      <source>Add file</source>
+      <translation>Add file</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

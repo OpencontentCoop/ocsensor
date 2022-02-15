@@ -3,6 +3,8 @@
 {if is_set( $areas['children'] )}
     {set $areas = $areas['children']}
 {/if}
+{def $images_length = sensor_settings().UploadMaxNumberOfImages}
+{def $file_length = sensor_settings().UploadMaxNumberOfFiles}
 
 <div id="add-post-gui">
     <div id="sensor_full_map"></div>
@@ -41,11 +43,20 @@
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
                             </a>
                         </li>
+                        {if $images_length|gt(0)}
                         <li role="presentation" class="nav-item">
-                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-image" role="tab" title="{sensor_translate('Images')}" style="position: relative">
+                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default{if $file_length|eq(0)} last-tab{/if}" data-toggle="tab" aria-controls="step-image" role="tab" title="{sensor_translate('Images')}" style="position: relative">
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-image fa-2x text-muted"></i>
                             </a>
                         </li>
+                        {/if}
+                        {if $file_length|gt(0)}
+                            <li role="presentation" class="nav-item">
+                                <a tabindex="8" href="#step-file" class="btn btn-lg btn-default last-tab" data-toggle="tab" aria-controls="step-file" role="tab" title="{sensor_translate('Files')}" style="position: relative">
+                                    <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-file-o fa-2x text-muted"></i>
+                                </a>
+                            </li>
+                        {/if}
                     </ul>
 
                     <div class="post-content tab-content">
@@ -86,6 +97,7 @@
                                 </p>
                             </div>
                         </div>
+                        {if $images_length|gt(0)}
                         <div class="tab-pane" role="tabpanel" id="step-image">
                             <div class="step-content">
                                 <div class="step-part">
@@ -97,31 +109,47 @@
                                         <div class="col-xs-3">
                                             {include uri='design:sensor_api_gui/add/images.tpl'}
                                         </div>
-                                        <div class="col-xs-3">
-                                            <div class="image-placeholder image-empty" data-index="0">
-                                                <input type="hidden" name="images[0][filename]" value="">
-                                                <input type="hidden" name="images[0][file]" value="">
+                                        {for 0 to sub($images_length, 1) as $counter}
+                                        <div class="col-xs-3" style="margin-bottom: 15px;">
+                                            <div class="image-placeholder image-empty" data-index="{$counter}">
+                                                <input type="hidden" name="images[{$counter}][filename]" value="">
+                                                <input type="hidden" name="images[{$counter}][file]" value="">
                                                 <i style="display: none" class="fa fa-trash fa-2x"></i>
                                             </div>
                                         </div>
-                                        <div class="col-xs-3">
-                                            <div class="image-placeholder image-empty" data-index="1">
-                                                <input type="hidden" name="images[1][filename]" value="">
-                                                <input type="hidden" name="images[1][file]" value="">
-                                                <i style="display: none" class="fa fa-trash fa-2x"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="image-placeholder image-empty" data-index="2">
-                                                <input type="hidden" name="images[2][filename]" value="">
-                                                <input type="hidden" name="images[2][file]" value="">
-                                                <i style="display: none" class="fa fa-trash fa-2x"></i>
-                                            </div>
-                                        </div>
+                                        {/for}
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {/if}
+                        {if $file_length|gt(0)}
+                            <div class="tab-pane" role="tabpanel" id="step-file">
+                                <div class="step-content">
+                                    <div class="step-part">
+                                        <p class="lead hidden-xs">
+                                            {sensor_translate('You can add up to three files in pdf format')}<br />
+                                            {sensor_translate('To remove an attached file click on the trash can')}
+                                        </p>
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                {include uri='design:sensor_api_gui/add/files.tpl'}
+                                            </div>
+                                            {for 0 to sub($file_length, 1) as $counter}
+                                                <div class="col-xs-3" style="margin-bottom: 15px;">
+                                                    <div class="image-placeholder file-empty" data-index="{$counter}">
+                                                        <input type="hidden" name="files[{$counter}][filename]" value="">
+                                                        <input type="hidden" name="files[{$counter}][file]" value="">
+                                                        <i style="display: none" class="fa fa-trash fa-2x"></i>
+                                                    </div>
+                                                </div>
+                                            {/for}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
+
                     </div>
 
                     {include uri='design:sensor_api_gui/add/categories.tpl'}

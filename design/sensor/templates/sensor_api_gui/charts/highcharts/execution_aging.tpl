@@ -4,6 +4,8 @@
     $(document).ready(function (){
         $('#chart').sensorChart({
             filters: ['area', 'category', 'group'],
+            enableRangeFilter: true,
+            rangeMax: false,
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 params.format = 'highcharts';

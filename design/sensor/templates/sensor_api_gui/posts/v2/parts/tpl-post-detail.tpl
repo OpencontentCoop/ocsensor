@@ -2,6 +2,27 @@
 <script id="tpl-post-detail" type="text/x-jsrender">
 
     <p class="lead" style="white-space:pre-wrap;">{{:description}}</p>
+
+    {{if files.length}}
+        <ul class="list-inline">
+        {{for files ~capabilities=capabilities}}
+            <li>
+                <a href="{{:downloadUrl}}" title="{{:filename}}">
+                    <img src="{{:icon}}" /> {{:filename}}
+                </a>
+                {{if ~capabilities.can_remove_file}}
+                    <span data-action-wrapper>
+                        <input type="hidden" data-value="files" value="{{:downloadUrl}}" />
+                        <a href="#"
+                           data-action="remove_file" data-parameters="files" data-confirmation="{{:~sensorTranslate('Are you sure to delete this file?')}}"
+                           class="btn btn-danger btn-icon btn-xs"><i class="fa fa-trash"></i></a>
+                    </span>
+                  {{/if}}
+            </li>
+        {{/for}}
+        </ul>
+    {{/if}}
+
     <ul class="list-inline">
         <li>{{:~sensorTranslate('Created at')}} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</li>
         {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}

@@ -266,7 +266,7 @@
                         <div class="upload-button-container">
                             <span class="btn btn-default fileinput-button" style="cursor:pointer">
                                 <strong>{{:~sensorTranslate('Add image')}}</strong>
-                                <input class="upload" name="files" type="file">
+                                <input class="upload" name="files" type="file" accept="image/*">
                             </span>
                         </div>
                         <div class="upload-button-spinner btn btn-default" style="display: none">
@@ -274,11 +274,22 @@
                         </div>
                     </form>
                 </div>
-                {{else capabilities.is_author}}
-                    <div class="btn btn-default fileinput-button button-disabled">
-                        <strong class="text-muted">{{:~sensorTranslate('Add image')}}</strong>
-                    </div>
-                {{/if}}
+            {{/if}}
+            {{if capabilities.can_add_file}}
+                <div data-action-wrapper style="display: inline-block">
+                    <form class="form-group" data-upload="add_file" style="display: inline-block;margin-right: 1px">
+                        <div class="upload-button-container">
+                            <span class="btn btn-default fileinput-button" style="cursor:pointer">
+                                <strong>{{:~sensorTranslate('Add file')}}</strong>
+                                <input class="upload" name="files" type="file" accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                            </span>
+                        </div>
+                        <div class="upload-button-spinner btn btn-default" style="display: none">
+                            <i class="fa fa-cog fa-spin"></i>
+                        </div>
+                    </form>
+                </div>
+            {{/if}}
         </div>
     </div>
 </div>

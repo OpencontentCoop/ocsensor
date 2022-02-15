@@ -9,6 +9,7 @@ use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\OpenApi;
+use Opencontent\Sensor\Legacy\Utils\MimeIcon;
 
 class SensorGuiApiController extends ezpRestMvcController implements SensorOpenApiControllerInterface
 {
@@ -580,6 +581,9 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             if ($action->identifier == 'add_image') {
                 $classAttributeIdentifier = 'sensor_post/images';
             }
+            if ($action->identifier == 'add_file') {
+                $classAttributeIdentifier = 'sensor_post/files';
+            }
 
             $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
             $uploadHandler = $this->getUploadHandler($classAttributeIdentifier, $uploadDir);
@@ -620,7 +624,6 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 $options['accept_file_types'] = $acceptFileTypesClassAttributeIdentifier[$classAttributeIdentifier];
             }
         }
-
         $options['upload_dir'] = $uploadDir;
         $options['download_via_php'] = true;
         $options['param_name'] = "files";
@@ -655,8 +658,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             if (!$this->repository->getPostRootNode()->attribute('can_create')) {
                 throw new ForbiddenException('create', 'post');
             }
-            $uploadDir = eZSys::cacheDirectory() . '/fileupload/';
-            $uploadHandler = $this->getUploadHandler('sensor_post/images', $uploadDir);
+            $uploadDir = eZSys::varDirectory() . '/fileupload/' . $this->repository->getCurrentUser()->id . '/';
+            $uploadHandler = $this->getUploadHandler('sensor_post/' . $this->Identifier, $uploadDir);
 
             /** @var array $data */
             $data = $uploadHandler->post(false);
@@ -668,10 +671,19 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 }
                 $filePath = $uploadHandler->getOption('upload_dir') . $file->name;
                 $mime = eZMimeType::findByURL($filePath);
+                eZClusterFileHandler::instance($filePath)->storeContents(file_get_contents($filePath));
+
+                if (strpos($mime['name'], 'image') === false){
+                    $thumb = base64_encode(file_get_contents(MimeIcon::getIconByMimeType($mime['name'])));
+                }else{
+                    $thumb = base64_encode(file_get_contents($filePath));
+                }
+
                 $files[] = [
                     'mime' => $mime['name'],
                     'filename' => basename($filePath),
-                    'file' => base64_encode(file_get_contents($filePath)),
+                    'filepath' => $filePath,
+                    'file' => $thumb,
                 ];
                 @unlink($filePath);
             }
