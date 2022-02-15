@@ -560,3 +560,10 @@
     background: #fff;
     border: 1px solid #666;
 }
+
+@media (max-width: 400px) {
+    .leaflet-control-layers-expanded {
+        max-height: 400px;
+        overflow: auto;
+    }
+}

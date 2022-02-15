@@ -120,7 +120,14 @@
                 });
             });
         }
-        L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(this.map);
+        var layers = L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(this.map);
+        if (!L.Browser.touch) {
+            L.DomEvent
+                .disableClickPropagation(layers._container)
+                .disableScrollPropagation(layers._container);
+        } else {
+            L.DomEvent.disableClickPropagation(layers._container);
+        }
         this.initMapEvents();
 
         this.viewport = this.element.find('.viewport');
@@ -694,12 +701,14 @@
             });
 
             $(document).on('click', '#sensor_hide_map_button', function () {
+                $('.leaflet-control-layers').removeClass("leaflet-control-layers-expanded");
                 $('#sensor_hide_map_button, #sensor_full_map, #mylocation-mobile-button').removeClass('zindexize');
                 $('body').removeClass('noscroll');
             });
 
             var showAddPostGui = function () {
                 $.get('/api/sensor_gui/default_area', function (response){
+                    $('body > .main, body > .full_page_photo, #posts-search').hide();
                     plugin.selectedArea = response.id;
                     $('#social_user_alerts').remove();
                     $('html').addClass('sensor-add-post');
@@ -736,6 +745,7 @@
             }
 
             $('.close-add-post').on('click', function (e) {
+                $('body > .main, body > .full_page_photo, #posts-search').show();
                 addPostGui.hide();
                 addPostGui.find('a[href="#step-text"]').trigger('click');
                 addPostGui.find('.next-step').show().next().hide();
@@ -769,6 +779,14 @@
 
         initMapEvents: function () {
             var self = this;
+
+            if (L.Browser.android || L.Browser.mobile || L.Browser.touch || L.Browser.retina) {
+                $('.leaflet-control-layers-selector').on('change', function () {
+                    setTimeout(function () {
+                        $('.leaflet-control-layers').removeClass("leaflet-control-layers-expanded")
+                    }, 500);
+                })
+            }
 
             $('.zoomIn').on('click', function (e) {
                 e.stopPropagation();
