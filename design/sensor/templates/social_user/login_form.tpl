@@ -20,13 +20,13 @@
                 <div class="signin">
                     <h3>
                         {if ezini_hasvariable('LoginTemplate_default', 'Title', 'app.ini')}
-                            {ezini('LoginTemplate_default', 'Title', 'app.ini')|wash()}
+                            {sensor_translate(ezini('LoginTemplate_default', 'Title', 'app.ini'), 'login')}
                         {else}
                             {sensor_translate('Are you already a member?', 'login')}
                         {/if}
                     </h3>
                     {if ezini_hasvariable('LoginTemplate_default', 'Text', 'app.ini')}
-                        <p class="text-center">{ezini('LoginTemplate_default', 'Text', 'app.ini')|wash()}</p>
+                        <p class="text-center">{sensor_translate(ezini('LoginTemplate_default', 'Text', 'app.ini'), 'login')}</p>
                     {else}
                         <p><strong>{sensor_translate('Log in now!', 'login')}</strong></p>
                     {/if}

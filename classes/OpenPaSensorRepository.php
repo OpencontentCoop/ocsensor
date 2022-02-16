@@ -28,190 +28,189 @@ class OpenPaSensorRepository extends LegacyRepository
 
     private $settings;
 
+    private $isBuilt;
+
     public static function instance()
     {
         //@todo load from ini
-        if (self::$instance === null)
+        if (self::$instance === null) {
             self::$instance = new static();
+            self::$instance->build();
+        }
         return self::$instance;
     }
 
     protected function __construct()
     {
-        $this->language = eZLocale::currentLocaleCode();
-        $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
-        $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
-        if (!empty($restrictResponders)){
-            /** @var eZContentObject[] $responderObjectList */
-            $responderObjectList = eZContentObject::fetchIDArray($restrictResponders);
-            $restrictResponders = [];
-            foreach ($responderObjectList as $responderObject){
-                if (in_array($responderObject->attribute('class_identifier'), ['user', 'sensor_operator'])){
-                    $restrictResponders[] = $responderObject->attribute('id');
-                }
-            }
-        }
-
-        $permissionDefinitions = array();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAddCategory();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAddObserver();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAssign();
-        $permissionDefinitions[] = new PermissionDefinitions\CanChangePrivacy();
-        $permissionDefinitions[] = new PermissionDefinitions\CanClose($restrictResponders);
-        $permissionDefinitions[] = new PermissionDefinitions\CanComment();
-        $permissionDefinitions[] = new PermissionDefinitions\CanFix();
-        $permissionDefinitions[] = new PermissionDefinitions\CanForceFix();
-        $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
-        $permissionDefinitions[] = new PermissionDefinitions\CanRespond($restrictResponders);
-        $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
-        $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
-        if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
-            $permissionDefinitions[] = new PermissionDefinitions\CanReopen(
-                $this->getSensorSettings()->get('ApproverCanReopen'),
-                $this->getSensorSettings()->get('AuthorCanReopen')
-            );
-        }
-        //$permissionDefinitions[] = new PermissionDefinitions\CanRead();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRead();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanEdit();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemove();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAddAttachment();
-        $permissionDefinitions[] = new PermissionDefinitions\CanRemoveAttachment();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
-        $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign($firstApproverScenario->getApprovers());
-        $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
-        $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddImage();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveImage();
-        $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
-        $permissionDefinitions[] = new PermissionDefinitions\CanSetType();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddFile();
-        $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
-        $this->setPermissionDefinitions($permissionDefinitions);
-
-        $actionDefinitions = array();
-        $actionDefinitions[] = new ActionDefinitions\AddAreaAction();
-        $actionDefinitions[] = new ActionDefinitions\AddCategoryAction();
-        $actionDefinitions[] = new ActionDefinitions\AddCommentAction();
-        $actionDefinitions[] = new ActionDefinitions\AddResponseAction();
-        $actionDefinitions[] = new ActionDefinitions\AddObserverAction();
-        $actionDefinitions[] = new ActionDefinitions\AssignAction();
-        $actionDefinitions[] = new ActionDefinitions\AutoAssignAction();
-        $actionDefinitions[] = new ActionDefinitions\CloseAction();
-        $actionDefinitions[] = new ActionDefinitions\EditCommentAction();
-        $actionDefinitions[] = new ActionDefinitions\EditPrivateMessageAction();
-        $actionDefinitions[] = new ActionDefinitions\EditResponseAction();
-        $actionDefinitions[] = new ActionDefinitions\FixAction();
-        $actionDefinitions[] = new ActionDefinitions\ForceFixAction();
-        $actionDefinitions[] = new ActionDefinitions\MakePrivateAction();
-        $actionDefinitions[] = new ActionDefinitions\MakePublicAction();
-        $actionDefinitions[] = new ActionDefinitions\ModerateAction();
-        $actionDefinitions[] = new ActionDefinitions\ReadAction();
-        if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
-            $actionDefinitions[] = new ActionDefinitions\ReopenAction();
-        }
-        $actionDefinitions[] = new ActionDefinitions\SendPrivateMessageAction();
-        $actionDefinitions[] = new ActionDefinitions\SetExpiryAction();
-        $actionDefinitions[] = new ActionDefinitions\AddAttachmentAction();
-        $actionDefinitions[] = new ActionDefinitions\RemoveAttachmentAction();
-        $actionDefinitions[] = new ActionDefinitions\AddApproverAction();
-        $actionDefinitions[] = new ActionDefinitions\RemoveObserverAction();
-        $actionDefinitions[] = new ActionDefinitions\AddImageAction();
-        $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
-        $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
-        $actionDefinitions[] = new ActionDefinitions\SetTypeAction();
-        $actionDefinitions[] = new ActionDefinitions\AddFileAction();
-        $actionDefinitions[] = new ActionDefinitions\RemoveFileAction();
-        $this->setActionDefinitions($actionDefinitions);
-
-        $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
-
-        $notificationTypes = [];
-        $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
-        $this->addListener('on_create', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnAssignNotificationType();
-        $this->addListener('on_assign', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnGroupAssignNotificationType();
-        $this->addListener('on_group_assign', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnAddObserverNotificationType();
-        $this->addListener('on_add_observer', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnAddCommentNotificationType();
-        $this->addListener('on_add_comment', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnFixNotificationType();
-        $this->addListener('on_fix', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnCloseNotificationType();
-        $this->addListener('on_close', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnReopenNotificationType();
-        $this->addListener('on_reopen', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\ReminderNotificationType();
-        $this->addListener('reminder', new ReminderNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnSendPrivateMessageNotificationType();
-        $this->addListener('on_send_private_message', new PrivateMailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
-        $this->addListener('on_add_approver', new MailNotificationListener($this));
-
-        $notificationTypes[] = new NotificationTypes\OnAddCommentToModerateNotificationType();
-        $this->addListener('on_add_comment_to_moderate', new MailNotificationListener($this));
-
-        $this->addListener('on_create', new SendMailListener($this));
-        $this->addListener('after_run_action', new SendMailListener($this));
-
-        $this->getNotificationService()->setNotificationTypes($notificationTypes);
-
-        $this->addListener('*', new ScenarioListener($this));
-        $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
-        $this->addListener('on_generate_user', new WelcomeUserListener($this));
-        $this->addListener('on_create', new SensorDailyReportListener());
-        $this->addListener('on_close', new SensorDailyReportListener());
-        $this->addListener('on_update_operator', new SensorReindexer());
-
-        $statisticsFactories = [];
-        $statisticsFactories[] = new Statistics\StatusPercentage($this);
-        $statisticsFactories[] = new Statistics\PerCategory($this);
-        $statisticsFactories[] = new Statistics\PerArea($this);
-        $statisticsFactories[] = new Statistics\PerType($this);
-        $statisticsFactories[] = new Statistics\AvgTimes($this);
-        $statisticsFactories[] = new Statistics\Users($this);
-        $statisticsFactories[] = new Statistics\StatusPerCategory($this);
-        $statisticsFactories[] = new Statistics\TypePerCategory($this);
-        $statisticsFactories[] = new Statistics\StatusPerOwnerGroup($this);
-        $statisticsFactories[] = new Statistics\OpenPerOwnerGroup($this);
-        $statisticsFactories[] = new Statistics\OpenHistoryPerOwnerGroup($this);
-        $statisticsFactories[] = new Statistics\PostAging($this);
-        $statisticsFactories[] = new Statistics\Trend($this);
-        $statisticsFactories[] = new Statistics\ExecutionTrend($this);
-        $statisticsFactories[] = new Statistics\ClosingTrend($this);
-        $statisticsFactories[] = new Statistics\ClosingTrendPerGroup($this);
-        $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
-
-        if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
-            $this->addListener('*', new SensorWebHookListener($this));
-        }
-
-        $this->addListener('*', new SensorFlashMessageListener($this));
-        if ($this->getSensorSettings()->get('SocketIsEnabled')) {
-            $this->addListener('*', new SensorSocketEmitterListener(
-                $this,
-                $this->getSensorSettings()->get('SocketSecret'),
-                $this->getSensorSettings()->get('SocketInternalUrl'),
-                $this->getSensorSettings()->get('SocketPort')
-            ));
-        }
-
         eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
+    }
 
-        parent::__construct();
+    protected function build()
+    {
+        if (!$this->isBuilt) {
+            $this->language = eZLocale::currentLocaleCode();
+            $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
+            $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
+
+            $permissionDefinitions = [];
+            $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAddCategory();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAddObserver();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAssign();
+            $permissionDefinitions[] = new PermissionDefinitions\CanChangePrivacy();
+            $permissionDefinitions[] = new PermissionDefinitions\CanClose($restrictResponders);
+            $permissionDefinitions[] = new PermissionDefinitions\CanComment();
+            $permissionDefinitions[] = new PermissionDefinitions\CanFix();
+            $permissionDefinitions[] = new PermissionDefinitions\CanForceFix();
+            $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
+            $permissionDefinitions[] = new PermissionDefinitions\CanRespond($restrictResponders);
+            $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
+            $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
+            if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
+                $permissionDefinitions[] = new PermissionDefinitions\CanReopen(
+                    $this->getSensorSettings()->get('ApproverCanReopen'),
+                    $this->getSensorSettings()->get('AuthorCanReopen')
+                );
+            }
+            //$permissionDefinitions[] = new PermissionDefinitions\CanRead();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRead();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanEdit();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemove();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAddAttachment();
+            $permissionDefinitions[] = new PermissionDefinitions\CanRemoveAttachment();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAddApprover();
+            $permissionDefinitions[] = new PermissionDefinitions\CanAutoAssign($firstApproverScenario->getApprovers());
+            $permissionDefinitions[] = new PermissionDefinitions\CanRemoveObserver();
+            $permissionDefinitions[] = new PermissionDefinitions\CanSelectReceiverInPrivateMessage($this->getSensorSettings()->get('UseDirectPrivateMessage'));
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddImage();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveImage();
+            $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
+            $permissionDefinitions[] = new PermissionDefinitions\CanSetType();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddFile();
+            $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
+            $this->setPermissionDefinitions($permissionDefinitions);
+
+            $actionDefinitions = [];
+            $actionDefinitions[] = new ActionDefinitions\AddAreaAction();
+            $actionDefinitions[] = new ActionDefinitions\AddCategoryAction();
+            $actionDefinitions[] = new ActionDefinitions\AddCommentAction();
+            $actionDefinitions[] = new ActionDefinitions\AddResponseAction();
+            $actionDefinitions[] = new ActionDefinitions\AddObserverAction();
+            $actionDefinitions[] = new ActionDefinitions\AssignAction();
+            $actionDefinitions[] = new ActionDefinitions\AutoAssignAction();
+            $actionDefinitions[] = new ActionDefinitions\CloseAction();
+            $actionDefinitions[] = new ActionDefinitions\EditCommentAction();
+            $actionDefinitions[] = new ActionDefinitions\EditPrivateMessageAction();
+            $actionDefinitions[] = new ActionDefinitions\EditResponseAction();
+            $actionDefinitions[] = new ActionDefinitions\FixAction();
+            $actionDefinitions[] = new ActionDefinitions\ForceFixAction();
+            $actionDefinitions[] = new ActionDefinitions\MakePrivateAction();
+            $actionDefinitions[] = new ActionDefinitions\MakePublicAction();
+            $actionDefinitions[] = new ActionDefinitions\ModerateAction();
+            $actionDefinitions[] = new ActionDefinitions\ReadAction();
+            if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
+                $actionDefinitions[] = new ActionDefinitions\ReopenAction();
+            }
+            $actionDefinitions[] = new ActionDefinitions\SendPrivateMessageAction();
+            $actionDefinitions[] = new ActionDefinitions\SetExpiryAction();
+            $actionDefinitions[] = new ActionDefinitions\AddAttachmentAction();
+            $actionDefinitions[] = new ActionDefinitions\RemoveAttachmentAction();
+            $actionDefinitions[] = new ActionDefinitions\AddApproverAction();
+            $actionDefinitions[] = new ActionDefinitions\RemoveObserverAction();
+            $actionDefinitions[] = new ActionDefinitions\AddImageAction();
+            $actionDefinitions[] = new ActionDefinitions\RemoveImageAction();
+            $actionDefinitions[] = new ActionDefinitions\ModerateCommentAction();
+            $actionDefinitions[] = new ActionDefinitions\SetTypeAction();
+            $actionDefinitions[] = new ActionDefinitions\AddFileAction();
+            $actionDefinitions[] = new ActionDefinitions\RemoveFileAction();
+            $this->setActionDefinitions($actionDefinitions);
+
+            $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
+
+            $notificationTypes = [];
+            $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
+            $this->addListener('on_create', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnAssignNotificationType();
+            $this->addListener('on_assign', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnGroupAssignNotificationType();
+            $this->addListener('on_group_assign', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnAddObserverNotificationType();
+            $this->addListener('on_add_observer', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnAddCommentNotificationType();
+            $this->addListener('on_add_comment', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnFixNotificationType();
+            $this->addListener('on_fix', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnCloseNotificationType();
+            $this->addListener('on_close', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnReopenNotificationType();
+            $this->addListener('on_reopen', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\ReminderNotificationType();
+            $this->addListener('reminder', new ReminderNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnSendPrivateMessageNotificationType();
+            $this->addListener('on_send_private_message', new PrivateMailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
+            $this->addListener('on_add_approver', new MailNotificationListener($this));
+
+            $notificationTypes[] = new NotificationTypes\OnAddCommentToModerateNotificationType();
+            $this->addListener('on_add_comment_to_moderate', new MailNotificationListener($this));
+
+            $this->addListener('on_create', new SendMailListener($this));
+            $this->addListener('after_run_action', new SendMailListener($this));
+
+            $this->getNotificationService()->setNotificationTypes($notificationTypes);
+
+            $this->addListener('*', new ScenarioListener($this));
+            $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
+            $this->addListener('on_generate_user', new WelcomeUserListener($this));
+            $this->addListener('on_create', new SensorDailyReportListener());
+            $this->addListener('on_close', new SensorDailyReportListener());
+            $this->addListener('on_update_operator', new SensorReindexer());
+
+            $statisticsFactories = [];
+            $statisticsFactories[] = new Statistics\StatusPercentage($this);
+            $statisticsFactories[] = new Statistics\PerCategory($this);
+            $statisticsFactories[] = new Statistics\PerArea($this);
+            $statisticsFactories[] = new Statistics\PerType($this);
+            $statisticsFactories[] = new Statistics\AvgTimes($this);
+            $statisticsFactories[] = new Statistics\Users($this);
+            $statisticsFactories[] = new Statistics\StatusPerCategory($this);
+            $statisticsFactories[] = new Statistics\TypePerCategory($this);
+            $statisticsFactories[] = new Statistics\StatusPerOwnerGroup($this);
+            $statisticsFactories[] = new Statistics\OpenPerOwnerGroup($this);
+            $statisticsFactories[] = new Statistics\OpenHistoryPerOwnerGroup($this);
+            $statisticsFactories[] = new Statistics\PostAging($this);
+            $statisticsFactories[] = new Statistics\Trend($this);
+            $statisticsFactories[] = new Statistics\ExecutionTrend($this);
+            $statisticsFactories[] = new Statistics\ClosingTrend($this);
+            $statisticsFactories[] = new Statistics\ClosingTrendPerGroup($this);
+            $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
+
+            if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
+                $this->addListener('*', new SensorWebHookListener($this));
+            }
+
+            $this->addListener('*', new SensorFlashMessageListener($this));
+            if ($this->getSensorSettings()->get('SocketIsEnabled')) {
+                $this->addListener('*', new SensorSocketEmitterListener(
+                    $this,
+                    $this->getSensorSettings()->get('SocketSecret'),
+                    $this->getSensorSettings()->get('SocketInternalUrl'),
+                    $this->getSensorSettings()->get('SocketPort')
+                ));
+            }
+
+            $this->isBuilt = true;
+        }
     }
 
     private static function sensorRootRemoteId()
@@ -222,57 +221,83 @@ class OpenPaSensorRepository extends LegacyRepository
     public function getSensorSettings()
     {
         if ($this->settings === null) {
-            $imagesAttribute = $this->getPostContentClassAttribute('images');
-            $filesAttribute = $this->getPostContentClassAttribute('files');
-            $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
-            $socketIni = eZINI::instance('ocsensor.ini')->group('SocketSettings');
-            $geocodeIni = eZINI::instance('ocsensor.ini')->group('GeoCoderSettings');
-            $this->settings = new Settings(array(
-                'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
-                'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
-                'AuthorCanReopen' => isset($sensorIni['AuthorCanReopen']) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
-                'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
-                'UniqueCategoryCount' => isset($sensorIni['CategoryCount']) ? $sensorIni['CategoryCount'] == 'unique' : true,
-                'CategoryAutomaticAssign' => isset($sensorIni['CategoryAutomaticAssign']) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
-                'DefaultPostExpirationDaysInterval' => isset($sensorIni['DefaultPostExpirationDaysInterval']) ? intval($sensorIni['DefaultPostExpirationDaysInterval']) : 15,
-                'DefaultPostExpirationDaysLimit' => isset($sensorIni['DefaultPostExpirationDaysLimit']) ? intval($sensorIni['DefaultPostExpirationDaysLimit']) : 7,
-                'TextMaxLength' => isset($sensorIni['TextMaxLength']) ? intval($sensorIni['TextMaxLength']) : 800,
-                'CloseCommentsAfterSeconds' => isset($sensorIni['CloseCommentsAfterSeconds']) ? intval($sensorIni['CloseCommentsAfterSeconds']) : 1814400,
-                'MoveMarkerOnSelectArea' => isset($sensorIni['MoveMarkerOnSelectArea']) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
-                'CommentsAllowed' => isset($sensorIni['CommentsAllowed']) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
-                'CategoryAutomaticAssignToRandomOperator' => isset($sensorIni['CategoryAutomaticAssignToRandomOperator']) ? $sensorIni['CategoryAutomaticAssignToRandomOperator'] == 'enabled' : false,
-                'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
-                'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
-                'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
-                'UseDirectPrivateMessage' => isset($sensorIni['UseDirectPrivateMessage']) ? $sensorIni['UseDirectPrivateMessage'] == 'enabled' : true,
-                'HideTypeChoice' => $this->isHiddenTypeChoice(),
-                'ShowSmartGui' => $this->isShownSmartGui(),
-                'ShowResponseProposal' => isset($sensorIni['ShowResponseProposal']) ? $sensorIni['ShowResponseProposal'] == 'enabled' : false,
-                'HideOperatorNames' => $this->isHiddenOperatorName(),
-                'HiddenOperatorName' => 'Operatore',
-                'HiddenOperatorEmail' => 'operator@example.it',
-                'AnnounceKitId' => $this->getAnnounceKitId(),
-                'MinimumIntervalFromLastPrivateMessageToFix' => isset($sensorIni['MinimumIntervalFromLastPrivateMessageToFix']) ? (int)$sensorIni['MinimumIntervalFromLastPrivateMessageToFix'] : -1,
-                'SocketIsEnabled' => $socketIni['Enabled'] === 'true' || $socketIni['Enabled'] === true,
-                'SocketUri' => $socketIni['Url'],
-                'SocketPath' => $socketIni['Path'],
-                'SocketPort' => $socketIni['Port'],
-                'SocketInternalUrl' => $socketIni['InternalUrl'],
-                'SocketSecret' => $socketIni['Secret'],
-                'AllowChangeApprover' => isset($sensorIni['AllowChangeApprover']) ? $sensorIni['AllowChangeApprover'] == 'enabled' : false,
-                'ShowFaqCategories' => isset($sensorIni['ShowFaqCategories']) ? $sensorIni['ShowFaqCategories'] == 'enabled' : true,
-                'UseStatCalculatedColor' => isset($sensorIni['UseStatCalculatedColor']) ? $sensorIni['UseStatCalculatedColor'] == 'enabled' : true,
-                'MarkerMustBeInArea' => isset($geocodeIni['MarkerMustBeInArea']) ? $geocodeIni['MarkerMustBeInArea'] == 'enabled' : false,
-                'MarkerOutOfBoundsAlert' => $geocodeIni['MarkerOutOfBoundsAlert'],
-                'UseInboxContextActions' => isset($sensorIni['UseInboxContextActions']) ? $sensorIni['UseInboxContextActions'] == 'enabled' : true,
-                'UseInboxFilters' => isset($sensorIni['UseInboxFilters']) ? $sensorIni['UseInboxFilters'] == 'enabled' : true,
-                'AllowAdditionalMemberGroups' => isset($sensorIni['AllowAdditionalMemberGroups']) ? $sensorIni['AllowAdditionalMemberGroups'] == 'enabled' : true,
-                'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
-                'HasCategoryPredictor' => SensorCategoryPredictor::instance()->isEnabled(),
-                'SiteLanguages' => isset($sensorIni['SiteLanguages']) ? explode(',', $sensorIni['SiteLanguages']) : [],
-                'UploadMaxNumberOfImages' => $imagesAttribute instanceof eZContentClassAttribute ? $imagesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
-                'UploadMaxNumberOfFiles' => $filesAttribute instanceof eZContentClassAttribute ? $filesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
-            ));
+            $modified = $this->getRootNode()->object()->attribute('modified');
+            $cacheFile = 'settings.cache';
+            $cacheFilePath = \eZDir::path(array(\eZSys::cacheDirectory(), 'ocopendata', 'sensor', $cacheFile));
+            $settingsCacheManager = \eZClusterFileHandler::instance($cacheFilePath);
+            $data = $settingsCacheManager->processCache(
+                function ($file, $mtime, $extraData) {
+                    if ($mtime >= $extraData[0]) {
+                        $content = include($file);
+                        return $content;
+                    } else {
+                        return new \eZClusterFileFailure(1, "Modified timestamp greater then file mtime");
+                    }
+                },
+                function ($file, $args) {
+                    $imagesAttribute = $this->getPostContentClassAttribute('images');
+                    $filesAttribute = $this->getPostContentClassAttribute('files');
+                    $sensorIni = eZINI::instance('ocsensor.ini')->group('SensorConfig');
+                    $socketIni = eZINI::instance('ocsensor.ini')->group('SocketSettings');
+                    $geocodeIni = eZINI::instance('ocsensor.ini')->group('GeoCoderSettings');
+                    $data = array(
+                        'AllowMultipleApprover' => isset($sensorIni['AllowMultipleApprover']) ? $sensorIni['AllowMultipleApprover'] == 'enabled' : false,
+                        'AllowMultipleOwner' => isset($sensorIni['AllowMultipleOwner']) ? $sensorIni['AllowMultipleOwner'] == 'enabled' : false,
+                        'AuthorCanReopen' => isset($sensorIni['AuthorCanReopen']) ? $sensorIni['AuthorCanReopen'] == 'enabled' : false,
+                        'ApproverCanReopen' => isset($sensorIni['ApproverCanReopen']) ? $sensorIni['ApproverCanReopen'] == 'enabled' : false,
+                        'UniqueCategoryCount' => isset($sensorIni['CategoryCount']) ? $sensorIni['CategoryCount'] == 'unique' : true,
+                        'CategoryAutomaticAssign' => isset($sensorIni['CategoryAutomaticAssign']) ? $sensorIni['CategoryAutomaticAssign'] == 'enabled' : false,
+                        'DefaultPostExpirationDaysInterval' => isset($sensorIni['DefaultPostExpirationDaysInterval']) ? intval($sensorIni['DefaultPostExpirationDaysInterval']) : 15,
+                        'DefaultPostExpirationDaysLimit' => isset($sensorIni['DefaultPostExpirationDaysLimit']) ? intval($sensorIni['DefaultPostExpirationDaysLimit']) : 7,
+                        'TextMaxLength' => isset($sensorIni['TextMaxLength']) ? intval($sensorIni['TextMaxLength']) : 800,
+                        'CloseCommentsAfterSeconds' => isset($sensorIni['CloseCommentsAfterSeconds']) ? intval($sensorIni['CloseCommentsAfterSeconds']) : 1814400,
+                        'MoveMarkerOnSelectArea' => isset($sensorIni['MoveMarkerOnSelectArea']) ? $sensorIni['MoveMarkerOnSelectArea'] == 'enabled' : true,
+                        'CommentsAllowed' => isset($sensorIni['CommentsAllowed']) ? $sensorIni['CommentsAllowed'] == 'enabled' : true,
+                        'CategoryAutomaticAssignToRandomOperator' => isset($sensorIni['CategoryAutomaticAssignToRandomOperator']) ? $sensorIni['CategoryAutomaticAssignToRandomOperator'] == 'enabled' : false,
+                        'HidePrivacyChoice' => $this->isHiddenPrivacyChoice(),
+                        'HideTimelineDetails' => $this->isHiddenTimelineDetails(),
+                        'ForceUrpApproverOnFix' => isset($sensorIni['ForceUrpApproverOnFix']) ? $sensorIni['ForceUrpApproverOnFix'] == 'enabled' : false,
+                        'UseDirectPrivateMessage' => isset($sensorIni['UseDirectPrivateMessage']) ? $sensorIni['UseDirectPrivateMessage'] == 'enabled' : true,
+                        'HideTypeChoice' => $this->isHiddenTypeChoice(),
+                        'ShowSmartGui' => $this->isShownSmartGui(),
+                        'ShowResponseProposal' => isset($sensorIni['ShowResponseProposal']) ? $sensorIni['ShowResponseProposal'] == 'enabled' : false,
+                        'HideOperatorNames' => $this->isHiddenOperatorName(),
+                        'HiddenOperatorName' => 'Operatore',
+                        'HiddenOperatorEmail' => 'operator@example.it',
+                        'AnnounceKitId' => $this->getAnnounceKitId(),
+                        'MinimumIntervalFromLastPrivateMessageToFix' => isset($sensorIni['MinimumIntervalFromLastPrivateMessageToFix']) ? (int)$sensorIni['MinimumIntervalFromLastPrivateMessageToFix'] : -1,
+                        'SocketIsEnabled' => $socketIni['Enabled'] === 'true' || $socketIni['Enabled'] === true,
+                        'SocketUri' => $socketIni['Url'],
+                        'SocketPath' => $socketIni['Path'],
+                        'SocketPort' => $socketIni['Port'],
+                        'SocketInternalUrl' => $socketIni['InternalUrl'],
+                        'SocketSecret' => $socketIni['Secret'],
+                        'AllowChangeApprover' => isset($sensorIni['AllowChangeApprover']) ? $sensorIni['AllowChangeApprover'] == 'enabled' : false,
+                        'ShowFaqCategories' => isset($sensorIni['ShowFaqCategories']) ? $sensorIni['ShowFaqCategories'] == 'enabled' : true,
+                        'UseStatCalculatedColor' => isset($sensorIni['UseStatCalculatedColor']) ? $sensorIni['UseStatCalculatedColor'] == 'enabled' : true,
+                        'MarkerMustBeInArea' => isset($geocodeIni['MarkerMustBeInArea']) ? $geocodeIni['MarkerMustBeInArea'] == 'enabled' : false,
+                        'MarkerOutOfBoundsAlert' => $geocodeIni['MarkerOutOfBoundsAlert'],
+                        'UseInboxContextActions' => isset($sensorIni['UseInboxContextActions']) ? $sensorIni['UseInboxContextActions'] == 'enabled' : true,
+                        'UseInboxFilters' => isset($sensorIni['UseInboxFilters']) ? $sensorIni['UseInboxFilters'] == 'enabled' : true,
+                        'AllowAdditionalMemberGroups' => isset($sensorIni['AllowAdditionalMemberGroups']) ? $sensorIni['AllowAdditionalMemberGroups'] == 'enabled' : true,
+                        'ShowInboxAllPrivateMessage' => isset($sensorIni['ShowInboxAllPrivateMessage']) ? $sensorIni['ShowInboxAllPrivateMessage'] == 'enabled' : false,
+                        'HasCategoryPredictor' => SensorCategoryPredictor::instance()->isEnabled(),
+                        'SiteLanguages' => isset($sensorIni['SiteLanguages']) ? explode(',', $sensorIni['SiteLanguages']) : [],
+                        'UploadMaxNumberOfImages' => $imagesAttribute instanceof eZContentClassAttribute ? $imagesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
+                        'UploadMaxNumberOfFiles' => $filesAttribute instanceof eZContentClassAttribute ? $filesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
+                        'ScenarioCache' => isset($sensorIni['ScenarioCache']) ? $sensorIni['ScenarioCache'] === 'enabled' : false,
+                    );
+                    return [
+                        'content' => $data,
+                        'scope' => 'sensor-settings',
+                        'datatype' => 'php',
+                        'store' => true
+                    ];
+                },
+                null, null, [$modified]
+            );
+
+            $this->settings = new Settings($data);
         }
 
         return $this->settings;

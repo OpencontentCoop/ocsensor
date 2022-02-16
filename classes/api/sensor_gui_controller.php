@@ -28,15 +28,27 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
      */
     protected $openApiTools;
 
-    public function __construct($action, ezcMvcRequest $request)
+
+    private function getOpenApiTools()
     {
-        parent::__construct($action, $request);
-        $this->repository = OpenPaSensorRepository::instance();
-        $this->openApiTools = new \Opencontent\Sensor\OpenApi(
-            $this->repository,
-            $this->getHostURI(),
-            $this->getBaseUri()
-        );
+        if ($this->openApiTools === null){
+            $this->openApiTools = new \Opencontent\Sensor\OpenApi(
+                $this->getRepository(),
+                $this->getHostURI(),
+                $this->getBaseUri()
+            );
+        }
+
+        return $this->openApiTools;
+    }
+
+    private function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = OpenPaSensorRepository::instance();
+        }
+
+        return $this->repository;
     }
 
     private function getHostURI()
@@ -74,12 +86,12 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doSettings()
     {
         try {
-            if ($this->repository->getCurrentUser()->id == eZUser::anonymousId()) {
+            if ($this->getRepository()->getCurrentUser()->id == eZUser::anonymousId()) {
                 throw new \Opencontent\Sensor\Api\Exception\ForbiddenException();
             }
             $result = new ezpRestMvcResult();
             $settings = [];
-            foreach ($this->repository->getSensorSettings()->jsonSerialize() as $key => $value) {
+            foreach ($this->getRepository()->getSensorSettings()->jsonSerialize() as $key => $value) {
                 $settings[] = ['key' => $key, 'value' => $value];
             }
             $result->variables = $settings;
@@ -95,7 +107,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         $result = new ezcMvcResult;
         $result->variables['message'] = $exception->getMessage();
 
-        $this->repository->getLogger()->error($exception->getMessage());
+        $this->getRepository()->getLogger()->error($exception->getMessage());
 
         $serverErrorCode = ezpHttpResponseCodes::SERVER_ERROR;
         $errorType = BaseException::cleanErrorCode(get_class($exception));
@@ -118,12 +130,12 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         try {
             $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
             $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
-            $data = $this->repository->getPostService()->loadPosts(null, $limit, $cursor);
+            $data = $this->getRepository()->getPostService()->loadPosts(null, $limit, $cursor);
 
             $result = new ezpRestMvcResult();
             $resultData = [
                 'self' => $this->getBaseUri() . "/posts?limit={$limit}&cursor=" . urlencode($data['current']),
-                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'items' => $this->getOpenApiTools()->replacePlaceholders($data['items']),
                 'next' => null,
             ];
             if ($data['next']) {
@@ -140,16 +152,16 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
     public function doLoadPostByIdWithCapabilities()
     {
-        $user = $this->repository->getCurrentUser();
+        $user = $this->getRepository()->getCurrentUser();
         try {
-//            $post = $this->repository->getSearchService()->searchPost($this->Id);
-            $post = $this->repository->getPostService()->loadPost($this->Id);
+//            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $result = new ezpRestMvcResult();
             $result->variables = [
                 'capabilities' => $this->loadApiUserPostCapabilities($user, $post),
                 'post' => $this->loadApiPost($post),
             ];
-            $this->repository->getActionService()->runAction(new Action('read'), $post);
+            $this->getRepository()->getActionService()->runAction(new Action('read'), $post);
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -159,7 +171,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
     private function loadApiPost($post)
     {
-        $apiPost = $this->openApiTools->replacePlaceholders($post->jsonSerialize());
+        $apiPost = $this->getOpenApiTools()->replacePlaceholders($post->jsonSerialize());
 
         $messages = [];
         foreach ($apiPost['timelineItems'] as $message) {
@@ -195,9 +207,9 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         }
 
         try {
-            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
             $apiPost = $this->loadApiPost($post);
-            $this->repository->getActionService()->runAction(new Action('read'), $post);
+            $this->getRepository()->getActionService()->runAction(new Action('read'), $post);
             $result = new ezpRestMvcResult();
             $result->variables = $apiPost;
         } catch (Exception $e) {
@@ -230,8 +242,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 $parameters['format'] = 'json';
             }
             $result = new ezpRestMvcResult();
-            $result->variables = $this->openApiTools->replacePlaceholders(
-                $this->repository->getSearchService()->searchPosts($query, $parameters)
+            $result->variables = $this->getOpenApiTools()->replacePlaceholders(
+                $this->getRepository()->getSearchService()->searchPosts($query, $parameters)
             );
 
         } catch (Exception $e) {
@@ -245,11 +257,11 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             if ($this->UserId == 'current') {
-                $user = $this->repository->getCurrentUser();
+                $user = $this->getRepository()->getCurrentUser();
             } else {
-                $user = $this->repository->getUserService()->loadUser($this->UserId);
+                $user = $this->getRepository()->getUserService()->loadUser($this->UserId);
             }
-            $apiUser = $this->openApiTools->replacePlaceholders($user->jsonSerialize());
+            $apiUser = $this->getOpenApiTools()->replacePlaceholders($user->jsonSerialize());
             $result = new ezpRestMvcResult();
             $result->variables = $apiUser;
         } catch (Exception $e) {
@@ -262,7 +274,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadCurrentUserLocale()
     {
         try {
-            $user = $this->repository->getCurrentUser();
+            $user = $this->getRepository()->getCurrentUser();
             $result = new ezpRestMvcResult();
             $result->variables = ['locale' => $user->language];
         } catch (Exception $e) {
@@ -275,9 +287,9 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doPostCurrentUserLocale()
     {
         try {
-            $user = $this->repository->getCurrentUser();
+            $user = $this->getRepository()->getCurrentUser();
             $language = $this->LanguageCode;
-            if (!in_array($language, $this->repository->getSensorSettings()->get('SiteLanguages'))){
+            if (!in_array($language, $this->getRepository()->getSensorSettings()->get('SiteLanguages'))){
                 throw new InvalidInputException("Language $language not found");
             }
 
@@ -294,7 +306,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
     private function loadApiUserPostCapabilities($user, $post)
     {
-        $data = $this->repository->getPermissionService()
+        $data = $this->getRepository()->getPermissionService()
             ->loadUserPostPermissionCollection($user, $post)->jsonSerialize();
 
         $data[] = [
@@ -367,11 +379,11 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $post = $this->repository->getPostService()->loadPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             if ($this->UserId == 'current') {
-                $user = $this->repository->getCurrentUser();
+                $user = $this->getRepository()->getCurrentUser();
             } else {
-                $user = $this->repository->getUserService()->loadUser($this->UserId);
+                $user = $this->getRepository()->getUserService()->loadUser($this->UserId);
             }
             $result->variables = $this->loadApiUserPostCapabilities($user, $post);
 
@@ -385,7 +397,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doCreatePost()
     {
         try {
-            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
             $result = $controller->createPost();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -397,7 +409,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doUpdatePost()
     {
         try {
-            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
             $result = $controller->updatePostById();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -409,8 +421,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doDeletePost()
     {
         try {
-            $post = $this->repository->getPostService()->loadPost($this->Id);
-            $this->repository->getPostService()->deletePost($post);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
+            $this->getRepository()->getPostService()->deletePost($post);
             $result = new ezpRestMvcResult();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -425,12 +437,12 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : null;
             $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
             $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
-            $data = $this->repository->getOperatorService()->loadOperators($query, $limit, $cursor);
+            $data = $this->getRepository()->getOperatorService()->loadOperators($query, $limit, $cursor);
 
             $result = new ezpRestMvcResult();
             $resultData = [
                 'self' => $this->getBaseUri() . "/operators?query={$query}&limit={$limit}&cursor=" . urlencode($data['current']),
-                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'items' => $this->getOpenApiTools()->replacePlaceholders($data['items']),
                 'next' => null,
             ];
             if ($data['next']) {
@@ -449,7 +461,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $result->variables = $this->repository->getOperatorService()->loadOperator($this->OperatorId);
+            $result->variables = $this->getRepository()->getOperatorService()->loadOperator($this->OperatorId);
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -463,12 +475,12 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : null;
             $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
             $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
-            $data = $this->repository->getGroupService()->loadGroups($query, $limit, $cursor);
+            $data = $this->getRepository()->getGroupService()->loadGroups($query, $limit, $cursor);
 
             $result = new ezpRestMvcResult();
             $resultData = [
                 'self' => $this->getBaseUri() . "/groups?query={$query}&limit={$limit}&cursor=" . urlencode($data['current']),
-                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'items' => $this->getOpenApiTools()->replacePlaceholders($data['items']),
                 'next' => null,
             ];
             if ($data['next']) {
@@ -486,10 +498,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadOperatorsByGroup()
     {
         $result = new ezpRestMvcResult();
-        $group = $this->repository->getGroupService()->loadGroup($this->GroupId);
+        $group = $this->getRepository()->getGroupService()->loadGroup($this->GroupId);
         $operators = [];
         if ($group instanceof Group) {
-            $operatorResult = $this->repository->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, '*');
+            $operatorResult = $this->getRepository()->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, '*');
             $operators = $operatorResult['items'];
             $this->recursiveLoadOperatorsByGroup($group, $operatorResult, $operators);
         }
@@ -501,7 +513,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     private function recursiveLoadOperatorsByGroup(Group $group, $operatorResult, &$operators)
     {
         if ($operatorResult['next']) {
-            $operatorResult = $this->repository->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, $operatorResult['next']);
+            $operatorResult = $this->getRepository()->getOperatorService()->loadOperatorsByGroup($group, SearchService::MAX_LIMIT, $operatorResult['next']);
             $operators = array_merge($operatorResult['items'], $operators);
             $this->recursiveLoadOperatorsByGroup($group, $operatorResult, $operators);
         }
@@ -515,12 +527,12 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $query = isset($this->request->get['query']) ? trim($this->request->get['query']) : null;
             $limit = isset($this->request->get['limit']) ? (int)$this->request->get['limit'] : $this->request->variables['limit'];
             $cursor = isset($this->request->get['cursor']) ? rawurldecode($this->request->get['cursor']) : $this->request->variables['cursor'];
-            $data = $this->repository->getSearchService()->searchOperatorAnGroups($query, $limit, $cursor);
+            $data = $this->getRepository()->getSearchService()->searchOperatorAnGroups($query, $limit, $cursor);
 
             $result = new ezpRestMvcResult();
             $resultData = [
                 'self' => $this->getBaseUri() . "/operators?query={$query}&limit={$limit}&cursor=" . urlencode($data['current']),
-                'items' => $this->openApiTools->replacePlaceholders($data['items']),
+                'items' => $this->getOpenApiTools()->replacePlaceholders($data['items']),
                 'next' => null,
             ];
             if ($data['next']) {
@@ -539,7 +551,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $actions = explode(',', $this->Action);
-            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
             $payload = $this->getPayload();
 
             foreach ($actions as $action) {
@@ -547,7 +559,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 foreach ($payload as $key => $value) {
                     $action->setParameter($key, $value);
                 }
-                $this->repository->getActionService()->runAction($action, $post);
+                $this->getRepository()->getActionService()->runAction($action, $post);
             }
 
             $result = $this->doLoadPostByIdWithCapabilities();
@@ -573,7 +585,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doPostUpload()
     {
         try {
-            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
             $action = new Action();
             $action->identifier = $this->Action;
 
@@ -603,7 +615,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             }
             $action->setParameter('files', $files);
 
-            $this->repository->getActionService()->runAction($action, $post);
+            $this->getRepository()->getActionService()->runAction($action, $post);
             $result = new ezpRestMvcResult();
             $result->variables = ['action' => $action->identifier];
 
@@ -655,10 +667,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doTempUpload()
     {
         try {
-            if (!$this->repository->getPostRootNode()->attribute('can_create')) {
+            if (!$this->getRepository()->getPostRootNode()->attribute('can_create')) {
                 throw new ForbiddenException('create', 'post');
             }
-            $uploadDir = eZSys::varDirectory() . '/fileupload/' . $this->repository->getCurrentUser()->id . '/';
+            $uploadDir = eZSys::varDirectory() . '/fileupload/' . $this->getRepository()->getCurrentUser()->id . '/';
             $uploadHandler = $this->getUploadHandler('sensor_post/' . $this->Identifier, $uploadDir);
 
             /** @var array $data */
@@ -701,7 +713,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadCategoryTree()
     {
         $result = new ezpRestMvcResult();
-        $result->variables = $this->repository->getCategoriesTree()->jsonSerialize();
+        $result->variables = $this->getRepository()->getCategoriesTree()->jsonSerialize();
 
         return $result;
     }
@@ -709,7 +721,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadAreaTree()
     {
         $result = new ezpRestMvcResult();
-        $result->variables = $this->repository->getAreasTree()->jsonSerialize();
+        $result->variables = $this->getRepository()->getAreasTree()->jsonSerialize();
 
         return $result;
     }
@@ -718,7 +730,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $stat = $this->repository->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
+            $stat = $this->getRepository()->getStatisticsService()->getStatisticFactoryByIdentifier($this->Identifier);
             $stat->setParameters($this->request->get);
             $format = isset($this->request->get['format']) ? $this->request->get['format'] : 'data';
             $result->variables = $stat->getDataByFormat($format);
@@ -732,7 +744,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadUsers()
     {
         try {
-            $controller = new OpenApi\Controller($this->openApiTools, $this);
+            $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
             $result = $controller->loadUsers();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -745,7 +757,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $todolist = new SensorInbox($this->repository);
+            $todolist = new SensorInbox($this->getRepository());
             $page = isset($this->request->get['page']) ? rawurldecode($this->request->get['page']) : $this->request->variables['page'];
             $limit = isset($this->request->get['limit']) ? rawurldecode($this->request->get['limit']) : $this->request->variables['limit'];
             $filters = isset($this->request->get['filters']) ? $this->request->get['filters'] : [];
@@ -760,7 +772,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doLoadSpecialIdList()
     {
         $result = new ezpRestMvcResult();
-        $result->variables = (new SensorInbox($this->repository))->fetchSpecialIdListForUser($this->repository->getCurrentUser()->id);
+        $result->variables = (new SensorInbox($this->getRepository()))->fetchSpecialIdListForUser($this->getRepository()->getCurrentUser()->id);
         return $result;
     }
 
@@ -768,10 +780,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $this->repository->getSearchService()->searchPost($this->Id);
+            $this->getRepository()->getSearchService()->searchPost($this->Id);
             $enabled = (bool)$this->Enable;
             $nodes = eZContentObjectTreeNode::fetchByContentObjectID($this->Id);
-            $userID = (int)$this->repository->getCurrentUser()->id;
+            $userID = (int)$this->getRepository()->getCurrentUser()->id;
             foreach ($nodes as $node) {
                 if ($enabled) {
                     $result->variables[] = eZContentBrowseBookmark::createNew($userID, $node->attribute('node_id'), $node->attribute('name'))->attribute('id');
@@ -812,7 +824,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             }
 
             $result = new ezpRestMvcResult();
-            $result->variables = $this->repository->getScenarioService()->searchScenarios($parameters);
+            $result->variables = $this->getRepository()->getScenarioService()->searchScenarios($parameters);
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -829,7 +841,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             }
 
             $result = new ezpRestMvcResult();
-            $result->variables = [$this->repository->getScenarioService()->createScenario($this->getPayload())];
+            $result->variables = [$this->getRepository()->getScenarioService()->createScenario($this->getPayload())];
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -845,7 +857,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             }
 
             $result = new ezpRestMvcResult();
-            $result->variables = ['result' => $this->repository->getScenarioService()->editScenario($this->Id, $this->getPayload())];
+            $result->variables = ['result' => $this->getRepository()->getScenarioService()->editScenario($this->Id, $this->getPayload())];
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }
@@ -857,7 +869,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $result->variables = $this->repository->getAreaService()->loadArea($this->Id);
+            $result->variables = $this->getRepository()->getAreaService()->loadArea($this->Id);
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -869,10 +881,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doPostAreaDisabledCategories()
     {
         try {
-            $area = $this->repository->getAreaService()->loadArea($this->Id);
+            $area = $this->getRepository()->getAreaService()->loadArea($this->Id);
 
             $result = new ezpRestMvcResult();
-            $this->repository->getAreaService()->disableCategories($area, $this->getPayload());
+            $this->getRepository()->getAreaService()->disableCategories($area, $this->getPayload());
 
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
@@ -895,7 +907,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         $result = new ezpRestMvcResult();
         try {
-            $post = $this->repository->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
             $predictor = SensorCategoryPredictor::instance();
             $result->variables = $predictor->predict($post->id, $post->subject, $post->description);;
         } catch (Exception $e) {

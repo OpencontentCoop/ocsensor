@@ -1,13 +1,13 @@
 <h1 class='text-center title'>
     {if ezini_hasvariable(concat('LoginTemplate_', $login_module_setting), 'Title', 'app.ini')}
-        {ezini(concat('LoginTemplate_', $login_module_setting), 'Title', 'app.ini')|wash()}
+        {sensor_translate(ezini(concat('LoginTemplate_', $login_module_setting), 'Title', 'app.ini'), 'login')}
     {else}
         {"Login"|i18n("design/ocbootstrap/user/login")}
     {/if}
 </h1>
 
 {if ezini_hasvariable(concat('LoginTemplate_', $login_module_setting), 'Text', 'app.ini')}
-    <p class="text-center" style="margin-bottom: 20px">{ezini(concat('LoginTemplate_', $login_module_setting), 'Text', 'app.ini')|wash()}</p>
+    <p class="text-center" style="margin-bottom: 20px">{sensor_translate(ezini(concat('LoginTemplate_', $login_module_setting), 'Text', 'app.ini'), 'login')}</p>
 {/if}
 
 {if $User:warning.bad_login}
@@ -50,9 +50,9 @@
     <button class='btn btn-lg btn-primary center-block'
             name="LoginButton">
         {if ezini_hasvariable(concat('LoginTemplate_', $login_module_setting), 'ButtonText', 'app.ini')}
-            {ezini(concat('LoginTemplate_', $login_module_setting), 'ButtonText', 'app.ini')|wash()}
+            {sensor_translate(ezini(concat('LoginTemplate_', $login_module_setting), 'ButtonText', 'app.ini'), 'login')}
         {else}
-            {'Login'|i18n('design/ocbootstrap/user/login','Button')}
+            {sensor_translate('Login', 'login')}
         {/if}
     </button>
 
