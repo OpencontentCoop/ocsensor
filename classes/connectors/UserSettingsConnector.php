@@ -215,6 +215,7 @@ class UserSettingsConnector extends AbstractBaseConnector
         $this->addGroups($addGroups);
         $this->grantStatData($this->sensorUser->id, $stats);
 
+        $this->repository->getUserService()->refreshUser($this->sensorUser);
         $userSettings = $this->getData();
         $this->sensorUser = $this->repository->getUserService()->loadFromEzUser($this->user);
         $this->repository->getLogger()->info("Modified info for user {$this->user->Login} #" . $this->user->id(), $userSettings);
