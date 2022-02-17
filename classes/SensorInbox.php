@@ -108,8 +108,15 @@ class SensorInbox
         $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
+        $specialIdQuery = [];
         if (count($specialIdList) > 0) {
-            $query = 'id in [' . implode(',', $specialIdList) . '] sort [modified=>desc]';
+            $specialIdQuery[] = 'id in [' . implode(',', $specialIdList) . '] ';
+        }
+        if ($this->repository->getCurrentUser()->isFirstApprover){
+            $specialIdQuery[] = '';
+        }
+        if (!empty($specialIdQuery)) {
+            $query = implode(' and ', $specialIdQuery) . ' sort [modified=>desc]';
             $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
             $results = $this->repository->getSearchService()->searchPosts(
                 $query,
