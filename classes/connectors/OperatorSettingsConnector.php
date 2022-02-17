@@ -140,6 +140,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
             TreeNode::clearCache($this->repository->getOperatorsRootNode()->attribute('node_id'));
             TreeNode::clearCache($this->repository->getGroupsRootNode()->attribute('node_id'));
         }
+        $this->repository->getUserService()->refreshUser($this->sensorUser);
         $userSettings = $this->getData();
         $this->sensorUser = $this->repository->getUserService()->loadFromEzUser($this->user);
         $this->repository->getLogger()->info("Modified info for operator {$this->user->Login} #" . $this->user->id(), $userSettings);
