@@ -17,6 +17,8 @@ use Opencontent\Sensor\Legacy\Listeners\WelcomeUserListener;
 use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Legacy\Scenarios;
+use Opencontent\Sensor\Legacy\Scenarios\FallbackScenario;
+use Opencontent\Sensor\Legacy\ScenarioService;
 use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
 
@@ -50,7 +52,7 @@ class OpenPaSensorRepository extends LegacyRepository
         if (!$this->isBuilt) {
             $this->language = eZLocale::currentLocaleCode();
             $firstApproverScenario = new Scenarios\FirstAreaApproverScenario($this);
-            $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getApprovers() : [];
+            $restrictResponders = $this->getSensorSettings()->get('ForceUrpApproverOnFix') ? $firstApproverScenario->getUserApprovers() : [];
 
             $permissionDefinitions = [];
             $permissionDefinitions[] = new PermissionDefinitions\CanAddArea();
@@ -209,6 +211,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 ));
             }
 
+            $this->scenarioService = new ScenarioService($this, [$firstApproverScenario, new FallbackScenario()]);
             $this->isBuilt = true;
         }
     }
