@@ -799,6 +799,26 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    public function doSetAsTaggedSpecial()
+    {
+        try {
+            $result = new ezpRestMvcResult();
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
+            $enabled = (bool)$this->Enable;
+            $tags = [];
+            if ($enabled){
+                $tags[] = 'special';
+            }
+            $action = new Action('set_tags', ['tags' => $tags]);
+            $this->getRepository()->getActionService()->runAction($action, $post);
+
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
     public function doScenarioSearch()
     {
         try {

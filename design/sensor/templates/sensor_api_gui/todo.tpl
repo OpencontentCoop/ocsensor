@@ -336,11 +336,71 @@
                         });
                     }
                 });
+                rendered.find('[data-special]').on('click', function (e){
+                    var self = $(this);
+                    var id = self.data('special');
+                    var csrfToken;
+                    var tokenNode = document.getElementById('ezxform_token_js');
+                    if ( tokenNode ){
+                        csrfToken = tokenNode.getAttribute('title');
+                    }
+                    if (self.hasClass('fa-bell-o')){
+                        $.ajax({
+                            type: "POST",
+                            url: '/api/sensor_gui/tagged-special/'+id+'/1',
+                            headers: {'X-CSRF-TOKEN': csrfToken},
+                            success: function (response,textStatus,jqXHR) {
+                                if(response.error_message || response.error_code){
+                                    console.log(response.error_message);
+                                }else {
+                                    self.removeClass('fa-bell-o text-muted');
+                                    self.addClass('fa-bell text-primary');
+                                    refreshMenuItem('special');
+                                    refreshMenuItem('todolist');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                var error = {
+                                    error_code: jqXHR.status,
+                                    error_message: jqXHR.statusText
+                                };
+                                console.log(error.error_message);
+                            }
+                        });
+                    }else{
+                        $.ajax({
+                            type: "POST",
+                            url: '/api/sensor_gui/tagged-special/'+id+'/0',
+                            headers: {'X-CSRF-TOKEN': csrfToken},
+                            success: function (response,textStatus,jqXHR) {
+                                if(response.error_message || response.error_code){
+                                    console.log(response.error_message);
+                                }else {
+                                    self.addClass('fa-bell-o text-muted');
+                                    self.removeClass('fa-bell text-primary');
+                                    refreshMenuItem('special');
+                                    refreshMenuItem('todolist');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                var error = {
+                                    error_code: jqXHR.status,
+                                    error_message: jqXHR.statusText
+                                };
+                                console.log(error.error_message);
+                            }
+                        });
+                    }
+                });
                 rendered.find('tr[data-previewid]').on('click', function (e){
                     var row = $(e.currentTarget);
                     var target = $(e.target);
                     var action = row.find('.todo-action').text();
-                    if (!$(e.target).hasClass('fa-star') && !$(e.target).hasClass('fa-star-o') && !$(e.target).hasClass('todo_action')){
+                    if (!$(e.target).hasClass('fa-star')
+                        && !$(e.target).hasClass('fa-star-o')
+                        && !$(e.target).hasClass('fa-bell')
+                        && !$(e.target).hasClass('fa-bell-o')
+                        && !$(e.target).hasClass('todo_action')){
                         showPreview(row.data('previewid'), action);
                     }
                 });

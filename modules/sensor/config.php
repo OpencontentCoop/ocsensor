@@ -11,9 +11,9 @@ $tpl = eZTemplate::factory();
 $currentUser = eZUser::currentUser();
 $repository = OpenPaSensorRepository::instance();
 $root = $repository->getRootNode();
+$rootObject = $root->object();
 
 if ($Part == '_set') {
-    $rootObject = $root->object();
     if (!$rootObject->canEdit()) {
         $data = [
             'result' => 'fail',

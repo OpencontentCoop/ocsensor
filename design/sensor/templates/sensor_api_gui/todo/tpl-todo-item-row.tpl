@@ -4,8 +4,11 @@
     <td width="1" style="vertical-align:middle{{if has_read == 0}};font-weight:bold{{/if}}">
         <i class="fa fa-circle" style="color:{{if status == 'close'}}#5cb85c{{else status == 'pending'}}#d9534f{{else}}#f0ad4e{{/if}}"></i>
     </td>
-    <td width="1" style="vertical-align:middle{{if has_read == 0}};font-weight:bold{{/if}}">
+    <td width="1" style="white-space:nowrap;vertical-align:middle{{if has_read == 0}};font-weight:bold{{/if}}">
         <i data-star="{{:id}}" class="fa fa-star{{if is_special}} text-primary{{else}}-o text-muted{{/if}}"></i>
+        {/literal}{if can_set_sensor_tag()}{literal}
+        <i style="margin-left:5px" data-special="{{:id}}" class="fa fa-bell{{if is_tagged_special}} text-primary{{else}}-o text-muted{{/if}}"></i>
+        {/literal}{/if}{literal}
     </td>
     <td width="1" style="vertical-align:middle;white-space:nowrap{{if has_read == 0}};font-weight:bold{{/if}}">
         {{:id}}

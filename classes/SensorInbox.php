@@ -112,17 +112,19 @@ class SensorInbox
         if (count($specialIdList) > 0) {
             $specialIdQuery[] = 'id in [' . implode(',', $specialIdList) . '] ';
         }
-        if ($this->repository->getCurrentUser()->isFirstApprover){
-            $specialIdQuery[] = '';
+        if ($this->repository->getCurrentUser()->isFirstApprover
+            && $this->repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute){
+            $specialIdQuery[] = "tags in ['special']";
         }
+
         if (!empty($specialIdQuery)) {
-            $query = implode(' and ', $specialIdQuery) . ' sort [modified=>desc]';
+            $query = '(' . implode(' or ', $specialIdQuery) . ') sort [modified=>desc]';
             $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
             $results = $this->repository->getSearchService()->searchPosts(
                 $query,
                 [
                     'readingStatuses' => true,
-                    'currentUserInParticipants' => true,
+                    'currentUserInParticipants' => $this->repository->getCurrentUser()->isFirstApprover === false,
                     'capabilities' => true,
                 ]
             );
@@ -364,6 +366,7 @@ class SensorInbox
             $data[] = [
                 'id' => (int)$post->id,
                 'is_special' => in_array($post->id, $specialIdList),
+                'is_tagged_special' => in_array('special', $post->tags),
                 'subject' => $post->subject,
                 'modified_datetime' => $this->formatDate($post->modified),
                 'modified_at' => Utils::getDateDiff($post->modified)->getText(),

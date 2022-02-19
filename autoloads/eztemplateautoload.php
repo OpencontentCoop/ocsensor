@@ -24,5 +24,6 @@ $eZTemplateOperatorArray[] = array(
         'is_sensor_public_field',
         'sensor_edit_category_access',
         'sensor_translate',
+        'can_set_sensor_tag',
     )
 );

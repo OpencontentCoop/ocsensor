@@ -28,6 +28,7 @@ class SensorOperator
             'is_sensor_public_field',
             'sensor_edit_category_access',
             'sensor_translate',
+            'can_set_sensor_tag',
         );
     }
 
@@ -83,6 +84,11 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'can_set_sensor_tag':
+                $operatorValue = $repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute
+                    && $repository->getCurrentUser()->isFirstApprover;
+                break;
+
             case 'sensor_translate':
                 $operatorValue = SensorTranslationHelper::instance()->translate(
                     $namedParameters['string'],

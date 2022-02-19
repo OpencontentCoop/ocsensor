@@ -214,6 +214,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 'http-post'
             ), 1),
 
+            'sensorGuiApiTaggedSpecial' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/tagged-special/:Id/:Enable',
+                'SensorGuiApiController',
+                'setAsTaggedSpecial',
+                array(),
+                'http-post'
+            ), 1),
+
             'sensorGuiApiScenarioSearch' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
                 '/scenarios',
                 'SensorGuiApiController',
