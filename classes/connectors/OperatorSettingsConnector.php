@@ -62,6 +62,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'sensor_can_behalf_of' => ['type' => 'boolean'],
                 'moderate' => ['type' => 'boolean'],
                 'restrict_mode' => ['type' => 'boolean'],
+                'super_observer' => ['type' => 'boolean'],
                 'stats' => [
                     'type' => 'object',
                     'title' => 'Accesso individuale alle statistiche',
@@ -95,6 +96,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'sensor_can_behalf_of' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di inserire segnalazioni per conto di altri'],
                 'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
                 'restrict_mode' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di visualizzare le segnalazioni in cui non è coinvolto (incluse le statistiche)'],
+                'super_observer' => ['type' => 'checkbox', 'rightLabel' => 'Consenti all\'utente di prendere in carico le segnalazioni in cui è coinvolto come osservatore'],
                 'stats' => [
                     'fields' => [
                         'stat' => [
@@ -125,6 +127,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $cabBehalf = $data['sensor_can_behalf_of'] === 'true';
         $moderate = $data['moderate'] === 'true';
         $restrictMode = $data['restrict_mode'] === 'true';
+        $isSuperObserver = $data['super_observer'] === 'true';
         $stats = isset($data['stats']['stat']) ? $data['stats']['stat'] : [];
 
         $changeEnabling = $blockMode !== $this->sensorUser->isEnabled;
@@ -133,6 +136,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $this->repository->getUserService()->setModerationMode($this->sensorUser, $moderate);
         $this->repository->getUserService()->setBehalfOfMode($this->sensorUser, $cabBehalf);
         $this->repository->getUserService()->setRestrictMode($this->sensorUser, $restrictMode);
+        $this->repository->getUserService()->setAsSuperObserver($this->sensorUser, $isSuperObserver);
 
         $this->grantStatData($this->sensorUser->id, $stats);
 
@@ -160,6 +164,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
             'sensor_can_behalf_of' => $this->sensorUser->behalfOfMode,
             'moderate' => $this->sensorUser->moderationMode,
             'restrict_mode' => $this->sensorUser->restrictMode,
+            'super_observer' => $this->sensorUser->isSuperObserver,
             'stats' => [
                 'stat' => $this->getStatData($this->sensorUser->id),
             ],
