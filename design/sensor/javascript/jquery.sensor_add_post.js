@@ -430,7 +430,7 @@
                 behalfOfCreate.addClass('hide');
                 behalfOfView.addClass('hide').find('span').text('');
                 behalfOf.val('');
-                behalfOfChannel.val('');
+                //behalfOfChannel.val('');
                 behalfOfSearchInput.val('');
                 behalfOfAnonymous.attr('checked', false);
                 checkBehalfFields();
