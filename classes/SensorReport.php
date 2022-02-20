@@ -26,6 +26,7 @@ class SensorReport
             $itemDataMap = $item->dataMap();
             if (isset($itemDataMap['link']) && $itemDataMap['link']->hasContent()) {
                 $link = trim($itemDataMap['link']->toString());
+                $internalStat = false;
                 $urlParts = parse_url($link);
                 $statIdentifier = isset($urlParts['path']) ? basename($urlParts['path']) : false;
                 $parameters = [];
@@ -33,15 +34,20 @@ class SensorReport
                     parse_str($urlParts['query'], $parameters);
                 }
                 if ($statIdentifier) {
-                    try {
-                        $stats = OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true);
-                        foreach ($stats as $stat) {
-                            if ($stat->getIdentifier() == $statIdentifier) {
-                                $stat->init()->setParameters($parameters);
-                                $format = isset($parameters['format']) ? $parameters['format'] : 'data';
-                                $data = $stat->getDataByFormat($format);
-                            }
+                    $stats = OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true);
+                    foreach ($stats as $stat) {
+                        if ($stat->getIdentifier() == $statIdentifier) {
+                            $internalStat = $stat;
                         }
+                    }
+                }
+                if (!$internalStat){
+                    $data = json_decode(file_get_contents($link), true);
+                }elseif ($internalStat instanceof \Opencontent\Sensor\Api\StatisticFactory) {
+                    try {
+                        $internalStat->init()->setParameters($parameters);
+                        $format = isset($parameters['format']) ? $parameters['format'] : 'data';
+                        $data = $internalStat->getDataByFormat($format);
                     } catch (Exception $e) {
                         eZDebug::writeError($e->getMessage(), __METHOD__);
                     }
