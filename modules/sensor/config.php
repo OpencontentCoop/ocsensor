@@ -14,22 +14,41 @@ $root = $repository->getRootNode();
 $rootObject = $root->object();
 
 if ($Part == '_set') {
-    if (!$rootObject->canEdit()) {
-        $data = [
-            'result' => 'fail',
-            'message' => 'Unauthorized',
-        ];
-    } else {
+    $data = [
+        'result' => 'fail',
+        'message' => 'Unauthorized',
+    ];
+    if ($rootObject->canEdit()) {
         $key = $Http->variable('key');
         $value = intval($Http->variable('value') === 'true');
         if (strpos($key, 'stat-access-') !== false) {
             $permission = str_replace('stat-access-', '', $key);
             try {
                 [$scope, $statIdentifier] = explode('-', $permission, 2);
-                $data = SensorStatisticAccess::instance()->setAccess($scope, $statIdentifier, $value);
+                SensorStatisticAccess::instance()->setAccess($scope, $statIdentifier, $value);
                 $data = [
                     'result' => 'success',
                     'attributes' => [$permission => $value],
+                ];
+            } catch (Exception $e) {
+                $data['message'] = $e->getMessage();
+            }
+        } elseif (strpos($key, 'notification-target-') !== false) {
+            try {
+                $targetData = str_replace('notification-target-', '', $key);
+                [$target, $notification, $role] = explode('-', $targetData, 3);
+                if ($value) {
+                    SensorNotificationTypeOverride::instance()->setOverride($target, $notification, $role);
+                }else{
+                    SensorNotificationTypeOverride::instance()->unsetOverride($target, $notification, $role);
+                }
+                $data = [
+                    'result' => 'success',
+                    'attributes' => [
+                        'target' => $target,
+                        'notification' => $notification,
+                        'role' => $role,
+                    ],
                 ];
             } catch (Exception $e) {
                 $data['message'] = $e->getMessage();
@@ -101,7 +120,7 @@ if ($Http->hasPostVariable('BrowseActionName')
         $areas = $repository->getAreasTree()->attribute('children');
         $firstAreaId = $areas[0]->attribute('id');
         $firstAreaObject = eZContentObject::fetch((int)$firstAreaId);
-        if ($firstAreaObject instanceof eZContentObject) {
+        if ($firstAreaObject instanceof eZContentObject && $firstAreaObject->canEdit()) {
             /** @var eZContentObjectAttribute[] $areaDataMap */
             $areaDataMap = $firstAreaObject->attribute('data_map');
             if (isset($areaDataMap['approver'])) {
@@ -330,6 +349,13 @@ if ($Part == 'areas') {
     $tpl->setVariable('custom_translations', $customTranslations);
     $tpl->setVariable('available_languages', $availableLanguages);
     $tpl->setVariable('current_locale_code', eZLocale::currentLocaleCode());
+
+} elseif ($Part == 'notifications_settings') {
+    $notificationTypes = json_decode(json_encode($repository->getNotificationService()->getNotificationTypes()), true);
+    $roles = json_decode(json_encode($repository->getParticipantService()->loadParticipantRoleCollection()), true);
+    unset($roles['roles'][1]);
+    $tpl->setVariable('roles', $roles['roles']);
+    $tpl->setVariable('notification_types', $notificationTypes);
 }
 
 $configMenu = $repository->getConfigMenu();

@@ -648,6 +648,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 'node' => false,
                 'icon' => 'fa fa-language',
             ];
+
         }
 
         $data['notifications'] = [
@@ -670,6 +671,15 @@ class OpenPaSensorRepository extends LegacyRepository
             'node' => false,
             'icon' => 'fa fa-question-circle',
         ];
+
+        if (eZUser::currentUser()->attribute('login') == 'admin'){
+            $data['notifications_settings'] = [
+                'uri' => 'sensor/config/notifications_settings',
+                'label' => 'Invio notifiche',
+                'node' => false,
+                'icon' => 'fa fa-gear',
+            ];
+        }
 
         return $data;
     }
