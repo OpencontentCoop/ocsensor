@@ -1,26 +1,25 @@
 <?php
 
+use League\Event\AbstractListener;
 use Opencontent\Opendata\Api\ClassRepository;
 use Opencontent\Sensor\Api\Exception\BaseException;
+use Opencontent\Sensor\Api\Values\NotificationType;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Core\PermissionDefinitions;
 use Opencontent\Sensor\Legacy\PermissionDefinitions as LegacyPermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
-use Opencontent\Sensor\Legacy\Listeners\MailNotificationListener;
-use Opencontent\Sensor\Legacy\Listeners\PrivateMailNotificationListener;
-use Opencontent\Sensor\Legacy\Listeners\ReminderNotificationListener;
 use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
 use Opencontent\Sensor\Legacy\Listeners\SendMailListener;
 use Opencontent\Sensor\Legacy\Listeners\WelcomeOperatorListener;
 use Opencontent\Sensor\Legacy\Listeners\WelcomeUserListener;
-use Opencontent\Sensor\Legacy\NotificationTypes;
 use Opencontent\Sensor\Legacy\Repository as LegacyRepository;
 use Opencontent\Sensor\Legacy\Scenarios;
 use Opencontent\Sensor\Legacy\Scenarios\FallbackScenario;
 use Opencontent\Sensor\Legacy\ScenarioService;
 use Opencontent\Sensor\Legacy\Statistics;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
+use Opencontent\Sensor\Api\Values\ParticipantRole;
 
 class OpenPaSensorRepository extends LegacyRepository
 {
@@ -131,48 +130,10 @@ class OpenPaSensorRepository extends LegacyRepository
 
             $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
 
-            $notificationTypes = [];
-            $notificationTypes[] = new NotificationTypes\OnCreateNotificationType();
-            $this->addListener('on_create', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnAssignNotificationType();
-            $this->addListener('on_assign', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnGroupAssignNotificationType();
-            $this->addListener('on_group_assign', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnAddObserverNotificationType();
-            $this->addListener('on_add_observer', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnAddCommentNotificationType();
-            $this->addListener('on_add_comment', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnFixNotificationType();
-            $this->addListener('on_fix', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnCloseNotificationType();
-            $this->addListener('on_close', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnReopenNotificationType();
-            $this->addListener('on_reopen', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\ReminderNotificationType();
-            $this->addListener('reminder', new ReminderNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnSendPrivateMessageNotificationType();
-            $this->addListener('on_send_private_message', new PrivateMailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnAddApproverNotificationType();
-            $this->addListener('on_add_approver', new MailNotificationListener($this));
-
-            $notificationTypes[] = new NotificationTypes\OnAddCommentToModerateNotificationType();
-            $this->addListener('on_add_comment_to_moderate', new MailNotificationListener($this));
+            $this->buildNotificationTypes();
 
             $this->addListener('on_create', new SendMailListener($this));
             $this->addListener('after_run_action', new SendMailListener($this));
-
-            $this->getNotificationService()->setNotificationTypes($notificationTypes);
-
             $this->addListener('*', new ScenarioListener($this));
             $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
             $this->addListener('on_generate_user', new WelcomeUserListener($this));
@@ -180,24 +141,24 @@ class OpenPaSensorRepository extends LegacyRepository
             $this->addListener('on_close', new SensorDailyReportListener());
             $this->addListener('on_update_operator', new SensorReindexer());
 
-            $statisticsFactories = [];
-            $statisticsFactories[] = new Statistics\StatusPercentage($this);
-            $statisticsFactories[] = new Statistics\PerCategory($this);
-            $statisticsFactories[] = new Statistics\PerArea($this);
-            $statisticsFactories[] = new Statistics\PerType($this);
-            $statisticsFactories[] = new Statistics\AvgTimes($this);
-            $statisticsFactories[] = new Statistics\Users($this);
-            $statisticsFactories[] = new Statistics\StatusPerCategory($this);
-            $statisticsFactories[] = new Statistics\TypePerCategory($this);
-            $statisticsFactories[] = new Statistics\StatusPerOwnerGroup($this);
-            $statisticsFactories[] = new Statistics\OpenPerOwnerGroup($this);
-            $statisticsFactories[] = new Statistics\OpenHistoryPerOwnerGroup($this);
-            $statisticsFactories[] = new Statistics\PostAging($this);
-            $statisticsFactories[] = new Statistics\Trend($this);
-            $statisticsFactories[] = new Statistics\ExecutionTrend($this);
-            $statisticsFactories[] = new Statistics\ClosingTrend($this);
-            $statisticsFactories[] = new Statistics\ClosingTrendPerGroup($this);
-            $this->getStatisticsService()->setStatisticFactories($statisticsFactories);
+            $this->getStatisticsService()->setStatisticFactories([
+                new Statistics\StatusPercentage($this),
+                new Statistics\PerCategory($this),
+                new Statistics\PerArea($this),
+                new Statistics\PerType($this),
+                new Statistics\AvgTimes($this),
+                new Statistics\Users($this),
+                new Statistics\StatusPerCategory($this),
+                new Statistics\TypePerCategory($this),
+                new Statistics\StatusPerOwnerGroup($this),
+                new Statistics\OpenPerOwnerGroup($this),
+                new Statistics\OpenHistoryPerOwnerGroup($this),
+                new Statistics\PostAging($this),
+                new Statistics\Trend($this),
+                new Statistics\ExecutionTrend($this),
+                new Statistics\ClosingTrend($this),
+                new Statistics\ClosingTrendPerGroup($this),
+            ]);
 
             if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
                 $this->addListener('*', new SensorWebHookListener($this));
@@ -215,6 +176,51 @@ class OpenPaSensorRepository extends LegacyRepository
 
             $this->scenarioService = new ScenarioService($this, [$firstApproverScenario, new FallbackScenario()]);
             $this->isBuilt = true;
+        }
+    }
+
+    private function buildNotificationTypes()
+    {
+        if (!$this->isBuilt){
+            $types = eZINI::instance('ocsensor.ini')->variable('NotificationTypes', 'Types');
+            foreach ($types as $type){
+                $typeSettings = eZINI::instance('ocsensor.ini')->group('NotificationTypes_' . $type);
+                $notificationClass = $typeSettings['PHPClass'];
+                $listenerClass = $typeSettings['Listener'];
+                if (!class_exists($notificationClass) || !class_exists($listenerClass)) {
+                    $this->getLogger()->error("Notification $type classes not found: $notificationClass $listenerClass");
+                    continue;
+                }
+                /** @var NotificationType $notificationType */
+                $notificationType = new $notificationClass();
+                if (!$notificationType instanceof NotificationType) {
+                    $this->getLogger()->error("Notification $type php class $notificationClass must extends " . NotificationType::class);
+                    continue;
+                }
+                /** @var AbstractListener $listener */
+                $listener = new $listenerClass($this);
+                if (!$listener instanceof AbstractListener){
+                    $this->getLogger()->error("Notification $type listener class $listenerClass must extends " . AbstractListener::class);
+                    continue;
+                }
+
+                $targetsMap = [
+                    'TargetAuthor' => ParticipantRole::ROLE_AUTHOR,
+                    'TargetApprover' => ParticipantRole::ROLE_APPROVER,
+                    'TargetOwner' => ParticipantRole::ROLE_OWNER,
+                    'TargetObserver' => ParticipantRole::ROLE_OBSERVER,
+                ];
+                foreach ($targetsMap as $settingKey => $role){
+                    $targetSettings = isset($typeSettings[$settingKey]) ? $typeSettings[$settingKey] : '';
+                    $targets = explode(';', $targetSettings);
+                    $notificationType->setTarget($role, $targets);
+                }
+//                $this->getLogger()->debug("Add $notificationType->identifier",
+//                    ['listener' => $listenerClass, 'targets' => json_encode($notificationType->getTargets())]
+//                );
+                $this->getNotificationService()->addNotificationType($notificationType);
+                $this->addListener($notificationType->identifier, $listener);
+            }
         }
     }
 

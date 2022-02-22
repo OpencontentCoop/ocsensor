@@ -14,12 +14,11 @@ $root = $repository->getRootNode();
 $rootObject = $root->object();
 
 if ($Part == '_set') {
-    if (!$rootObject->canEdit()) {
-        $data = [
-            'result' => 'fail',
-            'message' => 'Unauthorized',
-        ];
-    } else {
+    $data = [
+        'result' => 'fail',
+        'message' => 'Unauthorized',
+    ];
+    if ($rootObject->canEdit()) {
         $key = $Http->variable('key');
         $value = intval($Http->variable('value') === 'true');
         if (strpos($key, 'stat-access-') !== false) {
@@ -101,7 +100,7 @@ if ($Http->hasPostVariable('BrowseActionName')
         $areas = $repository->getAreasTree()->attribute('children');
         $firstAreaId = $areas[0]->attribute('id');
         $firstAreaObject = eZContentObject::fetch((int)$firstAreaId);
-        if ($firstAreaObject instanceof eZContentObject) {
+        if ($firstAreaObject instanceof eZContentObject && $firstAreaObject->canEdit()) {
             /** @var eZContentObjectAttribute[] $areaDataMap */
             $areaDataMap = $firstAreaObject->attribute('data_map');
             if (isset($areaDataMap['approver'])) {
@@ -308,18 +307,18 @@ if ($Part == 'areas') {
     $customTranslations = [];
     $availableLanguages = [];
     $languageCodeList = eZContentLanguage::fetchLocaleList();
-    foreach ($languageCodeList as $languageCode){
+    foreach ($languageCodeList as $languageCode) {
         $static = $translationsHelper->loadStaticTranslations($languageCode);
         $custom = $translationsHelper->loadCustomTranslations($languageCode);
-        if ($static){
+        if ($static) {
             $availableLanguages[] = $languageCode;
-            foreach ($static as $context => $values){
-                foreach ($values as $key => $value){
+            foreach ($static as $context => $values) {
+                foreach ($values as $key => $value) {
                     $staticTranslations[$key][$languageCode] = $value;
                 }
             }
-            foreach ($custom as $context => $values){
-                foreach ($values as $key => $value){
+            foreach ($custom as $context => $values) {
+                foreach ($values as $key => $value) {
                     $customTranslations[$key][$languageCode] = $value;
                 }
             }
