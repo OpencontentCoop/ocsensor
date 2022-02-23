@@ -215,9 +215,9 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
             ), 1),
 
             'sensorGuiApiTaggedSpecial' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
-                '/tagged-special/:Id/:Enable',
+                '/tagged-important/:Id/:Enable',
                 'SensorGuiApiController',
-                'setAsTaggedSpecial',
+                'setAsTaggedImportant',
                 array(),
                 'http-post'
             ), 1),

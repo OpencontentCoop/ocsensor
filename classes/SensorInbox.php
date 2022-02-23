@@ -50,6 +50,9 @@ class SensorInbox
 
             case 'closed':
                 return $this->getClosed();
+
+            case 'important':
+                return $this->getImportant();
         }
 
         throw new RuntimeException("Invalid inbox identifier: $identifier");
@@ -108,17 +111,13 @@ class SensorInbox
         $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
-        $specialIdQuery = [];
+        $specialIdQuery = false;
         if (count($specialIdList) > 0) {
-            $specialIdQuery[] = 'id in [' . implode(',', $specialIdList) . '] ';
-        }
-        if ($this->repository->getCurrentUser()->isFirstApprover
-            && $this->repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute){
-            $specialIdQuery[] = "tags in ['special']";
+            $specialIdQuery = 'id in [' . implode(',', $specialIdList) . '] ';
         }
 
-        if (!empty($specialIdQuery)) {
-            $query = '(' . implode(' or ', $specialIdQuery) . ') sort [modified=>desc]';
+        if ($specialIdQuery) {
+            $query = $specialIdQuery . ' sort [modified=>desc]';
             $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
             $results = $this->repository->getSearchService()->searchPosts(
                 $query,
@@ -129,6 +128,45 @@ class SensorInbox
                 ]
             );
             $data = $this->serializeSearchResult('special', $results, $specialIdList);
+            $count = $results->totalCount;
+        } else {
+            $data = [];
+            $count = 0;
+        }
+
+        return [
+            'current_page' => (int)$page,
+            'pages' => $count > 0 ? ceil($count / $limit) : $count,
+            'items' => $data,
+            'count' => $count,
+        ];
+    }
+
+    private function getImportant()
+    {
+        $page = $this->page;
+        $limit = $this->limit;
+
+        $importantQuery = false;
+        if ($this->repository->getCurrentUser()->isFirstApprover
+            && $this->repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute){
+            $importantQuery = "tags in ['important']";
+        }
+
+        if ($importantQuery) {
+            $query = $importantQuery . ' sort [modified=>desc]';
+            $query .= "{$this->filterQuery} limit $limit offset " . ($page - 1) * $limit;
+            $results = $this->repository->getSearchService()->searchPosts(
+                $query,
+                [
+                    'readingStatuses' => true,
+                    'currentUserInParticipants' => $this->repository->getCurrentUser()->isFirstApprover === false,
+                    'capabilities' => true,
+                ]
+            );
+            $currentUserId = $this->repository->getCurrentUser()->id;
+            $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
+            $data = $this->serializeSearchResult('important', $results, $specialIdList);
             $count = $results->totalCount;
         } else {
             $data = [];
@@ -366,7 +404,7 @@ class SensorInbox
             $data[] = [
                 'id' => (int)$post->id,
                 'is_special' => in_array($post->id, $specialIdList),
-                'is_tagged_special' => in_array('special', $post->tags),
+                'is_important' => in_array('important', $post->tags),
                 'subject' => $post->subject,
                 'modified_datetime' => $this->formatDate($post->modified),
                 'modified_at' => Utils::getDateDiff($post->modified)->getText(),

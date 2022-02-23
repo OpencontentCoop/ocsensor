@@ -799,7 +799,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
-    public function doSetAsTaggedSpecial()
+    public function doSetAsTaggedImportant()
     {
         try {
             $result = new ezpRestMvcResult();
@@ -807,7 +807,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $enabled = (bool)$this->Enable;
             $tags = [];
             if ($enabled){
-                $tags[] = 'special';
+                $tags[] = 'important';
             }
             $action = new Action('set_tags', ['tags' => $tags]);
             $this->getRepository()->getActionService()->runAction($action, $post);

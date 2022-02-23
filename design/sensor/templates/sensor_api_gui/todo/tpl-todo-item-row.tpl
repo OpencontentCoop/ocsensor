@@ -7,7 +7,7 @@
     <td width="1" style="white-space:nowrap;vertical-align:middle{{if has_read == 0}};font-weight:bold{{/if}}">
         <i data-star="{{:id}}" class="fa fa-star{{if is_special}} text-primary{{else}}-o text-muted{{/if}}"></i>
         {/literal}{if can_set_sensor_tag()}{literal}
-        <i style="margin-left:5px" data-special="{{:id}}" class="fa fa-bell{{if is_tagged_special}} text-primary{{else}}-o text-muted{{/if}}"></i>
+        <i style="margin-left:5px" data-important="{{:id}}" class="fa fa-bell{{if is_important}} text-primary{{else}}-o text-muted{{/if}}"></i>
         {/literal}{/if}{literal}
     </td>
     <td width="1" style="vertical-align:middle;white-space:nowrap{{if has_read == 0}};font-weight:bold{{/if}}">

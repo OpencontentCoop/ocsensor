@@ -1919,6 +1919,10 @@
       <source>Add file</source>
       <translation>Add file</translation>
     </message>
+    <message>
+      <source>Importants</source>
+      <translation>Importants</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

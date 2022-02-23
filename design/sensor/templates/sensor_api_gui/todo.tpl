@@ -37,6 +37,14 @@
                     <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Specials')}</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
                 </a>
             </li>
+            {if can_set_sensor_tag()}
+                <li role="presentation">
+                    <a href="#" data-inboxidentifier="important">
+                        <i class="fa fa-bell"></i>
+                        <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Importants')}</span> <span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>
+                    </a>
+                </li>
+            {/if}
             <li role="presentation">
                 <a href="#" data-inboxidentifier="conversations">
                     <i class="fa fa-comments"></i>
@@ -288,7 +296,10 @@
                     if ( tokenNode ){
                         csrfToken = tokenNode.getAttribute('title');
                     }
-                    if (self.hasClass('fa-star-o')){
+                    var doEnable = self.hasClass('fa-star-o');
+                    if (doEnable){
+                        self.removeClass('fa-star-o text-muted');
+                        self.addClass('fa-refresh fa-spin');
                         $.ajax({
                             type: "POST",
                             url: '/api/sensor_gui/special/'+id+'/1',
@@ -297,7 +308,7 @@
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);
                                 }else {
-                                    self.removeClass('fa-star-o text-muted');
+                                    self.removeClass('fa-refresh fa-spin');
                                     self.addClass('fa-star text-primary');
                                     refreshMenuItem('special');
                                     refreshMenuItem('todolist');
@@ -309,9 +320,13 @@
                                     error_message: jqXHR.statusText
                                 };
                                 console.log(error.error_message);
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-star-o text-muted');
                             }
                         });
                     }else{
+                        self.removeClass('fa-star text-primary');
+                        self.addClass('fa-refresh fa-spin');
                         $.ajax({
                             type: "POST",
                             url: '/api/sensor_gui/special/'+id+'/0',
@@ -320,8 +335,8 @@
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);
                                 }else {
+                                    self.removeClass('fa-refresh fa-spin');
                                     self.addClass('fa-star-o text-muted');
-                                    self.removeClass('fa-star text-primary');
                                     refreshMenuItem('special');
                                     refreshMenuItem('todolist');
                                 }
@@ -332,30 +347,35 @@
                                     error_message: jqXHR.statusText
                                 };
                                 console.log(error.error_message);
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-star text-primary');
                             }
                         });
                     }
                 });
-                rendered.find('[data-special]').on('click', function (e){
+                rendered.find('[data-important]').on('click', function (e){
                     var self = $(this);
-                    var id = self.data('special');
+                    var id = self.data('important');
                     var csrfToken;
                     var tokenNode = document.getElementById('ezxform_token_js');
                     if ( tokenNode ){
                         csrfToken = tokenNode.getAttribute('title');
                     }
-                    if (self.hasClass('fa-bell-o')){
+                    var doEnable = self.hasClass('fa-bell-o');
+                    if (doEnable){
+                        self.removeClass('fa-bell-o text-muted');
+                        self.addClass('fa-refresh fa-spin');
                         $.ajax({
                             type: "POST",
-                            url: '/api/sensor_gui/tagged-special/'+id+'/1',
+                            url: '/api/sensor_gui/tagged-important/'+id+'/1',
                             headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (response,textStatus,jqXHR) {
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);
                                 }else {
-                                    self.removeClass('fa-bell-o text-muted');
+                                    self.removeClass('fa-refresh fa-spin');
                                     self.addClass('fa-bell text-primary');
-                                    refreshMenuItem('special');
+                                    refreshMenuItem('important');
                                     refreshMenuItem('todolist');
                                 }
                             },
@@ -365,20 +385,24 @@
                                     error_message: jqXHR.statusText
                                 };
                                 console.log(error.error_message);
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-bell-o text-muted');
                             }
                         });
                     }else{
+                        self.removeClass('fa-bell text-primary');
+                        self.addClass('fa-refresh fa-spin');
                         $.ajax({
                             type: "POST",
-                            url: '/api/sensor_gui/tagged-special/'+id+'/0',
+                            url: '/api/sensor_gui/tagged-important/'+id+'/0',
                             headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (response,textStatus,jqXHR) {
                                 if(response.error_message || response.error_code){
                                     console.log(response.error_message);
                                 }else {
+                                    self.removeClass('fa-refresh fa-spin');
                                     self.addClass('fa-bell-o text-muted');
-                                    self.removeClass('fa-bell text-primary');
-                                    refreshMenuItem('special');
+                                    refreshMenuItem('important');
                                     refreshMenuItem('todolist');
                                 }
                             },
@@ -388,6 +412,8 @@
                                     error_message: jqXHR.statusText
                                 };
                                 console.log(error.error_message);
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-bell text-primary');
                             }
                         });
                     }
@@ -400,6 +426,7 @@
                         && !$(e.target).hasClass('fa-star-o')
                         && !$(e.target).hasClass('fa-bell')
                         && !$(e.target).hasClass('fa-bell-o')
+                        && !$(e.target).hasClass('fa-refresh')
                         && !$(e.target).hasClass('todo_action')){
                         showPreview(row.data('previewid'), action);
                     }

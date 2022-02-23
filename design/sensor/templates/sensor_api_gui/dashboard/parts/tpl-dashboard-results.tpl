@@ -52,7 +52,12 @@
                       <div><i class="fa fa-exclamation-triangle faa-tada animated"></i></div>
                     {{/if}}
                 </td>
-                <td class="isSpecial"><i style="font-size:1.2em" data-star="{{:id}}" class="fa fa-star{{if isSpecial}} text-primary{{else}}-o text-muted{{/if}}"></i></td>
+                <td class="isSpecial" style="white-space:nowrap;">
+                    <i style="font-size:1.2em" data-star="{{:id}}" class="fa fa-star{{if isSpecial}} text-primary{{else}}-o text-muted{{/if}}"></i>
+                    {/literal}{if can_set_sensor_tag()}{literal}
+                    <i style="margin-left:5px" data-important="{{:id}}" class="fa fa-bell{{if ~inArray('important', tags)}} text-primary{{else}}-o text-muted{{/if}}"></i>
+                    {/literal}{/if}{literal}
+                </td>
                 <td><a href="{{:~accessPath("/sensor/posts/")}}{{:id}}">{{:id}}</a></td>
                 <td data-href="{{:~accessPath("/sensor/posts/")}}{{:id}}" style="white-space:nowrap">
                     {{if workflowStatus.identifier == 'waiting'}}Da leggere

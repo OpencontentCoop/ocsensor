@@ -635,7 +635,10 @@ $(document).ready(function () {ldelim}
                 if ( tokenNode ){
                     csrfToken = tokenNode.getAttribute('title');
                 }
-                if (self.hasClass('fa-star-o')){
+                var doEnable = self.hasClass('fa-star-o');
+                if (doEnable){
+                    self.removeClass('fa-star-o text-muted');
+                    self.addClass('fa-refresh fa-spin');
                     $.ajax({
                         type: "POST",
                         url: '/api/sensor_gui/special/'+id+'/1',
@@ -644,7 +647,7 @@ $(document).ready(function () {ldelim}
                             if(response.error_message || response.error_code){
                                 console.log(response.error_message);
                             }else {
-                                self.removeClass('fa-star-o text-muted');
+                                self.removeClass('fa-refresh fa-spin');
                                 self.addClass('fa-star text-primary');
                                 bookmarkedIdList.push(id);
                             }
@@ -655,9 +658,13 @@ $(document).ready(function () {ldelim}
                                 error_message: jqXHR.statusText
                             };
                             console.log(error.error_message);
+                            self.removeClass('fa-refresh fa-spin');
+                            self.addClass('fa-star-o text-muted');
                         }
                     });
                 }else{
+                    self.removeClass('fa-star text-primary');
+                    self.addClass('fa-refresh fa-spin');
                     $.ajax({
                         type: "POST",
                         url: '/api/sensor_gui/special/'+id+'/0',
@@ -666,8 +673,8 @@ $(document).ready(function () {ldelim}
                             if(response.error_message || response.error_code){
                                 console.log(response.error_message);
                             }else {
+                                self.removeClass('fa-refresh fa-spin');
                                 self.addClass('fa-star-o text-muted');
-                                self.removeClass('fa-star text-primary');
                                 var index = bookmarkedIdList.indexOf(id);
                                 if (index > -1) {
                                     bookmarkedIdList.splice(index, 1);
@@ -680,6 +687,70 @@ $(document).ready(function () {ldelim}
                                 error_message: jqXHR.statusText
                             };
                             console.log(error.error_message);
+                            self.removeClass('fa-refresh fa-spin');
+                            self.addClass('fa-star text-primary');
+                        }
+                    });
+                }
+            });
+
+            viewContainer.find('[data-important]').css('cursor', 'pointer').on('click', function (e){
+                var self = $(this);
+                var id = self.data('important');
+                var csrfToken;
+                var tokenNode = document.getElementById('ezxform_token_js');
+                if ( tokenNode ){
+                    csrfToken = tokenNode.getAttribute('title');
+                }
+                var doEnable = self.hasClass('fa-bell-o');
+                if (doEnable){
+                    self.removeClass('fa-bell-o text-muted');
+                    self.addClass('fa-refresh fa-spin');
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/sensor_gui/tagged-important/'+id+'/1',
+                        headers: {'X-CSRF-TOKEN': csrfToken},
+                        success: function (response,textStatus,jqXHR) {
+                            if(response.error_message || response.error_code){
+                                console.log(response.error_message);
+                            }else {
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-bell text-primary');
+                            }
+                        },
+                        error: function (jqXHR) {
+                            var error = {
+                                error_code: jqXHR.status,
+                                error_message: jqXHR.statusText
+                            };
+                            console.log(error.error_message);
+                            self.removeClass('fa-refresh fa-spin');
+                            self.addClass('fa-bell-o text-muted');
+                        }
+                    });
+                }else{
+                    self.removeClass('fa-bell text-primary');
+                    self.addClass('fa-refresh fa-spin');
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/sensor_gui/tagged-important/'+id+'/0',
+                        headers: {'X-CSRF-TOKEN': csrfToken},
+                        success: function (response,textStatus,jqXHR) {
+                            if(response.error_message || response.error_code){
+                                console.log(response.error_message);
+                            }else {
+                                self.removeClass('fa-refresh fa-spin');
+                                self.addClass('fa-bell-o text-muted');
+                            }
+                        },
+                        error: function (jqXHR) {
+                            var error = {
+                                error_code: jqXHR.status,
+                                error_message: jqXHR.statusText
+                            };
+                            console.log(error.error_message);
+                            self.removeClass('fa-refresh fa-spin');
+                            self.addClass('fa-bell text-primary');
                         }
                     });
                 }
