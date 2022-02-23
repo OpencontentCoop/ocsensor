@@ -164,30 +164,33 @@
 </div>
 </script>
 <script id="tpl-data-results" type="text/x-jsrender">
-{{if pageCount > 1}}
+{{if totalCount > 0}}
 <div class="row">
     <div class="col-xs-12">
         <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
+            {{if pageCount > 1}}
             <ul class="pagination">
-
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
                         <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
-
                 {{for pages ~current=currentPage}}
                     <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
                 {{/for}}
-
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
                         <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
-
+            </ul>
+            {{/if}}
+            <ul class="pagination pull-right">
+                <li class="page-item">
+                    <a data-batch class="btn btn-warning" href="#">{{:~sensorTranslate('Edit')}} {{:totalCount}} <span style="text-transform:lowercase">{{:~sensorTranslate('Automations')}}</span></a>
+                </li>
             </ul>
         </div>
     </div>
@@ -217,7 +220,9 @@
                         {{:metadata.id}}
                     </th>
                     <td>
-                        {{:~eventName(~i18n(data, 'triggers'))}}
+                        <ul class="list-unstyled">
+                            {{for ~eventName(~i18n(data, 'triggers'))}}<li>{{:#data}}</li>{{/for}}
+                        </ul>
                     </td>
                     <td>
                         <ul class="list-unstyled">
@@ -280,30 +285,27 @@
     </div>
     {{/if}}
 </div>
+
 {{if pageCount > 1}}
 <div class="row">
     <div class="col-xs-12">
         <div class="pagination-container text-center" aria-label="{{:~sensorTranslate('Navigation')}}">
             <ul class="pagination">
-
                 <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                     <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                         <i class="fa fa-arrow-left"></i>
                         <span class="sr-only">{{:~sensorTranslate('Previous page')}}</span>
                     </a>
                 </li>
-
                 {{for pages ~current=currentPage}}
                     <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
                 {{/for}}
-
                 <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                     <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
                         <span class="sr-only">{{:~sensorTranslate('Next page')}}</span>
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </li>
-
             </ul>
         </div>
     </div>
@@ -344,6 +346,8 @@
                         query += value + ' = 1 and ';
                     } else if ($(this).attr('name') === 'criterion_type') {
                         query += $(this).attr('name') + ' = \'' + $(this).val() + '\' and ';
+                    } else if ($(this).attr('name') === 'triggers') {
+                        query += '(triggers in [' + $(this).val() + '] or raw[triggers_lk] in [' + $(this).val() + ']) and ';
                     } else {
                         query += $(this).attr('name') + ' in [' + $(this).val() + '] and ';
                     }
@@ -397,6 +401,21 @@
                     $('#item').opendataFormDelete({
                         object: $(this).data('remove')
                     },{
+                        onBeforeCreate: function(){
+                            $('#modal').modal('show');
+                        },
+                        onSuccess: function () {
+                            $('#modal').modal('hide');
+                            loadContents();
+                        }
+                    });
+                    e.preventDefault();
+                });
+                renderData.find('[data-batch]').on('click', function(e){
+                    $('#item').opendataForm({
+                        query: baseQuery
+                    },{
+                        connector: 'batch-scenarios',
                         onBeforeCreate: function(){
                             $('#modal').modal('show');
                         },

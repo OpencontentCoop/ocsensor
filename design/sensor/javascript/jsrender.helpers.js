@@ -45,8 +45,14 @@ let SensorTranslateSingleton = (function () {
 $.sensorTranslate = SensorTranslateSingleton.getInstance();
 $.views.helpers($.extend({}, $.opendataTools.helpers, {
     'eventName': function (value) {
-        var text = $('select#triggers option[value="' + value + '"]').text();
-        return text ? text : value;
+        var values = value.split('|');
+        var texts = [];
+        $.each(values, function (){
+            var text = $('select#triggers option[value="' + this + '"]').text();
+            texts.push(text ? text : this)
+        })
+
+        return texts;
     },
     'fromNow': function (value) {
         return moment(new Date(value)).fromNow();
