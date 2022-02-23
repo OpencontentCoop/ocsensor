@@ -657,7 +657,7 @@
     </message>
     <message>
       <source>Fixing the issue</source>
-      <translation>Fine lavorazione della segnalazione',</translation>
+      <translation>Fine lavorazione della segnalazione</translation>
     </message>
     <message>
       <source>Force as fixed</source>

@@ -87,7 +87,6 @@ class SensorScenarioClassConnector extends ClassConnector
             if ($this->getHelper()->hasParameter('object')) {
                 $current = eZContentObject::fetch((int)$this->getHelper()->getParameter('object'));
                 if ($current instanceof eZContentObject && $current->attribute('remote_id') !== $remoteId) {
-
                     throw new Exception("Esiste già uno scenario con i criteri selezionati (#{$alreadyExistsId})");
                 }
             }else{
@@ -98,6 +97,16 @@ class SensorScenarioClassConnector extends ClassConnector
         $payload = $this->getPayloadFromArray($submitData);
 
         $result = $this->doSubmit($payload);
+
+        if ($result['message'] == 'success'){
+            $id = (int)$result['content']['metadata']['id'];
+            eZContentObject::clearCache([$id]);
+            $object = eZContentObject::fetch($id);
+            if ($object instanceof eZContentObject && $object->attribute('remote_id') !== $remoteId){
+                $object->setAttribute('remote_id', $remoteId);
+                $object->store();
+            }
+        }
 
         return $result;
     }

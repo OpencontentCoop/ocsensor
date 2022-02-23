@@ -11,12 +11,17 @@ class ezfIndexSensorScenario extends ezfIndexSensor implements ezfIndexPlugin
                 $count++;
             }
         }
+        $triggers = [];
+        if (isset($dataMap['triggers']) && $dataMap['triggers']->hasContent()) {
+            $triggers = explode('|', $dataMap['triggers']->toString());
+        }
 
         /** @var eZContentObjectVersion $version */
         $version = $contentObject->currentVersion();
         if ($version !== false) {
             $availableLanguages = $version->translationList(false, false);
             foreach ($availableLanguages as $languageCode) {
+                $this->addField($docList[$languageCode], 'triggers_lk', implode(',', $triggers));
                 $this->addField($docList[$languageCode], 'criteria_count_i', $count);
             }
         }

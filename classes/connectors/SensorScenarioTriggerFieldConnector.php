@@ -18,7 +18,7 @@ class SensorScenarioTriggerFieldConnector extends FieldConnector
     {
         $rawContent = $this->getContent();
         if ($rawContent && !empty($rawContent['content'])){
-            return explode('|', $rawContent['content'])[0];
+            return explode('|', $rawContent['content']);
         }
         return null;
     }
@@ -27,8 +27,9 @@ class SensorScenarioTriggerFieldConnector extends FieldConnector
     {
         $identifiers = array_keys($this->events);
         $schema = array(
-            "enum" => $identifiers,
-            "title" => $this->attribute->attribute('name'),
+            'enum' => $identifiers,
+            'type' => 'array',
+            'title' => $this->attribute->attribute('name'),
             'required' => (bool)$this->attribute->attribute('is_required')
         );
 
@@ -46,8 +47,13 @@ class SensorScenarioTriggerFieldConnector extends FieldConnector
             "helper" => $this->attribute->attribute('description'),
             "optionLabels" => array_values($this->events),
             "hideNone" => (bool)$this->attribute->attribute('is_required'),
-            "type" => "select",
-            "multiple" => false,
+            "type" => "checkbox",
+            "multiple" => true,
         );
+    }
+
+    public function setPayload($postData)
+    {
+        return implode('|', $postData);
     }
 }
