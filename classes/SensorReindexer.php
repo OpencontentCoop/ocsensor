@@ -17,7 +17,7 @@ class SensorReindexer extends AbstractListener
         $updateData = [];
         $repository = OpenPaSensorRepository::instance();
         $groupId = (int)$groupId;
-        if ($groupId > 0 && self::addPendingAction('sensor_reindexing_post_by_group', $groupId)) {
+        if ($groupId > 0) {
             //$repository->getLogger()->debug('Start reindex post participants by group #' . $groupId);
             try {
                 $rows = $db->arrayQuery("select ci.data_int1 as id, ci.id as internal_id
@@ -106,45 +106,10 @@ class SensorReindexer extends AbstractListener
                     }
                 } catch (Exception $e) {
                     $repository->getLogger()->error($e->getMessage());
-                    $params = [
-                        'action' => 'sensor_reindex_post_by_group',
-                        'param' => $groupId,
-                    ];
-                    $alreadyPending = eZPendingActions::count(eZPendingActions::definition(), $params);
-                    if (!$alreadyPending) {
-                        $pending = new eZPendingActions($params);
-                        $pending->store();
-                    }
-                    self::addPendingAction('sensor_reindex_post_by_group', $groupId);
                 }
             }
-            self::removePendingAction('sensor_reindexing_post_by_group', $groupId);
             //$repository->getLogger()->debug('End reindex post participants by group #' . $groupId);
         }
-    }
-
-    private static function addPendingAction($action, $groupId)
-    {
-        $params = [
-            'action' => $action,
-            'param' => $groupId,
-        ];
-        $alreadyPending = eZPendingActions::count(eZPendingActions::definition(), $params);
-        if (!$alreadyPending) {
-            $pending = new eZPendingActions($params);
-            $pending->store();
-            return true;
-        }
-
-        return false;
-    }
-
-    private static function removePendingAction($action, $groupId)
-    {
-        eZPendingActions::removeObject( eZPendingActions::definition(), [
-            'action' => $action,
-            'param' => $groupId,
-        ] );
     }
 
     private static function getOperatorsIdByGroupId($groupId)
@@ -199,37 +164,48 @@ class SensorReindexer extends AbstractListener
 
     public function handle(EventInterface $event, $param = null)
     {
-        if ($param instanceof SensorEvent && $param->identifier == 'on_update_operator') {
+        if ($param instanceof SensorEvent) {
             eZContentObject::clearCache([$param->user->id]);
             $object = eZContentObject::fetch((int)$param->user->id);
             if ($object instanceof eZContentObject) {
-                $previousVersionNumber = $object->attribute('current_version') - 1;
-                $previousVersion = false;
-                while (!$previousVersion) {
-                    $previousVersion = eZContentObjectVersion::fetchVersion($previousVersionNumber, $object->attribute('id'));
-                    $previousVersionNumber--;
-                    if ($previousVersionNumber == 0) {
-                        break;
+                if ($param->identifier == 'on_update_operator') {
+                    $previousVersionNumber = $object->attribute('current_version') - 1;
+                    $previousVersion = false;
+                    while (!$previousVersion) {
+                        $previousVersion = eZContentObjectVersion::fetchVersion($previousVersionNumber, $object->attribute('id'));
+                        $previousVersionNumber--;
+                        if ($previousVersionNumber == 0) {
+                            break;
+                        }
                     }
-                }
-                if ($previousVersion instanceof eZContentObjectVersion) {
-                    $currentVersion = $object->currentVersion();
-                    $currentVersionDataMap = $currentVersion->dataMap();
+                    if ($previousVersion instanceof eZContentObjectVersion) {
+                        $currentVersion = $object->currentVersion();
+                        $currentVersionDataMap = $currentVersion->dataMap();
+                        $groupIdentifier = OperatorService::GROUP_ATTRIBUTE_IDENTIFIER;
+                        $currentVersionGroupValue = $previousVersionGroupValue = [];
+                        if (isset($currentVersionDataMap[$groupIdentifier])) {
+                            $currentVersionGroupValue = explode('-', $currentVersionDataMap[$groupIdentifier]->toString());
+                        }
+                        $previousVersionDataMap = $previousVersion->dataMap();
+                        if (isset($previousVersionDataMap[$groupIdentifier])) {
+                            $previousVersionGroupValue = explode('-', $previousVersionDataMap[$groupIdentifier]->toString());
+                        }
+                        $addGroups = array_diff($currentVersionGroupValue, $previousVersionGroupValue);
+                        $removeGroups = array_diff($previousVersionGroupValue, $currentVersionGroupValue);
+                        $touchedGroups = array_unique(array_merge($addGroups, $removeGroups));
+                        if (!empty($touchedGroups)) {
+                            SensorBatchOperations::instance()->addPendingOperation(SensorPostGroupParticipantHandler::SENSOR_HANDLER_IDENTIFIER, [
+                                'groups' => implode('-', $touchedGroups),
+                            ])->run();
+                        }
+                    }
+                }elseif ($param->identifier == 'on_new_operator') {
+                    $dataMap = $object->dataMap();
                     $groupIdentifier = OperatorService::GROUP_ATTRIBUTE_IDENTIFIER;
-                    $currentVersionGroupValue = $previousVersionGroupValue = [];
-                    if (isset($currentVersionDataMap[$groupIdentifier])) {
-                        $currentVersionGroupValue = explode('-', $currentVersionDataMap[$groupIdentifier]->toString());
-                    }
-                    $previousVersionDataMap = $previousVersion->dataMap();
-                    if (isset($previousVersionDataMap[$groupIdentifier])) {
-                        $previousVersionGroupValue = explode('-', $previousVersionDataMap[$groupIdentifier]->toString());
-                    }
-                    $addGroups = array_diff($currentVersionGroupValue, $previousVersionGroupValue);
-                    $removeGroups = array_diff($previousVersionGroupValue, $currentVersionGroupValue);
-                    $touchedGroups = array_unique(array_merge($addGroups, $removeGroups));
-                    if (!empty($touchedGroups)) {
-                        $touchedGroups = implode('-', $touchedGroups);
-                        exec("sh extension/ocsensor/bin/bash/reindex_by_group.sh $touchedGroups");
+                    if (isset($dataMap[$groupIdentifier]) && $dataMap[$groupIdentifier]->hasContent()){
+                        SensorBatchOperations::instance()->addPendingOperation(SensorPostGroupParticipantHandler::SENSOR_HANDLER_IDENTIFIER, [
+                            'groups' => $dataMap[$groupIdentifier]->toString(),
+                        ])->run();
                     }
                 }
             }

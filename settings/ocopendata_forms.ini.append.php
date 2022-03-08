@@ -6,6 +6,7 @@ AvailableConnectors[]=create-user
 AvailableConnectors[]=operator-settings
 AvailableConnectors[]=user-settings
 AvailableConnectors[]=delete-user-group
+AvailableConnectors[]=batch-scenarios
 
 [remove-operator_ConnectorSettings]
 PHPClass=RemoveOperatorConnector
@@ -21,3 +22,6 @@ PHPClass=UserSettingsConnector
 
 [delete-user-group_ConnectorSettings]
 PHPClass=DeleteUserGroupConnector
+
+[batch-scenarios_ConnectorSettings]
+PHPClass=BatchScenarioConnector
