@@ -140,6 +140,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $this->addListener('on_create', new SensorDailyReportListener());
             $this->addListener('on_close', new SensorDailyReportListener());
             $this->addListener('on_update_operator', new SensorReindexer());
+            $this->addListener('on_new_operator', new SensorReindexer());
 
             $this->getStatisticsService()->setStatisticFactories([
                 new Statistics\StatusPercentage($this),
@@ -653,6 +654,12 @@ class OpenPaSensorRepository extends LegacyRepository
                 'label' => $translations->translate('Translations'),
                 'node' => false,
                 'icon' => 'fa fa-language',
+            ];
+            $data['batch'] = [
+                'uri' => 'sensor/config/batch',
+                'label' => 'Batch operations',
+                'node' => false,
+                'icon' => 'fa fa-caret-square-o-right',
             ];
         }
 

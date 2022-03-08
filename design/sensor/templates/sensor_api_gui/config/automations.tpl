@@ -430,7 +430,7 @@
                     currentPage = $(this).data('page');
                     if (currentPage >= 0) loadContents();
                     $('html, body').stop().animate({
-                        scrollTop: form.offset().top
+                        scrollTop: wrapper.offset().top
                     }, 1000);
                     e.preventDefault();
                 });

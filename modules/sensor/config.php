@@ -329,6 +329,32 @@ if ($Part == 'areas') {
     $tpl->setVariable('custom_translations', $customTranslations);
     $tpl->setVariable('available_languages', $availableLanguages);
     $tpl->setVariable('current_locale_code', eZLocale::currentLocaleCode());
+
+} elseif ($Part == 'batch_rerun') {
+    if (isset($_GET['rerun'])){
+        SensorBatchOperations::instance()->reRun($_GET['rerun']);
+    }
+    $Module->redirectTo('/sensor/config/batch');
+    return;
+
+} elseif ($Part == 'batch_cleantoken') {
+    SQLIImportToken::cleanAll();
+    $Module->redirectTo('/sensor/config/batch');
+    return;
+
+
+} elseif ($Part == 'batch') {
+    if (SensorBatchOperations::instance()->getOperationCount('pending') > 0){
+        SensorBatchOperations::instance()->run();
+    }
+    $offset = isset($Params['UserParameters']['offset']) ? (int)$Params['UserParameters']['offset'] : 0;
+    $limit = 10;
+    $operations = SensorBatchOperations::instance()->getOperations($offset, $limit);
+    $operationCount = SensorBatchOperations::instance()->getOperationCount();
+    $tpl->setVariable('limit', $limit);
+    $tpl->setVariable('operations', $operations);
+    $tpl->setVariable('operation_count', $operationCount);
+    $tpl->setVariable('view_parameters', $Params['UserParameters']);
 }
 
 $configMenu = $repository->getConfigMenu();
