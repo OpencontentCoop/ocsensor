@@ -14,7 +14,6 @@ class SensorBatchScenarioEditHandler extends SQLIImportAbstractHandler implement
         eZUser::setCurrentlyLoggedInUser($user, $user->attribute('contentobject_id'));
         $this->idList = explode('|', $this->options->attribute('id'));
         $this->triggers = $this->options->attribute('triggers');
-        eZINI::instance()->setVariable('SearchSettings', 'DelayedIndexing', 'disabled');
     }
 
     public function getProcessLength()
@@ -41,7 +40,9 @@ class SensorBatchScenarioEditHandler extends SQLIImportAbstractHandler implement
 
     public function cleanup()
     {
-        // TODO: Implement cleanup() method.
+        $cacheFile = 'scenarios.cache';
+        $cacheFilePath = \eZDir::path(array(\eZSys::cacheDirectory(), 'ocopendata', 'sensor', 'scenarios', $cacheFile));
+        \eZClusterFileHandler::instance($cacheFilePath)->delete();
     }
 
     public function getHandlerName()
