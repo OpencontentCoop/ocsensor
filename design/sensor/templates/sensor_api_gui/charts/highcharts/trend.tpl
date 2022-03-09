@@ -3,7 +3,7 @@
 
     $(document).ready(function () {
         $('#chart').sensorChart({
-            filters: ['area', 'maincategory', 'group', 'interval'],
+            filters: ['area', 'maincategory', 'group', 'interval', 'usergroup'],
             enableDailyInterval: true,
             enableRangeFilter: ['daily','weekly','monthly'],
             rangeMax: false,

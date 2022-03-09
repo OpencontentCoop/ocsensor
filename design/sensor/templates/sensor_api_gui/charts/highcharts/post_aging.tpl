@@ -3,7 +3,7 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['area', 'category', 'group'],
+            filters: ['area', 'category', 'group', 'usergroup'],
             load: function (chart, params){
                 chart.html($('#spinner').html());
                 params.format = 'highcharts';

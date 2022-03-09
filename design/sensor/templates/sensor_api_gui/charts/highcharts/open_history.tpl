@@ -2,7 +2,7 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['group', 'interval', 'taggroup'],
+            filters: ['group', 'interval', 'taggroup', 'usergroup'],
             enableDailyInterval: true,
             enableRangeFilter: ['daily','weekly'],
             rangeMax: {days: 180},

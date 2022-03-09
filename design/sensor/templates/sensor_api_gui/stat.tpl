@@ -94,6 +94,14 @@
                             {/foreach}
                         </select>
                     </div>
+                    <div class="col-md-3 form-group hide" id="maincategories-filter">
+                        <label>{sensor_translate('Filter by macro category')}</label>
+                        <select class="select form-control" name="" multiple>
+                            {foreach $categories.children as $item}
+                                <option value="{$item.id}">{$item.name|wash()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
                     <div class="col-md-3 form-group hide" id="interval-filter">
                         <label>{sensor_translate('Filter by time interval')}</label>
                         <select class="select form-control" name="interval">
@@ -103,6 +111,20 @@
                             <option value="quarterly">{sensor_translate('Quarterly')}</option>
                             <option value="half-yearly">{sensor_translate('Half-yearly')}</option>
                             <option value="yearly" selected="selected">{sensor_translate('Yearly')}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group hide" id="usergroup-filter">
+                        <label>{sensor_translate('Filter by author group')}</label>
+                        <select class="select form-control" name="user_group" multiple>
+                            <option value="0">{sensor_translate('No group')}</option>
+                            {foreach fetch(content, list, hash( parent_node_id, ezini("UserSettings", "DefaultUserPlacement"),
+                                                                limitation, array(),
+                                                                class_filter_type, 'include', class_filter_array, array('user_group'),
+                                                                order_by, array('name', true()) ) ) as $group}
+                                {if $group.contentobject_id|ne(sensor_operators_root_node().contentobject_id)}
+                                <option value="{$group.contentobject_id}">{$group.name|wash())}</option>
+                                {/if}
+                           {/foreach}
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -183,7 +205,7 @@
         var pluginName = 'sensorChart',
             defaults = {
                 filtersContainer: $('#chart-filters'),
-                filters: ['type', 'area', 'category', 'interval'],
+                filters: ['type', 'area', 'category', 'interval', 'usergroup'],
                 enableDailyInterval: false,
                 enableEventFilter: false,
                 enableRangeFilter: false,

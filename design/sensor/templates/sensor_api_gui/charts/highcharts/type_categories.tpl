@@ -2,7 +2,7 @@
 <script type="text/javascript">
     $(document).ready(function (){
         $('#chart').sensorChart({
-            filters: ['maincategory'],
+            filters: ['maincategory', 'usergroup'],
             enableRangeFilter: true,
             rangeMax: false,
             load: function (chart, params){

@@ -29,6 +29,7 @@ class SensorOperator
             'sensor_edit_category_access',
             'sensor_translate',
             'can_set_sensor_tag',
+            'sensor_operators_root_node',
         );
     }
 
@@ -84,6 +85,10 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_operators_root_node':
+                $operatorValue = $repository->getOperatorsRootNode();
+                break;
+
             case 'can_set_sensor_tag':
                 $operatorValue = $repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute
                     && $repository->getCurrentUser()->isFirstApprover;
