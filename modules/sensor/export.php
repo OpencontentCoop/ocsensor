@@ -5,15 +5,21 @@ $module = $Params['Module'];
 $tpl = eZTemplate::factory();
 $http = eZHTTPTool::instance();
 
+$repository = OpenPaSensorRepository::instance();
+
 $http->setGetVariable('executionTimes', true);
 $http->setGetVariable('readingStatuses', true);
 $http->setGetVariable('capabilities', true);
+
 $http->setGetVariable('currentUserInParticipants', false);
 $http->setGetVariable('q', 'sort [modified=>desc]');
 $http->setGetVariable('format', 'json');
-$http->setGetVariable('ignorePolicies', true);
+if ($http->hasGetVariable('source') && $http->getVariable('source') === 'posts'){
+    $http->setGetVariable('ignorePolicies', false);
+}else {
+    $http->setGetVariable('ignorePolicies', true);
+}
 
-$repository = OpenPaSensorRepository::instance();
 $export = new SensorPostCsvExporter($repository);
 try{
     $export->handleDownload();

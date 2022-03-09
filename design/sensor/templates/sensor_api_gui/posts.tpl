@@ -371,6 +371,7 @@ $(document).ready(function () {ldelim}
         viewContainer.html(spinner);
         find(paginatedQuery, function (response) {
             queryPerPage[currentPage] = paginatedQuery;
+            response.query = baseQuery + ' sort [published=>desc]';
             response.currentPage = currentPage;
             response.prevPage = currentPage - 1;
             response.nextPage = currentPage + 1;

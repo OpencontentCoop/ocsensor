@@ -4,7 +4,7 @@
 	{{if pageCount > 1}}
 	<div class="pagination-container text-center">
         <ul class="pagination">
-            <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} {{:~sensorTranslate('issues')}}</span></li>
+            <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
         </ul>
         <ul class="pagination">
             <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
@@ -25,13 +25,13 @@
 	{{else totalCount == 1}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:~sensorTranslate('One issue')}}/span></li>
+                <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:~sensorTranslate('One issue')}}</a></li>
             </ul>
         </div>
 	{{else totalCount > 0}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item disabled"><span class="text" style="cursor: auto;">{{:totalCount}} {{:~sensorTranslate('issues')}}</span></li>
+                <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
             </ul>
         </div>
     {{else}}

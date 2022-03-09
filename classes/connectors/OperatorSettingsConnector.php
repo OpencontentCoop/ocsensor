@@ -63,6 +63,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'moderate' => ['type' => 'boolean'],
                 'restrict_mode' => ['type' => 'boolean'],
                 'super_observer' => ['type' => 'boolean'],
+                'user_list' => ['type' => 'boolean'],
                 'stats' => [
                     'type' => 'object',
                     'title' => 'Accesso individuale alle statistiche',
@@ -94,9 +95,10 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'block_mode' => ['type' => 'checkbox', 'rightLabel' => 'Blocca utente'],
                 'sensor_deny_comment' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di commentare'],
                 'sensor_can_behalf_of' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di inserire segnalazioni per conto di altri'],
-                'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
+                'user_list' => ['type' => 'checkbox', 'rightLabel' => 'Permetti all\'utente di accedere all\'elenco utenti'],
                 'restrict_mode' => ['type' => 'checkbox', 'rightLabel' => 'Impedisci all\'utente di visualizzare le segnalazioni in cui non è coinvolto (incluse le statistiche)'],
                 'super_observer' => ['type' => 'checkbox', 'rightLabel' => 'Consenti all\'utente di prendere in carico le segnalazioni in cui è coinvolto come osservatore'],
+                'moderate' => ['type' => 'checkbox', 'rightLabel' => 'Modera sempre le attività dell\'utente'],
                 'stats' => [
                     'fields' => [
                         'stat' => [
@@ -129,6 +131,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $restrictMode = $data['restrict_mode'] === 'true';
         $isSuperObserver = $data['super_observer'] === 'true';
         $stats = isset($data['stats']['stat']) ? $data['stats']['stat'] : [];
+        $userList = $data['user_list'] === 'true';
 
         $changeEnabling = $blockMode !== $this->sensorUser->isEnabled;
         $this->repository->getUserService()->setBlockMode($this->sensorUser, $blockMode);
@@ -139,6 +142,12 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $this->repository->getUserService()->setAsSuperObserver($this->sensorUser, $isSuperObserver);
 
         $this->grantStatData($this->sensorUser->id, $stats);
+
+        if ($userList){
+            $this->assignAccessToUserList($this->sensorUser->id);
+        }else{
+            $this->revokeAccessToUserList($this->sensorUser->id);
+        }
 
         if ($changeEnabling) {
             TreeNode::clearCache($this->repository->getOperatorsRootNode()->attribute('node_id'));
@@ -165,6 +174,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
             'moderate' => $this->sensorUser->moderationMode,
             'restrict_mode' => $this->sensorUser->restrictMode,
             'super_observer' => $this->sensorUser->isSuperObserver,
+            'user_list' => $this->hasAccessToUserList($this->sensorUser->id),
             'stats' => [
                 'stat' => $this->getStatData($this->sensorUser->id),
             ],
@@ -176,4 +186,40 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         throw new InvalidArgumentException('Upload not handled');
     }
 
+    private function getUserListRole()
+    {
+        $roleName = 'Sensor Read users';
+
+        $role = eZRole::fetchByName($roleName);
+        if (!$role instanceof eZRole) {
+            $role = eZRole::create($roleName);
+            $role->store();
+            $role->appendPolicy('content', 'read', ['Class' => [eZContentClass::classIDByIdentifier('user')]]);
+            $role->appendPolicy('sensor', 'user_list');
+        }
+
+        return $role;
+    }
+
+    public function assignAccessToUserList($userId)
+    {
+        $this->getUserListRole()->assignToUser((int)$userId);
+    }
+
+    public function revokeAccessToUserList($userId)
+    {
+        $this->getUserListRole()->removeUserAssignment((int)$userId);
+    }
+
+    public function hasAccessToUserList($userId)
+    {
+        $role = $this->getUserListRole();
+        $userId = (int)$userId;
+        $query = "SELECT count(*) FROM ezuser_role WHERE role_id='$role->ID' AND contentobject_id='$userId'";
+        /** @var eZDBInterface $db */
+        $db = eZDB::instance();
+        $result = $db->arrayQuery($query);
+
+        return $result[0]['count'] > 0;
+    }
 }
