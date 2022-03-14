@@ -677,7 +677,7 @@
     </message>
     <message>
       <source>Group</source>
-      <translation>Raggruppa</translation>
+      <translation>Gruppo</translation>
     </message>
     <message>
       <source>Group and operator in charge</source>
@@ -1922,6 +1922,10 @@
     <message>
       <source>Importants</source>
       <translation>Importanti</translation>
+    </message>
+    <message>
+      <source>Group data</source>
+      <translation>Raggruppa</translation>
     </message>
   </context>
   <context>

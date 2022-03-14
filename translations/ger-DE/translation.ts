@@ -1923,6 +1923,10 @@
       <source>Importants</source>
       <translation type="unfinished"/>
     </message>
+    <message>
+      <source>Group data</source>
+      <translation>Group data</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

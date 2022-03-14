@@ -274,8 +274,9 @@ class OpenPaSensorRepository extends LegacyRepository
                         'ShowSmartGui' => $this->isShownSmartGui(),
                         'ShowResponseProposal' => isset($sensorIni['ShowResponseProposal']) ? $sensorIni['ShowResponseProposal'] == 'enabled' : false,
                         'HideOperatorNames' => $this->isHiddenOperatorName(),
-                        'HiddenOperatorName' => 'Operatore',
+                        'HiddenOperatorName' => SensorTranslationHelper::instance()->translate('Operator'),
                         'HiddenOperatorEmail' => 'operator@example.it',
+                        'HiddenApproverName' => SensorTranslationHelper::instance()->translate('Reference for the citizen'),
                         'AnnounceKitId' => $this->getAnnounceKitId(),
                         'MinimumIntervalFromLastPrivateMessageToFix' => isset($sensorIni['MinimumIntervalFromLastPrivateMessageToFix']) ? (int)$sensorIni['MinimumIntervalFromLastPrivateMessageToFix'] : -1,
                         'SocketIsEnabled' => $socketIni['Enabled'] === 'true' || $socketIni['Enabled'] === true,
@@ -298,6 +299,7 @@ class OpenPaSensorRepository extends LegacyRepository
                         'UploadMaxNumberOfImages' => $imagesAttribute instanceof eZContentClassAttribute ? $imagesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
                         'UploadMaxNumberOfFiles' => $filesAttribute instanceof eZContentClassAttribute ? $filesAttribute->attribute(OCMultiBinaryType::MAX_NUMBER_OF_FILES_FIELD) : 0,
                         'ScenarioCache' => isset($sensorIni['ScenarioCache']) ? $sensorIni['ScenarioCache'] === 'enabled' : false,
+                        'InBoxFirstApproverReadStrategy' => isset($sensorIni['InBoxFirstApproverReadStrategy']) ? $sensorIni['InBoxFirstApproverReadStrategy'] : 'by_group',
                     );
                     return [
                         'content' => $data,
@@ -435,6 +437,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getSensorPostStates($identifier)
     {
+        $translations = SensorTranslationHelper::instance();
         if (!isset($this->data['states_' . $identifier])) {
             if ($identifier == 'sensor') {
                 $this->data['states_sensor'] = OpenPABase::initStateGroup(

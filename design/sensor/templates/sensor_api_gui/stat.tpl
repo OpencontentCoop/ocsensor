@@ -151,7 +151,7 @@
                             </div>
                             <div>
                                 <div class="form-group hide" id="taggroup-filter" style="margin-left: 10px">
-                                    <label>{sensor_translate('Group')}</label>
+                                    <label>{sensor_translate('Group data')}</label>
                                     <input type="checkbox" data-toggleconfig />
                                 </div>
                             </div>

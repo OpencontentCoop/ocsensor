@@ -63,11 +63,17 @@ class SensorInbox
         $page = $this->page;
         $limit = $this->limit;
         $currentUserId = $this->repository->getCurrentUser()->id;
-        $unreadCommentField = "user_{$currentUserId}_unread_comments";
-        if ($this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')){
-            $unreadPrivateField = "user_{$currentUserId}_unread_private_messages";
+
+        if ($this->repository->getCurrentUser()->isFirstApprover && $this->repository->getSensorSettings()->get('InBoxFirstApproverReadStrategy') == 'by_group'){
+            $unreadCommentField = "first_approver_unread_comments";
+            $unreadPrivateField = "first_approver_unread_private_messages";
         }else {
-            $unreadPrivateField = "user_{$currentUserId}_unread_private_messages_as_receiver";
+            $unreadCommentField = "user_{$currentUserId}_unread_comments";
+            if ($this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')) {
+                $unreadPrivateField = "user_{$currentUserId}_unread_private_messages";
+            } else {
+                $unreadPrivateField = "user_{$currentUserId}_unread_private_messages_as_receiver";
+            }
         }
 
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
@@ -95,6 +101,7 @@ class SensorInbox
                 'capabilities' => true,
             ]
         );
+
         $data = $this->serializeSearchResult('todolist', $results, $specialIdList);
 
         return [
@@ -286,11 +293,15 @@ class SensorInbox
         $data = [];
         /** @var Post $post */
         foreach ($results->searchHits as $post) {
+
+            $postHasRead = $this->repository->getCurrentUser()->isFirstApprover && $this->repository->getSensorSettings()->get('InBoxFirstApproverReadStrategy') == 'by_group' ?
+                (bool)$post->readingStatuses['first_approver_has_read'] : (bool)$post->readingStatuses['has_read'];
+
             $contextActions = [];
-            $lastUserAccess = $post->readingStatuses['last_access_timestamp'];
+            $lastUserAccess = $this->repository->getCurrentUser()->isFirstApprover && $this->repository->getSensorSettings()->get('InBoxFirstApproverReadStrategy') == 'by_group' ?
+                $post->readingStatuses['first_approver_last_access_timestamp'] : $post->readingStatuses['last_access_timestamp'];
             $actions = [];
-            if (!(bool)$post->readingStatuses['has_read']
-                || $post->workflowStatus->identifier === 'waiting') {
+            if (!$postHasRead || $post->workflowStatus->identifier === 'waiting') {
                 $actions[] = 'read_post';
             }
             if ($post->workflowStatus->identifier === 'read'
@@ -315,12 +326,12 @@ class SensorInbox
             $people = [[
                 'id' => (int)$post->author->id,
                 'name' => $post->author->name,
-                'is_read' => (bool)$post->readingStatuses['has_read'],
+                'is_read' => $postHasRead,
                 'published' => (int)$post->published->format('U')
             ]];
             foreach ($post->privateMessages->messages as $message) {
                 $doCount = true;
-                if ($context == 'todolist'){
+                if ($context == 'todolist' && !$this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')){
                     if (!$this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')) {
                         $doCount = $message->getReceiverById($userId);
                         if (!$doCount) {
@@ -415,7 +426,7 @@ class SensorInbox
                 'workflowStatus' => $post->workflowStatus->identifier,
                 'status' => $post->status->identifier,
 //                'reading_status' => $post->readingStatuses,
-                'has_read' => (bool)$post->readingStatuses['has_read'],
+                'has_read' => $postHasRead,
                 'actions' => $actions,
                 'action' => $this->getActionText($action),
                 'contextActions' => $this->repository->getSensorSettings()->get('UseInboxContextActions') ? $contextActions : [],
