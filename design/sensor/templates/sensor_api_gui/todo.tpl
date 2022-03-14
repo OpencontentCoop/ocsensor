@@ -60,7 +60,7 @@
             <li role="presentation">
                 <a href="#" data-inboxidentifier="closed">
                     <i class="fa fa-close"></i>
-                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Close')}</span> {*<span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
+                    <span class="hidden-sm hidden-xs nav-label">{sensor_translate('Closed')}</span> {*<span class="badge hidden-sm hidden-xs pull-right"><i class="fa fa-refresh fa-spin"></i></span>*}
                 </a>
             </li>
             {if sensor_settings('UseInboxFilters')}
