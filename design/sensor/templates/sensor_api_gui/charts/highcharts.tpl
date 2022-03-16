@@ -41,6 +41,16 @@ Highcharts.setOptions({
         decimalPoint: ','
     }
 })
+var getPointDataLink = function (category, serie, identifier, params){
+    console.log(category, serie, identifier, params)
+    params._c = category;
+    params._s = serie;
+    var href = '/sensor/console/stats/' + identifier + '?' + $.param(params);
+    let a = document.createElement('a');
+    a.target= '_blank';
+    a.href= href;
+    a.click();
+};
 var getExportingConfig = function (width, height){
     var sourceWidth = width || 1500;
     var sourceHeight = height || 800;

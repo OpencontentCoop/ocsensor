@@ -138,6 +138,12 @@ $ViewList['alert'] = [
     'functions' => ['use'],
 ];
 
+$ViewList['console'] = [
+    'script' => 'console.php',
+    'params' => ['Endpoint', 'Identifier'],
+    'functions' => ['debug'],
+];
+
 $FunctionList = [];
 $FunctionList['use'] = [];
 $FunctionList['debug'] = [];

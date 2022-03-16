@@ -49,7 +49,7 @@
   'bootstrap-toggle.min.css'
 ))}
 <script>
-  $.opendataTools.settings('endpoint',{ldelim}'search': '{'/opendata/api/useraware/search/'|ezurl(no,full)}/'{rdelim});
+  $.opendataTools.settings('endpoint',{ldelim}'search': '{'/opendata/api/useraware/search/'|ezurl(no)}/'{rdelim});
 </script>
 
 <section class="hgroup">

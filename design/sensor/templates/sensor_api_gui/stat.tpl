@@ -122,7 +122,7 @@
                                                                 class_filter_type, 'include', class_filter_array, array('user_group'),
                                                                 order_by, array('name', true()) ) ) as $group}
                                 {if $group.contentobject_id|ne(sensor_operators_root_node().contentobject_id)}
-                                <option value="{$group.contentobject_id}">{$group.name|wash())}</option>
+                                <option value="{$group.contentobject_id}">{$group.name|wash()}</option>
                                 {/if}
                            {/foreach}
                         </select>

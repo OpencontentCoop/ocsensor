@@ -14,8 +14,14 @@
                     $.each(response, function () {
                         this.config.exporting = getExportingConfig();
                         if (this.config.chart.type === 'pie') {
+                            this.config.plotOptions.pie.point.events.click = function (e){
+                                getPointDataLink(e.point.options.name, e.point.series.name, chart.data('identifier'),params);
+                            };
                             pie.highcharts(this.config);
                         } else {
+                            this.config.plotOptions.column.point.events.click = function (e){
+                                getPointDataLink(e.point.category, e.point.series.name, chart.data('identifier'), params);
+                            };
                             chart.highcharts(this.config);
                         }
                     })

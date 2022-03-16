@@ -90,6 +90,9 @@
 {{/if}}
 </script>
 <script>
+$.opendataTools.settings('endpoint', {
+    search: "{/literal}{'/opendata/api/content/search/'|ezurl(no)}{literal}"
+});
 $(document).ready(function () {
     var resultsContainer = $('[data-root]');
     var form = $('[data-faq-search]');

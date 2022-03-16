@@ -11,6 +11,9 @@
                 $.getJSON('/api/sensor/stats/' + chart.data('identifier'), params, function (response) {
                     $.each(response, function () {
                         this.config.exporting = getExportingConfig();
+                        this.config.plotOptions.column.point.events.click = function (e){
+                            getPointDataLink(e.point.category, e.point.series.name, chart.data('identifier'), params);
+                        };
                         chart.highcharts(this.config);
                     })
                 });
