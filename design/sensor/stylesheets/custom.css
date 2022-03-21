@@ -663,3 +663,29 @@ select.select-sensor-area-disabled::-ms-expand {
     line-height: 36px;
     font-size: 1em;
 }
+
+#posts-search select, #posts-search input {
+    width: 100%;
+    font-size: 14px;
+}
+
+@media (min-width:992px) {
+    #posts-search form .form-group-container {
+        flex-flow: nowrap;
+        display: flex;
+        margin-bottom: 15px;
+    }
+
+    #posts-search .form-group {
+        display: flex;
+        flex: 0 0 auto;
+        flex-flow: nowrap;
+        align-items: center;
+        margin-bottom: 0;
+        margin-right: 5px
+    }
+
+    #posts-search .select2-container {
+        max-width: 200px;
+    }
+}

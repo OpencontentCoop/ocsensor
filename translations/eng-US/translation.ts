@@ -741,7 +741,7 @@
     </message>
     <message>
       <source>ID</source>
-      <translation>ID</translation>
+      <translation>id</translation>
     </message>
     <message>
       <source>If the button does not work, paste the following address in the address bar of your browser: %password_link</source>
@@ -1926,6 +1926,42 @@
     <message>
       <source>Group data</source>
       <translation>Group data</translation>
+    </message>
+    <message>
+      <source>Filter by author group</source>
+      <translation>Filter by author group</translation>
+    </message>
+    <message>
+      <source>No group</source>
+      <translation>No group</translation>
+    </message>
+    <message>
+      <source>Author group</source>
+      <translation>Author group</translation>
+    </message>
+    <message>
+      <source>Custom</source>
+      <translation>Custom</translation>
+    </message>
+    <message>
+      <source>Apply</source>
+      <translation>Apply</translation>
+    </message>
+    <message>
+      <source>Today</source>
+      <translation>Today</translation>
+    </message>
+    <message>
+      <source>Yesterday</source>
+      <translation>Yesterday</translation>
+    </message>
+    <message>
+      <source>Last 7 days</source>
+      <translation>Last 7 days</translation>
+    </message>
+    <message>
+      <source>Last 30 days</source>
+      <translation>Last 30 days</translation>
     </message>
   </context>
   <context>

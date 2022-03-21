@@ -113,20 +113,24 @@
                             <option value="yearly" selected="selected">{sensor_translate('Yearly')}</option>
                         </select>
                     </div>
+                    {def $usergroups = fetch(content, list, hash( parent_node_id, ezini("UserSettings", "DefaultUserPlacement"),
+                                                                  attribute_filter, array(array('contentobject_id', '!=', sensor_operators_root_node().contentobject_id)),
+                                                                  limitation, array(),
+                                                                  class_filter_type, 'include',
+                                                                  class_filter_array, array('user_group'),
+                                                                  order_by, array('name', true()) ) )}
+                    {if count($usergroups)|gt(0)}
                     <div class="col-md-3 form-group hide" id="usergroup-filter">
                         <label>{sensor_translate('Filter by author group')}</label>
                         <select class="select form-control" name="user_group" multiple>
                             <option value="0">{sensor_translate('No group')}</option>
-                            {foreach fetch(content, list, hash( parent_node_id, ezini("UserSettings", "DefaultUserPlacement"),
-                                                                limitation, array(),
-                                                                class_filter_type, 'include', class_filter_array, array('user_group'),
-                                                                order_by, array('name', true()) ) ) as $group}
-                                {if $group.contentobject_id|ne(sensor_operators_root_node().contentobject_id)}
-                                <option value="{$group.contentobject_id}">{$group.name|wash())}</option>
-                                {/if}
+                            {foreach $usergroups as $group}
+                                <option value="{$group.contentobject_id}">{$group.name|wash()}</option>
                            {/foreach}
                         </select>
                     </div>
+                    {/if}
+                    {undef $usergroups}
                     <div class="col-md-3">
                         {if $has_group_tag}
                         <div style="display: flex">

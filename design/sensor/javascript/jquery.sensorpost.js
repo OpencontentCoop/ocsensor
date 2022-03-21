@@ -112,6 +112,13 @@
                     renderData.find('[data-value="category_id"] option[value="' + this.id + '"]').attr('selected', 'selected');
                 });
 
+                renderData.find('[data-usergroup]').each(function (){
+                    var self = $(this);
+                    $.get(plugin.settings.apiEndPoint + '/user-groups/' + self.data('usergroup'), function (response){
+                        self.html(response.name);
+                    })
+                });
+
                 renderData.find(".select").select2({
                     //width: '100%',
                     //allowClear: true,

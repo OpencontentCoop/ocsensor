@@ -232,7 +232,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="clearfix" data-action-wrapper>
-                        <label for="noteForFix">{{:~sensorTranslate('Add a note on processing to facilitate the drafting of the official response ')}}</label>
+                        <label for="noteForFix">{{:~sensorTranslate('Add a note on processing to facilitate the drafting of the official response')}}</label>
                         <textarea id="noteForFix" data-value="text" name="noteForFix" class="form-control" rows="4" required="required"></textarea>
                         <input data-value="is_response_proposal" type="hidden" value="1" />
                         {{for approvers}}<input data-value="participant_ids" type="hidden" value="{{:id}}" />{{/for}}

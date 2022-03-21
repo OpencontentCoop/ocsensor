@@ -741,7 +741,7 @@
     </message>
     <message>
       <source>ID</source>
-      <translation>ID</translation>
+      <translation>id</translation>
     </message>
     <message>
       <source>If the button does not work, paste the following address in the address bar of your browser: %password_link</source>
@@ -1927,6 +1927,42 @@
       <source>Group data</source>
       <translation>Raggruppa</translation>
     </message>
+    <message>
+      <source>Filter by author group</source>
+      <translation>Filtra per gruppo di utenti</translation>
+    </message>
+    <message>
+      <source>No group</source>
+      <translation>Nessun gruppo</translation>
+    </message>
+    <message>
+      <source>Author group</source>
+      <translation>Gruppo di utenti</translation>
+    </message>
+    <message>
+      <source>Custom</source>
+      <translation>Personalizza</translation>
+    </message>
+    <message>
+      <source>Apply</source>
+      <translation>Applica</translation>
+    </message>
+    <message>
+      <source>Today</source>
+      <translation>Oggi</translation>
+    </message>
+    <message>
+      <source>Yesterday</source>
+      <translation>Ieri</translation>
+    </message>
+    <message>
+      <source>Last 7 days</source>
+      <translation>Ultimi 7 giorni</translation>
+    </message>
+    <message>
+      <source>Last 30 days</source>
+      <translation>Ultimi 30 giorni</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
@@ -1966,11 +2002,11 @@
     <name>sensor/privacy</name>
     <message>
       <source>private</source>
-      <translation>Privato</translation>
+      <translation>privato</translation>
     </message>
     <message>
       <source>public</source>
-      <translation>Pubblico</translation>
+      <translation>pubblico</translation>
     </message>
   </context>
   <context>

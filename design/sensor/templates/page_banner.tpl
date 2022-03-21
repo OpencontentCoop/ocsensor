@@ -23,13 +23,11 @@
     <div class="full_page_photo hidden-xs"><div id="map"></div><div id="map-spinner" style="position: absolute;bottom: 0;height: 2px;background: #f00;width: 0;z-index: 1000;"></div></div>
     <div style="background: #eee;padding: 15px 0 10px" id="posts-search">
         <div class="container">
-            <form class="row" role="search">
-                <div class="col-xs-12 col-sm-2">
+            <form role="search">
+                <div class="form-group-container">
                     <div class="form-group">
                         <input type="text" class="form-control" name="query" value="" placeholder="{sensor_translate('Search text')}">
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group" id="area-filter">
                         <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
                             <option></option>
@@ -42,8 +40,6 @@
                             {/foreach}
                         </select>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-3">
                     <div class="form-group" id="category-filter">
                         <select class="select form-control" name="category" data-placeholder="{sensor_translate('Category')}" multiple="multiple">
                             {foreach $module_result.content_info.persistent_variable.categories.children as $item}
@@ -55,8 +51,6 @@
                             {/foreach}
                         </select>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group" id="type-filter">
                         <select class="select form-control" name="type" data-placeholder="{sensor_translate('Type')}">
                             <option></option>
@@ -65,8 +59,6 @@
                             {/foreach}
                         </select>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group">
                         <input type="text"
                                name="published"
@@ -74,10 +66,14 @@
                                placeholder="{sensor_translate('Creation date')}"
                                value=""/>
                     </div>
+                    <div class="form-group hidden-xs hidden-sm">
+                        <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Search')}</span></button>
+                        <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Cancel')}</span></button>
+                    </div>
                 </div>
 
                 {if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}
-                <div class="col-xs-12 col-sm-2">
+                <div class="form-group-container">
                     <div class="form-group">
                         <select name="status"
                                 class="select form-control"
@@ -88,9 +84,6 @@
                             {/foreach}
                         </select>
                     </div>
-                </div>
-
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group">
                         <input type="text"
                                name="author"
@@ -98,8 +91,26 @@
                                placeholder="{sensor_translate('Author')}"
                                value=""/>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
+                    {def $usergroups = fetch(content, list, hash( parent_node_id, ezini("UserSettings", "DefaultUserPlacement"),
+                                                                  limitation, array(),
+                                                                  attribute_filter, array(array('contentobject_id', '!=', sensor_operators_root_node().contentobject_id)),
+                                                                  class_filter_type, 'include',
+                                                                  class_filter_array, array('user_group'),
+                                                                  order_by, array('name', true()) ) )}
+                    {if count($usergroups)|gt(0)}
+                    <div class="form-group">
+                        <select name="usergroup"
+                                class="select form-control"
+                                data-placeholder="{sensor_translate('Author group')}">
+                            <option></option>
+                            <option value="0">{sensor_translate('No group')}</option>
+                            {foreach $usergroups as $group}
+                                <option value="{$group.contentobject_id}">{$group.name|wash()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    {/if}
+                    {undef $usergroups}
                     <div class="form-group">
                         <select name="owner"
                                 class="select select-operator form-control"
@@ -108,8 +119,6 @@
                             <option value="'0'" style="font-style: italic">Nessun operatore incaricato</option>
                         </select>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group">
                         <select name="owner_group"
                                 class="select select-group form-control"
@@ -118,8 +127,6 @@
                             <option value="'0'" style="font-style: italic">Nessun gruppo incaricato</option>
                         </select>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-2">
                     <div class="form-group">
                         <select name="observer"
                                 class="select select-operator form-control"
@@ -131,10 +138,11 @@
                 </div>
                 {/if}
 
-                <div class="col-xs-12 col-md-1" style="white-space: nowrap">
+                <div class="form-group hidden-md hidden-lg">
                     <button type="submit" class="btn btn-info"><span class="fa fa-search"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Search')}</span></button>
                     <button type="reset" class="btn btn-danger hide"><span class="fa fa-close"></span> <span class="hidden-sm hidden-md hidden-lg">{sensor_translate('Cancel')}</span></button>
                 </div>
+
             </form>
         </div>
     </div>

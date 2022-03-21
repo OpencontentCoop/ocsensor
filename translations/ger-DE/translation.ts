@@ -741,7 +741,7 @@
     </message>
     <message>
       <source>ID</source>
-      <translation>ICH WÜRDE</translation>
+      <translation>id</translation>
     </message>
     <message>
       <source>If the button does not work, paste the following address in the address bar of your browser: %password_link</source>
@@ -1925,7 +1925,43 @@
     </message>
     <message>
       <source>Group data</source>
-      <translation>Group data</translation>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Filter by author group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Author group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Custom</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Apply</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Today</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Yesterday</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Last 7 days</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Last 30 days</source>
+      <translation type="unfinished"/>
     </message>
   </context>
   <context>

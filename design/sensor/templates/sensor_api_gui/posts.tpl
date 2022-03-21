@@ -52,21 +52,17 @@ $(document).ready(function () {ldelim}
     $.opendataTools.settings('canReadUsers', {cond(fetch('user', 'has_access_to', hash('module','sensor','function','user_list')), 'true', 'false')});
 
     var dateRangePickerLocale = {ldelim}
-        "format": "{'DD/MM/YYYY'|i18n('sensor/datepicker')}",
-        "separator": "{' - '|i18n('sensor/datepicker')}",
-        "applyLabel": "{'Applica'|i18n('sensor/datepicker')}",
-        "cancelLabel": "{'Annulla'|i18n('sensor/datepicker')}",
-        "fromLabel": "{'Da'|i18n('sensor/datepicker')}",
-        "toLabel": "{'a'|i18n('sensor/datepicker')}",
-        "customRangeLabel": "{'Personalizza'|i18n('sensor/datepicker')}",
-        "weekLabel": "{'W'|i18n('sensor/datepicker')}",
-        "daysOfWeek": [
-            $.sensorTranslate.translate('Su_Mo_Tu_We_Th_Fr_Sa').split('_')
-        ],
-        "monthNames": [
-            $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_')
-        ],
-        "firstDay": {'1'|i18n('sensor/datepicker')}
+        "format": "DD/MM/YYYY",
+        "separator": " - ",
+        "applyLabel": $.sensorTranslate.translate('Apply'),
+        "cancelLabel": $.sensorTranslate.translate('Cancel'),
+        "fromLabel": $.sensorTranslate.translate('From'),
+        "toLabel": $.sensorTranslate.translate('To'),
+        "customRangeLabel": $.sensorTranslate.translate('Custom'),
+        "weekLabel": "W",
+        "daysOfWeek": $.sensorTranslate.translate('Su_Mo_Tu_We_Th_Fr_Sa').split('_'),
+        "monthNames": $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_'),
+        "firstDay": 1
     {rdelim};
     {if is_set($areas.children[0].geo.coords[0])}
         var centerMap = new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]});
@@ -97,6 +93,7 @@ $(document).ready(function () {ldelim}
     var selectGroup = form.find('select[name="owner_group"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(groups)));
     var selectObserver = form.find('select[name="observer"]').append($.templates('#tpl-post-tree-option').render(JSON.parse(operators)));
     var selectStatus = form.find('select[name="status"]');
+    var selectUserGroup = form.find('select[name="usergroup"]');
     form.find("select").select2({
         allowClear: true,
         templateResult: function (item) {
@@ -125,10 +122,10 @@ $(document).ready(function () {ldelim}
         opens: 'left',
         locale: dateRangePickerLocale,
         ranges: {
-            '{/literal}{'Oggi'|i18n('sensor/datepicker')}{literal}': [moment(), moment()],
-            '{/literal}{'Ieri'|i18n('sensor/datepicker')}{literal}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            '{/literal}{'Ultimi 7 giorni'|i18n('sensor/datepicker')}{literal}': [moment().subtract(6, 'days'), moment()],
-            '{/literal}{'Ultimi 30 giorni'|i18n('sensor/datepicker')}{literal}': [moment().subtract(29, 'days'), moment()]
+            '{/literal}{sensor_translate('Today')}{literal}': [moment(), moment()],
+            '{/literal}{sensor_translate('Yesterday')}{literal}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '{/literal}{sensor_translate('Last 7 days')}{literal}': [moment().subtract(6, 'days'), moment()],
+            '{/literal}{sensor_translate('Last 30 days')}{literal}': [moment().subtract(29, 'days'), moment()]
         }
     });
     $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
@@ -279,6 +276,15 @@ $(document).ready(function () {ldelim}
             var searchAuthor = form.find('input[name="author"]').val().replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
             if (searchAuthor.length > 0) {
                 query.push("author_name = '" + searchAuthor + "'");
+            }
+        }
+        if (selectUserGroup.length > 0) {
+            var searchUserGroup = selectUserGroup.find(':selected').val();
+            if (searchUserGroup) {
+                if(searchUserGroup === '0'){
+                    searchUserGroup = "'0'";
+                }
+                query.push("raw[sensor_author_group_list_lk] in [" + searchUserGroup + "]");
             }
         }
 

@@ -1927,6 +1927,42 @@
       <source>Group data</source>
       <translation type="unfinished"/>
     </message>
+    <message>
+      <source>Filter by author group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>No group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Author group</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Custom</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Apply</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Today</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Yesterday</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Last 7 days</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Last 30 days</source>
+      <translation type="unfinished"/>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
