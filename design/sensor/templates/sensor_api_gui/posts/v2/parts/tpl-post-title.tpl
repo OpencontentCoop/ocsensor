@@ -8,12 +8,12 @@
     {{if capabilities.can_edit}}
       <a class="btn btn-default btn-lg button-icon"
          title="{{:~sensorTranslate('Edit')}}"
-         href="{{:accessPath}}/sensor/edit/{{:id}}" data-post="{{:id}}"><i class="fa fa-pencil"></i></a>
+         href="{{:~accessPath("/sensor/edit/")}}{{:id}}" data-post="{{:id}}"><i class="fa fa-pencil"></i></a>
     {{/if}}
     {{if capabilities.can_behalf_of}}
         <a class="btn btn-default btn-lg button-icon"
            title="{{:~sensorTranslate('Duplicate')}}"
-           href="{{:accessPath}}/sensor/copy/{{:id}}" data-post="{{:id}}"><i class="fa fa-copy"></i></a>
+           href="{{:~accessPath("/sensor/copy/")}}{{:id}}"{/literal}{if ezini('SensorConfig', 'SmartDuplicationGui', 'ocsensor.ini')|eq('enabled')}{literal} data-duplicate="{{:id}}"{/literal}{/if}{literal}><i class="fa fa-copy"></i></a>
     {{/if}}
     {{if capabilities.can_remove}}
       <a class="btn btn-default btn-lg button-icon" href="#"
@@ -34,5 +34,21 @@
     {{for author.groups}}<span class="label label-default" data-usergroup="{{:#data}}">...</span>{{/for}}
   </p>
 </section>
+{/literal}{if ezini('SensorConfig', 'SmartDuplicationGui', 'ocsensor.ini')|eq('enabled')}{literal}
+{{if capabilities.can_behalf_of}}
+<div id="modal-duplicate" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="clearfix">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div id="form-duplicate" class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{{/if}}
+{/literal}{/if}{literal}
 </script>
 {/literal}

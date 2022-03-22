@@ -112,6 +112,28 @@
                     renderData.find('[data-value="category_id"] option[value="' + this.id + '"]').attr('selected', 'selected');
                 });
 
+                renderData.find('[data-duplicate]').on('click', function (e){
+                    var originalId = $(this).data('duplicate');
+                    $('#form-duplicate').opendataForm({
+                        source: originalId
+                    },{
+                        connector: 'duplicate-post',
+                        onBeforeCreate: function(){
+                            $('#modal-duplicate').modal('show');
+                        },
+                        onSuccess: function (data) {
+                            if (data){
+                                plugin.removeAlert().startLoading();
+                                window.location = $.opendataTools.settings('accessPath') + '/sensor/posts/'+data;
+                            }else{
+                                plugin.removeAlert().startLoading().load(post.id);
+                            }
+                            $('#modal-duplicate').modal('hide');
+                        }
+                    });
+                    e.preventDefault();
+                });
+
                 renderData.find('[data-usergroup]').each(function (){
                     var self = $(this);
                     $.get(plugin.settings.apiEndPoint + '/user-groups/' + self.data('usergroup'), function (response){

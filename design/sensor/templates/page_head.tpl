@@ -20,6 +20,7 @@
         'leaflet.0.7.2.css',
         'Control.Loading.css',
         'jquery.fileupload.css',
+        'summernote/summernote-lite.css',
         'alpaca.min.css',
         'alpaca-custom.css',
         'sensor_add_post.css',
@@ -60,6 +61,7 @@
         'jquery.opendatabrowse.js',
         'jquery.opendataform.js',
         'jquery.fileupload.js',
+        'summernote/summernote-lite.js',
         'jquery.sensor_add_post.js'
     ))}
     

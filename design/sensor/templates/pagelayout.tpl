@@ -26,6 +26,7 @@
         'alpaca.min.css',
         'alpaca-custom.css',
         'sensor_add_post.css',
+        'summernote/summernote-lite.css',
         'debug.css',
         'websitetoolbar.css'
     ) )}
@@ -64,6 +65,7 @@
         'jquery.opendatabrowse.js',
         'jquery.opendataform.js',
         'jquery.fileupload.js',
+        'summernote/summernote-lite.js',
         'jquery.sensor_add_post.js',
         'jquery.sensor_notifications.js'
     ))}

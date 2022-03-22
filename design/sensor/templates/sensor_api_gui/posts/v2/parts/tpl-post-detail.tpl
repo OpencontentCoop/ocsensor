@@ -1,7 +1,7 @@
 {literal}
 <script id="tpl-post-detail" type="text/x-jsrender">
 
-    <p class="lead" style="white-space:pre-wrap;">{{:description}}</p>
+    <p class="lead" style="white-space:pre-wrap;">{{:~boldify(description)}}</p>
 
     {{if files.length}}
         <ul class="list-inline">
@@ -40,7 +40,7 @@
     {{if relatedItems && relatedItems.length > 0}}
     <ul class="list-inline">
         <li>{{:~sensorTranslate('Related issues')}}</li>
-        {{for relatedItems}}<li><a href={{:~accessPath("/sensor/posts/")}}{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
+        {{for relatedItems}}<li><a href="{{:~accessPath("/sensor/posts/")}}{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
     </ul>
     {{/if}}
 
