@@ -79,7 +79,12 @@ class SensorInbox
         $specialIdList = $this->fetchSpecialIdListForUser($currentUserId);
         $specialQuery = '';
         if (count($specialIdList) > 0) {
-            $specialQuery = 'or (id in [' . implode(',', $specialIdList) . '])';
+            $specialQuery = ' or (id in [' . implode(',', $specialIdList) . ']) ';
+        }
+        $importantQuery = '';
+        if ($this->repository->getCurrentUser()->isFirstApprover
+            && $this->repository->getPostContentClassAttribute('tags') instanceof eZContentClassAttribute){
+            $importantQuery = " or (tags in ['important']) ";
         }
         $query = "(
             (approver_id_list = '$currentUserId' and workflow_status in ['waiting','read','reopened','fixed'])
@@ -88,7 +93,8 @@ class SensorInbox
             or ((approver_id_list = '$currentUserId' or owner_id_list = '$currentUserId') and workflow_status in ['assigned','fixed','closed'] and $unreadPrivateField range [1,*]) 
             or (approver_id_list = '$currentUserId' and unmoderated_comments range [1,*])
             or ((approver_id_list = '$currentUserId' or owner_user_id_list = '$currentUserId') and $unreadCommentField range [1,*]) 
-            $specialQuery           
+            $specialQuery
+            $importantQuery           
         ) {$this->filterQuery} sort [modified=>desc]";
 
         $query .= " limit $limit offset " . ($page - 1) * $limit;
