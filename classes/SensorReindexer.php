@@ -5,6 +5,7 @@ use League\Event\EventInterface;
 use Opencontent\Sensor\Api\Values\Event as SensorEvent;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Legacy\OperatorService;
+use Opencontent\Sensor\Legacy\SearchService\SolrMapper;
 
 class SensorReindexer extends AbstractListener
 {
@@ -102,7 +103,7 @@ class SensorReindexer extends AbstractListener
                     foreach ($chunks as $chunk) {
                         $part += count($chunk);
                         $repository->getLogger()->debug("Update post participants by group #{$groupId}: {$part}/{$total}");
-                        self::updateSolr(json_encode($chunk));
+                        SolrMapper::patchSearchIndex(json_encode($chunk));
                     }
                 } catch (Exception $e) {
                     $repository->getLogger()->error($e->getMessage());
@@ -126,40 +127,6 @@ class SensorReindexer extends AbstractListener
 
         }
         return self::$operatorsByGroup[$groupId];
-    }
-
-    private static function updateSolr($postData)
-    {
-        $errorMessage = 'Error updating solr data';
-        $solrBase = new eZSolrBase();
-        $maxRetries = (int)eZINI::instance('solr.ini')->variable('SolrBase', 'ProcessMaxRetries');
-        eZINI::instance('solr.ini')->setVariable('SolrBase', 'ProcessTimeout', 60);
-        if ($maxRetries < 1) {
-            $maxRetries = 1;
-        }
-
-        $tries = 0;
-        while ($tries < $maxRetries) {
-            try {
-                $tries++;
-                return $solrBase->sendHTTPRequest($solrBase->SearchServerURI . '/update?commit=true', $postData, 'application/json', 'OpenSegnalazioni');
-            } catch (ezfSolrException $e) {
-                $doRetry = false;
-                $errorMessage = $e->getMessage();
-                switch ($e->getCode()) {
-                    case ezfSolrException::REQUEST_TIMEDOUT : // Code error 28. Server is most likely overloaded
-                    case ezfSolrException::CONNECTION_TIMEDOUT : // Code error 7, same thing
-                        $errorMessage .= ' // Retry #' . $tries;
-                        $doRetry = true;
-                        break;
-                }
-
-                if (!$doRetry)
-                    break;
-            }
-        }
-
-        throw new Exception($errorMessage);
     }
 
     public function handle(EventInterface $event, $param = null)
