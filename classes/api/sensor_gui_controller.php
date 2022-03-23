@@ -207,7 +207,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         }
 
         try {
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $apiPost = $this->loadApiPost($post);
             $this->getRepository()->getActionService()->runAction(new Action('read'), $post);
             $result = new ezpRestMvcResult();
@@ -563,7 +563,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $actions = explode(',', $this->Action);
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $payload = $this->getPayload();
 
             foreach ($actions as $action) {
@@ -597,7 +597,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     public function doPostUpload()
     {
         try {
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $action = new Action();
             $action->identifier = $this->Action;
 
@@ -792,7 +792,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $result = new ezpRestMvcResult();
-            $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $this->getRepository()->getPostService()->loadPost($this->Id);
             $enabled = (bool)$this->Enable;
             $nodes = eZContentObjectTreeNode::fetchByContentObjectID($this->Id);
             $userID = (int)$this->getRepository()->getCurrentUser()->id;
@@ -939,7 +939,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         $result = new ezpRestMvcResult();
         try {
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $predictor = SensorCategoryPredictor::instance();
             $result->variables = $predictor->predict($post->id, $post->subject, $post->description);;
         } catch (Exception $e) {
