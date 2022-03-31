@@ -87,137 +87,139 @@
 
     function Plugin(element, options) {
         this.element = $(element);
-        this.selectedArea = 0;
         this.settings = $.extend({}, defaults, options);
-
-        this.settings.geoinput_splitted = false;
-        this.settings.geoinput_autocomplete = false;
-
-        this.positionBeforeDrag = false;
-
-        this.map = new L.Map(
-            this.element.attr('id'),
-            this.settings.map_params
-        ).setActiveArea('viewport');
-        var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(this.map);
-        var baseLayers = {
-            'Mappa': osmLayer,
-            'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-            })
-        };
-        var mapLayers = [];
-        if (this.settings.additionalWMSLayers.length > 0) {
-            $.each(this.settings.additionalWMSLayers, function(){
-                mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
-                    layers: this.layers,
-                    version: this.version,
-                    format: this.format,
-                    transparent: this.transparent,
-                    attribution: this.attribution
-                });
-            });
-        }
-        var layers = L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(this.map);
-        if (!L.Browser.touch) {
-            L.DomEvent
-                .disableClickPropagation(layers._container)
-                .disableScrollPropagation(layers._container);
-        } else {
-            L.DomEvent.disableClickPropagation(layers._container);
-        }
-        this.initMapEvents();
-
-        this.viewport = this.element.find('.viewport');
-
-        this.markers = L.featureGroup().addTo(this.map);
-        this.perimeters = L.featureGroup().addTo(this.map);
-        this.globalBoundingPerimeter = false;
-        this.globalBoundingBox = false;
-
-        var nominatimGeocoderParams = {};
-        if (typeof this.settings.bounding_area === 'string') {
-            try {
-                this.globalBoundingBox = L.geoJson(JSON.parse(this.settings.bounding_area)).getBounds();
-                this.globalBoundingPerimeter = L.rectangle(this.globalBoundingBox, {
-                    color: 'blue',
-                    weight: 2,
-                    fillOpacity: 0
-                });
-                if (this.settings.debug_bounding_area) {
-                    this.map.addLayer(this.globalBoundingPerimeter);
-                }
-                var viewBox = this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth();
-                if (this.settings.geocoder === "Nominatim") {
-                    nominatimGeocoderParams = {
-                        geocodingQueryParams: {
-                            viewbox: viewBox,
-                            bounded: 1
-                        }
-                    };
-                } else if (this.settings.geocoder === "NominatimDetailed") {
-                    if (this.settings.geocoder_params === false) {
-                        this.settings.geocoder_params = {geocodingQueryParams: {}};
-                    }
-                    this.settings.geocoder_params.geocodingQueryParams.viewbox = viewBox;
-                    this.settings.geocoder_params.geocodingQueryParams.bounded = 1;
-                }
-            } catch (err) {
-                console.log(err.message);
-            }
-        }
-
-        if (this.settings.geocoder === "Nominatim" || this.settings.geocoder === '') {
-            this.geocoder = L.Control.Geocoder.nominatim(nominatimGeocoderParams);
-        } else if (this.settings.geocoder === "Geoserver") {
-            this.geocoder = L.Control.Geocoder.geoserver(this.settings.geocoder_params);
-            this.settings.geoinput_autocomplete = true;
-        } else if (window.XDomainRequest) {
-            this.geocoder = L.Control.Geocoder.bing(this.settings.geocoder_params);
-        } else if (this.settings.geocoder === "Google") {
-            this.geocoder = L.Control.Geocoder.google(this.settings.geocoder_params);
-        } else if (this.settings.geocoder === "NominatimDetailed") {
-            this.geocoder = L.Control.Geocoder.nominatimDetailed(this.settings.geocoder_params);
-            this.settings.geoinput_splitted = true;
-        }
-
-        this.selectArea = $('.select-sensor-area');
-        this.suggestionContainer = $('#input-results');
-        this.inputLat = $('input#latitude');
-        this.inputLng = $('input#longitude');
-        this.inputAddress = $('input#input-address');
-        this.searchButton = $('#input-address-button');
-        this.inputMeta = $('textarea.ezcca-sensor_post_meta');
-        var currentMeta = JSON.parse(this.inputMeta.val() || '{}');
-        var persistentMeta = {};
-        $.each(this.settings.persistentMetaKeys, function (index, value){
-            if (currentMeta.hasOwnProperty(value)){
-                persistentMeta[value] = currentMeta[value];
-            }
-        });
-        this.persistentMeta = persistentMeta;
-
-        this._debugMeta();
-
-        if (this.settings.geoinput_splitted) {
-            this.inputAddress.hide();
-            this.inputNumber = $('<input class="form-control" size="20" type="text" placeholder="civico" id="input-number" value="" style="width: 20%;border-left:0">').prependTo(this.inputAddress.parent());
-            this.inputStreet = $('<input class="form-control" size="20" type="text" placeholder="Via, viale, piazza..." id="input-street" value="" style="width: 80%;border-right:0">').prependTo(this.inputAddress.parent());
-        }
-        this.initSearch();
-
-        this.initPerimeters();
-
-        this.debugNearest = this.settings.nearest_service.debug ? L.featureGroup().addTo(this.map) : false;
-        this.debugGeocoder = this.settings.debug_geocoder ? L.featureGroup().addTo(this.map) : false;
-
-        this.refreshViewPort();
-        this.refreshMap();
-
         if (this.settings.use_smart_gui) {
+            this.selectedArea = 0;
+
+            this.settings.geoinput_splitted = false;
+            this.settings.geoinput_autocomplete = false;
+
+            this.positionBeforeDrag = false;
+
+            this.map = new L.Map(
+                this.element.attr('id'),
+                this.settings.map_params
+            ).setActiveArea('viewport');
+            var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(this.map);
+            var baseLayers = {
+                'Mappa': osmLayer,
+                'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                })
+            };
+            var mapLayers = [];
+            if (this.settings.additionalWMSLayers.length > 0) {
+                $.each(this.settings.additionalWMSLayers, function(){
+                    mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
+                        layers: this.layers,
+                        version: this.version,
+                        format: this.format,
+                        transparent: this.transparent,
+                        attribution: this.attribution
+                    });
+                });
+            }
+            var layers = L.control.layers(baseLayers, mapLayers, {'position': 'topleft'}).addTo(this.map);
+            if (!L.Browser.touch) {
+                L.DomEvent
+                    .disableClickPropagation(layers._container)
+                    .disableScrollPropagation(layers._container);
+            } else {
+                L.DomEvent.disableClickPropagation(layers._container);
+            }
+            this.initMapEvents();
+
+            this.viewport = this.element.find('.viewport');
+
+            this.markers = L.featureGroup().addTo(this.map);
+            this.perimeters = L.featureGroup().addTo(this.map);
+            this.globalBoundingPerimeter = false;
+            this.globalBoundingBox = false;
+
+            var nominatimGeocoderParams = {};
+            if (typeof this.settings.bounding_area === 'string') {
+                try {
+                    this.globalBoundingBox = L.geoJson(JSON.parse(this.settings.bounding_area)).getBounds();
+                    this.globalBoundingPerimeter = L.rectangle(this.globalBoundingBox, {
+                        color: 'blue',
+                        weight: 2,
+                        fillOpacity: 0
+                    });
+                    if (this.settings.debug_bounding_area) {
+                        this.map.addLayer(this.globalBoundingPerimeter);
+                    }
+                    var viewBox = this.globalBoundingBox.getWest() + ',' + this.globalBoundingBox.getSouth() + ',' + this.globalBoundingBox.getEast() + ',' + this.globalBoundingBox.getNorth();
+                    if (this.settings.geocoder === "Nominatim") {
+                        nominatimGeocoderParams = {
+                            geocodingQueryParams: {
+                                viewbox: viewBox,
+                                bounded: 1
+                            }
+                        };
+                    } else if (this.settings.geocoder === "NominatimDetailed") {
+                        if (this.settings.geocoder_params === false) {
+                            this.settings.geocoder_params = {geocodingQueryParams: {}};
+                        }
+                        this.settings.geocoder_params.geocodingQueryParams.viewbox = viewBox;
+                        this.settings.geocoder_params.geocodingQueryParams.bounded = 1;
+                    }
+                } catch (err) {
+                    console.log(err.message);
+                }
+            }
+
+            if (this.settings.geocoder === "Nominatim" || this.settings.geocoder === '') {
+                this.geocoder = L.Control.Geocoder.nominatim(nominatimGeocoderParams);
+            } else if (this.settings.geocoder === "Geoserver") {
+                this.geocoder = L.Control.Geocoder.geoserver(this.settings.geocoder_params);
+                this.settings.geoinput_autocomplete = true;
+            } else if (window.XDomainRequest) {
+                this.geocoder = L.Control.Geocoder.bing(this.settings.geocoder_params);
+            } else if (this.settings.geocoder === "Google") {
+                this.geocoder = L.Control.Geocoder.google(this.settings.geocoder_params);
+            } else if (this.settings.geocoder === "NominatimDetailed") {
+                this.geocoder = L.Control.Geocoder.nominatimDetailed(this.settings.geocoder_params);
+                this.settings.geoinput_splitted = true;
+            }
+
+            this.selectArea = $('.select-sensor-area');
+            this.suggestionContainer = $('#input-results');
+            this.inputLat = $('input#latitude');
+            this.inputLng = $('input#longitude');
+            this.inputAddress = $('input#input-address');
+            this.searchButton = $('#input-address-button');
+            this.inputMeta = $('textarea.ezcca-sensor_post_meta');
+            var currentMeta = JSON.parse(this.inputMeta.val() || '{}');
+            var persistentMeta = {};
+            $.each(this.settings.persistentMetaKeys, function (index, value){
+                if (currentMeta.hasOwnProperty(value)){
+                    persistentMeta[value] = currentMeta[value];
+                }
+            });
+            this.persistentMeta = persistentMeta;
+
+            this._debugMeta();
+
+            if (this.settings.geoinput_splitted) {
+                this.inputAddress.hide();
+                this.inputNumber = $('<input class="form-control" size="20" type="text" placeholder="civico" id="input-number" value="" style="width: 20%;border-left:0">').prependTo(this.inputAddress.parent());
+                this.inputStreet = $('<input class="form-control" size="20" type="text" placeholder="Via, viale, piazza..." id="input-street" value="" style="width: 80%;border-right:0">').prependTo(this.inputAddress.parent());
+            }
+            this.initSearch();
+
+            this.initPerimeters();
+
+            this.debugNearest = this.settings.nearest_service.debug ? L.featureGroup().addTo(this.map) : false;
+            this.debugGeocoder = this.settings.debug_geocoder ? L.featureGroup().addTo(this.map) : false;
+
+            this.refreshViewPort();
+            this.refreshMap();
+
             this.initSmartGui();
+        }else{
+            this.initDefaultGui();
         }
     }
 
@@ -756,6 +758,49 @@
                 $('body').removeClass('sensor-add-post').css('overflow', 'auto');
                 e.preventDefault();
             });
+        },
+
+        initDefaultGui: function (){
+            var addPostModal = this.element;
+            var addButton = $('a[href$="/sensor/add"]');
+            addButton.on('click', function (e) {
+                $('#add-post-form').opendataFormCreate({
+                    class: addPostModal.data('class'),
+                    parent: addPostModal.data('parent')
+                },{
+                    onBeforeCreate: function(){
+                        addPostModal.modal('show');
+                    },
+                    onSuccess: function (response) {
+                        window.location = $.opendataTools.settings('accessPath')+'/sensor/posts/' + response.content.metadata.id
+                        addPostModal.modal('hide');
+                    },
+                    alpaca: {
+                        'options': {
+                            'form': {
+                                'buttons': {
+                                    'submit': {
+                                        'value': $.sensorTranslate.translate('Send'),
+                                        'styles': 'btn btn-lg btn-success pull-right'
+                                    },
+                                    'reset': {
+                                        'click': function () {
+                                            addPostModal.modal('hide');
+                                        },
+                                        'value': $.sensorTranslate.translate('Cancel'),
+                                        'styles': 'btn btn-lg btn-danger pull-left'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                e.preventDefault();
+            });
+            var hash = window.location.hash;
+            if (hash === '#add'){
+                addButton.trigger('click');
+            }
         },
 
         refreshMap: function () {

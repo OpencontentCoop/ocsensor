@@ -10,9 +10,14 @@ FieldConnectors[sensor_scenario/observer]=SensorScenarioObserverFieldConnector
 FieldConnectors[sensor_faq/answer]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 FieldConnectors[sensor_report/intro]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 FieldConnectors[sensor_report_item/text]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
+FieldConnectors[sensor_post/area]=SensorPostAreaFieldConnector
+FieldConnectors[sensor_post/category]=SensorPostCategoryFieldConnector
+FieldConnectors[sensor_post/privacy]=SensorPostPrivacyFieldConnector
+FieldConnectors[sensor_post/type]=SensorPostTypeFieldConnector
 
 [ClassSettings]
 ClassConnectors[sensor_scenario]=SensorScenarioClassConnector
 ClassConnectors[sensor_report]=SensorReportClassConnector
 ClassConnectors[sensor_report_item]=SensorReportItemClassConnector
 ClassConnectors[user_group]=UserGroupClassConnector
+ClassConnectors[sensor_post]=SensorPostClassConnector

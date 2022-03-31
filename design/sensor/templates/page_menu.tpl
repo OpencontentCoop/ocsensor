@@ -61,9 +61,9 @@
         {if $current_user.is_logged_in|not()}
             <li>
                 <a href="{'user/login'|ezurl(no)}">
-          <span class="label label-primary" style="font-size: 100%">
-              {sensor_translate('Login')}
-          </span>
+                    <span class="label label-primary" style="font-size: 100%">
+                        {sensor_translate('Login')}
+                    </span>
                 </a>
             </li>
         {else}

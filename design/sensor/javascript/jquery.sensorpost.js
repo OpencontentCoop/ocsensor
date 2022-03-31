@@ -114,12 +114,12 @@
 
                 renderData.find('[data-duplicate]').on('click', function (e){
                     var originalId = $(this).data('duplicate');
-                    $('#form-duplicate').opendataForm({
+                    $('#form-edit').opendataForm({
                         source: originalId
                     },{
                         connector: 'duplicate-post',
                         onBeforeCreate: function(){
-                            $('#modal-duplicate').modal('show');
+                            $('#modal-edit').modal('show');
                         },
                         onSuccess: function (data) {
                             if (data){
@@ -128,7 +128,22 @@
                             }else{
                                 plugin.removeAlert().startLoading().load(post.id);
                             }
-                            $('#modal-duplicate').modal('hide');
+                            $('#modal-edit').modal('hide');
+                        }
+                    });
+                    e.preventDefault();
+                });
+
+                renderData.find('[data-edit]').on('click', function (e){
+                    $('#form-edit').opendataFormEdit({
+                        object: $(this).data('edit')
+                    },{
+                        onBeforeCreate: function(){
+                            $('#modal-edit').modal('show');
+                        },
+                        onSuccess: function (data) {
+                            plugin.removeAlert().startLoading().load(post.id);
+                            $('#modal-edit').modal('hide');
                         }
                     });
                     e.preventDefault();

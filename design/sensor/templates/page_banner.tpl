@@ -147,7 +147,24 @@
         </div>
     </div>
 {/if}
+<div id="add-post-modal" class="modal fade" data-parent="{sensor_postcontainer().node_id}" data-class="{sensor_post_class().identifier}" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="add-post-form" class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
 {if sensor_settings().ShowSmartGui}
     {include name="add_post" uri='design:sensor_api_gui/add/add_post.tpl'}
+{else}
+    <script>
+        $(document).ready(function () {ldelim}
+            $('#add-post-modal').sensorAddPost({ldelim}
+                'use_smart_gui': false
+            {rdelim});
+        {rdelim});
+    </script>
 {/if}
 {undef $show_inbox_widget}

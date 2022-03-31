@@ -8,7 +8,7 @@
     {{if capabilities.can_edit}}
       <a class="btn btn-default btn-lg button-icon"
          title="{{:~sensorTranslate('Edit')}}"
-         href="{{:~accessPath("/sensor/edit/")}}{{:id}}" data-post="{{:id}}"><i class="fa fa-pencil"></i></a>
+         href="{{:~accessPath("/sensor/edit/")}}{{:id}}" data-edit="{{:id}}"><i class="fa fa-pencil"></i></a>
     {{/if}}
     {{if capabilities.can_behalf_of}}
         <a class="btn btn-default btn-lg button-icon"
@@ -35,15 +35,15 @@
   </p>
 </section>
 {/literal}{if ezini('SensorConfig', 'SmartDuplicationGui', 'ocsensor.ini')|eq('enabled')}{literal}
-{{if capabilities.can_behalf_of}}
-<div id="modal-duplicate" class="modal fade">
+{{if capabilities.can_behalf_of || capabilities.can_edit}}
+<div id="modal-edit" class="modal fade">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-body">
         <div class="clearfix">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         </div>
-        <div id="form-duplicate" class="clearfix"></div>
+        <div id="form-edit" class="clearfix"></div>
       </div>
     </div>
   </div>

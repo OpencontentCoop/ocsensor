@@ -694,3 +694,11 @@ select.select-sensor-area-disabled::-ms-expand {
         overflow: hidden;
     }
 }
+
+.optiontree-selector select{
+    max-width: 200px;
+}
+
+.alpaca-field-radio .radio.alpaca-control{
+    padding-left: 10px;
+}

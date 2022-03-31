@@ -3,18 +3,12 @@
 {ezpagedata_set('types', $types)}
 {ezcss_require(array(
     'daterangepicker.css',
-    'select2.min.css',
-    'leaflet/MarkerCluster.css',
-    'leaflet/MarkerCluster.Default.css',
-    'leaflet.0.7.2.css'
+    'select2.min.css'
 ))}
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
     'moment-with-locales.min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
-    'leaflet.0.7.2.js',
-    'leaflet.markercluster.js',
-    'Leaflet.MakiMarkers.js',
     'daterangepicker.js',
     'jquery.opendataTools.js',
     'jsrender.js', 'jsrender.helpers.js'
