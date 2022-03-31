@@ -249,6 +249,33 @@
     </div>
     {{/if}}
 
+    {{if settings.AddPrivateMessageBeforeReassign}}
+    <div id="addNoteThenAssign" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="clearfix" data-action-wrapper>
+                        <div data-single-action-wrapper="send_private_message" data-parameters="text,participant_ids">
+                            <label for="noteForAssign">{{:~sensorTranslate('Specify the reason for the reassignment')}}</label>
+                            <textarea id="noteForAssign" data-value="text" name="noteForAssign" class="form-control" rows="4" required="required"></textarea>
+                            {{for approvers}}<input data-value="participant_ids" type="hidden" value="{{:id}}" />{{/for}}
+                        </div>
+                        <div data-single-action-wrapper="assign" data-parameters="group_ids,participant_ids">
+                            <input data-value="group_ids" type="hidden" value="" />
+                            <input data-value="participant_ids" type="hidden" value="" />
+                        </div>
+                        <input class="btn send btn-bold pull-right"
+                               type="submit"
+                               style="margin-top:10px"
+                               data-actions="send_private_message,assign"
+                               value="{{:~sensorTranslate('Add note and reassign')}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
 </script>
 
 <script id="tpl-post-add_area" type="text/x-jsrender">
@@ -396,7 +423,11 @@
                 <option></option>
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids,group_ids" value="{{if owners.length == 0}}{{:~sensorTranslate('Assign')}}{{else}}{{:~sensorTranslate('Reassign')}}{{/if}}" />
+                <input class="btn btn-sm btn-default"
+                       type="submit"
+                       data-action="{{if settings.AddPrivateMessageBeforeReassign && owners.length > 0}}checkNoteAndAssign{{else}}assign{{/if}}"
+                       data-parameters="participant_ids,group_ids"
+                       value="{{if owners.length == 0}}{{:~sensorTranslate('Assign')}}{{else}}{{:~sensorTranslate('Reassign')}}{{/if}}" />
             </span>
         </div>
     </div>

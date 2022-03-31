@@ -385,7 +385,8 @@
                     return date > (Math.round(+new Date() / 1000) - seconds);
                 }
 
-                var runAction = function (action, payload, confirmMessage, onSuccess, onError) {
+                var runAction = function (action, payload, confirmMessage, onSuccess, onError, async) {
+                    async = typeof async === "undefined" ? true : async;
                     var confirmation = true;
                     if (confirmMessage) {
                         confirmation = confirm(confirmMessage);
@@ -404,6 +405,7 @@
                             type: 'POST',
                             url: plugin.settings.apiEndPoint + '/actions/' + post.id + '/' + action,
                             data: JSON.stringify(payload),
+                            async: async,
                             headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (data) {
                                 plugin.actionStarted = false;
@@ -452,6 +454,20 @@
                 renderData.find('[data-action]').on('click', function (e) {
                     renderData.find('.modal').modal('hide');
                     var action = $(this).data('action');
+                    var parameters = $(this).data('parameters');
+                    var wrapper = $(this).parents('[data-action-wrapper]');
+                    var payload = getActionPayload(wrapper, parameters);
+                    if (action === 'checkNoteAndAssign') {
+                        if (capabilities.is_approver || $.inArray(''+post.currentOwnerGroupId, payload.group_ids) > -1 || ''+post.currentOwnerGroupId === payload.group_ids){
+                            action = 'assign';
+                        }else{
+                            var tempActionWrapper = renderData.find('#addNoteThenAssign');
+                            tempActionWrapper.find('[data-single-action-wrapper="assign"] [data-value="group_ids"]').val(payload.group_ids);
+                            tempActionWrapper.find('[data-single-action-wrapper="assign"] [data-value="participant_ids"]').val(payload.participant_ids);
+                            tempActionWrapper.modal('show');
+                            return false;
+                        }
+                    }
                     if (action === 'checkNoteAndFix') {
                         if (timeIsGreater(capabilities.last_private_message_timestamp, post.settings.MinimumIntervalFromLastPrivateMessageToFix)) {
                             action = 'fix';
@@ -460,9 +476,6 @@
                             return false;
                         }
                     }
-                    var parameters = $(this).data('parameters');
-                    var wrapper = $(this).parents('[data-action-wrapper]');
-                    var payload = getActionPayload(wrapper, parameters);
                     runAction(action, payload, $(this).data('confirmation'),
                         function (data){
                             plugin.render(data.capabilities, data.post);
@@ -484,25 +497,50 @@
                 renderData.find('[data-actions]').on('click', function (e) {
                     renderData.find('.modal').modal('hide');
                     var action = $(this).data('actions');
-                    var parameters = $(this).data('parameters');
                     var wrapper = $(this).parents('[data-action-wrapper]');
                     var confirmMessage = $(this).data('confirmation');
-                    var payload = getActionPayload(wrapper, parameters);
-                    runAction(action, payload, confirmMessage,
-                        function (data){
-                            plugin.render(data.capabilities, data.post);
-                            if (plugin.settings.alertsEndPoint) {
-                                $('#social_user_alerts').remove();
-                                $.get(plugin.settings.alertsEndPoint, function (data) {
-                                    $('header').prepend(data);
-                                });
-                            }
-                        },
-                        function (data) {
-                            plugin.error(data);
-                            plugin.load(post.id);
+                    var onSuccessCallback = function (data) {
+                        plugin.render(data.capabilities, data.post);
+                        if (plugin.settings.alertsEndPoint) {
+                            $('#social_user_alerts').remove();
+                            $.get(plugin.settings.alertsEndPoint, function (data) {
+                                $('header').prepend(data);
+                            });
                         }
-                    );
+                    };
+                    var onErrorCallback = function (data) {
+                        plugin.error(data);
+                        plugin.load(post.id);
+                    };
+
+                    if (wrapper.find('[data-single-action-wrapper]').length > 0) {
+                        var actions = action.split(',');
+                        var actionsCount = actions.length;
+                        $.each(actions, function(index, element){
+                            var singleAction = this;
+                            var singleActionWrapper = wrapper.find('[data-single-action-wrapper="'+singleAction+'"]');
+                            var singleActionParameters = singleActionWrapper.data('parameters');
+                            var singleActionPayload = getActionPayload(singleActionWrapper, singleActionParameters);
+                            runAction(singleAction, singleActionPayload, confirmMessage,
+                                function (data){
+                                    if (index === (actionsCount-1)) {
+                                        onSuccessCallback(data)
+                                    }
+                                },
+                                function (data){
+                                    onErrorCallback(data)
+                                },
+                                false
+                            );
+                        })
+                    }else {
+                        var parameters = $(this).data('parameters');
+                        var payload = getActionPayload(wrapper, parameters);
+                        runAction(action, payload, confirmMessage,
+                            function (data){onSuccessCallback(data)},
+                            function (data){onErrorCallback(data)}
+                        );
+                    }
                     e.preventDefault();
                 });
 
