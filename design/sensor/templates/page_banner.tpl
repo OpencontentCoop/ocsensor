@@ -147,7 +147,7 @@
         </div>
     </div>
 {/if}
-<div id="add-post-modal" class="modal fade" data-parent="{sensor_postcontainer().node_id}" data-class="{sensor_post_class().identifier}" data-backdrop="static">
+<div id="add-post-modal" class="modal fade" data-postparent="{sensor_postcontainer().node_id}" data-postclass="{sensor_post_class().identifier}" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body">

@@ -765,8 +765,8 @@
             var addButton = $('a[href$="/sensor/add"]');
             addButton.on('click', function (e) {
                 $('#add-post-form').opendataFormCreate({
-                    class: addPostModal.data('class'),
-                    parent: addPostModal.data('parent')
+                    class: addPostModal.data('postclass'),
+                    parent: addPostModal.data('postparent')
                 },{
                     onBeforeCreate: function(){
                         addPostModal.modal('show');
