@@ -518,24 +518,26 @@
 
                     if (wrapper.find('[data-single-action-wrapper]').length > 0) {
                         var actions = action.split(',');
-                        var actionsCount = actions.length;
+                        var actionsAndPayloads = [];
                         $.each(actions, function(index, element){
                             var singleAction = this;
                             var singleActionWrapper = wrapper.find('[data-single-action-wrapper="'+singleAction+'"]');
                             var singleActionParameters = singleActionWrapper.data('parameters');
                             var singleActionPayload = getActionPayload(singleActionWrapper, singleActionParameters);
-                            runAction(singleAction, singleActionPayload, confirmMessage,
-                                function (data){
-                                    if (index === (actionsCount-1)) {
-                                        onSuccessCallback(data)
-                                    }
-                                },
-                                function (data){
-                                    onErrorCallback(data)
-                                },
-                                false
-                            );
-                        })
+                            actionsAndPayloads.push({
+                                'action': singleAction,
+                                'payload': singleActionPayload,
+                            });
+                        });
+                        runAction(actionsAndPayloads[0].action, actionsAndPayloads[0].payload, confirmMessage,
+                            function (data){
+                                runAction(actionsAndPayloads[1].action, actionsAndPayloads[1].payload, confirmMessage,
+                                    function (data){onSuccessCallback(data)},
+                                    function (data){onErrorCallback(data)}
+                                );
+                            },
+                            function (data){onErrorCallback(data)}
+                        );
                     }else {
                         var parameters = $(this).data('parameters');
                         var payload = getActionPayload(wrapper, parameters);
