@@ -5,6 +5,7 @@ use Opencontent\Sensor\Api\Values\Post\Channel;
 use Opencontent\Sensor\Legacy\PermissionService;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\Legacy\Statistics\FiltersTrait;
+use Opencontent\Sensor\Legacy\Utils\TreeNodeItem;
 
 class SensorPostCsvExporter extends SearchQueryCSVExporter
 {
@@ -88,6 +89,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'response' =>  $this->translator->translate('Official response'),
             'response_count' =>  $this->translator->translate('Responses'),
             'message_count' =>  $this->translator->translate('Responses'),
+            'current_owner_group_reference' =>  $this->translator->translate('Group reference'),
         );
 
         $this->filename = 'posts' . '_' . time();
@@ -153,8 +155,15 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     {
         if ($post instanceof \Opencontent\Sensor\Api\Values\Post) {
             $ownerGroup = $post->latestOwnerGroup instanceof Participant && $post->status->identifier == 'close'?
-                $post->latestOwnerGroup->name :
-                implode(' - ', $post->owners->getParticipantNameListByType(Participant::TYPE_GROUP));
+                $post->latestOwnerGroup :
+                $post->owners->getParticipantsByType(Participant::TYPE_GROUP)->first();
+
+            $ownerGroupName = $ownerGroup instanceof Participant ? $ownerGroup->name : '';
+            $ownerGroupReference = '';
+            if ($ownerGroup instanceof Participant){
+                $treeNodeItem = $this->repository->getGroupsTree()->findById($ownerGroup->id);
+                $ownerGroupReference = $treeNodeItem instanceof TreeNodeItem ? $treeNodeItem->attribute('reference') : '';
+            }
 
             $owner = $post->latestOwner instanceof Participant && $post->status->identifier == 'close'?
                 $post->latestOwner->name :
@@ -180,7 +189,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 //                'fiscal_code' => $post->author->fiscalCode,
                 'category' => count($post->categories) > 0 ? $this->mainCategories[$post->categories[0]->id] : '',
                 'category_child' => count($post->categories) > 0 && isset($this->childCategories[$post->categories[0]->id]) ? $this->childCategories[$post->categories[0]->id] : '',
-                'current_owner_group' => $ownerGroup,
+                'current_owner_group' => $ownerGroupName,
                 'current_owner' => $owner,
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
@@ -188,6 +197,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'response' => $post->responses->count() > 0 ? $post->responses->last()->text : '',
                 'response_count' => $post->responses->count(),
                 'message_count' => $post->privateMessages->count(),
+                'current_owner_group_reference' => $ownerGroupReference
             );
 
             if ($this->searchPolicies !== null && ($post->privacy->identifier != 'public' || $post->moderation->identifier == 'waiting')){
