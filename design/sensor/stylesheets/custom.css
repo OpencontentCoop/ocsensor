@@ -688,4 +688,10 @@ select.select-sensor-area-disabled::-ms-expand {
     #posts-search.posts-filters .select2-container {
         max-width: 200px;
     }
+
+    #posts-search.posts-filters .select2-container--default .select2-selection--multiple .select2-selection__choice{
+        max-width: 164px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
 }
