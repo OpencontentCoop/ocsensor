@@ -1991,6 +1991,14 @@
       <source>About privacy</source>
       <translation>About privacy</translation>
     </message>
+    <message>
+      <source>Specify the reason for the reassignment</source>
+      <translation>Specify the reason for the reassignment</translation>
+    </message>
+    <message>
+      <source>Add note and reassign</source>
+      <translation>Add note and reassign</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
