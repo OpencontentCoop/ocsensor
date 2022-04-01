@@ -26,11 +26,17 @@ class DuplicatePostConnector extends AbstractBaseConnector
      */
     protected $descriptionAttribute;
 
+    /**
+     * @var eZContentClassAttribute
+     */
+    protected $subjectAttribute;
+
     protected function load()
     {
         if (!$this->isLoaded) {
             $this->repository = OpenPaSensorRepository::instance();
             $this->descriptionAttribute = $this->repository->getPostContentClassAttribute('description');
+            $this->subjectAttribute = $this->repository->getPostContentClassAttribute('subject');
             if ($this->hasParameter('source')) {
                 $this->source = eZContentObject::fetch((int)$this->getParameter('source'));
                 if (!$this->source instanceof eZContentObject){
@@ -57,7 +63,10 @@ class DuplicatePostConnector extends AbstractBaseConnector
         $data = preg_replace('/__(.+?)__/s', "<strong>$1</strong>", $data);
         $data = nl2br($data);
 
-        return ['description' => $data];
+        return [
+            'subject' => $this->sourceDataMap['subject']->toString(),
+            'description' => $data,
+        ];
     }
 
     protected function getSchema()
@@ -66,6 +75,11 @@ class DuplicatePostConnector extends AbstractBaseConnector
             "title" => "Duplica segnalazione",
             "type" => "object",
             "properties" => [
+                "subject" => [
+                    "type" => "string",
+                    "title" => $this->subjectAttribute->attribute('name'),
+                    'required' => true
+                ],
                 "description" => [
                     "type" => "string",
                     "title" => $this->descriptionAttribute->attribute('name'),
@@ -121,6 +135,7 @@ class DuplicatePostConnector extends AbstractBaseConnector
     protected function submit()
     {
         $redirect = $_POST['redirect'] === 'true';
+        $newSubject = $_POST['subject'];
         $newDescription = $_POST['description'];
         $newDescription = preg_replace('#<br\s*/?>#i', "", $newDescription);
         $newDescription = str_replace(['<b>', '</b>'], "__", $newDescription);
@@ -131,7 +146,7 @@ class DuplicatePostConnector extends AbstractBaseConnector
             'attributes' => [
                 'reporter' => eZUser::currentUserID(),
                 'on_behalf_of' => $this->source->attribute('owner_id'),
-                'subject' => $this->sourceDataMap['subject']->toString(),
+                'subject' => $newSubject,
                 'type' => $this->sourceDataMap['type']->toString(),
                 'image' => $this->sourceDataMap['image']->toString(),
                 'images' => $this->sourceDataMap['images']->toString(),
