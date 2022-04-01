@@ -1725,7 +1725,7 @@
     </message>
     <message>
       <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
-      <translation>WARNUNG: Sie haben keine aktive Benachrichtigung und Sie erhalten keine E-Mails. Sie können Benachrichtigungen auf der Seite aktivieren, die auf %open_notification_url%Notifikations%close_notification_url% aktiviert sind.</translation>
+      <translation>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</translation>
     </message>
     <message>
       <source>Translations</source>
@@ -1962,6 +1962,34 @@
     <message>
       <source>Last 30 days</source>
       <translation>Last 30 days</translation>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation>Criticals</translation>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation>To recover the access password, visit the page \n %s</translation>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation>There is already a registration pending activation for the '%s' fiscal code</translation>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation>The activation email has been sent again: check the '%s' email address</translation>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation>The '%s' username already exists, please choose another one</translation>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation>New issue</translation>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation>About privacy</translation>
     </message>
   </context>
   <context>

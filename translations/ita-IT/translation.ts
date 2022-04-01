@@ -137,7 +137,7 @@
     </message>
     <message>
       <source>Area</source>
-      <translation>Area</translation>
+      <translation>Zona</translation>
     </message>
     <message>
       <source>Areas</source>
@@ -1557,7 +1557,7 @@
     </message>
     <message>
       <source>Store comment</source>
-      <translation>Salva commento</translation>
+      <translation>Pubblica commento</translation>
     </message>
     <message>
       <source>Store the official response and close the issue</source>
@@ -1962,6 +1962,34 @@
     <message>
       <source>Last 30 days</source>
       <translation>Ultimi 30 giorni</translation>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation>Critiche</translation>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation>Per recuperare la password di accesso visita la pagina \n %s</translation>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation>Esiste già una registrazione in attesa di attivazione per il codice fiscale '%s'</translation>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation>È stata inviata nuovamente la mail di attivazione: controlla l'indirizzo di posta '%s'</translation>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation>Il nome utente '%s' esiste già, sei pregato di sceglierne un altro</translation>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation>Nuova segnalazione</translation>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation>Informazioni sulla privacy</translation>
     </message>
   </context>
   <context>

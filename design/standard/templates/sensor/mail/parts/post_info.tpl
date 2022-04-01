@@ -5,7 +5,7 @@
     <strong>{sensor_translate('Object of issue')}:</strong> {$object.name|wash()}
 </p>
 <p>
-    <strong>{sensor_translate('Type')}:</strong> {attribute_view_gui attribute= $object.data_map.type}
+    <strong>{sensor_translate('Type')}:</strong> {foreach $object.data_map.type.class_content.options as $option}{if $object.data_map.type.content|contains($option.id)}{sensor_types($option.name).name|wash()}{/if}{/foreach}
 </p>
 {if  $object|has_attribute('geo')}
     <p>

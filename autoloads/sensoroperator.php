@@ -77,6 +77,13 @@ class SensorOperator
                     'default' => [],
                 )
             ),
+            'sensor_types' => array(
+                'identifier' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => null,
+                )
+            ),
         );
     }
 
@@ -209,7 +216,11 @@ class SensorOperator
 
             case 'sensor_types':
             {
-                $operatorValue = $repository->getPostTypeService()->loadPostTypes();
+                if (!empty($namedParameters['identifier'])){
+                    $operatorValue = $repository->getPostTypeService()->loadPostType($namedParameters['identifier']);
+                }else {
+                    $operatorValue = $repository->getPostTypeService()->loadPostTypes();
+                }
                 break;
             }
 

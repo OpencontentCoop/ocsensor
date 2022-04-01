@@ -2,13 +2,13 @@
 
 class ocsensorhandler extends eZContentObjectEditHandler
 {
-    const PASSWORD_FORGOT_MESSAGE = "Per recuperare la password di accesso visita la pagina \n %s";
+    const PASSWORD_FORGOT_MESSAGE = "To recover the access password, visit the page \n %s";
 
-    const PENDING_USER_DUPLICATED_FISCAL_CODE_MESSAGE = "Esiste già una registrazione in attesa di attivazione per il codice fiscale '%s'";
+    const PENDING_USER_DUPLICATED_FISCAL_CODE_MESSAGE = "There is already a registration pending activation for the '%s' fiscal code";
 
-    const NOTIFICATION_SENT_MESSAGE = "È stata inviata nuovamente la mail di attivazione: controlla l'indirizzo di posta '%s'";
+    const NOTIFICATION_SENT_MESSAGE = "The activation email has been sent again: check the '%s' email address";
 
-    const DUPLICATED_LOGIN_MESSAGE = "Il nome utente '%s' esiste già, sei pregato di sceglierne un altro";
+    const DUPLICATED_LOGIN_MESSAGE = "The '%s' username already exists, please choose another one";
 
     /**
      * @param eZHTTPTool $http

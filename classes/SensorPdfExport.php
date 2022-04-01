@@ -55,10 +55,10 @@ class SensorPdfExport
 
         $attributes = [
             $this->translator->translate('Creation date') => [$this->post->published->format('d/m/Y H:i')],
-            $this->translator->translate('Type') => [$this->post->type->label],
+            $this->translator->translate('Type') => [$this->repository->getPostTypeService()->loadPostType($this->post->type->identifier)->name],
             $this->translator->translate('Object of issue') => [$this->post->subject],
             $this->translator->translate('Description of issue') =>  [preg_replace('/\s+/', ' ', $this->post->description)],
-            $this->translator->translate('Location info') => $this->post->geoLocation instanceof Post\Field\GeoLocation ?
+            $this->translator->translate('Location info') => $this->post->geoLocation instanceof Post\Field\GeoLocation && $this->post->geoLocation->latitude != 0 ?
                 [$this->post->geoLocation->address, '(lat: ' . $this->post->geoLocation->latitude . ', lng: ' . $this->post->geoLocation->longitude . ')'] : [],
         ];
 

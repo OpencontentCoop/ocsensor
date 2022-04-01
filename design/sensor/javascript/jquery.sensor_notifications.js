@@ -60,7 +60,7 @@ $(document).ready(function () {
                             var title = $('title').text();
                             var icon = $('a.navbar-brand img').attr('src');
                             var options = {
-                                body: '[' + data.id + '] Nuova segnalazione',
+                                body: '[' + data.id + '] ' + $.sensorTranslate.translate('New issue'),
                                 icon: icon,
                                 badge: icon,
                                 data: data,
