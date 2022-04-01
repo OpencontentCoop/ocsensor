@@ -13,6 +13,9 @@
                 $.getJSON('/api/sensor/stats/' + chart.data('identifier'), params, function (response) {
                     $.each(response, function () {
                         this.config.exporting = getExportingConfig();
+                        this.config.plotOptions.column.dataLabels.formatter = function(){
+                            return (this.y !== 0) ? this.y : '';
+                        }
                         chart.highcharts(this.config);
                     })
                 });
