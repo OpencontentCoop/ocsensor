@@ -18,7 +18,8 @@
             'categoryPredictionTpl': '#tpl-category-predictions',
             'onRemove': null,
             'alertsEndPoint': false,
-            'additionalWMSLayers': []
+            'additionalWMSLayers': [],
+            'postsUrl': function(){ return $('[data-location="sensor-posts"]').attr('href')}
         };
 
     function Plugin(element, options, postId) {
@@ -27,6 +28,8 @@
         this.alertContainer = $(this.settings.alertContainerSelector);
         this.actionStarted = false;
         this.spinner = $($.templates(this.settings.spinnerTpl).render({}));
+        this.hasOpenedPost = false;
+        this.openedPostHistory = [];
         $(document).on('show.bs.collapse', '#collapseConversation', function (e) {
             Cookies.set('collapseConversation', 1);
         });
@@ -121,12 +124,12 @@
                         onBeforeCreate: function(){
                             $('#modal-duplicate').modal('show');
                         },
-                        onSuccess: function (data) {
-                            if (data){
-                                plugin.removeAlert().startLoading();
-                                window.location = $.opendataTools.settings('accessPath') + '/sensor/posts/'+data;
+                        onSuccess: function (postId) {
+                            plugin.removeAlert().startLoading();
+                            if (postId){
+                                plugin.openPost(postId);
                             }else{
-                                plugin.removeAlert().startLoading().load(post.id);
+                                plugin.load(post.id);
                             }
                             $('#modal-duplicate').modal('hide');
                         }
@@ -713,6 +716,53 @@
             plugin.resultContainer.css({'opacity': '1'});
 
             return plugin;
+        },
+
+        openPost: function (postId, cb, context){
+            var plugin = this;
+            plugin.hasOpenedPost = postId;
+            plugin.removeAlert().startLoading().load(postId);
+            var isInHistory = $.inArray(postId, plugin.openedPostHistory) > -1;
+            if (!isInHistory) {
+                window.history.pushState({'post_id': postId}, document.title, plugin.settings.postsUrl() + '/' + postId);
+                plugin.openedPostHistory.push(postId);
+            }
+            if ($.isFunction(cb)) cb.call(context, plugin);
+            $(window).scrollTop(0);
+        },
+
+        closePost: function (currentPageLink, cb, context){
+            var plugin = this;
+            plugin.hasOpenedPost = false;
+            plugin.removeAlert().stopLoading();
+            window.history.replaceState({'post_id': null}, document.title, currentPageLink.attr('href'));
+            if ($.isFunction(cb)) cb.call(context, plugin);
+            $(window).scrollTop(0);
+        },
+
+        getOpenedPost: function (){
+            return this.hasOpenedPost;
+        },
+
+        initNavigation: function(currentPageLink, onOpenPost, onClosePost, reset){
+            var plugin = this;
+            window.onpopstate = function(event) {
+                // console.log(event.state);
+                $(window).scrollTop(0);
+                if (event.state === null || event.state.post_id === null){
+                    plugin.closePost(currentPageLink, onClosePost);
+                }else if (event.state.post_id){
+                    plugin.openPost(event.state.post_id, onOpenPost);
+                }
+            };
+            currentPageLink.on('click', function (e){
+                if (plugin.getOpenedPost()){
+                    plugin.closePost(currentPageLink, onClosePost);
+                }else{
+                    reset();
+                }
+                e.preventDefault();
+            });
         }
     });
 

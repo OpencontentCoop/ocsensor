@@ -42,7 +42,7 @@ additionalWMSLayers.push({ldelim}
 {rdelim});
 {/foreach}
 $(document).ready(function () {ldelim}
-    $('#post').sensorPost({ldelim}
+    var sensorPostViewer =$('#post').sensorPost({ldelim}
         'apiEndPoint': '/api/sensor_gui',
         'sensorPostDefinition': '{$sensor_post|wash(javascript)}',
         'currentUserId': {fetch(user,current_user).contentobject_id|int()},
@@ -55,6 +55,18 @@ $(document).ready(function () {ldelim}
         'postTpl': '#tpl-post',
         'alertsEndPoint': '{'social_user/alert'|ezurl(no)}',
         'additionalWMSLayers': additionalWMSLayers
-    {rdelim}, {$post_id});
+    {rdelim}, {$post_id}).data('plugin_sensorPost');
+
+    var currentPageLink = $('[data-location="sensor-posts"]');
+    window.onpopstate = function(event) {ldelim}
+        if (event.state !== null && event.state.post_id !== null){ldelim}
+            var postId = event.state.post_id;
+            //window.history.pushState({ldelim}'post_id': postId{rdelim}, document.title, currentPageLink.attr('href')+'/'+postId);
+            $(window).scrollTop(0);
+            sensorPostViewer.removeAlert().startLoading().load(postId);
+        {rdelim}
+    };
+    window.history.replaceState({ldelim}'post_id': {$post_id}{rdelim}, document.title, currentPageLink.attr('href')+'/'+{$post_id});
+
 {rdelim});
 </script>

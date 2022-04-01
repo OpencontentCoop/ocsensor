@@ -1,4 +1,4 @@
-<div class="row" style="text-align:center;margin: 20px 0">
+<div id="post-dashboard-selector" class="row" style="text-align:center;margin: 20px 0">
     <div class="col-md-12" data-participant_filters="sensor_participant_filter">
         <p><strong>{sensor_translate("Show only issues I participate in such as:")}</strong></p>
         <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{sensor_translate('Reference for the citizen')}</button>
@@ -6,7 +6,7 @@
         <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{sensor_translate('Observer')}</button>
     </div>
 </div>
-<div class="row post-gui">
+<div id="post-dashboard" class="row post-gui">
     <div class="col-md-12">
         <button class="btn search-trigger" style="position: absolute;right: -41px;transform: rotate(-90deg);top: 23px;border-radius: 0;"><span class="fa fa-search"></span> {sensor_translate('Search', 'config')}</button>
         <div class="bordered">
@@ -191,21 +191,41 @@
     </div>
 </div>
 
+<div id="preview" style="display: none">
+    <div id="post-preview" class="post-gui" style="position: relative;min-height: 400px;"></div>
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-title.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-detail.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-messages.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-sidebar.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-alerts.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-post-gallery.tpl'}
+</div>
+
 {ezcss_require(array(
-    'select2.min.css',
     'daterangepicker.css',
-    'leaflet.0.7.2.css'
+    'select2.min.css',
+    'leaflet/MarkerCluster.css',
+    'leaflet/MarkerCluster.Default.css',
+    'leaflet.0.7.2.css',
+    'plugins/blueimp/blueimp-gallery.css',
+    'jquery.fileupload.css'
 ))}
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
-    'moment-with-locales.min.js',
     'js.cookie.js',
+    'moment-with-locales.min.js',
+    'plugins/blueimp/jquery.blueimp-gallery.min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+    'jquery.fileupload.js',
     'leaflet.0.7.2.js',
+    'leaflet.markercluster.js',
     'Leaflet.MakiMarkers.js',
     'daterangepicker.js',
     'jquery.opendataTools.js',
-    'jsrender.js', 'jsrender.helpers.js'
+    'jsrender.js', 'jsrender.helpers.js',
+    'jquery.sensorpost.js'
 ))}
 
 {include uri='design:sensor_api_gui/dashboard/parts/tpl-dashboard-results.tpl'}
@@ -214,8 +234,6 @@
 
 <script>
 $(document).ready(function () {ldelim}
-
-
     $('.search-trigger').on('click', function (e) {ldelim}
        $(this).hide().parent().addClass('col-md-9').removeClass('col-md-12');
        $('.searchform').removeClass('hide');
@@ -268,6 +286,40 @@ $(document).ready(function () {ldelim}
         'settings': '{$settings|wash(javascript)}'
     {rdelim};
 {literal}
+    var postList = $('#post-dashboard');
+    var postGui = $('#preview');
+    var postWindow = $('#post-preview');
+    var dashboardSelector = $('#post-dashboard-selector');
+    var dashboardHeader = $('#post-dashboard-header');
+    var postPageLink = $('[data-location="sensor-posts"]');
+    var currentPageLink = $('[data-location="sensor-dashboard"]');
+    var sensorPostViewer = postWindow.sensorPost({
+        'apiEndPoint': '/api/sensor_gui',
+        'sensorPostDefinition': '{/literal}{sensor_post_class()|json_encode()|wash(javascript)}{literal}',
+        'currentUserId': {/literal}{fetch(user,current_user).contentobject_id|int()}{literal},
+        'areas': '{/literal}{sensor_areas()|json_encode()|wash(javascript)}{literal}',
+        'categories': '{/literal}{sensor_categories()|json_encode()|wash(javascript)}{literal}',
+        'operators': '{/literal}{sensor_operators()|json_encode()|wash(javascript)}{literal}',
+        'groups': '{/literal}{sensor_groups()|json_encode()|wash(javascript)}{literal}',
+        'settings': '{/literal}{sensor_settings()|json_encode()|wash(javascript)}{literal}',
+        'spinnerTpl': '#tpl-spinner',
+        'postTpl': '#tpl-post',
+        'alertsEndPoint': '{/literal}{'social_user/alert'|ezurl(no)}{literal}'
+    }).data('plugin_sensorPost');
+    var onOpenPost = function (){
+        dashboardHeader.hide();
+        dashboardSelector.hide();
+        postList.hide();
+        postGui.show();
+    };
+    var onClosePost = function(){
+        dashboardHeader.show();
+        dashboardSelector.show();
+        postList.show();
+        postGui.hide();
+        postWindow.html('');
+    };
+
     var form = $('form.dashboard-form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
@@ -624,9 +676,10 @@ $(document).ready(function () {ldelim}
             viewContainer.html(renderData);
 
             viewContainer.find('td[data-href]').css('cursor', 'pointer').on('click', function (e) {
-                document.location = $(this).data('href');
+                //document.location = $(this).data('href');
+                var postId = $(this).data('preview');
+                sensorPostViewer.openPost(postId, onOpenPost);
             });
-
             viewContainer.find('[data-star]').css('cursor', 'pointer').on('click', function (e){
                 var self = $(this);
                 var id = self.data('star');
@@ -693,7 +746,6 @@ $(document).ready(function () {ldelim}
                     });
                 }
             });
-
             viewContainer.find('[data-important]').css('cursor', 'pointer').on('click', function (e){
                 var self = $(this);
                 var id = self.data('important');
@@ -816,7 +868,7 @@ $(document).ready(function () {ldelim}
         reset();
     })
 
-
+    sensorPostViewer.initNavigation(currentPageLink, onOpenPost, onClosePost, reset);
 {/literal}
 {rdelim});
 </script>

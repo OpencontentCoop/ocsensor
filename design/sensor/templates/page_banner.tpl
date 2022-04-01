@@ -31,7 +31,7 @@
                     <div class="form-group" id="area-filter">
                         <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
                             <option></option>
-                            {foreach $module_result.content_info.persistent_variable.areas.children as $item}
+                            {foreach sensor_areas().children as $item}
                                 <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                 {foreach $item.children as $child}
                                     <option data-parent="{$item.id}" value="{$child.id}"
@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group" id="category-filter">
                         <select class="select form-control" name="category" data-placeholder="{sensor_translate('Category')}" multiple="multiple">
-                            {foreach $module_result.content_info.persistent_variable.categories.children as $item}
+                            {foreach sensor_categories().children as $item}
                                 <option value="{$item.id}"
                                         style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                 {foreach $item.children as $child}
@@ -54,7 +54,7 @@
                     <div class="form-group" id="type-filter">
                         <select class="select form-control" name="type" data-placeholder="{sensor_translate('Type')}">
                             <option></option>
-                            {foreach $module_result.content_info.persistent_variable.types as $item}
+                            {foreach sensor_types() as $item}
                                 <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
                             {/foreach}
                         </select>
@@ -147,6 +147,7 @@
         </div>
     </div>
 {/if}
+
 {if sensor_settings().ShowSmartGui}
     {include name="add_post" uri='design:sensor_api_gui/add/add_post.tpl'}
 {/if}
