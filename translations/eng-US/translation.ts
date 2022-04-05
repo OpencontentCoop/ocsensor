@@ -1999,6 +1999,10 @@
       <source>Add note and reassign</source>
       <translation>Add note and reassign</translation>
     </message>
+    <message>
+      <source>Group reference</source>
+      <translation>Group reference</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
