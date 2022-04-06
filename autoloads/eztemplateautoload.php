@@ -23,6 +23,7 @@ $eZTemplateOperatorArray[] = array(
         'sensor_faqcontainer',
         'is_sensor_public_field',
         'sensor_edit_category_access',
+        'sensor_edit_category_access_cache_key',
         'sensor_translate',
         'can_set_sensor_tag',
         'sensor_operators_root_node',

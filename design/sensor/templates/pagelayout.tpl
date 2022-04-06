@@ -138,7 +138,8 @@
     cond(is_set($module_result.content_info.persistent_variable.sensor_home), 'is_home', 'not_is_home'),
     cond(is_set($module_result.content_info.persistent_variable.sensor_post_container), 'is_post_container', 'not_is_post_container'),
     cond(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), 'can_manage', 'not_can_manage'),
-    cond(sensor_settings().ShowSmartGui, 'has_smart_gui', 'not_has_smart_gui')
+    cond(sensor_settings().ShowSmartGui, 'has_smart_gui', 'not_has_smart_gui'),
+    sensor_edit_category_access_cache_key()
 )}
 {cache-block expiry=86400 ignore_content_expiry keys=$cache_keys}
     {include uri='design:page_banner.tpl'}
