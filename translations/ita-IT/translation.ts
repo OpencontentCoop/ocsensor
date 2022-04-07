@@ -1724,7 +1724,7 @@
       <translation>Per rimuovere un'immagine allegata clicca sul cestino</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
       <translation>Per vedere tutte le tue segnalazioni clicca %dashboard_link_start%qui%dashboard_link_end%'</translation>
     </message>
     <message>
@@ -2002,6 +2002,18 @@
     <message>
       <source>Group reference</source>
       <translation>Riferimento</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>Se l'indirizzo email è registrato nel sistema, ti verrà inviato un messaggio con un link che devi cliccare per darci la conferma che sei l'utente giusto.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Mappa</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellite</translation>
     </message>
   </context>
   <context>

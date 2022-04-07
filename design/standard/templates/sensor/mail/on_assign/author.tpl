@@ -18,13 +18,13 @@
                       {include uri='design:sensor/mail/parts/post_info.tpl'}
                     </td>
                 </tr>
-                {if and( sensor_settings('HideOperatorNames')|not(), sensor_settings('HideTimelineDetails')|not(), count( $event_details )|gt(0), is_set( $event_details.owners ) )}
+                {*if and( sensor_settings('HideOperatorNames')|not(), sensor_settings('HideTimelineDetails')|not(), count( $event_details )|gt(0), is_set( $event_details.owners ) )}
                     <tr>
                         <td align='left' style='border-top: 1px solid #dce1e5;border-bottom: 1px solid #dce1e5;' valign='top'>
                             <p><strong>{sensor_translate('In charge of')}:</strong> {foreach $event_details.owners as $owner_id}{fetch( content, object, hash( object_id, $owner_id )).name|wash()}{delimiter}, {/delimiter}{/foreach}</p>
                         </td>
                     </tr>
-                {/if}
+                {/if*}
                 <tr>
                     <td align='center' bgcolor='#f90f00' valign='top'>
                         <h3><a href="https://{$social_pagedata.site_url}/sensor/posts/{$object.id}" style="color: #ffffff !important">{sensor_translate('Check the resolution trend')}</a></h3>

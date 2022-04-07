@@ -1724,8 +1724,8 @@
       <translation>Click on the trash can to remove an attached image</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
-      <translation>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</translation>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
+      <translation>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</translation>
     </message>
     <message>
       <source>Translations</source>
@@ -2002,6 +2002,18 @@
     <message>
       <source>Group reference</source>
       <translation>Group reference</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Map</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellite</translation>
     </message>
   </context>
   <context>

@@ -1724,7 +1724,7 @@
       <translation>Klicken Sie auf das Papierkorb-Symbol, um ein hinzugefügtes Bild zu entfernen</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
       <translation>Wenn Sie alle Ihre bisherigen Meldungen ansehen möchten, klicken Sie auf %dashboard_link_start% %dashboard_link_end%</translation>
     </message>
     <message>
@@ -2002,6 +2002,18 @@
     <message>
       <source>Group reference</source>
       <translation>Gruppenreferenz</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>Wenn die E-Mail-Adresse im System registriert ist, erhalten Sie eine Nachricht mit einem Link, auf den Sie klicken müssen, um zu bestätigen, dass Sie der richtige Benutzer sind.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Map</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellit</translation>
     </message>
   </context>
   <context>
