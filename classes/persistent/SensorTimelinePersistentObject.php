@@ -304,4 +304,14 @@ class SensorTimelinePersistentObject extends eZPersistentObject
 
         return $data;
     }
+
+    public function toArray()
+    {
+        $data = [];
+        foreach (array_keys(self::definition()['fields']) as $field){
+            $data[$field] = $this->attribute($field);
+        }
+
+        return $data;
+    }
 }

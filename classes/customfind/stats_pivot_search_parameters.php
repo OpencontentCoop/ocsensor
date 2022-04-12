@@ -1,16 +1,16 @@
 <?php
 
-class SensorDailySearchParameters extends OCCustomSearchParameters
+class StatsPivotSearchParameters extends OCCustomSearchParameters
 {
     /**
      * @var array
      */
-    private $stats = array();
+    protected $stats = array();
 
     /**
      * @var array
      */
-    private $pivot = array();
+    protected $pivot = array();
 
     /**
      * @return array
@@ -22,7 +22,7 @@ class SensorDailySearchParameters extends OCCustomSearchParameters
 
     /**
      * @param array $stats
-     * @return SensorDailySearchParameters
+     * @return OCCustomSearchParameters
      */
     public function setStats($stats)
     {
@@ -40,7 +40,7 @@ class SensorDailySearchParameters extends OCCustomSearchParameters
 
     /**
      * @param array $pivot
-     * @return SensorDailySearchParameters
+     * @return OCCustomSearchParameters
      */
     public function setPivot($pivot)
     {

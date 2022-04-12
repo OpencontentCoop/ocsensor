@@ -1,6 +1,6 @@
 <?php
 
-class SensorDailySearchResult extends OCCustomSearchResult
+class StatsPivotSearchResult extends OCCustomSearchResult
 {
     public function fromArrayResult(array $resultArray)
     {
@@ -10,5 +10,4 @@ class SensorDailySearchResult extends OCCustomSearchResult
 
         return $data;
     }
-
 }
