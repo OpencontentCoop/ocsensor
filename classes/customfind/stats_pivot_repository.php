@@ -11,7 +11,7 @@ trait StatsPivotRepository
         $queryParams = $this->buildQuery($parameters);
         eZDebug::accumulatorStop('Query build');
 
-        if ($parameters instanceof SensorDailySearchParameters){
+        if ($parameters instanceof StatsPivotSearchParameters){
             $queryParams = $this->addStatsToQueryParams($parameters->getStats(), $queryParams);
             $queryParams = $this->addPivotToQueryParams($parameters->getPivot(), $queryParams);
         }

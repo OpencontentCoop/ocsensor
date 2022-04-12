@@ -134,6 +134,8 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         ];
         $row = new self($item);
         $row->store();
+
+        return $row;
     }
 
     public static function createOnNewTimelineItem(Post $post, TimelineItem $timelineItem)
@@ -280,6 +282,8 @@ class SensorTimelinePersistentObject extends eZPersistentObject
 
         $row = new self($item);
         $row->store();
+
+        return $row;
     }
 
     private static function getParentAndChildCategory($categoryId)
