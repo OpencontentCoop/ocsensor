@@ -198,8 +198,12 @@ class SensorTimelinePersistentObject extends eZPersistentObject
                     $previousRead = $item;
                 }
             }
-            $previous = array_shift($previousList);
-            $first = array_pop($previousList);
+            if (count($previousList) === 1){
+                $previous = $first = $previousList[0];
+            }else {
+                $previous = array_shift($previousList);
+                $first = array_pop($previousList);
+            }
         }
 
         if ($previousWithTarget instanceof SensorTimelinePersistentObject) {
@@ -281,12 +285,8 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             'post_parent_category_id' => $parentAndChildCategory['parent'],
             'post_child_category_id' => $parentAndChildCategory['child'],
             'post_area_id' => count($post->areas) > 0 ? $post->areas[0]->id : null,
-            'post_author_id' => $first instanceof SensorTimelinePersistentObject ? $first->attribute(
-                'post_author_id'
-            ) : null,
-            'post_author_group_id' => $first instanceof SensorTimelinePersistentObject ? $first->attribute(
-                'post_author_group_id'
-            ) : null,
+            'post_author_id' => $first instanceof SensorTimelinePersistentObject ? $first->attribute('post_author_id') : null,
+            'post_author_group_id' => $first instanceof SensorTimelinePersistentObject ? $first->attribute('post_author_group_id') : null,
             'post_status' => $status,
             'post_type' => $post->type->identifier,
         ];
