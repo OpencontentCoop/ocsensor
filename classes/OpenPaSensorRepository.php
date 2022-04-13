@@ -145,6 +145,9 @@ class OpenPaSensorRepository extends LegacyRepository
             if ($this->getSensorSettings()->get('CloseOnUserGroupPostFix')) {
                 $this->addListener('on_fix', new UserGroupPostFixListener($this));
             }
+            $timelineListener = new SensorTimelineListener();
+            $this->addListener('on_create', $timelineListener);
+            $this->addListener('on_create_timeline', $timelineListener);
 
             $this->getStatisticsService()->setStatisticFactories([
                 new Statistics\StatusPercentage($this),

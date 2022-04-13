@@ -29,6 +29,8 @@ $user = eZUser::fetchByName('admin');
 eZUser::setCurrentlyLoggedInUser($user, $user->attribute('contentobject_id'));
 $cli = eZCLI::instance();
 
+SensorTimelinePersistentObject::storeHelperTables();
+
 try {
     $repository = OpenPaSensorRepository::instance();
     if ($options['id']){
