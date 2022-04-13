@@ -140,7 +140,7 @@
                 renderData.find('[data-usergroup]').each(function (){
                     var self = $(this);
                     $.get(plugin.settings.apiEndPoint + '/user-groups/' + self.data('usergroup'), function (response){
-                        self.html(response.name);
+                        self.show().html(response.name);
                     })
                 });
 

@@ -1,6 +1,6 @@
 <form class="row form">
     {if count($user_groups)}
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-3" style="padding-right: 0">
             <select class="form-control" name="user_group">
                 <option selected="selected" value="{$user_parent_node.node_id}">{sensor_translate('Filter by group', 'config')}</option>
                 {foreach $user_groups as $user_group}
@@ -9,7 +9,7 @@
             </select>
         </div>
     {/if}
-    <div class="col-xs-12 col-md-6">
+    <div class="col-xs-12 col-md-7">
         <div class="input-group">
             <input type="text" class="form-control" data-search="q" placeholder="{sensor_translate('Search', 'config')}">
             <span class="input-group-btn">
@@ -55,6 +55,7 @@
             {{for searchHits}}
                 <tr>
                     <td>
+                        {{if metadata.classIdentifier != 'user'}}<i class="fa fa-user-circle"></i>{{/if}}
                         {{if ~i18n(metadata.name)}}{{:~i18n(metadata.name)}}{{/if}}
                     </td>
                     <td width="1">
@@ -78,16 +79,16 @@
                         </div>
                     </td>
                     <td width="1">
-                        <a class="btn btn-link btn-xs text-black" data-user_access_edit="{{:metadata.id}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
+                        <a class="btn btn-link btn-xs text-black" data-user_access_edit="{{:metadata.id}}" data-type="{{:metadata.classIdentifier}}"><i data-user={{:metadata.id}} class="fa fa-user"></i></a>
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
-                            <a href="#" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
+                            <a href="#" data-edit="{{:metadata.id}}"><i class="fa fa-pencil"></i></a>
                         {{/if}}
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canRemove}}
-                            <a href="#" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
+                            <a href="#" data-remove="{{:metadata.id}}"><i class="fa fa-trash"></i></a>
                         {{/if}}
                     </td>
                 </tr>
@@ -313,10 +314,11 @@
                         });
 
                         renderData.find('[data-user_access_edit]').on('click', function(e){
+                            var connector = $(this).data('type') === 'user' ? 'user-settings' : 'operator-settings';
                             $('#item').opendataForm({
                                 user: $(this).data('user_access_edit')
                             },{
-                                connector: 'user-settings',
+                                connector: connector,
                                 onBeforeCreate: function(){
                                     $('#modal').modal('show');
                                     setTimeout(function() {

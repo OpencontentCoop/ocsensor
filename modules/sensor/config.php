@@ -145,6 +145,7 @@ if ($Part == 'areas') {
     $tpl->setVariable('operator_parent_node', $repository->getOperatorsRootNode());
     $tpl->setVariable('operator_class', eZContentClass::fetchByIdentifier('sensor_operator'));
     $tpl->setVariable('groups', $repository->getGroupsTree());
+    $tpl->setVariable('user_groups', $repository->getMembersAvailableGroups());
 
 } elseif ($Part == 'groups') {
     $tpl->setVariable('groups_parent_node', $repository->getGroupsRootNode());

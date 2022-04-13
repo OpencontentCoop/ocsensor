@@ -1,10 +1,20 @@
 <form class="row form">
     {if count($groups)}
-        <div class="col-xs-12 col-md-4">
+        <div class="col-xs-12 col-md-3" style="padding-right: 0">
             <select class="form-control" name="operator_group">
                 <option selected="selected" value="">{sensor_translate('Filter by operator group', 'config')}</option>
                 {foreach $groups.children as $group}
                     <option value="{$group.id}">{$group.name|wash()}</option>
+                {/foreach}
+            </select>
+        </div>
+    {/if}
+    {if count($user_groups)}
+        <div class="col-xs-12 col-md-3" style="padding-right: 0">
+            <select class="form-control" name="user_group">
+                <option selected="selected" value="{$user_parent_node.node_id}">{sensor_translate('Filter by group', 'config')}</option>
+                {foreach $user_groups as $user_group}
+                    <option value="{$user_group.node_id}">{$user_group.name|wash()}</option>
                 {/foreach}
             </select>
         </div>
@@ -160,7 +170,6 @@
             var resultsContainer = $('[data-parent]');
             var form = resultsContainer.prev();
             var limitPagination = resultsContainer.data('limit');
-            var subtree = resultsContainer.data('parent');
             var classes = resultsContainer.data('classes');
             var redirect = resultsContainer.data('redirect');
             var currentPage = 0;
@@ -226,6 +235,12 @@
                 if (classes.length) {
                     classQuery = 'classes [' + classes + ']';
                 }
+                var subtree = resultsContainer.data('parent');
+                var subtreeSelect = form.find('[name="user_group"]');
+                if (subtreeSelect.length > 0 && subtreeSelect.val().length > 0){
+                    subtree = subtreeSelect.val();
+                }
+
                 var query = classQuery + ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']';
                 var searchText = form.find('[data-search="q"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
                 if (searchText.length > 0) {
