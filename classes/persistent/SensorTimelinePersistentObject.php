@@ -340,8 +340,10 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         }
 
         $db->query('TRUNCATE ocsensor_category');
-        $query = "INSERT INTO ocsensor_category (id, name, parent_id) VALUES " . implode(',', $insertValues);
-        $db->query($query);
+        if (!empty($insertValues)) {
+            $query = "INSERT INTO ocsensor_category (id, name, parent_id) VALUES " . implode(',', $insertValues);
+            $db->query($query);
+        }
     }
 
     private static function storeAreas()
@@ -357,8 +359,10 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         }
 
         $db->query('TRUNCATE ocsensor_area');
-        $query = "INSERT INTO ocsensor_area (id, name) VALUES " . implode(',', $insertValues);
-        $db->query($query);
+        if (!empty($insertValues)) {
+            $query = "INSERT INTO ocsensor_area (id, name) VALUES " . implode(',', $insertValues);
+            $db->query($query);
+        }
     }
 
     private static function storeGroups()
@@ -378,8 +382,10 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         }
 
         $db->query('TRUNCATE ocsensor_group');
-        $query = "INSERT INTO ocsensor_group (id, name, tag, reference) VALUES " . implode(',', $insertValues);
-        $db->query($query);
+        if (!empty($insertValues)) {
+            $query = "INSERT INTO ocsensor_group (id, name, tag, reference) VALUES " . implode(',', $insertValues);
+            $db->query($query);
+        }
     }
 
     private static function storeOperators()
@@ -395,8 +401,10 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         }
 
         $db->query('TRUNCATE ocsensor_operator');
-        $query = "INSERT INTO ocsensor_operator (id, name) VALUES " . implode(',', $insertValues);
-        $db->query($query);
+        if (!empty($insertValues)) {
+            $query = "INSERT INTO ocsensor_operator (id, name) VALUES " . implode(',', $insertValues);
+            $db->query($query);
+        }
     }
 
     private static function storeUsers()
@@ -420,26 +428,24 @@ class SensorTimelinePersistentObject extends eZPersistentObject
 
     public static function storeHelperTables($identifiers = [])
     {
-        if (!self::isSchemaInstalled()){
-            return false;
-        }
-
-        if (in_array('categories', $identifiers)) {
-            SensorTimelinePersistentObject::storeCategories();
-        } elseif (in_array('areas', $identifiers)) {
-            SensorTimelinePersistentObject::storeAreas();
-        } elseif (in_array('groups', $identifiers)) {
-            SensorTimelinePersistentObject::storeGroups();
-        } elseif (in_array('operators', $identifiers)) {
-            SensorTimelinePersistentObject::storeOperators();
-        } elseif (in_array('users', $identifiers)) {
-            SensorTimelinePersistentObject::storeUsers();
-        } elseif (empty($identifiers)) {
-            SensorTimelinePersistentObject::storeCategories();
-            SensorTimelinePersistentObject::storeAreas();
-            SensorTimelinePersistentObject::storeGroups();
-            SensorTimelinePersistentObject::storeOperators();
-            SensorTimelinePersistentObject::storeUsers();
+        if (self::isSchemaInstalled()) {
+            if (in_array('categories', $identifiers)) {
+                SensorTimelinePersistentObject::storeCategories();
+            } elseif (in_array('areas', $identifiers)) {
+                SensorTimelinePersistentObject::storeAreas();
+            } elseif (in_array('groups', $identifiers)) {
+                SensorTimelinePersistentObject::storeGroups();
+            } elseif (in_array('operators', $identifiers)) {
+                SensorTimelinePersistentObject::storeOperators();
+            } elseif (in_array('users', $identifiers)) {
+                SensorTimelinePersistentObject::storeUsers();
+            } elseif (empty($identifiers)) {
+                SensorTimelinePersistentObject::storeCategories();
+                SensorTimelinePersistentObject::storeAreas();
+                SensorTimelinePersistentObject::storeGroups();
+                SensorTimelinePersistentObject::storeOperators();
+                SensorTimelinePersistentObject::storeUsers();
+            }
         }
     }
 }
