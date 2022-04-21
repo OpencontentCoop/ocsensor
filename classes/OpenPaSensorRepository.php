@@ -309,6 +309,7 @@ class OpenPaSensorRepository extends LegacyRepository
                         'InBoxFirstApproverReadStrategy' => isset($sensorIni['InBoxFirstApproverReadStrategy']) ? $sensorIni['InBoxFirstApproverReadStrategy'] : 'by_group',
                         'AddPrivateMessageBeforeReassign' => isset($sensorIni['AddPrivateMessageBeforeReassign']) ? $sensorIni['AddPrivateMessageBeforeReassign'] == 'enabled' : false,
                         'CloseOnUserGroupPostFix' => isset($sensorIni['CloseOnUserGroupPostFix']) ? $sensorIni['CloseOnUserGroupPostFix'] == 'enabled' : false,
+                        'RequireCategoryForAdditionalMemberGroups' => isset($sensorIni['RequireCategoryForAdditionalMemberGroups']) ? $sensorIni['RequireCategoryForAdditionalMemberGroups'] == 'enabled' : true,
                     );
                     return [
                         'content' => $data,

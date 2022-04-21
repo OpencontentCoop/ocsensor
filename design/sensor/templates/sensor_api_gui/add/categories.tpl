@@ -3,7 +3,7 @@
 {if $category_access|ne('none')}
     {def $categories = sensor_categories()}
     {if $category_field|not()}
-        {set $category_field = hash('is_required', true())}
+        {set $category_field = hash('is_required', sensor_settings('RequireCategoryForAdditionalMemberGroups'))}
     {/if}
     {if is_set( $categories['children'] )}
         {set $categories = $categories['children']}

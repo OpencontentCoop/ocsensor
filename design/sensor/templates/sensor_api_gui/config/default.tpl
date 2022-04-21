@@ -146,3 +146,9 @@
         </td>
     </tr>
 </table>
+
+{if fetch( user, has_access_to, hash( module, settings, function, view ) )}
+    <p class="pull-right">
+        <a target="_blank" href="{'/settings/view/ita_sensor/ocsensor.ini/'|ezurl(no)}"><small>{'Ini settings'|i18n('design/admin/parts/setup/menu')}</small></a>
+    </p>
+{/if}
