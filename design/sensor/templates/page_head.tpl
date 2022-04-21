@@ -30,6 +30,7 @@
 
     {ezscript_load(array(
         'modernizr.custom.48287.js',
+        'sensor::translations',
         'ezjsc::jquery',
         'bootstrap.min.js',
         'isotope/jquery.isotope.min.js',
