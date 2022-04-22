@@ -349,7 +349,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
     private static function storeAreas()
     {
         $db = eZDB::instance();
-        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getAreasRootNode(), ['language' => 'ita-IT']);
+        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getAreasRootNode(), ['language' => 'ita-IT', 'classes' => ['sensor_area']]);
         $insertValues = [];
         foreach ($tree->attribute('children') as $item){
             $insertValues[] = '(' . $item->attribute('id') . ',\'' . $db->escapeString($item->attribute('name')) . '\')';
@@ -368,7 +368,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
     private static function storeGroups()
     {
         $db = eZDB::instance();
-        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getGroupsRootNode(), ['language' => 'ita-IT']);
+        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getGroupsRootNode(), ['language' => 'ita-IT', 'classes' => ['sensor_group']]);
         $insertValues = [];
         foreach ($tree->attribute('children') as $item){
             $insertValues[] = '(' . $item->attribute('id') . ',\'' . $db->escapeString($item->attribute('name')) . '\',\'' . $db->escapeString($item->attribute('group')) . '\',\'' . $db->escapeString($item->attribute('reference')) . '\')';
@@ -391,7 +391,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
     private static function storeOperators()
     {
         $db = eZDB::instance();
-        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getOperatorsRootNode(), ['language' => 'ita-IT']);
+        $tree = TreeNode::walk(OpenPaSensorRepository::instance()->getOperatorsRootNode(), ['language' => 'ita-IT', 'classes' => ['sensor_operator']]);
         $insertValues = [];
         foreach ($tree->attribute('children') as $item){
             $insertValues[] = '(' . $item->attribute('id') . ',\'' . $db->escapeString($item->attribute('name')) . '\')';
