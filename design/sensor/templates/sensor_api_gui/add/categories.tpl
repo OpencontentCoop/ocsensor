@@ -11,7 +11,7 @@
     {if ne( count( $categories ), 0)}
         <label class="form-group has-float-label" style="margin-top: 30px;">
             <select class="form-control" name="category"{if $category_field.is_required} required{/if}>
-                {if $category_field.is_required|not()}<option data-avoid_areas="[]"></option>{/if}
+                <option data-avoid_areas="[]"></option>
                 {foreach $categories as $item}
                     {if or($category_access|eq('all'), $category_access|contains($item['node_id']))}
                         {if count($item.children)|eq(0)}
