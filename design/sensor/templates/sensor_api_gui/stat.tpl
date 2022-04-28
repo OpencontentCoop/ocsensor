@@ -149,6 +149,13 @@
                                         <option value="{$item.id}"{if count($items)|gt(1)} style="margin-left: 20px"{/if}>{$item.name|wash()}</option>
                                     {/foreach}
                                 {/foreach}
+                                {if $has_group_reference}
+                                    <optgroup label="{sensor_translate('Reference')}">
+                                    {foreach $references as $identifier => $reference}
+                                        <option value="{$identifier}" style="font-style: italic">{$reference|wash()}</option>
+                                    {/foreach}
+                                    </optgroup>
+                                {/if}
                             </select>
                         </div>
                         {if $has_group_tag}
