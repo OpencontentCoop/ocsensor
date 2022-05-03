@@ -29,9 +29,10 @@
     {{:subject}}
   </h1>
   <p class="lead"><strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong> &middot;
+    {{if author.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}}
     {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a> {{if author.phone}}<a style="font-size:.6em" href="tel:{{:author.phone}}"><i class="fa fa-phone-square"></i> {{:author.phone}}</a>{{/if}}
     {{else}}{{:author.name}}{{/if}}
-    {{for author.groups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}
+    {{if author.isSuperUser}}{{for author.groups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
   </p>
 </section>
 {/literal}{if ezini('SensorConfig', 'SmartDuplicationGui', 'ocsensor.ini')|eq('enabled')}{literal}

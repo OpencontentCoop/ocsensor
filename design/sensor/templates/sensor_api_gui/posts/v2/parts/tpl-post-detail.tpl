@@ -33,7 +33,11 @@
 
     {{if (capabilities.is_a == 'sensor_operator' || capabilities.can_behalf_of) && reporter.id != author.id}}
     <ul class="list-inline">
-        <li>{{:~sensorTranslate('Issue reported by')}} {{:reporter.name}}{{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}</li>
+        <li>
+        {{:~sensorTranslate('Issue reported by')}} {{if reporter.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}} {{:reporter.name}}
+            {{if reporter.isSuperUser}}{{for reporter.groups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
+            {{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}
+        </li>
     </ul>
     {{/if}}
 

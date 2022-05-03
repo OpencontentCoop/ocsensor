@@ -7,7 +7,7 @@ use Opencontent\Sensor\Api\Values\NotificationType;
 use Opencontent\Sensor\Api\Values\Settings;
 use Opencontent\Sensor\Core\ActionDefinitions;
 use Opencontent\Sensor\Core\PermissionDefinitions;
-use Opencontent\Sensor\Legacy\Listeners\UserGroupPostFixListener;
+use Opencontent\Sensor\Legacy\Listeners\SuperUserPostFixListener;
 use Opencontent\Sensor\Legacy\PermissionDefinitions as LegacyPermissionDefinitions;
 use Opencontent\Sensor\Legacy\Listeners\ApproverFirstReadListener;
 use Opencontent\Sensor\Legacy\Listeners\ScenarioListener;
@@ -143,7 +143,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $this->addListener('on_update_operator', new SensorReindexer());
             $this->addListener('on_new_operator', new SensorReindexer());
             if ($this->getSensorSettings()->get('CloseOnUserGroupPostFix')) {
-                $this->addListener('on_fix', new UserGroupPostFixListener($this));
+                $this->addListener('on_fix', new SuperUserPostFixListener($this));
             }
             $timelineListener = new SensorTimelineListener();
             $this->addListener('on_create', $timelineListener);
@@ -237,6 +237,13 @@ class OpenPaSensorRepository extends LegacyRepository
         return OpenPABase::getCurrentSiteaccessIdentifier() . '_openpa_sensor';
     }
 
+    public function clearSensorSettingsCache()
+    {
+        $cacheFile = 'settings.cache';
+        $cacheFilePath = \eZDir::path(array(\eZSys::cacheDirectory(), 'ocopendata', 'sensor', $cacheFile));
+        \eZClusterFileHandler::instance($cacheFilePath)->delete();
+    }
+
     public function getSensorSettings()
     {
         if ($this->settings === null) {
@@ -310,6 +317,8 @@ class OpenPaSensorRepository extends LegacyRepository
                         'AddPrivateMessageBeforeReassign' => isset($sensorIni['AddPrivateMessageBeforeReassign']) ? $sensorIni['AddPrivateMessageBeforeReassign'] == 'enabled' : false,
                         'CloseOnUserGroupPostFix' => isset($sensorIni['CloseOnUserGroupPostFix']) ? $sensorIni['CloseOnUserGroupPostFix'] == 'enabled' : false,
                         'RequireCategoryForAdditionalMemberGroups' => isset($sensorIni['RequireCategoryForAdditionalMemberGroups']) ? $sensorIni['RequireCategoryForAdditionalMemberGroups'] == 'enabled' : true,
+                        'AddOperatorSuperUserAsObserver' => isset($sensorIni['AddOperatorSuperUserAsObserver']) ? $sensorIni['AddOperatorSuperUserAsObserver'] == 'enabled' : false,
+                        'AddBehalfOfUserAsObserver' => isset($sensorIni['AddBehalfOfUserAsObserver']) ? $sensorIni['AddBehalfOfUserAsObserver'] == 'enabled' : true,
                     );
                     return [
                         'content' => $data,

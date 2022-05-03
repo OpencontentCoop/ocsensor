@@ -28,6 +28,16 @@
                     <div class="form-group">
                         <input type="text" class="form-control" name="query" value="" placeholder="{sensor_translate('Search text')}">
                     </div>
+                    <div class="form-group">
+                        <select name="status"
+                                class="select form-control"
+                                data-placeholder="{sensor_translate('Status')}">
+                            <option></option>
+                            {foreach sensor_statuses() as $status}
+                                <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
                     <div class="form-group" id="area-filter">
                         <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
                             <option></option>
@@ -74,16 +84,6 @@
 
                 {if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}
                 <div class="form-group-container">
-                    <div class="form-group">
-                        <select name="status"
-                                class="select form-control"
-                                data-placeholder="{sensor_translate('Status')}">
-                            <option></option>
-                            {foreach sensor_statuses() as $status}
-                                <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
-                            {/foreach}
-                        </select>
-                    </div>
                     <div class="form-group">
                         <input type="text"
                                name="author"

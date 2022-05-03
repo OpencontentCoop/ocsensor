@@ -13,6 +13,12 @@ $repository = OpenPaSensorRepository::instance();
 $root = $repository->getRootNode();
 $rootObject = $root->object();
 
+if ($Part == '_refresh'){
+    $repository->clearSensorSettingsCache();
+    $Module->redirectTo('sensor/config');
+    return;
+}
+
 if ($Part == '_set') {
     $data = [
         'result' => 'fail',
