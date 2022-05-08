@@ -129,6 +129,14 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             return false;
         }
 
+        $userGroup = null;
+        if (!empty($post->author->userGroups)){
+            $userGroup = $post->author->userGroups[0];
+        }
+        if (!empty($post->reporter->userGroups)){
+            $userGroup = $post->reporter->userGroups[0];
+        }
+
         $item = [
             'timeline_id' => 0,
             'post_id' => $post->id,
@@ -140,9 +148,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             'duration' => 0,
             'post_area_id' => count($post->areas) > 0 ? $post->areas[0]->id : null,
             'post_author_id' => $post->author->id,
-            'post_author_group_id' => $post->author->type == 'user' && count(
-                $post->author->groups
-            ) > 0 ? $post->author->groups[0] : null,
+            'post_author_group_id' => $userGroup,
             'post_status' => 'pending',
             'post_type' => $post->type->identifier,
         ];
