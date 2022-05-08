@@ -35,7 +35,7 @@
     <ul class="list-inline">
         <li>
         {{:~sensorTranslate('Issue reported by')}} {{if reporter.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}} {{:reporter.name}}
-            {{if reporter.isSuperUser}}{{for reporter.groups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
+            {{if reporter.isSuperUser}}{{for reporter.userGroups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
             {{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}
         </li>
     </ul>
