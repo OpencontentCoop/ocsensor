@@ -140,8 +140,8 @@
         <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}<i class="fa fa-globe"></i> {{:~sensorTranslate('public', 'privacy')}}{{else}}<i class="fa fa-lock"></i> {{:~sensorTranslate('private', 'privacy')}}{{/if}}</p>
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <div class="form-group hide" data-action-wrapper>
-                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('accepted', 'moderation')}}{{else}}{{:~sensorTranslate('waiting', 'moderation')}}{{/if}}" />
-                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('Make public')}}{{else}}{{:~sensorTranslate('make private')}}{{/if}}" />
+                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}accepted{{else}}waiting{{/if}}" />
+                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('Make public')}}{{else}}{{:~sensorTranslate('Make private')}}{{/if}}" />
             </div>
         {{/if}}
     </div>
