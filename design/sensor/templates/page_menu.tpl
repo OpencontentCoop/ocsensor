@@ -3,7 +3,7 @@
     {def $enabled_languages = sensor_settings('SiteLanguages')}
     {if count($enabled_languages)|gt(1)}
         {def $avail_translation = language_switcher('/')}
-        {def $lang_uri_maps = ezini('SiteAccessSettings', 'LanguageStaticURI')}
+        {def $lang_uri_maps = cond(ezini_hasvariable('SiteAccessSettings', 'LanguageStaticURI'), ezini('SiteAccessSettings', 'LanguageStaticURI'), array())}
         {if $avail_translation|count()|gt(1)}
             <ul class="nav pull-right navbar-nav" style="margin-top: 0">
                 {foreach $avail_translation as $siteaccess => $lang}
@@ -23,7 +23,7 @@
             </ul>
         {/if}
     {/if}
-    <ul class="nav pull-right navbar-nav"{if and(count($enabled_languages)|gt(1), count($avail_translation)|gt(1))} style="margin-top: -10px;clear:right;"{/if}>
+    <ul class="nav pull-right navbar-nav"{if and(count($enabled_languages)|gt(1), is_set($avail_translation), count($avail_translation)|gt(1))} style="margin-top: -10px;clear:right;"{/if}>
         {foreach $social_pagedata.menu as $item}
             {if $item.has_children}
                 <li class="dropdown">

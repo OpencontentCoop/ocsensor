@@ -1,4 +1,5 @@
 <?php
+
 /** @var eZModule $module */
 $module = $Params['Module'];
 $tpl = eZTemplate::factory();
@@ -7,19 +8,79 @@ $http = eZHTTPTool::instance();
 $handler = new SensorCriticalPosts();
 $api = $Params['api'];
 
-if ($http->hasPostVariable('StoreFilters')){
-    $changed = $handler->storeRules($_POST['Rules'], $_POST['Sql']);
+if ($http->hasPostVariable('UpdateData')){
+    $handler->updateView();
     header('Content-Type: application/json');
     header( 'HTTP/1.1 200 OK' );
-    echo json_encode($changed);
+    echo json_encode(true);
     eZExecution::cleanExit();
 }
 
-if ($api === 'api'){
-    $data = $handler->find($_GET['p']);
+if ($http->hasPostVariable('StoreFilters')){
+    $handler->storeRules($_POST['Rules'], $_POST['Sql'], $_POST['PresetName']);
+    header('Content-Type: application/json');
+    header( 'HTTP/1.1 200 OK' );
+    echo json_encode($handler->getAllRulesAndSql());
+    eZExecution::cleanExit();
+}
+
+if ($api === 'reset'){
+    $handler->resetRulesAndQuery();
+    $module->redirectTo('sensor/criticals');
+    return;
+}
+
+if ($api === 'preset'){
+    $handler->setPreset($_POST['PresetName']);
+    header('Content-Type: application/json');
+    header( 'HTTP/1.1 200 OK' );
+    $data = $handler->getAllRulesAndSql();
+    echo json_encode($data);
+    eZExecution::cleanExit();
+    return;
+}
+
+if ($api === 'remove-preset'){
+    $data = $handler->removePreset($_POST['PresetName']);
     header('Content-Type: application/json');
     header( 'HTTP/1.1 200 OK' );
     echo json_encode($data);
+    eZExecution::cleanExit();
+    return;
+}
+
+if ($api === 'api'){
+    $data = $handler->find($_GET['p'], $_GET['latest_group']);
+    header('Content-Type: application/json');
+    header( 'HTTP/1.1 200 OK' );
+    echo json_encode($data);
+    eZExecution::cleanExit();
+}
+
+if ($api === 'csv-export'){
+    $currentPreset = $handler->getCurrentPreset();
+    $filename = $currentPreset . '.csv';
+    header( 'X-Powered-By: eZ Publish' );
+    header( 'Content-Description: File Transfer' );
+    header( 'Content-Type: text/csv; charset=utf-8' );
+    header( "Content-Disposition: attachment; filename=$filename" );
+    header( "Pragma: no-cache" );
+    header( "Expires: 0" );
+    ob_get_clean();
+    $output = fopen('php://output', 'w');
+    $runOnce = false;
+    $items = $handler->findAll();
+    foreach ($items as $values) {
+        if (!$runOnce) {
+            fputcsv(
+                $output,
+                array_keys($values)
+            );
+            $runOnce = true;
+        }
+        fputcsv($output, array_values($values));
+        flush();
+    }
     eZExecution::cleanExit();
 }
 
@@ -34,16 +95,19 @@ if ($api === 'query'){
 if ($api === 'rules'){
     header('Content-Type: application/json');
     header( 'HTTP/1.1 200 OK' );
-    echo json_encode([
-        'rules' => $handler->getRules(),
-        'sql' => $handler->getSql(),
-    ]);
+    $data = $handler->getAllRulesAndSql();
+    if (isset($data['sql']['presets'])){
+        $data['sql']['presets'] = array_values($data['sql']['presets']);
+    }
+    echo json_encode($data);
     eZExecution::cleanExit();
 }
 
-
 $tpl->setVariable('filters', json_encode($handler->getFilters()));
 $tpl->setVariable('rules', json_encode($handler->getRules()));
+$tpl->setVariable('has_sql', !empty($handler->getSql()));
+$tpl->setVariable('current_preset', $handler->getCurrentPreset());
+$tpl->setVariable('presets', $handler->getPresets());
 
 $Result = [];
 $Result['persistent_variable'] = $tpl->variable('persistent_variable');

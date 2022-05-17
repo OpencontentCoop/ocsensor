@@ -21,6 +21,21 @@ class SensorCriticalPosts
     {
         $db = eZDB::instance();
 
+        if (!self::isSchemaInstalled('ocsensor_message_count')) {
+            $db->query(
+                "CREATE OR REPLACE VIEW ocsensor_message_count AS
+            SELECT DISTINCT ON (ezcollab_item.data_int1) ezcollab_item.data_int1 AS post_id, 
+                count(DISTINCT message_id) FILTER (WHERE ezcollab_item_message_link.message_type = 0) AS \"timelines\",
+                count(DISTINCT message_id) FILTER (WHERE ezcollab_item_message_link.message_type = 1) AS \"comments\",
+                count(DISTINCT message_id) FILTER (WHERE ezcollab_item_message_link.message_type = 2) AS \"responses\",
+                count(DISTINCT message_id) FILTER (WHERE ezcollab_item_message_link.message_type NOT IN (0,1,2,4)) AS \"private_messages\"
+                FROM ezcollab_item
+                  JOIN ezcollab_item_message_link ON (ezcollab_item.id = ezcollab_item_message_link.collaboration_id)                  
+                GROUP BY ezcollab_item.data_int1
+                ORDER BY ezcollab_item.data_int1"
+            );
+        }
+
         if (!self::isSchemaInstalled('ocsensor_closing_time')) {
             $db->query(
                 "CREATE OR REPLACE VIEW ocsensor_closing_time AS
@@ -80,17 +95,18 @@ class SensorCriticalPosts
             );
         }
 
-        if (!self::isSchemaInstalled('ocsensor_has_comment_after_close')) {
+        if (!self::isSchemaInstalled('ocsensor_messages')) {
             $db->query(
-                "CREATE OR REPLACE VIEW ocsensor_has_comment_after_close AS
-            SELECT DISTINCT(ocsensor_current_post_status.id) as post_id, commented_at::bool as has_comment FROM ocsensor_current_post_status
+                "CREATE OR REPLACE VIEW ocsensor_messages AS
+            SELECT DISTINCT(ocsensor_current_post_status.id) as post_id, comments, responses, private_messages, commented_at::bool as has_comment FROM ocsensor_current_post_status
                 FULL OUTER JOIN ocsensor_commented_after_closed ON (ocsensor_commented_after_closed.post_id = ocsensor_current_post_status.id)
+                FULL OUTER JOIN ocsensor_message_count ON (ocsensor_message_count.post_id = ocsensor_current_post_status.id)
                 ORDER BY ocsensor_current_post_status.id ASC"
             );
         }
     }
 
-    public function find($requestPage = 1)
+    public function find($requestPage = 1, $latestGroups = [])
     {
         self::installSchemaIfNeeded();
         $requestPage = (int)$requestPage;
@@ -105,14 +121,39 @@ class SensorCriticalPosts
             $this->createView();
         }
 
-        $count = $db->arrayQuery("SELECT count(*) FROM ocsensor_criticals")[0]['count'];
-        $results = $db->arrayQuery("SELECT * FROM ocsensor_criticals LIMIT $limit OFFSET $offset");
+        $where = '';
+        if (!is_array($latestGroups)){
+            $latestGroups = [$latestGroups];
+        }
+        if (count($latestGroups) > 0){
+            $cleanGroups = [];
+            foreach ($latestGroups as $latestGroup){
+                if (!empty($latestGroup)) {
+                    $cleanGroups[] = "'" . $db->escapeString($latestGroup) . "'";
+                }
+            }
+            if (!empty($cleanGroups)) {
+                $where = 'WHERE latest_group IN (' . implode(',', $cleanGroups) . ')';
+            }
+        }
+        $countUnfiltered = $db->arrayQuery("SELECT count(*) FROM ocsensor_criticals")[0]['count'];
+        $count = $db->arrayQuery("SELECT count(*) FROM ocsensor_criticals $where")[0]['count'];
+        $results = $db->arrayQuery("SELECT * FROM ocsensor_criticals $where LIMIT $limit OFFSET $offset");
+        $groupFacets = $db->arrayQuery('SELECT DISTINCT(latest_group) FROM ocsensor_criticals ORDER BY latest_group;');
+        $groups = [];
+        foreach ($groupFacets as $group){
+            $groups[] = [
+                'name' => $group['latest_group'],
+                'selected' => in_array($group['latest_group'], $latestGroups),
+            ];
+        }
         $page = $requestPage;
         $pages = ceil($count/$limit);
         $next = $page + 1;
         $previous = $page - 1;
         return [
             'total' => (int)$count,
+            'total_unfiltered' => (int)$countUnfiltered,
             'page' => $page,
             'next' => $next > $pages ? false : $next,
             'previous' => $previous <= 0 ? false : $previous,
@@ -120,7 +161,16 @@ class SensorCriticalPosts
             'limit' => $limit,
             'offset' => $offset,
             'hits' => $this->serializeResults($results),
+            'groups' => $groups,
         ];
+    }
+
+    public function findAll()
+    {
+        $db = eZDB::instance();
+        $results = $db->arrayQuery("SELECT * FROM ocsensor_criticals");
+
+        return $this->serializeResults($results);
     }
 
     private function serializeResults($results)
@@ -132,17 +182,20 @@ class SensorCriticalPosts
             $results[$index]['reopen_count'] = (int)$results[$index]['reopen_count'];
             $results[$index]['duration'] = floor($results[$index]['duration']/24/60/60);
             $results[$index]['has_comment_after_close'] = $results[$index]['has_comment_after_close'] === 't';
+            $results[$index]['comment_count'] = (int)$results[$index]['comment_count'];
+            $results[$index]['private_message_count'] = (int)$results[$index]['private_message_count'];
         }
         return $results;
     }
 
     public function getQuery()
     {
-        $sql = json_decode($this->getSqlSiteData()->attribute('value'), true);
+        $sql = $this->getSql();
         $where = '';
         if (!empty($sql)){
             $params = [];
             foreach ($sql['params'] as $key => $value){
+                $key = str_replace('ocsensor_has_comment_after_close', 'ocsensor_messages', $key); //bc
                 if (strpos($key, 'ocsensor_current_post_status.contentobject_state_id') !== false){
                     $valueParts = explode(',', $value);
                     $value = "'" . implode("','", $valueParts) . "'";
@@ -164,7 +217,9 @@ class SensorCriticalPosts
                     duration, 
                     ocsensor_latest_group_assignment.name AS latest_group, 
                     ocsensor_latest_group_assignment.reference AS group_reference,
-                    ocsensor_has_comment_after_close.has_comment AS has_comment_after_close
+                    ocsensor_messages.comments AS comment_count,
+                    ocsensor_messages.private_messages AS private_message_count,
+                    ocsensor_messages.has_comment AS has_comment_after_close
                 FROM (
                     SELECT post_id, 
                     count(*) FILTER (WHERE action = 'reassigning') AS \"reassign_count\",
@@ -173,7 +228,7 @@ class SensorCriticalPosts
                     FROM ocsensor_timeline
                     GROUP BY post_id
                 ) AS t 
-            LEFT JOIN ocsensor_has_comment_after_close ON (ocsensor_has_comment_after_close.post_id = t.post_id) 
+            LEFT JOIN ocsensor_messages ON (ocsensor_messages.post_id = t.post_id) 
             LEFT JOIN ocsensor_current_post_status ON (ocsensor_current_post_status.id = t.post_id) 
             LEFT JOIN ocsensor_latest_group_assignment ON (ocsensor_latest_group_assignment.post_id = t.post_id) 
         $where ORDER BY t.post_id ASC";
@@ -182,11 +237,17 @@ class SensorCriticalPosts
     private function createView()
     {
         $query = $this->getQuery();
-        eZDebug::writeDebug($query, __METHOD__);
+        eZDebug::writeDebug('Replace criticals view', __METHOD__);
+        $db = eZDB::instance();
+        $db->query('DROP MATERIALIZED VIEW IF EXISTS ocsensor_criticals');
+        $db->query("CREATE MATERIALIZED VIEW IF NOT EXISTS ocsensor_criticals AS $query");
+        $db->query('CREATE UNIQUE INDEX IF NOT EXISTS ocsensor_criticals_idx ON ocsensor_criticals (post_id);');
+    }
 
-        eZDB::instance()->query(
-            "CREATE OR REPLACE VIEW ocsensor_criticals AS $query"
-        );
+    public function updateView()
+    {
+        $db = eZDB::instance();
+        $db->query('REFRESH MATERIALIZED VIEW CONCURRENTLY ocsensor_criticals');
     }
 
     public function getFilters()
@@ -216,11 +277,23 @@ class SensorCriticalPosts
                 'operators' => ['less', 'less_or_equal', 'greater', 'greater_or_equal']
             ],
             [
-                'id' => 'ocsensor_has_comment_after_close.has_comment',
+                'id' => 'ocsensor_messages.has_comment',
                 'label' => 'Segnalazioni con una risposta successiva alla chiusura',
                 'type' => 'string',
                 'input' => 'select',
                 'operators' => ['is_null', 'is_not_null'],
+            ],
+            [
+                'id' => 'ocsensor_messages.comments',
+                'label' => 'Numero di commenti',
+                'type' => 'integer',
+                'operators' => ['equal', 'not_equal', 'less', 'less_or_equal', 'greater', 'greater_or_equal']
+            ],
+            [
+                'id' => 'ocsensor_messages.private_messages',
+                'label' => 'Numero di note private',
+                'type' => 'integer',
+                'operators' => ['equal', 'not_equal', 'less', 'less_or_equal', 'greater', 'greater_or_equal']
             ],
             [
                 'id' => 'ocsensor_current_post_status.contentobject_state_id',
@@ -240,30 +313,14 @@ class SensorCriticalPosts
             $siteData = new eZSiteData([
                 'name' => 'sensor_criticals_rules',
                 'value' => json_encode([
-                    'condition' => 'AND',
-                    'rules' => [
-                        [
-                            'id' => 'ocsensor_current_post_status.contentobject_state_id',
-                            'operator' => 'in',
-                            'value' => ['open'],
+                    'current' => 'default',
+                    'presets' => [
+                        'default' => [
+                            'name' => 'default',
+                            'rules' => $this->getDefaultRules(),
                         ],
-                        [
-                            'condition' => 'OR',
-                            'rules' => [
-                                [
-                                    'id' => 't.reassign_count',
-                                    'operator' => 'greater_or_equal',
-                                    'value' => '2',
-                                ],
-                                [
-                                    'id' => 't.reopen_count',
-                                    'operator' => 'equal',
-                                    'value' => '1',
-                                ],
-                            ]
-                        ]
-                    ]
-                ])
+                    ],
+                ]),
             ]);
             $siteData->store();
         }
@@ -271,28 +328,105 @@ class SensorCriticalPosts
         return $siteData;
     }
 
-    public function getRules()
+    private function getDefaultRules()
     {
-        return json_decode($this->getRulesSiteData()->attribute('value'), true);
+        return [
+            'condition' => 'AND',
+            'rules' => [
+                [
+                    'id' => 'ocsensor_current_post_status.contentobject_state_id',
+                    'operator' => 'in',
+                    'value' => ['open'],
+                ],
+                [
+                    'condition' => 'OR',
+                    'rules' => [
+                        [
+                            'id' => 't.reassign_count',
+                            'operator' => 'greater_or_equal',
+                            'value' => '2',
+                        ],
+                        [
+                            'id' => 't.reopen_count',
+                            'operator' => 'equal',
+                            'value' => '1',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
-    public function storeRules($rules, $sql)
+    public function resetRulesAndQuery()
     {
+        $this->getRulesSiteData()->remove();
+        $this->getSqlSiteData()->remove();
+    }
+
+    public function getRules()
+    {
+        $rules = json_decode($this->getRulesSiteData()->attribute('value'), true);
+        $presets = $rules['presets'];
+        $current = $rules['current'];
+        foreach ($presets as $preset){
+            if ($preset['name'] == $current){
+                return $preset['rules'];
+            }
+        }
+
+        return $this->getDefaultRules();
+    }
+
+    public function getAllRulesAndSql()
+    {
+        return [
+            'rules' => json_decode($this->getRulesSiteData()->attribute('value'), true),
+            'sql' => json_decode($this->getSqlSiteData()->attribute('value'), true),
+        ];
+    }
+
+    public function getCurrentPreset()
+    {
+        $rules = json_decode($this->getRulesSiteData()->attribute('value'), true);
+        return $rules['current'];
+    }
+
+    public function getPresets()
+    {
+        $rules = json_decode($this->getRulesSiteData()->attribute('value'), true);
+        $presets = [];
+        foreach ($rules['presets'] as $preset){
+            $presets[] = $preset['name'];
+        }
+
+        return $presets;
+    }
+
+    public function storeRules($rules, $sql, $presetName = 'default')
+    {
+        $presetName = empty($presetName) ? 'default' : $presetName;
+
         $ruleSiteData = $this->getRulesSiteData();
-        $ruleSiteData->setAttribute('value', json_encode($rules));
+        $newRules = json_decode($ruleSiteData->attribute('value'), true);
+        $newRules['current'] = $presetName;
+        $newRules['presets'][$presetName] = [
+            'name' => $presetName,
+            'rules' => $rules,
+        ];
+        $ruleSiteData->setAttribute('value', json_encode($newRules));
         $ruleSiteData->store();
 
         $sqlSiteData = $this->getSqlSiteData();
-        $currentSql = $sqlSiteData->attribute('value');
-        $newSql = json_encode($sql);
-        $sqlSiteData->setAttribute('value', $newSql);
+        $sqls = json_decode($sqlSiteData->attribute('value'), true);
+        $sqls['current'] = $presetName;
+        $sqls['presets'][$presetName] = [
+            'name' => $presetName,
+            'sql' => $sql,
+        ];
+        $sqlSiteData->setAttribute('value', json_encode($sqls));
         $sqlSiteData->store();
-        $changed = false;
-        if ($currentSql != $newSql){
-            $this->createView();
-            $changed = true;
-        }
-        return $changed;
+        $this->createView();
+        return true;
     }
 
     private function getSqlSiteData()
@@ -301,7 +435,10 @@ class SensorCriticalPosts
         if (!$siteData instanceof eZSiteData){
             $siteData = new eZSiteData([
                 'name' => 'sensor_criticals_sql',
-                'value' => json_encode([])
+                'value' => json_encode([
+                    'current' => null,
+                    'presets' => [],
+                ]),
             ]);
             $siteData->store();
         }
@@ -311,7 +448,56 @@ class SensorCriticalPosts
 
     public function getSql()
     {
-        return json_decode($this->getSqlSiteData()->attribute('value'), true);
+        $sqls = json_decode($this->getSqlSiteData()->attribute('value'), true);
+        $presets = $sqls['presets'];
+        $current = $sqls['current'];
+        foreach ($presets as $preset){
+            if ($preset['name'] == $current){
+                return $preset['sql'];
+            }
+        }
+
+        return [];
+    }
+
+    public function setPreset($presetName)
+    {
+        $presets = $this->getPresets();
+        if (in_array($presetName, $presets)){
+            $ruleSiteData = $this->getRulesSiteData();
+            $newRules = json_decode($ruleSiteData->attribute('value'), true);
+            $newRules['current'] = $presetName;
+            $ruleSiteData->setAttribute('value', json_encode($newRules));
+            $ruleSiteData->store();
+            $sqlSiteData = $this->getSqlSiteData();
+            $sqls = json_decode($sqlSiteData->attribute('value'), true);
+            $sqls['current'] = $presetName;
+            $sqlSiteData->setAttribute('value', json_encode($sqls));
+            $sqlSiteData->store();
+            $this->createView();
+        }
+    }
+
+    public function removePreset($presetName)
+    {
+        $presets = $this->getPresets();
+        $current = $this->getCurrentPreset();
+        if (in_array($presetName, $presets) && $current !== $presetName){
+            $ruleSiteData = $this->getRulesSiteData();
+            $newRules = json_decode($ruleSiteData->attribute('value'), true);
+            unset($newRules['presets'][$presetName]);
+            $ruleSiteData->setAttribute('value', json_encode($newRules));
+            $ruleSiteData->store();
+            $sqlSiteData = $this->getSqlSiteData();
+            $sqls = json_decode($sqlSiteData->attribute('value'), true);
+            unset($sqls['presets'][$presetName]);
+            $sqlSiteData->setAttribute('value', json_encode($sqls));
+            $sqlSiteData->store();
+
+            return true;
+        }
+
+        return false;
     }
 }
 
