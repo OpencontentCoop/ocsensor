@@ -943,7 +943,43 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         try {
             $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
             $predictor = SensorCategoryPredictor::instance();
-            $result->variables = $predictor->predict($post->id, $post->subject, $post->description);;
+            $result->variables = $predictor->predict($post->id, $post->subject, $post->description);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+        return $result;
+    }
+
+    public function doPredictFaqs()
+    {
+        $tresholdForFaq = (int)eZINI::instance('ocsensor.ini')->variable('CategoryPredictor', 'FaqFindTreshold');
+        $result = new ezpRestMvcResult();
+        try {
+            $payload = $this->getPayload();
+            $predictor = SensorCategoryPredictor::instance();
+            $categories = $predictor->predict(0, $payload['subject'], $payload['description']);
+            $idList = [];
+            foreach ($categories as $category){
+                if ($category['score'] > $tresholdForFaq){
+                    $idList[] = $category['id'];
+                    foreach ($category['children'] as $child){
+                        if ($child['score'] > $tresholdForFaq){
+                            $idList[] = $child['id'];
+                        }
+                    }
+                }
+            }
+            $faqs = [];
+            if (count($idList) > 0){
+                $contentSearch = new \Opencontent\Opendata\Api\ContentSearch();
+                $currentEnvironment = \Opencontent\Opendata\Api\EnvironmentLoader::loadPreset('content');
+                $contentSearch->setCurrentEnvironmentSettings($currentEnvironment);
+                $faqs = $contentSearch->search('classes [sensor_faq] and category.id in ['. implode(',', $idList) . '] limit 5 sort [priority=>desc,published=>asc]');
+            }
+            $result->variables = [
+                'categories' => $categories,
+                'faqs' => $faqs,
+            ];
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
         }

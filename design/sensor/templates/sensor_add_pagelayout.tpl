@@ -18,6 +18,8 @@
     'jquery.ocdrawmap.js',
     'wise-leaflet-pip.js',
     'turf.min.js',
+    'jsrender.js',
+    'jsrender.helpers.js',
     'jquery.sensor_add_post.js'
 ))}
 <body class="sensor-add-post">
