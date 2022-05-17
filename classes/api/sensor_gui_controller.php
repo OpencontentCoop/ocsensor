@@ -962,10 +962,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             foreach ($categories as $category){
                 if ($category['score'] > $tresholdForFaq){
                     $idList[] = $category['id'];
-                    foreach ($category['children'] as $child){
-                        if ($child['score'] > $tresholdForFaq){
-                            $idList[] = $child['id'];
-                        }
+                }
+                foreach ($category['children'] as $child){
+                    if ($child['score'] > $tresholdForFaq){
+                        $idList[] = $child['id'];
                     }
                 }
             }
@@ -979,6 +979,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $result->variables = [
                 'categories' => $categories,
                 'faqs' => $faqs,
+                'treshold' => $tresholdForFaq,
             ];
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);
