@@ -66,6 +66,8 @@
         'jquery.opendataform.js',
         'jquery.fileupload.js',
         'summernote/summernote-lite.js',
+        'jsrender.js',
+        'jsrender.helpers.js',
         'jquery.sensor_add_post.js',
         'jquery.sensor_notifications.js'
     ))}
