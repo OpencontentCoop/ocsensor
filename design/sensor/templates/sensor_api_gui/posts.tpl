@@ -2,16 +2,12 @@
 
 {ezcss_require(array(
     'daterangepicker.css',
-<<<<<<< HEAD
-    'select2.min.css'
-=======
     'select2.min.css',
     'leaflet/MarkerCluster.css',
     'leaflet/MarkerCluster.Default.css',
     'leaflet.0.7.2.css',
     'plugins/blueimp/blueimp-gallery.css',
     'jquery.fileupload.css'
->>>>>>> master
 ))}
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
@@ -19,13 +15,10 @@
     'moment-with-locales.min.js',
     'plugins/blueimp/jquery.blueimp-gallery.min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
-<<<<<<< HEAD
-=======
     'jquery.fileupload.js',
     'leaflet.0.7.2.js',
     'leaflet.markercluster.js',
     'Leaflet.MakiMarkers.js',
->>>>>>> master
     'daterangepicker.js',
     'jquery.opendataTools.js',
     'jsrender.js', 'jsrender.helpers.js',
@@ -274,6 +267,7 @@ $(document).ready(function () {ldelim}
         query = [];
         var queryString = form.find('[name="query"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
         if (queryString.length > 0){
+            //query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "')");
             query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "' or raw[ezf_df_text] = '" + queryString + "')");
             queryData.push({name: 'query', value: form.find('[name="query"]').val()});
         }
