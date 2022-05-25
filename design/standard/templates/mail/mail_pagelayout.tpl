@@ -116,8 +116,8 @@
                         <td align='center' valign='top'>
                           <small>
                             &copy; {currentdate()|datetime('custom', '%Y')} {$social_pagedata.logo_title} -
-                            {'%privacy_link_start%Informazioni sulla privacy%privacy_link_end%'|i18n('sensor/mail/registration',, hash( '%privacy_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/sensor/info/privacy/>' ), '%privacy_link_end%', '</a>' ))} -
-                            {'%terms_link_start%Termini di utilizzo%terms_link_end%'|i18n('sensor/mail/registration',, hash( '%terms_link_start%', concat( '<a href=https://', $social_pagedata.site_url, '/sensor/info/terms/>' ), '%terms_link_end%', '</a>' ))}
+                              <a href="https://{$social_pagedata.site_url}/sensor/info/privacy/">{sensor_translate('About privacy')}</a>
+                              <a href="https://{$social_pagedata.site_url}/sensor/info/terms/">{sensor_translate('Terms of use')}</a>
                           </small>
                         </td>
                     </tr>
@@ -128,3 +128,4 @@
 </table>
 </body>
 </html>
+

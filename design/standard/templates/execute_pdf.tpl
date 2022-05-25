@@ -10,8 +10,7 @@
 *}
 
 
-{pdf(execute, $pdf_definition, hash( size, A4,
-                                     orientation, portrait ) )}
+{pdf(execute, $pdf_definition, hash( size, A4, orientation, portrait ) )}
 
 {if $generate_stream|eq(1)}
   {pdf(stream)}

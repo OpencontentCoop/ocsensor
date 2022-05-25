@@ -102,12 +102,14 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
-    protected function doExceptionResult(Exception $exception)
+    protected function doExceptionResult(Exception $exception, $logError = true)
     {
         $result = new ezcMvcResult;
         $result->variables['message'] = $exception->getMessage();
 
-        $this->getRepository()->getLogger()->error($exception->getMessage());
+        if ($logError) {
+            $this->getRepository()->getLogger()->error($exception->getMessage());
+        }
 
         $serverErrorCode = ezpHttpResponseCodes::SERVER_ERROR;
         $errorType = BaseException::cleanErrorCode(get_class($exception));
@@ -277,7 +279,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
             $result = $controller->getUserGroupById();
         } catch (Exception $e) {
-            $result = $this->doExceptionResult($e);
+            $result = $this->doExceptionResult($e, false);
         }
 
         return $result;

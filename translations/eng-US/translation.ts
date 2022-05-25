@@ -1724,8 +1724,8 @@
       <translation>Click on the trash can to remove an attached image</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
-      <translation>WARNUNG: Sie haben keine aktive Benachrichtigung und Sie erhalten keine E-Mails. Sie können Benachrichtigungen auf der Seite aktivieren, die auf %open_notification_url%Notifikations%close_notification_url% aktiviert sind.</translation>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
+      <translation>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</translation>
     </message>
     <message>
       <source>Translations</source>
@@ -1962,6 +1962,58 @@
     <message>
       <source>Last 30 days</source>
       <translation>Last 30 days</translation>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation>Criticals</translation>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation>To recover the access password, visit the page \n %s</translation>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation>There is already a registration pending activation for the '%s' fiscal code</translation>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation>The activation email has been sent again: check the '%s' email address</translation>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation>The '%s' username already exists, please choose another one</translation>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation>New issue</translation>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation>About privacy</translation>
+    </message>
+    <message>
+      <source>Specify the reason for the reassignment</source>
+      <translation>Specify the reason for the reassignment</translation>
+    </message>
+    <message>
+      <source>Add note and reassign</source>
+      <translation>Add note and reassign</translation>
+    </message>
+    <message>
+      <source>Group reference</source>
+      <translation>Group reference</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Map</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellite</translation>
     </message>
   </context>
   <context>

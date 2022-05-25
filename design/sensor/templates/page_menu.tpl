@@ -28,18 +28,19 @@
             {if $item.has_children}
                 <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle"
+                       data-location="{$item.url|explode('/')|implode('-')}"
                        href="{$item.url|ezurl(no)}">{$item.name|wash()}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         {foreach $item.children as $child}
-                            <li><a href="{$child.url|ezurl(no)}">{$child.name|wash()}</a></li>
+                            <li><a data-location="{$child.url|explode('/')|implode('-')}" href="{$child.url|ezurl(no)}">{$child.name|wash()}</a></li>
                         {/foreach}
                     </ul>
                 </li>
             {else}
                 <li>
-                    <a href="{$item.url|ezurl(no)}">
+                    <a href="{$item.url|ezurl(no)}" data-location="{$item.url|explode('/')|implode('-')}">
                         {if $item.highlight}<span class="label label-primary" style="font-size: 100%">{/if}
                             {$item.name|wash()}
                             {if $item.highlight}</span>{/if}

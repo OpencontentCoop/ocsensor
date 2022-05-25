@@ -88,6 +88,28 @@
             <input type="checkbox" {if $sensor_settings.HideOperatorNames}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideOperatorNames"{else}disabled{/if}>
         </td>
     </tr>
+
+    <tr><td colspan="2" style="background: #fff"></td></tr>
+
+    <tr>
+        <th>
+            {sensor_translate('When an issue is fixed, it always resets the reference for the citizen')}
+            {foreach $default_approvers as $approver}{include uri='design:content/view/sensor_person.tpl' sensor_person=$approver}{delimiter}, {/delimiter}{/foreach}
+            {def $force_is_enabled = cond($sensor_settings.ForceUrpApproverOnFix, true(), false())}
+            {if $force_is_enabled}
+                {set $force_is_enabled = false()}
+                {foreach $default_approvers as $approver}
+                    {if array('user', 'sensor_operator')|contains($approver.class_identifier)}
+                        {set $force_is_enabled = true()}
+                    {/if}
+                {/foreach}
+                {if $force_is_enabled|not}<p class="text-danger">{sensor_translate('This configuration is not applicable')}</p>{/if}
+            {/if}
+        </th>
+        <td class="text-center">
+            <input type="checkbox" {if $force_is_enabled}checked{/if} disabled data-toggleconfig>
+        </td>
+    </tr>
     <tr>
         <th>{sensor_translate('The reporter can reopen a closed issue')}</th>
         <td class="text-center">
@@ -110,25 +132,6 @@
     *}
     <tr>
         <th>
-            {sensor_translate('When an issue is fixed, it always resets the reference for the citizen')}
-            {foreach $default_approvers as $approver}{include uri='design:content/view/sensor_person.tpl' sensor_person=$approver}{delimiter}, {/delimiter}{/foreach}
-            {def $force_is_enabled = cond($sensor_settings.ForceUrpApproverOnFix, true(), false())}
-            {if $force_is_enabled}
-                {set $force_is_enabled = false()}
-                {foreach $default_approvers as $approver}
-                    {if array('user', 'sensor_operator')|contains($approver.class_identifier)}
-                        {set $force_is_enabled = true()}
-                    {/if}
-                {/foreach}
-                {if $force_is_enabled|not}<p class="text-danger">{sensor_translate('This configuration is not applicable')}</p>{/if}
-            {/if}
-        </th>
-        <td class="text-center">
-            <input type="checkbox" {if $force_is_enabled}checked{/if} disabled data-toggleconfig>
-        </td>
-    </tr>
-    <tr>
-        <th>
             {sensor_translate('Allow public comments')}
             <br /><small>{sensor_translate('If this option is enabled, authenticated users can post comments to public issyes')}</small>
         </th>
@@ -145,4 +148,59 @@
             <input type="checkbox" {if $sensor_settings.UseDirectPrivateMessage}checked{/if} disabled data-toggleconfig>
         </td>
     </tr>
+    <tr>
+        <th>Visualizza le scorciatoie nella lista di Inbox</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.UseInboxContextActions}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Abilita i filtri in Inbox</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.UseInboxFilters}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Abilita la modifica del riferimento per il cittadino</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.AllowChangeApprover}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Visualizza le categorie delle faq</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.ShowFaqCategories}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Visualizza in Inbox tutti i messaggi privati (anziché solo quelli indirizzati all'utente)</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.ShowInboxAllPrivateMessage}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Abilita l'interfaccia smart per la duplicazione delle segnalazioni</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.SmartDuplicationGui}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Impone la redazione di una nota privata prima della riassegnazione</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.AddPrivateMessageBeforeReassign}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Aggiunge automaticamente gli utenti reporter come osservatori delle segnalazioni che aprono</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.AddBehalfOfUserAsObserver}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Abilita la gestione dei gruppi di utenti</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.AllowAdditionalMemberGroups}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Chiude automaticamente le segnalazioni inserite dai gruppi di utenti</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.CloseOnUserGroupPostFix}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Impone come obbligatoria la categoria per i gruppi di utenti</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.RequireCategoryForAdditionalMemberGroups}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+    <tr>
+        <th>Aggiunge automaticamente gli operatori appartenenti a gruppi di utenti come osservatori delle segnalazioni che aprono</th>
+        <td class="text-center"><input type="checkbox" {if $sensor_settings.AddOperatorSuperUserAsObserver}checked{/if} disabled data-toggleconfig></td>
+    </tr>
+
 </table>
+
+{if fetch( user, has_access_to, hash( module, settings, function, view ) )}
+    <p class="pull-right">
+        <a target="_blank" href="{'/settings/view/ita_sensor/ocsensor.ini/'|ezurl(no)}"><small>{'Ini settings'|i18n('design/admin/parts/setup/menu')}</small></a>
+    </p>
+{/if}

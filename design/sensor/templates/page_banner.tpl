@@ -28,10 +28,20 @@
                     <div class="form-group">
                         <input type="text" class="form-control" name="query" value="" placeholder="{sensor_translate('Search text')}">
                     </div>
+                    <div class="form-group">
+                        <select name="status"
+                                class="select form-control"
+                                data-placeholder="{sensor_translate('Status')}">
+                            <option></option>
+                            {foreach sensor_statuses() as $status}
+                                <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
+                            {/foreach}
+                        </select>
+                    </div>
                     <div class="form-group" id="area-filter">
                         <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
                             <option></option>
-                            {foreach $module_result.content_info.persistent_variable.areas.children as $item}
+                            {foreach sensor_areas().children as $item}
                                 <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                 {foreach $item.children as $child}
                                     <option data-parent="{$item.id}" value="{$child.id}"
@@ -42,7 +52,7 @@
                     </div>
                     <div class="form-group" id="category-filter">
                         <select class="select form-control" name="category" data-placeholder="{sensor_translate('Category')}" multiple="multiple">
-                            {foreach $module_result.content_info.persistent_variable.categories.children as $item}
+                            {foreach sensor_categories().children as $item}
                                 <option value="{$item.id}"
                                         style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
                                 {foreach $item.children as $child}
@@ -54,7 +64,7 @@
                     <div class="form-group" id="type-filter">
                         <select class="select form-control" name="type" data-placeholder="{sensor_translate('Type')}">
                             <option></option>
-                            {foreach $module_result.content_info.persistent_variable.types as $item}
+                            {foreach sensor_types() as $item}
                                 <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
                             {/foreach}
                         </select>
@@ -74,16 +84,6 @@
 
                 {if fetch('user', 'has_access_to', hash('module','sensor','function','manage'))}
                 <div class="form-group-container">
-                    <div class="form-group">
-                        <select name="status"
-                                class="select form-control"
-                                data-placeholder="{sensor_translate('Status')}">
-                            <option></option>
-                            {foreach sensor_statuses() as $status}
-                                <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
-                            {/foreach}
-                        </select>
-                    </div>
                     <div class="form-group">
                         <input type="text"
                                name="author"
@@ -147,24 +147,8 @@
         </div>
     </div>
 {/if}
-<div id="add-post-modal" class="modal fade" data-postparent="{sensor_postcontainer().node_id}" data-postclass="{sensor_post_class().identifier}" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div id="add-post-form" class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-</div>
+
 {if sensor_settings().ShowSmartGui}
     {include name="add_post" uri='design:sensor_api_gui/add/add_post.tpl'}
-{else}
-    <script>
-        $(document).ready(function () {ldelim}
-            $('#add-post-modal').sensorAddPost({ldelim}
-                'use_smart_gui': false
-            {rdelim});
-        {rdelim});
-    </script>
 {/if}
 {undef $show_inbox_widget}

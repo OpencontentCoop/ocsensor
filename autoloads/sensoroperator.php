@@ -27,6 +27,7 @@ class SensorOperator
             'sensor_faqcontainer',
             'is_sensor_public_field',
             'sensor_edit_category_access',
+            'sensor_edit_category_access_cache_key',
             'sensor_translate',
             'can_set_sensor_tag',
             'sensor_operators_root_node',
@@ -77,6 +78,13 @@ class SensorOperator
                     'default' => [],
                 )
             ),
+            'sensor_types' => array(
+                'identifier' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => null,
+                )
+            ),
         );
     }
 
@@ -117,6 +125,20 @@ class SensorOperator
                 }
                 $operatorValue = $categoryNodeIdList;
 
+                break;
+
+            case 'sensor_edit_category_access_cache_key':
+                $categoryNodeIdList = [];
+                $policy = eZUser::currentUser()->hasAccessTo('sensor', 'category_access');
+                if ($policy['accessWord'] == 'limited'){
+                    foreach ($policy['policies'] as $policyItem){
+                        if (isset($policyItem['Node'])){
+                            $categoryNodeIdList = array_merge($categoryNodeIdList, $policyItem['Node']);
+                        }
+                    }
+                }
+                sort($categoryNodeIdList);
+                $operatorValue = implode(',', $categoryNodeIdList);
                 break;
 
             case 'is_sensor_public_field':
@@ -209,7 +231,11 @@ class SensorOperator
 
             case 'sensor_types':
             {
-                $operatorValue = $repository->getPostTypeService()->loadPostTypes();
+                if (!empty($namedParameters['identifier'])){
+                    $operatorValue = $repository->getPostTypeService()->loadPostType($namedParameters['identifier']);
+                }else {
+                    $operatorValue = $repository->getPostTypeService()->loadPostTypes();
+                }
                 break;
             }
 

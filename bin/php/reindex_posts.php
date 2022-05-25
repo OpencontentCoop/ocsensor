@@ -32,7 +32,10 @@ try {
 
     $repository = OpenPaSensorRepository::instance();
     $cli->output('Fetching objects... ', false);
-    $conditions = ['contentclass_id' => $repository->getPostContentClass()->attribute('id')];
+    $conditions = [
+        'contentclass_id' => $repository->getPostContentClass()->attribute('id'),
+        'status' => eZContentObject::STATUS_PUBLISHED,
+    ];
     if ($options['user']){
         $conditions['owner_id'] = (int)$options['user'];
     }

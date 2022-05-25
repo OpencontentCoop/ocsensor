@@ -9,19 +9,19 @@
     </message>
     <message>
       <source>%password_link_start%Click here to generate your personal password%password_link_end%</source>
-      <translation>%password_link_start%Klicken Sie hier, um Ihr persönliches Passwort zu generieren%password_link_end%</translation>
+      <translation>%password_link_start%Klicken Sie hier, um Ihr persönliches Passwort zu erstellen%password_link_end%</translation>
     </message>
     <message>
       <source>A issue close near to your home was closed:</source>
-      <translation>Ein Problem in der Nähe Ihres Hauses war geschlossen:</translation>
+      <translation>Ein Problem in der Nähe Ihrer Wohnung wurde gelöst:</translation>
     </message>
     <message>
       <source>A issue for your %sitename account has been registered</source>
-      <translation>Ein Problem für Ihr %sitename-Konto wurde registriert</translation>
+      <translation>Eine Meldung für Ihr %sitename-Konto wurde registriert</translation>
     </message>
     <message>
       <source>A new user has registered</source>
-      <translation>Ein neuer Benutzer hat registriert</translation>
+      <translation>Ein neuer Benutzer hat sich registriert</translation>
     </message>
     <message>
       <source>Actions</source>
@@ -29,15 +29,15 @@
     </message>
     <message>
       <source>Add a note on processing to facilitate the drafting of the official response</source>
-      <translation>Fügen Sie der Verarbeitung eine Notiz hinzu, um die Ausarbeitung der offiziellen Antwort zu erleichtern</translation>
+      <translation>Fügen Sie eine Notiz hinzu, um die Formulierung der offiziellen Antwort zu erleichtern</translation>
     </message>
     <message>
       <source>Add attachment</source>
-      <translation>Anhang hinzufügen</translation>
+      <translation>Anlage hinzufügen</translation>
     </message>
     <message>
       <source>Add comment</source>
-      <translation>Einen Kommentar hinzufügen</translation>
+      <translation>Kommentar hinzufügen</translation>
     </message>
     <message>
       <source>Add image</source>
@@ -49,7 +49,7 @@
     </message>
     <message>
       <source>Add new</source>
-      <translation>Neue hinzufügen</translation>
+      <translation>Hinzufügen</translation>
     </message>
     <message>
       <source>Add note</source>
@@ -57,7 +57,7 @@
     </message>
     <message>
       <source>Add note and set as fixed</source>
-      <translation>Hinweis hinzufügen und als festgelegt einstellen</translation>
+      <translation>Notiz hinzufügen und Meldung als erledigt markieren</translation>
     </message>
     <message>
       <source>Add official response</source>
@@ -65,23 +65,23 @@
     </message>
     <message>
       <source>Add private message</source>
-      <translation>Private Nachricht hinzufügen</translation>
+      <translation>Private Notiz hinzufügen</translation>
     </message>
     <message>
       <source>Add the operator who opened the issue</source>
-      <translation>Fügen Sie den Betreiber hinzu, der das Problem eröffnet hat</translation>
+      <translation>Fügen Sie die Person hinzu, die das Problem gemeldet hat</translation>
     </message>
     <message>
       <source>added a comment</source>
-      <translation>einen Kommentar hinzugefügt.</translation>
+      <translation>hat einen Kommentar hinzugefügt</translation>
     </message>
     <message>
       <source>added a reponse</source>
-      <translation>eine Antwort hinzugefügt</translation>
+      <translation>hat eine Antwort hinzugefügt</translation>
     </message>
     <message>
       <source>Aging of issues</source>
-      <translation>Alterung von Problemen.</translation>
+      <translation>Aktualität der Meldungen</translation>
     </message>
     <message>
       <source>All</source>
@@ -89,7 +89,7 @@
     </message>
     <message>
       <source>Allow public comments</source>
-      <translation>Öffentliche Kommentare zulassen.</translation>
+      <translation>Öffentliche Kommentare zu den Meldungen zulassen.</translation>
     </message>
     <message>
       <source>Allow publishing:</source>
@@ -97,7 +97,7 @@
     </message>
     <message>
       <source>Already moderate</source>
-      <translation>Bereits moderat</translation>
+      <translation>Moderiert</translation>
     </message>
     <message>
       <source>and</source>
@@ -117,35 +117,35 @@
     </message>
     <message>
       <source>Are you already a member?</source>
-      <translation>Bereits registriert?</translation>
+      <translation>Sind Sie bereits registriert?</translation>
     </message>
     <message>
       <source>Are you not registered yet?</source>
-      <translation>Noch nicht registriert?</translation>
+      <translation>Sie sind noch nicht registriert?</translation>
     </message>
     <message>
       <source>Are you sure to delete this image?</source>
-      <translation>Sind Sie sicher, dieses Bild zu löschen?</translation>
+      <translation>Sind Sie sicher, dass Sie dieses Bild entfernen möchten?</translation>
     </message>
     <message>
       <source>Are you sure you remove this content?</source>
-      <translation>Sind Sie sicher, dass Sie diesen Inhalt entfernen?</translation>
+      <translation>Sind Sie sicher, dass Sie diesen Inhalt entfernen möchten?</translation>
     </message>
     <message>
       <source>Are you sure you want to add a comment visible to the author of the report?</source>
-      <translation>Möchten Sie sicher, dass Sie dem Autor des Berichts einen Kommentar hinzufügen möchten?</translation>
+      <translation>Sind Sie sicher, dass Sie einen öffentlichen Kommentar hinzufügen möchten?</translation>
     </message>
     <message>
       <source>Area</source>
-      <translation>Bereich</translation>
+      <translation>Gebiet</translation>
     </message>
     <message>
       <source>Areas</source>
-      <translation>Bereiche</translation>
+      <translation>Zonen</translation>
     </message>
     <message>
       <source>Assign</source>
-      <translation>Zuordnen</translation>
+      <translation>Zuweisen</translation>
     </message>
     <message>
       <source>Assigned</source>
@@ -153,31 +153,31 @@
     </message>
     <message>
       <source>Assigned to %name</source>
-      <translation>Zugeordnet in %name</translation>
+      <translation>Zugewiesen: %name</translation>
     </message>
     <message>
       <source>Assigning a issue to a group</source>
-      <translation>Einem Problem einer Gruppe zuweisen</translation>
+      <translation>Einer Gruppe eine Meldung zuweisen</translation>
     </message>
     <message>
       <source>Assigning the type to issue</source>
-      <translation>Zuweisen des Typs zum Thema</translation>
+      <translation>Einer Meldung eine Meldungsart zuweisen</translation>
     </message>
     <message>
       <source>Assignment</source>
-      <translation>Abtretung</translation>
+      <translation>Zuweisungen</translation>
     </message>
     <message>
       <source>Assignment of a issue</source>
-      <translation>Zuordnung eines Problems</translation>
+      <translation>Zuweisung einer Meldung</translation>
     </message>
     <message>
       <source>Assignments</source>
-      <translation>Zuordnungen</translation>
+      <translation>Zuweisungen</translation>
     </message>
     <message>
       <source>Attachments</source>
-      <translation>Anhänge</translation>
+      <translation>Anlagen</translation>
     </message>
     <message>
       <source>Audit</source>
@@ -185,15 +185,15 @@
     </message>
     <message>
       <source>Authenticated user</source>
-      <translation>Authentifizierter Nutzer</translation>
+      <translation>Authentifizierter Benutzer</translation>
     </message>
     <message>
       <source>Author</source>
-      <translation>Autor</translation>
+      <translation>Verfasser</translation>
     </message>
     <message>
       <source>Author and subject</source>
-      <translation>Autor und Betreff.</translation>
+      <translation>Verfasser und Gegenstand</translation>
     </message>
     <message>
       <source>Automations</source>
@@ -201,11 +201,11 @@
     </message>
     <message>
       <source>Average execution times</source>
-      <translation>Durchschnittliche Ausführungszeiten</translation>
+      <translation>Durchschnittliche Bearbeitungszeiten</translation>
     </message>
     <message>
       <source>Average of execution times on days</source>
-      <translation>Durchschnitt der Ausführungszeiten an Tagen</translation>
+      <translation>Durchschnittliche Bearbeitungszeiten in Tagen</translation>
     </message>
     <message>
       <source>Back to site</source>
@@ -213,11 +213,11 @@
     </message>
     <message>
       <source>Bring to the attention of</source>
-      <translation>Auf die Aufmerksamkeit von</translation>
+      <translation>Zu Händen von:</translation>
     </message>
     <message>
       <source>By accessing the system, you can check the resolution of your issues and insert new ones</source>
-      <translation>Durch den Zugriff auf das System können Sie die Auflösung Ihrer Probleme überprüfen und neue einfügen</translation>
+      <translation>Indem Sie sich anmelden, können Sie überprüfen, ob das von Ihnen gemeldete Problem bereits gelöst wurde, sowie weitere Meldungen erstatten</translation>
     </message>
     <message>
       <source>Cancel</source>
@@ -225,11 +225,11 @@
     </message>
     <message>
       <source>Categories</source>
-      <translation>Themenbereiche</translation>
+      <translation>Kategorien</translation>
     </message>
     <message>
       <source>Categories enabled for area</source>
-      <translation>Kategorien für den Bereich aktiviert</translation>
+      <translation>Für diese Zone aktivierte Kategorien</translation>
     </message>
     <message>
       <source>Category</source>
@@ -237,11 +237,11 @@
     </message>
     <message>
       <source>Category assignment to issue</source>
-      <translation>Kategoriezuweisung zu Ausgabe</translation>
+      <translation>Dieser Meldung einer Kategorie zuweisen</translation>
     </message>
     <message>
       <source>Change</source>
-      <translation>Veränderung</translation>
+      <translation>Ändern</translation>
     </message>
     <message>
       <source>Channel</source>
@@ -249,15 +249,15 @@
     </message>
     <message>
       <source>Check the resolution trend</source>
-      <translation>Überprüfen Sie den Auflösungstrend</translation>
+      <translation>Überprüfen Sie den Bearbeitungsfortschritt</translation>
     </message>
     <message>
       <source>Child category</source>
-      <translation>Kindkategorie</translation>
+      <translation>Kategorie (Schlagwort)</translation>
     </message>
     <message>
       <source>Choose a point on the map or enter an address and click on the lens.</source>
-      <translation>Wählen Sie einen Punkt auf der Karte aus oder geben Sie eine Adresse ein und klicken Sie auf das Objektiv.</translation>
+      <translation>Wählen Sie einen Punkt auf der Karte aus oder geben Sie eine Adresse ein und klicken Sie auf die Lupe.</translation>
     </message>
     <message>
       <source>Choose the category</source>
@@ -265,15 +265,15 @@
     </message>
     <message>
       <source>Choose the type of issue</source>
-      <translation>Wählen Sie die Art der Ausgabe aus</translation>
+      <translation>Wählen Sie eine Meldungsart aus</translation>
     </message>
     <message>
       <source>Close</source>
-      <translation>Nah dran</translation>
+      <translation>Schließen</translation>
     </message>
     <message>
       <source>Close issue</source>
-      <translation>Enge Problem</translation>
+      <translation>Schließen</translation>
     </message>
     <message>
       <source>Close with last answer:</source>
@@ -281,35 +281,35 @@
     </message>
     <message>
       <source>Close with operator's note:</source>
-      <translation>Schließen Sie mit der Anmerkung des Bedieners:</translation>
+      <translation>Schließen Sie mit der Notiz des Bearbeiters:</translation>
     </message>
     <message>
       <source>Closed</source>
-      <translation>Abgeschlossen</translation>
+      <translation>Geschlossen</translation>
     </message>
     <message>
       <source>Closed by %name</source>
-      <translation>Geschlossen nach %name</translation>
+      <translation>Geschlossen von %name</translation>
     </message>
     <message>
       <source>Closing</source>
-      <translation>Schließen</translation>
+      <translation>Wird geschlossen</translation>
     </message>
     <message>
       <source>Closing a issue</source>
-      <translation>Ein Problem schließen.</translation>
+      <translation>Meldung abschließen</translation>
     </message>
     <message>
       <source>Closing date</source>
-      <translation>Einsendeschluss</translation>
+      <translation>Datum der Erledigung</translation>
     </message>
     <message>
       <source>Closing the issue</source>
-      <translation>Das Problem schließen</translation>
+      <translation>Meldung abschließend bearbeitet</translation>
     </message>
     <message>
       <source>Closure</source>
-      <translation>Schließung</translation>
+      <translation>Wird geschlossen</translation>
     </message>
     <message>
       <source>Comment text</source>
@@ -317,19 +317,19 @@
     </message>
     <message>
       <source>Comment to a issue</source>
-      <translation>Kommentar zu einem Problem</translation>
+      <translation>Kommentar zu einer Meldung</translation>
     </message>
     <message>
       <source>Comment to moderate</source>
-      <translation>Kommentar zu mäßig</translation>
+      <translation>Zu moderierender Kommentar</translation>
     </message>
     <message>
       <source>comments</source>
-      <translation>Bemerkungen</translation>
+      <translation>Kommentare</translation>
     </message>
     <message>
       <source>Comments</source>
-      <translation>Bemerkungen</translation>
+      <translation>Kommentare</translation>
     </message>
     <message>
       <source>Conditions</source>
@@ -345,11 +345,11 @@
     </message>
     <message>
       <source>Create issue</source>
-      <translation>Problem erstellen</translation>
+      <translation>Melden</translation>
     </message>
     <message>
       <source>Create response from this note</source>
-      <translation>Antwort von dieser Notiz erstellen</translation>
+      <translation>Ausgehend von dieser Notiz eine Antwort formulieren</translation>
     </message>
     <message>
       <source>Create user</source>
@@ -357,7 +357,7 @@
     </message>
     <message>
       <source>Created at</source>
-      <translation>Hergestellt in</translation>
+      <translation>Veröffentlicht am</translation>
     </message>
     <message>
       <source>Creating</source>
@@ -365,11 +365,11 @@
     </message>
     <message>
       <source>Creating a issue</source>
-      <translation>Ein Problem erstellen.</translation>
+      <translation>Meldung erstellen</translation>
     </message>
     <message>
       <source>Creation date</source>
-      <translation>Erstellungsdatum</translation>
+      <translation>Veröffentlichungsdatum</translation>
     </message>
     <message>
       <source>Daily</source>
@@ -389,7 +389,7 @@
     </message>
     <message>
       <source>Describe the details of the issue</source>
-      <translation>Beschreiben Sie die Details des Problems</translation>
+      <translation>Machen Sie nähere Angaben zur Meldung</translation>
     </message>
     <message>
       <source>Description</source>
@@ -397,11 +397,11 @@
     </message>
     <message>
       <source>Description of issue</source>
-      <translation>Beschreibung des Problems</translation>
+      <translation>Beschreibung der Meldung</translation>
     </message>
     <message>
       <source>Desktop notifications disabled</source>
-      <translation>Desktop-Benachrichtigungen deaktiviert.</translation>
+      <translation>Desktop-Benachrichtigungen deaktiviert</translation>
     </message>
     <message>
       <source>Desktop notifications enabled</source>
@@ -409,47 +409,47 @@
     </message>
     <message>
       <source>Details</source>
-      <translation>Einzelheiten</translation>
+      <translation>Details</translation>
     </message>
     <message>
       <source>Details (maximum %count characters)</source>
-      <translation>Details (Maximal %count)</translation>
+      <translation>Details zur Meldung (Maximal %count Buchstaben)</translation>
     </message>
     <message>
       <source>Detect my location</source>
-      <translation>Meinen Standort erkennen</translation>
+      <translation>Meinen Standort ermitteln</translation>
     </message>
     <message>
       <source>Displays the ajax input interface</source>
-      <translation>Zeigt die AJAX-Eingangsschnittstelle an</translation>
+      <translation>AJAX-Eingabeschnittstelle anzeigen</translation>
     </message>
     <message>
       <source>Download file</source>
-      <translation>Download-Datei</translation>
+      <translation>Datei herunterladen</translation>
     </message>
     <message>
       <source>Download JPG image</source>
-      <translation>Laden Sie das JPG-Bild herunter</translation>
+      <translation>JPG-Bild herunterladen</translation>
     </message>
     <message>
       <source>Download PDF document</source>
-      <translation>PDF-Dokument herunterladen.</translation>
+      <translation>PDF-Dokument herunterladen</translation>
     </message>
     <message>
       <source>Download PNG image</source>
-      <translation>Laden Sie das PNG-Bild herunter</translation>
+      <translation>PNG-Bild herunterladen</translation>
     </message>
     <message>
       <source>Download SVG</source>
-      <translation>Laden Sie SVG herunter</translation>
+      <translation>SVG-Datei herunterladen</translation>
     </message>
     <message>
       <source>Duplicate</source>
-      <translation>Duplikat</translation>
+      <translation>Duplizieren</translation>
     </message>
     <message>
       <source>E-mail</source>
-      <translation>Email Adresse</translation>
+      <translation>E-Mail</translation>
     </message>
     <message>
       <source>Edit</source>
@@ -457,15 +457,15 @@
     </message>
     <message>
       <source>Email</source>
-      <translation>Email Adresse</translation>
+      <translation>E-Mail</translation>
     </message>
     <message>
       <source>Enable automations on category assignment</source>
-      <translation>Aktivieren Sie Automationen in der Kategoriezuweisung</translation>
+      <translation>Einstellungen für die Zuweisung der Kategorie</translation>
     </message>
     <message>
       <source>Enable automations on creating an issue in area</source>
-      <translation>Aktivieren Sie Automationen beim Erstellen eines Problems in der Umgebung</translation>
+      <translation>Einstellungen für die Zuweisung der Kategorie</translation>
     </message>
     <message>
       <source>Enable desktop notifications</source>
@@ -473,39 +473,39 @@
     </message>
     <message>
       <source>Enabled</source>
-      <translation>Ermöglicht</translation>
+      <translation>Aktviert</translation>
     </message>
     <message>
       <source>Enter the report password</source>
-      <translation>Geben Sie das Report Passwort ein</translation>
+      <translation>Geben Sie das Zugangspasswort ein</translation>
     </message>
     <message>
       <source>Event</source>
-      <translation>Fall</translation>
+      <translation>Ereignis</translation>
     </message>
     <message>
       <source>Everyone will be able to read this report</source>
-      <translation>Jeder kann diesen Bericht lesen</translation>
+      <translation>Diese Meldung kann von allen gelesen werden</translation>
     </message>
     <message>
       <source>Everyone will be able to read this report when the %site team approves it</source>
-      <translation>Jeder kann diesen Bericht lesen, wenn das%-Site-Team es genehmigt</translation>
+      <translation>Nach Freischaltung durch das %site-Team kann diese Meldung von allen gelesen werden</translation>
     </message>
     <message>
       <source>Exclusive recipients of private notes</source>
-      <translation>Exklusive Empfänger von privaten Noten</translation>
+      <translation>Empfänger von privaten Notizen</translation>
     </message>
     <message>
       <source>Expiration</source>
-      <translation>Ablauf</translation>
+      <translation>Fälligkeit</translation>
     </message>
     <message>
       <source>Expirations</source>
-      <translation>Ausfälle</translation>
+      <translation>Fälligkeit</translation>
     </message>
     <message>
       <source>Expired since</source>
-      <translation>Abgelaufen</translation>
+      <translation>Verfallen am</translation>
     </message>
     <message>
       <source>Expires in</source>
@@ -513,51 +513,51 @@
     </message>
     <message>
       <source>Expiry</source>
-      <translation>Ablauf</translation>
+      <translation>Fälligkeit</translation>
     </message>
     <message>
       <source>Export</source>
-      <translation>Export</translation>
+      <translation>Exportieren</translation>
     </message>
     <message>
       <source>Export in CSV</source>
-      <translation>Export in CSV.</translation>
+      <translation>Per CSV exportieren</translation>
     </message>
     <message>
       <source>Export to CSV</source>
-      <translation>Export in CSV.</translation>
+      <translation>In CSV exportieren</translation>
     </message>
     <message>
       <source>Faq</source>
-      <translation>FAQ – häufig gestellte Fragen</translation>
+      <translation>FAQ – Häufig gestellte Fragen</translation>
     </message>
     <message>
       <source>Favourite language</source>
-      <translation>Lieblingssprache</translation>
+      <translation>Wählen Sie Ihre Sprache</translation>
     </message>
     <message>
       <source>Filter by area</source>
-      <translation>Filtern nach Bereich.</translation>
+      <translation>Filtern nach Zone</translation>
     </message>
     <message>
       <source>Filter by assignment</source>
-      <translation>Filtern nach Auftrag</translation>
+      <translation>Filtern nach Zuordnung</translation>
     </message>
     <message>
       <source>Filter by category</source>
-      <translation>Filtern nach Kategorie.</translation>
+      <translation>Filtern nach Kategorie</translation>
     </message>
     <message>
       <source>Filter by condition</source>
-      <translation>Filtern nach Zustand.</translation>
+      <translation>Filtern nach Bedingung</translation>
     </message>
     <message>
       <source>Filter by group</source>
-      <translation>Filtern nach der Gruppe.</translation>
+      <translation>Filtern nach Gruppe</translation>
     </message>
     <message>
       <source>Filter by group in charge</source>
-      <translation>Filtern nach der Verantwortlichen Gruppe</translation>
+      <translation>Filtern nach zuständiger Gruppe</translation>
     </message>
     <message>
       <source>Filter by macro category</source>
@@ -569,7 +569,7 @@
     </message>
     <message>
       <source>Filter by static in the time range</source>
-      <translation>Filtern Sie mit statisch im Zeitbereich</translation>
+      <translation>Statistisch filtern nach Zeitraum</translation>
     </message>
     <message>
       <source>Filter by time interval</source>
@@ -577,91 +577,91 @@
     </message>
     <message>
       <source>Filter by type</source>
-      <translation>Filtern nach Typ</translation>
+      <translation>Filtern nach Meldungsart</translation>
     </message>
     <message>
       <source>Find by address</source>
-      <translation>Suche nach Adresse.</translation>
+      <translation>Nach Adresse suchen</translation>
     </message>
     <message>
       <source>Find by area</source>
-      <translation>Finden nach Gebiet.</translation>
+      <translation>Nach Zone suchen</translation>
     </message>
     <message>
       <source>Find by author</source>
-      <translation>Suche nach dem Autor.</translation>
+      <translation>Nach Verfasser suchen</translation>
     </message>
     <message>
       <source>Find by category</source>
-      <translation>Nach Kategorie finden.</translation>
+      <translation>Nach Kategorie suchen</translation>
     </message>
     <message>
       <source>Find by channel</source>
-      <translation>Finden von Kanal.</translation>
+      <translation>Nach Kanal suchen</translation>
     </message>
     <message>
       <source>Find by creation date</source>
-      <translation>Suche nach Erstellungsdatum</translation>
+      <translation>Nach Erstellungsdatum suchen</translation>
     </message>
     <message>
       <source>Find by expiry</source>
-      <translation>Suche nach Ablauf</translation>
+      <translation>Nach Fälligkeit suchen</translation>
     </message>
     <message>
       <source>Find by ID</source>
-      <translation>Finden Sie nach ID.</translation>
+      <translation>Nach ID suchen</translation>
     </message>
     <message>
       <source>Find by moderation</source>
-      <translation>Suche nach Moderation.</translation>
+      <translation>Nach Moderation suchen</translation>
     </message>
     <message>
       <source>Find by observer</source>
-      <translation>Suche nach Beobachter.</translation>
+      <translation>Nach Beobachter suchen</translation>
     </message>
     <message>
       <source>Find by operator in charge</source>
-      <translation>Finden Sie nach dem Betreiber zuständig</translation>
+      <translation>Nach Beauftragtem suchen</translation>
     </message>
     <message>
       <source>Find by subject</source>
-      <translation>Nach Thema finden.</translation>
+      <translation>Nach Thema suchen</translation>
     </message>
     <message>
       <source>Find by visibility</source>
-      <translation>Suche nach Sichtbarkeit.</translation>
+      <translation>Nach Sichtbarkeit suchen</translation>
     </message>
     <message>
       <source>Find in issues</source>
-      <translation>In Fragen finden.</translation>
+      <translation>In den Meldungen suchen</translation>
     </message>
     <message>
       <source>Find user</source>
-      <translation>Benutzer finden</translation>
+      <translation>Benutzer suchen</translation>
     </message>
     <message>
       <source>Fiscal code</source>
-      <translation>Fiskalcode</translation>
+      <translation>Steuernummer</translation>
     </message>
     <message>
       <source>Fixed</source>
-      <translation>Fest</translation>
+      <translation>Problem behoben</translation>
     </message>
     <message>
       <source>Fixed by %name</source>
-      <translation>Fixiert nach %name</translation>
+      <translation>Erledigt von %name</translation>
     </message>
     <message>
       <source>Fixing</source>
-      <translation>Festsetzung</translation>
+      <translation>Bearbeitung abgeschlossen</translation>
     </message>
     <message>
       <source>Fixing the issue</source>
-      <translation>Das Problem beheben</translation>
+      <translation>Meldung abschließend bearbeitet</translation>
     </message>
     <message>
       <source>Force as fixed</source>
-      <translation>Zwinge wie fest</translation>
+      <translation>Erledigt</translation>
     </message>
     <message>
       <source>From</source>
@@ -669,35 +669,35 @@
     </message>
     <message>
       <source>General Settings</source>
-      <translation>Ändere allgemeine Einstellungen</translation>
+      <translation>Allgemeine Einstellungen</translation>
     </message>
     <message>
       <source>Go to the issue</source>
-      <translation>Auf das Thema gehen</translation>
+      <translation>Gehe zur Meldung</translation>
     </message>
     <message>
       <source>Group</source>
-      <translation>Gruppe</translation>
+      <translation>Gruppieren</translation>
     </message>
     <message>
       <source>Group and operator in charge</source>
-      <translation>Gruppe und Betreiber verantwortlich</translation>
+      <translation>Zuständige Gruppen und Bearbeiter</translation>
     </message>
     <message>
       <source>Group in charge</source>
-      <translation>Verantwortliche Gruppe</translation>
+      <translation>Zuständige Gruppe</translation>
     </message>
     <message>
       <source>Group of operator who opened the issue</source>
-      <translation>Gruppe des Betreibers, der das Problem eröffnet hat</translation>
+      <translation>Gruppe des meldenden Bediensteten</translation>
     </message>
     <message>
       <source>Group of operators in charge</source>
-      <translation>Gruppe von Betreibern verantwortlich</translation>
+      <translation>Bearbeitergruppen</translation>
     </message>
     <message>
       <source>Groups</source>
-      <translation>Gruppen</translation>
+      <translation>Bearbeitergruppen</translation>
     </message>
     <message>
       <source>Half-yearly</source>
@@ -705,7 +705,7 @@
     </message>
     <message>
       <source>Hide archived</source>
-      <translation>Archiviert ausblenden.</translation>
+      <translation>Archivierte ausblenden</translation>
     </message>
     <message>
       <source>Hide map</source>
@@ -713,23 +713,23 @@
     </message>
     <message>
       <source>Hide publication consent from the reporter</source>
-      <translation>Veröffentlichung der Veröffentlichung aus dem Reporter ausblenden</translation>
+      <translation>Die Zustimmung zur Veröffentlichung für den Meldenden ausblenden</translation>
     </message>
     <message>
       <source>Hide the choice of the type of issue from the reporter</source>
-      <translation>Die Wahl der Art der Ausgabe aus dem Reporter ausblenden</translation>
+      <translation>Die Meldungsart für den Meldenden ausblenden</translation>
     </message>
     <message>
       <source>Hide the detailed timeline from the public</source>
-      <translation>Verstecken Sie die detaillierte Zeitleiste aus der Öffentlichkeit aus</translation>
+      <translation>Die detaillierte Zeitleiste für die öffentlichen Nutzer ausblenden</translation>
     </message>
     <message>
       <source>Hide the operators name from the public</source>
-      <translation>Den Namen der Betreiber aus der Öffentlichkeit ausblenden</translation>
+      <translation>Die Namen der Bearbeiter für die öffentlichen Nutzer ausblenden</translation>
     </message>
     <message>
       <source>Hit enter to search</source>
-      <translation>Drücken Sie die Eingabetaste, um zu suchen</translation>
+      <translation>Drücken Sie die Enter-Taste, um die Suche zu starten</translation>
     </message>
     <message>
       <source>hour</source>
@@ -737,11 +737,11 @@
     </message>
     <message>
       <source>hours</source>
-      <translation>Std</translation>
+      <translation>Stunden</translation>
     </message>
     <message>
       <source>ID</source>
-      <translation>id</translation>
+      <translation>ID</translation>
     </message>
     <message>
       <source>If the button does not work, paste the following address in the address bar of your browser: %password_link</source>
@@ -749,47 +749,47 @@
     </message>
     <message>
       <source>If the option is activated, only the acceptance and closure events will be shown in the history</source>
-      <translation>Wenn die Option aktiviert ist, werden nur die Annahme- und Verschlussereignisse in der Historie angezeigt</translation>
+      <translation>Wenn diese Option aktiviert ist, werden im Verlauf nur die Übernahme und der Abschluss angezeigt</translation>
     </message>
     <message>
       <source>If the option is activated, the reporter is not asked to choose the type of issue</source>
-      <translation>Wenn die Option aktiviert ist, wird der Reporter nicht aufgefordert, die Art der Ausgabe auszuwählen</translation>
+      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht aufgefordert, die Art der Meldung auszuwählen</translation>
     </message>
     <message>
       <source>If the option is enabled, the names of the operators will be replaced with a generic string</source>
-      <translation>Wenn die Option aktiviert ist, werden die Namen der Operatoren durch eine generische Zeichenfolge ersetzt</translation>
+      <translation>Wenn diese Option aktiviert ist, werden die Namen der Bearbeiter durch eine willkürliche Zeichenfolge ersetzt</translation>
     </message>
     <message>
       <source>If the option is enabled, the reporter is not asked for consent to make the issue public: operators will not be able to make it public in any way.</source>
-      <translation>Wenn die Option aktiviert ist, wird der Reporter nicht zur Einwilligung zur Einwilligung des Problems gefragt: Die Betreiber können es in keiner Weise öffentlich machen.</translation>
+      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht zur Einwilligung in die Veröffentlichung der Meldung aufgefordert. Die Bearbeiter der Meldung dürfen diese nicht öffentlich machen.</translation>
     </message>
     <message>
       <source>If this option is enabled, authenticated users can post comments to public issyes</source>
-      <translation>Wenn diese Option aktiviert ist, können authentifizierte Benutzer Kommentare an öffentliche Issyes posten</translation>
+      <translation>Wenn diese Option aktiviert ist, können authentifizierte Benutzer Kommentare zu öffentlich sichtbaren Meldungen hinterlassen</translation>
     </message>
     <message>
       <source>If this option is enabled, new issues are not publicly visible</source>
-      <translation>Wenn diese Option aktiviert ist, sind neue Probleme nicht öffentlich sichtbar</translation>
+      <translation>Wenn diese Option aktiviert ist, sind die neuen Meldungen nicht öffentlich sichtbar</translation>
     </message>
     <message>
       <source>If this option is enabled, you can select which operators can read each note</source>
-      <translation>Wenn diese Option aktiviert ist, können Sie auswählen, welche Bediener jede Note lesen können</translation>
+      <translation>Wenn diese Option aktiviert ist, können Sie auswählen, welche Bearbeiter Lesezugriff auf alle Notizen haben</translation>
     </message>
     <message>
       <source>Images</source>
-      <translation>Bilde</translation>
+      <translation>Bilder</translation>
     </message>
     <message>
       <source>In charge of</source>
-      <translation>Verantwortlich für</translation>
+      <translation>Übernommen von</translation>
     </message>
     <message>
       <source>In general,%count issues have been resolved</source>
-      <translation>Insgesamt wurden %count Probleme gelöst</translation>
+      <translation>Insgesamt wurden %count Meldungen abschließend bearbeitet</translation>
     </message>
     <message>
       <source>In order to partecipate, you need to be registered!</source>
-      <translation>Zuerst registrieren, dann mitmachen!</translation>
+      <translation>Sie müssen registriert sein, um teilnehmen zu können</translation>
     </message>
     <message>
       <source>Inbox</source>
@@ -805,7 +805,7 @@
     </message>
     <message>
       <source>Involvement of a reference for the citizen</source>
-      <translation>Beteiligung einer Referenz für den Bürger</translation>
+      <translation>Bezug für den Bürger</translation>
     </message>
     <message>
       <source>Involvement of an observer</source>
@@ -813,11 +813,11 @@
     </message>
     <message>
       <source>Is static</source>
-      <translation>Ist statisch</translation>
+      <translation>Statistisch</translation>
     </message>
     <message>
       <source>Issue comments</source>
-      <translation>Kommentare ausgeben.</translation>
+      <translation>Kommentare zur Meldung</translation>
     </message>
     <message>
       <source>Issue fixed</source>
@@ -825,23 +825,23 @@
     </message>
     <message>
       <source>Issue images</source>
-      <translation>Bilder ausgeben</translation>
+      <translation>Zugleich mit der Meldung eingegangene Bilder</translation>
     </message>
     <message>
       <source>Issue info</source>
-      <translation>Ausgabe info.</translation>
+      <translation>Informationen zur Meldung</translation>
     </message>
     <message>
       <source>Issue number</source>
-      <translation>Ausgabe Nummer</translation>
+      <translation>Meldung Nr.</translation>
     </message>
     <message>
       <source>Issue private notes</source>
-      <translation>Private Notizen ausgeben.</translation>
+      <translation>Private Notizen zur Meldung</translation>
     </message>
     <message>
       <source>Issue reported by</source>
-      <translation>Ausgabe berichtet von</translation>
+      <translation>Meldung aufgenommen von</translation>
     </message>
     <message>
       <source>issues</source>
@@ -853,7 +853,7 @@
     </message>
     <message>
       <source>It takes just 5 seconds to register!</source>
-      <translation>In 5 Sekunden bist du mit dabei!</translation>
+      <translation>Jetzt registrieren!</translation>
     </message>
     <message>
       <source>Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec</source>
@@ -861,15 +861,15 @@
     </message>
     <message>
       <source>January_February_March_April_May_June_July_August_September_October_November_December</source>
-      <translation>January_February_March_Appril_May_June_July_August_September_October_November_December</translation>
+      <translation>Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember</translation>
     </message>
     <message>
       <source>Json API</source>
-      <translation>JSON API.</translation>
+      <translation>Im JSON-Format öffnen</translation>
     </message>
     <message>
       <source>La zona selezionata non è coperta dal servizio</source>
-      <translation>La zona selezionata nicht è coperta dal servizio</translation>
+      <translation>Dieser Dienst ist in der ausgewählten Zone nicht verfügbar</translation>
     </message>
     <message>
       <source>Last access</source>
@@ -877,23 +877,23 @@
     </message>
     <message>
       <source>Last assignment</source>
-      <translation>Letzte Aufgabe.</translation>
+      <translation>Letzte Zuweisung</translation>
     </message>
     <message>
       <source>Last modified at</source>
-      <translation>Zuletzt modifiziert at.</translation>
+      <translation>Zuletzt geändert am</translation>
     </message>
     <message>
       <source>Legend:</source>
-      <translation>Legende:</translation>
+      <translation>Legende</translation>
     </message>
     <message>
       <source>Link</source>
-      <translation>Verknüpfung</translation>
+      <translation>Link</translation>
     </message>
     <message>
       <source>List of category ids for api selection</source>
-      <translation>Liste der Kategorie-IDs für API-Auswahl</translation>
+      <translation>Liste der Kategorie-IDs für die Vorauswahl</translation>
     </message>
     <message>
       <source>Loading...</source>
@@ -901,31 +901,31 @@
     </message>
     <message>
       <source>Location info</source>
-      <translation>Standortinfo.</translation>
+      <translation>Standortinformation</translation>
     </message>
     <message>
       <source>Log in now!</source>
-      <translation>Sofort einloggen!</translation>
+      <translation>Jetzt anmdelden!</translation>
     </message>
     <message>
       <source>Login</source>
-      <translation>Einloggen</translation>
+      <translation>Anmelden</translation>
     </message>
     <message>
       <source>Logout</source>
-      <translation>Ausloggen</translation>
+      <translation>Abmelden</translation>
     </message>
     <message>
       <source>Make private</source>
-      <translation>Privatisieren</translation>
+      <translation>Auf privat stellen</translation>
     </message>
     <message>
       <source>Make public</source>
-      <translation>Veröffentlichen</translation>
+      <translation>Auf öffentlich stellen</translation>
     </message>
     <message>
       <source>Menu</source>
-      <translation>Speisekarte</translation>
+      <translation>Menü</translation>
     </message>
     <message>
       <source>minute</source>
@@ -933,15 +933,15 @@
     </message>
     <message>
       <source>minutes</source>
-      <translation>Protokoll</translation>
+      <translation>Minuten</translation>
     </message>
     <message>
       <source>Moderation</source>
-      <translation>Mäßigung</translation>
+      <translation>Moderation</translation>
     </message>
     <message>
       <source>Modified at</source>
-      <translation>Geändert</translation>
+      <translation>Geändert am</translation>
     </message>
     <message>
       <source>month</source>
@@ -969,11 +969,11 @@
     </message>
     <message>
       <source>New %count users have been registered</source>
-      <translation>Neue %count Benutzer wurden registriert</translation>
+      <translation>%count neue Benutzer wurden registriert</translation>
     </message>
     <message>
       <source>News</source>
-      <translation>Nachrichten</translation>
+      <translation>Neuigkeiten</translation>
     </message>
     <message>
       <source>Next</source>
@@ -989,7 +989,7 @@
     </message>
     <message>
       <source>No attachments</source>
-      <translation>Keine Anhänge</translation>
+      <translation>Keine Anlagen</translation>
     </message>
     <message>
       <source>No content</source>
@@ -997,11 +997,11 @@
     </message>
     <message>
       <source>No issue found...</source>
-      <translation>Kein Problem gefunden ...</translation>
+      <translation>Keine Meldung gefunden</translation>
     </message>
     <message>
       <source>No issues</source>
-      <translation>Keine Probleme</translation>
+      <translation>Keine Meldung</translation>
     </message>
     <message>
       <source>Nobody</source>
@@ -1013,7 +1013,7 @@
     </message>
     <message>
       <source>Notes</source>
-      <translation>Anmerkungen</translation>
+      <translation>Notizen</translation>
     </message>
     <message>
       <source>Notification settings</source>
@@ -1021,7 +1021,7 @@
     </message>
     <message>
       <source>Notification texts</source>
-      <translation>Benachrichtigungstexte.</translation>
+      <translation>Benachrichtigungstexte</translation>
     </message>
     <message>
       <source>Notifications</source>
@@ -1029,39 +1029,39 @@
     </message>
     <message>
       <source>Number of issues by aging time buckets</source>
-      <translation>Anzahl der Probleme durch alterndes Eimer</translation>
+      <translation>Offene Meldungen nach Aktualität</translation>
     </message>
     <message>
       <source>Number of issues by area</source>
-      <translation>Anzahl der Probleme nach Bereich</translation>
+      <translation>Offene Meldungen nach Zone</translation>
     </message>
     <message>
       <source>Number of issues by category</source>
-      <translation>Anzahl der Probleme nach Kategorie</translation>
+      <translation>Offene Meldungen nach Kategorie</translation>
     </message>
     <message>
       <source>Number of issues by status</source>
-      <translation>Anzahl der Probleme nach Status</translation>
+      <translation>Meldungen nach Status</translation>
     </message>
     <message>
       <source>Number of issues by type</source>
-      <translation>Anzahl der Probleme nach Typ</translation>
+      <translation>Offene Meldungen nach Meldungsart</translation>
     </message>
     <message>
       <source>Number of issues open and closed by time interval</source>
-      <translation>Anzahl der Probleme offen und geschlossen vom Zeitintervall</translation>
+      <translation>Anzahl der eingefügten und erledigten Meldungen nach Zeitspanne</translation>
     </message>
     <message>
       <source>Number of reports for processing times</source>
-      <translation>Anzahl der Berichte zur Bearbeitungszeiten</translation>
+      <translation>Anzahl der Meldungen nach Bearbeitungszeiten</translation>
     </message>
     <message>
       <source>Object of issue</source>
-      <translation>Objekt des Problems.</translation>
+      <translation>Gegenstand der Meldung</translation>
     </message>
     <message>
       <source>Object of the issue</source>
-      <translation>Objekt des Problems</translation>
+      <translation>Gegenstand der Meldung</translation>
     </message>
     <message>
       <source>Observer</source>
@@ -1073,7 +1073,7 @@
     </message>
     <message>
       <source>official replies</source>
-      <translation>offizielle Antworten</translation>
+      <translation>Offizielle Antworten</translation>
     </message>
     <message>
       <source>Official response</source>
@@ -1081,59 +1081,59 @@
     </message>
     <message>
       <source>One issue</source>
-      <translation>Ein Problem</translation>
+      <translation>Eine Meldung</translation>
     </message>
     <message>
       <source>Only the %site team will be able to read this report</source>
-      <translation>Nur das%-Site-Team kann diesen Bericht lesen</translation>
+      <translation>Diese Meldung wird nur vom%-Site-Team gelesen</translation>
     </message>
     <message>
       <source>Open for group of operators in charge</source>
-      <translation>Offen für die Gruppe von Betreibern zuständig</translation>
+      <translation>Offen für Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Open issues by entering date</source>
-      <translation>Offene Probleme durch Eingabe des Datums</translation>
+      <translation>Offene Meldungen nach Einfügedatum</translation>
     </message>
     <message>
       <source>Open issues for groups of operators in charge</source>
-      <translation>Offene Themen für Gruppen von Betreibern zuständig</translation>
+      <translation>Offene Meldungen nach zuständiger Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Open over time</source>
-      <translation>Im Laufe der Zeit geöffnet</translation>
+      <translation>Ständig geöffnet</translation>
     </message>
     <message>
       <source>OpenSegnalazioni Notifications</source>
-      <translation>OpenSegnalazioni-Benachrichtigungen</translation>
+      <translation>OpenSegnalazioni Notifications</translation>
     </message>
     <message>
       <source>OpenSegnalazioni Settings</source>
-      <translation>Ändere OpenSegnalazioni Einstellungen</translation>
+      <translation>OpenSegnalazioni Settings</translation>
     </message>
     <message>
       <source>Operator</source>
-      <translation>Operator</translation>
+      <translation>Bearbeiter</translation>
     </message>
     <message>
       <source>Operator groups</source>
-      <translation>Bedienergruppen</translation>
+      <translation>Bearbeitergruppen</translation>
     </message>
     <message>
       <source>Operator in charge</source>
-      <translation>Betreiber verantwortlich</translation>
+      <translation>Zuständiger Bearbeiter</translation>
     </message>
     <message>
       <source>Operator who opened the issue</source>
-      <translation>Betreiber, der das Problem eröffnet hat</translation>
+      <translation>Bearbeiter, der die Meldung eröffnet hat</translation>
     </message>
     <message>
       <source>Operators</source>
-      <translation>Sachbearbeiter</translation>
+      <translation>Bearbeiter</translation>
     </message>
     <message>
       <source>Operators in charge</source>
-      <translation>Betreiber verantwortlich</translation>
+      <translation>Zuständige Bearbeiter</translation>
     </message>
     <message>
       <source>Password</source>
@@ -1141,15 +1141,15 @@
     </message>
     <message>
       <source>Pending</source>
-      <translation>Ausstehend</translation>
+      <translation>Noch nicht zugewiesen</translation>
     </message>
     <message>
       <source>Percentage of issues closed by category</source>
-      <translation>Prozentsatz der von der Kategorie geschlossenen Themen</translation>
+      <translation>Prozentsatz der erledigten Meldungen nach Kategorie</translation>
     </message>
     <message>
       <source>Percentage of messages closed by group of operators in charge</source>
-      <translation>Prozentsatz der von der Gruppe von Betreibern zuständigen Betreiber geschlossenen Nachrichten</translation>
+      <translation>Prozentsatz der erledigten Meldungen nach Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Phone</source>
@@ -1157,11 +1157,11 @@
     </message>
     <message>
       <source>Posta o Fax</source>
-      <translation>Posta o fax.</translation>
+      <translation>Postanschrift oder Fax-Nr.</translation>
     </message>
     <message>
       <source>Prevent the area selection</source>
-      <translation>Verhindern Sie die Bereichsauswahl</translation>
+      <translation>Verhindern Sie, dass bei Meldung eine Zone ausgewählt wird</translation>
     </message>
     <message>
       <source>Previous</source>
@@ -1173,11 +1173,11 @@
     </message>
     <message>
       <source>Print</source>
-      <translation>Drucken</translation>
+      <translation>Gedruckt</translation>
     </message>
     <message>
       <source>Print chart</source>
-      <translation>Drucken</translation>
+      <translation>Grafik drucken</translation>
     </message>
     <message>
       <source>Printable version</source>
@@ -1189,11 +1189,11 @@
     </message>
     <message>
       <source>Privacy</source>
-      <translation>Datenschutz und Privacy</translation>
+      <translation>Datenschutz</translation>
     </message>
     <message>
       <source>Private</source>
-      <translation>Privatgelände</translation>
+      <translation>Privat</translation>
     </message>
     <message>
       <source>Private message</source>
@@ -1205,11 +1205,11 @@
     </message>
     <message>
       <source>Processing</source>
-      <translation>wird bearbeitet</translation>
+      <translation>Wird bearbeitet</translation>
     </message>
     <message>
       <source>Processing times</source>
-      <translation>Verarbeitungszeiten</translation>
+      <translation>Bearbeitungszeiten</translation>
     </message>
     <message>
       <source>Profile</source>
@@ -1217,15 +1217,15 @@
     </message>
     <message>
       <source>Propose as an official response</source>
-      <translation>Als offizielle Antwort vorschlagen</translation>
+      <translation>Vorschlag für eine offizielle Antwort</translation>
     </message>
     <message>
       <source>Public</source>
-      <translation>Allgemein</translation>
+      <translation>Öffentlich</translation>
     </message>
     <message>
       <source>Publication of an official response</source>
-      <translation>Veröffentlichung einer offiziellen Antwort</translation>
+      <translation>Offiizelle Antwort einfügen</translation>
     </message>
     <message>
       <source>Quarterly</source>
@@ -1233,75 +1233,75 @@
     </message>
     <message>
       <source>Random operator</source>
-      <translation>Zufälliger Bediener</translation>
+      <translation>Zufälliger Bearbeiter</translation>
     </message>
     <message>
       <source>Read</source>
-      <translation>Lesen</translation>
+      <translation>Gelesen</translation>
     </message>
     <message>
       <source>Read by %name</source>
-      <translation>Lesen Sie nach %name</translation>
+      <translation>Gelesen von %name</translation>
     </message>
     <message>
       <source>Read the issue</source>
-      <translation>Lesen Sie das Problem.</translation>
+      <translation>Meldung lesen</translation>
     </message>
     <message>
       <source>Reading</source>
-      <translation>Lektüre</translation>
+      <translation>Lesen</translation>
     </message>
     <message>
       <source>Reassign</source>
-      <translation>Neu zugewiesen</translation>
+      <translation>Neu zuweisen</translation>
     </message>
     <message>
       <source>Receive a notification for creating a issue</source>
-      <translation>Erhalten Sie eine Benachrichtigung zum Erstellen eines Problems</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn eine neue Meldung erstellt wird</translation>
     </message>
     <message>
       <source>Receive a notification to the reopening of your issue</source>
-      <translation>Erhalten Sie eine Benachrichtigung an die Wiedereröffnung Ihres Problems</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihre Meldung neu bearbeitet wird</translation>
     </message>
     <message>
       <source>Receive a notification when a comment is added to moderate</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn ein Kommentar zu mäßig hinzugefügt wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn ein zu moderierender Kommentar hinzugefügt wird</translation>
     </message>
     <message>
       <source>Receive a notification when a comment is added to your report</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn in Ihrem Bericht ein Kommentar hinzugefügt wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Meldung ein Kommentar hinzugefügt wird</translation>
     </message>
     <message>
       <source>Receive a notification when a operator has completed the activity concerning your issue</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn ein Bediener die Aktivität in Bezug auf Ihr Problem abgeschlossen hat</translation>
+      <translation>Sie erhalten eine Benachrichtigung, sobald der zuständige Bedienstete die von Ihnen gemeldete Situation abschließend geregelt hat.</translation>
     </message>
     <message>
       <source>Receive a notification when an observer is involved in a report</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn ein Beobachter an einem Bericht beteiligt ist</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn ein Beobachter in eine Meldung eingebunden wird</translation>
     </message>
     <message>
       <source>Receive a notification when you are the recipient of a private message</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn Sie der Empfänger einer privaten Nachricht sind</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn eine private Nachricht für Sie vorliegt</translation>
     </message>
     <message>
       <source>Receive a notification when your issue has been closed</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn Ihr Problem geschlossen wurde</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn die von Ihnen gemeldete Situation behoben wurde.</translation>
     </message>
     <message>
       <source>Receive a notification when your issue is assigned to a manager</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn Ihr Problem einem Manager zugewiesen wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, sobald Ihre Meldung an die zuständige Person weitergeleitet wurde</translation>
     </message>
     <message>
       <source>Receive a notification when your issue is assigned to a new reference for the citizen</source>
-      <translation>Erhalten Sie eine Benachrichtigung, wenn Ihr Problem einer neuen Referenz für den Bürger zugewiesen ist</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Meldung ein neuer Bezug für den Bürger zugewiesen wurde</translation>
     </message>
     <message>
       <source>Receive a periodic update notification</source>
-      <translation>Erhalten Sie eine periodische Update-Benachrichtigung</translation>
+      <translation>Sie werden regelmäßig über den aktuellen Bearbeitungsstand benachrichtigt</translation>
     </message>
     <message>
       <source>Receive notification when a issue is assigned to your group</source>
-      <translation>Erhalten Sie Benachrichtigung, wenn Ihrer Gruppe ein Problem zugewiesen ist</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Gruppe eine Meldung zugewiesen wurde</translation>
     </message>
     <message>
       <source>Receivers</source>
@@ -1313,7 +1313,7 @@
     </message>
     <message>
       <source>Reference for the citizen</source>
-      <translation>Referenz für den Bürger</translation>
+      <translation>Bezug für den Bürger/die Bürgerin</translation>
     </message>
     <message>
       <source>Reject</source>
@@ -1325,7 +1325,7 @@
     </message>
     <message>
       <source>Related issues</source>
-      <translation>Verwandte Themen</translation>
+      <translation>Verwandte Meldungen</translation>
     </message>
     <message>
       <source>Reload</source>
@@ -1333,7 +1333,7 @@
     </message>
     <message>
       <source>Remember answer</source>
-      <translation>Erinnern Sie sich an Antwort</translation>
+      <translation>Antwort speichern</translation>
     </message>
     <message>
       <source>Remove observer</source>
@@ -1341,91 +1341,91 @@
     </message>
     <message>
       <source>Remove selected attachmentes</source>
-      <translation>Ausgewählte Anhänge entfernen.</translation>
+      <translation>Ausgewählte Anlagen entfernen</translation>
     </message>
     <message>
       <source>Reopen</source>
-      <translation>Wieder öffnen</translation>
+      <translation>Wiedereröffnet</translation>
     </message>
     <message>
       <source>Reopen by %name</source>
-      <translation>Reopen nach %name</translation>
+      <translation>Wiedereröffnet von %name</translation>
     </message>
     <message>
       <source>Reopen issue</source>
-      <translation>Reopen-Problem</translation>
+      <translation>Wiedereröffnen</translation>
     </message>
     <message>
       <source>Reopening a report</source>
-      <translation>Einen Bericht wiedereröffnen.</translation>
+      <translation>Eine Meldung wird erneut geöffnet</translation>
     </message>
     <message>
       <source>Reponse proposal</source>
-      <translation>Reponse-Vorschlag</translation>
+      <translation>Vorschlag für eine Antwort</translation>
     </message>
     <message>
       <source>Report link</source>
-      <translation>Link melden</translation>
+      <translation>Link zum Bericht</translation>
     </message>
     <message>
       <source>Reporter</source>
-      <translation>Reporter</translation>
+      <translation>Meldende Person</translation>
     </message>
     <message>
       <source>Reporter group</source>
-      <translation>Reportergruppe</translation>
+      <translation>Gruppe der meldenden Person</translation>
     </message>
     <message>
       <source>Reporter info</source>
-      <translation>Reporterinfo.</translation>
+      <translation>Informationen zur meldenden Person</translation>
     </message>
     <message>
       <source>Reports</source>
-      <translation>Berichte</translation>
+      <translation>Bericht</translation>
     </message>
     <message>
       <source>Reset factory settings</source>
-      <translation>Fabrikeinstellungen zurücksetzen.</translation>
+      <translation>Standardeinstellungen wiederherstellen</translation>
     </message>
     <message>
       <source>Resolution time</source>
-      <translation>Lösungszeit</translation>
+      <translation>Erledigungszeit</translation>
     </message>
     <message>
       <source>Responses</source>
-      <translation>Reaktionen</translation>
+      <translation>Antworten</translation>
     </message>
     <message>
       <source>Save as pdf</source>
-      <translation>Speichern als PDF.</translation>
+      <translation>Als PDF speichern</translation>
     </message>
     <message>
       <source>Save your settings</source>
-      <translation>Speichern Sie Ihre Einstellungen</translation>
+      <translation>Einstellungen speichern</translation>
     </message>
     <message>
       <source>Search</source>
-      <translation>Suche</translation>
+      <translation>Suchen</translation>
     </message>
     <message>
       <source>Search in faq</source>
-      <translation>Suche in FAQ</translation>
+      <translation>In FAQ suchen</translation>
     </message>
     <message>
       <source>Search or create user</source>
-      <translation>Benutzer suchen oder erstellen</translation>
+      <translation>Benutzer suchen oder anlegen</translation>
     </message>
     <message>
       <source>Search registered user</source>
-      <translation>Registrierter Benutzer suchen.</translation>
+      <translation>Unter registrierte Benutzer suchen</translation>
     </message>
     <message>
       <source>Search text</source>
-      <translation>Suchtext</translation>
+      <translation>Textsuche</translation>
     </message>
     <message>
       <source>second</source>
-      <translation>zweite</translation>
+      <translation>Sekunde</translation>
     </message>
     <message>
       <source>seconds</source>
@@ -1433,19 +1433,19 @@
     </message>
     <message>
       <source>See all issues</source>
-      <translation>Alle Fragen sehen</translation>
+      <translation>Alle Meldungen ansehen</translation>
     </message>
     <message>
       <source>Select</source>
-      <translation>Wählen</translation>
+      <translation>Hinzufügen</translation>
     </message>
     <message>
       <source>Select area</source>
-      <translation>Bereich auswählen</translation>
+      <translation>Zone auswählen</translation>
     </message>
     <message>
       <source>Select category</source>
-      <translation>Kategorie wählen</translation>
+      <translation>Kategorie auswählen</translation>
     </message>
     <message>
       <source>Select event</source>
@@ -1453,15 +1453,15 @@
     </message>
     <message>
       <source>Select group</source>
-      <translation>Wähle die Gruppe</translation>
+      <translation>Gruppe auswählen</translation>
     </message>
     <message>
       <source>Select operator</source>
-      <translation>Operator auswählen</translation>
+      <translation>Bearbeiter auswählen</translation>
     </message>
     <message>
       <source>Select the reference area</source>
-      <translation>Wählen Sie den Referenzbereich aus</translation>
+      <translation>Betroffene Zone auswählen</translation>
     </message>
     <message>
       <source>Select type</source>
@@ -1473,23 +1473,23 @@
     </message>
     <message>
       <source>Set a random operator</source>
-      <translation>Stellen Sie einen zufälligen Bediener ein</translation>
+      <translation>Bearbeiter per Zufallsauswahl bestimmen</translation>
     </message>
     <message>
       <source>Set as fixed</source>
-      <translation>Wie fest festgelegt</translation>
+      <translation>Situation behoben</translation>
     </message>
     <message>
       <source>Set days</source>
-      <translation>Eingestellte Tage</translation>
+      <translation>Tage einstellen</translation>
     </message>
     <message>
       <source>Set each new issue as private</source>
-      <translation>Stellen Sie jedes neue Problem als privat ein</translation>
+      <translation>Jede neu eingefügte Meldung als private Meldung einstellen</translation>
     </message>
     <message>
       <source>Set the operator who opened the issue</source>
-      <translation>Stellen Sie den Betreiber ein, der das Problem eröffnet hat</translation>
+      <translation>Meldender Bediensteter</translation>
     </message>
     <message>
       <source>Settings</source>
@@ -1497,11 +1497,11 @@
     </message>
     <message>
       <source>Show</source>
-      <translation>Show</translation>
+      <translation>Anzeigen</translation>
     </message>
     <message>
       <source>Show only issues I participate in such as:</source>
-      <translation>Nur Probleme zeigen, an denen ich beteilige, an deren:</translation>
+      <translation>Nur Meldungen anzeigen, in die ich persönlich eingebunden bin als:</translation>
     </message>
     <message>
       <source>Show other options</source>
@@ -1509,11 +1509,11 @@
     </message>
     <message>
       <source>Specials</source>
-      <translation>Specials.</translation>
+      <translation>Besondere</translation>
     </message>
     <message>
       <source>Sportello Fisico</source>
-      <translation>Sportello Fisico.</translation>
+      <translation>Schalter vor Ort</translation>
     </message>
     <message>
       <source>Standard</source>
@@ -1521,15 +1521,15 @@
     </message>
     <message>
       <source>Static on</source>
-      <translation>Statisch ein</translation>
+      <translation>Statistisch erhoben am</translation>
     </message>
     <message>
       <source>Statistics</source>
-      <translation>Statistik</translation>
+      <translation>Statistiken</translation>
     </message>
     <message>
       <source>Statistics source</source>
-      <translation>Statistikquelle</translation>
+      <translation>Statistische Quelle</translation>
     </message>
     <message>
       <source>Status</source>
@@ -1541,19 +1541,19 @@
     </message>
     <message>
       <source>Status for group of operators in charge</source>
-      <translation>Status für die Gruppe von Betreibern</translation>
+      <translation>Status nach Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Status of issues by category</source>
-      <translation>Status der Probleme nach Kategorie</translation>
+      <translation>Meldungsstatus nach Kategorie</translation>
     </message>
     <message>
       <source>Status of issues for groups of operators in charge</source>
-      <translation>Status der Fragen für Gruppen von Betreiber</translation>
+      <translation>Meldungsstatus nach zuständigen Bearbeitergruppen</translation>
     </message>
     <message>
       <source>Store</source>
-      <translation>Geschäft</translation>
+      <translation>Speichern</translation>
     </message>
     <message>
       <source>Store comment</source>
@@ -1561,15 +1561,15 @@
     </message>
     <message>
       <source>Store the official response and close the issue</source>
-      <translation>Bewahren Sie die offizielle Antwort auf und schließen Sie das Problem</translation>
+      <translation>Offizielle Antwort veröffentlichen und Meldung als erledigt abschließen</translation>
     </message>
     <message>
       <source>Store the official response and keep the issue open</source>
-      <translation>Bewahren Sie die offizielle Antwort auf und halten Sie das Problem aufrecht</translation>
+      <translation>Offizielle Antwort veröffentlichen und Meldung offen halten</translation>
     </message>
     <message>
       <source>Su_Mo_Tu_We_Th_Fr_Sa</source>
-      <translation>SU_MO_TU_WE_TH_FR_SA</translation>
+      <translation>So_Mo-Di-Mi-Do-Fr-Sa</translation>
     </message>
     <message>
       <source>Subject</source>
@@ -1577,31 +1577,31 @@
     </message>
     <message>
       <source>Subscribe</source>
-      <translation>Registrierung</translation>
+      <translation>Melden Sie sich an</translation>
     </message>
     <message>
       <source>Subscriptions</source>
-      <translation>Abonnements</translation>
+      <translation>Anmeldungen</translation>
     </message>
     <message>
       <source>Subscriptions trend</source>
-      <translation>Abonnement-Trend</translation>
+      <translation>Entwicklung neue Anmeldungen</translation>
     </message>
     <message>
       <source>Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday</source>
-      <translation>Sonntag Montag Dienstag Mittwoch Donnerstag Freitag Samstag</translation>
+      <translation>Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag</translation>
     </message>
     <message>
       <source>Take charge</source>
-      <translation>Verantwortung übernehmen</translation>
+      <translation>Übernehmen</translation>
     </message>
     <message>
       <source>Taken in charge by %name</source>
-      <translation>Verantwortlich von %name aufgenommen</translation>
+      <translation>Übernommen von %name</translation>
     </message>
     <message>
       <source>Telefono</source>
-      <translation>Telefono</translation>
+      <translation>Telefon</translation>
     </message>
     <message>
       <source>Terms of use</source>
@@ -1609,11 +1609,11 @@
     </message>
     <message>
       <source>The areas most affected by new issues are:</source>
-      <translation>Die am stärksten betroffenen Bereiche sind:</translation>
+      <translation>Am meisten Meldungen gingen für folgende Gegenden ein:</translation>
     </message>
     <message>
       <source>The comment will also be visible to the author of the report.</source>
-      <translation>Der Kommentar ist auch für den Autor des Berichts sichtbar.</translation>
+      <translation>Der Kommentar ist auch für den Autor der Meldung sichtbar.</translation>
     </message>
     <message>
       <source>The comment will be moderated.</source>
@@ -1621,47 +1621,47 @@
     </message>
     <message>
       <source>The comment will be public.</source>
-      <translation>Der Kommentar wird öffentlich sein.</translation>
+      <translation>Der Kommentar ist öffentlich sichtbar.</translation>
     </message>
     <message>
       <source>the issue contains comments</source>
-      <translation>Das Problem enthält Kommentare</translation>
+      <translation>Es liegen Kommentare vor</translation>
     </message>
     <message>
       <source>the issue contains comments pending moderation</source>
-      <translation>Das Problem enthält Kommentare ausstehend Moderation</translation>
+      <translation>Es liegen Kommentare vor, die moderiert werden müssen</translation>
     </message>
     <message>
       <source>the issue contains private messages</source>
-      <translation>Das Problem enthält private Nachrichten</translation>
+      <translation>Es liegen private Nachrichten vor</translation>
     </message>
     <message>
       <source>the issue contains unread timeline</source>
-      <translation>Das Problem enthält ungelesene Zeitleiste</translation>
+      <translation>Ungelesene Inhalte in der Zeitleiste</translation>
     </message>
     <message>
       <source>The new input interface is exposed to the reporter</source>
-      <translation>Die neue Eingabeschnittstelle ist dem Reporter ausgesetzt</translation>
+      <translation>Der meldenden Person wird die neue Eingabeschnittstelle angezeigt</translation>
     </message>
     <message>
       <source>The reference for the citizen can reopen a closed issue</source>
-      <translation>Die Referenz des Bürgers kann ein geschlossenes Thema wieder öffnen</translation>
+      <translation>Die Referenz für den Bürger kann eine abgeschlossene Meldung wieder öffnen</translation>
     </message>
     <message>
       <source>The reporter can reopen a closed issue</source>
-      <translation>Der Reporter kann ein geschlossenes Thema wieder öffnen</translation>
+      <translation>Der Meldende kann eine abschließend erledigte Meldung wieder öffnen</translation>
     </message>
     <message>
       <source>the scenario that coincides with the greatest number of conditions is executed.</source>
-      <translation>Das Szenario, das mit der größten Anzahl von Bedingungen zusammenfällt, wird ausgeführt.</translation>
+      <translation>Es wird das Szenario ausgeführt, das die größte Anzahl von Bedingungen auf sich vereint</translation>
     </message>
     <message>
       <source>The selected location is not covered by the service</source>
-      <translation>Der ausgewählte Ort ist nicht vom Dienst abgedeckt</translation>
+      <translation>Dieser Dienst ist am ausgewählten Ort nicht aktiv</translation>
     </message>
     <message>
       <source>The texts and images inserted must comply with the policies established for %open_privacy_url%privacy%close_privacy_url% and %open_terms_url% the terms of use %close_terms_url%</source>
-      <translation>Die eingefügten Texte und Bilder müssen den Richtlinien einhalten, die für %open_privacy_url% Privacy%close_privacy_url% und %open_terms_url% die Nutzungsbedingungen%close_terms_url%</translation>
+      <translation>Die eingefügten Texte und Bilder müssen die Richtlinien einhalten, die für %open_privacy_url% Privacy%close_privacy_url% und %open_terms_url% die Nutzungsbedingungen%close_terms_url%</translation>
     </message>
     <message>
       <source>The whole working group can read the note; a notification will be sent only to the selected participants</source>
@@ -1669,11 +1669,11 @@
     </message>
     <message>
       <source>There are no official replies entered: are you sure you want to close the report?</source>
-      <translation>Es gibt keine offiziellen Antworten eingegeben: Sind Sie sicher, dass Sie den Bericht schließen möchten?</translation>
+      <translation>Es sind keine offiziellen Antworten vorhanden: Sind Sie sicher, dass Sie die Meldung als erledigt einstufen möchten?</translation>
     </message>
     <message>
       <source>There is no information about the reporter</source>
-      <translation>Es gibt keine Informationen zum Reporter</translation>
+      <translation>Keine Informationen zum Meldenden vorhanden</translation>
     </message>
     <message>
       <source>This configuration is not applicable</source>
@@ -1681,11 +1681,11 @@
     </message>
     <message>
       <source>This link is valid up to %1</source>
-      <translation>Dieser Link ist bis zu 1 %gültig</translation>
+      <translation>Dieser Link ist gültig bis %1</translation>
     </message>
     <message>
       <source>This option identifies the operator who takes charge of the issues in the first instance</source>
-      <translation>Diese Option identifiziert den Betreiber, der die Probleme in erster Instanz übernimmt</translation>
+      <translation>Diese Option gibt Auskunft über den Bearbeiter, der die Meldung als erster aufnimmt</translation>
     </message>
     <message>
       <source>Time range</source>
@@ -1701,11 +1701,11 @@
     </message>
     <message>
       <source>To</source>
-      <translation>Zu</translation>
+      <translation>An</translation>
     </message>
     <message>
       <source>To access the content you must be authenticated.</source>
-      <translation>Um auf den Inhalt zuzugreifen, müssen Sie authentifiziert werden.</translation>
+      <translation>Sie müssen authentifiziert sein, um auf diesen Inhalt zuzugreifen</translation>
     </message>
     <message>
       <source>To disable notifications click %notification_link_start% here %notification_link_end%</source>
@@ -1713,19 +1713,19 @@
     </message>
     <message>
       <source>To enter your current position click on the compass.</source>
-      <translation>Um Ihre aktuelle Position einzugeben, klicken Sie auf den Kompass.</translation>
+      <translation>Klicken Sie auf den Kompass, um Ihre aktuelle Position einzufügen</translation>
     </message>
     <message>
       <source>To moderate</source>
-      <translation>Moderieren</translation>
+      <translation>Zu moderieren</translation>
     </message>
     <message>
       <source>To remove an attached image click on the trash can</source>
-      <translation>Um ein angeschlossenes Bild zu entfernen, klicken Sie auf den Mülleimer</translation>
+      <translation>Klicken Sie auf das Papierkorb-Symbol, um ein hinzugefügtes Bild zu entfernen</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
-      <translation>Um alle Ihre Emission zu sehen, klicken Sie auf %dashboard_link_start% hier %dashboard_link_end%</translation>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
+      <translation>Wenn Sie alle Ihre bisherigen Meldungen ansehen möchten, klicken Sie auf %dashboard_link_start% %dashboard_link_end%</translation>
     </message>
     <message>
       <source>Translations</source>
@@ -1737,35 +1737,35 @@
     </message>
     <message>
       <source>Trend by group of operators in charge</source>
-      <translation>Trend von der Gruppe von Betreibern</translation>
+      <translation>Trend nach Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Trend opening/closing</source>
-      <translation>Trendöffnung / Schließung</translation>
+      <translation>Entwicklung Meldungen eröffnet/erledigt</translation>
     </message>
     <message>
       <source>Triggered on '%name' event. The default payload is a json API Sensor Post object</source>
-      <translation>Ausgelöst auf '%name' event. Die Standard-Nutzlast ist ein JSON-API-Sensor-Post-Objekt</translation>
+      <translation>Wird ausgelöst bei '%name' event. Der Default-Payload ist ein JSON-API-Sensor-Post-Objekt</translation>
     </message>
     <message>
       <source>Type</source>
-      <translation>Typ</translation>
+      <translation>Art</translation>
     </message>
     <message>
       <source>Type an address and click on the lens or click on the map to view the map</source>
-      <translation>Geben Sie eine Adresse ein und klicken Sie auf das Objektiv oder klicken Sie auf die Karte, um die Karte anzuzeigen</translation>
+      <translation>Geben Sie eine Adresse ein und klicken Sie auf die Lupe oder klicken Sie auf den Kartenausschnitt, damit sich die Kartenansicht öffnet</translation>
     </message>
     <message>
       <source>Type assignment to issue</source>
-      <translation>TYPE AUFTRAG ZU AUSGABE</translation>
+      <translation>Der Meldung eine Meldungsart zuweisen</translation>
     </message>
     <message>
       <source>Type by category</source>
-      <translation>Typ nach Kategorie</translation>
+      <translation>Meldungsart nach Kategorie</translation>
     </message>
     <message>
       <source>Type of issues by category</source>
-      <translation>Art der Probleme nach Kategorie</translation>
+      <translation>Meldungsart nach Kategorie</translation>
     </message>
     <message>
       <source>Undefined</source>
@@ -1773,7 +1773,7 @@
     </message>
     <message>
       <source>Under the same number of conditions, the scenario with the lower ID is applied</source>
-      <translation>Unter derselben Anzahl von Bedingungen wird das Szenario mit der unteren ID angewendet</translation>
+      <translation>Bei gleicher Bedingungsanzahl wird das Szenario mit der unteren ID angewandt</translation>
     </message>
     <message>
       <source>Unread</source>
@@ -1781,15 +1781,15 @@
     </message>
     <message>
       <source>Update notification</source>
-      <translation>Benachrichtigung aktualisieren.</translation>
+      <translation>Aktualisierungsmeldung</translation>
     </message>
     <message>
       <source>Use your browser settings to allow desktop notifications to be enabled</source>
-      <translation>Verwenden Sie Ihre Browsereinstellungen, damit Desktop-Benachrichtigungen aktiviert werden können</translation>
+      <translation>Verwenden Sie Ihre Browsereinstellungen, um die Desktop-Benachrichtigungen zu aktivieren</translation>
     </message>
     <message>
       <source>Use your browser settings to disable desktop notifications</source>
-      <translation>Verwenden Sie Ihre Browsereinstellungen, um Desktop-Benachrichtigungen zu deaktivieren</translation>
+      <translation>Verwenden Sie Ihre Browsereinstellungen, um die Desktop-Benachrichtigungen zu deaktivieren</translation>
     </message>
     <message>
       <source>User groups</source>
@@ -1805,11 +1805,11 @@
     </message>
     <message>
       <source>View the history of issue</source>
-      <translation>Sehen Sie sich die Geschichte der Ausgabe an</translation>
+      <translation>Meldungsverlauf anzeigen</translation>
     </message>
     <message>
       <source>View the report</source>
-      <translation>Sehen Sie sich den Bericht an</translation>
+      <translation>Bericht anzeigen</translation>
     </message>
     <message>
       <source>Visibility</source>
@@ -1817,15 +1817,15 @@
     </message>
     <message>
       <source>Waiting for moderation</source>
-      <translation>Warten auf die Moderation.</translation>
+      <translation>Muss noch moderiert werden</translation>
     </message>
     <message>
       <source>Warning:</source>
-      <translation>Warnung:</translation>
+      <translation>Achtung:</translation>
     </message>
     <message>
       <source>Warning: you have no active notification and you will not receive any email. You can enable notifications on the page dedicated to %open_notification_url%notificationsettings%close_notification_url%.</source>
-      <translation>WARNUNG: Sie haben keine aktive Benachrichtigung und Sie erhalten keine E-Mails. Sie können Benachrichtigungen auf der Seite aktivieren, die auf %open_notification_url%Notifikations%close_notification_url% aktiviert sind.</translation>
+      <translation>Achtung: Sie haben keine aktiven Benachrichtigungen und erhalten daher keine E-Mail. Sie können die Benachrichtigungen auf der Seite für %open_notification_url%Notifikations%close_notification_url% aktivieren.</translation>
     </message>
     <message>
       <source>Webhooks</source>
@@ -1837,27 +1837,27 @@
     </message>
     <message>
       <source>Welcome</source>
-      <translation>Herzlich willkommen</translation>
+      <translation>Herzlich willkommen!</translation>
     </message>
     <message>
       <source>When an issue is fixed, it always resets the reference for the citizen</source>
-      <translation>Wenn ein Problem behoben ist, setzt sie immer den Referenz für den Bürger zurück</translation>
+      <translation>Wenn ein Problem behoben ist, wird die Referenz für den Bürger zurückgesetzt</translation>
     </message>
     <message>
       <source>When approved, the comment will also be visible to the author of the report.</source>
-      <translation>Bei der Genehmigung ist der Kommentar auch für den Autor des Berichts sichtbar.</translation>
+      <translation>Nach Freigabe des Kommentars ist auch der Autor der Meldung sichtbar</translation>
     </message>
     <message>
       <source>When approved, the comment will be public.</source>
-      <translation>Bei der Genehmigung wird der Kommentar öffentlich sein.</translation>
+      <translation>Nach der Freigabe ist der Kommentar öffentlich sichtbar</translation>
     </message>
     <message>
       <source>Without moderation</source>
-      <translation>Ohne Mäßigung</translation>
+      <translation>Keine Moderation notwendig</translation>
     </message>
     <message>
       <source>Write the subject of the issue</source>
-      <translation>Schreiben Sie das Thema des Problems</translation>
+      <translation>Geben Sie den Gegenstand der Meldung an</translation>
     </message>
     <message>
       <source>year</source>
@@ -1873,7 +1873,7 @@
     </message>
     <message>
       <source>Yes</source>
-      <translation>ja</translation>
+      <translation>Ja</translation>
     </message>
     <message>
       <source>You can add up to three images in png or jpg format</source>
@@ -1881,147 +1881,199 @@
     </message>
     <message>
       <source>You can drag the marker on the map to select the location more precisely</source>
-      <translation>Sie können den Marker auf der Karte ziehen, um den Standort genauer auszuwählen</translation>
+      <translation>Mit dem Marker können Sie den Standort auf der Karte genauer eingrenzen</translation>
     </message>
     <message>
       <source>You have %count characters out of %total</source>
-      <translation>Sie haben %count von %total</translation>
+      <translation>Ihnen stehen %count von %total Anschläge zur Verfüfung</translation>
     </message>
     <message>
       <source>Your email address has been registered in the %sitename team</source>
-      <translation>Ihre E-Mail-Adresse wurde im %sitename-Team registriert</translation>
+      <translation>Ihre E-Mail-Adresse wurde vom %sitename-Team registriert.</translation>
     </message>
     <message>
       <source>Your issues have been resolved:</source>
-      <translation>Ihre Probleme wurden aufgelöst:</translation>
+      <translation>Die von Ihnen gemeldeten Probleme wurden gelöst:</translation>
     </message>
     <message>
       <source>Zone assignment to issue</source>
-      <translation>Zonenzuordnung zu Ausgabe</translation>
+      <translation>Die Meldung einer Zone zuordnen</translation>
     </message>
     <message>
       <source>Files</source>
-      <translation type="unfinished"/>
+      <translation>Beigefügte Dateien</translation>
     </message>
     <message>
       <source>You can add up to three files in pdf format</source>
-      <translation type="unfinished"/>
+      <translation>Sie können bis zu drei Dateien im PDF-Format hinzufügen</translation>
     </message>
     <message>
       <source>To remove an attached file click on the trash can</source>
-      <translation type="unfinished"/>
+      <translation>Klicken Sie auf den Papierkorb, um eine beigefügte Datei zu löschen</translation>
     </message>
     <message>
       <source>Are you sure to delete this file?</source>
-      <translation type="unfinished"/>
+      <translation>Sind Sie sicher, dass Sie diese Datei löschen möchten?</translation>
     </message>
     <message>
       <source>Add file</source>
-      <translation type="unfinished"/>
+      <translation>Datei hinzufügen</translation>
     </message>
     <message>
       <source>Importants</source>
-      <translation type="unfinished"/>
+      <translation>Wichtig</translation>
     </message>
     <message>
       <source>Group data</source>
-      <translation type="unfinished"/>
+      <translation>Gruppieren</translation>
     </message>
     <message>
       <source>Filter by author group</source>
-      <translation type="unfinished"/>
+      <translation>Nach Benutzergruppen filtern</translation>
     </message>
     <message>
       <source>No group</source>
-      <translation type="unfinished"/>
+      <translation>Keine Gruppe</translation>
     </message>
     <message>
       <source>Author group</source>
-      <translation type="unfinished"/>
+      <translation>Benutzergruppe</translation>
     </message>
     <message>
       <source>Custom</source>
-      <translation type="unfinished"/>
+      <translation>Personalisieren</translation>
     </message>
     <message>
       <source>Apply</source>
-      <translation type="unfinished"/>
+      <translation>Anwenden</translation>
     </message>
     <message>
       <source>Today</source>
-      <translation type="unfinished"/>
+      <translation>Heute</translation>
     </message>
     <message>
       <source>Yesterday</source>
-      <translation type="unfinished"/>
+      <translation>Gestern</translation>
     </message>
     <message>
       <source>Last 7 days</source>
-      <translation type="unfinished"/>
+      <translation>Letzte 7 Tage</translation>
     </message>
     <message>
       <source>Last 30 days</source>
-      <translation type="unfinished"/>
+      <translation>Letzte 30 Tage</translation>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation>Kritik</translation>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation>Gehen Sie auf die Seite \n %s, um Ihr Zugangspasswort wiederherzustellen</translation>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation>Für die Steuernummer '%s' ist bereits eine Registrierung vorhanden, die noch nicht aktiviert wurde</translation>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation>Wir haben Ihnen erneut eine Aktivierungsmail zugeschickt: Kontrollieren Sie Ihre Mailadresse '%s'</translation>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation>Der Benutzername '%s' ist bereits vorhanden. Bitte wählen Sie einen anderen Benutzernamen</translation>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation>Neue Meldung</translation>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation>Datenschutzerklärung</translation>
+    </message>
+    <message>
+      <source>Specify the reason for the reassignment</source>
+      <translation>Begründen Sie die Neuzuweisung</translation>
+    </message>
+    <message>
+      <source>Add note and reassign</source>
+      <translation>Fügen Sie eine Notiz hinzu und nehmen Sie eine Neuzuweisung vor</translation>
+    </message>
+    <message>
+      <source>Group reference</source>
+      <translation>Gruppenreferenz</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>Wenn die E-Mail-Adresse im System registriert ist, erhalten Sie eine Nachricht mit einem Link, auf den Sie klicken müssen, um zu bestätigen, dass Sie der richtige Benutzer sind.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Map</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellit</translation>
     </message>
   </context>
   <context>
     <name>sensor/moderation</name>
     <message>
       <source>accepted</source>
-      <translation>Akzeptiert</translation>
+      <translation>Angenommen</translation>
     </message>
     <message>
       <source>refused</source>
-      <translation>verweigert</translation>
+      <translation>Verweigert</translation>
     </message>
     <message>
       <source>skipped</source>
-      <translation>übersprungen</translation>
+      <translation>Keine Moderation notwendig</translation>
     </message>
     <message>
       <source>waiting</source>
-      <translation>warten</translation>
+      <translation>Muss noch moderiert werden</translation>
     </message>
   </context>
   <context>
     <name>sensor/status</name>
     <message>
       <source>close</source>
-      <translation>nah dran</translation>
+      <translation>Geschlossen</translation>
     </message>
     <message>
       <source>open</source>
-      <translation>offen</translation>
+      <translation>Zugewiesen</translation>
     </message>
     <message>
       <source>pending</source>
-      <translation>steht aus</translation>
+      <translation>Gesendet</translation>
     </message>
   </context>
   <context>
     <name>sensor/privacy</name>
     <message>
       <source>private</source>
-      <translation>Privatgelände</translation>
+      <translation>Privat</translation>
     </message>
     <message>
       <source>public</source>
-      <translation>allgemein</translation>
+      <translation>Öffentlich</translation>
     </message>
   </context>
   <context>
     <name>sensor/type</name>
     <message>
       <source>reclamo</source>
-      <translation>Reclamo</translation>
+      <translation>Beschwerde</translation>
     </message>
     <message>
       <source>segnalazione</source>
-      <translation>segnalazione.</translation>
+      <translation>Meldung</translation>
     </message>
     <message>
       <source>suggerimento</source>
-      <translation>Suggerimento.</translation>
+      <translation>Tipp</translation>
     </message>
   </context>
 </TS>

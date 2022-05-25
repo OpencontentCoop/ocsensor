@@ -103,16 +103,15 @@
             var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(this.map);
-            var baseLayers = {
-                'Mappa': osmLayer,
-                'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                })
-            };
+            var baseLayers = [];
+            baseLayers[$.sensorTranslate.translate('Map')] = osmLayer;
+            baseLayers[$.sensorTranslate.translate('Satellite')] = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            });
             var mapLayers = [];
             if (this.settings.additionalWMSLayers.length > 0) {
-                $.each(this.settings.additionalWMSLayers, function(){
-                    mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
+                $.each(this.settings.additionalWMSLayers, function () {
+                    mapLayers[$.sensorTranslate.translate(this.attribution)] = L.tileLayer.wms(this.baseUrl, {
                         layers: this.layers,
                         version: this.version,
                         format: this.format,
@@ -193,8 +192,8 @@
             this.inputMeta = $('textarea.ezcca-sensor_post_meta');
             var currentMeta = JSON.parse(this.inputMeta.val() || '{}');
             var persistentMeta = {};
-            $.each(this.settings.persistentMetaKeys, function (index, value){
-                if (currentMeta.hasOwnProperty(value)){
+            $.each(this.settings.persistentMetaKeys, function (index, value) {
+                if (currentMeta.hasOwnProperty(value)) {
                     persistentMeta[value] = currentMeta[value];
                 }
             });
@@ -218,7 +217,7 @@
             this.refreshMap();
 
             this.initSmartGui();
-        }else{
+        } else {
             this.initDefaultGui();
         }
     }

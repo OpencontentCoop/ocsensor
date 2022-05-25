@@ -1,30 +1,61 @@
-{ezpagedata_set('areas', $areas)}
-{ezpagedata_set('categories', $categories)}
-{ezpagedata_set('types', $types)}
+{ezpagedata_set('sensor_post_container', 1)}
+
 {ezcss_require(array(
     'daterangepicker.css',
+<<<<<<< HEAD
     'select2.min.css'
+=======
+    'select2.min.css',
+    'leaflet/MarkerCluster.css',
+    'leaflet/MarkerCluster.Default.css',
+    'leaflet.0.7.2.css',
+    'plugins/blueimp/blueimp-gallery.css',
+    'jquery.fileupload.css'
+>>>>>>> master
 ))}
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
+    'js.cookie.js',
     'moment-with-locales.min.js',
+    'plugins/blueimp/jquery.blueimp-gallery.min.js',
     'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+<<<<<<< HEAD
+=======
+    'jquery.fileupload.js',
+    'leaflet.0.7.2.js',
+    'leaflet.markercluster.js',
+    'Leaflet.MakiMarkers.js',
+>>>>>>> master
     'daterangepicker.js',
     'jquery.opendataTools.js',
-    'jsrender.js', 'jsrender.helpers.js'
+    'jsrender.js', 'jsrender.helpers.js',
+    'jquery.sensorpost.js'
 ))}
 
 
-<section class="service_teasers">
+<section id="post-list" class="service_teasers">
     <div class="row">
         <div class="col-xs-12" data-contents style="min-height: 50px"></div>
     </div>
 </section>
 
+<div id="preview" style="display: none">
+    <div id="post-preview" class="post-gui" style="position: relative;min-height: 400px;"></div>
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-title.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-detail.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-messages.tpl'}
+    {include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-sidebar.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-alerts.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-post-gallery.tpl'}
+</div>
+
 {include uri='design:sensor_api_gui/posts/tpl-posts-results.tpl'}
 {include uri='design:sensor_api_gui/posts/tpl-post-popup.tpl'}
+
 {literal}
-<script id="tpl-spinner" type="text/x-jsrender">
+<script id="tpl-posts-spinner" type="text/x-jsrender">
 <div class="spinner text-center" style="margin-top:20px">
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
     <span class="sr-only">Loading...</span>
@@ -58,13 +89,14 @@ $(document).ready(function () {ldelim}
         "monthNames": $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_'),
         "firstDay": 1
     {rdelim};
-    {if is_set($areas.children[0].geo.coords[0])}
-        var centerMap = new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]});
-    {elseif is_set($areas.children[0].bounding_box)}
-        var centerMap = '{$areas.children[0].bounding_box.geo_json}';
-    {else}
-        var centerMap = false;
-    {/if}
+
+    var centerMap = {if is_set($areas.children[0].geo.coords[0])}{*
+        *}new L.latLng({$areas.children[0].geo.coords[0]}, {$areas.children[0].geo.coords[1]}){*
+    *}{elseif is_set($areas.children[0].bounding_box)}{*
+        *}'{$areas.children[0].bounding_box.geo_json}'{*
+    *}{else}{*
+       *}false{*
+    *}{/if};
     var additionalWMSLayers = [];
     {foreach sensor_additional_map_layers() as $layer}
     additionalWMSLayers.push({ldelim}
@@ -79,6 +111,39 @@ $(document).ready(function () {ldelim}
     var operators = '{$operators|wash(javascript)}';
     var groups = '{$grouped_groups|wash(javascript)}';
 {literal}
+    var postList = $('#post-list');
+    var postGui = $('#preview');
+    var postWindow = $('#post-preview');
+    var postSearch = $('#posts-search');
+    var postMap = $('.full_page_photo');
+    var currentPageLink = $('[data-location="sensor-posts"]');
+    var sensorPostViewer = postWindow.sensorPost({
+        'apiEndPoint': '/api/sensor_gui',
+        'sensorPostDefinition': '{/literal}{sensor_post_class()|json_encode()|wash(javascript)}{literal}',
+        'currentUserId': {/literal}{fetch(user,current_user).contentobject_id|int()}{literal},
+        'areas': '{/literal}{sensor_areas()|json_encode()|wash(javascript)}{literal}',
+        'categories': '{/literal}{sensor_categories()|json_encode()|wash(javascript)}{literal}',
+        'operators': '{/literal}{sensor_operators()|json_encode()|wash(javascript)}{literal}',
+        'groups': '{/literal}{sensor_groups()|json_encode()|wash(javascript)}{literal}',
+        'settings': '{/literal}{sensor_settings()|json_encode()|wash(javascript)}{literal}',
+        'spinnerTpl': '#tpl-spinner',
+        'postTpl': '#tpl-post',
+        'alertsEndPoint': '{/literal}{'social_user/alert'|ezurl(no)}{literal}'
+    }).data('plugin_sensorPost');
+    var onOpenPost = function (){
+        postMap.hide();
+        postSearch.hide();
+        postList.hide();
+        postGui.show();
+    };
+    var onClosePost = function(){
+        postMap.show();
+        map.invalidateSize(false);
+        postSearch.show();
+        postList.show();
+        postGui.hide();
+        postWindow.html('');
+    };
     var form = $('#posts-search form');
     var selectCategory = form.find('select[name="category"]');
     var selectArea = form.find('select[name="area"]');
@@ -101,7 +166,7 @@ $(document).ready(function () {ldelim}
     var currentPage = 0;
     var queryPerPage = [];
     var template = $.templates('#tpl-posts-results');
-    var spinner = $($.templates("#tpl-spinner").render({}));
+    var spinner = $($.templates("#tpl-posts-spinner").render({}));
     var mapSpinner = $('#map-spinner');
     var hasClickOnMarker = false;
     var templatePopup = $.templates('#tpl-post-popup');
@@ -125,7 +190,6 @@ $(document).ready(function () {ldelim}
     $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
     });
-
     var find = function (query, cb, context) {
         var data = $.extend(true, {}, findParams);
         data.q = query;
@@ -177,7 +241,6 @@ $(document).ready(function () {ldelim}
             }
         });
     };
-
     var geoRecursiveFind = function (queryId, cb, context) {
         var query = buildQueryFilters(true) + ' sort [published=>desc]';
         var features = [];
@@ -206,7 +269,6 @@ $(document).ready(function () {ldelim}
         };
         getSubRequest(query);
     };
-
     var buildQueryFilters = function (onlyActive) {
         var queryData = [];
         query = [];
@@ -293,10 +355,8 @@ $(document).ready(function () {ldelim}
             query.push("status in [open,pending]");
         }
 
-        location.hash = $.param(queryData);
         return query.length > 0 ? query.join(' and ') + ' and ' : '';
     };
-
     var resetMarkers = function() {
         if (currentGeoRequest){
             currentGeoRequest.abort();
@@ -304,7 +364,6 @@ $(document).ready(function () {ldelim}
         mapSpinner.stop(true,false).css({'width': '0'}).show();
         markers.clearLayers();
     };
-
     var buildMarkers = function() {
         currentQueryId++;
         var ajaxTime = new Date().getTime();
@@ -364,7 +423,6 @@ $(document).ready(function () {ldelim}
             }
         });
     };
-
     var buildView = function(callback, context) {
         var baseQuery = buildQueryFilters();
         var paginatedQuery = baseQuery + ' limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [published=>desc]';
@@ -396,7 +454,6 @@ $(document).ready(function () {ldelim}
                     statusCss = 'success';
                 }
                 post.statusCss = statusCss;
-
                 var typeCss = 'info';
                 if (post.type.identifier === 'suggerimento') {
                     typeCss = 'warning';
@@ -407,6 +464,11 @@ $(document).ready(function () {ldelim}
                 post.canReadUsers = $.opendataTools.settings('canReadUsers');
             });
             var renderData = $(template.render(response));
+            renderData.find('[data-preview]').on('click', function (e){
+                var postId = $(this).data('preview');
+                sensorPostViewer.openPost(postId, onOpenPost);
+                e.preventDefault();
+            });
             viewContainer.html(renderData);
 
             viewContainer.find('.page, .nextPage, .prevPage').on('click', function (e) {
@@ -447,7 +509,6 @@ $(document).ready(function () {ldelim}
             }
         });
     };
-
     var reset = function(){
         form[0].reset();
         form.find('.select, .remote-select').val(null).trigger('change');
@@ -459,7 +520,6 @@ $(document).ready(function () {ldelim}
             buildMarkers();
         });
     };
-
     form.find('[type="submit"]').on('click', function(e){
         form.find('[type="reset"]').removeClass('hide');
         currentPage = 0;
@@ -474,21 +534,19 @@ $(document).ready(function () {ldelim}
         reset();
         e.preventDefault();
     });
-
     var map = L.map('map', {loadingControl: true});
     var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-    var baseLayers = {
-        'Mappa': osmLayer,
-        'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-        })
-    };
+    var baseLayers = [];
+    baseLayers[$.sensorTranslate.translate('Map')] = osmLayer;
+    baseLayers[$.sensorTranslate.translate('Satellite')] =  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
     var mapLayers = [];
     if (additionalWMSLayers.length > 0) {
         $.each(additionalWMSLayers, function(){
-            mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
+            mapLayers[$.sensorTranslate.translate(this.attribution)] = L.tileLayer.wms(this.baseUrl, {
                 layers: this.layers,
                 version: this.version,
                 format: this.format,
@@ -512,35 +570,9 @@ $(document).ready(function () {ldelim}
     }
     map.addLayer(markers);
     markers.on('clusterclick', function(){hasClickOnMarker = true});
+    reset();
 
-    var parseParams = function (str) {
-        if (str.length === 0){
-            return false;
-        }
-        str = str.substring(1);
-        return str.split('&').reduce(function (params, param) {
-            var paramSplit = param.split('=').map(function (value) {
-                return decodeURIComponent(value.replace(/\+/g, ' '));
-            });
-            params[paramSplit[0]] = paramSplit[1];
-            return params;
-        }, {});
-    }
-    var hash = parseParams(location.hash);
-    if (hash){
-        $.each(hash, function (key, value) {
-            if (key === 'query'){
-                form.find('[name="query"]').val(value);
-            } else {
-                form.find('select[name="'+key+'"]').val(value.split(','));
-                form.find('select[name="'+key+'"]').trigger('change');
-            }
-        })
-        form.find('[name="published"]').val('');
-        form.find('[type="submit"]').trigger('click');
-    }else {
-        reset();
-    }
+    sensorPostViewer.initNavigation(currentPageLink, onOpenPost, onClosePost, reset);
 
 {/literal}
 {rdelim});

@@ -1,0 +1,345 @@
+<?php
+// This array contains the database schema
+$schema = array (
+  'ocsensor_area' =>
+  array (
+    'name' => 'ocsensor_area',
+    'fields' =>
+    array (
+      'id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+      'name' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+    ),
+    'indexes' =>
+    array (
+      'PRIMARY' =>
+      array (
+        'type' => 'primary',
+        'fields' =>
+        array (
+          0 => 'id',
+        ),
+      ),
+    ),
+  ),
+  'ocsensor_category' =>
+  array (
+    'name' => 'ocsensor_category',
+    'fields' =>
+    array (
+      'id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+      'name' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'parent_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+    ),
+    'indexes' =>
+    array (
+      'PRIMARY' =>
+      array (
+        'type' => 'primary',
+        'fields' =>
+        array (
+          0 => 'id',
+        ),
+      ),
+    ),
+  ),
+  'ocsensor_group' =>
+  array (
+    'name' => 'ocsensor_group',
+    'fields' =>
+    array (
+      'id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+      'name' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'reference' =>
+      array (
+        'type' => 'longtext',
+        'default' => false,
+      ),
+      'tag' =>
+      array (
+        'type' => 'longtext',
+        'default' => false,
+      ),
+    ),
+    'indexes' =>
+    array (
+      'PRIMARY' =>
+      array (
+        'type' => 'primary',
+        'fields' =>
+        array (
+          0 => 'id',
+        ),
+      ),
+      'ocsensor_group_reference' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'reference',
+        ),
+      ),
+      'ocsensor_group_tag' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'tag',
+        ),
+      ),
+    ),
+  ),
+  'ocsensor_operator' =>
+  array (
+    'name' => 'ocsensor_operator',
+    'fields' =>
+    array (
+      'id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+      'name' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+    ),
+    'indexes' =>
+    array (
+      'PRIMARY' =>
+      array (
+        'type' => 'primary',
+        'fields' =>
+        array (
+          0 => 'id',
+        ),
+      ),
+    ),
+  ),
+  'ocsensor_timeline' =>
+  array (
+    'name' => 'ocsensor_timeline',
+    'fields' =>
+    array (
+      'action' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'duration' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'end_at' =>
+      array (
+        'type' => 'timestamp',
+        'default' => NULL,
+      ),
+      'executor_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'group_id_in_charge' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_area_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_author_group_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_author_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_child_category_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+      'post_parent_category_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'post_status' =>
+      array (
+        'length' => 50,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'post_type' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'start_at' =>
+      array (
+        'type' => 'timestamp',
+        'default' => NULL,
+      ),
+      'status_at_end' =>
+      array (
+        'length' => 255,
+        'type' => 'varchar',
+        'default' => NULL,
+      ),
+      'target_group_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'target_operator_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'timeline_id' =>
+      array (
+        'length' => 11,
+        'type' => 'int',
+        'not_null' => '1',
+        'default' => 0,
+      ),
+    ),
+    'indexes' =>
+    array (
+      'PRIMARY' =>
+      array (
+        'type' => 'primary',
+        'fields' =>
+        array (
+          0 => 'timeline_id',
+          1 => 'post_id',
+        ),
+      ),
+      'ocsensor_timeline_duration_group_id_idx' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'duration',
+          1 => 'group_id_in_charge',
+        ),
+      ),
+      'ocsensor_timeline_post_id' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'post_id',
+        ),
+      ),
+      'ocsensor_timeline_post_id_end_at' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'post_id',
+          1 => 'end_at',
+        ),
+      ),
+      'ocsensor_timeline_status' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'post_status',
+        ),
+      ),
+      'ocsensor_timeline_status_start_idx' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'post_status',
+          1 => 'start_at',
+        ),
+      ),
+      'ocsensor_timeline_timeline_post_idx' =>
+      array (
+        'type' => 'non-unique',
+        'fields' =>
+        array (
+          0 => 'timeline_id',
+          1 => 'post_id',
+        ),
+      ),
+    ),
+  ),
+  '_info' =>
+  array (
+    'format' => 'generic',
+  ),
+);
+
+?>

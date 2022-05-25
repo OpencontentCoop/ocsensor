@@ -12,7 +12,7 @@
     <div class="alert alert-info text-center">
         <i class="fa fa-envelope-o fa-5x"></i>
         <p>
-            {"Se l'indirizzo email è registrato nel sistema, ti verrà inviato un messaggio con un link che devi cliccare per darci la conferma che sei l'utente giusto."|i18n('mbpaex/userpaex/forgotpassword',,array($email))}
+            {sensor_translate('If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.')}
         </p>
     </div>
 {else}
@@ -23,7 +23,7 @@
         <div class="alert alert-info text-center">
             <i class="fa fa-envelope-o fa-5x"></i>
             <p>
-                {"Se l'indirizzo email è registrato nel sistema, ti verrà inviato un messaggio con un link che devi cliccare per darci la conferma che sei l'utente giusto."|i18n('mbpaex/userpaex/forgotpassword',,array($email))}
+                {sensor_translate('If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.')}
             </p>
         </div>
     {else}

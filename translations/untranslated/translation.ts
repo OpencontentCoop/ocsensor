@@ -1724,7 +1724,7 @@
       <translation type="unfinished"/>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
       <translation type="unfinished"/>
     </message>
     <message>
@@ -1961,6 +1961,58 @@
     </message>
     <message>
       <source>Last 30 days</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Specify the reason for the reassignment</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Add note and reassign</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Group reference</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Satellite</source>
       <translation type="unfinished"/>
     </message>
   </context>

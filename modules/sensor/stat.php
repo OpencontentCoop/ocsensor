@@ -14,9 +14,14 @@ try {
     $tpl->setVariable('areas', $repository->getAreasTree());
     $tpl->setVariable('categories', $repository->getCategoriesTree());
 
-    $groupsTag = [];
     $groupTree = $repository->getGroupsTree();
+
+    $groupsTag = [];
     $hasGroupsTag = false;
+
+    $groupsReference = [];
+    $hasGroupsReference = false;
+
     foreach ($groupTree->attribute('children') as $groupTreeItem) {
         $groupTag = $groupTreeItem->attribute('group');
         if (empty($groupTag)) {
@@ -25,9 +30,20 @@ try {
             $hasGroupsTag = true;
         }
         $groupsTag[$groupTag][] = $groupTreeItem;
+
+        $groupReference = $groupTreeItem->attribute('reference');
+        if (!empty($groupReference)) {
+            $hasGroupsReference = true;
+            $groupReferenceIdentifier = eZCharTransform::instance()->transformByGroup($groupReference, 'urlalias');
+            $groupsReference[$groupReferenceIdentifier] = $groupReference;
+        }
     }
     $tpl->setVariable('has_group_tag', $hasGroupsTag);
     $tpl->setVariable('groups', $groupsTag);
+
+    $hasGroupsReference = $hasGroupsReference && $current->attribute('render_settings')['allow_reference_filter'];
+    $tpl->setVariable('has_group_reference', $hasGroupsReference);
+    $tpl->setVariable('references', $groupsReference);
 
     $Result = array();
     $Result['persistent_variable'] = $tpl->variable('persistent_variable');

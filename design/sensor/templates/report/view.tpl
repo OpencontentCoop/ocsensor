@@ -100,6 +100,13 @@
                     if (this.type === 'stockChart') {
                         Highcharts.stockChart('s-' + slide, this.config);
                     } else {
+                        try {
+                            if (this.config.plotOptions.column.dataLabels) {
+                                this.config.plotOptions.column.dataLabels.formatter = function () {
+                                    return (this.y !== 0) ? this.y : '';
+                                }
+                            }
+                        }catch (e){}
                         chart.highcharts(this.config);
                     }
                 })

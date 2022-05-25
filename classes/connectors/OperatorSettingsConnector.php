@@ -6,15 +6,14 @@ use Opencontent\Sensor\Legacy\Utils\TreeNode;
 class OperatorSettingsConnector extends AbstractBaseConnector
 {
     use CustomStatAccessTrait;
+    use MemberGroupsTrait;
 
     private static $isLoaded;
-
-    private $language;
 
     /**
      * @var eZUser
      */
-    private $user;
+    protected $user;
 
     /**
      * @var \Opencontent\Sensor\Api\Values\User
@@ -26,6 +25,10 @@ class OperatorSettingsConnector extends AbstractBaseConnector
      */
     private $repository;
 
+    private $availableGroups = [];
+
+    private $groups = [];
+
     public function runService($serviceIdentifier)
     {
         $this->load();
@@ -35,8 +38,8 @@ class OperatorSettingsConnector extends AbstractBaseConnector
     private function load()
     {
         if (!self::$isLoaded) {
-            $this->language = \eZLocale::currentLocaleCode();
-            $this->getHelper()->setSetting('language', $this->language);
+            $language = \eZLocale::currentLocaleCode();
+            $this->getHelper()->setSetting('language', $language);
             $userId = (int)$this->getHelper()->getParameter('user');
             $this->user = eZUser::fetch($userId);
             if (!$this->user instanceof eZUser) {
@@ -47,13 +50,22 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 throw new Exception('User is not an operator');
             }
             $this->sensorUser = $this->repository->getUserService()->loadFromEzUser($this->user);
+
+            $this->availableGroups = $this->repository->getMembersAvailableGroups();
+            $userGroups = $this->user->groups();
+            foreach ($userGroups as $userGroup){
+                if (isset($this->availableGroups[$userGroup])){
+                    $this->groups[] = (int)$userGroup;
+                }
+            }
+
             self::$isLoaded = true;
         }
     }
 
     protected function getSchema()
     {
-        return [
+        $schema = [
             "title" => $this->user->contentObject()->attribute('name'),
             "type" => "object",
             'properties' => [
@@ -64,23 +76,39 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'restrict_mode' => ['type' => 'boolean'],
                 'super_observer' => ['type' => 'boolean'],
                 'user_list' => ['type' => 'boolean'],
-                'stats' => [
-                    'type' => 'object',
-                    'title' => 'Accesso individuale alle statistiche',
-                    'properties' => [
-                        'stat' => [
-                            'type' => 'array',
-                            'enum' => array_keys($this->getStats()),
-                        ],
-                    ],
+            ],
+        ];
+
+        if (!empty($this->availableGroups)){
+            $schema['properties']['groups'] = [
+                'type' => 'object',
+                'title' => 'Gruppi di utenti',
+                'properties' => [
+                    'user_groups' => [
+                        'type' => 'array',
+                        'enum' => array_keys($this->availableGroups),
+                    ]
+                ],
+            ];
+        }
+
+        $schema['properties']['stats'] = [
+            'type' => 'object',
+            'title' => 'Accesso individuale alle statistiche',
+            'properties' => [
+                'stat' => [
+                    'type' => 'array',
+                    'enum' => array_keys($this->getStats()),
                 ],
             ],
         ];
+
+        return $schema;
     }
 
     protected function getOptions()
     {
-        return [
+        $options = [
             "form" => [
                 "attributes" => [
                     "class" => 'opendata-connector',
@@ -111,6 +139,21 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 ],
             ],
         ];
+
+        if (!empty($this->availableGroups)){
+            $options['fields']['groups'] = [
+                'fields' => [
+                    'user_groups' => [
+                        'hideNone' => true,
+                        'multiple' => true,
+                        'type' => 'checkbox',
+                        'optionLabels' => array_column($this->availableGroups, 'name'),
+                    ]
+                ]
+            ];
+        }
+
+        return $options;
     }
 
     protected function getView()
@@ -132,6 +175,22 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $isSuperObserver = $data['super_observer'] === 'true';
         $stats = isset($data['stats']['stat']) ? $data['stats']['stat'] : [];
         $userList = $data['user_list'] === 'true';
+        $assignGroups = isset($data['groups']['user_groups']) ? $data['groups']['user_groups'] : [];
+
+        $removeGroups = [];
+        $addGroups = [];
+        if (!empty($this->availableGroups)){
+            foreach ($this->groups as $group){
+                if (!in_array($group, $assignGroups)){
+                    $removeGroups[] = $group;
+                }
+            }
+            foreach ($assignGroups as $group){
+                if (!in_array($group, $this->groups) && isset($this->availableGroups[$group])){
+                    $addGroups[] = $group;
+                }
+            }
+        }
 
         $changeEnabling = $blockMode !== $this->sensorUser->isEnabled;
         $this->repository->getUserService()->setBlockMode($this->sensorUser, $blockMode);
@@ -140,7 +199,8 @@ class OperatorSettingsConnector extends AbstractBaseConnector
         $this->repository->getUserService()->setBehalfOfMode($this->sensorUser, $cabBehalf);
         $this->repository->getUserService()->setRestrictMode($this->sensorUser, $restrictMode);
         $this->repository->getUserService()->setAsSuperObserver($this->sensorUser, $isSuperObserver);
-
+        $this->removeGroups($removeGroups);
+        $this->addGroups($addGroups);
         $this->grantStatData($this->sensorUser->id, $stats);
 
         if ($userList){
@@ -167,7 +227,7 @@ class OperatorSettingsConnector extends AbstractBaseConnector
 
     protected function getData()
     {
-        return [
+        $data = [
             'block_mode' => $this->sensorUser->isEnabled === false,
             'sensor_deny_comment' => $this->sensorUser->commentMode === false,
             'sensor_can_behalf_of' => $this->sensorUser->behalfOfMode,
@@ -179,6 +239,12 @@ class OperatorSettingsConnector extends AbstractBaseConnector
                 'stat' => $this->getStatData($this->sensorUser->id),
             ],
         ];
+
+        if (!empty($this->availableGroups)){
+            $data['groups']['user_groups'] = $this->groups;
+        }
+
+        return $data;
     }
 
     protected function upload()

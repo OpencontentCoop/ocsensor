@@ -23,7 +23,7 @@
 {include uri='design:sensor_api_gui/todo/tpl-todo-empty.tpl'}
 
 <div class="row">
-    <div class="col-md-2 col-xs-1">
+    <div class="col-md-2 col-xs-1" style="padding-right: 0">
         <ul class="nav nav-pills nav-stacked" id="inbox-menu">
             <li role="presentation" class="active">
                 <a href="#" data-inboxidentifier="todolist">
@@ -194,7 +194,11 @@
             'settings': '{/literal}{sensor_settings()|json_encode()|wash(javascript)}{literal}',
             'spinnerTpl': '#tpl-spinner',
             'postTpl': '#tpl-post',
-            'alertsEndPoint': '{/literal}{'social_user/alert'|ezurl(no)}{literal}'
+            'alertsEndPoint': '{/literal}{'social_user/alert'|ezurl(no)}{literal}',
+            'postsUrl': function(){
+                $('#preview .preview-action').text('');
+                return $('[data-location="sensor-inbox"]').attr('href')+'/#'
+            }
         }).data('plugin_sensorPost');
 
         var filterSelectors = $('[data-filter]');

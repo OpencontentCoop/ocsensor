@@ -81,7 +81,7 @@
                       {{/if}}
                   </ul>
                   <p class="lead" style="white-space:pre-wrap;font-size: 18px;line-height: 1.25;">{{:description}}</p>
-                  <a href="{{:~accessPath("/sensor/posts/")}}{{:id}}" class="btn btn-default btn-bold pull-right btn-sm">{{:~sensorTranslate('Details')}}</a>
+                  <a href="{{:~accessPath("/sensor/posts/")}}{{:id}}" data-preview="{{:id}}" class="btn btn-default btn-bold pull-right btn-sm">{{:~sensorTranslate('Details')}}</a>
               </div>
             </div>
         </div>

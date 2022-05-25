@@ -55,12 +55,21 @@ class SensorPdfExport
 
         $attributes = [
             $this->translator->translate('Creation date') => [$this->post->published->format('d/m/Y H:i')],
-            $this->translator->translate('Type') => [$this->post->type->label],
+            $this->translator->translate('Type') => [$this->repository->getPostTypeService()->loadPostType($this->post->type->identifier)->name],
+            $this->translator->translate('Visibility') => $this->post->privacy->identifier === 'public' && $this->post->moderation->identifier !== 'waiting' ?
+                [$this->translator->translate('public', 'privacy')] :
+                [$this->translator->translate('private', 'privacy')],
             $this->translator->translate('Object of issue') => [$this->post->subject],
             $this->translator->translate('Description of issue') =>  [preg_replace('/\s+/', ' ', $this->post->description)],
-            $this->translator->translate('Location info') => $this->post->geoLocation instanceof Post\Field\GeoLocation ?
+            $this->translator->translate('Location info') => $this->post->geoLocation instanceof Post\Field\GeoLocation && $this->post->geoLocation->latitude != 0 ?
                 [$this->post->geoLocation->address, '(lat: ' . $this->post->geoLocation->latitude . ', lng: ' . $this->post->geoLocation->longitude . ')'] : [],
         ];
+        if (count($this->post->categories)){
+            $attributes[$this->translator->translate('Category')] = [$this->post->categories[0]->name];
+        }
+        if (count($this->post->areas)){
+            $attributes[$this->translator->translate('Area')] = [$this->post->areas[0]->name];
+        }
 
         $images = [];
         if (isset($postObjectDataMap['images']) && $postObjectDataMap['images']->hasContent()){
@@ -93,6 +102,26 @@ class SensorPdfExport
             }
         }
 
+        $files = [];
+        foreach ($this->post->files as $file){
+            $files[] = [
+                'Name' => basename($file->downloadUrl),
+                'Url' => $file->downloadUrl,
+                'Size' => $this->formatBytes($file->size),
+                'Mime' => $file->mimeType,
+            ];
+        }
+
+        $attachments = [];
+        foreach ($this->post->attachments as $file){
+            $attachments[] = [
+                'Name' => basename($file->downloadUrl),
+                'Url' => $file->downloadUrl,
+                'Size' => $this->formatBytes($file->size),
+                'Mime' => $file->mimeType,
+            ];
+        }
+
         $comments = [];
         foreach ($this->post->comments->messages as $message){
             $comments[] = [
@@ -111,11 +140,33 @@ class SensorPdfExport
             ];
         }
 
+        $responses = [];
+        foreach ($this->post->responses->messages as $message){
+            $responses[] = [
+                'Autore' => $message->creator->name,
+                'Data' => $message->published->format('d/m/Y H:i'),
+                'Testo' => preg_replace('/\s+/', ' ', $message->text)
+            ];
+        }
+
+        $timelines = [];
+        foreach ($this->post->timelineItems->messages as $message){
+            $timelines[] = [
+                'Autore' => $message->creator->name,
+                'Data' => $message->published->format('d/m/Y H:i'),
+                'Testo' => preg_replace('/\s+/', ' ', $message->text)
+            ];
+        }
+
         $tpl->setVariable('post_id', $this->post->id);
         $tpl->setVariable('attributes', $attributes);
         $tpl->setVariable('images', $images);
+        $tpl->setVariable('files', $files);
+        $tpl->setVariable('attachments', $attachments);
         $tpl->setVariable('comments', $comments);
         $tpl->setVariable('notes', $notes);
+        $tpl->setVariable('responses', $responses);
+        $tpl->setVariable('timelines', $timelines);
         $tpl->setVariable('generate_stream', 1);
         $tpl->setVariable('generate_file', 0);
         $tpl->setVariable('filename', $filename);
@@ -138,5 +189,13 @@ class SensorPdfExport
 
         header("Content-Disposition: attachment; filename={$filename}");
         eZTemplateIncludeFunction::handleInclude($textElements, $uri, $tpl, '', '');
+    }
+
+    private function formatBytes($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = array('', 'K', 'M', 'G', 'T');
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
 }

@@ -137,7 +137,7 @@
     </message>
     <message>
       <source>Area</source>
-      <translation>Area</translation>
+      <translation>Zona</translation>
     </message>
     <message>
       <source>Areas</source>
@@ -1557,7 +1557,7 @@
     </message>
     <message>
       <source>Store comment</source>
-      <translation>Salva commento</translation>
+      <translation>Pubblica commento</translation>
     </message>
     <message>
       <source>Store the official response and close the issue</source>
@@ -1724,7 +1724,7 @@
       <translation>Per rimuovere un'immagine allegata clicca sul cestino</translation>
     </message>
     <message>
-      <source>To see all your issuess click %dashboard_link_start% here %dashboard_link_end%</source>
+      <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
       <translation>Per vedere tutte le tue segnalazioni clicca %dashboard_link_start%qui%dashboard_link_end%'</translation>
     </message>
     <message>
@@ -1962,6 +1962,58 @@
     <message>
       <source>Last 30 days</source>
       <translation>Ultimi 30 giorni</translation>
+    </message>
+    <message>
+      <source>Criticals</source>
+      <translation>Critiche</translation>
+    </message>
+    <message>
+      <source>To recover the access password, visit the page \n %s</source>
+      <translation>Per recuperare la password di accesso visita la pagina \n %s</translation>
+    </message>
+    <message>
+      <source>There is already a registration pending activation for the '%s' fiscal code</source>
+      <translation>Esiste già una registrazione in attesa di attivazione per il codice fiscale '%s'</translation>
+    </message>
+    <message>
+      <source>The activation email has been sent again: check the '%s' email address</source>
+      <translation>È stata inviata nuovamente la mail di attivazione: controlla l'indirizzo di posta '%s'</translation>
+    </message>
+    <message>
+      <source>The '%s' username already exists, please choose another one</source>
+      <translation>Il nome utente '%s' esiste già, sei pregato di sceglierne un altro</translation>
+    </message>
+    <message>
+      <source>New issue</source>
+      <translation>Nuova segnalazione</translation>
+    </message>
+    <message>
+      <source>About privacy</source>
+      <translation>Informazioni sulla privacy</translation>
+    </message>
+    <message>
+      <source>Specify the reason for the reassignment</source>
+      <translation>Specifica il motivo della riassegnazione</translation>
+    </message>
+    <message>
+      <source>Add note and reassign</source>
+      <translation>Aggiungi nota e riassegna</translation>
+    </message>
+    <message>
+      <source>Group reference</source>
+      <translation>Riferimento</translation>
+    </message>
+    <message>
+      <source>If the email address is registered in the system, a message will be sent to you with a link that you must click to confirm that you are the right user.</source>
+      <translation>Se l'indirizzo email è registrato nel sistema, ti verrà inviato un messaggio con un link che devi cliccare per darci la conferma che sei l'utente giusto.</translation>
+    </message>
+    <message>
+      <source>Map</source>
+      <translation>Mappa</translation>
+    </message>
+    <message>
+      <source>Satellite</source>
+      <translation>Satellite</translation>
     </message>
   </context>
   <context>

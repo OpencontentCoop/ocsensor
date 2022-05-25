@@ -18,7 +18,8 @@
             'categoryPredictionTpl': '#tpl-category-predictions',
             'onRemove': null,
             'alertsEndPoint': false,
-            'additionalWMSLayers': []
+            'additionalWMSLayers': [],
+            'postsUrl': function(){ return $('[data-location="sensor-posts"]').attr('href')}
         };
 
     function Plugin(element, options, postId) {
@@ -27,6 +28,8 @@
         this.alertContainer = $(this.settings.alertContainerSelector);
         this.actionStarted = false;
         this.spinner = $($.templates(this.settings.spinnerTpl).render({}));
+        this.hasOpenedPost = false;
+        this.openedPostHistory = [];
         $(document).on('show.bs.collapse', '#collapseConversation', function (e) {
             Cookies.set('collapseConversation', 1);
         });
@@ -121,12 +124,12 @@
                         onBeforeCreate: function(){
                             $('#modal-edit').modal('show');
                         },
-                        onSuccess: function (data) {
-                            if (data){
-                                plugin.removeAlert().startLoading();
-                                window.location = $.opendataTools.settings('accessPath') + '/sensor/posts/'+data;
+                        onSuccess: function (postId) {
+                            plugin.removeAlert().startLoading();
+                            if (postId){
+                                plugin.openPost(postId);
                             }else{
-                                plugin.removeAlert().startLoading().load(post.id);
+                                plugin.load(post.id);
                             }
                             $('#modal-edit').modal('hide');
                         }
@@ -152,7 +155,7 @@
                 renderData.find('[data-usergroup]').each(function (){
                     var self = $(this);
                     $.get(plugin.settings.apiEndPoint + '/user-groups/' + self.data('usergroup'), function (response){
-                        self.html(response.name);
+                        self.show().html(response.name);
                     })
                 });
 
@@ -340,16 +343,15 @@
                     var osmLayer = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     }).addTo(map);
-                    var baseLayers = {
-                        'Mappa': osmLayer,
-                        'Satellite': L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-                            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-                        })
-                    };
+                    var baseLayers = [];
+                    baseLayers[$.sensorTranslate.translate('Map')] = osmLayer;
+                    baseLayers[$.sensorTranslate.translate('Satellite')] =  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                    });
                     var mapLayers = [];
                     if (plugin.settings.additionalWMSLayers.length > 0) {
                         $.each(plugin.settings.additionalWMSLayers, function(){
-                            mapLayers[this.attribution] = L.tileLayer.wms(this.baseUrl, {
+                            mapLayers[$.sensorTranslate.translate(this.attribution)] = L.tileLayer.wms(this.baseUrl, {
                                 layers: this.layers,
                                 version: this.version,
                                 format: this.format,
@@ -400,7 +402,8 @@
                     return date > (Math.round(+new Date() / 1000) - seconds);
                 }
 
-                var runAction = function (action, payload, confirmMessage, onSuccess, onError) {
+                var runAction = function (action, payload, confirmMessage, onSuccess, onError, async) {
+                    async = typeof async === "undefined" ? true : async;
                     var confirmation = true;
                     if (confirmMessage) {
                         confirmation = confirm(confirmMessage);
@@ -419,6 +422,7 @@
                             type: 'POST',
                             url: plugin.settings.apiEndPoint + '/actions/' + post.id + '/' + action,
                             data: JSON.stringify(payload),
+                            async: async,
                             headers: {'X-CSRF-TOKEN': csrfToken},
                             success: function (data) {
                                 plugin.actionStarted = false;
@@ -467,6 +471,20 @@
                 renderData.find('[data-action]').on('click', function (e) {
                     renderData.find('.modal').modal('hide');
                     var action = $(this).data('action');
+                    var parameters = $(this).data('parameters');
+                    var wrapper = $(this).parents('[data-action-wrapper]');
+                    var payload = getActionPayload(wrapper, parameters);
+                    if (action === 'checkNoteAndAssign') {
+                        if (capabilities.is_approver || $.inArray(''+post.currentOwnerGroupId, payload.group_ids) > -1 || ''+post.currentOwnerGroupId === payload.group_ids){
+                            action = 'assign';
+                        }else{
+                            var tempActionWrapper = renderData.find('#addNoteThenAssign');
+                            tempActionWrapper.find('[data-single-action-wrapper="assign"] [data-value="group_ids"]').val(payload.group_ids);
+                            tempActionWrapper.find('[data-single-action-wrapper="assign"] [data-value="participant_ids"]').val(payload.participant_ids);
+                            tempActionWrapper.modal('show');
+                            return false;
+                        }
+                    }
                     if (action === 'checkNoteAndFix') {
                         if (timeIsGreater(capabilities.last_private_message_timestamp, post.settings.MinimumIntervalFromLastPrivateMessageToFix)) {
                             action = 'fix';
@@ -475,9 +493,6 @@
                             return false;
                         }
                     }
-                    var parameters = $(this).data('parameters');
-                    var wrapper = $(this).parents('[data-action-wrapper]');
-                    var payload = getActionPayload(wrapper, parameters);
                     runAction(action, payload, $(this).data('confirmation'),
                         function (data){
                             plugin.render(data.capabilities, data.post);
@@ -499,25 +514,52 @@
                 renderData.find('[data-actions]').on('click', function (e) {
                     renderData.find('.modal').modal('hide');
                     var action = $(this).data('actions');
-                    var parameters = $(this).data('parameters');
                     var wrapper = $(this).parents('[data-action-wrapper]');
                     var confirmMessage = $(this).data('confirmation');
-                    var payload = getActionPayload(wrapper, parameters);
-                    runAction(action, payload, confirmMessage,
-                        function (data){
-                            plugin.render(data.capabilities, data.post);
-                            if (plugin.settings.alertsEndPoint) {
-                                $('#social_user_alerts').remove();
-                                $.get(plugin.settings.alertsEndPoint, function (data) {
-                                    $('header').prepend(data);
-                                });
-                            }
-                        },
-                        function (data) {
-                            plugin.error(data);
-                            plugin.load(post.id);
+                    var onSuccessCallback = function (data) {
+                        plugin.render(data.capabilities, data.post);
+                        if (plugin.settings.alertsEndPoint) {
+                            $('#social_user_alerts').remove();
+                            $.get(plugin.settings.alertsEndPoint, function (data) {
+                                $('header').prepend(data);
+                            });
                         }
-                    );
+                    };
+                    var onErrorCallback = function (data) {
+                        plugin.error(data);
+                        plugin.load(post.id);
+                    };
+
+                    if (wrapper.find('[data-single-action-wrapper]').length > 0) {
+                        var actions = action.split(',');
+                        var actionsAndPayloads = [];
+                        $.each(actions, function(index, element){
+                            var singleAction = this;
+                            var singleActionWrapper = wrapper.find('[data-single-action-wrapper="'+singleAction+'"]');
+                            var singleActionParameters = singleActionWrapper.data('parameters');
+                            var singleActionPayload = getActionPayload(singleActionWrapper, singleActionParameters);
+                            actionsAndPayloads.push({
+                                'action': singleAction,
+                                'payload': singleActionPayload,
+                            });
+                        });
+                        runAction(actionsAndPayloads[0].action, actionsAndPayloads[0].payload, confirmMessage,
+                            function (data){
+                                runAction(actionsAndPayloads[1].action, actionsAndPayloads[1].payload, confirmMessage,
+                                    function (data){onSuccessCallback(data)},
+                                    function (data){onErrorCallback(data)}
+                                );
+                            },
+                            function (data){onErrorCallback(data)}
+                        );
+                    }else {
+                        var parameters = $(this).data('parameters');
+                        var payload = getActionPayload(wrapper, parameters);
+                        runAction(action, payload, confirmMessage,
+                            function (data){onSuccessCallback(data)},
+                            function (data){onErrorCallback(data)}
+                        );
+                    }
                     e.preventDefault();
                 });
 
@@ -690,6 +732,53 @@
             plugin.resultContainer.css({'opacity': '1'});
 
             return plugin;
+        },
+
+        openPost: function (postId, cb, context){
+            var plugin = this;
+            plugin.hasOpenedPost = postId;
+            plugin.removeAlert().startLoading().load(postId);
+            var isInHistory = $.inArray(postId, plugin.openedPostHistory) > -1;
+            if (!isInHistory) {
+                window.history.pushState({'post_id': postId}, document.title, plugin.settings.postsUrl() + '/' + postId);
+                plugin.openedPostHistory.push(postId);
+            }
+            if ($.isFunction(cb)) cb.call(context, plugin);
+            $(window).scrollTop(0);
+        },
+
+        closePost: function (currentPageLink, cb, context){
+            var plugin = this;
+            plugin.hasOpenedPost = false;
+            plugin.removeAlert().stopLoading();
+            window.history.replaceState({'post_id': null}, document.title, currentPageLink.attr('href'));
+            if ($.isFunction(cb)) cb.call(context, plugin);
+            $(window).scrollTop(0);
+        },
+
+        getOpenedPost: function (){
+            return this.hasOpenedPost;
+        },
+
+        initNavigation: function(currentPageLink, onOpenPost, onClosePost, reset){
+            var plugin = this;
+            window.onpopstate = function(event) {
+                // console.log(event.state);
+                $(window).scrollTop(0);
+                if (event.state === null || event.state.post_id === null){
+                    plugin.closePost(currentPageLink, onClosePost);
+                }else if (event.state.post_id){
+                    plugin.openPost(event.state.post_id, onOpenPost);
+                }
+            };
+            currentPageLink.on('click', function (e){
+                if (plugin.getOpenedPost()){
+                    plugin.closePost(currentPageLink, onClosePost);
+                }else{
+                    reset();
+                }
+                e.preventDefault();
+            });
         }
     });
 

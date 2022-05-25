@@ -140,8 +140,8 @@
         <p class="widget-content">{{if privacy.identifier == 'public' && moderation.identifier != 'waiting'}}<i class="fa fa-globe"></i> {{:~sensorTranslate('public', 'privacy')}}{{else}}<i class="fa fa-lock"></i> {{:~sensorTranslate('private', 'privacy')}}{{/if}}</p>
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <div class="form-group hide" data-action-wrapper>
-                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('accepted', 'moderation')}}{{else}}{{:~sensorTranslate('waiting', 'moderation')}}{{/if}}" />
-                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('Make public')}}{{else}}{{:~sensorTranslate('make private')}}{{/if}}" />
+                <input type="hidden" data-value="status" value="{{if moderation.identifier == 'waiting'}}accepted{{else}}waiting{{/if}}" />
+                <input class="btn btn-sm btn-default" data-parameters="status" type="submit" data-action="moderate" value="{{if moderation.identifier == 'waiting'}}{{:~sensorTranslate('Make public')}}{{else}}{{:~sensorTranslate('Make private')}}{{/if}}" />
             </div>
         {{/if}}
     </div>
@@ -242,6 +242,33 @@
                                data-actions="send_private_message,fix"
                                data-parameters="text,participant_ids,is_response_proposal"
                                value="{{:~sensorTranslate('Add note and set as fixed')}}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{if settings.AddPrivateMessageBeforeReassign}}
+    <div id="addNoteThenAssign" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="clearfix" data-action-wrapper>
+                        <div data-single-action-wrapper="send_private_message" data-parameters="text,participant_ids">
+                            <label for="noteForAssign">{{:~sensorTranslate('Specify the reason for the reassignment')}}</label>
+                            <textarea id="noteForAssign" data-value="text" name="noteForAssign" class="form-control" rows="4" required="required"></textarea>
+                            {{for approvers}}<input data-value="participant_ids" type="hidden" value="{{:id}}" />{{/for}}
+                        </div>
+                        <div data-single-action-wrapper="assign" data-parameters="group_ids,participant_ids">
+                            <input data-value="group_ids" type="hidden" value="" />
+                            <input data-value="participant_ids" type="hidden" value="" />
+                        </div>
+                        <input class="btn send btn-bold pull-right"
+                               type="submit"
+                               style="margin-top:10px"
+                               data-actions="send_private_message,assign"
+                               value="{{:~sensorTranslate('Add note and reassign')}}" />
                     </div>
                 </div>
             </div>
@@ -396,7 +423,11 @@
                 <option></option>
             </select>
             <span class="input-group-btn">
-                <input class="btn btn-sm btn-default" type="submit" data-action="assign" data-parameters="participant_ids,group_ids" value="{{if owners.length == 0}}{{:~sensorTranslate('Assign')}}{{else}}{{:~sensorTranslate('Reassign')}}{{/if}}" />
+                <input class="btn btn-sm btn-default"
+                       type="submit"
+                       data-action="{{if settings.AddPrivateMessageBeforeReassign && owners.length > 0}}checkNoteAndAssign{{else}}assign{{/if}}"
+                       data-parameters="participant_ids,group_ids"
+                       value="{{if owners.length == 0}}{{:~sensorTranslate('Assign')}}{{else}}{{:~sensorTranslate('Reassign')}}{{/if}}" />
             </span>
         </div>
     </div>
