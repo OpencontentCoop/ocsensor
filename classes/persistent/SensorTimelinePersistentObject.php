@@ -2,6 +2,7 @@
 
 use Opencontent\Sensor\Api\Values\Message\TimelineItem;
 use Opencontent\Sensor\Api\Values\Post;
+use Opencontent\Sensor\Legacy\Utils;
 use Opencontent\Sensor\Legacy\Utils\TreeNode;
 use Opencontent\Sensor\Legacy\Utils\TreeNodeItem;
 
@@ -233,7 +234,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
         $startAt = $status = $action = false;
 
         if ($previous instanceof SensorTimelinePersistentObject) {
-            $startAt = DateTime::createFromFormat(self::DATE_FORMAT, $previous->attribute('end_at'));
+            $startAt = DateTime::createFromFormat(self::DATE_FORMAT, $previous->attribute('end_at'), Utils::getDateTimeZone());
         }
 
         switch ($timelineItem->type) {
