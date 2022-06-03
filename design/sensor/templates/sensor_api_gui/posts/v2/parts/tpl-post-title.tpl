@@ -28,11 +28,15 @@
     <span class="label label-primary" id="current-post-id">{{:id}}</span>
     {{:subject}}
   </h1>
-  <p class="lead"><strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong> &middot;
+  <p class="lead">
+    {/literal}{if sensor_settings('HighlightSuperUserPosts')}{literal}
+        {{if author.isSuperUser}}<span class="label label-info">{{:~sensorTranslate('internal')}}</span>{{/if}}
+    {/literal}{/if}{literal}
+    <strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong> &middot;
     {{if author.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}}
     {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a> {{if author.phone}}<a style="font-size:.6em" href="tel:{{:author.phone}}"><i class="fa fa-phone-square"></i> {{:author.phone}}</a>{{/if}}
     {{else}}{{:author.name}}{{/if}}
-    {{if author.isSuperUser}}{{for author.userGroups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
+    {{if author.isSuperUser}}{{for author.userGroups}}<span class="label label-default" style="display:none;margin-right: 5px" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
   </p>
 </section>
 {/literal}{if ezini('SensorConfig', 'SmartDuplicationGui', 'ocsensor.ini')|eq('enabled')}{literal}

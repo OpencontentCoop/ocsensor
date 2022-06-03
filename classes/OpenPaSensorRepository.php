@@ -319,6 +319,8 @@ class OpenPaSensorRepository extends LegacyRepository
                         'RequireCategoryForAdditionalMemberGroups' => isset($sensorIni['RequireCategoryForAdditionalMemberGroups']) ? $sensorIni['RequireCategoryForAdditionalMemberGroups'] == 'enabled' : true,
                         'AddOperatorSuperUserAsObserver' => isset($sensorIni['AddOperatorSuperUserAsObserver']) ? $sensorIni['AddOperatorSuperUserAsObserver'] == 'enabled' : false,
                         'AddBehalfOfUserAsObserver' => isset($sensorIni['AddBehalfOfUserAsObserver']) ? $sensorIni['AddBehalfOfUserAsObserver'] == 'enabled' : true,
+                        'HighlightSuperUserPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['HighlightSuperUserPosts'] == 'enabled' : false,
+                        'UserCanAccessUserGroupPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
                     );
                     return [
                         'content' => $data,
