@@ -59,6 +59,11 @@
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
+                            <a href="#" data-upload="{{:metadata.mainNodeId}}"><i class="fa fa-upload"></i></a>
+                        {{/if}}
+                    </td>
+                    <td width="1">
+                        {{if metadata.userAccess.canEdit}}
                             <a href="#" data-edit="{{:metadata.id}}"><i class="fa fa-pencil"></i></a>
                         {{/if}}
                     </td>
@@ -192,6 +197,21 @@
                     var renderData = $(template.render(response));
                     resultsContainer.html(renderData);
 
+                    renderData.find('[data-upload]').on('click', function(e){
+                        $('#item').opendataForm({
+                            id: $(this).data('upload')
+                        },{
+                            connector: 'import-user',
+                            onBeforeCreate: function(){
+                                $('#modal').modal('show');
+                            },
+                            onSuccess: function () {
+                                $('#modal').modal('hide');
+                                loadContents();
+                            }
+                        });
+                        e.preventDefault();
+                    });
                     renderData.find('[data-edit]').on('click', function(e){
                         $('#item').opendataFormEdit({
                             object: $(this).data('edit')

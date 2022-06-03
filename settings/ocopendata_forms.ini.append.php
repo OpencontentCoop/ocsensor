@@ -8,6 +8,7 @@ AvailableConnectors[]=user-settings
 AvailableConnectors[]=delete-user-group
 AvailableConnectors[]=batch-scenarios
 AvailableConnectors[]=duplicate-post
+AvailableConnectors[]=import-user
 
 [remove-operator_ConnectorSettings]
 PHPClass=RemoveOperatorConnector
@@ -29,3 +30,6 @@ PHPClass=BatchScenarioConnector
 
 [duplicate-post_ConnectorSettings]
 PHPClass=DuplicatePostConnector
+
+[import-user_ConnectorSettings]
+PHPClass=UserImportCsvConnector

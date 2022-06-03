@@ -11,6 +11,7 @@ class SensorBatchOperations
         $this->handlers = [
             SensorBatchScenarioEditHandler::SENSOR_HANDLER_IDENTIFIER,
             SensorPostGroupParticipantHandler::SENSOR_HANDLER_IDENTIFIER,
+            UserCsvImportHandler::SENSOR_HANDLER_IDENTIFIER,
         ];
     }
 
