@@ -258,6 +258,7 @@
 
             var uploadImage = addPostGui.find('#add_image');
             uploadImage.find('.upload').fileupload({
+                pasteZone: null,
                 dropZone: null,
                 formData: function (form) {
                     return form.serializeArray();
@@ -307,6 +308,7 @@
             var uploadFile = addPostGui.find('#add_file');
             if (uploadFile.length > 0) {
                 uploadFile.find('.upload').fileupload({
+                    pasteZone: null,
                     dropZone: null,
                     formData: function (form) {
                         return form.serializeArray();
