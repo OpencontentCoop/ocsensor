@@ -2015,6 +2015,22 @@
       <source>Satellite</source>
       <translation type="unfinished"/>
     </message>
+    <message>
+      <source>Sort by</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Modified</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Published</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show only with unread messages</source>
+      <translation type="unfinished"/>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

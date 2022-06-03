@@ -5,7 +5,7 @@
     <name>sensor</name>
     <message>
       <source>%count issues</source>
-      <translation>%count Meldungen</translation>
+      <translation>%count Anliegen</translation>
     </message>
     <message>
       <source>%password_link_start%Click here to generate your personal password%password_link_end%</source>
@@ -17,7 +17,7 @@
     </message>
     <message>
       <source>A issue for your %sitename account has been registered</source>
-      <translation>Eine Meldung für Ihr %sitename-Konto wurde registriert</translation>
+      <translation>Ein Anliegen für Ihr %sitename-Konto wurde registriert</translation>
     </message>
     <message>
       <source>A new user has registered</source>
@@ -57,7 +57,7 @@
     </message>
     <message>
       <source>Add note and set as fixed</source>
-      <translation>Notiz hinzufügen und Meldung als erledigt markieren</translation>
+      <translation>Notiz hinzufügen und Anliegen als erledigt markieren</translation>
     </message>
     <message>
       <source>Add official response</source>
@@ -73,7 +73,7 @@
     </message>
     <message>
       <source>added a comment</source>
-      <translation>hat einen Kommentar hinzugefügt</translation>
+      <translation>hat einen öffentlichen Kommentar hinzugefügt</translation>
     </message>
     <message>
       <source>added a reponse</source>
@@ -81,7 +81,7 @@
     </message>
     <message>
       <source>Aging of issues</source>
-      <translation>Aktualität der Meldungen</translation>
+      <translation>Offene Anliegen nach Bearbeitungszeit</translation>
     </message>
     <message>
       <source>All</source>
@@ -89,7 +89,7 @@
     </message>
     <message>
       <source>Allow public comments</source>
-      <translation>Öffentliche Kommentare zu den Meldungen zulassen.</translation>
+      <translation>Öffentliche Kommentare zu den Anliegen zulassen.</translation>
     </message>
     <message>
       <source>Allow publishing:</source>
@@ -137,11 +137,11 @@
     </message>
     <message>
       <source>Area</source>
-      <translation>Gebiet</translation>
+      <translation>Stadtviertel</translation>
     </message>
     <message>
       <source>Areas</source>
-      <translation>Zonen</translation>
+      <translation>Stadtviertel</translation>
     </message>
     <message>
       <source>Assign</source>
@@ -157,7 +157,7 @@
     </message>
     <message>
       <source>Assigning a issue to a group</source>
-      <translation>Einer Gruppe eine Meldung zuweisen</translation>
+      <translation>Anliegen einer Bearbeitungsstelle zuweisen</translation>
     </message>
     <message>
       <source>Assigning the type to issue</source>
@@ -165,15 +165,15 @@
     </message>
     <message>
       <source>Assignment</source>
-      <translation>Zuweisungen</translation>
+      <translation>Zugewiesen</translation>
     </message>
     <message>
       <source>Assignment of a issue</source>
-      <translation>Zuweisung einer Meldung</translation>
+      <translation>Anliegen zuweisen</translation>
     </message>
     <message>
       <source>Assignments</source>
-      <translation>Zuweisungen</translation>
+      <translation>Zugewiesen</translation>
     </message>
     <message>
       <source>Attachments</source>
@@ -197,7 +197,7 @@
     </message>
     <message>
       <source>Automations</source>
-      <translation>Automationen</translation>
+      <translation>Automatisierungen</translation>
     </message>
     <message>
       <source>Average execution times</source>
@@ -217,7 +217,7 @@
     </message>
     <message>
       <source>By accessing the system, you can check the resolution of your issues and insert new ones</source>
-      <translation>Indem Sie sich anmelden, können Sie überprüfen, ob das von Ihnen gemeldete Problem bereits gelöst wurde, sowie weitere Meldungen erstatten</translation>
+      <translation>Indem Sie sich anmelden, können Sie überprüfen, ob das von Ihnen gemeldete Problem bereits gelöst wurde, sowie weitere Anliegen einfügen</translation>
     </message>
     <message>
       <source>Cancel</source>
@@ -237,7 +237,7 @@
     </message>
     <message>
       <source>Category assignment to issue</source>
-      <translation>Dieser Meldung einer Kategorie zuweisen</translation>
+      <translation>Kategorie einem Anliegen zuweisen</translation>
     </message>
     <message>
       <source>Change</source>
@@ -265,7 +265,7 @@
     </message>
     <message>
       <source>Choose the type of issue</source>
-      <translation>Wählen Sie eine Meldungsart aus</translation>
+      <translation>Wählen Sie die Art des Anliegens aus</translation>
     </message>
     <message>
       <source>Close</source>
@@ -285,19 +285,19 @@
     </message>
     <message>
       <source>Closed</source>
-      <translation>Geschlossen</translation>
+      <translation>Erledigt</translation>
     </message>
     <message>
       <source>Closed by %name</source>
-      <translation>Geschlossen von %name</translation>
+      <translation>Abgeschlossen von %name</translation>
     </message>
     <message>
       <source>Closing</source>
-      <translation>Wird geschlossen</translation>
+      <translation>Abschließung</translation>
     </message>
     <message>
       <source>Closing a issue</source>
-      <translation>Meldung abschließen</translation>
+      <translation>Anliegen erledigt</translation>
     </message>
     <message>
       <source>Closing date</source>
@@ -305,11 +305,11 @@
     </message>
     <message>
       <source>Closing the issue</source>
-      <translation>Meldung abschließend bearbeitet</translation>
+      <translation>Anliegen abschließen</translation>
     </message>
     <message>
       <source>Closure</source>
-      <translation>Wird geschlossen</translation>
+      <translation>Erledigt</translation>
     </message>
     <message>
       <source>Comment text</source>
@@ -317,7 +317,7 @@
     </message>
     <message>
       <source>Comment to a issue</source>
-      <translation>Kommentar zu einer Meldung</translation>
+      <translation>Kommentar zu einem Anliegen</translation>
     </message>
     <message>
       <source>Comment to moderate</source>
@@ -345,7 +345,7 @@
     </message>
     <message>
       <source>Create issue</source>
-      <translation>Melden</translation>
+      <translation>Anliegen melden</translation>
     </message>
     <message>
       <source>Create response from this note</source>
@@ -365,7 +365,7 @@
     </message>
     <message>
       <source>Creating a issue</source>
-      <translation>Meldung erstellen</translation>
+      <translation>Neues Anliegen</translation>
     </message>
     <message>
       <source>Creation date</source>
@@ -389,7 +389,7 @@
     </message>
     <message>
       <source>Describe the details of the issue</source>
-      <translation>Machen Sie nähere Angaben zur Meldung</translation>
+      <translation>Beschreiben Sie Ihr Anliegen</translation>
     </message>
     <message>
       <source>Description</source>
@@ -397,7 +397,7 @@
     </message>
     <message>
       <source>Description of issue</source>
-      <translation>Beschreibung der Meldung</translation>
+      <translation>Beschreibung des Anliegens</translation>
     </message>
     <message>
       <source>Desktop notifications disabled</source>
@@ -413,7 +413,7 @@
     </message>
     <message>
       <source>Details (maximum %count characters)</source>
-      <translation>Details zur Meldung (Maximal %count Buchstaben)</translation>
+      <translation>Details zum Anliegen (Maximal %count Buchstaben)</translation>
     </message>
     <message>
       <source>Detect my location</source>
@@ -485,15 +485,15 @@
     </message>
     <message>
       <source>Everyone will be able to read this report</source>
-      <translation>Diese Meldung kann von allen gelesen werden</translation>
+      <translation>Das Anliegen kann von allen gelesen werden</translation>
     </message>
     <message>
       <source>Everyone will be able to read this report when the %site team approves it</source>
-      <translation>Nach Freischaltung durch das %site-Team kann diese Meldung von allen gelesen werden</translation>
+      <translation>Nach Freischaltung durch das %site-Team kann dieses Anliegen von allen gelesen werden</translation>
     </message>
     <message>
       <source>Exclusive recipients of private notes</source>
-      <translation>Empfänger von privaten Notizen</translation>
+      <translation>Private Notizen empfängen</translation>
     </message>
     <message>
       <source>Expiration</source>
@@ -521,11 +521,11 @@
     </message>
     <message>
       <source>Export in CSV</source>
-      <translation>Per CSV exportieren</translation>
+      <translation>Als CSV exportieren</translation>
     </message>
     <message>
       <source>Export to CSV</source>
-      <translation>In CSV exportieren</translation>
+      <translation>Als CSV exportieren</translation>
     </message>
     <message>
       <source>Faq</source>
@@ -537,47 +537,47 @@
     </message>
     <message>
       <source>Filter by area</source>
-      <translation>Filtern nach Zone</translation>
+      <translation>Nach Stadtviertel filtern</translation>
     </message>
     <message>
       <source>Filter by assignment</source>
-      <translation>Filtern nach Zuordnung</translation>
+      <translation>Nach Zuordnung filtern</translation>
     </message>
     <message>
       <source>Filter by category</source>
-      <translation>Filtern nach Kategorie</translation>
+      <translation>Nach Kategorie filtern</translation>
     </message>
     <message>
       <source>Filter by condition</source>
-      <translation>Filtern nach Bedingung</translation>
+      <translation>Nach Bedingung filtern</translation>
     </message>
     <message>
       <source>Filter by group</source>
-      <translation>Filtern nach Gruppe</translation>
+      <translation>Nach Gruppe filtern</translation>
     </message>
     <message>
       <source>Filter by group in charge</source>
-      <translation>Filtern nach zuständiger Gruppe</translation>
+      <translation>Nach zuständiger Gruppe filtern</translation>
     </message>
     <message>
       <source>Filter by macro category</source>
-      <translation>Filtern nach Makrokategorie</translation>
+      <translation>Nach Makrokategorie filtern</translation>
     </message>
     <message>
       <source>Filter by operator group</source>
-      <translation>Filtern nach der Betreibergruppe</translation>
+      <translation>Nach der Betreibergruppe filtern</translation>
     </message>
     <message>
       <source>Filter by static in the time range</source>
-      <translation>Statistisch filtern nach Zeitraum</translation>
+      <translation>Nach statistischer Zeitspanne filtern</translation>
     </message>
     <message>
       <source>Filter by time interval</source>
-      <translation>Filtern nach Zeitintervall</translation>
+      <translation>Nach Zeitspanne filtern</translation>
     </message>
     <message>
       <source>Filter by type</source>
-      <translation>Filtern nach Meldungsart</translation>
+      <translation>Nach Anliegen filtern</translation>
     </message>
     <message>
       <source>Find by address</source>
@@ -585,7 +585,7 @@
     </message>
     <message>
       <source>Find by area</source>
-      <translation>Nach Zone suchen</translation>
+      <translation>Nach Stadtviertel suchen</translation>
     </message>
     <message>
       <source>Find by author</source>
@@ -633,7 +633,7 @@
     </message>
     <message>
       <source>Find in issues</source>
-      <translation>In den Meldungen suchen</translation>
+      <translation>In den Anliegen suchen</translation>
     </message>
     <message>
       <source>Find user</source>
@@ -657,7 +657,7 @@
     </message>
     <message>
       <source>Fixing the issue</source>
-      <translation>Meldung abschließend bearbeitet</translation>
+      <translation>Anliegen abschließend bearbeitet</translation>
     </message>
     <message>
       <source>Force as fixed</source>
@@ -673,11 +673,11 @@
     </message>
     <message>
       <source>Go to the issue</source>
-      <translation>Gehe zur Meldung</translation>
+      <translation>Gehe zum Anliegen</translation>
     </message>
     <message>
       <source>Group</source>
-      <translation>Gruppieren</translation>
+      <translation>Gruppe</translation>
     </message>
     <message>
       <source>Group and operator in charge</source>
@@ -685,7 +685,7 @@
     </message>
     <message>
       <source>Group in charge</source>
-      <translation>Zuständige Gruppe</translation>
+      <translation>Zuständige Bearbeitungsstelle</translation>
     </message>
     <message>
       <source>Group of operator who opened the issue</source>
@@ -717,7 +717,7 @@
     </message>
     <message>
       <source>Hide the choice of the type of issue from the reporter</source>
-      <translation>Die Meldungsart für den Meldenden ausblenden</translation>
+      <translation>Die Art des Anliegens für den Meldenden ausblenden</translation>
     </message>
     <message>
       <source>Hide the detailed timeline from the public</source>
@@ -749,11 +749,11 @@
     </message>
     <message>
       <source>If the option is activated, only the acceptance and closure events will be shown in the history</source>
-      <translation>Wenn diese Option aktiviert ist, werden im Verlauf nur die Übernahme und der Abschluss angezeigt</translation>
+      <translation>Wenn diese Option aktiviert ist, werden im Verlauf nur angezeigt, dass das Anliegen übernommen bzw. erledigt wurde</translation>
     </message>
     <message>
       <source>If the option is activated, the reporter is not asked to choose the type of issue</source>
-      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht aufgefordert, die Art der Meldung auszuwählen</translation>
+      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht aufgefordert, die Art seines Anliegens auszuwählen</translation>
     </message>
     <message>
       <source>If the option is enabled, the names of the operators will be replaced with a generic string</source>
@@ -761,15 +761,15 @@
     </message>
     <message>
       <source>If the option is enabled, the reporter is not asked for consent to make the issue public: operators will not be able to make it public in any way.</source>
-      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht zur Einwilligung in die Veröffentlichung der Meldung aufgefordert. Die Bearbeiter der Meldung dürfen diese nicht öffentlich machen.</translation>
+      <translation>Wenn diese Option aktiviert ist, wird der Meldende nicht zur Einwilligung in die Veröffentlichung des Anliegens aufgefordert. Die Bearbeiter des Anliengens dürfen diese nicht öffentlich machen.</translation>
     </message>
     <message>
       <source>If this option is enabled, authenticated users can post comments to public issyes</source>
-      <translation>Wenn diese Option aktiviert ist, können authentifizierte Benutzer Kommentare zu öffentlich sichtbaren Meldungen hinterlassen</translation>
+      <translation>Wenn diese Option aktiviert ist, können authentifizierte Benutzer Kommentare zu öffentlich sichtbaren Anliegen hinterlassen</translation>
     </message>
     <message>
       <source>If this option is enabled, new issues are not publicly visible</source>
-      <translation>Wenn diese Option aktiviert ist, sind die neuen Meldungen nicht öffentlich sichtbar</translation>
+      <translation>Wenn diese Option aktiviert ist, sind die neuen Anliegen nicht öffentlich sichtbar</translation>
     </message>
     <message>
       <source>If this option is enabled, you can select which operators can read each note</source>
@@ -785,7 +785,7 @@
     </message>
     <message>
       <source>In general,%count issues have been resolved</source>
-      <translation>Insgesamt wurden %count Meldungen abschließend bearbeitet</translation>
+      <translation>Insgesamt wurden %count Anliegen abschließend bearbeitet</translation>
     </message>
     <message>
       <source>In order to partecipate, you need to be registered!</source>
@@ -805,11 +805,11 @@
     </message>
     <message>
       <source>Involvement of a reference for the citizen</source>
-      <translation>Bezug für den Bürger</translation>
+      <translation>Anlaufstelle</translation>
     </message>
     <message>
       <source>Involvement of an observer</source>
-      <translation>Beteiligung eines Beobachters</translation>
+      <translation>Angabe eines weiteren Beteiligten</translation>
     </message>
     <message>
       <source>Is static</source>
@@ -817,7 +817,7 @@
     </message>
     <message>
       <source>Issue comments</source>
-      <translation>Kommentare zur Meldung</translation>
+      <translation>Kommentare zum Anliegen</translation>
     </message>
     <message>
       <source>Issue fixed</source>
@@ -825,31 +825,31 @@
     </message>
     <message>
       <source>Issue images</source>
-      <translation>Zugleich mit der Meldung eingegangene Bilder</translation>
+      <translation>Dem Anliegen beigelegte Fotos</translation>
     </message>
     <message>
       <source>Issue info</source>
-      <translation>Informationen zur Meldung</translation>
+      <translation>Informationen zum Anliegen</translation>
     </message>
     <message>
       <source>Issue number</source>
-      <translation>Meldung Nr.</translation>
+      <translation>Anliegen Nr.</translation>
     </message>
     <message>
       <source>Issue private notes</source>
-      <translation>Private Notizen zur Meldung</translation>
+      <translation>Private Notizen zum Anliegen</translation>
     </message>
     <message>
       <source>Issue reported by</source>
-      <translation>Meldung aufgenommen von</translation>
+      <translation>Anliegen aufgenommen von</translation>
     </message>
     <message>
       <source>issues</source>
-      <translation>Meldungen</translation>
+      <translation>Anliegen</translation>
     </message>
     <message>
       <source>Issues</source>
-      <translation>Meldungen</translation>
+      <translation>Anliegen</translation>
     </message>
     <message>
       <source>It takes just 5 seconds to register!</source>
@@ -997,11 +997,11 @@
     </message>
     <message>
       <source>No issue found...</source>
-      <translation>Keine Meldung gefunden</translation>
+      <translation>Kein Anliegen gefunden</translation>
     </message>
     <message>
       <source>No issues</source>
-      <translation>Keine Meldung</translation>
+      <translation>Kein Anliegen</translation>
     </message>
     <message>
       <source>Nobody</source>
@@ -1029,47 +1029,47 @@
     </message>
     <message>
       <source>Number of issues by aging time buckets</source>
-      <translation>Offene Meldungen nach Aktualität</translation>
+      <translation>Offene Anliegen nach Bearbeitungszeit</translation>
     </message>
     <message>
       <source>Number of issues by area</source>
-      <translation>Offene Meldungen nach Zone</translation>
+      <translation>Offene Anliegen nach Zone</translation>
     </message>
     <message>
       <source>Number of issues by category</source>
-      <translation>Offene Meldungen nach Kategorie</translation>
+      <translation>Offene Anliegen nach Kategorie</translation>
     </message>
     <message>
       <source>Number of issues by status</source>
-      <translation>Meldungen nach Status</translation>
+      <translation>Anliegen nach Bearbetungsstatus</translation>
     </message>
     <message>
       <source>Number of issues by type</source>
-      <translation>Offene Meldungen nach Meldungsart</translation>
+      <translation>Offene Anliegen nach Art des Anliegens</translation>
     </message>
     <message>
       <source>Number of issues open and closed by time interval</source>
-      <translation>Anzahl der eingefügten und erledigten Meldungen nach Zeitspanne</translation>
+      <translation>Anzahl der eingegangenen und erledigten Anliegen nach Zeitspanne</translation>
     </message>
     <message>
       <source>Number of reports for processing times</source>
-      <translation>Anzahl der Meldungen nach Bearbeitungszeiten</translation>
+      <translation>Bearbeitungszeiten pro Anliegen</translation>
     </message>
     <message>
       <source>Object of issue</source>
-      <translation>Gegenstand der Meldung</translation>
+      <translation>Gegenstand des Anliegens</translation>
     </message>
     <message>
       <source>Object of the issue</source>
-      <translation>Gegenstand der Meldung</translation>
+      <translation>Gegenstand des Anliegens</translation>
     </message>
     <message>
       <source>Observer</source>
-      <translation>Beobachter</translation>
+      <translation>Weitere Beteiligte</translation>
     </message>
     <message>
       <source>Observers</source>
-      <translation>Beobachter</translation>
+      <translation>Weitere Beteiligte</translation>
     </message>
     <message>
       <source>official replies</source>
@@ -1081,27 +1081,27 @@
     </message>
     <message>
       <source>One issue</source>
-      <translation>Eine Meldung</translation>
+      <translation>Ein Anliegen</translation>
     </message>
     <message>
       <source>Only the %site team will be able to read this report</source>
-      <translation>Diese Meldung wird nur vom%-Site-Team gelesen</translation>
+      <translation>Dieses Anliegen wird nur vom%-Site-Team gelesen</translation>
     </message>
     <message>
       <source>Open for group of operators in charge</source>
-      <translation>Offen für Bearbeitergruppe</translation>
+      <translation>Offene Anliegen nach zuständiger Bearbeitungsstelle</translation>
     </message>
     <message>
       <source>Open issues by entering date</source>
-      <translation>Offene Meldungen nach Einfügedatum</translation>
+      <translation>Offene Anliegen nach Eingangsdatum</translation>
     </message>
     <message>
       <source>Open issues for groups of operators in charge</source>
-      <translation>Offene Meldungen nach zuständiger Bearbeitergruppe</translation>
+      <translation>Offene Anliegen nach zuständiger Bearbeitungsstelle</translation>
     </message>
     <message>
       <source>Open over time</source>
-      <translation>Ständig geöffnet</translation>
+      <translation>Offene Anliegen nach Eingang</translation>
     </message>
     <message>
       <source>OpenSegnalazioni Notifications</source>
@@ -1125,15 +1125,15 @@
     </message>
     <message>
       <source>Operator who opened the issue</source>
-      <translation>Bearbeiter, der die Meldung eröffnet hat</translation>
+      <translation>BearbeiterIn, der/die das Anliegen eröffnet hat</translation>
     </message>
     <message>
       <source>Operators</source>
-      <translation>Bearbeiter</translation>
+      <translation>BearbeiterIn</translation>
     </message>
     <message>
       <source>Operators in charge</source>
-      <translation>Zuständige Bearbeiter</translation>
+      <translation>Zuständige/r BearbeiterIn</translation>
     </message>
     <message>
       <source>Password</source>
@@ -1145,11 +1145,11 @@
     </message>
     <message>
       <source>Percentage of issues closed by category</source>
-      <translation>Prozentsatz der erledigten Meldungen nach Kategorie</translation>
+      <translation>Prozentsatz der erledigten Anliegen nach Kategorie</translation>
     </message>
     <message>
       <source>Percentage of messages closed by group of operators in charge</source>
-      <translation>Prozentsatz der erledigten Meldungen nach Bearbeitergruppe</translation>
+      <translation>Prozentsatz der erledigten Anliegen nach Bearbeitergruppe</translation>
     </message>
     <message>
       <source>Phone</source>
@@ -1161,7 +1161,7 @@
     </message>
     <message>
       <source>Prevent the area selection</source>
-      <translation>Verhindern Sie, dass bei Meldung eine Zone ausgewählt wird</translation>
+      <translation>Verhindern Sie, dass bei Eintragen eines Anliegens ein Stadtviertel ausgewählt wird</translation>
     </message>
     <message>
       <source>Previous</source>
@@ -1205,7 +1205,7 @@
     </message>
     <message>
       <source>Processing</source>
-      <translation>Wird bearbeitet</translation>
+      <translation>In Bearbeitung</translation>
     </message>
     <message>
       <source>Processing times</source>
@@ -1245,11 +1245,11 @@
     </message>
     <message>
       <source>Read the issue</source>
-      <translation>Meldung lesen</translation>
+      <translation>Anliegen lesen</translation>
     </message>
     <message>
       <source>Reading</source>
-      <translation>Lesen</translation>
+      <translation>Gelesen</translation>
     </message>
     <message>
       <source>Reassign</source>
@@ -1257,11 +1257,11 @@
     </message>
     <message>
       <source>Receive a notification for creating a issue</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn eine neue Meldung erstellt wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn eine neues Anliegen eingeht</translation>
     </message>
     <message>
       <source>Receive a notification to the reopening of your issue</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn Ihre Meldung neu bearbeitet wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihr Anliegen erneut bearbeitet wird</translation>
     </message>
     <message>
       <source>Receive a notification when a comment is added to moderate</source>
@@ -1269,15 +1269,15 @@
     </message>
     <message>
       <source>Receive a notification when a comment is added to your report</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Meldung ein Kommentar hinzugefügt wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrem Anliegen ein Kommentar hinzugefügt wird</translation>
     </message>
     <message>
       <source>Receive a notification when a operator has completed the activity concerning your issue</source>
-      <translation>Sie erhalten eine Benachrichtigung, sobald der zuständige Bedienstete die von Ihnen gemeldete Situation abschließend geregelt hat.</translation>
+      <translation>Sie erhalten eine Benachrichtigung, sobald der/die zuständige Bedienstete die von Ihnen gemeldete Situation abschließend geregelt hat.</translation>
     </message>
     <message>
       <source>Receive a notification when an observer is involved in a report</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn ein Beobachter in eine Meldung eingebunden wird</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn ein Beobachter in ein Anliegen eingebunden wird</translation>
     </message>
     <message>
       <source>Receive a notification when you are the recipient of a private message</source>
@@ -1285,15 +1285,15 @@
     </message>
     <message>
       <source>Receive a notification when your issue has been closed</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn die von Ihnen gemeldete Situation behoben wurde.</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihr Anliegen erledigt wurde</translation>
     </message>
     <message>
       <source>Receive a notification when your issue is assigned to a manager</source>
-      <translation>Sie erhalten eine Benachrichtigung, sobald Ihre Meldung an die zuständige Person weitergeleitet wurde</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihr Anliegen and die zuständige Person weitergeleitet wurde</translation>
     </message>
     <message>
       <source>Receive a notification when your issue is assigned to a new reference for the citizen</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Meldung ein neuer Bezug für den Bürger zugewiesen wurde</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihr Anliegen von einer neuen Aufnahmestelle bearbeitet wird</translation>
     </message>
     <message>
       <source>Receive a periodic update notification</source>
@@ -1301,7 +1301,7 @@
     </message>
     <message>
       <source>Receive notification when a issue is assigned to your group</source>
-      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Gruppe eine Meldung zugewiesen wurde</translation>
+      <translation>Sie erhalten eine Benachrichtigung, wenn Ihrer Bearbeitungsstelle ein Anliegen zugewiesen wurde</translation>
     </message>
     <message>
       <source>Receivers</source>
@@ -1313,7 +1313,7 @@
     </message>
     <message>
       <source>Reference for the citizen</source>
-      <translation>Bezug für den Bürger/die Bürgerin</translation>
+      <translation>Anlaufstelle</translation>
     </message>
     <message>
       <source>Reject</source>
@@ -1325,7 +1325,7 @@
     </message>
     <message>
       <source>Related issues</source>
-      <translation>Verwandte Meldungen</translation>
+      <translation>Verwandte Anliegen</translation>
     </message>
     <message>
       <source>Reload</source>
@@ -1357,7 +1357,7 @@
     </message>
     <message>
       <source>Reopening a report</source>
-      <translation>Eine Meldung wird erneut geöffnet</translation>
+      <translation>Anliegen wird erneut bearbeitet</translation>
     </message>
     <message>
       <source>Reponse proposal</source>
@@ -1433,7 +1433,7 @@
     </message>
     <message>
       <source>See all issues</source>
-      <translation>Alle Meldungen ansehen</translation>
+      <translation>Alle Anliegen ansehen</translation>
     </message>
     <message>
       <source>Select</source>
@@ -1465,7 +1465,7 @@
     </message>
     <message>
       <source>Select type</source>
-      <translation>Art auswählen</translation>
+      <translation>Anliegen auswählen</translation>
     </message>
     <message>
       <source>Send</source>
@@ -1485,7 +1485,7 @@
     </message>
     <message>
       <source>Set each new issue as private</source>
-      <translation>Jede neu eingefügte Meldung als private Meldung einstellen</translation>
+      <translation>Neues Anliegen immer als privat kennzeichnen</translation>
     </message>
     <message>
       <source>Set the operator who opened the issue</source>
@@ -1501,7 +1501,7 @@
     </message>
     <message>
       <source>Show only issues I participate in such as:</source>
-      <translation>Nur Meldungen anzeigen, in die ich persönlich eingebunden bin als:</translation>
+      <translation>Nur Anliegen anzeigen, in die ich persönlich eingebunden bin als:</translation>
     </message>
     <message>
       <source>Show other options</source>
@@ -1533,23 +1533,23 @@
     </message>
     <message>
       <source>Status</source>
-      <translation>Status</translation>
+      <translation>Bearbeitungsstatus</translation>
     </message>
     <message>
       <source>Status by category</source>
-      <translation>Status nach Kategorie.</translation>
+      <translation>Bearbeitungsstatus nach Kategorie.</translation>
     </message>
     <message>
       <source>Status for group of operators in charge</source>
-      <translation>Status nach Bearbeitergruppe</translation>
+      <translation>Bearbeitungsstatus nach Zuständigkeit</translation>
     </message>
     <message>
       <source>Status of issues by category</source>
-      <translation>Meldungsstatus nach Kategorie</translation>
+      <translation>Bearbeitungsstatus nach Kategorie</translation>
     </message>
     <message>
       <source>Status of issues for groups of operators in charge</source>
-      <translation>Meldungsstatus nach zuständigen Bearbeitergruppen</translation>
+      <translation>Bearbeitungsstatus nach zuständiger Stelle</translation>
     </message>
     <message>
       <source>Store</source>
@@ -1561,11 +1561,11 @@
     </message>
     <message>
       <source>Store the official response and close the issue</source>
-      <translation>Offizielle Antwort veröffentlichen und Meldung als erledigt abschließen</translation>
+      <translation>Offizielle Antwort veröffentlichen und Anliegen als erledigt abschließen</translation>
     </message>
     <message>
       <source>Store the official response and keep the issue open</source>
-      <translation>Offizielle Antwort veröffentlichen und Meldung offen halten</translation>
+      <translation>Offizielle Antwort veröffentlichen und Anliegen offen halten</translation>
     </message>
     <message>
       <source>Su_Mo_Tu_We_Th_Fr_Sa</source>
@@ -1581,11 +1581,11 @@
     </message>
     <message>
       <source>Subscriptions</source>
-      <translation>Anmeldungen</translation>
+      <translation>Neuregistrierungen</translation>
     </message>
     <message>
       <source>Subscriptions trend</source>
-      <translation>Entwicklung neue Anmeldungen</translation>
+      <translation>Neu registrierte Benutzer</translation>
     </message>
     <message>
       <source>Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday</source>
@@ -1609,11 +1609,11 @@
     </message>
     <message>
       <source>The areas most affected by new issues are:</source>
-      <translation>Am meisten Meldungen gingen für folgende Gegenden ein:</translation>
+      <translation>Am meisten Anliegen gingen für folgende Gegenden ein:</translation>
     </message>
     <message>
       <source>The comment will also be visible to the author of the report.</source>
-      <translation>Der Kommentar ist auch für den Autor der Meldung sichtbar.</translation>
+      <translation>Der Kommentar ist auch für den Autor des Anliegens sichtbar.</translation>
     </message>
     <message>
       <source>The comment will be moderated.</source>
@@ -1645,11 +1645,11 @@
     </message>
     <message>
       <source>The reference for the citizen can reopen a closed issue</source>
-      <translation>Die Referenz für den Bürger kann eine abgeschlossene Meldung wieder öffnen</translation>
+      <translation>Die Anlaufstelle kann eine abgeschlossenes Anliegen wieder eröffnen</translation>
     </message>
     <message>
       <source>The reporter can reopen a closed issue</source>
-      <translation>Der Meldende kann eine abschließend erledigte Meldung wieder öffnen</translation>
+      <translation>Die meldende Person kann ein bereits erledigtes Anliegen erneut vorbringen</translation>
     </message>
     <message>
       <source>the scenario that coincides with the greatest number of conditions is executed.</source>
@@ -1661,7 +1661,7 @@
     </message>
     <message>
       <source>The texts and images inserted must comply with the policies established for %open_privacy_url%privacy%close_privacy_url% and %open_terms_url% the terms of use %close_terms_url%</source>
-      <translation>Die eingefügten Texte und Bilder müssen die Richtlinien einhalten, die für %open_privacy_url% Privacy%close_privacy_url% und %open_terms_url% die Nutzungsbedingungen%close_terms_url%</translation>
+      <translation>Die eingefügten Texte und Fotos müssen die Richtlinien einhalten, die für Datenschutzvorgaben%open_privacy_url% Privacy%close_privacy_url% und %open_terms_url% die Benutzerrichtlinien%close_terms_url% entsprechen</translation>
     </message>
     <message>
       <source>The whole working group can read the note; a notification will be sent only to the selected participants</source>
@@ -1669,7 +1669,7 @@
     </message>
     <message>
       <source>There are no official replies entered: are you sure you want to close the report?</source>
-      <translation>Es sind keine offiziellen Antworten vorhanden: Sind Sie sicher, dass Sie die Meldung als erledigt einstufen möchten?</translation>
+      <translation>Es sind keine offiziellen Antworten vorhanden: Sind Sie sicher, dass Sie das Anliegen als erledigt einstufen möchten?</translation>
     </message>
     <message>
       <source>There is no information about the reporter</source>
@@ -1685,7 +1685,7 @@
     </message>
     <message>
       <source>This option identifies the operator who takes charge of the issues in the first instance</source>
-      <translation>Diese Option gibt Auskunft über den Bearbeiter, der die Meldung als erster aufnimmt</translation>
+      <translation>Diese Option gibt Auskunft über den Bearbeiter, der das Anliegen als erster aufnimmt</translation>
     </message>
     <message>
       <source>Time range</source>
@@ -1725,7 +1725,7 @@
     </message>
     <message>
       <source>To see all your issues click %dashboard_link_start% here %dashboard_link_end%</source>
-      <translation>Wenn Sie alle Ihre bisherigen Meldungen ansehen möchten, klicken Sie auf %dashboard_link_start% %dashboard_link_end%</translation>
+      <translation>Wenn Sie alle Ihre bisherigen Anliegen ansehen möchten, klicken Sie auf %dashboard_link_start% %dashboard_link_end%</translation>
     </message>
     <message>
       <source>Translations</source>
@@ -1741,7 +1741,7 @@
     </message>
     <message>
       <source>Trend opening/closing</source>
-      <translation>Entwicklung Meldungen eröffnet/erledigt</translation>
+      <translation>Trend eingegangene/erledigte Anliegen</translation>
     </message>
     <message>
       <source>Triggered on '%name' event. The default payload is a json API Sensor Post object</source>
@@ -1749,7 +1749,7 @@
     </message>
     <message>
       <source>Type</source>
-      <translation>Art</translation>
+      <translation>Anliegen</translation>
     </message>
     <message>
       <source>Type an address and click on the lens or click on the map to view the map</source>
@@ -1757,15 +1757,15 @@
     </message>
     <message>
       <source>Type assignment to issue</source>
-      <translation>Der Meldung eine Meldungsart zuweisen</translation>
+      <translation>Dem Anliegen eine Anliegensart zuweisen</translation>
     </message>
     <message>
       <source>Type by category</source>
-      <translation>Meldungsart nach Kategorie</translation>
+      <translation>Art des Anliegens nach Kategorie</translation>
     </message>
     <message>
       <source>Type of issues by category</source>
-      <translation>Meldungsart nach Kategorie</translation>
+      <translation>Art des Anliengens nach Kategorie</translation>
     </message>
     <message>
       <source>Undefined</source>
@@ -1797,7 +1797,7 @@
     </message>
     <message>
       <source>Users</source>
-      <translation>Nutzer</translation>
+      <translation>Benutzer</translation>
     </message>
     <message>
       <source>via</source>
@@ -1805,7 +1805,7 @@
     </message>
     <message>
       <source>View the history of issue</source>
-      <translation>Meldungsverlauf anzeigen</translation>
+      <translation>Anliengesverlauf anzeigen</translation>
     </message>
     <message>
       <source>View the report</source>
@@ -1813,7 +1813,7 @@
     </message>
     <message>
       <source>Visibility</source>
-      <translation>Sichtweite</translation>
+      <translation>Ansicht öffentlich</translation>
     </message>
     <message>
       <source>Waiting for moderation</source>
@@ -1845,7 +1845,7 @@
     </message>
     <message>
       <source>When approved, the comment will also be visible to the author of the report.</source>
-      <translation>Nach Freigabe des Kommentars ist auch der Autor der Meldung sichtbar</translation>
+      <translation>Nach Freigabe des Kommentars ist auch der Autor des Anliegens sichtbar</translation>
     </message>
     <message>
       <source>When approved, the comment will be public.</source>
@@ -1857,7 +1857,7 @@
     </message>
     <message>
       <source>Write the subject of the issue</source>
-      <translation>Geben Sie den Gegenstand der Meldung an</translation>
+      <translation>Worum geht es?</translation>
     </message>
     <message>
       <source>year</source>
@@ -1885,7 +1885,7 @@
     </message>
     <message>
       <source>You have %count characters out of %total</source>
-      <translation>Ihnen stehen %count von %total Anschläge zur Verfüfung</translation>
+      <translation>Es bleiben %count von insgesamt %total Zeichen zur Verfüfung</translation>
     </message>
     <message>
       <source>Your email address has been registered in the %sitename team</source>
@@ -1897,7 +1897,7 @@
     </message>
     <message>
       <source>Zone assignment to issue</source>
-      <translation>Die Meldung einer Zone zuordnen</translation>
+      <translation>Das Anliegen einem Stadtviertel zuordnen</translation>
     </message>
     <message>
       <source>Files</source>
@@ -1985,7 +1985,7 @@
     </message>
     <message>
       <source>New issue</source>
-      <translation>Neue Meldung</translation>
+      <translation>Neues Anliegen</translation>
     </message>
     <message>
       <source>About privacy</source>
@@ -2015,6 +2015,22 @@
       <source>Satellite</source>
       <translation>Satellit</translation>
     </message>
+    <message>
+      <source>Sort by</source>
+      <translation>Sortieren nach</translation>
+    </message>
+    <message>
+      <source>Modified</source>
+      <translation>Änderungsdatum</translation>
+    </message>
+    <message>
+      <source>Published</source>
+      <translation>Veröffentlichungsdatum</translation>
+    </message>
+    <message>
+      <source>Show only with unread messages</source>
+      <translation>Nur für ungelesene Nachrichten anzeigen</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
@@ -2039,15 +2055,15 @@
     <name>sensor/status</name>
     <message>
       <source>close</source>
-      <translation>Geschlossen</translation>
+      <translation>Erledigt</translation>
     </message>
     <message>
       <source>open</source>
-      <translation>Zugewiesen</translation>
+      <translation>In Bearbeitung</translation>
     </message>
     <message>
       <source>pending</source>
-      <translation>Gesendet</translation>
+      <translation>Eingegangen</translation>
     </message>
   </context>
   <context>
