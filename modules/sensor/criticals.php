@@ -6,6 +6,14 @@ $tpl = eZTemplate::factory();
 $repository = OpenPaSensorRepository::instance();
 $http = eZHTTPTool::instance();
 $handler = new SensorCriticalPosts();
+$timelineListener = new SensorTimelineListener();
+if (!$timelineListener->isEnabled()){
+    header('Content-Type: application/json');
+    header( 'HTTP/1.1 404 Not found' );
+    echo json_encode(['error' => 'CollectSensorTimelineItems is disabled']);
+    eZExecution::cleanExit();
+}
+
 $api = $Params['api'];
 
 if ($http->hasPostVariable('UpdateData')){

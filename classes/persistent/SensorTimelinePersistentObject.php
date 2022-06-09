@@ -424,8 +424,9 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             FROM ezcontentobject_tree
               INNER JOIN ezcontentobject ON (ezcontentobject_tree.contentobject_id = ezcontentobject.id)
               INNER JOIN ezcontentobject_name ON ( ezcontentobject_tree.contentobject_id = ezcontentobject_name.contentobject_id AND ezcontentobject_tree.contentobject_version = ezcontentobject_name.content_version)
+              INNER JOIN ezuser_setting ON (ezcontentobject_tree.contentobject_id = ezuser_setting.user_id)
             WHERE
-             ezcontentobject.contentclass_id = 4 AND ezcontentobject_tree.node_id = ezcontentobject_tree.main_node_id AND ezcontentobject.language_mask & 15 > 0 AND ezcontentobject_tree.path_string like '/1/5/12/%'
+             ezuser_setting.is_enabled = 1 AND ezcontentobject.contentclass_id = 4 AND ezcontentobject_tree.node_id = ezcontentobject_tree.main_node_id AND ezcontentobject.language_mask & 15 > 0 AND ezcontentobject_tree.path_string like '/1/5/12/%'
             ORDER BY ezcontentobject.id asc
         ";
         $db->query($viewQuery);

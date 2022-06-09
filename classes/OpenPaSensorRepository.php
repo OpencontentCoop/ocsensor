@@ -519,7 +519,9 @@ class OpenPaSensorRepository extends LegacyRepository
             $user = $this->getUserService()->loadUser($userId);
             foreach (['on_create', 'on_assign', 'on_close', 'reminder'] as $identifier) {
                 $notification = $this->getNotificationService()->getNotificationByIdentifier($identifier);
-                $this->getNotificationService()->addUserToNotification($user, $notification);
+                if ($notification instanceof NotificationType) {
+                    $this->getNotificationService()->addUserToNotification($user, $notification);
+                }
             }
         } catch (Exception $e) {
             eZDebug::writeError($e->getMessage(), __METHOD__);

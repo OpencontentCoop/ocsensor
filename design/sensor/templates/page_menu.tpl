@@ -1,8 +1,9 @@
 <div class="collapse navbar-collapse">
 
     {def $enabled_languages = sensor_settings('SiteLanguages')}
+    {def $avail_translation = array()}
     {if count($enabled_languages)|gt(1)}
-        {def $avail_translation = language_switcher('/')}
+        {set $avail_translation = language_switcher('/')}
         {def $lang_uri_maps = cond(ezini_hasvariable('SiteAccessSettings', 'LanguageStaticURI'), ezini('SiteAccessSettings', 'LanguageStaticURI'), array())}
         {if $avail_translation|count()|gt(1)}
             <ul class="nav pull-right navbar-nav" style="margin-top: 0">

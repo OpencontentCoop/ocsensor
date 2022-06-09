@@ -82,7 +82,8 @@
             'default_user_placement': 0,
             'additionalWMSLayers': [],
             'area_cache_prefix': 'area-',
-            'persistentMetaKeys': ['pingback_url', 'approver_id']
+            'persistentMetaKeys': ['pingback_url', 'approver_id'],
+            'faq_predictor': false
         };
 
     function Plugin(element, options) {
@@ -590,7 +591,7 @@
                     e.preventDefault();
                     return false;
                 }
-                if (hasValidTexts && hasFaqRequest === false){
+                if (plugin.settings.faq_predictor && hasValidTexts && hasFaqRequest === false){
                     console.log('load faq by predict')
                     hasFaqRequest = true;
                     $.ajax({
@@ -604,8 +605,8 @@
                         }),
                         success: function (response) {
                             if (response.faqs.totalCount > 0){
-                                addPostGui.find('.is-last-tab').removeClass('last-tab');
-                                $('#nav-faqs').show().find('[data-toggle="tab"]').addClass('last-tab');
+                                //addPostGui.find('.is-last-tab').removeClass('last-tab');
+                                $('#nav-faqs').show();//.find('[data-toggle="tab"]').addClass('last-tab');
                                 var faqs = $.templates('#tpl-faq-on-create').render(response.faqs);
                                 $('#step-faq').html(faqs);
                             }
@@ -738,8 +739,8 @@
 
                     hasValidTexts = false;
                     hasFaqRequest = false;
-                    addPostGui.find('.is-last-tab').addClass('last-tab');
-                    $('#nav-faqs').hide().find('[data-toggle="tab"]').removeClass('last-tab');
+                    //addPostGui.find('.is-last-tab').addClass('last-tab');
+                    $('#nav-faqs').hide();//.find('[data-toggle="tab"]').removeClass('last-tab');
                     $('#step-faq').html('');
 
                     $('body > .main, body > .full_page_photo, #posts-search').hide();

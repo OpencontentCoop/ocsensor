@@ -4,13 +4,19 @@ class SensorCriticalPosts
 {
     private static $isSchemaInstalled;
 
-    private static function isSchemaInstalled($tableName)
+    private static function isSchemaInstalled($tableName, $type = 'table')
     {
         if (!isset(self::$isSchemaInstalled[$tableName])) {
             $dbName = eZINI::instance()->variable('DatabaseSettings', 'Database');
-            $res = eZDB::instance()->arrayQuery(
-                "SELECT EXISTS (SELECT FROM information_schema.tables WHERE  table_catalog = '$dbName' AND table_name   = '$tableName');"
-            );
+            if ($type === 'table' || $type === 'view' ) {
+                $res = eZDB::instance()->arrayQuery(
+                    "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_catalog = '$dbName' AND table_name   = '$tableName');"
+                );
+            }else{
+                $res = eZDB::instance()->arrayQuery(
+                    "SELECT EXISTS (SELECT FROM pg_matviews WHERE matviewname   = '$tableName');"
+                );
+            }
             self::$isSchemaInstalled[$tableName] = $res[0]['exists'] == 't';
         }
 
@@ -117,7 +123,7 @@ class SensorCriticalPosts
         $limit = 50;
         $offset = $limit * ($requestPage - 1);
 
-        if (!self::isSchemaInstalled('ocsensor_criticals')) {
+        if (!self::isSchemaInstalled('ocsensor_criticals', 'materialized_view')) {
             $this->createView();
         }
 
