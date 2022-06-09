@@ -375,6 +375,7 @@
                     var $buttonContainer = $element.find('.upload-button-container');
                     var $spinner = $element.find('.upload-button-spinner');
                     $element.find('.upload').fileupload({
+                        pasteZone: null,
                         dropZone: $element,
                         formData: function (form) {
                             return form.serializeArray();

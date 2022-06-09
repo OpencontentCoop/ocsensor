@@ -3,6 +3,7 @@
 [ImportSettings]
 AvailableSourceHandlers[]=sensor_scenario_edit
 AvailableSourceHandlers[]=sensor_group_reindex
+AvailableSourceHandlers[]=user_csv_import
 RobotUserID=14
 
 [sensor_scenario_edit-HandlerSettings]
@@ -15,6 +16,12 @@ Debug=enabled
 Enabled=true
 Name=Reindex Post Group Participant
 ClassName=SensorPostGroupParticipantHandler
+Debug=enabled
+
+[user_csv_import-HandlerSettings]
+Enabled=true
+Name=User Csv Import
+ClassName=UserCsvImportHandler
 Debug=enabled
 
 */ ?>

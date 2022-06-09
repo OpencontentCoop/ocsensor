@@ -1,9 +1,23 @@
-<div id="post-dashboard-selector" class="row" style="text-align:center;margin: 20px 0">
-    <div class="col-md-12" data-participant_filters="sensor_participant_filter">
-        <p><strong>{sensor_translate("Show only issues I participate in such as:")}</strong></p>
-        <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{sensor_translate('Reference for the citizen')}</button>
-        <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{sensor_translate('Operator in charge')}</button>
-        <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{sensor_translate('Observer')}</button>
+<div id="post-dashboard-selector"  style="margin: 20px 0">
+    <div class="row">
+        <div class="col-md-6" data-participant_filters="sensor_participant_filter" style="text-align:center;">
+            <p><strong>{sensor_translate("Show only issues I participate in such as:")}</strong></p>
+            <button type="button" data-participant_filter="approver" data-participant_filter_preset="{ezpreference('sensor_participant_filter_approver')}" class="btn btn-default btn-md">{sensor_translate('Reference for the citizen')}</button>
+            <button type="button" data-participant_filter="owner" data-participant_filter_preset="{ezpreference('sensor_participant_filter_owner')}" class="btn btn-default btn-md">{sensor_translate('Operator in charge')}</button>
+            <button type="button" data-participant_filter="observer" data-participant_filter_preset="{ezpreference('sensor_participant_filter_observer')}" class="btn btn-default btn-md">{sensor_translate('Observer')}</button>
+        </div>
+        <div class="col-md-3">
+            <label for="sort_by">{sensor_translate("Sort by")}</label>
+            <select class="form-control" id="sort_by">
+                <option value="modified" {if ezpreference('sensor_dashboard_sort')|eq('modified')}selected="selected"{/if}>{sensor_translate("Modified")}</option>
+                <option value="published" {if ezpreference('sensor_dashboard_sort')|eq('published')}selected="selected"{/if}>{sensor_translate("Published")}</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="checkbox">
+                <input type="checkbox" id="only_unread" {if ezpreference('sensor_dashboard_only_unread')|eq('enabled')}checked="checked"{/if}>{sensor_translate("Show only with unread messages")}
+            </label>
+        </div>
     </div>
 </div>
 <div id="post-dashboard" class="row post-gui">
@@ -316,6 +330,7 @@ $(document).ready(function () {ldelim}
         dashboardHeader.show();
         dashboardSelector.show();
         postList.show();
+        buildDashboard();
         postGui.hide();
         postWindow.html('');
     };
@@ -486,9 +501,30 @@ $(document).ready(function () {ldelim}
         });
     };
 
+    var sortSelect = $('#sort_by').on('change', function (){
+        $.ez.setPreference('sensor_dashboard_sort',$(this).val());
+        buildView(currentView);
+    });
+
+    var onlyUnreadCheck = $('#only_unread').on('change', function (){
+        $.ez.setPreference('sensor_dashboard_only_unread', $(this).is(':checked') ? 'enabled' : 'disabled');
+        buildDashboard();
+    });
+
+    var getSortQuery = function () {
+        var sorter = sortSelect.val();
+        var sortString = '[modified=>desc]';
+        if (sorter === 'modified'){
+            sortString = '[modified=>desc]';
+        }else if (sorter === 'published'){
+            sortString = '[published=>desc]';
+        }
+        return ' sort ' + sortString;
+    }
+
     var fillExportUrl = function () {
         var params = findParams;
-        params.q = buildQueryFilters()+' sort [modified=>desc]';
+        params.q = buildQueryFilters()+getSortQuery();
         var href = exportUrl.attr('href').split('?')[0];
         exportUrl.attr('href', href + '?' + jQuery.param(params));
     };
@@ -554,6 +590,15 @@ $(document).ready(function () {ldelim}
         });
         if (participantRoles.length > 0) {
             query.push("("+participantRoles.join(' or ')+")");
+        }
+
+        if (onlyUnreadCheck.length > 0){
+            if (onlyUnreadCheck.is(':checked')){
+                query.push(
+                    // raw[sensor_user_'+settings.currentUserId+'_unread_timelines_i] range [1,*] or
+                    '(raw[sensor_user_'+settings.currentUserId+'_unread_comments_i] range [1,*] or raw[sensor_user_'+settings.currentUserId+'_unread_private_messages_i] range [1,*] or raw[sensor_user_'+settings.currentUserId+'unread_responses_i] range [1,*])'
+                );
+            }
         }
 
         return query.length > 0 ? query.join(' and ') + ' and ' : '';
@@ -624,7 +669,7 @@ $(document).ready(function () {ldelim}
         var baseQuery = buildQueryFilters();
         baseQuery += 'workflow_status in ['+viewIdentifier+']';
 
-        var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
+        var paginatedQuery = baseQuery + ' and limit ' + limitPagination + ' offset ' + currentPage*limitPagination + getSortQuery();
         viewContainer.html(spinner);
         find(paginatedQuery, function (response) {
             queryPerPage[currentPage] = paginatedQuery;

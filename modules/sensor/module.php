@@ -138,6 +138,12 @@ $ViewList['alert'] = [
     'functions' => ['use'],
 ];
 
+$ViewList['criticals'] = [
+    'script' => 'criticals.php',
+    'params' => ['api'],
+    'functions' => ['debug'],
+];
+
 $FunctionList = [];
 $FunctionList['use'] = [];
 $FunctionList['debug'] = [];

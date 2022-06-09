@@ -319,6 +319,8 @@ class OpenPaSensorRepository extends LegacyRepository
                         'RequireCategoryForAdditionalMemberGroups' => isset($sensorIni['RequireCategoryForAdditionalMemberGroups']) ? $sensorIni['RequireCategoryForAdditionalMemberGroups'] == 'enabled' : true,
                         'AddOperatorSuperUserAsObserver' => isset($sensorIni['AddOperatorSuperUserAsObserver']) ? $sensorIni['AddOperatorSuperUserAsObserver'] == 'enabled' : false,
                         'AddBehalfOfUserAsObserver' => isset($sensorIni['AddBehalfOfUserAsObserver']) ? $sensorIni['AddBehalfOfUserAsObserver'] == 'enabled' : true,
+                        'HighlightSuperUserPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['HighlightSuperUserPosts'] == 'enabled' : false,
+                        'UserCanAccessUserGroupPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
                     );
                     return [
                         'content' => $data,
@@ -517,7 +519,9 @@ class OpenPaSensorRepository extends LegacyRepository
             $user = $this->getUserService()->loadUser($userId);
             foreach (['on_create', 'on_assign', 'on_close', 'reminder'] as $identifier) {
                 $notification = $this->getNotificationService()->getNotificationByIdentifier($identifier);
-                $this->getNotificationService()->addUserToNotification($user, $notification);
+                if ($notification instanceof NotificationType) {
+                    $this->getNotificationService()->addUserToNotification($user, $notification);
+                }
             }
         } catch (Exception $e) {
             eZDebug::writeError($e->getMessage(), __METHOD__);

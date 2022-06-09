@@ -43,16 +43,21 @@
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-map-marker fa-2x text-muted"></i>
                             </a>
                         </li>
+                        <li id="nav-faqs" role="presentation" class="nav-item" style="display: none">
+                            <a tabindex="8" href="#step-faq" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-faq" role="tab" title="{sensor_translate('Faq')}" style="position: relative">
+                                <i class="fa fa-question-circle fa-2x text-muted"></i>
+                            </a>
+                        </li>
                         {if $images_length|gt(0)}
                         <li role="presentation" class="nav-item">
-                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default{if $file_length|eq(0)} last-tab{/if}" data-toggle="tab" aria-controls="step-image" role="tab" title="{sensor_translate('Images')}" style="position: relative">
+                            <a tabindex="8" href="#step-image" class="btn btn-lg btn-default{if $file_length|eq(0)} is-last-tab last-tab{/if}" data-toggle="tab" aria-controls="step-image" role="tab" title="{sensor_translate('Images')}" style="position: relative">
                                 <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-image fa-2x text-muted"></i>
                             </a>
                         </li>
                         {/if}
                         {if $file_length|gt(0)}
                             <li role="presentation" class="nav-item">
-                                <a tabindex="8" href="#step-file" class="btn btn-lg btn-default last-tab" data-toggle="tab" aria-controls="step-file" role="tab" title="{sensor_translate('Files')}" style="position: relative">
+                                <a tabindex="8" href="#step-file" class="btn btn-lg btn-default is-last-tab last-tab" data-toggle="tab" aria-controls="step-file" role="tab" title="{sensor_translate('Files')}" style="position: relative">
                                     <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-file-o fa-2x text-muted"></i>
                                 </a>
                             </li>
@@ -149,6 +154,7 @@
                                 </div>
                             </div>
                         {/if}
+                        <div class="tab-pane" role="tabpanel" id="step-faq"></div>
 
                     </div>
 
@@ -278,8 +284,34 @@
             'center_map': CenterMap,
             'bounding_area': BoundingArea,
             'additionalWMSLayers': additionalWMSLayers,
-            'persistentMetaKeys': ['{ezini('GeoCoderSettings', 'PersistentMetaKeys', 'ocsensor.ini')|implode("','")}']
+            'persistentMetaKeys': ['{ezini('GeoCoderSettings', 'PersistentMetaKeys', 'ocsensor.ini')|implode("','")}'],
+            'faq_predictor': {cond(ezini('CategoryPredictor', 'UseFaqPredictor', 'ocsensor.ini')|eq('enabled'), 'true', 'false')}
         {rdelim});
     {rdelim});
 </script>
+{literal}
+<script id="tpl-faq-on-create" type="text/x-jsrender">
+{{if totalCount > 0}}
+    {{for searchHits}}
+        <div class="panel-group" id="accordion-{{:metadata.id}}" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading-{{:metadata.id}}">
+              <h4 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion-{{:metadata.id}}" href="#collapse-{{:metadata.id}}" aria-expanded="false" aria-controls="collapse-{{:metadata.id}}">
+                  {{if ~i18n(data, 'question')}}{{:~i18n(data, 'question')}}{{/if}}
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-{{:metadata.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{:metadata.id}}">
+              <div class="panel-body">
+                {{if ~i18n(data, 'answer')}}{{:~i18n(data, 'answer')}}{{/if}}
+                {{if ~i18n(data, 'category')}}<div class="text-right"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+    {{/for}}
+{{/if}}
+</script>
+{/literal}
 {undef $can_behalf}

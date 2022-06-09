@@ -82,7 +82,8 @@
             'default_user_placement': 0,
             'additionalWMSLayers': [],
             'area_cache_prefix': 'area-',
-            'persistentMetaKeys': ['pingback_url', 'approver_id']
+            'persistentMetaKeys': ['pingback_url', 'approver_id'],
+            'faq_predictor': false
         };
 
     function Plugin(element, options) {
@@ -227,6 +228,8 @@
         initSmartGui: function () {
             var plugin = this;
 
+            var hasValidTexts = false;
+            var hasFaqRequest = false;
             var addPostGui = $('#add-post-gui');
 
             var subject = addPostGui.find('[name="subject"]')
@@ -258,6 +261,7 @@
 
             var uploadImage = addPostGui.find('#add_image');
             uploadImage.find('.upload').fileupload({
+                pasteZone: null,
                 dropZone: null,
                 formData: function (form) {
                     return form.serializeArray();
@@ -307,6 +311,7 @@
             var uploadFile = addPostGui.find('#add_file');
             if (uploadFile.length > 0) {
                 uploadFile.find('.upload').fileupload({
+                    pasteZone: null,
                     dropZone: null,
                     formData: function (form) {
                         return form.serializeArray();
@@ -506,6 +511,7 @@
                         .removeClass('fa-plus-circle text-primary')
                         .addClass('fa-check-circle text-success');
 
+                    hasValidTexts = true;
                     return true;
                 } else {
                     stepItemIcon
@@ -586,6 +592,29 @@
                     showTextValidation();
                     e.preventDefault();
                     return false;
+                }
+                if (plugin.settings.faq_predictor && hasValidTexts && hasFaqRequest === false){
+                    console.log('load faq by predict')
+                    hasFaqRequest = true;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/sensor_gui/predict/faqs',
+                        contentType: 'application/json',
+                        dataType: 'json',
+                        data: JSON.stringify({
+                            subject: addPostGui.find('[name="subject"]').val(),
+                            description: addPostGui.find('[name="description"]').val()
+                        }),
+                        success: function (response) {
+                            if (response.faqs.totalCount > 0){
+                                //addPostGui.find('.is-last-tab').removeClass('last-tab');
+                                $('#nav-faqs').show();//.find('[data-toggle="tab"]').addClass('last-tab');
+                                var faqs = $.templates('#tpl-faq-on-create').render(response.faqs);
+                                $('#step-faq').html(faqs);
+                            }
+                        },
+                        error: function () {}
+                    });
                 }
                 if ($(this).hasClass('last-tab')) {
                     addPostGui.find('.next-step').hide().next().show();
@@ -709,6 +738,13 @@
 
             var showAddPostGui = function () {
                 $.get('/api/sensor_gui/default_area', function (response){
+
+                    hasValidTexts = false;
+                    hasFaqRequest = false;
+                    //addPostGui.find('.is-last-tab').addClass('last-tab');
+                    $('#nav-faqs').hide();//.find('[data-toggle="tab"]').removeClass('last-tab');
+                    $('#step-faq').html('');
+
                     $('body > .main, body > .full_page_photo, #posts-search').hide();
                     plugin.selectedArea = response.id;
                     $('#social_user_alerts').remove();
