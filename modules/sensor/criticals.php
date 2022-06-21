@@ -58,7 +58,7 @@ if ($api === 'remove-preset'){
 }
 
 if ($api === 'api'){
-    $data = $handler->find($_GET['p'], $_GET['latest_group']);
+    $data = $handler->find($_GET['p'], $_GET['latest_group'], $_GET['references']);
     header('Content-Type: application/json');
     header( 'HTTP/1.1 200 OK' );
     echo json_encode($data);

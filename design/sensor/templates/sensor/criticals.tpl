@@ -26,8 +26,7 @@
 
 <div class="container">
     <section class="hgroup">
-        <div id="SelectPreset" class="pull-right">
-        </div>
+        <div id="SelectPreset" class="pull-right"></div>
         <h1>Segnalazioni critiche</h1>
     </section>
     <div class="row">
@@ -42,6 +41,7 @@
                 </div>
                 <button id="update-data" class="btn btn-info btn-lg pull-right"{if $has_sql|not()} style="display: none"{/if}><i class="fa fa-refresh"></i> Aggiorna i dati</button>
             </div>
+            <div id="filters"></div>
             <div id="data"></div>
         </div>
     </div>
@@ -93,6 +93,34 @@
     <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
 </div>
 </script>
+<script id="tpl-data-filters" type="text/x-jsrender">
+    <div class="row">
+        <div class="col-xs-6">
+            <div>
+                <select data-name="group-filter" name="GroupSelect[]" class="select form-control" data-placeholder="Filtra per gruppo" multiple>
+                    <option></option>
+                    {{for groups}}
+                        {{if name}}
+                        <option value="{{>name}}" {{if selected}} selected="selected"{{/if}}>{{>name}}</option>
+                        {{/if}}
+                    {{/for}}
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div>
+                <select data-name="reference-filter" name="ReferenceSelect[]" class="select form-control" data-placeholder="Filtra per riferimento" multiple>
+                    <option></option>
+                    {{for references}}
+                        {{if name}}
+                        <option value="{{>name}}" {{if selected}} selected="selected"{{/if}}>{{>name}}</option>
+                        {{/if}}
+                    {{/for}}
+                </select>
+            </div>
+        </div>
+    </div>
+</script>
 <script id="tpl-data-results" type="text/x-jsrender">
 <div>
     {{if total == 0}}
@@ -127,7 +155,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-10">
+        <div class="col-xs-12">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -161,21 +189,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-2" style="background:#f9f9f9;">
-            <div style="padding:5px">
-                <label>Filtra per gruppo</label>
-                {{for groups}}
-                    {{if name}}
-                    <div class="checkbox">
-                        <label>
-                            <input{{if selected}} checked="checked"{{/if}} name="GroupSelect[]" type="checkbox" value="{{>name}}" />
-                            <small>{{>name}}</small>
-                        </label>
-                    </div>
-                    {{/if}}
-                {{/for}}
-            </div>
-        </div>
     </div>
     <div class="row">
         <div class="col-xs-12">
@@ -204,12 +217,15 @@
 <script>
     $(document).ready(function (){
         var template = $.templates('#tpl-data-results');
+        var filtersTpl = $.templates('#tpl-data-filters');
         var selectPreset = $.templates('#tpl-select-preset');
         var spinner = $($.templates("#tpl-data-spinner").render({}));
+        var filtersContainer = $('#filters');
         var resultsContainer = $('#data');
         var selectPresetContainer = $('#SelectPreset');
         var currentPage = 1;
         var currentGroups = [];
+        var currentReferences = [];
         var builder = $('#builder');
         var filters = {/literal}{$filters}{literal};
         var rules = {/literal}{$rules}{literal};
@@ -246,13 +262,41 @@
             rules: rules
         });
 
+        var isFiltersAlreadyLoaded = false;
         var loadData = function (){
             resultsContainer.html(spinner);
             var requestData = {'p': currentPage};
             if (currentGroups.length > 0){
                 requestData.latest_group = currentGroups;
             }
+            if (currentReferences.length > 0){
+                requestData.references = currentReferences;
+            }
+            console.log(requestData);
             $.get('/sensor/criticals/api', requestData, function (response){
+
+                if (!isFiltersAlreadyLoaded) {
+                    var renderFilters = $(filtersTpl.render(response));
+                    filtersContainer.html(renderFilters);
+                    filtersContainer.find('[data-name="group-filter"]').select2().on('change', function (e) {
+                        currentPage = 1;
+                        currentGroups = filtersContainer.find('[data-name="group-filter"]').val() || [];
+                        loadData();
+                        $('html, body').stop().animate({
+                            scrollTop: builder.offset().top
+                        }, 1000);
+                    });
+                    filtersContainer.find('[data-name="reference-filter"]').select2().on('change', function (e) {
+                        currentPage = 1;
+                        currentReferences = filtersContainer.find('[data-name="reference-filter"]').val() || [];
+                        loadData();
+                        $('html, body').stop().animate({
+                            scrollTop: builder.offset().top
+                        }, 1000);
+                    });
+                    isFiltersAlreadyLoaded = true;
+                }
+
                 var renderData = $(template.render(response));
                 resultsContainer.html(renderData);
                 resultsContainer.find('[data-page]').on('click', function (e) {
@@ -267,16 +311,6 @@
                     var postId = $(this).data('preview');
                     sensorPostViewer.openPost(postId, onOpenPost);
                     e.preventDefault();
-                });
-                resultsContainer.find('[type="checkbox"]').on('change', function (e) {
-                    currentPage = 1;
-                    currentGroups = resultsContainer.find('[type="checkbox"]:checked').map(function() {
-                        return this.value;
-                    }).get() || [];
-                    loadData();
-                    $('html, body').stop().animate({
-                        scrollTop: builder.offset().top
-                    }, 1000);
                 });
             })
         }
@@ -300,6 +334,7 @@
                             storePresetButton.hide();
                             currentPage = 1;
                             currentGroups = [];
+                            currentReferences = [];
                             loadData();
                             loadPresetMenu();
                             updateDataButton.show();
@@ -339,6 +374,7 @@
                 }, function (response){
                     currentPage = 1;
                     currentGroups = [];
+                    currentReferences = [];
                     loadData();
                     loadPresetMenu();
                     updateDataButton.show();
@@ -357,6 +393,7 @@
             }, function (response){
                 currentPage = 1;
                 currentGroups = [];
+                currentReferences = [];
                 loadData();
             })
             e.preventDefault();

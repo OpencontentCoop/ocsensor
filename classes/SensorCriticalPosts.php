@@ -112,7 +112,7 @@ class SensorCriticalPosts
         }
     }
 
-    public function find($requestPage = 1, $latestGroups = [])
+    public function find($requestPage = 1, $latestGroups = [], $references = [])
     {
         self::installSchemaIfNeeded();
         $requestPage = (int)$requestPage;
@@ -128,6 +128,7 @@ class SensorCriticalPosts
         }
 
         $where = '';
+        $whereParts = [];
         if (!is_array($latestGroups)){
             $latestGroups = [$latestGroups];
         }
@@ -139,19 +140,48 @@ class SensorCriticalPosts
                 }
             }
             if (!empty($cleanGroups)) {
-                $where = 'WHERE latest_group IN (' . implode(',', $cleanGroups) . ')';
+                $whereParts[] = 'latest_group IN (' . implode(',', $cleanGroups) . ')';
             }
+        }
+        if (!is_array($references)){
+            $references = [$references];
+        }
+        if (count($references) > 0){
+            $cleanReferences = [];
+            foreach ($references as $reference){
+                if (!empty($reference)) {
+                    $cleanReferences[] = "'" . $db->escapeString($reference) . "'";
+                }
+            }
+            if (!empty($cleanReferences)) {
+                $whereParts[] = 'group_reference IN (' . implode(',', $cleanReferences) . ')';
+            }
+        }
+        if (count($whereParts)){
+            $where = 'WHERE ' . implode(' OR ', $whereParts);
         }
         $countUnfiltered = $db->arrayQuery("SELECT count(*) FROM ocsensor_criticals")[0]['count'];
         $count = $db->arrayQuery("SELECT count(*) FROM ocsensor_criticals $where")[0]['count'];
         $results = $db->arrayQuery("SELECT * FROM ocsensor_criticals $where LIMIT $limit OFFSET $offset");
         $groupFacets = $db->arrayQuery('SELECT DISTINCT(latest_group) FROM ocsensor_criticals ORDER BY latest_group;');
-        $groups = [];
+        $referenceFacets = $db->arrayQuery('SELECT DISTINCT(group_reference) FROM ocsensor_criticals ORDER BY group_reference;');
+        $resultGroups = [];
         foreach ($groupFacets as $group){
-            $groups[] = [
-                'name' => $group['latest_group'],
-                'selected' => in_array($group['latest_group'], $latestGroups),
-            ];
+            if (!empty($group['latest_group'])) {
+                $resultGroups[] = [
+                    'name' => $group['latest_group'],
+                    'selected' => in_array($group['latest_group'], $latestGroups),
+                ];
+            }
+        }
+        $resultReferences = [];
+        foreach ($referenceFacets as $referenceFacet){
+            if (!empty($referenceFacet['group_reference'])) {
+                $resultReferences[] = [
+                    'name' => $referenceFacet['group_reference'],
+                    'selected' => in_array($referenceFacet['group_reference'], $references),
+                ];
+            }
         }
         $page = $requestPage;
         $pages = ceil($count/$limit);
@@ -167,7 +197,8 @@ class SensorCriticalPosts
             'limit' => $limit,
             'offset' => $offset,
             'hits' => $this->serializeResults($results),
-            'groups' => $groups,
+            'groups' => $resultGroups,
+            'references' => $resultReferences,
         ];
     }
 
