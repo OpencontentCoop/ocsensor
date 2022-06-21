@@ -303,9 +303,14 @@
               </h4>
             </div>
             <div id="collapse-{{:metadata.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{:metadata.id}}">
-              <div class="panel-body">
+              <div class="panel-body" style="padding: 10px;">
                 {{if ~i18n(data, 'answer')}}{{:~i18n(data, 'answer')}}{{/if}}
-                {{if ~i18n(data, 'category')}}<div class="text-right"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
+                <div class="row">
+                {{if ~i18n(data, 'category')}}<div class="col-xs-6 text-left"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
+                    <div class="col-xs-6 text-right">
+                        <button class="btn btn-default btn-sm" type="button" data-toggle="collapse" data-target="#collapse-{{:metadata.id}}" aria-expanded="false" aria-controls="collapse-{{:metadata.id}}"><small>{{:~sensorTranslate('Close')}}</small></button>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
