@@ -86,6 +86,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
             'comment' =>  $this->translator->translate('Comments'),
             'channel' =>  $this->translator->translate('Channel'),
             'area' =>  $this->translator->translate('Area'),
+            'geo' =>  $this->translator->translate('Location info'),
             'response' =>  $this->translator->translate('Official response'),
             'response_count' =>  $this->translator->translate('Responses'),
             'message_count' =>  $this->translator->translate('Responses'),
@@ -194,6 +195,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 'comment' => $post->comments->count(),
                 'channel' => $post->channel instanceof Channel ? $post->channel->name : '',
                 'area' => count($post->areas) > 0 ? $post->areas[0]->name : '',
+                'geo' => $post->geoLocation instanceof \Opencontent\Sensor\Api\Values\Post\Field\GeoLocation && $post->geoLocation->latitude != 0 ? $post->geoLocation->address : '',
                 'response' => $post->responses->count() > 0 ? $post->responses->last()->text : '',
                 'response_count' => $post->responses->count(),
                 'message_count' => $post->privateMessages->count(),
@@ -205,6 +207,7 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
                 $item['description'] = '***';
                 $item['author'] = '***';
                 $item['response'] = '***';
+                $item['geo'] = '***';
             }
 
             if (
