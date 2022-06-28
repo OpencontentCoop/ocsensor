@@ -16,10 +16,11 @@ $script = eZScript::instance([
 $script->startup();
 
 $options = $script->getOptions(
-    '[id:]',
+    '[id:][truncate]',
     '',
     array(
         'id' => 'Filter by post id',
+        'truncate' => 'Truncate table before'
     )
 );
 $script->initialize();
@@ -31,7 +32,14 @@ $cli = eZCLI::instance();
 
 SensorTimelinePersistentObject::storeHelperTables();
 
+eZDB::setErrorHandling(eZDB::ERROR_HANDLING_EXCEPTIONS);
+
 try {
+    if ($options['truncate']) {
+        $cli->warning('Truncate table');
+        SensorTimelinePersistentObject::truncate();
+    }
+
     $repository = OpenPaSensorRepository::instance();
     if ($options['id']){
         $objects = [eZContentObject::fetch((int)$options['id'])];

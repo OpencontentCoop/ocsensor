@@ -16,7 +16,8 @@ CREATE TABLE ocsensor_timeline (
     post_author_id integer,
     post_author_group_id integer,
     post_status varchar(50),
-    post_type varchar(255)
+    post_type varchar(255),
+    is_internal integer
 );
 ALTER TABLE ONLY ocsensor_timeline ADD CONSTRAINT ocsensor_timeline_pkey PRIMARY KEY (timeline_id, post_id);
 CREATE INDEX IF NOT EXISTS ocsensor_timeline_status_start_idx ON ocsensor_timeline USING btree (post_status, start_at DESC);

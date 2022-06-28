@@ -19,6 +19,13 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             $tableName = 'ocsensor_timeline';
             $res = eZDB::instance()->arrayQuery("SELECT EXISTS (SELECT FROM information_schema.tables WHERE  table_catalog = '$dbName' AND table_name   = '$tableName');");
             self::$isSchemaInstalled = $res[0]['exists'] == 't';
+
+            if (self::$isSchemaInstalled) {
+                $internalColumnExists = eZDB::instance()->arrayQuery("SELECT EXISTS (SELECT FROM information_schema.columns WHERE table_name='$tableName' AND column_name='is_internal')");
+                if ($internalColumnExists[0]['exists'] == 'f'){
+                    eZDB::instance()->query("ALTER TABLE {$tableName} ADD COLUMN 'is_internal' INTEGER");
+                }
+            }
         }
 
         return self::$isSchemaInstalled;
@@ -117,11 +124,21 @@ class SensorTimelinePersistentObject extends eZPersistentObject
                     'datatype' => 'string',
                     'default' => null,
                 ],
+                'is_internal' => [
+                    'name' => 'is_internal',
+                    'datatype' => 'integer',
+                    'default' => null,
+                ],
             ],
             'keys' => ['timeline_id', 'post_id'],
             'class_name' => 'SensorTimelinePersistentObject',
             'name' => 'ocsensor_timeline',
         ];
+    }
+
+    public static function truncate()
+    {
+        eZDB::instance()->query('TRUNCATE ocsensor_timeline');
     }
 
     public static function createOnPublishNewPost(Post $post)
@@ -152,6 +169,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             'post_author_group_id' => $userGroup,
             'post_status' => 'pending',
             'post_type' => $post->type->identifier,
+            'is_internal' => (int)$post->author->isSuperUser,
         ];
         $row = new self($item);
         $row->store();
@@ -296,13 +314,14 @@ class SensorTimelinePersistentObject extends eZPersistentObject
             'post_author_group_id' => $first instanceof SensorTimelinePersistentObject ? $first->attribute('post_author_group_id') : null,
             'post_status' => $status,
             'post_type' => $post->type->identifier,
+            'is_internal' => (int)$post->author->isSuperUser,
         ];
 
         $endAt = $timelineItem->published;
         if ($startAt instanceof DateTime) {
             $duration = $endAt->format('U') - $startAt->format('U');
             $item['start_at'] = $startAt->format(self::DATE_FORMAT);
-            $item['duration'] = $duration;
+            $item['duration'] = max($duration, 0);
         }
 
         $row = new self($item);
