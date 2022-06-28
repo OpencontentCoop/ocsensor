@@ -2031,6 +2031,10 @@
       <source>Show only with unread messages</source>
       <translation>Show only with unread messages</translation>
     </message>
+    <message>
+      <source>Text is required</source>
+      <translation>Text is required</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

@@ -2031,6 +2031,10 @@
       <source>Show only with unread messages</source>
       <translation>Mostro solo le segnalazioni con messaggi da leggere</translation>
     </message>
+    <message>
+      <source>Text is required</source>
+      <translation>Il campo testo è obbligatorio</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

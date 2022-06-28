@@ -105,7 +105,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     protected function doExceptionResult(Exception $exception, $logError = true)
     {
         $result = new ezcMvcResult;
-        $result->variables['message'] = $exception->getMessage();
+        $message = \SensorTranslationHelper::instance()->translate($exception->getMessage());
+        $result->variables['message'] = $message;
 
         if ($logError) {
             $this->getRepository()->getLogger()->error($exception->getMessage());
@@ -120,7 +121,7 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
 
         $result->status = new OcOpenDataErrorResponse(
             $serverErrorCode,
-            $exception->getMessage(),
+            $message,
             $errorType
         );
 
