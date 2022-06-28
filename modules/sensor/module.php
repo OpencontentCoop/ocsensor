@@ -144,6 +144,12 @@ $ViewList['criticals'] = [
     'functions' => ['debug'],
 ];
 
+$ViewList['metrics'] = [
+    'script' => 'metrics.php',
+    'functions' => ['metrics'],
+];
+
+
 $FunctionList = [];
 $FunctionList['use'] = [];
 $FunctionList['debug'] = [];
@@ -153,6 +159,7 @@ $FunctionList['behalf'] = [];
 $FunctionList['ws_user'] = [];
 $FunctionList['user_list'] = [];
 $FunctionList['report'] = [];
+$FunctionList['metrics'] = [];
 
 $charts = [];
 foreach (OpenPaSensorRepository::instance()->getStatisticsService()->getStatisticFactories(true) as $item) {
