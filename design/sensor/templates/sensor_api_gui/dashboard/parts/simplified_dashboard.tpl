@@ -7,15 +7,59 @@
               </button>
             </span>
     </div>
+    <div style="margin: 10px 0">
+        <div class="row">
+            <div class="col-md-3">
+                <select name="status"
+                        class="select form-control"
+                        data-placeholder="{sensor_translate('Status')}">
+                    <option></option>
+                    {foreach sensor_statuses() as $status}
+                        <option value="{$status.identifier|wash()}">{$status.current_translation.name|wash()}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="select form-control" name="area" data-placeholder="{sensor_translate('Area')}">
+                    <option></option>
+                    {foreach sensor_areas().children as $item}
+                        <option value="{$item.id}" style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}">{$item.name|wash()}</option>
+                        {foreach $item.children as $child}
+                            <option data-parent="{$item.id}" value="{$child.id}"
+                                    style="padding-left:{$child.level|mul(10)}px;{if $child.level|eq(0)}font-weight: bold;{/if}">{$child.name|wash()}</option>
+                        {/foreach}
+                    {/foreach}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="select form-control" name="type" data-placeholder="{sensor_translate('Type')}">
+                    <option></option>
+                    {foreach sensor_types() as $item}
+                        <option value="{$item.identifier|wash()}">{$item.name|wash()}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                       name="published"
+                       class="form-control daterange"
+                       placeholder="{sensor_translate('Creation date')}"
+                       value=""/>
+            </div>
+        </div>
+    </div>
 </form>
 <div class="" data-contents></div>
 
 {ezscript_require(array(
     'ezjsc::jquery', 'ezjsc::jqueryio', 'ezjsc::jqueryUI',
     'moment-with-locales.min.js',
+    'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+    'daterangepicker.js',
     'jquery.opendataTools.js',
     'jsrender.js', 'jsrender.helpers.js'
 ))}
+{ezcss_require(array('select2.min.css','daterangepicker.css'))}
 
 {literal}
 <script id="tpl-tree-option" type="text/x-jsrender">
@@ -123,6 +167,19 @@ $(document).ready(function () {ldelim}
         'categories': '{$categories|wash(javascript)}',
         'settings': '{$settings|wash(javascript)}'
     {rdelim};
+    var dateRangePickerLocale = {ldelim}
+        "format": "DD/MM/YYYY",
+        "separator": " - ",
+        "applyLabel": $.sensorTranslate.translate('Apply'),
+        "cancelLabel": $.sensorTranslate.translate('Cancel'),
+        "fromLabel": $.sensorTranslate.translate('From'),
+        "toLabel": $.sensorTranslate.translate('To'),
+        "customRangeLabel": $.sensorTranslate.translate('Custom'),
+        "weekLabel": "W",
+        "daysOfWeek": $.sensorTranslate.translate('Su_Mo_Tu_We_Th_Fr_Sa').split('_'),
+        "monthNames": $.sensorTranslate.translate('January_February_March_April_May_June_July_August_September_October_November_December').split('_'),
+        "firstDay": 1
+    {rdelim};
 {literal}
     var viewContainer = $('[data-contents]');
     var limitPagination = 15;
@@ -130,7 +187,43 @@ $(document).ready(function () {ldelim}
     var queryPerPage = [];
     var template = $.templates('#tpl-dashboard-results');
     var spinner = $($.templates("#tpl-dashboard-spinner").render({}));
+    var form = $('#SearchForm');
+    form.find("select").select2({
+        allowClear: true,
+        templateResult: function (item) {
+            var style = item.element ? $(item.element).attr('style') : '';
+            return $('<span style="display:inline-block;' + style + '">' + item.text + '</span>');
+        }
+    }).on('select2:select', function (e) {
+        viewContainer.html(spinner);
+        buildView();
+    }).on('select2:unselect', function (e) {
+        $(this).val('');
+        viewContainer.html(spinner);
+        buildView();
+    });
 
+    form.find('input[name="published"]').daterangepicker({
+        startDate: moment(),
+        endDate: moment(),
+        opens: 'left',
+        locale: dateRangePickerLocale,
+        ranges: {
+            '{/literal}{sensor_translate('Today')}{literal}': [moment(), moment()],
+            '{/literal}{sensor_translate('Yesterday')}{literal}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '{/literal}{sensor_translate('Last 7 days')}{literal}': [moment().subtract(6, 'days'), moment()],
+            '{/literal}{sensor_translate('Last 30 days')}{literal}': [moment().subtract(29, 'days'), moment()]
+        }
+    }).on('change', function (e) {
+        viewContainer.html(spinner);
+        buildView();
+    }).val('');
+
+    $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+        viewContainer.html(spinner);
+        buildView();
+    });
     var find = function (query, cb, context) {
         $.ajax({
             type: "GET",
@@ -161,13 +254,43 @@ $(document).ready(function () {ldelim}
         });
     };
 
+    var selectArea = form.find('select[name="area"]');
+    var selectType = form.find('select[name="type"]');
+    var selectStatus = form.find('select[name="status"]');
+
     var buildView = function() {
+        var query = [];
         var searchText = '';
         var queryString = $('#SearchText').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
         if (queryString.length > 0){
-            searchText = "(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "') ";
+            query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "')");
         }
-        var paginatedQuery = searchText + 'limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
+        var searchArea = selectArea.val();
+        if (searchArea){
+            var searchAreaList = [searchArea];
+            selectArea.find('[data-parent="'+searchArea+'"]').each(function () {
+                searchAreaList.push($(this).attr('value'));
+            })
+            query.push("area.id in [" + searchAreaList.join(',') + "]");
+        }
+        var searchType = selectType.val();
+        if (searchType){
+            query.push("type in [" + searchType + "]");
+        }
+        var searchPublished = form.find('[name="published"]');
+        if (searchPublished.val().length > 0){
+            query.push("published range [" + searchPublished.data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm') + "," + searchPublished.data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm') + "]");
+        }
+
+        if (selectStatus.length > 0) {
+            var searchStatus = selectStatus.find(':selected').val();
+            if (searchStatus) {
+                query.push("status in [" + searchStatus + "]");
+            }
+        }
+
+        var queryAsString = query.length > 0 ? query.join(' and ') + ' and ' : '';
+        var paginatedQuery = queryAsString + 'limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [modified=>desc]';
         viewContainer.html(spinner);
         find(paginatedQuery, function (response) {
             queryPerPage[currentPage] = paginatedQuery;
@@ -255,7 +378,7 @@ $(document).ready(function () {ldelim}
     viewContainer.html(spinner);
     buildView();
 
-    $('#SearchForm').on('submit', function (e){
+    form.on('submit', function (e){
         viewContainer.html(spinner);
         buildView();
         e.preventDefault();
