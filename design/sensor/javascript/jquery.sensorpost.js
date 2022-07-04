@@ -233,10 +233,16 @@
                 var resetUserAndGroupSelect = function () {
                     userAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
                     $.each(post.operatorsTree.children, function () {
-                        var selected = parseInt(post.currentOwnerUserId) === parseInt(this.id);
-                        var newOption = new Option(this.name, this.id, selected, selected);
-                        newOption.disabled = !this.is_enabled;
-                        if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
+                        var user = this;
+                        var selected = parseInt(post.currentOwnerUserId) === parseInt(user.id);
+                        var newOption = new Option(user.name, user.id, selected, selected);
+                        newOption.disabled = !user.is_enabled;
+                        $.each(post.approvers, function (i,v){
+                            if (v.id === user.id){
+                                newOption.disabled = true;
+                            }
+                        });
+                        if (userAssignSelect.find('option[value="' + user.id + '"]').length === 0) {
                             userAssignSelect.append(newOption);
                         }
                     });
@@ -245,9 +251,15 @@
                     if (post.groupsTree.children.length > 0) {
                         groupAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
                         $.each(post.groupsTree.children, function () {
-                            var selected = parseInt(post.currentOwnerGroupId) === parseInt(this.id);
-                            var newOption = new Option(this.name, this.id, selected, selected);
-                            if (groupAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
+                            var group = this;
+                            var selected = parseInt(post.currentOwnerGroupId) === parseInt(group.id);
+                            var newOption = new Option(group.name, group.id, selected, selected);
+                            $.each(post.approvers, function (i,v){
+                                if (v.id === group.id){
+                                    newOption.disabled = true;
+                                }
+                            });
+                            if (groupAssignSelect.find('option[value="' + group.id + '"]').length === 0) {
                                 groupAssignSelect.append(newOption);
                             }
                         });
