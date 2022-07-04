@@ -207,7 +207,20 @@
                         $.get(plugin.settings.apiEndPoint + '/operators/' + currentUser, function (data) {
                             if ($.inArray(parseInt(currentGroupSelected), data.groups) === -1) {
                                 if (data.groups.length > 0) {
-                                    groupAssignSelect.val(data.groups[0]).trigger('change');
+                                    var hasGroups = false;
+                                    $.each(data.groups, function(){
+                                        if (!hasGroups) {
+                                            var groupId = this;
+                                            var isDisabled = groupAssignSelect.find('option[value="' + groupId + '"]').attr('disabled') === 'disabled';
+                                            if (!isDisabled) {
+                                                groupAssignSelect.val(groupId).trigger('change');
+                                                hasGroups = true;
+                                            }
+                                        }
+                                    });
+                                    if (!hasGroups) {
+                                        groupAssignSelect.val('').trigger('change');
+                                    }
                                 } else {
                                     groupAssignSelect.val('').trigger('change');
                                 }
@@ -254,6 +267,7 @@
                             var group = this;
                             var selected = parseInt(post.currentOwnerGroupId) === parseInt(group.id);
                             var newOption = new Option(group.name, group.id, selected, selected);
+                            newOption.disabled = !group.is_enabled;
                             $.each(post.approvers, function (i,v){
                                 if (v.id === group.id){
                                     newOption.disabled = true;
