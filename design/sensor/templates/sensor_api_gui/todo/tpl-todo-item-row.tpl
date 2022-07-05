@@ -1,6 +1,6 @@
 {literal}
 <script id="tpl-todo-item-row" type="text/x-jsrender">
-<tr style="cursor:pointer;position:relative" data-previewid="{{:id}}">
+<tr style="cursor:pointer;position:relative" data-previewid="{{:id}}" {/literal}{if sensor_settings('HighlightSuperUserPosts')}{literal}{{if is_internal}}class="bg-info"{{/if}}{/literal}{/if}{literal}>
     <td width="1" style="vertical-align:middle{{if has_read == 0}};font-weight:bold{{/if}}">
         <i class="fa fa-circle" style="color:{{if status == 'close'}}#5cb85c{{else status == 'pending'}}#d9534f{{else}}#f0ad4e{{/if}}"></i>
     </td>

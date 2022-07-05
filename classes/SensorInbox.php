@@ -422,6 +422,7 @@ class SensorInbox
                 'id' => (int)$post->id,
                 'is_special' => in_array($post->id, $specialIdList),
                 'is_important' => in_array('important', $post->tags),
+                'is_internal' => $post->author->isSuperUser,
                 'subject' => $post->subject,
                 'modified_datetime' => $this->formatDate($post->modified),
                 'modified_at' => Utils::getDateDiff($post->modified)->getText(),
