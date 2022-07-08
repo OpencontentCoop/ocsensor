@@ -726,9 +726,9 @@
             plugin.removeAlert().startLoading().load(postId);
             var isInHistory = $.inArray(postId, plugin.openedPostHistory) > -1;
             if (!isInHistory) {
-                window.history.pushState({'post_id': postId}, document.title, plugin.settings.postsUrl() + '/' + postId);
                 plugin.openedPostHistory.push(postId);
             }
+            window.history.pushState({'post_id': postId}, document.title, plugin.settings.postsUrl() + '/' + postId);
             if ($.isFunction(cb)) cb.call(context, plugin);
             $(window).scrollTop(0);
         },
