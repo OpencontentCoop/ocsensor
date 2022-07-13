@@ -31,6 +31,27 @@ class SensorWebHookListener extends AbstractListener
         if ($param instanceof SensorEvent){
             if (in_array($param->identifier, $this->events)){
                 $this->repository->getLogger()->info("Emit '{$param->identifier}' to webhook on post {$param->post->id}");
+
+                $trigger = OCWebHookTriggerRegistry::registeredTrigger($param->identifier);
+                if ($trigger instanceof OCWebHookTriggerInterface) {
+                    $webHooks = OCWebHook::fetchEnabledListByTrigger($trigger->getIdentifier());
+                    foreach ($webHooks as $index => $webHook) {
+                        $filters = null;
+                        if ($trigger->useFilter()) {
+                            $currentTriggers = $webHook->getTriggers();
+                            foreach ($currentTriggers as $currentTrigger) {
+                                if ($currentTrigger['identifier'] == $trigger->getIdentifier()) {
+                                    $filters = $currentTrigger['filters'];
+                                }
+                            }
+                        }
+                        if ($trigger->isValidPayload($param->post, $filters)) {
+                            $this->repository->getPostService()->doRefreshPost($param->post);
+                            break;
+                        }
+                    }
+                }
+
                 OCWebHookEmitter::emit(
                     $param->identifier,
                     $param->post,

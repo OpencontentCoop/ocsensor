@@ -336,31 +336,16 @@ class SensorInbox
                 'published' => (int)$post->published->format('U')
             ]];
             foreach ($post->privateMessages->messages as $message) {
-                $doCount = true;
-                if ($context == 'todolist' && !$this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')){
-                    if (!$this->repository->getSensorSettings()->get('ShowInboxAllPrivateMessage')) {
-                        $doCount = $message->getReceiverById($userId);
-                        if (!$doCount) {
-                            foreach ($groupIdList as $groupId) {
-                                if (!$doCount) {
-                                    $doCount = $message->getReceiverById($groupId);
-                                }
-                            }
-                        }
-                    }
+                $isRead = $message->published->format('U') < $lastUserAccess;
+                if (!$isRead) {
+                    $actions[] = 'read_private_message';
                 }
-                if ($doCount) {
-                    $isRead = $message->published->format('U') < $lastUserAccess;
-                    if (!$isRead) {
-                        $actions[] = 'read_private_message';
-                    }
-                    $people[] = [
-                        'id' => (int)$message->creator->id,
-                        'name' => $message->creator->name,
-                        'is_read' => $isRead,
-                        'published' => (int)$message->published->format('U')
-                    ];
-                }
+                $people[] = [
+                    'id' => (int)$message->creator->id,
+                    'name' => $message->creator->name,
+                    'is_read' => $isRead,
+                    'published' => (int)$message->published->format('U')
+                ];
                 $messageCount++;
             }
             foreach ($post->comments->messages as $message) {

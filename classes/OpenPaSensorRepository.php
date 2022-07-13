@@ -507,6 +507,7 @@ class OpenPaSensorRepository extends LegacyRepository
         TreeNode::clearCache($repository->getAreasRootNode()->attribute('node_id'));
         TreeNode::clearCache($repository->getOperatorsRootNode()->attribute('node_id'));
         TreeNode::clearCache($repository->getGroupsRootNode()->attribute('node_id'));
+        TreeNode::clearCache(\eZINI::instance()->variable("UserSettings", "DefaultUserPlacement"));
         $commonPath = eZDir::path(array(eZSys::cacheDirectory(), 'ocopendata', 'sensor'));
         $fileHandler = eZClusterFileHandler::instance();
         $commonSuffix = '';
@@ -778,24 +779,23 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public function getMembersAvailableGroups()
     {
-        $defaultUserPlacement = (int)\eZINI::instance()->variable("UserSettings", "DefaultUserPlacement");
-        $availableGroups = [];
-        if ($this->getSensorSettings()->get('AllowAdditionalMemberGroups')) {
-            /** @var eZContentObjectTreeNode[] $groups */
-            $groups = eZContentObjectTreeNode::subTreeByNodeID([
-                'ClassFilterType' => 'include',
-                'ClassFilterArray' => ['user_group'],
-                'Limitation' => [],
-            ], $defaultUserPlacement);
-            foreach ($groups as $group) {
-                if ($this->getOperatorsRootNode()->attribute('contentobject_id') != $group->attribute('contentobject_id')) {
-                    $availableGroups[$group->attribute('contentobject_id')] = [
-                        'name' => $group->attribute('name'),
-                        'node_id' => $group->attribute('node_id'),
-                    ];
+        if (!isset($this->treeCache['user-groups'])) {
+            $this->treeCache['user-groups'] = [];
+            $defaultUserPlacement = (int)\eZINI::instance()->variable("UserSettings", "DefaultUserPlacement");
+            $defaultUserNode = eZContentObjectTreeNode::fetch($defaultUserPlacement);
+            if ($defaultUserNode instanceof eZContentObjectTreeNode) {
+                $userGroups = TreeNode::walk($defaultUserNode, ['classes' => ['user_group']]);
+                foreach ($userGroups->attribute('children') as $item){
+                    if ($this->getOperatorsRootNode()->attribute('contentobject_id') != $item->attribute('id')) {
+                        $this->treeCache['user-groups'][$item->attribute('id')] = [
+                            'name' => $item->attribute('name'),
+                            'node_id' => $item->attribute('node_id'),
+                        ];
+                    }
                 }
             }
         }
-        return $availableGroups;
+
+        return $this->treeCache['user-groups'];
     }
 }

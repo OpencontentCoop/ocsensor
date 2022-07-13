@@ -43,6 +43,7 @@ class SensorSocketEmitterListener extends AbstractListener
     {
         if ($param instanceof SensorEvent) {
             if (in_array($param->identifier, $this->events)) {
+                $this->repository->getPostService()->doRefreshPost($param->post);
                 $this->send([
                     'identifier' => $param->identifier,
                     'data' => [
