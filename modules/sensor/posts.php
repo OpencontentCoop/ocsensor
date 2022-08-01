@@ -29,6 +29,9 @@ if (!is_numeric($postId)) {
     foreach ($groupTree->attribute('children') as $groupTreeItem) {
         $groupTag = $groupTreeItem->attribute('group');
         $groupTreeItem = $groupTreeItem->toArray();
+        if (!$groupTreeItem['is_enabled']){
+            continue;
+        }
         if (empty($groupTag)) {
             $groupTreeItem['is_tag_group'] = false;
             $tree[$groupTreeItem['id']] = $groupTreeItem;
@@ -47,7 +50,8 @@ if (!is_numeric($postId)) {
                     'id' => $groupTagId,
                     'is_tag_group' => true,
                     'level' => 0,
-                    'children' => [$groupTreeItem]
+                    'children' => [$groupTreeItem],
+                    'children_count' => 0,
                 ];
             }
         }
@@ -55,12 +59,21 @@ if (!is_numeric($postId)) {
     foreach ($tree as $index => $group){
         if ($group['is_tag_group']){
             $tree[$index]['id'] = implode(',', array_column($group['children'], 'id'));
+            $tree[$index]['children_count'] = count($group['children']);
+            if ($tree[$index]['children_count'] < 2){
+                $children = [];
+                foreach ($group['children'] as $child){
+                    $child['level'] = $child['level'] -1;
+                    $children[] = $child;
+                }
+                $tree[$index]['children'] = $children;
+            }
         }
     }
 
     $groups = $isOperator ? $groupTree : [];
     $tpl->setVariable('groups', json_encode($groups));
-    $groupedGroups = $isOperator ? ['children' => array_values($tree)] : [];
+    $groupedGroups = $isOperator ? ['children' => array_values($tree), 'children_count' => count($tree)] : [];
     $tpl->setVariable('grouped_groups', json_encode($groupedGroups));
 
     $Result = array();

@@ -236,6 +236,7 @@
                             $.each(data, function () {
                                 var selected = parseInt(currentUserSelected) === parseInt(this.id);
                                 var newOption = new Option(this.name, this.id, selected, selected);
+                                newOption.disabled = !selected.is_enabled;
                                 if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
                                     userAssignSelect.append(newOption).trigger('change');
                                 }
@@ -264,17 +265,24 @@
                     if (post.groupsTree.children.length > 0) {
                         groupAssignSelect.html('').append(new Option('', '', false, false)).trigger('change');
                         $.each(post.groupsTree.children, function () {
+                            var append = true;
                             var group = this;
                             var selected = parseInt(post.currentOwnerGroupId) === parseInt(group.id);
                             var newOption = new Option(group.name, group.id, selected, selected);
-                            newOption.disabled = !group.is_enabled;
-                            $.each(post.approvers, function (i,v){
-                                if (v.id === group.id){
-                                    newOption.disabled = true;
+                            if (selected && !group.is_enabled) {
+                                newOption.disabled = !group.is_enabled;
+                                $.each(post.approvers, function (i, v) {
+                                    if (v.id === group.id) {
+                                        newOption.disabled = true;
+                                    }
+                                });
+                            }else if (!group.is_enabled){
+                                append = false;
+                            }
+                            if (append) {
+                                if (groupAssignSelect.find('option[value="' + group.id + '"]').length === 0) {
+                                    groupAssignSelect.append(newOption);
                                 }
-                            });
-                            if (groupAssignSelect.find('option[value="' + group.id + '"]').length === 0) {
-                                groupAssignSelect.append(newOption);
                             }
                         });
                         groupAssignSelect.trigger('change');

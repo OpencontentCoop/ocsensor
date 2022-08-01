@@ -29,7 +29,15 @@ try {
         }else{
             $hasGroupsTag = true;
         }
-        $groupsTag[$groupTag][] = $groupTreeItem;
+        if (!isset($groupsTag[$groupTag])){
+            $groupsTag[$groupTag] = [
+                'has_tag' => !empty($groupTreeItem->attribute('group')),
+                'items' => [],
+                'count' => 0,
+            ];
+        }
+        $groupsTag[$groupTag]['items'][] = $groupTreeItem;
+        $groupsTag[$groupTag]['count'] = $groupsTag[$groupTag]['count'] + 1;
 
         $groupReference = $groupTreeItem->attribute('reference');
         if (!empty($groupReference)) {

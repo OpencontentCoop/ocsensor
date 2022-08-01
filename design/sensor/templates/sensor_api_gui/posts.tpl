@@ -56,7 +56,9 @@
 </script>
 <script id="tpl-post-tree-option" type="text/x-jsrender">
 {{for children}}
+    {{if !is_tag_group || (is_tag_group && children_count > 1)}}
     <option value="{{:id}}" style="padding-left:calc(10px*{{:level}});">{{:name}}</option>
+    {{/if}}
     {{include tmpl="#tpl-post-tree-option"/}}
 {{/for}}
 </script>

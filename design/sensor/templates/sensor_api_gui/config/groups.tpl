@@ -63,7 +63,15 @@
                         {{/for}}
                         </span>
                     </td>
-                    <td width="1"><a href="#" data-object={{:metadata.id}}><i class="fa fa-eye"></i></a></td>
+                    <td width="1">
+                        <a href="#" data-object={{:metadata.id}}>
+                            {{if ~i18n(data, 'avoid_assignment')}}
+                                <span class="fa-stack"><i class="fa fa-user fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger"></i></span>
+                            {{else}}
+                                <i class="fa fa-eye"></i>
+                            {{/if}}
+                        </a>
+                    </td>
                     <td width="1">
                         {{if metadata.userAccess.canEdit}}
                             <a href="#" data-edit={{:metadata.id}}><i class="fa fa-pencil"></i></a>
@@ -71,7 +79,9 @@
                     </td>
                     <td width="1">
                         {{if metadata.userAccess.canRemove}}
-                            <a href="#" data-remove={{:metadata.id}}><i class="fa fa-trash"></i></a>
+                            <a href="#" data-remove={{:metadata.id}}>
+                                <i class="fa fa-trash"></i>
+                            </a>
                         {{/if}}
                     </td>
                 </tr>

@@ -140,13 +140,15 @@
                             <label>{sensor_translate('Filter by group in charge')}</label>
                             <select class="select form-control" name="group" multiple>
                                 {def $tag_group_id = 0}
-                                {foreach $groups as $group => $items}
-                                    {if count($items)|gt(1)}
+                                {foreach $groups as $group => $item}
+                                    {if and($item.has_tag, $item.count|gt(0))}
                                         {set $tag_group_id = $tag_group_id|inc()}
-                                        <option value="{$tag_group_id}" style="font-weight: bold">{$group|wash()}</option>
+                                        {if $item.count|gt(1)}
+                                            <option value="{$tag_group_id}" style="font-weight: bold">{$group|wash()}</option>
+                                        {/if}
                                     {/if}
-                                    {foreach $items as $item}
-                                        <option value="{$item.id}"{if count($items)|gt(1)} style="margin-left: 20px"{/if}>{$item.name|wash()}</option>
+                                    {foreach $item.items as $i}
+                                        <option value="{$i.id}"{if $item.count|gt(1)} style="margin-left: 20px"{/if}>{$i.name|wash()}</option>
                                     {/foreach}
                                 {/foreach}
                                 {if $has_group_reference}
