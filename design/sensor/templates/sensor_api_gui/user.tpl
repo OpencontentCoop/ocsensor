@@ -1,6 +1,13 @@
 <section class="hgroup">
     <a href="#" class="reload pull-right"><i class="fa fa-refresh fa-2x"></i></a>
-    <h1>{$user.name|wash()}</h1>
+    <h1>
+        {$user.name|wash()}
+    </h1>
+    <ul class="list-inline">
+        {if $user.fiscalCode}<li><i class="fa fa-address-card"></i> {$user.fiscalCode|wash()}</li>{/if}
+        {if $user.phone}<li><i class="fa fa-phone-square"></i> {$user.phone|wash()}</li>{/if}
+        {if $user.email}<li><i class="fa fa-paper-plane"></i> {$user.email|wash()}</li>{/if}
+    </ul>
 </section>
 
 {ezscript_require(array(

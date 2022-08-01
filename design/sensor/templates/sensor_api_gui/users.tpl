@@ -30,7 +30,7 @@
         <div style="margin: 20px 0"
              data-parent="{$user_parent_node.node_id}"
              data-classes="{$user_classes|implode(',')}"
-             data-limit="50"
+             data-limit="20"
              data-redirect="/sensor/user"></div>
     </div>
 </div>
