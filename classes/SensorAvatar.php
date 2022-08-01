@@ -44,10 +44,11 @@ class SensorAvatar
         $object = eZContentObject::fetch((int)$id);
         $name = $id == 1 ? 'Op' : 'X';
         $content = false;
-        $style= '';
+        $avatar = new LasseRafn\InitialAvatarGenerator\InitialAvatar();
         if ($object instanceof eZContentObject){
             if ($object->attribute('class_identifier') == 'sensor_group'){
-                $style = '&background=8b5d5d&color=f0e9e9';
+                $avatar->background('#8b5d5d');
+                $avatar->color('#f0e9e9');
             }
             $name = $object->attribute('name');
             $dataMap = $object->dataMap();
@@ -60,10 +61,12 @@ class SensorAvatar
                 }
             }
         }else{
-            $style = '&background=666666&color=ffffff';
+            $avatar->background('#666666');
+            $avatar->color('#ffffff');
         }
+        $avatar->name($name);
         if (!$content){
-            $content = file_get_contents('https://eu.ui-avatars.com/api/?name=' . $name . $style);
+            $content = $avatar->generate()->stream('png', 100);
         }
         eZLog::write("Create avatar for user $id", 'sensor.log');
 
