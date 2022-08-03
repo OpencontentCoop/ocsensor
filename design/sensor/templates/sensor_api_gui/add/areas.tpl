@@ -11,7 +11,7 @@
                         data-lat="{$item.geo.coords[0]}" data-lng="{$item.geo.coords[1]}"
                     {/if}
                     style="padding-left:{$item.level|mul(10)}px;{if $item.level|eq(0)}font-weight: bold;{/if}"
-                    {if ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled')}disabled="disabled"{/if}>{$item.name|wash()}</option>
+                    {*if ezini('GeoCoderSettings', 'MarkerMustBeInArea', 'ocsensor.ini')|eq('enabled')}disabled="disabled"{/if*}>{$item.name|wash()}</option>
             {foreach $item.children as $child}
                 <option value="{$child.id}"
                         data-id="{$child.id}"
