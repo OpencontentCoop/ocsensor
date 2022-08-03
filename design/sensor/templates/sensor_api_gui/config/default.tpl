@@ -46,7 +46,9 @@
     <tr>
         <th>
             {sensor_translate('Hide publication consent from the reporter')}
+            {if sensor_settings('DefaultPrivacyStatus')|eq('privacy.private')}
             <br /><small>{sensor_translate('If the option is enabled, the reporter is not asked for consent to make the issue public: operators will not be able to make it public in any way.')}</small>
+            {/if}
         </th>
         <td class="text-center">
             <input type="checkbox" {if $sensor_settings.HidePrivacyChoice}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HidePrivacyChoice"{else}disabled{/if}>

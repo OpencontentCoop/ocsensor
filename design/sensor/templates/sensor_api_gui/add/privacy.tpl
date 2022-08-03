@@ -1,5 +1,5 @@
 {if sensor_settings('HidePrivacyChoice')}
-    <input type="hidden" name="is_private" value="1" />
+    <input type="hidden" name="is_private" value="{cond(sensor_settings('DefaultPrivacyStatus')|eq('privacy.private'), '1', '0')}" />
 {else}
     <style>
         {literal}

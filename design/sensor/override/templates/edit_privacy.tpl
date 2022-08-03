@@ -3,7 +3,7 @@
 
 {if sensor_settings('HidePrivacyChoice')}
     <input type="hidden" name="{$attribute_base}_ezselect_selected_array_{$attribute.id}" value="" />
-    <input type="hidden" name="{$attribute_base}_ezselect_selected_array_{$attribute.id}[]" value="No" />
+    <input type="hidden" name="{$attribute_base}_ezselect_selected_array_{$attribute.id}[]" value="{cond(sensor_settings('DefaultPrivacyStatus')|eq('privacy.private'), 'No', 'Si')}" />
 {else}
     <style>
     {literal}

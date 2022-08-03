@@ -165,7 +165,7 @@
 
                     <div class="post-privacy">
                         {if sensor_settings().HidePrivacyChoice}
-                            <input type="hidden" name="is_private" value="1" />
+                            <input type="hidden" name="is_private" value="{cond(sensor_settings('DefaultPrivacyStatus')|eq('privacy.private'), '1', '0')}" />
                         {else}
                             <div class="row">
                                 <div class="col-xs-8 col-md-6">
@@ -205,7 +205,11 @@
 
                     <div>
                         {if sensor_settings().HidePrivacyChoice}
-                            <p><i class="fa fa-lock"></i> {sensor_translate('Only the %site team will be able to read this report', '', hash('%site', social_pagedata().logo_title))}</p>
+                            {if sensor_settings('DefaultPrivacyStatus')|eq('privacy.private')}
+                                <p><i class="fa fa-lock"></i> {sensor_translate('Only the %site team will be able to read this report', '', hash('%site', social_pagedata().logo_title))}</p>
+                            {else}
+                                <p><i class="fa fa-globe"></i> {sensor_translate('Everyone will be able to read this report')}</p>
+                            {/if}
                         {/if}
                         <p class="text-muted post-help">
                             {sensor_translate('The texts and images inserted must comply with the policies established for %open_privacy_url%privacy%close_privacy_url% and %open_terms_url% the terms of use %close_terms_url%', '', hash(
