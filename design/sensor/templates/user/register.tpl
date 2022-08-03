@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-6 col-md-offset-3">
 
         <form enctype="multipart/form-data" action={"/user/register/"|ezurl} method="post" name="Register"
               class="form-signin">
@@ -39,32 +39,28 @@
             {/if}
 
             {if count($content_attributes)|gt(0)}
-                <div class="row">
-                    <div class="col-md-8">
-                        {foreach $content_attributes as $attribute}
-                            {if $attribute.contentclass_attribute.category|eq('hidden')}<div style="display:none">{else}<div style="margin-bottom: 20px">{/if}
-                                {if $attribute.contentclass_attribute.description} <span class="help-block">{first_set( $attribute.contentclass_attribute.descriptionList[ezini('RegionalSettings', 'Locale')], $attribute.contentclass_attribute.description)|wash}</span>{/if}
-                                <input type="hidden" name="ContentObjectAttribute_id[]" value="{$attribute.id}"/>
-                                <p>{attribute_edit_gui attribute=$attribute html_class="form-control input-lg" placeholder=$attribute.contentclass_attribute.name}</p>
-                            </div>
-                        {/foreach}
-                        <div class="buttonblock">
-                            <input type="hidden" name="UserID" value="{$content_attributes[0].contentobject_id}"/>
-                            {if and( is_set( $checkErrNodeId ), $checkErrNodeId )|not()}
-                                <input class="btn btn-lg btn-primary pull-right" type="submit" id="PublishButton"
-                                       name="PublishButton" value="{'Register'|i18n('design/ocbootstrap/user/register')}"
-                                       onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
-                            {else}
-                                <input class="btn btn-lg btn-info pull-right" type="submit" id="PublishButton"
-                                       name="PublishButton" disabled="disabled"
-                                       value="{'Register'|i18n('design/ocbootstrap/user/register')}"
-                                       onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
-                            {/if}
-                            <input class="btn btn-lg btn-info pull-left" type="submit" id="CancelButton" name="CancelButton"
-                                   value="{'Discard'|i18n('design/ocbootstrap/user/register')}"
-                                   onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
-                        </div>
+                {foreach $content_attributes as $attribute}
+                    {if $attribute.contentclass_attribute.category|eq('hidden')}<div style="display:none">{else}<div style="margin-bottom: 30px">{/if}
+                        {if $attribute.contentclass_attribute.description} <span class="help-block">{first_set( $attribute.contentclass_attribute.descriptionList[ezini('RegionalSettings', 'Locale')], $attribute.contentclass_attribute.description)|wash}</span>{/if}
+                        <input type="hidden" name="ContentObjectAttribute_id[]" value="{$attribute.id}"/>
+                        <p>{attribute_edit_gui attribute=$attribute html_class="form-control input-lg" placeholder=$attribute.contentclass_attribute.name}</p>
                     </div>
+                {/foreach}
+                <div class="buttonblock">
+                    <input type="hidden" name="UserID" value="{$content_attributes[0].contentobject_id}"/>
+                    {if and( is_set( $checkErrNodeId ), $checkErrNodeId )|not()}
+                        <input class="btn btn-lg btn-primary pull-right" type="submit" id="PublishButton"
+                               name="PublishButton" value="{'Register'|i18n('design/ocbootstrap/user/register')}"
+                               onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
+                    {else}
+                        <input class="btn btn-lg btn-info pull-right" type="submit" id="PublishButton"
+                               name="PublishButton" disabled="disabled"
+                               value="{'Register'|i18n('design/ocbootstrap/user/register')}"
+                               onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
+                    {/if}
+                    <input class="btn btn-lg btn-info pull-left" type="submit" id="CancelButton" name="CancelButton"
+                           value="{'Discard'|i18n('design/ocbootstrap/user/register')}"
+                           onclick="window.setTimeout( disableButtons, 1 ); return true;"/>
                 </div>
             {else}
                 <div class="alert alert-danger">
