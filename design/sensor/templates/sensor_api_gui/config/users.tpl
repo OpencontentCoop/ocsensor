@@ -213,7 +213,7 @@
                         subtree = subtreeSelect.val();
                     }
                     query += ' subtree [' + subtree + '] and raw[meta_main_node_id_si] !in [' + subtree + ']'
-                    query += ' sort [last_name=>asc,name=>asc]';
+                    query += ' sort [name=>asc]';
 
                     return query;
                 };

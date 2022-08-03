@@ -78,8 +78,7 @@ class UserCsvImporter
             if (!$user instanceof eZUser) {
                 if ($settings['create_as'] === 'user') {
                     $payload = [
-                        'first_name' => $value['cognome'],
-                        'last_name' => $value['nome'],
+                        'name' => $value['nome'],
                         'email' => $value['email'],
                         'fiscal_code' => $value['codice_fiscale'],
                     ];

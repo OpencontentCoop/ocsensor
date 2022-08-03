@@ -69,9 +69,8 @@ class BehalfUserClassConnector extends ClassConnector
         $codiceFiscale->SetCF($fiscalCode);
 
         if (empty($payload->getData('user_account'))) {
-            $firstName = $submitData['first_name'];
-            $lastName = $submitData['last_name'];
-            $nameNormalized = eZCharTransform::instance()->transformByGroup("{$firstName}.{$lastName}", 'identifier');
+            $firstName = $submitData['name'];
+            $nameNormalized = eZCharTransform::instance()->transformByGroup($firstName, 'identifier');
             $email = $login = $nameNormalized . '@invalid.email';
 
             $user = eZUser::fetchByEmail($email);

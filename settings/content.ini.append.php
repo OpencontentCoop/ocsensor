@@ -7,4 +7,7 @@ CategoryList[controls]=Abilitazioni
 [EditSettings]
 ExtensionDirectories[]=ocsensor
 
+[CodiceFiscaleSettings]
+FormalValidation=disabled
+
 */ ?>
