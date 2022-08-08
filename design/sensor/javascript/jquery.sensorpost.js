@@ -236,7 +236,7 @@
                             $.each(data, function () {
                                 var selected = parseInt(currentUserSelected) === parseInt(this.id);
                                 var newOption = new Option(this.name, this.id, selected, selected);
-                                newOption.disabled = !selected.is_enabled;
+                                newOption.disabled = !this.isEnabled;
                                 if (userAssignSelect.find('option[value="' + this.id + '"]').length === 0) {
                                     userAssignSelect.append(newOption).trigger('change');
                                 }
