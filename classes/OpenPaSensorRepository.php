@@ -223,6 +223,9 @@ class OpenPaSensorRepository extends LegacyRepository
                     $targets = explode(';', $targetSettings);
                     $notificationType->setTarget($role, $targets);
                 }
+                if (isset($typeSettings['Group'])){
+                    $notificationType->group = trim($typeSettings['Group']);
+                }
 //                $this->getLogger()->debug("Add $notificationType->identifier",
 //                    ['listener' => $listenerClass, 'targets' => json_encode($notificationType->getTargets())]
 //                );
