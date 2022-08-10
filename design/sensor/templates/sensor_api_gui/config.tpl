@@ -24,7 +24,7 @@
   'fields/OpenStreetMap.js',
   'fields/DrawMap.js',
   'fields/RelationBrowse.js',
-  concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
+  concat('https://www.recaptcha.net/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
   'fields/Recaptcha.js',
   'jquery.opendataform.js',
   'bootstrap-toggle.min.js'
