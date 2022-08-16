@@ -380,7 +380,7 @@
                         queryTokenizer: Bloodhound.tokenizers.whitespace,
                         datumTokenizer: Bloodhound.tokenizers.whitespace,
                         remote: {
-                            url: '/api/sensor_gui/users?q=%QUERY',
+                            url: '/api/sensor_gui/users_as_organizations?q=%QUERY',
                             wildcard: '%QUERY',
                             transform: function (response) {
                                 //console.log(response);
@@ -447,7 +447,7 @@
                     class: 'user',
                     parent: plugin.settings.default_user_placement
                 }, {
-                    connector: 'create-user',
+                    connector: 'create-organization',
                     onSuccess: function (response) {
                         behalfOfSearch.addClass('hide');
                         behalfOfCreate.addClass('hide');
@@ -760,7 +760,7 @@
                     checkBehalfFields();
                     addPostGui.show().find('.post-subject input').focus();
                     behalfOfView.find('i').trigger('click');
-                    behalfOfAnonymous.trigger('click');
+                    //behalfOfAnonymous.trigger('click');
                     plugin.refreshViewPort();
                     plugin.refreshMap();
                     if (plugin.selectedArea > 0){

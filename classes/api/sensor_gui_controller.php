@@ -768,6 +768,18 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         return $result;
     }
 
+    public function doLoadUsersAsOrganizations()
+    {
+        try {
+            $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
+            $result = $controller->loadUsers(true);
+        } catch (Exception $e) {
+            $result = $this->doExceptionResult($e);
+        }
+
+        return $result;
+    }
+
     public function doLoadInbox()
     {
         try {

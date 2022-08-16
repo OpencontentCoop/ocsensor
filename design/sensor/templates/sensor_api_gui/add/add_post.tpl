@@ -34,7 +34,7 @@
                         {if $can_behalf}
                             <li role="presentation" class="nav-item">
                                 <a tabindex="4" href="#step-behalf" class="btn btn-lg btn-default" data-toggle="tab" aria-controls="step-behalf" role="tab" title="{sensor_translate('Reporter info')}" style="position: relative">
-                                    <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-user fa-2x text-muted"></i>
+                                    <i class="add-icon fa fa-plus-circle text-primary"></i><i class="fa fa-group fa-2x text-muted"></i>
                                 </a>
                             </li>
                         {/if}

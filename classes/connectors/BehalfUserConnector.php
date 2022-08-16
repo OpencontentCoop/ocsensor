@@ -5,12 +5,12 @@ use Opencontent\Sensor\Api\Exception\InvalidInputException;
 
 class BehalfUserConnector extends AbstractBaseConnector
 {
-    private static $isLoaded;
-    private $language;
+    protected static $isLoaded;
+    protected $language;
     /**
      * @var BehalfUserClassConnector
      */
-    private $classConnector;
+    protected $classConnector;
 
     public function runService($serviceIdentifier)
     {
@@ -18,7 +18,7 @@ class BehalfUserConnector extends AbstractBaseConnector
         return parent::runService($serviceIdentifier);
     }
 
-    private function load()
+    protected function load()
     {
         if (!self::$isLoaded) {
             if (OpenPaSensorRepository::instance()->getCurrentUser()->behalfOfMode !== true) {

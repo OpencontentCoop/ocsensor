@@ -1,4 +1,4 @@
-<div class="post-subject">
+<div class="post-subject hide">
     <label class="form-group has-float-label">
         <select id="behalf-of-channel" name="channel" class="form-control" tabindex="1">
             <option></option>
@@ -26,7 +26,7 @@
             <a id="behalf-of-create-button" href="#" class="btn btn-default"><i class="fa fa-plus"></i> {sensor_translate('Create user')}</a>
         </span>
     </div>
-    <div class="checkbox" style="width: 100%;">
+    <div class="checkbox hide" style="width: 100%;">
         <label>
             <input type="checkbox" id="behalf-of-anonymous" data-userid="{ezini('UserSettings', 'AnonymousUserID')}"> {sensor_translate('There is no information about the reporter')}
         </label>
