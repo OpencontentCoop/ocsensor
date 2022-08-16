@@ -132,6 +132,24 @@
         </div>
     {{/if}}
 
+    {{if capabilities.can_send_private_message}}
+        <div class="widget">
+            {{if capabilities.can_set_protocol}}
+                <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
+            {{/if}}
+            <strong class="widget-title">{{:~sensorTranslate('Protocollo')}}</strong>
+            <p class="widget-content">
+                {{if protocols && (protocols[0] || protocols[1] || protocols[2])}}
+                    {{if protocols[0]}}<strong>{{:~sensorTranslate('Protocollo1')}}</strong>: {{:protocols[0]}}<br />{{/if}}
+                    {{if protocols[1]}}<strong>{{:~sensorTranslate('Protocollo2')}}</strong>: {{:protocols[1]}}<br />{{/if}}
+                    {{if protocols[2]}}<strong>{{:~sensorTranslate('Protocollo3')}}</strong>: {{:protocols[2]}}{{/if}}
+                {{else}}<em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
+                {{/if}}
+            </p>
+            {{include tmpl="#tpl-post-set_protocol"/}}
+        </div>
+    {{/if}}
+
     <div class="widget">
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
@@ -493,6 +511,29 @@
                type="submit"
                data-action="reopen"
                value="{{:~sensorTranslate('Reopen issue')}}" />
+    </div>
+{{/if}}
+</script>
+<script id="tpl-post-set_protocol" type="text/x-jsrender">
+{{if capabilities.can_set_protocol}}
+    <div class="form-group hide" data-action-wrapper>
+        <ul class="list-unstyled">
+            <li>
+                <label for="protocol1">{{:~sensorTranslate('Protocollo1')}}</label>
+                <input type="text" data-value="protocol1" id="protocol1" class="form-control" value="{{if protocols && protocols[0]}}{{:protocols[0]}}{{/if}}" style="height: 30px;"/>
+            </li>
+            <li>
+                <label for="protocol2">{{:~sensorTranslate('Protocollo2')}}</label>
+                <input type="text" data-value="protocol2" id="protocol2" class="form-control" value="{{if protocols && protocols[1]}}{{:protocols[1]}}{{/if}}" style="height: 30px;"/>
+            </li>
+            <li>
+                <label for="protocol3">{{:~sensorTranslate('Protocollo3')}}</label>
+                <input type="text" data-value="protocol3" id="protocol3" class="form-control" value="{{if protocols && protocols[2]}}{{:protocols[2]}}{{/if}}" style="height: 30px;"/>
+            </li>
+            <li class="clearfix">
+                <input style="margin-top: 5px;" data-action="set_protocol" data-parameters="protocol1,protocol2,protocol3" class="btn btn-sm btn-default pull-right" type="submit" value="{{:~sensorTranslate('Select')}}" />
+            </li>
+        </ul>
     </div>
 {{/if}}
 </script>
