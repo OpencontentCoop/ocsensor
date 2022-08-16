@@ -4,6 +4,14 @@ use Opencontent\Sensor\Legacy\UserService;
 
 class BehalfUserAsOrganizationClassConnector extends BehalfUserClassConnector
 {
+    public function getData()
+    {
+        $data = parent::getData();
+        $data['user_type'] = UserService::USER_TYPES[1];
+        return $data;
+    }
+
+
     public function getOptions()
     {
         $options = parent::getOptions();
