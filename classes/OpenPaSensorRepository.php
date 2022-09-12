@@ -92,6 +92,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetTags();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetProtocol();
+            $permissionDefinitions[] = new PermissionDefinitions\CanSubscribe(eZUser::currentUserID());
             $this->setPermissionDefinitions($permissionDefinitions);
 
             $actionDefinitions = [];
@@ -129,6 +130,8 @@ class OpenPaSensorRepository extends LegacyRepository
             $actionDefinitions[] = new ActionDefinitions\RemoveFileAction();
             $actionDefinitions[] = new ActionDefinitions\SetTagsAction();
             $actionDefinitions[] = new ActionDefinitions\SetProtocolAction();
+            $actionDefinitions[] = new ActionDefinitions\SubscribeAction();
+            $actionDefinitions[] = new ActionDefinitions\RemoveSubscriptionAction();
             $this->setActionDefinitions($actionDefinitions);
 
             $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));

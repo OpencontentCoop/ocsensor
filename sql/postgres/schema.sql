@@ -61,3 +61,21 @@ ALTER TABLE ONLY ocsensor_operator ADD CONSTRAINT ocsensor_operator_pkey PRIMARY
 --    group_id integer NOT NULL
 --);
 --ALTER TABLE ONLY ocsensor_operator_group ADD CONSTRAINT ocsensor_operator_group_pkey PRIMARY KEY (operator_id, group_id);
+
+CREATE SEQUENCE ocsensorsubscription_id_seq
+    START 1
+    INCREMENT 1
+    MAXVALUE 9223372036854775807
+    MINVALUE 1
+    CACHE 1;
+
+CREATE TABLE ocsensor_subscription (
+   id integer DEFAULT nextval('ocsensorsubscription_id_seq'::text) NOT NULL,
+   created_at integer,
+   post_id integer DEFAULT 0 NOT NULL,
+   user_id integer DEFAULT 0 NOT NULL
+);
+ALTER TABLE ONLY ocsensor_subscription ADD CONSTRAINT ocsensor_subscription_pkey PRIMARY KEY (post_id, user_id);
+CREATE INDEX IF NOT EXISTS ocsensor_subscription_id ON ocsensor_subscription USING btree (id);
+CREATE INDEX IF NOT EXISTS ocsensor_subscription_post ON ocsensor_subscription USING btree (post_id);
+CREATE INDEX IF NOT EXISTS ocsensor_subscription_user ON ocsensor_subscription USING btree (user_id);

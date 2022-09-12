@@ -5,6 +5,7 @@
     <div class="col-md-9">
         <div class="bordered">
             {{include tmpl="#tpl-post-detail"/}}
+            {{include tmpl="#tpl-post-subscription"/}}
             {{include tmpl="#tpl-post-messages"/}}
         </div>
     </div>

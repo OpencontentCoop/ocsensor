@@ -97,3 +97,4 @@
 
 </script>
 {/literal}
+{include uri='design:sensor_api_gui/posts/v2/parts/tpl-post-subscription.tpl'}
