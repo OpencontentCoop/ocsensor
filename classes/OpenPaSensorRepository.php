@@ -92,7 +92,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetTags();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetProtocol();
-            $permissionDefinitions[] = new PermissionDefinitions\CanSubscribe(eZUser::currentUserID());
+            $permissionDefinitions[] = new PermissionDefinitions\CanSubscribe();
             $this->setPermissionDefinitions($permissionDefinitions);
 
             $actionDefinitions = [];
