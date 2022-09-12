@@ -1,8 +1,8 @@
 {literal}
 <script id="tpl-post-subscription" type="text/x-jsrender">
     {{if capabilities.can_subscribe}}
-        {{if author.isSubscriber}}
-        <div class="panel panel-default">
+        {{if capabilities.is_subscriber}}
+        <div class="panel panel-default" style="margin-top:20px">
             <div class="panel-heading">
                 <div class="media">
                     <div class="pull-right" data-action-wrapper>
@@ -21,7 +21,7 @@
             </div>
         </div>
         {{else}}
-        <div class="panel panel-info">
+        <div class="panel panel-info" style="margin-top:20px">
             <div class="panel-heading">
                 <div class="media">
                     <div class="pull-right" data-action-wrapper>
@@ -40,8 +40,8 @@
             </div>
         </div>
         {{/if}}
-    {{else author.isSubscriber}}
-        <div class="panel panel-info">
+    {{else capabilities.is_subscriber}}
+        <div class="panel panel-info" style="margin-top:20px">
             <div class="panel-heading">
                 <div class="media">
                     <div class="media-body">

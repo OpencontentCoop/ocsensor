@@ -7,6 +7,7 @@ use Opencontent\Sensor\Api\Exception\InvalidArgumentException;
 use Opencontent\Sensor\Api\Exception\InvalidInputException;
 use Opencontent\Sensor\Api\Values\Group;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
+use Opencontent\Sensor\Api\Values\Subscription;
 use Opencontent\Sensor\Legacy\SearchService;
 use Opencontent\Sensor\OpenApi;
 use Opencontent\Sensor\Legacy\Utils\MimeIcon;
@@ -351,6 +352,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         $data[] = [
             'identifier' => 'is_a',
             'grant' => $user->type
+        ];
+        $data[] = [
+            'identifier' => 'is_subscriber',
+            'grant' => $this->getRepository()->getSubscriptionService()->getUserSubscription($user, $post) instanceof Subscription,
         ];
         $lastPrivateMessage = -1;
         foreach ($post->privateMessages->messages as $message) {
