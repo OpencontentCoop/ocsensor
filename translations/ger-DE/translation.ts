@@ -2035,6 +2035,54 @@
       <source>Text is required</source>
       <translation>Text ist erforderlich</translation>
     </message>
+    <message>
+      <source>Show Inbox shortcuts</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Enable Inbox filter</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Enable approver edit</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show faq categories</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Show all private messages in Inbox</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Enable smart duplication gui</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Private note mandatory before reassign</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Add reporter operator as observer</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Enable super groups</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Auto close super groups posts</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Category mandatory for super groups</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Add super groups operator as observer</source>
+      <translation type="unfinished"/>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

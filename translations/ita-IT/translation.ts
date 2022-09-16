@@ -2035,6 +2035,54 @@
       <source>Text is required</source>
       <translation>Il campo testo è obbligatorio</translation>
     </message>
+    <message>
+      <source>Show Inbox shortcuts</source>
+      <translation>Visualizza le scorciatoie nella lista di Inbox</translation>
+    </message>
+    <message>
+      <source>Enable Inbox filter</source>
+      <translation>Abilita i filtri in Inbox</translation>
+    </message>
+    <message>
+      <source>Enable approver edit</source>
+      <translation>Abilita la modifica del riferimento per il cittadino</translation>
+    </message>
+    <message>
+      <source>Show faq categories</source>
+      <translation>Visualizza le categorie delle faq</translation>
+    </message>
+    <message>
+      <source>Show all private messages in Inbox</source>
+      <translation>Visualizza in Inbox tutti i messaggi privati (anziché solo quelli indirizzati all'utente)</translation>
+    </message>
+    <message>
+      <source>Enable smart duplication gui</source>
+      <translation>Abilita l'interfaccia smart per la duplicazione delle segnalazioni</translation>
+    </message>
+    <message>
+      <source>Private note mandatory before reassign</source>
+      <translation>Impone la redazione di una nota privata prima della riassegnazione</translation>
+    </message>
+    <message>
+      <source>Add reporter operator as observer</source>
+      <translation>Aggiunge automaticamente gli utenti reporter come osservatori delle segnalazioni che aprono</translation>
+    </message>
+    <message>
+      <source>Enable super groups</source>
+      <translation>Abilita la gestione dei gruppi di utenti</translation>
+    </message>
+    <message>
+      <source>Auto close super groups posts</source>
+      <translation>Chiude automaticamente le segnalazioni inserite dai gruppi di utenti</translation>
+    </message>
+    <message>
+      <source>Category mandatory for super groups</source>
+      <translation>Impone come obbligatoria la categoria per i gruppi di utenti</translation>
+    </message>
+    <message>
+      <source>Add super groups operator as observer</source>
+      <translation>Aggiunge automaticamente gli operatori appartenenti a gruppi di utenti come osservatori delle segnalazioni che aprono</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

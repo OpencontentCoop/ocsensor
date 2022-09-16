@@ -2035,6 +2035,54 @@
       <source>Text is required</source>
       <translation>Text is required</translation>
     </message>
+    <message>
+      <source>Show Inbox shortcuts</source>
+      <translation>Show Inbox shortcuts</translation>
+    </message>
+    <message>
+      <source>Enable Inbox filter</source>
+      <translation>Enable Inbox filter</translation>
+    </message>
+    <message>
+      <source>Enable approver edit</source>
+      <translation>Enable approver edit</translation>
+    </message>
+    <message>
+      <source>Show faq categories</source>
+      <translation>Show faq categories</translation>
+    </message>
+    <message>
+      <source>Show all private messages in Inbox</source>
+      <translation>Show all private messages in Inbox</translation>
+    </message>
+    <message>
+      <source>Enable smart duplication gui</source>
+      <translation>Enable smart duplication gui</translation>
+    </message>
+    <message>
+      <source>Private note mandatory before reassign</source>
+      <translation>Private note mandatory before reassign</translation>
+    </message>
+    <message>
+      <source>Add reporter operator as observer</source>
+      <translation>Add reporter operator as observer</translation>
+    </message>
+    <message>
+      <source>Enable super groups</source>
+      <translation>Enable super groups</translation>
+    </message>
+    <message>
+      <source>Auto close super groups posts</source>
+      <translation>Auto close super groups posts</translation>
+    </message>
+    <message>
+      <source>Category mandatory for super groups</source>
+      <translation>Category mandatory for super groups</translation>
+    </message>
+    <message>
+      <source>Add super groups operator as observer</source>
+      <translation>Add super groups operator as observer</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

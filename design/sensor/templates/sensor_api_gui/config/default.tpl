@@ -149,51 +149,51 @@
         </td>
     </tr>
     <tr>
-        <th>Visualizza le scorciatoie nella lista di Inbox</th>
+        <th>{sensor_translate('Show Inbox shortcuts')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.UseInboxContextActions}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Abilita i filtri in Inbox</th>
+        <th>{sensor_translate('Enable Inbox filter')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.UseInboxFilters}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Abilita la modifica del riferimento per il cittadino</th>
+        <th>{sensor_translate('Enable approver edit')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.AllowChangeApprover}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Visualizza le categorie delle faq</th>
+        <th>{sensor_translate('Show faq categories')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.ShowFaqCategories}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Visualizza in Inbox tutti i messaggi privati (anziché solo quelli indirizzati all'utente)</th>
+        <th>{sensor_translate('Show all private messages in Inbox')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.ShowInboxAllPrivateMessage}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Abilita l'interfaccia smart per la duplicazione delle segnalazioni</th>
+        <th>{sensor_translate('Enable smart duplication gui')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.SmartDuplicationGui}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Impone la redazione di una nota privata prima della riassegnazione</th>
+        <th>{sensor_translate('Private note mandatory before reassign')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.AddPrivateMessageBeforeReassign}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Aggiunge automaticamente gli utenti reporter come osservatori delle segnalazioni che aprono</th>
+        <th>{sensor_translate('Add reporter operator as observer')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.AddBehalfOfUserAsObserver}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Abilita la gestione dei gruppi di utenti</th>
+        <th>{sensor_translate('Enable super groups')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.AllowAdditionalMemberGroups}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Chiude automaticamente le segnalazioni inserite dai gruppi di utenti</th>
+        <th>{sensor_translate('Auto close super groups posts')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.CloseOnUserGroupPostFix}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Impone come obbligatoria la categoria per i gruppi di utenti</th>
+        <th>{sensor_translate('Category mandatory for super groups')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.RequireCategoryForAdditionalMemberGroups}checked{/if} disabled data-toggleconfig></td>
     </tr>
     <tr>
-        <th>Aggiunge automaticamente gli operatori appartenenti a gruppi di utenti come osservatori delle segnalazioni che aprono</th>
+        <th>{sensor_translate('Add super groups operator as observer')}</th>
         <td class="text-center"><input type="checkbox" {if $sensor_settings.AddOperatorSuperUserAsObserver}checked{/if} disabled data-toggleconfig></td>
     </tr>
 
