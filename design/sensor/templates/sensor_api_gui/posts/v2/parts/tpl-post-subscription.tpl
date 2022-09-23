@@ -28,7 +28,9 @@
                         <a href="#" class="btn button-icon btn-info"
                            data-action="subscribe"
                            style="margin-left:5px"
-                           title="{{:~sensorTranslate('Add subscription')}}"><i class="fa fa-thumbs-up"></i></a>
+                           title="{{:~sensorTranslate('Add subscription')}}">
+                           <i class="fa fa-thumbs-up"></i>
+                       </a>
                     </div>
                     <div class="media-body">
                         <p class="comment_name">
@@ -44,6 +46,12 @@
         <div class="panel panel-info" style="margin-top:20px">
             <div class="panel-heading">
                 <div class="media">
+                    <div class="pull-right" data-action-wrapper>
+                        <span class="btn button-icon btn-default"
+                           style="margin-left:5px">
+                           <i class="fa fa-thumbs-up"></i>
+                       </a>
+                    </div>
                     <div class="media-body">
                         <p class="comment_name">
                             <strong>{{:~sensorTranslate('You have subscribed')}}</strong>

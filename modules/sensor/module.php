@@ -149,6 +149,11 @@ $ViewList['metrics'] = [
     'functions' => ['metrics'],
 ];
 
+$ViewList['subscriptions'] = [
+    'script' => 'subscriptions.php',
+    'functions' => ['use'],
+];
+
 
 $FunctionList = [];
 $FunctionList['use'] = [];

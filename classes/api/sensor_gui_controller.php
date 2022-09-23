@@ -357,6 +357,10 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
             'identifier' => 'is_subscriber',
             'grant' => $this->getRepository()->getSubscriptionService()->getUserSubscription($user, $post) instanceof Subscription,
         ];
+//        $data[] = [
+//            'identifier' => 'subscriptions_count',
+//            'grant' => $this->getRepository()->getSubscriptionService()->countSubscriptionsByPost($post),
+//        ];
         $lastPrivateMessage = -1;
         foreach ($post->privateMessages->messages as $message) {
             if ($message->creator->id == $user->id) {
