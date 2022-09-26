@@ -157,8 +157,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         $user = $this->getRepository()->getCurrentUser();
         try {
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
-//            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
+//            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $result = new ezpRestMvcResult();
             $this->getRepository()->getActionService()->runAction(new Action('read'), $post);
             $result->variables = [
@@ -210,7 +210,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
         }
 
         try {
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+//            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $apiPost = $this->loadApiPost($post);
             $this->getRepository()->getActionService()->runAction(new Action('read'), $post);
             $result = new ezpRestMvcResult();
@@ -566,7 +567,8 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $actions = explode(',', $this->Action);
-            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+//            $post = $this->getRepository()->getSearchService()->searchPost($this->Id);
+            $post = $this->getRepository()->getPostService()->loadPost($this->Id);
             $payload = $this->getPayload();
 
             foreach ($actions as $action) {
