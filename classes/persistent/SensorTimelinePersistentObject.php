@@ -261,7 +261,7 @@ class SensorTimelinePersistentObject extends eZPersistentObject
                     $startAt = $post->published;
                 }
                 $status = 'open';
-                $action = $previous instanceof SensorTimelinePersistentObject && $previous->attribute('status_at_end') == 'reopened' ? 'reassigning' : 'reading';
+                $action = 'reading';
                 break;
 
             case 'assigned':
