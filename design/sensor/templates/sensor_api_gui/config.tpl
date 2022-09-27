@@ -41,7 +41,7 @@
   'bootstrap-toggle.min.css'
 ))}
 <script>
-  $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
+  $.opendataTools.settings('accessPath', "{''|ezurl(no)}");
   $.opendataTools.settings('language', "{$current_language}");
   $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
   $.opendataTools.settings('locale', "{$moment_language}");

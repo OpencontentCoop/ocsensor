@@ -9,7 +9,7 @@
                     {{for comments ~currentUserId=currentUserId ~capabilities=capabilities}}
                         <div class="row">
                             <figure class="col-xs-2 col-md-2">
-                                <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" />
+                                <img src="{{:accessPath}}/sensor/avatar/{{:creator.id}}" class="img-circle" />
                             </figure>
                             <div class="col-xs-10 col-md-10">
                                 <div class="comment_name">

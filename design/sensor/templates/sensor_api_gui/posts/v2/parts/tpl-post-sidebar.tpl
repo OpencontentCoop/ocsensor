@@ -7,9 +7,9 @@
         {{/if}}
         <strong class="widget-title">Riferimento</strong>
         <ul class="list-unstyled widget-content">
-        {{for approvers}}
+        {{for approvers ~accessPath=accessPath}}
             <li>
-                <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                <img src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
                 {{:name}}
             </li>
         {{else}}
@@ -29,9 +29,9 @@
             {{/if}}
             <strong class="widget-title">Incaricato</strong>
             <ul class="list-unstyled widget-content">
-            {{for owners}}
+            {{for owners ~accessPath=accessPath}}
                 <li>
-                    <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                    <img src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
                     {{:name}}
                 </li>
             {{else}}
@@ -51,9 +51,9 @@
             {{/if}}
             <strong class="widget-title">Osservatori</strong>
             <ul class="list-unstyled widget-content">
-            {{for observers ~capabilities=capabilities}}
+            {{for observers ~capabilities=capabilities ~accessPath=accessPath}}
                 <li data-action-wrapper>
-                    <img src="/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+                    <img src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
                     {{:name}}
                     {{if ~capabilities.can_remove_observer}}
                     <a href="#"

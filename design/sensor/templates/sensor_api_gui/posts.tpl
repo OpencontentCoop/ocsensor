@@ -33,7 +33,7 @@
 {def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 <script>
 $(document).ready(function () {ldelim}
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
+    $.opendataTools.settings('accessPath', "{''|ezurl(no)}");
     $.opendataTools.settings('language', "{$current_language}");
     $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
     $.opendataTools.settings('locale', "{$moment_language}");
@@ -262,6 +262,7 @@ $(document).ready(function () {ldelim}
                         }
                         post.typeCss = typeCss;
                         var popup = new L.Popup({maxHeight: 360});
+                        post.accessPath = $.opendataTools.settings('accessPath');
                         popup.setContent($(templatePopup.render(post)).html());
                         layer.bindPopup(popup);
                     }
@@ -327,6 +328,7 @@ $(document).ready(function () {ldelim}
                     typeCss = 'danger';
                 }
                 post.typeCss = typeCss;
+                post.accessPath = $.opendataTools.settings('accessPath');
             });
             var renderData = $(template.render(response));
             viewContainer.html(renderData);

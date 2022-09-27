@@ -217,7 +217,7 @@ $(document).ready(function () {ldelim}
        $('.searchform').removeClass('hide');
     {rdelim});
 
-    $.opendataTools.settings('accessPath', "{''|ezurl(no,full)}");
+    $.opendataTools.settings('accessPath', "{''|ezurl(no)}");
     $.opendataTools.settings('language', "{$current_language}");
     $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
     $.opendataTools.settings('locale', "{$moment_language}");
@@ -614,6 +614,7 @@ $(document).ready(function () {ldelim}
                 }else{
                     post.lastTimelineItem = false;
                 }
+                post.accessPath = $.opendataTools.settings('accessPath');
             });
             var renderData = $(template.render(response));
             viewContainer.html(renderData);

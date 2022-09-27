@@ -6,4 +6,4 @@
   {set $dimensions = concat( $dimensions, 'width="', $width, '" ' )}
 {/if}
 
-<img src="/sensor/avatar/{$object.id}" class="img-circle" {$dimensions} style="max-width: 90px; max-height: 90px" />
+<img src="{concat('/sensor/avatar/', $object.id)|ezurl(no)}" class="img-circle" {$dimensions} style="max-width: 90px; max-height: 90px" />
