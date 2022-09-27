@@ -6,10 +6,10 @@
             {{if comments.length > 0}}
                 <div class="comment">
                     <h4>{/literal}{'Commenti'|i18n('sensor/messages')}{literal}</h4>
-                    {{for comments ~currentUserId=currentUserId ~capabilities=capabilities}}
+                    {{for comments ~currentUserId=currentUserId ~capabilities=capabilities ~accessPath=accessPath}}
                         <div class="row">
                             <figure class="col-xs-2 col-md-2">
-                                <img src="{{:accessPath}}/sensor/avatar/{{:creator.id}}" class="img-circle" />
+                                <img src="{{:~accessPath}}/sensor/avatar/{{:creator.id}}" class="img-circle" />
                             </figure>
                             <div class="col-xs-10 col-md-10">
                                 <div class="comment_name">

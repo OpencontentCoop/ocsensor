@@ -5,12 +5,12 @@
         {{if _messages.length > 0}}
 
             <div class="message">
-                {{for _messages ~currentUserId=currentUserId ~capabilities=capabilities}}
+                {{for _messages ~currentUserId=currentUserId ~capabilities=capabilities ~accessPath=accessPath}}
                     <div class="message-{{:_type}} panel panel-{{if _type == 'system'}}default{{else _type == 'private'}}warning{{else _type == 'public'}}success{{else}}primary{{/if}}">
                         <div class="panel-heading"{{if _type == 'system'}} style="border-bottom: none;"{{/if}}>
                             <div class="media">
                                 <div class="pull-left">
-                                    <img src="{{:accessPath}}/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    <img src="{{:~accessPath}}/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 50px; height: 50px; object-fit: cover;" />
                                 </div>
                                 <div class="media-body">
                                     <p class="comment_name">

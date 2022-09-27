@@ -80,22 +80,22 @@
                 </td>
                 <td>
                     <ul class="list-inline">
-                        {{for approvers}}
-                            <li><img title="{{:name}}" src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
+                        {{for approvers ~accessPath=accessPath}}
+                            <li><img title="{{:name}}" src="{{:~accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
                         {{/for}}
                     </ul>
                 </td>
                 <td>
                     <ul class="list-inline">
-                        {{for owners ~count=owners.length}}
-                            <li><img title="{{:name}}" src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
+                        {{for owners ~count=owners.length ~accessPath=accessPath}}
+                            <li><img title="{{:name}}" src="{{:~accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
                         {{/for}}
                     </ul>
                 </td>
                 <td>
                     <ul class="list-inline">
-                        {{for observers ~count=owners.length}}
-                            <li><img title="{{:name}}" src="{{:accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
+                        {{for observers ~count=owners.length ~accessPath=accessPath}}
+                            <li><img title="{{:name}}" src="{{:~accessPath}}/sensor/avatar/{{:id}}" class="img-circle" style="width: 30px; height: 30px; object-fit: cover; margin-right:5px" /></li>
                         {{/for}}
                     </ul>
                 </td>

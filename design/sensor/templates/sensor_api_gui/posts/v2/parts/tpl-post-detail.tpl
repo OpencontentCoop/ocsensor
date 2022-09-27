@@ -13,7 +13,7 @@
     {{if relatedItems && relatedItems.length > 0}}
     <ul class="list-inline">
         <li>{/literal}{'Segnalazioni correlate'|i18n('sensor/post')}{literal}</li>
-        {{for relatedItems ~accessPath=accessPath}}<li><a href="{{:accessPath}}/sensor/posts/{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
+        {{for relatedItems ~accessPath=accessPath}}<li><a href="{{:~accessPath}}/sensor/posts/{{:#data}}" class="label label-primary">{{:#data}}</a></li>{{/for}}
     </ul>
     {{/if}}
 
