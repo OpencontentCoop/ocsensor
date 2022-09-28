@@ -22,6 +22,7 @@
     'daterangepicker.js',
     'jquery.opendataTools.js',
     'jsrender.js', 'jsrender.helpers.js',
+    'jquery.maskedinput.js',
     'jquery.sensorpost.js'
 ))}
 

@@ -24,7 +24,7 @@ class SensorTranslationHelper
         return self::$instance;
     }
 
-    public function translate($string, $context = false, $replacements = [], $language = null)
+    public function translate($string, $context = false, $replacements = [], $language = null, $quiet = false)
     {
         if (!$language){
             $language = eZLocale::currentLocaleCode();
@@ -40,7 +40,7 @@ class SensorTranslationHelper
             $string = $translations['custom'][$string];
         }elseif (isset($translations[$context][$string])){
             $string = $translations[$context][$string];
-        }else{
+        }elseif (!$quiet){
             eZDebug::writeWarning("Missing translations for $string", '[translations]');
         }
 

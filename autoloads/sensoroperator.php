@@ -76,6 +76,11 @@ class SensorOperator
                     'type' => 'array',
                     'required' => false,
                     'default' => [],
+                ),
+                'fallback' => array(
+                    'type' => 'string',
+                    'required' => false,
+                    'default' => '',
                 )
             ),
             'sensor_types' => array(
@@ -107,8 +112,12 @@ class SensorOperator
                     $namedParameters['string'],
                     $namedParameters['context'],
                     $namedParameters['replacements'],
-                    $repository->getCurrentLanguage()
+                    $repository->getCurrentLanguage(),
+                    !empty($namedParameters['fallback'])
                 );
+                if ($operatorValue == $namedParameters['string'] && !empty($namedParameters['fallback'])){
+                    $operatorValue = $namedParameters['fallback'];
+                }
                 break;
 
             case 'sensor_edit_category_access':

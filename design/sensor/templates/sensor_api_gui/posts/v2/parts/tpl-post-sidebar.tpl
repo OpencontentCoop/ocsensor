@@ -2,6 +2,13 @@
 <script id="tpl-post-sidebar" type="text/x-jsrender">
 
     <div class="widget">
+        <strong class="widget-title">{{:~sensorTranslate('Subscriptions')}}</strong>
+        <ul class="list-unstyled widget-content" data-subscriptions="" style="max-height: 200px;overflow-y: auto;">
+            <li><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></li>
+        </ul>
+    </div>
+
+    <div class="widget">
         {{if capabilities.can_add_approver && groupsTree.children.length > 0}}
             <a href="#" class="pull-right action-trigger{{if !settings.AllowChangeApprover}} hide{{/if}}" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
@@ -519,16 +526,19 @@
     <div class="form-group hide" data-action-wrapper>
         <ul class="list-unstyled">
             <li>
+                <em class="text-muted">{{:~sensorTranslate('Inserire anno e numero')}}</em>
+            </li>
+            <li>
                 <label for="protocol1">{{:~sensorTranslate('Protocollo1')}}</label>
-                <input type="text" data-value="protocol1" id="protocol1" class="form-control" value="{{if protocols && protocols[0]}}{{:protocols[0]}}{{/if}}" style="height: 30px;"/>
+                <input type="text" data-value="protocol1" id="protocol1" class="form-control protocol-mask" value="{{if protocols && protocols[0]}}{{:protocols[0]}}{{/if}}" style="height: 30px;"/>
             </li>
             <li>
                 <label for="protocol2">{{:~sensorTranslate('Protocollo2')}}</label>
-                <input type="text" data-value="protocol2" id="protocol2" class="form-control" value="{{if protocols && protocols[1]}}{{:protocols[1]}}{{/if}}" style="height: 30px;"/>
+                <input type="text" data-value="protocol2" id="protocol2" class="form-control protocol-mask" value="{{if protocols && protocols[1]}}{{:protocols[1]}}{{/if}}" style="height: 30px;"/>
             </li>
             <li>
                 <label for="protocol3">{{:~sensorTranslate('Protocollo3')}}</label>
-                <input type="text" data-value="protocol3" id="protocol3" class="form-control" value="{{if protocols && protocols[2]}}{{:protocols[2]}}{{/if}}" style="height: 30px;"/>
+                <input type="text" data-value="protocol3" id="protocol3" class="form-control protocol-mask" value="{{if protocols && protocols[2]}}{{:protocols[2]}}{{/if}}" style="height: 30px;"/>
             </li>
             <li class="clearfix">
                 <input style="margin-top: 5px;" data-action="set_protocol" data-parameters="protocol1,protocol2,protocol3" class="btn btn-sm btn-default pull-right" type="submit" value="{{:~sensorTranslate('Select')}}" />
@@ -536,5 +546,16 @@
         </ul>
     </div>
 {{/if}}
+</script>
+<script id="tpl-subscriber" type="text/x-jsrender">
+    <li>
+        <img src="/sensor/avatar/{{:userId}}" class="img-circle" style="width: 20px; height: 20px; object-fit: cover; margin-right:5px" />
+        {{:userName}}
+    </li>
+</script>
+<script id="tpl-no_subscriber" type="text/x-jsrender">
+    <li>
+        <em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
+    </li>
 </script>
 {/literal}

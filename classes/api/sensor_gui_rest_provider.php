@@ -309,6 +309,14 @@ class SensorGuiApiProvider implements ezpRestProviderInterface
                 array(),
                 'http-post'
             ), 1),
+
+            'sensorGuiApiSubscriptions' => new ezpRestVersionedRoute(new SensorApiRailsRoute(
+                '/subscriptions/:Id',
+                'SensorGuiApiController',
+                'loadSubscriptions',
+                array(),
+                'http-get'
+            ), 1),
         );
         return $routes;
     }

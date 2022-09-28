@@ -63,4 +63,14 @@ class SensorSubscriptionPersistentObject extends eZPersistentObject
             'post_id' => (int)$postId,
         ]);
     }
+
+    public static function fetchByPost($postId)
+    {
+        return self::fetchObjectList(
+            self::definition(),
+            null,
+            ['post_id' => (int)$postId,],
+            ['created_at' => 'asc']
+        );
+    }
 }

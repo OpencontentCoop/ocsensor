@@ -233,15 +233,17 @@
             {{if capabilities.can_respond}}
                 <div class="new_response action-form hide" data-action-wrapper>
                     <textarea data-value="text" class="form-control" placeholder="{{:~sensorTranslate('Official response')}}" rows="7"></textarea>
+                    <input type="hidden" data-value="label" value="sensor.success" />
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default pull-left">{{:~sensorTranslate('Cancel')}}</a>
                         <div class="btn-group pull-right">
-                            <button class="btn send btn-bold" type="submit" data-actions="add_response,close" data-parameters="text">{{:~sensorTranslate('Store the official response and close the issue')}}</button>
+                            <button class="btn send btn-bold" type="submit" data-actions="add_response,close" data-parameters="text,label">{{:~sensorTranslate('Store the official response and set the issue as approved')}}</button>
                             <button type="button" class="btn btn-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">{{:~sensorTranslate('Show other options')}}</span>
                             </button>
                             <ul class="dropdown-menu">
+                                <li><a href="#" data-action="add_response,close" data-parameters="text">{{:~sensorTranslate('Store the official response and set the issue as rejected')}}</a></li>
                                 <li><a href="#" data-action="add_response" data-parameters="text">{{:~sensorTranslate('Store the official response and keep the issue open')}}</a></li>
                             </ul>
                         </div>

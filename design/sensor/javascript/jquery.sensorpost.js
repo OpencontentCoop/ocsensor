@@ -288,11 +288,25 @@
                         groupAssignSelect.trigger('change');
                         groupAssignSelect.trigger('select2:select');
                     }
-                }
+                };
                 resetUserAndGroupSelect();
+
+                renderData.find('.protocol-mask').mask('9999?-999999999999999');
 
                 plugin.stopLoading();
                 plugin.resultContainer.html(renderData);
+
+                $.getJSON(plugin.settings.apiEndPoint + '/subscriptions/' + post.id, function (response) {
+                    var list = renderData.find('[data-subscriptions]');
+                    list.html('');
+                    if (response.length > 0) {
+                        $.each(response, function () {
+                            list.append($('#tpl-subscriber').render(this));
+                        });
+                    }else{
+                        list.append($('#tpl-no_subscriber').render(this));
+                    }
+                });
 
                 var messageReceivers = renderData.find('.private_message_receivers');
                 messageReceivers.find('.group_receivers').each(function () {
