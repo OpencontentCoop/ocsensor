@@ -34,7 +34,7 @@
 {def $moment_language = $current_locale.http_locale_code|explode('-')[0]|downcase()|extract_left( 2 )}
 <script>
 $(document).ready(function () {ldelim}
-    $.opendataTools.settings('accessPath', "{''|ezurl(no)}");
+    $.opendataTools.settings('accessPath', "{sensor_access_path()}");
     $.opendataTools.settings('language', "{$current_language}");
     $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
     $.opendataTools.settings('locale', "{$moment_language}");

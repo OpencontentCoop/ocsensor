@@ -217,7 +217,7 @@ $(document).ready(function () {ldelim}
        $('.searchform').removeClass('hide');
     {rdelim});
 
-    $.opendataTools.settings('accessPath', "{''|ezurl(no)}");
+    $.opendataTools.settings('accessPath', "{sensor_access_path()}");
     $.opendataTools.settings('language', "{$current_language}");
     $.opendataTools.settings('languages', ['{ezini('RegionalSettings','SiteLanguageList')|implode("','")}']);
     $.opendataTools.settings('locale', "{$moment_language}");

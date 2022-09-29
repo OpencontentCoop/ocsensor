@@ -12,6 +12,7 @@ class SensorOperator
             'sensor_areas',
             'sensor_default_approvers',
             'sensor_settings',
+            'sensor_access_path',
         );
     }
 
@@ -38,6 +39,12 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_access_path':
+                $href = '';
+                $href = eZURI::transformURI($href, false);
+                $operatorValue = $href === '/' ? '' : $href;
+                break;
+
             case 'sensor_settings':
                 $settings = $repository->getSensorSettings()->jsonSerialize();
                 if ($namedParameters['setting'] === false){
