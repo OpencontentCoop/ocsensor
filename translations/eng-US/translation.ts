@@ -2083,6 +2083,18 @@
       <source>Add super groups operator as observer</source>
       <translation>Add super groups operator as observer</translation>
     </message>
+    <message>
+      <source>Hide the author name from the public</source>
+      <translation>Hide the author name from the public</translation>
+    </message>
+    <message>
+      <source>If the option is enabled, the names of the useres will be hidden</source>
+      <translation>If the option is enabled, the names of the useres will be hidden</translation>
+    </message>
+    <message>
+      <source>Add an attachment</source>
+      <translation>Add an attachment</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

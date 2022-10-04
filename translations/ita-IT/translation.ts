@@ -2083,6 +2083,18 @@
       <source>Add super groups operator as observer</source>
       <translation>Aggiunge automaticamente gli operatori appartenenti a gruppi di utenti come osservatori delle segnalazioni che aprono</translation>
     </message>
+    <message>
+      <source>Hide the author name from the public</source>
+      <translation>Nascondi al pubblico il nome degli utenti</translation>
+    </message>
+    <message>
+      <source>If the option is enabled, the names of the useres will be hidden</source>
+      <translation>Se l'opzione è attivata i nomi degli utenti sarà nascosto</translation>
+    </message>
+    <message>
+      <source>Add an attachment</source>
+      <translation>Inserimento di un allegato</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

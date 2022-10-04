@@ -60,6 +60,9 @@ if ($Part == '_set') {
                 case 'HideOperatorNames':
                     $attribute = 'hide_operator_name';
                     break;
+                case 'HideUserNames':
+                    $attribute = 'hide_user_name';
+                    break;
             }
             if ($attribute) {
                 $version = $rootObject->currentVersion();

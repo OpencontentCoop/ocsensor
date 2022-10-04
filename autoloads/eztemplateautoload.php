@@ -27,5 +27,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_translate',
         'can_set_sensor_tag',
         'sensor_operators_root_node',
+        'sensor_root_class',
     )
 );

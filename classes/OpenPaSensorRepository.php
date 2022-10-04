@@ -323,7 +323,8 @@ class OpenPaSensorRepository extends LegacyRepository
                         'AddOperatorSuperUserAsObserver' => isset($sensorIni['AddOperatorSuperUserAsObserver']) ? $sensorIni['AddOperatorSuperUserAsObserver'] == 'enabled' : false,
                         'AddBehalfOfUserAsObserver' => isset($sensorIni['AddBehalfOfUserAsObserver']) ? $sensorIni['AddBehalfOfUserAsObserver'] == 'enabled' : true,
                         'HighlightSuperUserPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['HighlightSuperUserPosts'] == 'enabled' : false,
-                        'UserCanAccessUserGroupPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
+                        'UserCanAccessUserGroupPosts' => isset($sensorIni['UserCanAccessUserGroupPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
+                        'HideUserNames' => $this->isHiddenUserName(),
                     );
                     return [
                         'content' => $data,
@@ -575,6 +576,16 @@ class OpenPaSensorRepository extends LegacyRepository
     private function isHiddenOperatorName()
     {
         $attribute = $this->getRootNodeAttribute('hide_operator_name');
+        if ($attribute instanceof eZContentObjectAttribute) {
+            return $attribute->attribute('data_int') == 1;
+        }
+
+        return false;
+    }
+
+    private function isHiddenUserName()
+    {
+        $attribute = $this->getRootNodeAttribute('hide_user_name');
         if ($attribute instanceof eZContentObjectAttribute) {
             return $attribute->attribute('data_int') == 1;
         }

@@ -88,6 +88,24 @@
             <input type="checkbox" {if $sensor_settings.HideOperatorNames}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideOperatorNames"{else}disabled{/if}>
         </td>
     </tr>
+    {def $can_hide_user_name = false()}
+    {foreach sensor_root_class().fields as $field}
+        {if $field.identifier|eq('hide_user_name')}
+            {set $can_hide_user_name = true()}
+            {break}
+        {/if}
+    {/foreach}
+    {if $can_hide_user_name}
+    <tr>
+        <th>
+            {sensor_translate('Hide the author name from the public')}
+            <br /><small>{sensor_translate('If the option is enabled, the names of the useres will be hidden')}</small>
+        </th>
+        <td class="text-center">
+            <input type="checkbox" {if $sensor_settings.HideUserNames}checked{/if} data-toggleconfig {if $root.can_edit}data-attribute="HideUserNames"{else}disabled{/if}>
+        </td>
+    </tr>
+    {/if}
 
     <tr><td colspan="2" style="background: #fff"></td></tr>
 
