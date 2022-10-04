@@ -69,6 +69,7 @@
                     {{/if}}
                 </td>
                 <td data-preview="{{:id}}" data-href="{{:~accessPath("/sensor/posts/")}}{{:id}}">
+                     {/literal}{if sensor_settings('HighlightSuperUserPosts')}{literal}{{if author.isSuperUser}}<span class="label label-info">{{:~sensorTranslate('internal')}}</span>{{/if}}{/literal}{/if}{literal}
                      <strong>{{:author.name}}{{if reporter.id != author.id}} <span class="text-muted">{{if channel && channel.icon}}<i title="{{:channel.name}}" class="{{:channel.icon}}"></i> {{/if}}{{:reporter.name}}</span>{{/if}}</strong>
                      <p>{{:subject}}</p>
                      <ul class="list-inline">

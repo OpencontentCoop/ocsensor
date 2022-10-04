@@ -55,7 +55,11 @@
                         <div>{{:subject}}</div>
                     </h2>
                     <ul class="list-inline">
-                      <li>{{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<i class="fa fa-lock"></i> {{/if}}<strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong> &middot; {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}</li>
+                      <li>{{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<i class="fa fa-lock"></i> {{/if}}
+                        <strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong>
+                        {/literal}{if sensor_settings('HighlightSuperUserPosts')}{literal}{{if author.isSuperUser}}<span class="label label-info">{{:~sensorTranslate('internal')}}</span>{{/if}}{/literal}{/if}{literal}
+                        &middot; {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}
+                      </li>
                       <li><small><i class="fa fa-clock-o"></i> {{:~sensorTranslate('Created at')}} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
                       {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}
                           <li><small><i class="fa fa-clock-o"></i> {{:~sensorTranslate('Last modified at')}} {{:~formatDate(modified, 'DD/MM/YYYY HH:mm')}}</small></li>
