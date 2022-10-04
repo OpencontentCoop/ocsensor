@@ -41,7 +41,7 @@ class SensorOperator
         {
             case 'sensor_access_path':
                 $href = '';
-                $href = eZURI::transformURI($href, false);
+                eZURI::transformURI($href, false);
                 $operatorValue = $href === '/' ? ' ' : $href;
                 break;
 
