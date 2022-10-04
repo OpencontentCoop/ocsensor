@@ -16,6 +16,11 @@ class SensorWebHookTriggerFactory implements OCWebHookTriggerFactoryInterface
             'on_add_response',
             SensorTranslationHelper::instance()->translate('Publication of an official response')
         );
+        $triggers[] = new SensorWebHookTrigger(
+            'on_add_attachment',
+            SensorTranslationHelper::instance()->translate('Add an attachment')
+        );
+
         return $triggers;
     }
 

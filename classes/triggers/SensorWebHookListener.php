@@ -24,6 +24,9 @@ class SensorWebHookListener extends AbstractListener
         if (!in_array('on_add_response', $this->events)) {
             $this->events[] = 'on_add_response';
         }
+        if (!in_array('on_add_attachment', $this->events)) {
+            $this->events[] = 'on_add_attachment';
+        }
     }
 
     public function handle(EventInterface $event, $param = null)
