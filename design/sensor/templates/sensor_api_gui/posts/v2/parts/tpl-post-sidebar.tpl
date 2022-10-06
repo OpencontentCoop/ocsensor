@@ -507,7 +507,16 @@
                type="submit"
                {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
                data-action="close"
-               value="{{:~sensorTranslate('Close issue')}}" />
+               value="{{:~sensorTranslate('Reject')}}" />
+    </div>
+    <div class="form-group" data-action-wrapper>
+        <input type="hidden" data-value="label" value="sensor.success" />
+        <input class="btn btn-md btn-default btn-block"
+               type="submit"
+               {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
+               data-action="close"
+               data-parameters="label"
+               value="{{:~sensorTranslate('Patto')}}" />
     </div>
 {{/if}}
 </script>
