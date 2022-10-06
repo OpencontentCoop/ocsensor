@@ -374,15 +374,7 @@ $(document).ready(function () {ldelim}
                     },
                     onEachFeature: function (feature, layer) {
                         var post = feature.properties;
-                        var statusCss = 'info';
-                        if (post.status.identifier === 'pending') {
-                            statusCss = 'danger';
-                        } else if (post.status.identifier === 'open') {
-                            statusCss = 'warning';
-                        } else if (post.status.identifier === 'close') {
-                            statusCss = 'success';
-                        }
-                        post.statusCss = statusCss;
+                        post.statusCss = $.postStatusStyle(post);
 
                         var typeCss = 'info';
                         if (post.type.identifier === 'suggerimento') {
@@ -441,15 +433,7 @@ $(document).ready(function () {ldelim}
             response.prevPageQuery = jQuery.type(queryPerPage[response.prevPage]) === "undefined" ? null : queryPerPage[response.prevPage];
             $.each(response.searchHits, function(){
                 var post = this;
-                var statusCss = 'info';
-                if (post.status.identifier === 'pending') {
-                    statusCss = 'danger';
-                } else if (post.status.identifier === 'open') {
-                    statusCss = 'warning';
-                } else if (post.status.identifier === 'close') {
-                    statusCss = 'success';
-                }
-                post.statusCss = statusCss;
+                post.statusCss = $.postStatusStyle(post);
                 var typeCss = 'info';
                 if (post.type.identifier === 'suggerimento') {
                     typeCss = 'warning';

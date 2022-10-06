@@ -43,14 +43,25 @@ let SensorTranslateSingleton = (function () {
     };
 })();
 $.sensorTranslate = SensorTranslateSingleton.getInstance();
+$.postStatusStyle = function (post) {
+    var statusCss = 'info';
+    if (post.status.identifier === 'pending') {
+        statusCss = 'default';
+    } else if (post.status.identifier === 'open') {
+        statusCss = 'warning';
+    } else if (post.status.identifier === 'close') {
+        statusCss = 'danger';
+    }
+    return statusCss;
+};
 $.views.helpers($.extend({}, $.opendataTools.helpers, {
     'eventName': function (value) {
         var values = value.split('|');
         var texts = [];
         $.each(values, function (){
             var text = $('select#triggers option[value="' + this + '"]').text();
-            texts.push(text ? text : this)
-        })
+            texts.push(text ? text : this);
+        });
 
         return texts;
     },
@@ -104,5 +115,8 @@ $.views.helpers($.extend({}, $.opendataTools.helpers, {
             newtext += array[i];
         }
         return newtext;
+    },
+    'statusStyle': function (post) {
+        return $.postStatusStyle(post);
     }
 }));

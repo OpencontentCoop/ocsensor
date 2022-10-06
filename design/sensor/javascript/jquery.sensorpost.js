@@ -72,16 +72,7 @@
                 post.groupsTree = JSON.parse(plugin.settings.groups);
                 post.settings = JSON.parse(plugin.settings.settings);
                 post.canReadUsers = capabilities.can_read_user;
-
-                var statusCss = 'info';
-                if (post.status.identifier === 'pending') {
-                    statusCss = 'danger';
-                } else if (post.status.identifier === 'open') {
-                    statusCss = 'warning';
-                } else if (post.status.identifier === 'close') {
-                    statusCss = 'success';
-                }
-                post.statusCss = statusCss;
+                post.statusCss = $.postStatusStyle(post);
 
                 var typeCss = 'info';
                 if (post.type.identifier === 'suggerimento') {

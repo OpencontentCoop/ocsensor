@@ -691,15 +691,7 @@ $(document).ready(function () {ldelim}
 
             $.each(response.searchHits, function(){
                 var post = this;
-                var statusCss = 'info';
-                if (post.status.identifier === 'pending') {
-                    statusCss = 'danger';
-                } else if (post.status.identifier === 'open') {
-                    statusCss = 'warning';
-                } else if (post.status.identifier === 'close') {
-                    statusCss = 'success';
-                }
-                post.statusCss = statusCss;
+                post.statusCss = $.postStatusStyle(post);
 
                 var typeCss = 'info';
                 if (post.type.identifier === 'suggerimento') {
