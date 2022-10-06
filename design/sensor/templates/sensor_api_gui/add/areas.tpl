@@ -1,9 +1,10 @@
 {if ne( count( $areas ), 0)}
     <select {if ezini( 'SensorConfig', 'MoveMarkerOnSelectArea', 'ocsensor.ini' )|eq('enabled')}id="poi"{/if}
-            class="form-control select-sensor-area{if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')} select-sensor-area-disabled" readonly="readonly" tabindex="-1{/if}"
+            class="form-control select-sensor-area select-sensor-required {if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')} select-sensor-area-disabled" readonly="readonly" tabindex="-1{/if}"
+{*            required="required"*}
             name="areas[]">
         {*if ezini( 'SensorConfig', 'ReadOnlySelectArea', 'ocsensor.ini' )|eq('enabled')}<option value=""></option>{/if*}
-        <option value=""></option>
+        <option></option>
         {foreach $areas as $item}
             <option value="{$item.id}"
                     data-id="{$item.id}"

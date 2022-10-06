@@ -257,6 +257,10 @@
                     checkMapFields()
                 });
 
+            var areas = addPostGui.find('.select-sensor-required').on('input change', function () {
+                checkAreasField();
+            });
+
             var uploadImage = addPostGui.find('#add_image');
             uploadImage.find('.upload').fileupload({
                 pasteZone: null,
@@ -585,11 +589,40 @@
                 }
             }
 
+            function checkAreasField(){
+                var hasValue =  areas && areas.val().length > 0;
+                if (hasValue){
+                    hideAreasValidation();
+                }
+                return hasValue;
+            }
+
+            function showAreasValidation() {
+                if (areas) {
+                    areas.parent().addClass('has-warning');
+                }
+            }
+
+            function hideAreasValidation() {
+                if (areas) {
+                    areas.parent().removeClass('has-warning');
+                }
+            }
+
             addPostGui.find('a[data-toggle="tab"]').on('click', function (e) {
                 if (!checkTextFields()) {
                     showTextValidation();
                     e.preventDefault();
                     return false;
+                }
+                var navActive = addPostGui.find('.step-nav li.active');
+                var currentHref = $(this).attr('href');
+                if (navActive.find('a').attr('href') === '#step-geo' && currentHref !== '#step-text' && currentHref !== '#step-behalf'){
+                    if (!checkAreasField()){
+                        showAreasValidation();
+                        e.preventDefault();
+                        return false;
+                    }
                 }
                 if (plugin.settings.faq_predictor && hasValidTexts && hasFaqRequest === false){
                     console.log('load faq by predict')
@@ -634,6 +667,13 @@
             addPostGui.find('.next-step').on('click', function (e) {
                 if (checkTextFields()) {
                     var navActive = addPostGui.find('.step-nav li.active');
+                    if (navActive.find('a').attr('href') === '#step-geo'){
+                        if (!checkAreasField()){
+                            showAreasValidation();
+                            e.preventDefault();
+                            return false;
+                        }
+                    }
                     var next = navActive.next().find('a');
                     if (next.length > 0) {
                         next.trigger('click');
@@ -642,7 +682,7 @@
                     showTextValidation();
                 }
                 e.preventDefault();
-            })
+            });
 
             plugin.selectArea.on('change sensor-set-area', function (){
                 var current = plugin.selectArea.val();
@@ -659,6 +699,13 @@
             });
 
             addPostGui.find('form').on('submit', function (e) {
+                if (!checkAreasField()){
+                    addPostGui.find('.step-nav li a[href="#' + areas.parents('.tab-pane').attr('id') + '"]').trigger('click');
+                    showAreasValidation();
+                    e.preventDefault();
+                    return false;
+                }
+
                 var self = $(this);
                 if (self.data('disabled') === true) {
                     e.preventDefault();
@@ -787,6 +834,7 @@
                 addPostGui.find('p.is_public').hide();
                 addPostGui.find('p.is_private').hide();
                 hideTextValidation();
+                hideAreasValidation();
                 $('html').removeClass('sensor-add-post');
                 $('body').removeClass('sensor-add-post').css('overflow', 'auto');
                 e.preventDefault();
