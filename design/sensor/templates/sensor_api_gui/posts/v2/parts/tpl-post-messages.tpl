@@ -36,7 +36,8 @@
                                                   <p>{{:~sensorTranslate('Receivers')}} {{for receivers}}<span class="label label-warning">{{:name}}</span> {{/for}}</p>
                                             {{/if}}
                                         {{else _type == 'public'}}
-                                            {{if ~capabilities.can_moderate_comment && needModeration}}
+                                            {{if ~capabilities.can_moderate_comment}}
+                                                {{if needModeration || isRejected}}
                                                 <div class="pull-right" data-action-wrapper>
                                                     <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-success"
                                                        data-action="moderate_comment" data-parameters="comment_id,moderation"
@@ -45,6 +46,8 @@
                                                    <input type="hidden" data-value="comment_id" value="{{:id}}" />
                                                    <input type="hidden" data-value="moderation" value="approve" />
                                                 </div>
+                                                {{/if}}
+                                                {{if needModeration || !isRejected}}
                                                 <div class="pull-right" data-action-wrapper>
                                                     <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-danger"
                                                        data-action="moderate_comment" data-parameters="comment_id,moderation"
@@ -53,11 +56,12 @@
                                                    <input type="hidden" data-value="comment_id" value="{{:id}}" />
                                                    <input type="hidden" data-value="moderation" value="reject" />
                                                 </div>
+                                                {{/if}}
                                             {{/if}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
                                                 <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{{:~sensorTranslate('Edit')}}"><i class="fa fa-pencil"></i></a>
                                             {{/if}}
-                                            <strong>{{:creator.name}}</strong> {{:~sensorTranslate('added a comment')}} {{if !needModeration && !isRejected}}{{:~sensorTranslate('public')}}{{/if}}
+                                            <strong>{{:creator.name}}</strong> {{:~sensorTranslate('added a comment')}}
                                         {{else _type != 'audit'}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
                                                 <a class="btn btn-default button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{{:~sensorTranslate('Edit')}}"><i class="fa fa-pencil"></i></a>
