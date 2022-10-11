@@ -2095,6 +2095,26 @@
       <source>Add an attachment</source>
       <translation>Inserimento di un allegato</translation>
     </message>
+    <message>
+      <source>Verify your account</source>
+      <translation>Verifica il tuo accesso</translation>
+    </message>
+    <message>
+      <source>Click on the link to confirm your account</source>
+      <translation>Clicca sul link per confermare il tuo account</translation>
+    </message>
+    <message>
+      <source>Verification code</source>
+      <translation>Codice di verifica</translation>
+    </message>
+    <message>
+      <source>Enter the code that was sent to your inbox</source>
+      <translation>Inserisci il codice di verifica che ti è stato inviato per email</translation>
+    </message>
+    <message>
+      <source>Verify</source>
+      <translation>Verifica</translation>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>

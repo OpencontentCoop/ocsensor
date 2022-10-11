@@ -2095,6 +2095,26 @@
       <source>Add an attachment</source>
       <translation type="unfinished"/>
     </message>
+    <message>
+      <source>Verify your account</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Click on the link to confirm your account</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Verification code</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Enter the code that was sent to your inbox</source>
+      <translation type="unfinished"/>
+    </message>
+    <message>
+      <source>Verify</source>
+      <translation type="unfinished"/>
+    </message>
   </context>
   <context>
     <name>sensor/moderation</name>
