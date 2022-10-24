@@ -19,8 +19,10 @@
                 <div class="service_details">
                     <h2 class="section_header skincolored"{{if ~i18n(data, 'color')}} style="color:{{:~i18n(data, 'color')}} !important"{{/if}}>{{:~i18n(data, 'title')}}</h2>
                     {{:~i18n(data, 'intro')}}
+                    {{if ~i18n(data, 'button_link')}}
                     <a href="{{:~i18n(data, 'button_link')}}"
                        class="btn btn-lg btn-block btn-primary"{{if ~i18n(data, 'color')}} style="background-color:{{:~i18n(data, 'color')}} !important;border-color:{{:~i18n(data, 'color')}} !important"{{/if}}>{{:~sensorTranslate(~i18n(data, 'button_label'))}}</a>
+                    {{/if}}
                 </div>
             </div>
         </div>
