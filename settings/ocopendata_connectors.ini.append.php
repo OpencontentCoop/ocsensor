@@ -11,6 +11,7 @@ FieldConnectors[sensor_faq/answer]=\Opencontent\Ocopendata\Forms\Connectors\Open
 FieldConnectors[sensor_report/intro]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 FieldConnectors[sensor_report_item/text]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 FieldConnectors[sensor_operator/struttura_di_competenza]=SensorOperatorGroupFieldConnector
+FieldConnectors[sensor_block/intro]=\Opencontent\Ocopendata\Forms\Connectors\OpendataConnector\FieldConnector\EzOnlineEditorXmlField
 
 [ClassSettings]
 ClassConnectors[sensor_scenario]=SensorScenarioClassConnector
