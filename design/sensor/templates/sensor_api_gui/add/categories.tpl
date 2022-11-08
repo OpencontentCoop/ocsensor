@@ -10,7 +10,7 @@
     {/if}
     {if ne( count( $categories ), 0)}
         <label class="form-group has-float-label" style="margin-top: 30px;">
-            <select class="form-control" name="category"{if $category_field.is_required} required{/if}>
+            <select class="form-control" data-is_required_for_additional_members="{if sensor_settings('RequireCategoryForAdditionalMemberGroups')}required{/if}" name="category"{if $category_field.is_required} required{/if}>
                 <option data-avoid_areas="[]"></option>
                 {foreach $categories as $item}
                     {if or($category_access|eq('all'), $category_access|contains($item['node_id']))}

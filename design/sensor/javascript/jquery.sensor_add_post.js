@@ -485,6 +485,14 @@
 
             function checkBehalfFields() {
                 var stepItemIcon = addPostGui.find('a[href="#step-behalf"] .add-icon');
+                if (category.length > 0){
+                    var isCustomRequired = category.data('is_required_for_additional_members').length > 0;
+                    if (isCustomRequired){
+                        console.log('set cat', behalfOf.val() === '');
+                        category.attr('required', behalfOf.val() === '');
+                    }
+                }
+
                 if (behalfOf.val() !== '' && behalfOfChannel.val() !== ''){
                     stepItemIcon
                         .removeClass('fa-plus-circle text-primary')
@@ -760,7 +768,7 @@
                     checkBehalfFields();
                     addPostGui.show().find('.post-subject input').focus();
                     behalfOfView.find('i').trigger('click');
-                    behalfOfAnonymous.trigger('click');
+                    //behalfOfAnonymous.trigger('click');
                     plugin.refreshViewPort();
                     plugin.refreshMap();
                     if (plugin.selectedArea > 0){
