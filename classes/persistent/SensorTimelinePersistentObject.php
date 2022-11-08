@@ -257,7 +257,8 @@ class SensorTimelinePersistentObject extends eZPersistentObject
 
         switch ($timelineItem->type) {
             case 'read':
-                if (count($previousList) >= 1) {
+                if ($previous instanceof SensorTimelinePersistentObject
+                    && $previous->attribute('action') == 'creating') {
                     $startAt = $post->published;
                 }
                 $status = 'open';
