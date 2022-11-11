@@ -265,12 +265,12 @@ $(document).ready(function () {ldelim}
     var buildQueryFilters = function (onlyActive) {
         var queryData = [];
         query = [];
-        var queryString = form.find('[name="query"]').val().replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
-        if (queryString.length > 0){
+          var queryString = form.find('[name="query"]').val().replace('Prot', '').replace('/', '_').replace(':', '').replace(/"/g, '').replace(/'/g, "").replace(/\(/g, "").replace(/\)/g, "").replace(/\[/g, "").replace(/\]/g, "");
+          if (queryString.length > 0){
             //query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "')");
-            query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "' or raw[ezf_df_text] = '" + queryString + "')");
+            query.push("(id = '" + queryString + "' or subject = '" + queryString + "' or description = '" + queryString + "' or raw[subattr_protocollo___normalized_s]  = '" + $.trim(queryString) + "')");
             queryData.push({name: 'query', value: form.find('[name="query"]').val()});
-        }
+          }
         var searchCategory = selectCategory.val();
         if (searchCategory && searchCategory.length > 0){
             var searchCategoryList = [];
@@ -418,12 +418,16 @@ $(document).ready(function () {ldelim}
         });
     };
     var buildView = function(callback, context) {
+        var sort = ' sort [published=>desc]';
+        if (form.find('[name="query"]').val().length > 0){
+          sort = ' sort [score=>desc]';
+        }
         var baseQuery = buildQueryFilters();
-        var paginatedQuery = baseQuery + ' limit ' + limitPagination + ' offset ' + currentPage*limitPagination + ' sort [published=>desc]';
+        var paginatedQuery = baseQuery + ' limit ' + limitPagination + ' offset ' + currentPage*limitPagination + sort;
         viewContainer.html(spinner);
         find(paginatedQuery, function (response) {
             queryPerPage[currentPage] = paginatedQuery;
-            response.query = baseQuery + ' sort [published=>desc]';
+            response.query = baseQuery + sort;
             response.currentPage = currentPage;
             response.prevPage = currentPage - 1;
             response.nextPage = currentPage + 1;

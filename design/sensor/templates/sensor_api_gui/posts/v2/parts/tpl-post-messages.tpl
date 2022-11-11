@@ -281,7 +281,7 @@
                         <div class="upload-button-container">
                             <span class="btn btn-default fileinput-button" style="cursor:pointer">
                                 <strong>{{:~sensorTranslate('Add file')}}</strong>
-                                <input class="upload" name="files" type="file" accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                                <input class="upload" name="files" type="file" accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*,.p7m,.zip">
                             </span>
                         </div>
                         <div class="upload-button-spinner btn btn-default" style="display: none">
