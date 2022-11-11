@@ -34,6 +34,7 @@
                 {undef $enabled_languages}
             </dl>
             <input class="button btn btn-info" type="submit" name="EditButton" value="{'Edit profile'|i18n('social_user/user_edit')}"/>
+            {if fetch(user, current_user).contentobject.class_identifier|ne('user')}
             {if ezmodule( 'userpaex' )}
                 {if $userAccount.password_hash|eq('')}
                     <a class="button btn btn-info" href="{'sensor/home/?p'|ezurl(no)}">{'Crea password'|i18n('social_user/user_edit')}</a>
@@ -45,6 +46,7 @@
             {/if}
             {if fetch( 'user', 'has_access_to', hash( 'module', 'content', 'function', 'dashboard' ) )}
                 <a class="button btn btn-info" href="{"/content/dashboard/"|ezurl(no)}" title="Dashboard">Dashboard</a>
+            {/if}
             {/if}
         </form>
     </div>
