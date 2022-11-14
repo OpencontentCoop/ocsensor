@@ -51,6 +51,8 @@ $.postStatusStyle = function (post) {
         statusCss = 'warning';
     } else if (post.status.identifier === 'close') {
         statusCss = 'danger';
+    } else if (post.status.identifier === 'approved') {
+        statusCss = 'success';
     }
     return statusCss;
 };

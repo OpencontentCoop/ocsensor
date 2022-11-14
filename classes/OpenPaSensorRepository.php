@@ -473,7 +473,8 @@ class OpenPaSensorRepository extends LegacyRepository
                         'pending' => "Inviato",
                         'open' => "In carico",
                         'close' => "Respinta",
-                        'success' => "Patto",
+                        'approved' => "Accettata",
+                        'deployed' => "Patto",
                     )
                 );
             } elseif ($identifier == 'privacy') {

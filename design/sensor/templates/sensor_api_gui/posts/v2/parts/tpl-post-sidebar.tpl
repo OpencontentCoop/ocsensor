@@ -101,7 +101,7 @@
         {{/if}}
     {{/if}}
 
-    <div class="widget">
+    <div class="widget hide">
         {{if capabilities.can_set_type}}
             <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
@@ -502,6 +502,7 @@
 </script>
 <script id="tpl-post-close" type="text/x-jsrender">
 {{if capabilities.can_close}}
+    {{if status.identifier !== 'close'}}
     <div class="form-group" data-action-wrapper>
         <input class="btn btn-md btn-default btn-block"
                type="submit"
@@ -509,8 +510,21 @@
                data-action="close"
                value="{{:~sensorTranslate('Reject')}}" />
     </div>
+    {{/if}}
+    {{if status.identifier !== 'approved' && categories.length > 0 && protocols[0]}}
     <div class="form-group" data-action-wrapper>
-        <input type="hidden" data-value="label" value="sensor.success" />
+        <input type="hidden" data-value="label" value="sensor.approved" />
+        <input class="btn btn-md btn-default btn-block"
+               type="submit"
+               {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
+               data-action="close"
+               data-parameters="label"
+               value="{{:~sensorTranslate('Approve')}}" />
+    </div>
+    {{/if}}
+    {{if status.identifier !== 'deployed' && protocols[2]}}
+    <div class="form-group" data-action-wrapper>
+        <input type="hidden" data-value="label" value="sensor.deployed" />
         <input class="btn btn-md btn-default btn-block"
                type="submit"
                {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
@@ -518,6 +532,7 @@
                data-parameters="label"
                value="{{:~sensorTranslate('Patto')}}" />
     </div>
+    {{/if}}
 {{/if}}
 </script>
 <script id="tpl-post-reopen" type="text/x-jsrender">

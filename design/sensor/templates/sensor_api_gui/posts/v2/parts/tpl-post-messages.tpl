@@ -9,13 +9,13 @@
                     <div id="message-{{:id}}" class="message-{{:_type}} {{if _type == 'system'}}panel panel-default{{else _type == 'private'}}panel panel-warning{{else _type == 'public'}}panel panel-success{{else _type == 'response'}}panel panel-primary{{/if}}"
                         {{if _type == 'audit'}}style="margin-bottom: 20px;display: none;"{{/if}}>
                         <div{{if _type != 'audit'}} class="panel-heading"{{/if}}{{if _type == 'system' || _type == 'audit'}} style="border-bottom: none;"{{/if}}>
-                            <div class="media">
+                            <div class="media"{{if needModeration || !isRejected}} style="overflow:visible"{{/if}}>
                                 {{if _type != 'audit'}}
                                 <div class="pull-left">
                                     <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 50px; height: 50px; object-fit: cover;" />
                                 </div>
                                 {{/if}}
-                                <div class="media-body">
+                                <div class="media-body"{{if needModeration || !isRejected}} style="overflow:visible"{{/if}}>
                                     {{if _type != 'audit'}}<p class="comment_name">{{/if}}
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
@@ -48,13 +48,35 @@
                                                 </div>
                                                 {{/if}}
                                                 {{if needModeration || !isRejected}}
-                                                <div class="pull-right" data-action-wrapper>
-                                                    <a href="#" data-message="{{:id}}" class="create-response-draft btn button-icon btn-danger"
-                                                       data-action="moderate_comment" data-parameters="comment_id,moderation"
-                                                       style="margin-left:5px"
-                                                       title="{{:~sensorTranslate('Reject')}}"><i class="fa fa-times"></i></a>
-                                                   <input type="hidden" data-value="comment_id" value="{{:id}}" />
-                                                   <input type="hidden" data-value="moderation" value="reject" />
+                                                <div class="btn-group pull-right">
+                                                    <button type="button" class="btn button-icon btn-danger btn-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-times"></i>
+                                                        <span class="caret"></span>
+                                                        <span class="sr-only">{{:~sensorTranslate('Reject')}}</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li data-action-wrapper>
+                                                            <a href="#" data-action="moderate_comment" data-parameters="comment_id,moderation">
+                                                                {{:~sensorTranslate('Reject for privacy reasons')}}
+                                                            </a>
+                                                            <input type="hidden" data-value="comment_id" value="{{:id}}" />
+                                                            <input type="hidden" data-value="moderation" value="reject_privacy" />
+                                                        </li>
+                                                        <li data-action-wrapper>
+                                                            <a href="#" data-action="moderate_comment" data-parameters="comment_id,moderation">
+                                                                {{:~sensorTranslate('Reject for violation of the terms of use')}}
+                                                            </a>
+                                                            <input type="hidden" data-value="comment_id" value="{{:id}}" />
+                                                            <input type="hidden" data-value="moderation" value="reject_terms" />
+                                                        </li>
+                                                        <li data-action-wrapper>
+                                                            <a href="#" data-action="moderate_comment" data-parameters="comment_id,moderation">
+                                                                {{:~sensorTranslate('Reject for other reasons')}}
+                                                            </a>
+                                                            <input type="hidden" data-value="comment_id" value="{{:id}}" />
+                                                            <input type="hidden" data-value="moderation" value="reject_other" />
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                                 {{/if}}
                                             {{/if}}
@@ -74,7 +96,7 @@
                                     {{/if}}
                                     {{if _type == 'private' && isResponseProposal && ~settings.ShowResponseProposal}}- <strong>{{:~sensorTranslate('Reponse proposal')}}</strong>{{/if}}
                                     {{if _type == 'public' && needModeration}} <strong class="label label-danger">{{:~sensorTranslate('Waiting for moderation')}}</strong>{{/if}}
-                                    {{if _type == 'public' && isRejected}} <strong class="label label-danger">{{:~sensorTranslate('Rejected')}}</strong>{{/if}}
+                                    {{if _type == 'public' && isRejected}} <strong class="label label-danger">{{:~sensorTranslate('Rejected')}}{{if rejectionReason}} {{:~sensorTranslate(rejectionReason)}}{{/if}}</strong>{{/if}}
                                 </div>
                             </div>
                         </div>
@@ -237,19 +259,23 @@
             {{if capabilities.can_respond}}
                 <div class="new_response action-form hide" data-action-wrapper>
                     <textarea data-value="text" class="form-control" placeholder="{{:~sensorTranslate('Official response')}}" rows="7"></textarea>
-                    <input type="hidden" data-value="label" value="sensor.success" />
+                    <input type="hidden" data-value="label" value="sensor.approved" />
                     <div class="clearfix">
                         <a href="#" class="reset-message-form btn btn-default pull-left">{{:~sensorTranslate('Cancel')}}</a>
                         <div class="btn-group pull-right">
                             <button class="btn send btn-bold" type="submit" data-actions="add_response" data-parameters="text">{{:~sensorTranslate('Store the official response')}}</button>
+                            {{if status.identifier !== 'deployed'}}
                             <button type="button" class="btn btn-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="caret"></span>
                                 <span class="sr-only">{{:~sensorTranslate('Show other options')}}</span>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="#" data-action="add_response,close" data-parameters="text">{{:~sensorTranslate('Store the official response and set the issue as rejected')}}</a></li>
+                                {{if categories.length > 0 && protocols[0]}}
                                 <li><a href="#" data-action="add_response,close" data-parameters="text,label">{{:~sensorTranslate('Store the official response and set the issue as approved')}}</a></li>
+                                {{/if}}
                             </ul>
+                            {{/if}}
                         </div>
                     </div>
                 </div>
