@@ -10,6 +10,8 @@ AvailableConnectors[]=batch-scenarios
 AvailableConnectors[]=duplicate-post
 AvailableConnectors[]=import-user
 AvailableConnectors[]=create-organization
+AvailableConnectors[]=deploy-post
+AvailableConnectors[]=view-original-post
 
 [remove-operator_ConnectorSettings]
 PHPClass=RemoveOperatorConnector
@@ -37,3 +39,9 @@ PHPClass=UserImportCsvConnector
 
 [create-organization_ConnectorSettings]
 PHPClass=BehalfOrganizationConnector
+
+[deploy-post_ConnectorSettings]
+PHPClass=DeployPostConnector
+
+[view-original-post_ConnectorSettings]
+PHPClass=ViewOriginalPostConnector

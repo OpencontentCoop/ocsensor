@@ -23,6 +23,7 @@
         'summernote/summernote-lite.css',
         'alpaca.min.css',
         'alpaca-custom.css',
+        'bootstrap-datetimepicker.min.css',
         'sensor_add_post.css',
         'debug.css',
         'websitetoolbar.css'
@@ -63,6 +64,7 @@
         'jquery.opendataform.js',
         'jquery.fileupload.js',
         'summernote/summernote-lite.js',
+        'bootstrap-datetimepicker.min.js',
         'jsrender.js',
         'jsrender.helpers.js',
         'jquery.sensor_add_post.js'

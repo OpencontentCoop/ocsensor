@@ -80,9 +80,9 @@
                                                 </div>
                                                 {{/if}}
                                             {{/if}}
-                                            {{if ~currentUserId == creator.id && ~capabilities.can_comment}}
+                                            {{!--{{if ~currentUserId == creator.id && ~capabilities.can_comment}}
                                                 <a class="btn btn-success button-icon edit-message pull-right" href="#" data-message-id="{{:id}}" title="{{:~sensorTranslate('Edit')}}"><i class="fa fa-pencil"></i></a>
-                                            {{/if}}
+                                            {{/if}}--}}
                                             <strong>{{:creator.name}}</strong> {{:~sensorTranslate('added a comment')}}
                                         {{else _type != 'audit'}}
                                             {{if ~currentUserId == creator.id && ~capabilities.can_respond}}
@@ -114,12 +114,12 @@
                                 <textarea data-value="text" class="form-control" rows="3">{{:text}}</textarea>
                                 <input class="btn btn-sm btn-block" type="submit" data-action="edit_response" data-parameters="id,text" value="{{:~sensorTranslate('Store')}}" />
                               </div>
-                          {{else _type == 'public' &&  ~currentUserId == creator.id && ~capabilities.can_comment}}
+                          {{!--{{else _type == 'public' &&  ~currentUserId == creator.id && ~capabilities.can_comment}}
                               <div id="edit-message-{{:id}}" style="display: none;" data-action-wrapper>
                                 <input type="hidden" data-value="id" value="{{:id}}" />
                                 <textarea data-value="text" class="form-control" rows="3">{{:text}}</textarea>
                                 <input class="btn btn-sm btn-block" type="submit" data-action="edit_comment" data-parameters="id,text" value="{{:~sensorTranslate('Store')}}" />
-                              </div>
+                              </div>--}}
                           {{/if}}                          
                           <div id="view-message-{{:id}}">
                               {{:richText}}
@@ -273,6 +273,8 @@
                                 <li><a href="#" data-action="add_response,close" data-parameters="text">{{:~sensorTranslate('Store the official response and set the issue as rejected')}}</a></li>
                                 {{if categories.length > 0 && protocols[0]}}
                                 <li><a href="#" data-action="add_response,close" data-parameters="text,label">{{:~sensorTranslate('Store the official response and set the issue as approved')}}</a></li>
+                                {{else}}
+                                <li><span style="display: block;padding: 3px 20px;color: #ddd">{{:~sensorTranslate('Store the official response and set the issue as approved')}}</span></li>
                                 {{/if}}
                             </ul>
                             {{/if}}

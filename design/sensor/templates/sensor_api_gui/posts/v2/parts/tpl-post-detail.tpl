@@ -48,6 +48,24 @@
     </ul>
     {{/if}}
 
+    {{if version > 1 && author.id == currentUserId}}
+    <ul class="list-inline">
+        <li>{{:~sensorTranslate('Il testo della proposta è stato modificato')}} <a href="#" data-original="{{:id}}">{{:~sensorTranslate('visualizza il testo originale')}}</a></li>
+    </ul>
+    <div id="modal-original" class="modal fade text-left">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="clearfix">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div id="data-original" class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
     {{if geoLocation && geoLocation.address}}
     <ul class="list-inline">
         <li><i class="fa fa-map-marker"></i> {{:geoLocation.address}}</li>

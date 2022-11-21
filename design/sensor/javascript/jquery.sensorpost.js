@@ -128,6 +128,40 @@
                     e.preventDefault();
                 });
 
+                renderData.find('[data-deploy]').on('click', function (e){
+                    var postId = $(this).data('deploy');
+                    $('#form-deploy').opendataForm({
+                        post: postId
+                    },{
+                        connector: 'deploy-post',
+                        onBeforeCreate: function(){
+                            $('#modal-deploy').modal('show');
+                        },
+                        onSuccess: function (postId) {
+                            plugin.removeAlert().startLoading();
+                            plugin.load(post.id);
+                            $('#modal-deploy').modal('hide');
+                        }
+                    });
+                    e.preventDefault();
+                });
+
+                renderData.find('[data-original]').on('click', function (e){
+                    var postId = $(this).data('original');
+                    $('#data-original').opendataFormView({
+                        object: postId
+                    },{
+                        connector: 'view-original-post',
+                        onBeforeCreate: function(){
+                            $('#modal-original').modal('show');
+                        },
+                        onSuccess: function (postId) {
+                            $('#modal-original').modal('hide');
+                        }
+                    });
+                    e.preventDefault();
+                });
+
                 renderData.find('[data-usergroup]').each(function (){
                     var self = $(this);
                     $.get(plugin.settings.apiEndPoint + '/user-groups/' + self.data('usergroup'), function (response){

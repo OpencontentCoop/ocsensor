@@ -149,7 +149,6 @@
                 {{if protocols && (protocols[0] || protocols[1] || protocols[2])}}
                     {{if protocols[0]}}<strong>{{:~sensorTranslate('Protocollo1')}}</strong>: {{:protocols[0]}}<br />{{/if}}
                     {{if protocols[1]}}<strong>{{:~sensorTranslate('Protocollo2')}}</strong>: {{:protocols[1]}}<br />{{/if}}
-                    {{if protocols[2]}}<strong>{{:~sensorTranslate('Protocollo3')}}</strong>: {{:protocols[2]}}{{/if}}
                 {{else}}<em class="text-muted">{{:~sensorTranslate('Undefined')}}</em>
                 {{/if}}
             </p>
@@ -218,7 +217,7 @@
         {{/if}}
     </div>
 
-    {{if capabilities.can_auto_assign || capabilities.can_fix || capabilities.can_force_fix || capabilities.can_close || capabilities.can_reopen}}
+    {{if capabilities.can_auto_assign || (status.identifier == 'approved' || (status.identifier == 'deployed' && capabilities.is_approver))}}
     <div class="widget">
         <strong class="widget-title">{{:~sensorTranslate('Actions')}}</strong>
         <div class="row">
@@ -226,13 +225,13 @@
                 
                 {{include tmpl="#tpl-post-autoassign"/}}
                 
-                {{include tmpl="#tpl-post-fix"/}}
+                {{!--include tmpl="#tpl-post-fix"--}}
                 
-                {{include tmpl="#tpl-post-force_fix"/}}
+                {{!--include tmpl="#tpl-post-force_fix" --}}
                 
                 {{include tmpl="#tpl-post-close"/}}
 
-                {{include tmpl="#tpl-post-reopen"/}}
+                {{!--include tmpl="#tpl-post-reopen"--}}
             </div>
         </div>
     </div>
@@ -502,6 +501,7 @@
 </script>
 <script id="tpl-post-close" type="text/x-jsrender">
 {{if capabilities.can_close}}
+{{!--
     {{if status.identifier !== 'close'}}
     <div class="form-group" data-action-wrapper>
         <input class="btn btn-md btn-default btn-block"
@@ -522,15 +522,22 @@
                value="{{:~sensorTranslate('Approve')}}" />
     </div>
     {{/if}}
-    {{if status.identifier !== 'deployed' && protocols[2]}}
-    <div class="form-group" data-action-wrapper>
-        <input type="hidden" data-value="label" value="sensor.deployed" />
-        <input class="btn btn-md btn-default btn-block"
-               type="submit"
-               {{if responses.length == 0}}data-confirmation="{{:~sensorTranslate('There are no official replies entered: are you sure you want to close the report?')}}"{{/if}}
-               data-action="close"
-               data-parameters="label"
-               value="{{:~sensorTranslate('Patto')}}" />
+--}}
+    {{if status.identifier == 'approved' || (status.identifier == 'deployed' && capabilities.is_approver)}}
+    <div class="form-group">
+        <a href="#" data-deploy="{{:id}}" type="button" class="btn btn-md btn-block btn-info">{{:~sensorTranslate('Imposta patto')}}</a>
+    </div>
+    <div id="modal-deploy" class="modal fade text-left">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="clearfix">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div id="form-deploy" class="clearfix"></div>
+          </div>
+        </div>
+      </div>
     </div>
     {{/if}}
 {{/if}}
@@ -560,12 +567,8 @@
                 <label for="protocol2">{{:~sensorTranslate('Protocollo2')}}</label>
                 <input type="text" data-value="protocol2" id="protocol2" class="form-control protocol-mask" value="{{if protocols && protocols[1]}}{{:protocols[1]}}{{/if}}" style="height: 30px;"/>
             </li>
-            <li>
-                <label for="protocol3">{{:~sensorTranslate('Protocollo3')}}</label>
-                <input type="text" data-value="protocol3" id="protocol3" class="form-control protocol-mask" value="{{if protocols && protocols[2]}}{{:protocols[2]}}{{/if}}" style="height: 30px;"/>
-            </li>
             <li class="clearfix">
-                <input style="margin-top: 5px;" data-action="set_protocol" data-parameters="protocol1,protocol2,protocol3" class="btn btn-sm btn-default pull-right" type="submit" value="{{:~sensorTranslate('Select')}}" />
+                <input style="margin-top: 5px;" data-action="set_protocol" data-parameters="protocol1,protocol2" class="btn btn-sm btn-default pull-right" type="submit" value="{{:~sensorTranslate('Select')}}" />
             </li>
         </ul>
     </div>
