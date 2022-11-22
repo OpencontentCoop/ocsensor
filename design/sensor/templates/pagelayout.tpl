@@ -5,9 +5,6 @@
 
 <head>
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&display=swap" rel="stylesheet">
-
     <meta charset="utf-8">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,6 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     {ezcss_load( array(
+        'opensans.css',
         'animate.css',
         'style.css',
         'custom.css',
@@ -60,7 +58,6 @@
         'jsrender.js', 'jsrender.helpers.js',
         'moment-with-locales.min.js',
         'alpaca.js',
-        concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase),
         'fields/Recaptcha.js',
         'jquery.opendatabrowse.js',
         'jquery.opendataform.js',
