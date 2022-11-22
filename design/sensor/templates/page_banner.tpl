@@ -135,6 +135,13 @@
                             <option></option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <input type="text"
+                               name="validity"
+                               class="form-control daterange"
+                               placeholder="{sensor_translate('Data di validità')}"
+                               value=""/>
+                    </div>
                 </div>
                 {/if}
 

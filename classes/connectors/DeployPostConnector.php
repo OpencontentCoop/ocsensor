@@ -1,6 +1,7 @@
 <?php
 
 use Opencontent\Ocopendata\Forms\Connectors\AbstractBaseConnector;
+use Opencontent\Sensor\Api\Action\Action;
 use Opencontent\Sensor\Api\Values\ParticipantRole;
 use Opencontent\Sensor\Legacy\PermissionService;
 
@@ -71,9 +72,9 @@ class DeployPostConnector extends AbstractBaseConnector
     protected function getData()
     {
         return [
-            'start_date' => $this->startDateAttribute ?
+            'start_date' => $this->startDateAttribute && $this->postDataMap['start_date']->hasContent()?
                 date('d/m/Y', $this->postDataMap['start_date']->toString()) : null,
-            'end_date' => $this->endDateAttribute ?
+            'end_date' => $this->endDateAttribute && $this->postDataMap['end_date']->hasContent() ?
                 date('d/m/Y', $this->postDataMap['end_date']->toString()) : null,
             'document_number' => $this->documentNumberAttribute ?
                 $this->postDataMap['document_number']->toString() : null,
@@ -173,12 +174,16 @@ class DeployPostConnector extends AbstractBaseConnector
         if ($this->startDateAttribute && $this->endDateAttribute && $this->documentNumberAttribute) {
             $attributes = [];
             $startDateTime = \DateTime::createFromFormat('d/m/Y', $_POST['start_date']);
-            $attributes['start_date'] = $startDateTime instanceof \DateTime ?
-                $startDateTime->format(\DateTime::ISO8601) : null;
+            if (!$startDateTime instanceof \DateTime){
+                throw new Exception('Data non valida ' . $_POST['start_date']);
+            }
+            $attributes['start_date'] = $startDateTime->format('U');
 
             $endDateTime = \DateTime::createFromFormat('d/m/Y', $_POST['end_date']);
-            $attributes['end_date'] = $endDateTime instanceof \DateTime && $endDateTime > $startDateTime?
-                $endDateTime->format(\DateTime::ISO8601) : null;
+            if (!$endDateTime instanceof \DateTime){
+                throw new Exception('Data non valida ' . $_POST['end_date']);
+            }
+            $attributes['end_date'] = $endDateTime->format('U');
 
             if (!$this->isAlreadyDeployed) {
                 $attributes['document_number'] = $_POST['document_number'];
@@ -189,10 +194,10 @@ class DeployPostConnector extends AbstractBaseConnector
 
                 eZContentFunctions::updateAndPublishObject($this->post, ['attributes' => $attributes]);
 
-                $state = $this->repository->getSensorPostStates('sensor')["sensor.deployed"];
-                if ($state instanceof eZContentObjectState) {
-                    $this->post->assignState($state);
-                }
+                $this->repository->getActionService()->runAction(
+                    new Action('close', ['label' => 'sensor.deployed']),
+                    $this->repository->getPostService()->loadPost((int)$post->attribute('id'))
+                );
 
                 return true;
             }

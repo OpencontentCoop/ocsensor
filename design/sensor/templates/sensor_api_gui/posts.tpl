@@ -183,6 +183,18 @@ $(document).ready(function () {ldelim}
             '{/literal}{sensor_translate('Last 30 days')}{literal}': [moment().subtract(29, 'days'), moment()]
         }
     });
+    form.find('input[name="validity"]').daterangepicker({
+        startDate: moment(),
+        endDate: moment(),
+        opens: 'left',
+        locale: dateRangePickerLocale,
+        ranges: {
+          '{/literal}{sensor_translate('Today')}{literal}': [moment(), moment()],
+          '{/literal}{sensor_translate('Yesterday')}{literal}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          '{/literal}{sensor_translate('Last 7 days')}{literal}': [moment().subtract(6, 'days'), moment()],
+          '{/literal}{sensor_translate('Last 30 days')}{literal}': [moment().subtract(29, 'days'), moment()]
+        }
+    });
     $('.daterange').on('cancel.daterangepicker', function(ev, picker) {
         $(this).val('');
     });
@@ -304,6 +316,10 @@ $(document).ready(function () {ldelim}
         var searchPublished = form.find('[name="published"]');
         if (searchPublished.val().length > 0){
             query.push("published range [" + searchPublished.data('daterangepicker').startDate.format('YYYY-MM-DD HH:mm') + "," + searchPublished.data('daterangepicker').endDate.format('YYYY-MM-DD HH:mm') + "]");
+        }
+        var searchValidity = form.find('[name="validity"]');
+        if (searchValidity.length > 0 && searchValidity.val().length > 0){
+            query.push("calendar[start_date,end_date] = [" + searchValidity.data('daterangepicker').startDate.format('YYYY-MM-DD') + "," + searchValidity.data('daterangepicker').endDate.format('YYYY-MM-DD') + "]");
         }
 
         if (selectOwner.length > 0) {

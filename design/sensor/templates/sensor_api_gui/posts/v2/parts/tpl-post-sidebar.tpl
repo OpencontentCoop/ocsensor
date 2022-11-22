@@ -217,7 +217,18 @@
         {{/if}}
     </div>
 
-    {{if capabilities.can_auto_assign || (status.identifier == 'approved' || (status.identifier == 'deployed' && capabilities.is_approver))}}
+    {{if status.identifier == 'deployed'}}
+    <div class="widget">
+        <strong class="widget-title">{{:~sensorTranslate('Informazioni Patto')}}</strong>
+        <ul class="list-unstyled widget-content">
+            <li><b>{{:~sensorTranslate('Data inizio validità')}}:</b> {{:~formatDate(deployInfo.validFrom, 'DD/MM/YYYY')}}</li>
+            <li><b>{{:~sensorTranslate('Data fine validità')}}:</b> {{:~formatDate(deployInfo.validTo, 'DD/MM/YYYY')}}</li>
+            <li><b>{{:~sensorTranslate('Numero determina')}}:</b> {{:deployInfo.documentNumber}}</li>
+        </ul>
+    </div>
+    {{/if}}
+
+    {{if capabilities.can_auto_assign || capabilities.can_respond}}
     <div class="widget">
         <strong class="widget-title">{{:~sensorTranslate('Actions')}}</strong>
         <div class="row">
@@ -523,7 +534,7 @@
     </div>
     {{/if}}
 --}}
-    {{if status.identifier == 'approved' || (status.identifier == 'deployed' && capabilities.is_approver)}}
+    {{if (status.identifier == 'approved' || status.identifier == 'deployed') && capabilities.can_respond}}
     <div class="form-group">
         <a href="#" data-deploy="{{:id}}" type="button" class="btn btn-md btn-block btn-info">{{:~sensorTranslate('Imposta patto')}}</a>
     </div>
