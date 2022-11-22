@@ -1,3 +1,4 @@
+{ezscript_require(array(concat('https://www.google.com/recaptcha/api.js?hl=', fetch( 'content', 'locale' ).country_code|downcase)))}
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
 
