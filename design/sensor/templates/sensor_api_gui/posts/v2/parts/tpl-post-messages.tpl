@@ -9,13 +9,13 @@
                     <div id="message-{{:id}}" class="message-{{:_type}} {{if _type == 'system'}}panel panel-default{{else _type == 'private'}}panel panel-warning{{else _type == 'public'}}panel panel-success{{else _type == 'response'}}panel panel-primary{{/if}}"
                         {{if _type == 'audit'}}style="margin-bottom: 20px;display: none;"{{/if}}>
                         <div{{if _type != 'audit'}} class="panel-heading"{{/if}}{{if _type == 'system' || _type == 'audit'}} style="border-bottom: none;"{{/if}}>
-                            <div class="media"{{if needModeration || !isRejected}} style="overflow:visible"{{/if}}>
+                            <div class="media"{{if needModeration}} style="overflow:visible"{{/if}}>
                                 {{if _type != 'audit'}}
                                 <div class="pull-left">
                                     <img src="/sensor/avatar/{{:creator.id}}" class="img-circle" style="width: 50px; height: 50px; object-fit: cover;" />
                                 </div>
                                 {{/if}}
-                                <div class="media-body"{{if needModeration || !isRejected}} style="overflow:visible"{{/if}}>
+                                <div class="media-body"{{if needModeration}} style="overflow:visible"{{/if}}>
                                     {{if _type != 'audit'}}<p class="comment_name">{{/if}}
                                         {{if _type == 'system'}}
                                             <strong>{{:richText}}</strong>
@@ -47,7 +47,7 @@
                                                    <input type="hidden" data-value="moderation" value="approve" />
                                                 </div>
                                                 {{/if}}
-                                                {{if needModeration || !isRejected}}
+                                                {{if needModeration}}
                                                 <div class="btn-group pull-right">
                                                     <button type="button" class="btn button-icon btn-danger btn-bold dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fa fa-times"></i>

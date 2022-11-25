@@ -26,12 +26,24 @@ class ViewOriginalPostConnector extends AbstractBaseConnector
      */
     protected $subjectAttribute;
 
+    /**
+     * @var eZContentClassAttribute
+     */
+    protected $imagesAttribute;
+
+    /**
+     * @var eZContentClassAttribute
+     */
+    protected $filesAttribute;
+
     protected function load()
     {
         if (!$this->isLoaded) {
             $this->repository = OpenPaSensorRepository::instance();
             $this->descriptionAttribute = $this->repository->getPostContentClassAttribute('description');
             $this->subjectAttribute = $this->repository->getPostContentClassAttribute('subject');
+            $this->imagesAttribute = $this->repository->getPostContentClassAttribute('images');
+            $this->filesAttribute = $this->repository->getPostContentClassAttribute('files');
             if ($this->hasParameter('object')) {
                 $this->post = eZContentObject::fetch((int)$this->getParameter('object'));
                 if (!$this->post instanceof eZContentObject) {
@@ -58,12 +70,27 @@ class ViewOriginalPostConnector extends AbstractBaseConnector
         return [
             'subject' => $dataMap['subject']->toString(),
             'description' => $dataMap['description']->toString(),
+            'images' => $this->imagesAttribute ? $this->formatMultiFile($dataMap['images']) : null,
+            'files' => $this->filesAttribute ? $this->formatMultiFile($dataMap['files']) : null,
         ];
+    }
+
+    private function formatMultiFile(eZContentObjectAttribute $attribute)
+    {
+        $files = [];
+        if ($attribute->attribute('data_type_string') === OCMultiBinaryType::DATA_TYPE_STRING){
+            /** @var eZMultiBinaryFile[] $content */
+            $content = $attribute->content();
+            foreach ($content as $item){
+                $files[] = $item->attribute('original_filename');
+            }
+        }
+        return $files;
     }
 
     protected function getSchema()
     {
-        return [
+        $schema = [
             "title" => SensorTranslationHelper::instance()->translate('Versione originale'),
             "type" => "object",
             "properties" => [
@@ -78,6 +105,26 @@ class ViewOriginalPostConnector extends AbstractBaseConnector
 
             ],
         ];
+        if ($this->imagesAttribute){
+            $schema['properties']['images'] = [
+                "type" => "array",
+                "items" => [
+                    "type" => "string",
+                ],
+                "title" => $this->imagesAttribute->attribute('name'),
+            ];
+        }
+        if ($this->filesAttribute){
+            $schema['properties']['files'] = [
+                "type" => "array",
+                "items" => [
+                    "type" => "string",
+                ],
+                "title" => $this->filesAttribute->attribute('name'),
+            ];
+        }
+
+        return $schema;
     }
 
     protected function getOptions()
