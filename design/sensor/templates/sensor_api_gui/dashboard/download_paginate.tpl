@@ -7,12 +7,8 @@
 
     <title>Exporting CSV</title>
 
-    <link href="//getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-1.12.0.min.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="//getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    {ezcss_load( array( 'app.css', 'font-awesome.min.css') )}
+    {ezscript_load( array('ezjsc::jquery', 'ezjsc::jqueryUI' ) )}
     <script>
         {literal}
         $(document).ready(function(){
@@ -35,12 +31,13 @@
                     });
                 }else{
                     $('.progress').hide();
-                    $('h2').html('File is ready');
-                    $('.download').attr( 'href', endpoint+'?download=1&download_id='+data.download_id).show();
+                  $('h2').html('Il file è pronto!');
+                  $('.download').attr( 'href', endpoint+'?download=1&download_id='+data.download_id).show();
+                  $('.backtosite').show();
                 }
             };
 
-            iterate({/literal}{ldelim}{foreach $variables as $key => $value}{$key}:{$value}{delimiter},{/delimiter}{/foreach}{rdelim}{literal});
+            iterate({/literal}{ldelim}{foreach $variables as $key => $value}'{$key}':{$value}{delimiter},{/delimiter}{/foreach}{rdelim}{literal});
         });
         {/literal}
     </script>
@@ -60,7 +57,9 @@
         </div>
 
         <div class="text-center">
-            <a href="#" class="download btn btn-success btn-lg" style="display: none">Download file</a>
+            <a href="#" class="download btn btn-success btn-lg" style="display: none">Download file}</a>
+            <p class="backtosite" style="margin-top:20px; display: none"><a href="/" class="btn btn-info btn-lg">Torna al sito</a></p>
+
         </div>
 
     </div>

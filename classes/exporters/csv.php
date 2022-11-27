@@ -33,8 +33,11 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $this->repository = $repository;
 
         $this->queryParams = $http->attribute('get');
-        $this->queryString = $this->queryParams['q'];
-        $this->maxSearchLimit = \Opencontent\Sensor\Legacy\SearchService::MAX_LIMIT;
+        $this->queryString = isset($this->queryParams['query']) ? $this->queryParams['query'] : $this->queryParams['q'];
+        unset($this->queryParams['/sensor/dashboard/(export)']);
+        unset($this->queryParams['/sensor/export']);
+        unset($this->queryParams['format']);
+        $this->maxSearchLimit = 100;
 
         unset($this->queryParams['capabilities']); //boost performance
         if (isset($this->queryParams['ignorePolicies']) && $this->queryParams['ignorePolicies']){
@@ -92,7 +95,12 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
     public function fetchCount()
     {
         if ($this->count === null) {
-            $this->count = $this->repository->getSearchService()->searchPosts($this->queryString . ' and limit 1', $this->queryParams, $this->searchPolicies)->totalCount;
+            $searchQuery = '';
+            if (!empty($this->queryString)){
+                $searchQuery = $this->queryString . ' and ';
+            }
+            $this->count = $this->repository->getSearchService()->searchPosts($searchQuery . 'limit 1', $this->queryParams, $this->searchPolicies)->totalCount;
+
         }
         return $this->count;
     }
@@ -137,6 +145,8 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
 
             return $item;
         }
+
+        return [];
     }
 
     protected function startPaginateDownload()
@@ -161,11 +171,89 @@ class SensorPostCsvExporter extends SearchQueryCSVExporter
         $tpl = eZTemplate::factory();
         foreach ($variables as $key => $value){
             if (is_string($value) && $value != 'true' && $value != 'false'){ //@todo
-                $variables[$key] = '"' . $variables[$key] . '"';
+                $variables[$key] = '"' . addcslashes($variables[$key], '"') . '"';
+            }elseif (is_bool($value)){
+                $variables[$key] = (int)$variables[$key];
             }
         }
         $tpl->setVariable('variables', $variables);
 
         return $tpl->fetch('design:sensor_api_gui/dashboard/download_paginate.tpl');
     }
+
+
+    protected function tempFileName($filename)
+    {
+        return eZSys::storageDirectory() . '/export-csv/' . $filename . '.csv';
+    }
+
+    protected function tempFile($filename)
+    {
+        $filename = $this->tempFileName($filename);
+        $fileHandler = eZClusterFileHandler::instance($filename);
+        if (!$fileHandler->exists()) {
+            $fileHandler->storeContents(' ', 'exportcsv', 'text/csv');
+        }
+
+        return $fileHandler;
+    }
+
+    protected function handlePaginateDownload()
+    {
+        $fileHandler = $this->tempFile($this->filename);
+
+        $tempFilename = eZSys::storageDirectory() . '/export-csv/' . uniqid('exportaspaginate_') . '.temp';
+        $contents = $fileHandler->fetchContents();
+        if ($contents === ' '){
+            $contents = '';
+        }
+        if (!eZFile::create(basename($tempFilename), dirname($tempFilename), $contents)){
+            eZDebug::writeError("Fail creating $tempFilename", __METHOD__);
+        }
+
+        $output = fopen($tempFilename, 'a');
+        $result = $this->fetch();
+
+        $makeHeaders = $this->iteration == 0;
+
+        /** @var Opencontent\Sensor\Api\Values\Post $item */
+        foreach ($result->searchHits as $item) {
+            $headers = $this->csvHeaders($item);
+            if ($makeHeaders) {
+                fputcsv(
+                    $output,
+                    $headers,
+                    $this->options['CSVDelimiter'],
+                    $this->options['CSVEnclosure']
+                );
+            }
+            $values = $this->transformItem($item);
+            if (!empty($values)){
+                fputcsv($output, array_values($values), $this->options['CSVDelimiter'], $this->options['CSVEnclosure']);
+            }
+            $makeHeaders = false;
+        }
+
+        $this->queryString = $result->nextPageQuery;
+
+        $fileHandler->storeContents( file_get_contents($tempFilename) );
+        unlink($tempFilename);
+
+        $data = array_merge(
+            $this->queryParams,
+            array(
+                'query' => $this->queryString,
+                'download_id' => $this->filename,
+                'iteration' => ++$this->iteration,
+                'last' => count( $result->searchHits ),
+                'count' => $this->count,
+                'limit' => $this->maxSearchLimit
+            )
+        );
+
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        eZExecution::cleanExit();
+    }
+
 }
