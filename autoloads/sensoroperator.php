@@ -32,6 +32,7 @@ class SensorOperator
             'can_set_sensor_tag',
             'sensor_operators_root_node',
             'sensor_root_class',
+            'sensor_can_modify_password',
         );
     }
 
@@ -94,6 +95,10 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_can_modify_password':
+                $operatorValue = $repository->isCurrentUserExternal() === false;
+                break;
+
             case 'sensor_operators_root_node':
                 $operatorValue = $repository->getOperatorsRootNode();
                 break;

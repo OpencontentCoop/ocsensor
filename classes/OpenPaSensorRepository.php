@@ -1025,4 +1025,9 @@ class OpenPaSensorRepository extends LegacyRepository
         ];
         return $userMenu;
     }
+
+    public function isCurrentUserExternal()
+    {
+        return \eZHTTPTool::instance()->hasSessionVariable('SIRACUserLoggedIn') || \eZHTTPTool::instance()->hasSessionVariable('CASUserLoggedIn');
+    }
 }
