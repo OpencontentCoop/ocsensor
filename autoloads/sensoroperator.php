@@ -315,10 +315,12 @@ class SensorOperator
                 $last = $repository->getSearchService()->searchPosts('sort [published=>desc] limit 1', [], [])->searchHits[0];
                 /** @var \Opencontent\Sensor\Api\Values\Post $first */
                 /** @var \Opencontent\Sensor\Api\Values\Post $last */
-                return [
-                    'first' => $first->published->setTime(0, 0),
-                    'last' => $last->published->setTime(23, 0)
-                ];
+                if ($first->published && $last->published) {
+                    return [
+                        'first' => $first->published->setTime(0, 0),
+                        'last' => $last->published->setTime(23, 0)
+                    ];
+                }
             }
         }catch (Exception $e){
             eZDebug::writeError($e->getMessage(), __METHOD__);
