@@ -33,6 +33,7 @@ class SensorOperator
             'sensor_operators_root_node',
             'sensor_root_class',
             'sensor_can_modify_password',
+            'sensor_message_id',
         );
     }
 
@@ -87,6 +88,13 @@ class SensorOperator
                     'default' => null,
                 )
             ),
+            'sensor_message_id' => array(
+                'id' => array(
+                    'type' => 'integer',
+                    'required' => true,
+                    'default' => 0,
+                )
+            ),
         );
     }
 
@@ -95,6 +103,10 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_message_id':
+                $operatorValue = '<post.' . $namedParameters['id'] . '.sensor@' . str_replace('/', '', eZINI::instance()->variable('SiteSettings', 'SiteURL')) . '>';
+                break;
+
             case 'sensor_can_modify_password':
                 $operatorValue = $repository->isCurrentUserExternal() === false;
                 break;
@@ -315,7 +327,7 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         try {
             $first = $repository->getSearchService()->searchPosts('sort [published=>asc] limit 1', [], []);
-            if ($first->totalCount > 0) {
+            if ($first->totalCount > 0 && isset($first->searchHits[0])) {
                 $first = $first->searchHits[0];
                 $last = $repository->getSearchService()->searchPosts('sort [published=>desc] limit 1', [], [])->searchHits[0];
                 /** @var \Opencontent\Sensor\Api\Values\Post $first */

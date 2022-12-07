@@ -29,5 +29,6 @@ $eZTemplateOperatorArray[] = array(
         'sensor_operators_root_node',
         'sensor_root_class',
         'sensor_can_modify_password',
+        'sensor_message_id',
     )
 );

@@ -1,6 +1,6 @@
 {def $social_pagedata = social_pagedata('sensor')}
-{set-block scope=root variable=message_id}{concat('<post.', $object.id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
-{set-block scope=root variable=reply_to}{concat('<post.', $object.id,'.sensor','@',$social_pagedata.site_url,'>')}{/set-block}
+{set-block scope=root variable=message_id}{sensor_message_id($object.id)}{/set-block}
+{set-block scope=root variable=reply_to}{sensor_message_id($object.id)}{/set-block}
 
 {set-block scope=root variable=subject}[{$social_pagedata.site_title}] #{$object.id}: {$subject|wash()}{/set-block}
 {set-block scope=root variable=body}
