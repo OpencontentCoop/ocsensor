@@ -326,6 +326,7 @@ class OpenPaSensorRepository extends LegacyRepository
                         'UserCanAccessUserGroupPosts' => isset($sensorIni['UserCanAccessUserGroupPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
                         'HideUserNames' => $this->isHiddenUserName(),
                         'CustomHomepageDashboard' => isset($sensorIni['CustomHomepageDashboard']) ? $sensorIni['CustomHomepageDashboard'] == 'enabled' : false,
+                        'WebhookUserEmailBlackList' => isset($sensorIni['WebhookUserEmailBlackList']) ? explode(';', $sensorIni['WebhookUserEmailBlackList']) : [],
                     );
                     return [
                         'content' => $data,
