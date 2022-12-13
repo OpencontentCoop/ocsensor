@@ -1,0 +1,1 @@
+{include uri='design:page_login.tpl'}

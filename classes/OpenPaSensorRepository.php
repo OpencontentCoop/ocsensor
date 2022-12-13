@@ -832,11 +832,17 @@ class OpenPaSensorRepository extends LegacyRepository
         return $this->data['homepage'];
     }
 
+    public static function isOnlyUserContext()
+    {
+        return eZINI::instance()->variable('DesignSettings', 'SiteDesign') === 'bootstrapitalia';
+    }
+
     /**
      * @return array[]
      */
     public function getMainMenu()
     {
+        $isOnlyUserContext = self::isOnlyUserContext();
         $trans = SensorTranslationHelper::instance();
         $infoChildren = [
             [
@@ -857,7 +863,7 @@ class OpenPaSensorRepository extends LegacyRepository
         ];
 
         $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'stat');
-        if ($hasAccess['accessWord'] != 'no') {
+        if ($hasAccess['accessWord'] != 'no' && !$isOnlyUserContext) {
             $infoChildren[] = [
                 'name' => $trans->translate('Statistics', 'menu'),
                 'url' => 'sensor/stat',
@@ -887,16 +893,18 @@ class OpenPaSensorRepository extends LegacyRepository
             ],
         ];
         if (eZUser::currentUser()->isRegistered()) {
-            $menu[] = [
-                'name' => $trans->translate('My activities', 'menu'),
-                'url' => 'sensor/dashboard',
-                'highlight' => false,
-                'has_children' => false,
-            ];
+            if (!$isOnlyUserContext) {
+                $menu[] = [
+                    'name' => $trans->translate('My activities', 'menu'),
+                    'url' => 'sensor/dashboard',
+                    'highlight' => false,
+                    'has_children' => false,
+                ];
+            }
             if ($sensorIni->hasVariable('SensorConfig', 'ShowUserWidget')
                 && $sensorIni->variable('SensorConfig', 'ShowUserWidget') == 'menu') {
                 $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'user_list');
-                if ($hasAccess['accessWord'] != 'no') {
+                if ($hasAccess['accessWord'] != 'no' && !$isOnlyUserContext) {
                     $menu[] = [
                         'name' => $trans->translate('Users', 'menu'),
                         'url' => 'sensor/user',
@@ -911,7 +919,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 && $sensorIni->hasVariable('SocketSettings', 'Enabled')
                 && $sensorIni->variable('SocketSettings', 'Enabled') == 'true') {
                 $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'manage');
-                if ($hasAccess['accessWord'] != 'no') {
+                if ($hasAccess['accessWord'] != 'no' && !$isOnlyUserContext) {
                     $menu[] = [
                         'name' => $trans->translate('Inbox', 'menu'),
                         'url' => 'sensor/inbox',
@@ -969,6 +977,7 @@ class OpenPaSensorRepository extends LegacyRepository
      */
     public function getUserMenu()
     {
+        $isOnlyUserContext = self::isOnlyUserContext();
         $trans = SensorTranslationHelper::instance();
         $userMenu = [
             [
@@ -986,7 +995,7 @@ class OpenPaSensorRepository extends LegacyRepository
         ];
 
         $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'stat');
-        if ($hasAccess['accessWord'] != 'no') {
+        if ($hasAccess['accessWord'] != 'no' && !$isOnlyUserContext) {
             $userMenu[] = [
                 'name' => $trans->translate('Statistics', 'menu'),
                 'url' => 'sensor/stat',
@@ -996,7 +1005,7 @@ class OpenPaSensorRepository extends LegacyRepository
         }
 
         $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'config');
-        if ($hasAccess['accessWord'] == 'yes') {
+        if ($hasAccess['accessWord'] == 'yes' && !$isOnlyUserContext) {
             $userMenu[] = [
                 'name' => $trans->translate('Settings', 'menu'),
                 'url' => 'sensor/config',
@@ -1007,7 +1016,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
         if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
             $hasAccess = eZUser::currentUser()->hasAccessTo('webhook', 'admin');
-            if ($hasAccess['accessWord'] == 'yes') {
+            if ($hasAccess['accessWord'] == 'yes' && !$isOnlyUserContext) {
                 $userMenu[] = [
                     'name' => $trans->translate('Webhooks', 'menu'),
                     'url' => 'webhook/list',

@@ -38,7 +38,7 @@
                         </h2>
                         {attribute_view_gui attribute=$post_container.data_map.short_description}
                         {*<div id="sensorgraph" style="width: 100%; height: 500px; margin: 0 auto; padding: 10px;"></div>*}
-                        {if $current_user.is_logged_in|not()}
+                        {if fetch(user, current_user).is_logged_in|not()}
                             <a href="#login"
                                class="btn btn-primary btn-lg btn-block">{sensor_translate('Login', 'menu')}</a>
                         {else}
