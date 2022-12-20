@@ -21,8 +21,7 @@ class SensorApiBasicAuthStyle extends ezpRestAuthenticationStyle implements ezpR
                 return $auth;
             }
         } elseif ($request->authentication === null) {
-            eZSession::lazyStart();
-            $userID = eZSession::issetkey('eZUserLoggedInID', false) ? eZSession::get('eZUserLoggedInID') : eZUser::anonymousId();
+            $userID = eZSession::issetkey('eZUserLoggedInID') ? eZSession::get('eZUserLoggedInID') : eZUser::anonymousId();
             if ($userID) {
                 $auth = new ezcAuthentication(new ezcAuthenticationIdCredentials($userID));
                 $auth->addFilter(new SensorApiAuthenticationEzFilter());
