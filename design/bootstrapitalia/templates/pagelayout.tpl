@@ -46,12 +46,6 @@
     {/if}
     {ezscript_load($scripts)}
     {undef $scripts $current_locale $moment_language}
-    {if and(fetch('user', 'has_access_to', hash('module','sensor','function','manage')), sensor_settings('SocketIsEnabled'))}
-    <script src="{sensor_settings('SocketUri')}/socket.io/socket.io.js"></script>
-    <script>var Socket = typeof io === 'undefined' ? null : io({if sensor_settings('SocketPath')}{ldelim}path:'{sensor_settings('SocketPath')}/socket.io'{rdelim}{else}'{sensor_settings('SocketUri')}'{/if});</script>
-    {else}
-    <script>var Socket = null;</script>
-    {/if}
 
     {include uri='design:page_head_google_tag_manager.tpl'}
     {include uri='design:page_head_google-site-verification.tpl'}
