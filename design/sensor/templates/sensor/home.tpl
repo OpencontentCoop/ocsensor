@@ -7,9 +7,20 @@
     true(),
     false()
 )}
+{def $show_homepage_blocks = cond(
+    and(
+        ezini('SensorConfig', 'CustomHomepageDashboard', 'ocsensor.ini')|eq('enabled'),
+        $current_user.is_logged_in,
+        $current_user.contentobject.class_identifier|eq('user')
+    ),
+    true(),
+    false()
+)}
 <section class="hgroup noborder">
 {if $show_inbox_widget}
     {include uri='design:sensor_api_gui/todo.tpl'}
+{elseif $show_homepage_blocks}
+    {include uri='design:sensor/home_blocks.tpl'}
 {else}
     <div class="row">
         <div class="col-sm-12">

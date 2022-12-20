@@ -362,6 +362,11 @@ if ($Part == 'areas') {
     $tpl->setVariable('operations', $operations);
     $tpl->setVariable('operation_count', $operationCount);
     $tpl->setVariable('view_parameters', $Params['UserParameters']);
+
+} elseif ($Part == 'homepage') {
+    $tpl->setVariable('blocks_parent_node', $repository->getHomepageBlocksRootNode());
+    $tpl->setVariable('blocks_class', 'sensor_block');
+
 }
 
 $configMenu = $repository->getConfigMenu();

@@ -327,6 +327,7 @@ class OpenPaSensorRepository extends LegacyRepository
                         'HighlightSuperUserPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['HighlightSuperUserPosts'] == 'enabled' : false,
                         'UserCanAccessUserGroupPosts' => isset($sensorIni['HighlightSuperUserPosts']) ? $sensorIni['UserCanAccessUserGroupPosts'] == 'enabled' : false,
                         'DefaultPrivacyStatus' => isset($sensorIni['DefaultPrivacyStatus']) ? $sensorIni['DefaultPrivacyStatus'] : 'privacy.public',
+                        'CustomHomepageDashboard' => isset($sensorIni['CustomHomepageDashboard']) ? $sensorIni['CustomHomepageDashboard'] == 'enabled' : false,
                     );
                     return [
                         'content' => $data,
@@ -719,6 +720,15 @@ class OpenPaSensorRepository extends LegacyRepository
             'icon' => 'fa fa-question-circle',
         ];
 
+        if ($this->getSensorSettings()->get('CustomHomepageDashboard')){
+            $data['homepage'] = [
+                'uri' => 'sensor/config/homepage',
+                'label' => $translations->translate('Homepage'),
+                'node' => false,
+                'icon' => 'fa fa-object-group',
+            ];
+        }
+
         return $data;
     }
 
@@ -805,5 +815,13 @@ class OpenPaSensorRepository extends LegacyRepository
         }
 
         return $this->treeCache['user-groups'];
+    }
+
+    public function getHomepageBlocksRootNode()
+    {
+        if (!isset($this->data['homepage'])) {
+            $this->data['homepage'] = $this->fetchObjectRemoteID(self::sensorRootRemoteId() . '_home_blocks')->attribute('main_node');
+        }
+        return $this->data['homepage'];
     }
 }
