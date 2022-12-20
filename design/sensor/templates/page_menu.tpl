@@ -42,7 +42,7 @@
             {else}
                 <li>
                     <a href="{$item.url|ezurl(no)}" data-location="{$item.url|explode('/')|implode('-')}">
-                        {if $item.highlight}<span class="label label-primary" style="font-size: 100%">{/if}
+                        {if $item.highlight}<span class="label label-primary" style="font-size: 100%{if $item.highlight|begins_with('#')}; background-color:{$item.highlight} !important;border-color:{$item.highlight} !important{/if}">{/if}
                             {$item.name|wash()}
                             {if $item.highlight}</span>{/if}
                     </a>

@@ -824,4 +824,200 @@ class OpenPaSensorRepository extends LegacyRepository
         }
         return $this->data['homepage'];
     }
+
+
+    /**
+     * @return array[]
+     */
+    public function getMainMenu()
+    {
+        $trans = SensorTranslationHelper::instance();
+        $infoChildren = [
+            [
+                'name' => $trans->translate('Faq', 'menu'),
+                'url' => 'sensor/info/faq',
+                'has_children' => false,
+            ],
+            [
+                'name' => $trans->translate('Privacy', 'menu'),
+                'url' => 'sensor/info/privacy',
+                'has_children' => false,
+            ],
+            [
+                'name' => $trans->translate('Terms of use', 'menu'),
+                'url' => 'sensor/info/terms',
+                'has_children' => false,
+            ],
+        ];
+
+        $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'stat');
+        if ($hasAccess['accessWord'] != 'no') {
+            $infoChildren[] = [
+                'name' => $trans->translate('Statistics', 'menu'),
+                'url' => 'sensor/stat',
+                'highlight' => false,
+                'has_children' => false,
+            ];
+        }
+
+        $sensorIni = eZINI::instance('ocsensor.ini');
+        $menuSegnalazioni = $trans->translate('Issues', 'menu');
+        if ($sensorIni->hasVariable('MenuSettings', 'Segnalazioni')) {
+            $menuSegnalazioni = $sensorIni->variable('MenuSettings', 'Segnalazioni');
+        }
+        $menu = [
+            [
+                'name' => $trans->translate('Informations', 'menu'),
+                'url' => 'sensor/info',
+                'highlight' => false,
+                'has_children' => true,
+                'children' => $infoChildren,
+            ],
+            [
+                'name' => $menuSegnalazioni,
+                'url' => 'sensor/posts',
+                'highlight' => false,
+                'has_children' => false,
+            ],
+        ];
+        if (eZUser::currentUser()->isRegistered()) {
+            $menu[] = [
+                'name' => $trans->translate('My activities', 'menu'),
+                'url' => 'sensor/dashboard',
+                'highlight' => false,
+                'has_children' => false,
+            ];
+            if ($sensorIni->hasVariable('SensorConfig', 'ShowUserWidget')
+                && $sensorIni->variable('SensorConfig', 'ShowUserWidget') == 'menu') {
+                $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'user_list');
+                if ($hasAccess['accessWord'] != 'no') {
+                    $menu[] = [
+                        'name' => $trans->translate('Users', 'menu'),
+                        'url' => 'sensor/user',
+                        'highlight' => false,
+                        'has_children' => false,
+                    ];
+                }
+            }
+
+            if ($sensorIni->hasVariable('SensorConfig', 'ShowInboxWidget')
+                && $sensorIni->variable('SensorConfig', 'ShowInboxWidget') == 'menu'
+                && $sensorIni->hasVariable('SocketSettings', 'Enabled')
+                && $sensorIni->variable('SocketSettings', 'Enabled') == 'true') {
+                $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'manage');
+                if ($hasAccess['accessWord'] != 'no') {
+                    $menu[] = [
+                        'name' => $trans->translate('Inbox', 'menu'),
+                        'url' => 'sensor/inbox',
+                        'highlight' => false,
+                        'has_children' => false,
+                    ];
+                }
+            }
+            $menu = array_merge($menu, $this->getMenuButtons());
+        }
+        return $menu;
+    }
+
+    private function getMenuButtons()
+    {
+        $trans = SensorTranslationHelper::instance();
+        if ($this->getSensorSettings()->get('CustomHomepageDashboard')
+            && eZUser::currentUser()->contentObject()->attribute('class_identifier') == 'user'){
+            /** @var eZContentObjectTreeNode[] $blocks */
+            $blocks = eZContentObjectTreeNode::subTreeByNodeID([
+                'ClassFilterType' => 'include',
+                'ClassFilterArray' => ['sensor_block'],
+                'Limitation' => [],
+                'AttributeFilter' => [
+                    ['sensor_block/show_in_menu', '=', 1]
+                ]
+            ], 1);
+            $menu = [];
+            foreach ($blocks as $block){
+                $dataMap = $block->dataMap();
+                if (isset($dataMap['button_link'], $dataMap['button_label']) && $dataMap['button_link']->hasContent()){
+                    $menu[] = [
+                        'name' => $dataMap['button_label']->toString(),
+                        'url' => $dataMap['button_link']->toString(),
+                        'highlight' => (isset($dataMap['color']) && $dataMap['color']->hasContent()) ? $dataMap['color']->toString() : true,
+                        'has_children' => false,
+                    ];
+                }
+            }
+            return $menu;
+        }else {
+            return [
+                [
+                    'name' => $trans->translate('Create issue', 'menu'),
+                    'url' => 'sensor/add',
+                    'highlight' => true,
+                    'has_children' => false,
+                ]
+            ];
+        }
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getUserMenu()
+    {
+        $trans = SensorTranslationHelper::instance();
+        $userMenu = [
+            [
+                'name' => $trans->translate('Profile', 'menu'),
+                'url' => 'user/edit',
+                'highlight' => false,
+                'has_children' => false,
+            ],
+            [
+                'name' => $trans->translate('Notifications', 'menu'),
+                'url' => 'notification/settings',
+                'highlight' => false,
+                'has_children' => false,
+            ],
+        ];
+
+        $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'stat');
+        if ($hasAccess['accessWord'] != 'no') {
+            $userMenu[] = [
+                'name' => $trans->translate('Statistics', 'menu'),
+                'url' => 'sensor/stat',
+                'highlight' => false,
+                'has_children' => false,
+            ];
+        }
+
+        $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'config');
+        if ($hasAccess['accessWord'] == 'yes') {
+            $userMenu[] = [
+                'name' => $trans->translate('Settings', 'menu'),
+                'url' => 'sensor/config',
+                'highlight' => false,
+                'has_children' => false,
+            ];
+        }
+
+        if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
+            $hasAccess = eZUser::currentUser()->hasAccessTo('webhook', 'admin');
+            if ($hasAccess['accessWord'] == 'yes') {
+                $userMenu[] = [
+                    'name' => $trans->translate('Webhooks', 'menu'),
+                    'url' => 'webhook/list',
+                    'highlight' => false,
+                    'has_children' => false,
+                ];
+            }
+        }
+
+        $userMenu[] = [
+            'name' => $trans->translate('Logout', 'menu'),
+            'url' => 'user/logout',
+            'highlight' => false,
+            'has_children' => false,
+        ];
+        return $userMenu;
+    }
+
 }
