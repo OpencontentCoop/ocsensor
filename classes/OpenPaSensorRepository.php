@@ -867,6 +867,11 @@ class OpenPaSensorRepository extends LegacyRepository
         }
         $menu = [
             [
+                'name' => $trans->translate('Privacy', 'menu'),
+                'url' => 'sensor/info/privacy',
+                'has_children' => false,
+            ],
+            [
                 'name' => $trans->translate('Informations', 'menu'),
                 'url' => 'sensor/info',
                 'highlight' => false,
@@ -881,12 +886,26 @@ class OpenPaSensorRepository extends LegacyRepository
             ],
         ];
         if (eZUser::currentUser()->isRegistered()) {
-            $menu[] = [
+            $menu[] = array(
                 'name' => $trans->translate('My activities', 'menu'),
                 'url' => 'sensor/dashboard',
                 'highlight' => false,
-                'has_children' => false,
-            ];
+                'has_children' => true,
+                'children' => [
+                    array(
+                        'name' => $trans->translate('My proposals', 'menu'),
+                        'url' => 'sensor/dashboard',
+                        'highlight' => false,
+                        'has_children' => false
+                    ),
+                    array(
+                        'name' => $trans->translate('My subscriptions', 'menu'),
+                        'url' => 'sensor/subscriptions',
+                        'highlight' => false,
+                        'has_children' => false
+                    )
+                ]
+            );
             if ($sensorIni->hasVariable('SensorConfig', 'ShowUserWidget')
                 && $sensorIni->variable('SensorConfig', 'ShowUserWidget') == 'menu') {
                 $hasAccess = eZUser::currentUser()->hasAccessTo('sensor', 'user_list');
