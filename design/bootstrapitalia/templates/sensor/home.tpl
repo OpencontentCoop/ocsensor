@@ -20,7 +20,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="it-hero-text-wrapper bg-dark">
+                <div class="it-hero-text-wrapper bg-dark pr-5">
                     <h1 class="py-1 px-2 d-inline-block bg-secondary text-white m-0">{$social_pagedata.banner_title}</h1>
                     <h2 class="text-white bg-primary d-inline-block py-1 px-2">{$social_pagedata.banner_subtitle}</h2>
                 </div>

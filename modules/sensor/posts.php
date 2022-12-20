@@ -162,12 +162,13 @@ if (!is_numeric($postId)) {
             throw new NotFoundException();
         }
 
+        if (isset($Params['Offset']) && $Params['Offset'] === 'pdf') {
+            $pdf = SensorPdfExport::instance($repository, $postId);
+            $pdf->generate();
+            eZExecution::cleanExit();
+        }
+
         if (!OpenPaSensorRepository::isOnlyUserContext()){
-            if (isset($Params['Offset']) && $Params['Offset'] === 'pdf') {
-                $pdf = SensorPdfExport::instance($repository, $postId);
-                $pdf->generate();
-                eZExecution::cleanExit();
-            }
 
             $tpl->setVariable('post_id', (int)$postId);
 

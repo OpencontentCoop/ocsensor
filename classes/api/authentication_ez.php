@@ -29,7 +29,12 @@ class SensorApiAuthUser extends eZUser
     public static function setLoggedUser(eZUser $user)
     {
         if (eZUser::currentUserID() != $user->id()) {
-            self::loginSucceeded($user);
+            //self::loginSucceeded($user);
+            $userID = $user->attribute('contentobject_id');
+            eZAudit::writeAudit('user-login', ['User id' => $userID, 'User login' => $user->attribute('login')]);
+            eZUser::updateLastVisit($userID, true);
+            eZUser::setCurrentlyLoggedInUser($user, $userID, eZUser::NO_SESSION_REGENERATE);
+            eZUser::setFailedLoginAttempts($userID, 0);
         }
     }
 
