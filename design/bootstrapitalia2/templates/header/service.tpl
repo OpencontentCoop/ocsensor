@@ -19,7 +19,7 @@
 {/if}
 
 
-<div class="it-header-slim-wrapper{* theme-light*}">
+<div class="it-header-slim-wrapper{if current_theme_has_variation('light_slim')} theme-light{/if}">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -53,21 +53,21 @@
                             </nav>
                         </div>
                     {/if}
-                    <div class="header-slim-right-zone">
+                    <div class="it-header-slim-right-zone" role="navigation">
                         {if count($enabled_languages)|gt(1)}
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle py-0" href="#" data-toggle="dropdown" aria-expanded="false">
-                                <span>
+                            <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false" aria-controls="languages" aria-haspopup="true">
+                                <span class="visually-hidden">{'Current language'|i18n('bootstrapitalia/header')}:</span>
                                     {foreach $avail_translations as $siteaccess => $lang}
                                         {if and($enabled_languages|contains($lang.locale), is_set($lang_uri_maps[$lang.locale]))}
                                             {if $siteaccess|eq($access_type.name)}
-                                                {$lang.text|wash|upcase}
+                                                <span>{$lang.text|wash|upcase}</span>
                                             {/if}
                                         {/if}
                                     {/foreach}
-                                </span>
                                 {display_icon('it-expand', 'svg', 'icon d-none d-lg-block')}
-                            </a>
+                            </button>
                             <div class="dropdown-menu">
                                 <div class="row">
                                     <div class="col-12">
@@ -76,7 +76,7 @@
                                                 {foreach $avail_translations as $siteaccess => $lang}
                                                     {if and($enabled_languages|contains($lang.locale), is_set($lang_uri_maps[$lang.locale]))}
                                                         <li>
-                                                            <a class="list-item" href={$lang_uri_maps[$lang.locale]}>
+                                                            <a class="dropdown-item list-item" href={$lang_uri_maps[$lang.locale]}>
                                                                 <span lang="{fetch(content, locale, hash(locale_code, $lang.locale)).http_locale_code|explode('-')[0]}">{$lang.text|wash|upcase}</span>
                                                             </a>
                                                         </li>
@@ -100,21 +100,25 @@
                                 </span>
                             </a>
                             {else}
-                                <div class="dropdown">
-                                    <a href="#" class="btn btn-primary btn-icon btn-full dropdown-toggle" id="dropdown-user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div class="it-user-wrapper nav-item dropdown">
+                                    <a aria-expanded="false" class="btn btn-primary btn-icon btn-full" data-bs-toggle="dropdown" href="#" data-focus-mouse="false">
                                         <span class="rounded-icon">
                                             {display_icon('it-user', 'svg', 'icon icon-primary notrasform')}
                                         </span>
                                         <span  class="d-none d-lg-block text-nowrap">{$current_user.contentobject.name|wash()}</span>
                                         {display_icon('it-expand', 'svg', 'icon-expand icon icon-white')}
                                     </a>
-                                    <div class="dropdown-user dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                                        <div class="link-list-wrapper">
-                                            <ul class="link-list">
-                                                {foreach $social_pagedata.user_menu as $item}
-                                                    <li><a class="list-item"  href="{$item.url|ezurl(no)}"><span>{$item.name|wash()|upcase()}</span></a></li>
-                                                {/foreach}
-                                            </ul>
+                                    <div class="dropdown-menu">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="link-list-wrapper">
+                                                    <ul class="link-list">
+                                                        {foreach $social_pagedata.user_menu as $item}
+                                                            <li><a class="dropdown-item list-item" href="{$item.url|ezurl(no)}"><span>{$item.name|wash()|upcase()}</span></a></li>
+                                                        {/foreach}
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

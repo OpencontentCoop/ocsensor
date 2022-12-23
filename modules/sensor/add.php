@@ -3,13 +3,13 @@
 $module = $Params['Module'];
 $http = eZHTTPTool::instance();
 
-if (OpenPaSensorRepository::instance()->getSensorSettings()->get('ShowSmartGui')){
-    if (OpenPaSensorRepository::isOnlyUserContext()){
-        $module->redirectTo('/sensor/posts/new');
-    }else{
-        $module->redirectTo('/#add');
-    }
+if (OpenPaSensorRepository::isOnlyUserContext()) {
+    $module->redirectTo('/sensor/posts/new');
+    return;
+}
 
+if (OpenPaSensorRepository::instance()->getSensorSettings()->get('ShowSmartGui')){
+    $module->redirectTo('/#add');
     return;
 }
 

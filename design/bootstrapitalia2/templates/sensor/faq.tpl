@@ -10,13 +10,13 @@
                autocomplete="off"
                data-search="q"
                name="SearchText"
-               class="form-control rounded-left"
+               class="form-control rounded-0"
                placeholder="{sensor_translate('Search in faq')}">
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="submit">
+            <button class="btn btn-outline-secondary  rounded-0 m-0" type="submit">
                 {display_icon('it-search', 'svg', 'icon icon-sm')} <span class="sr-only">{'Search'|i18n('design/base')}</span>
             </button>
-            <button type="reset" class="btn btn-danger hide">
+            <button type="reset" class="btn btn-danger hide rounded-0 m-0">
                 <i class="fa fa-times"></i>
             </button>
         </div>
@@ -47,17 +47,20 @@
 </script>
 <script id="tpl-data-results" type="text/x-jsrender">
 {{if totalCount > 0}}
-    <div class="collapse-div collapse-left-icon">
+    <div class="accordion">
     {{for searchHits}}
-        <div class="collapse-header" id="heading-{{:metadata.id}}">
-            <button data-toggle="collapse" data-target="#collapse-{{:metadata.id}}" aria-expanded="false" aria-controls="collapse-{{:metadata.id}}">
-                {{if ~i18n(data, 'question')}}{{:~i18n(data, 'question')}}{{/if}}
-            </button>
-        </div>
-        <div id="collapse-{{:metadata.id}}" class="collapse" aria-labelledby="heading-{{:metadata.id}}">
-            <div class="collapse-body" style="padding-left: 64px !important;">
-                {{if ~i18n(data, 'answer')}}{{:~i18n(data, 'answer')}}{{/if}}
-                {{if ~i18n(data, 'category')}}<div class="text-right"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-{{:metadata.id}}">
+                <button class="accordion-button collapsed" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapse-{{:metadata.id}}" aria-expanded="false" aria-controls="collapse-{{:metadata.id}}">
+                    {{if ~i18n(data, 'question')}}{{:~i18n(data, 'question')}}{{/if}}
+                </button>
+            </h2>
+            <div id="collapse-{{:metadata.id}}" class="accordion-collapse collapse" role="region" aria-labelledby="heading-{{:metadata.id}}">
+                <div class="accordion-body">
+                    {{if ~i18n(data, 'answer')}}{{:~i18n(data, 'answer')}}{{/if}}
+                    {{if ~i18n(data, 'category')}}<div class="text-right"><small><i class="fa fa-tag"></i> {{for ~i18n(data, 'category')}}{{:~i18n(name)}}{{/for}}</small></div>{{/if}}
+                </div>
             </div>
         </div>
     {{/for}}

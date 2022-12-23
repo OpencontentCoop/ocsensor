@@ -26,6 +26,10 @@
 
     {debug-accumulator id=page_head_style name=page_head_style}
     {include uri='design:page_head_style.tpl'}
+    <style>
+        b,strong{ldelim}font-weight:bold !important;{rdelim}
+        .it-hero-wrapper h1, .it-hero-wrapper h2{ldelim}font-weight:normal !important;{rdelim}
+    </style>
     {/debug-accumulator}
 
     {debug-accumulator id=page_head_script name=page_head_script}

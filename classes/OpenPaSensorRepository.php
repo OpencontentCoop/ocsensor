@@ -834,7 +834,7 @@ class OpenPaSensorRepository extends LegacyRepository
 
     public static function isOnlyUserContext()
     {
-        return eZINI::instance()->variable('DesignSettings', 'SiteDesign') === 'bootstrapitalia';
+        return eZINI::instance()->variable('DesignSettings', 'SiteDesign') === 'bootstrapitalia2';
     }
 
     /**

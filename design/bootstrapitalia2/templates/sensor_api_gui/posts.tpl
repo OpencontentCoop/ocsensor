@@ -1,10 +1,5 @@
 {ezpagedata_set( 'has_container', true() )}
-<script type="text/javascript" id="">var link = document.createElement("link");
-  link.href = "https://s3.eu-west-1.amazonaws.com/download.stanzadelcittadino.it/assets/styles/main.css";
-  link.type = "text/css";
-  link.rel = "stylesheet";
-  link.media = "screen,print";
-  document.getElementsByTagName("head")[0].appendChild(link);
+<script type="text/javascript" id="">
   var script_tag = document.createElement("script");
   script_tag.setAttribute("src", "https://s3.eu-west-1.amazonaws.com/download.stanzadelcittadino.it/assets/js/main.js");
   script_tag.setAttribute("defer", "defer");
@@ -14,7 +9,7 @@
 
 <style>{literal}
     #root .justify-content-center.row section,
-    #root .cmp-breadcrumbs.breadcrumb-container
+    #root .cmp-breadcrumbs
     {
         display: none !important;
     }
@@ -34,11 +29,22 @@
         color: #587506;
         cursor: inherit;
     }
-    #root a:focus {
+    #root a:focus, #root button:focus {
         outline: 0 !important;
         border-top-color: transparent !important;
         border-left-color: transparent !important;
         border-right-color: transparent !important;
         box-shadow: none !important;
+    }
+    .callout.warning{
+        background-image:none;
+    }
+    #root .cmp-navscroll .container-fluid{
+        padding: 0;
+        display: block;
+    }
+    #root #intro{
+        padding-bottom: 24px !important;
+        padding-top: 24px !important;
     }
 {/literal}</style>

@@ -34,8 +34,8 @@
             {undef $footer_links}
         </div>
     </div>
-    {include uri='design:footer/copyright.tpl'}
 </footer>
+{include uri='design:footer/copyright.tpl'}
 
 <a href="#" aria-hidden="true" data-attribute="back-to-top" class="back-to-top shadow"
    aria-label="{'back to top'|i18n('openpa/footer')}">
