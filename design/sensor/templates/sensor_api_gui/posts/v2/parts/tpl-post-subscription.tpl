@@ -29,7 +29,7 @@
                            data-action="subscribe"
                            style="margin-left:5px"
                            title="{{:~sensorTranslate('Add subscription')}}">
-                           <i class="fa fa-thumbs-up"></i>
+                           <i class="fa fa-handshake-o"></i>
                        </a>
                     </div>
                     <div class="media-body">

@@ -156,7 +156,7 @@
         </div>
     {{/if}}
 
-    <div class="widget">
+    <div class="widget{{if capabilities.can_send_private_message}} bg-danger" style="padding:10px{{/if}}">
         {{if capabilities.can_moderate && privacy.identifier == 'public'}}
             <a href="#" class="pull-right action-trigger" data-reverse="{{:~sensorTranslate('Cancel')}}">{{:~sensorTranslate('Edit')}}</a>
         {{/if}}
