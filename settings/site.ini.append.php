@@ -38,4 +38,8 @@ PolicyOmitList[]=sensor/report
 PolicyOmitList[]=sensor/alert
 PolicyOmitList[]=sensor/metrics
 
+[UserSettings]
+ExtensionDirectory[]=ocsensor
+#LoginHandler[]=sensor
+
 */ ?>
