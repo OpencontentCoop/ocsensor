@@ -80,14 +80,40 @@
     </script>
 
     {if and(openpacontext().is_edit|not(),openpacontext().is_browse|not())}
-    {cache-block expiry=86400 ignore_content_expiry keys=array( $access_type.name, $extra_cache_key, $user_hash, openpaini('GeneralSettings','theme', 'default') )}
-    {debug-accumulator id=page_header_and_offcanvas_menu name=page_header_and_offcanvas_menu}
-        {def $pagedata = openpapagedata() $social_pagedata = social_pagedata()}
-        {include uri='design:page_notifications.tpl'}
-        {include uri='design:page_header.tpl'}
-        {undef $pagedata $social_pagedata}
-    {/debug-accumulator}
-    {/cache-block}
+    <header class="it-header-wrapper it-header-sticky" data-bs-toggle="sticky" data-bs-position-type="fixed" data-bs-sticky-class-name="is-sticky" data-bs-target="#header-nav-wrapper">
+        {cache-block expiry=86400 ignore_content_expiry keys=array( $access_type.name, $extra_cache_key, $current_user.contentobject_id, openpaini('GeneralSettings','theme', 'default') )}
+        {debug-accumulator id=page_header_service name=page_header_service}
+            {def $pagedata = openpapagedata() $social_pagedata = social_pagedata()}
+            {include uri='design:header/service.tpl'}
+            {undef $pagedata $social_pagedata}
+        {/debug-accumulator}
+        {/cache-block}
+
+        {cache-block expiry=86400 ignore_content_expiry keys=array( $access_type.name, $extra_cache_key, $user_hash, openpaini('GeneralSettings','theme', 'default') )}
+        {debug-accumulator id=page_header_and_offcanvas_menu name=page_header_and_offcanvas_menu}
+            {def $pagedata = openpapagedata() $social_pagedata = social_pagedata()}
+            <div class="it-nav-wrapper">
+                <div class="it-header-center-wrapper{if current_theme_has_variation('light_center')} theme-light{/if}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="it-header-center-content-wrapper">
+                                    {include uri='design:logo.tpl'}
+                                    <div class="it-right-zone">
+                                        {include uri='design:header/social.tpl' css="d-none d-lg-flex"}
+                                        {include uri='design:header/search.tpl'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {include uri='design:header/navbar.tpl'}
+            </div>
+            {undef $pagedata $social_pagedata}
+        {/debug-accumulator}
+        {/cache-block}
+    </header>
     {/if}
 
     {if $has_container|not()}<div class="{$main_content_class}">{/if}
