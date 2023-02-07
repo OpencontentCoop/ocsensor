@@ -72,7 +72,7 @@ class DuplicatePostConnector extends AbstractBaseConnector
     protected function getSchema()
     {
         return [
-            "title" => "Duplica segnalazione",
+            "title" => SensorTranslationHelper::instance()->translate('"Duplica proposta"'),
             "type" => "object",
             "properties" => [
                 "subject" => [
@@ -118,7 +118,7 @@ class DuplicatePostConnector extends AbstractBaseConnector
                 ],
                 "redirect" => array(
                     "type" => "checkbox",
-                    "rightLabel" => 'Al salvataggio reindirizza alla segnalazione duplicata',
+                    "rightLabel" => SensorTranslationHelper::instance()->translate('Al salvataggio reindirizza alla proposta duplicata'),
                 ),
             ],
         ];
@@ -140,6 +140,41 @@ class DuplicatePostConnector extends AbstractBaseConnector
         $newDescription = preg_replace('#<br\s*/?>#i', "", $newDescription);
         $newDescription = str_replace(['<b>', '</b>'], "__", $newDescription);
 
+        $storageDirectory = eZSys::instance()->storageDirectory();
+        $images = $files = [];
+        if (isset($this->sourceDataMap['images'])) {
+            $imagesBinaryFiles = $this->sourceDataMap['images']->content();
+            foreach ($imagesBinaryFiles as $binaryFile) {
+                if ($binaryFile instanceof eZMultiBinaryFile) {
+                    $mimeType = $binaryFile->attribute("mime_type");
+                    [$prefix, $suffix] = explode('/', $mimeType);
+                    unset($suffix);
+                    $originalDirectory = $storageDirectory . '/original/' . $prefix;
+                    $fileName = $binaryFile->attribute("filename");
+                    $filePath = $originalDirectory . "/" . $fileName;
+                    eZClusterFileHandler::instance($filePath)->fetch();
+                    $images[] = $filePath;
+                }
+            }
+        }
+        if (isset($this->sourceDataMap['files'])) {
+            $filesBinaryFiles = $this->sourceDataMap['files']->content();
+            foreach ($filesBinaryFiles as $binaryFile) {
+                if ($binaryFile instanceof eZMultiBinaryFile) {
+                    $mimeType = $binaryFile->attribute("mime_type");
+                    [$prefix, $suffix] = explode('/', $mimeType);
+                    unset($suffix);
+                    $originalDirectory = $storageDirectory . '/original/' . $prefix;
+                    $fileName = $binaryFile->attribute("filename");
+                    $filePath = $originalDirectory . "/" . $fileName;
+                    eZClusterFileHandler::instance($filePath)->fetch();
+                    $files[] = $filePath;
+                }
+            }
+        }
+
+
+
         $copy = eZContentFunctions::createAndPublishObject([
             'parent_node_id' => $this->repository->getPostRootNode()->attribute('node_id'),
             'class_identifier' => $this->repository->getPostContentClass()->attribute('identifier'),
@@ -149,7 +184,8 @@ class DuplicatePostConnector extends AbstractBaseConnector
                 'subject' => $newSubject,
                 'type' => $this->sourceDataMap['type']->toString(),
                 'image' => $this->sourceDataMap['image']->toString(),
-                'images' => $this->sourceDataMap['images']->toString(),
+                'images' => implode('|', $images),
+                'files' => implode('|', $files),
                 'privacy' => $this->sourceDataMap['privacy']->toString(),
                 'description' => $newDescription,
                 'on_behalf_of_detail' => $this->sourceDataMap['on_behalf_of_detail']->toString(),
