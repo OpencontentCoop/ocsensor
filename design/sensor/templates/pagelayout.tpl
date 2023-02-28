@@ -76,7 +76,7 @@
         <script>var Socket = null;</script>
     {/if}
 
-{cache-block expiry=86400 ignore_content_expiry keys=array( $current_user.contentobject_id, $access_type.name )}
+{cache-block expiry=86400 ignore_content_expiry keys=array( $current_user.contentobject_id, $access_type.name, $user_hash )}
 {def $social_pagedata = social_pagedata()}
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
