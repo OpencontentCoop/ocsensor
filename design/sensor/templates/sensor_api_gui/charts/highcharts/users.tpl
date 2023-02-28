@@ -6,6 +6,7 @@
             filters: ['interval'],
             enableRangeFilter: ['daily','weekly','monthly'],
             rangeMax: false,
+            rangeDateMin: false,
             load: function (chart, params) {
                 chart.html($('#spinner').html());
                 params.format = 'highcharts';
