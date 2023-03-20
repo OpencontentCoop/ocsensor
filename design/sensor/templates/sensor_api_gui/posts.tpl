@@ -42,6 +42,7 @@
     {include uri='design:sensor_api_gui/posts/tpl-alerts.tpl'}
     {include uri='design:sensor_api_gui/posts/tpl-spinner.tpl'}
     {include uri='design:sensor_api_gui/posts/tpl-post-gallery.tpl'}
+    {include uri='design:sensor_api_gui/posts/tpl-post-satisfy.tpl'}
 </div>
 
 {include uri='design:sensor_api_gui/posts/tpl-posts-results.tpl'}

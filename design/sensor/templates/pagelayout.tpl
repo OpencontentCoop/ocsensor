@@ -1,7 +1,7 @@
 {def $user_hash  = concat( $current_user.role_id_list|implode( ',' ), ',', $current_user.limited_assignment_value_list|implode( ',' ) )}
 {def $has_container = cond(is_set($module_result.content_info.persistent_variable.has_container), true(), false())}
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="{$site.http_equiv.Content-language|explode('-')[0]}">
 
 <head>
 
@@ -120,8 +120,20 @@
                     'X-SiteAccess' : '{$access_type.name}'
                 {rdelim}
             {rdelim});
+            window.satisfy = {ldelim}
+                read: "{sensor_satisfy_entrypoint('read')}",
+                waiting: "{sensor_satisfy_entrypoint('waiting')}",
+                assigned: "{sensor_satisfy_entrypoint('assigned')}",
+                closed: "{sensor_satisfy_entrypoint('closed')}",
+                fixed: "{sensor_satisfy_entrypoint('fixed')}",
+                reopened: "{sensor_satisfy_entrypoint('reopened')}",
+            {rdelim};
         {rdelim})
     </script>
+    {if sensor_has_satisfy_entrypoint()}
+        <script src="{openpaini('StanzaDelCittadinoBridge', 'BuiltInWidgetSource_satisfy', 'https://satisfy.opencontent.it/widget_ns.js')}"></script>
+        <link rel="stylesheet" type="text/css" href="{'stylesheets/satisfy.css'|ezdesign(no)}" />
+    {/if}
 </head>
 
 

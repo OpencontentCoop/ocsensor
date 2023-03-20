@@ -104,5 +104,8 @@ $.views.helpers($.extend({}, $.opendataTools.helpers, {
             newtext += array[i];
         }
         return newtext;
-    }
+    },
+    'satisfyEntrypoint': function (workflowStatusIdentifier) {
+        return window.satisfy[workflowStatusIdentifier] || false;
+    },
 }));

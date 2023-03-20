@@ -34,6 +34,8 @@ class SensorOperator
             'sensor_root_class',
             'sensor_can_modify_password',
             'sensor_message_id',
+            'sensor_satisfy_entrypoint',
+            'sensor_has_satisfy_entrypoint',
         );
     }
 
@@ -95,6 +97,13 @@ class SensorOperator
                     'default' => 0,
                 )
             ),
+            'sensor_satisfy_entrypoint' => array(
+                'suffix' => array(
+                    'type' => 'string',
+                    'required' => true,
+                    'default' => '',
+                )
+            ),
         );
     }
 
@@ -103,6 +112,14 @@ class SensorOperator
         $repository = OpenPaSensorRepository::instance();
         switch ( $operatorName )
         {
+            case 'sensor_has_satisfy_entrypoint':
+                $operatorValue = $repository->hasSatisfyEntrypoint();
+                break;
+
+            case 'sensor_satisfy_entrypoint':
+                $operatorValue = $repository->getSatisfyEntrypointId($namedParameters['suffix']);
+                break;
+
             case 'sensor_message_id':
                 $operatorValue = '<post.' . $namedParameters['id'] . '.sensor@' . str_replace('/', '', eZINI::instance()->variable('SiteSettings', 'SiteURL')) . '>';
                 break;

@@ -1030,4 +1030,33 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         return \eZHTTPTool::instance()->hasSessionVariable('SIRACUserLoggedIn') || \eZHTTPTool::instance()->hasSessionVariable('CASUserLoggedIn');
     }
+
+    public function getSatisfyEntrypointId(?string $suffix): ?string
+    {
+        $attribute = $this->getRootNodeAttribute('satisfy_' . $suffix);
+        if ($attribute instanceof eZContentObjectAttribute && $attribute->hasContent()) {
+            return $attribute->toString();
+        }
+
+        return null;
+    }
+
+    public function hasSatisfyEntrypoint(): bool
+    {
+        $statusList = [
+            'read',
+            'waiting',
+            'assigned',
+            'closed',
+            'fixed',
+            'reopened',
+        ];
+        foreach ($statusList as $status){
+            if ($this->getSatisfyEntrypointId($status)){
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

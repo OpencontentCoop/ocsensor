@@ -6,6 +6,7 @@
         <div class="bordered">
             {{include tmpl="#tpl-post-detail"/}}
             {{include tmpl="#tpl-post-messages"/}}
+            {{include tmpl="#tpl-post-satisfy"/}}
         </div>
     </div>
     <div class="col-md-3 sidebar">
