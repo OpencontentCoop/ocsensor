@@ -42,6 +42,11 @@ class OpenPaSensorRepository extends LegacyRepository
         return self::$instance;
     }
 
+    public static function isReadOnlyModeEnabled()
+    {
+        return getenv('SENSOR_READ_ONLY');
+    }
+
     protected function __construct()
     {
         eZModule::setGlobalPathList(eZModule::activeModuleRepositories());
@@ -67,6 +72,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $permissionDefinitions[] = new PermissionDefinitions\CanModerate();
             $permissionDefinitions[] = new PermissionDefinitions\CanRespond($restrictResponders);
             $permissionDefinitions[] = new PermissionDefinitions\CanSendPrivateMessage();
+            $permissionDefinitions[] = new PermissionDefinitions\CanReadPrivateMessage();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetExpiryDays();
             if ($this->getSensorSettings()->get('ApproverCanReopen') || $this->getSensorSettings()->get('AuthorCanReopen')) {
                 $permissionDefinitions[] = new PermissionDefinitions\CanReopen(
@@ -87,6 +93,7 @@ class OpenPaSensorRepository extends LegacyRepository
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddImage();
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveImage();
             $permissionDefinitions[] = new PermissionDefinitions\CanModerateComment();
+            $permissionDefinitions[] = new PermissionDefinitions\CanReadUnmoderatedComment();
             $permissionDefinitions[] = new PermissionDefinitions\CanSetType();
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanAddFile();
             $permissionDefinitions[] = new LegacyPermissionDefinitions\CanRemoveFile();
@@ -129,25 +136,28 @@ class OpenPaSensorRepository extends LegacyRepository
             $actionDefinitions[] = new ActionDefinitions\SetTagsAction();
             $this->setActionDefinitions($actionDefinitions);
 
-            $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
+            if (!self::isReadOnlyModeEnabled()) {
+                $this->addListener('on_approver_first_read', new ApproverFirstReadListener($this));
 
-            $this->buildNotificationTypes();
+                $this->buildNotificationTypes();
 
-            $this->addListener('on_create', new SendMailListener($this));
-            $this->addListener('after_run_action', new SendMailListener($this));
-            $this->addListener('*', new ScenarioListener($this));
-            $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
-            $this->addListener('on_generate_user', new WelcomeUserListener($this));
-            $this->addListener('on_create', new SensorDailyReportListener());
-            $this->addListener('on_close', new SensorDailyReportListener());
-            $this->addListener('on_update_operator', new SensorReindexer());
-            $this->addListener('on_new_operator', new SensorReindexer());
-            if ($this->getSensorSettings()->get('CloseOnUserGroupPostFix')) {
-                $this->addListener('on_fix', new SuperUserPostFixListener($this));
+                $this->addListener('on_create', new SendMailListener($this));
+                $this->addListener('after_run_action', new SendMailListener($this));
+                $this->addListener('*', new ScenarioListener($this));
+                $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
+                $this->addListener('on_generate_user', new WelcomeUserListener($this));
+                $this->addListener('on_create', new SensorDailyReportListener());
+                $this->addListener('on_close', new SensorDailyReportListener());
+                $this->addListener('on_update_operator', new SensorReindexer());
+                $this->addListener('on_new_operator', new SensorReindexer());
+                if ($this->getSensorSettings()->get('CloseOnUserGroupPostFix')) {
+                    $this->addListener('on_fix', new SuperUserPostFixListener($this));
+                }
+
+                $timelineListener = new SensorTimelineListener();
+                $this->addListener('on_create', $timelineListener);
+                $this->addListener('on_create_timeline', $timelineListener);
             }
-            $timelineListener = new SensorTimelineListener();
-            $this->addListener('on_create', $timelineListener);
-            $this->addListener('on_create_timeline', $timelineListener);
 
             $this->getStatisticsService()->setStatisticFactories([
                 new Statistics\StatusPercentage($this),
@@ -168,7 +178,7 @@ class OpenPaSensorRepository extends LegacyRepository
                 new Statistics\ClosingTrendPerGroup($this),
             ]);
 
-            if (in_array('ocwebhookserver', eZExtension::activeExtensions())) {
+            if (!self::isReadOnlyModeEnabled() && in_array('ocwebhookserver', eZExtension::activeExtensions())) {
                 $this->addListener('*', new SensorWebHookListener($this));
             }
 
