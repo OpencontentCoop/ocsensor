@@ -414,6 +414,9 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
     {
         try {
             $controller = new OpenApi\Controller($this->getOpenApiTools(), $this);
+            if ($this->getRepository()->getSensorSettings()->get('RequireGeolocation')) {
+                $controller->setGeolocationRequired();
+            }
             $result = $controller->createPost();
         } catch (Exception $e) {
             $result = $this->doExceptionResult($e);

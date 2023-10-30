@@ -483,6 +483,8 @@
                 e.preventDefault();
             });
 
+            var geolocationIsRequired = this.inputAddress.attr('required') === 'required';
+
             function checkBehalfFields() {
                 var stepItemIcon = addPostGui.find('a[href="#step-behalf"] .add-icon');
                 if (category.length > 0){
@@ -535,11 +537,19 @@
                         .removeClass('fa-plus-circle text-primary')
                         .addClass('fa-check-circle text-success');
                     addPostGui.find('.drag-marker-help').show();
+                    if (geolocationIsRequired) {
+                        address.parent().removeClass('has-warning');
+                    }
+                    return true;
                 } else {
                     stepItemIcon
                         .removeClass('fa-check-circle text-success')
                         .addClass('fa-plus-circle text-primary');
                     addPostGui.find('.drag-marker-help').hide();
+                    if (geolocationIsRequired) {
+                        address.parent().addClass('has-warning');
+                    }
+                    return false;
                 }
             }
 
@@ -599,6 +609,12 @@
                     e.preventDefault();
                     return false;
                 }
+                var currentTarget = $(this).attr('href').replace('#', '');
+                if (geolocationIsRequired && !checkMapFields() && currentTarget !== 'step-text' && currentTarget !== 'step-geo'){
+                    addPostGui.find('a[href="#step-geo"]').trigger('click');
+                    e.preventDefault();
+                    return false;
+                }
                 if (plugin.settings.faq_predictor && hasValidTexts && hasFaqRequest === false){
                     console.log('load faq by predict')
                     hasFaqRequest = true;
@@ -643,7 +659,11 @@
                 if (checkTextFields()) {
                     var navActive = addPostGui.find('.step-nav li.active');
                     var next = navActive.next().find('a');
+                    var currentTarget = next.attr('href').replace('#', '');
                     if (next.length > 0) {
+                        if (geolocationIsRequired && !checkMapFields() && currentTarget !== 'step-text' && currentTarget !== 'step-geo'){
+                            return false;
+                        }
                         next.trigger('click');
                     }
                 } else {

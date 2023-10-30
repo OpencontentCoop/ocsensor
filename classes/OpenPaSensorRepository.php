@@ -337,6 +337,7 @@ class OpenPaSensorRepository extends LegacyRepository
                         'HideUserNames' => $this->isHiddenUserName(),
                         'CustomHomepageDashboard' => isset($sensorIni['CustomHomepageDashboard']) ? $sensorIni['CustomHomepageDashboard'] == 'enabled' : false,
                         'WebhookUserEmailBlackList' => isset($sensorIni['WebhookUserEmailBlackList']) ? explode(';', $sensorIni['WebhookUserEmailBlackList']) : [],
+                        'RequireGeolocation' => isset($sensorIni['RequireGeolocation']) && $sensorIni['RequireGeolocation'] == 'enabled',
                     );
                     return [
                         'content' => $data,
