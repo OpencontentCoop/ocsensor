@@ -609,8 +609,8 @@
                     e.preventDefault();
                     return false;
                 }
-                var currentTarget = $(this).attr('href').replace('#', '');
-                if (geolocationIsRequired && !checkMapFields() && currentTarget !== 'step-text' && currentTarget !== 'step-geo'){
+                var currentTarget = $(this).attr('href');
+                if (geolocationIsRequired && !checkMapFields() && currentTarget !== '#step-text' && currentTarget !== '#step-geo' && currentTarget !== '#step-behalf'){
                     addPostGui.find('a[href="#step-geo"]').trigger('click');
                     e.preventDefault();
                     return false;
@@ -659,9 +659,10 @@
                 if (checkTextFields()) {
                     var navActive = addPostGui.find('.step-nav li.active');
                     var next = navActive.next().find('a');
-                    var currentTarget = next.attr('href').replace('#', '');
                     if (next.length > 0) {
-                        if (geolocationIsRequired && !checkMapFields() && currentTarget !== 'step-text' && currentTarget !== 'step-geo'){
+                        var currentTarget = next.attr('href');
+                        if (geolocationIsRequired && !checkMapFields() && (currentTarget === '#step-image' || currentTarget === '#step-faq' || currentTarget === '#step-file')){
+                            e.preventDefault();
                             return false;
                         }
                         next.trigger('click');
