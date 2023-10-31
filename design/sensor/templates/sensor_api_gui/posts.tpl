@@ -472,34 +472,6 @@ $(document).ready(function () {ldelim}
                 if (currentPage >= 0) buildView();
                 e.preventDefault();
             });
-            var more = $('<li class="page-item"><span class="page-link">...</span></li');
-            var displayPages = viewContainer.find('.page[data-page_number]');
-
-            var currentPageNumber = viewContainer.find('.page[data-current]').data('page_number');
-            var length = 5;
-            if (displayPages.length > (length+2)){
-                if (currentPageNumber <= (length-1)){
-                    viewContainer.find('.page[data-page_number="'+length+'"]').parent().after(more.clone());
-                    for (i = length; i < pagination; i++) {
-                        viewContainer.find('.page[data-page_number="'+i+'"]').parent().hide();
-                    }
-                }else if (currentPageNumber >= length ){
-                    viewContainer.find('.page[data-page_number="1"]').parent().after(more.clone());
-                    var itemToRemove = (currentPageNumber+1-length);
-                    for (i = 2; i < pagination; i++) {
-                        if (itemToRemove > 0){
-                            viewContainer.find('.page[data-page_number="'+i+'"]').parent().hide();
-                            itemToRemove--;
-                        }
-                    }
-                    if (currentPageNumber < (pagination-1)){
-                        viewContainer.find('.page[data-current]').parent().after(more.clone());
-                    }
-                    for (i = (currentPageNumber+1); i < pagination; i++) {
-                        viewContainer.find('.page[data-page_number="'+i+'"]').parent().hide();
-                    }
-                }
-            }
             if ($.isFunction(callback)){
                 callback.call(context);
             }

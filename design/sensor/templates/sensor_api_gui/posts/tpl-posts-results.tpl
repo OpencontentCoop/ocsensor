@@ -4,17 +4,12 @@
 	{{if pageCount > 1}}
 	<div class="pagination-container text-center">
         <ul class="pagination">
-            <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
-        </ul>
-        <ul class="pagination">
             <li class="page-item {{if !prevPageQuery}}disabled{{/if}}">
                 <a class="page-link prevPage" {{if prevPageQuery}}data-page="{{>prevPage}}"{{/if}} href="#">
                     <span class="text"><i class="fa fa-arrow-left"></i></span>
                 </a>
             </li>
-            {{for pages ~current=currentPage}}
-                <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
-            {{/for}}
+            <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
             <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                 <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
                     <span class="text"><i class="fa fa-arrow-right"></i></span>
@@ -99,9 +94,6 @@
                     <span class="text"><i class="fa fa-arrow-left"></i></span>
                 </a>
             </li>
-            {{for pages ~current=currentPage}}
-                <li class="page-item{{if ~current == query}} active{{/if}}"><a href="#" class="page-link page" data-page_number="{{:page}}" data-page="{{:query}}"{{if ~current == query}} data-current aria-current="page"{{/if}}>{{:page}}</a></li>
-            {{/for}}
             <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                 <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
                     <span class="text"><i class="fa fa-arrow-right"></i></span>
