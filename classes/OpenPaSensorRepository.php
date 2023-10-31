@@ -339,6 +339,14 @@ class OpenPaSensorRepository extends LegacyRepository
                         'WebhookUserEmailBlackList' => isset($sensorIni['WebhookUserEmailBlackList']) ? explode(';', $sensorIni['WebhookUserEmailBlackList']) : [],
                         'RequireGeolocation' => isset($sensorIni['RequireGeolocation']) && $sensorIni['RequireGeolocation'] == 'enabled',
                     );
+                    $data['ApiTypeMap'] = [];
+                    if (!empty($sensorIni['ApiTypeMap'])){
+                        $apiTypeMap = explode('|', $sensorIni['ApiTypeMap']);
+                        foreach ($apiTypeMap as $item){
+                            list($old, $new) = explode(';', $item);
+                            $data['ApiTypeMap'][$old] = $new;
+                        }
+                    }
                     return [
                         'content' => $data,
                         'scope' => 'sensor-settings',
