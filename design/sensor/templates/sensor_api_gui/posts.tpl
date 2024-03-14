@@ -298,7 +298,7 @@ $(document).ready(function () {ldelim}
         }
         var searchType = selectType.val();
         if (searchType){
-            query.push("type in [" + searchType + "]");
+            query.push('type in ["' + searchType + '"]');
             queryData.push({name: 'type', value: searchType});
         }
         var searchPublished = form.find('[name="published"]');

@@ -3,5 +3,8 @@
 [EnvironmentSettingsPresets_content]
 PHPClass=SensorDefaultEnvironmentSettings
 
+[EnvironmentSettingsPresets_datatable]
+PHPClass=SensorDatatableEnvironmentSettings
+
 
 */ ?>

@@ -370,6 +370,7 @@ if ($Part == 'areas') {
     $tpl->setVariable('blocks_parent_node', $repository->getHomepageBlocksRootNode());
     $tpl->setVariable('blocks_class', 'sensor_block');
 
+} elseif ($Part == 'adapters') {
 }
 
 $configMenu = $repository->getConfigMenu();

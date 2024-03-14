@@ -31,12 +31,15 @@
         <li>{{:comments.length}} {{:~sensorTranslate('comments')}} - {{:responses.length}} {{:~sensorTranslate('official replies')}}    </li>
     </ul>
 
-    {{if (capabilities.is_a == 'sensor_operator' || capabilities.can_behalf_of) && reporter.id != author.id}}
+    {{if (capabilities.is_a == 'sensor_operator' || capabilities.can_behalf_of) && (reporter.id != author.id || (meta && meta.application))}}
     <ul class="list-inline">
         <li>
-        {{:~sensorTranslate('Issue reported by')}} {{if reporter.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}} {{:reporter.name}}
-            {{if reporter.isSuperUser}}{{for reporter.userGroups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
-            {{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}
+            {{if reporter.id != author.id}}
+                {{:~sensorTranslate('Issue reported by')}} {{if reporter.type == 'sensor_operator'}}<i class="fa fa-user-circle"></i>{{/if}} {{:reporter.name}}
+                {{if reporter.isSuperUser}}{{for reporter.userGroups}}<span class="label label-default" style="display:none" data-usergroup="{{:#data}}">...</span>{{/for}}{{/if}}
+                {{if channel && channel.icon}} {{:~sensorTranslate('via')}} <i class="{{:channel.icon}}"></i> {{:channel.name}}{{/if}}
+            {{/if}}
+            {{if meta && meta.application}}<code style="border-radius:2px;">{{:meta.application.id}}</code>{{/if}}
         </li>
     </ul>
     {{/if}}
