@@ -12,7 +12,6 @@ class SensorApiViewController implements ezpRestViewControllerInterface
      */
     public function loadView( ezcMvcRoutingInformation $routeInfo, ezcMvcRequest $request, ezcMvcResult $result )
     {
-        return new ezpRestJsonView( $request, $result );
+        return new SensorApiJsonView( $request, $result );
     }
-
 }

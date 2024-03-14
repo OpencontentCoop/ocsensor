@@ -1,0 +1,15 @@
+{
+    "name": "opencontent/stanzadelcittadino",
+    "description": "Simple client for stanzadelcittadino",
+    "license": "GPL-2.0",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Luca Realdi",
+            "email": "lr@opencontent.it"
+        }
+    ],
+    "autoload": {
+        "psr-0": {"Opencontent\\Stanzadelcittadino\\Composer": "src/"}
+    }
+}

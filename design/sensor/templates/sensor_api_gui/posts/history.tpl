@@ -4,9 +4,11 @@
             <span class="label label-default">{sensor_translate('Timeline')}</span>
             <a href="{concat('/sensor/posts/', $post.id)|ezurl(no)}" class="label label-primary">{$post.id|wash()}</a>
             {$post.subject|wash()}
+
         </h1>
         <p class="lead">
             <strong>{$post.type.name|wash()}</strong> di <a href="/sensor/user/{$post.author.id|wash()}">{$post.author.name|wash()}</a>
+            <small class="label label-default pull-right">{$post.uuid|wash()}</small>
         </p>
     </section>
 

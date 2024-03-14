@@ -4,6 +4,7 @@
 AvailableSourceHandlers[]=sensor_scenario_edit
 AvailableSourceHandlers[]=sensor_group_reindex
 AvailableSourceHandlers[]=user_csv_import
+AvailableSourceHandlers[]=inefficiency_retry
 RobotUserID=14
 
 [sensor_scenario_edit-HandlerSettings]
@@ -22,6 +23,12 @@ Debug=enabled
 Enabled=true
 Name=User Csv Import
 ClassName=UserCsvImportHandler
+Debug=enabled
+
+[inefficiency_retry-HandlerSettings]
+Enabled=true
+Name=Batch Inefficiency Retry
+ClassName=InefficiencyRetryHandler
 Debug=enabled
 
 */ ?>
