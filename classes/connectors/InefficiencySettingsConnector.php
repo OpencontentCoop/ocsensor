@@ -213,6 +213,7 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
                     $this->inefficiencySettings->api_password
                 );
             $inefficiencyClient->getCredential(Client\Credential::API_USER, true);
+            $this->inefficiencySettings->tenants = ['*'];
             OpenPaSensorRepository::instance()->setInefficiencySettings($this->inefficiencySettings);
         }else{
             OpenPaSensorRepository::instance()->setInefficiencySettings(null);
