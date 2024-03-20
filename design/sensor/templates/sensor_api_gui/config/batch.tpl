@@ -23,7 +23,10 @@
                 <td>
                     {$import.status_string|wash()}
                 </td>
-                <td>{$import.percentage}%</td>
+                <td>
+                    {$import.percentage}%<br />
+                    <small>{$import.progression_notes}</small>
+                </td>
                 <td>{$import.process_time_formated.hour}h {$import.process_time_formated.minute}min {$import.process_time_formated.second}sec</td>
                 <td>
                     {if or($import.status|eq(2),$import.status|eq(4),$import.status|eq(5))}

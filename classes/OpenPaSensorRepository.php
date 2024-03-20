@@ -1207,8 +1207,6 @@ class OpenPaSensorRepository extends LegacyRepository
         if (!$settings) {
             $siteData->remove();
         } else {
-            $settings->admin_login = getenv('SDC_ADMIN_USER') ?? '';
-            $settings->admin_password = getenv('SDC_ADMIN_PASSWORD') ?? '';
             $siteData->setAttribute('value', json_encode($settings));
             $siteData->store();
         }
@@ -1218,6 +1216,8 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         if ($this->inefficiencyClient === null) {
             $inefficiency = $this->getSensorSettings()->get('Inefficiency');
+            $inefficiency->admin_login = getenv('SDC_ADMIN_USER') ?? eZINI::instance('ocsensor.ini')->variable('Adapters', 'InefficiencyAdminUser');
+            $inefficiency->admin_password = getenv('SDC_ADMIN_PASSWORD') ?? eZINI::instance('ocsensor.ini')->variable('Adapters', 'InefficiencyAdminPassword');
             $this->inefficiencyClient = (new Client\HttpClient($inefficiency->base_url))
                 ->addCredential(
                     Client\Credential::API_USER,

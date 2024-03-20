@@ -9,6 +9,8 @@ class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQL
 
     private $pendingActions = [];
 
+    private $notes = [];
+
     public function initialize()
     {
         /** @var eZUser $user */
@@ -36,7 +38,10 @@ class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQL
             $handler = new Listener(OpenPaSensorRepository::instance());
             if ($event instanceof Event) {
                 $row->remove();
-                $handler->handleSensorEvent($event);
+                $note = $handler->handleSensorEvent($event);
+                if ($note){
+                    $this->notes[] = $note;
+                }
             }
         }
     }
@@ -48,7 +53,7 @@ class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQL
 
     public function getHandlerName()
     {
-        return 'OpenSegnalazioni Batch Inefficiency Retry';
+        return 'OpenSegnalazioni Inefficiency Batch Operation';
     }
 
     public function getHandlerIdentifier()
@@ -58,7 +63,7 @@ class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQL
 
     public function getProgressionNotes()
     {
-        return '';
+        return implode(PHP_EOL, $this->notes);
     }
 
 }

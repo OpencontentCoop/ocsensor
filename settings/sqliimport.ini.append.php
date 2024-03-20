@@ -27,7 +27,7 @@ Debug=enabled
 
 [inefficiency_retry-HandlerSettings]
 Enabled=true
-Name=Batch Inefficiency Retry
+Name=Batch Inefficiency
 ClassName=InefficiencyRetryHandler
 Debug=enabled
 
