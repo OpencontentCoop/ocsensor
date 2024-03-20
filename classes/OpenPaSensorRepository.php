@@ -1168,6 +1168,8 @@ class OpenPaSensorRepository extends LegacyRepository
             'tenants' => [],
             'api_login' => '',
             'api_password' => '',
+            'admin_login' => '',
+            'admin_password' => '',
             'base_url' => '',
             'default_group_name' => 'Ufficio relazioni con il pubblico',
             'service_identifier' => 'inefficiencies',
@@ -1205,6 +1207,8 @@ class OpenPaSensorRepository extends LegacyRepository
         if (!$settings) {
             $siteData->remove();
         } else {
+            $settings->admin_login = getenv('SDC_ADMIN_USER') ?? '';
+            $settings->admin_password = getenv('SDC_ADMIN_PASSWORD') ?? '';
             $siteData->setAttribute('value', json_encode($settings));
             $siteData->store();
         }
@@ -1219,6 +1223,11 @@ class OpenPaSensorRepository extends LegacyRepository
                     Client\Credential::API_USER,
                     $inefficiency->api_login,
                     $inefficiency->api_password
+                )
+                ->addCredential(
+                    Client\Credential::ADMIN,
+                    $inefficiency->admin_login ?? '',
+                    $inefficiency->admin_password ?? ''
                 );
             $this->inefficiencyClient->setLogger(OpenPaSensorRepository::instance()->getLogger());
         }
