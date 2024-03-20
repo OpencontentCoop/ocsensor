@@ -25,7 +25,7 @@
                 </td>
                 <td>
                     {$import.percentage}%<br />
-                    <small>{$import.progression_notes}</small>
+                    <small>{$import.progression_notes|wash()}</small>
                 </td>
                 <td>{$import.process_time_formated.hour}h {$import.process_time_formated.minute}min {$import.process_time_formated.second}sec</td>
                 <td>
