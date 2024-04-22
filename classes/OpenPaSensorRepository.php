@@ -170,8 +170,9 @@ class OpenPaSensorRepository extends LegacyRepository
                 $this->addListener('on_create', $timelineListener);
                 $this->addListener('on_create_timeline', $timelineListener);
 
-                $inefficiencyListener = new InefficiencyListener($this);
-                $this->addListener('*', $inefficiencyListener);
+                if ($this->getInefficiencySettings()->is_enabled) {
+                    $this->addListener('*', new InefficiencyListener($this));
+                }
             }
 
             $this->getStatisticsService()->setStatisticFactories([
@@ -1218,17 +1219,18 @@ class OpenPaSensorRepository extends LegacyRepository
             $inefficiency = $this->getSensorSettings()->get('Inefficiency');
             $inefficiency->admin_login = getenv('SDC_ADMIN_USER') ?? eZINI::instance('ocsensor.ini')->variable('Adapters', 'InefficiencyAdminUser');
             $inefficiency->admin_password = getenv('SDC_ADMIN_PASSWORD') ?? eZINI::instance('ocsensor.ini')->variable('Adapters', 'InefficiencyAdminPassword');
-            $this->inefficiencyClient = (new Client\HttpClient($inefficiency->base_url))
-                ->addCredential(
-                    Client\Credential::API_USER,
-                    $inefficiency->api_login,
-                    $inefficiency->api_password
-                )
-                ->addCredential(
+            $this->inefficiencyClient = (new Client\HttpClient($inefficiency->base_url))->addCredential(
+                Client\Credential::API_USER,
+                $inefficiency->api_login,
+                $inefficiency->api_password
+            );
+            if ($inefficiency->admin_login) {
+                $this->inefficiencyClient->addCredential(
                     Client\Credential::ADMIN,
                     $inefficiency->admin_login ?? '',
                     $inefficiency->admin_password ?? ''
                 );
+            }
             $this->inefficiencyClient->setLogger(OpenPaSensorRepository::instance()->getLogger());
         }
 

@@ -19,10 +19,16 @@ class AcceptApplication extends AbstractRequestHandler
      */
     private $message;
 
-    public function __construct(string $applicationUuid, ?string $message = null)
+    /**
+     * @var \DateTimeInterface|null
+     */
+    private $closedAt;
+
+    public function __construct(string $applicationUuid, ?string $message = null, ?\DateTimeInterface $closedAt = null)
     {
         $this->applicationUuid = $applicationUuid;
         $this->message = $message;
+        $this->closedAt = $closedAt;
     }
 
     public function getRequestMethod(): string

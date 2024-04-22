@@ -213,6 +213,7 @@
     </script>
 {/if}
 
+{*
 <script>
     {literal}
     $(document).ready(function(){
@@ -222,6 +223,7 @@
     });
     {/literal}
 </script>
+*}
 {/cache-block}
 
 <!--DEBUG_REPORT-->

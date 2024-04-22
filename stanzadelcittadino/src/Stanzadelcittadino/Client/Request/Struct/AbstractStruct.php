@@ -9,7 +9,11 @@ class AbstractStruct
         return get_object_vars($this);
     }
 
-    public static function fromArray(array $data): self
+    /**
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data)
     {
         $instance = new static;
         foreach ($data as $key => $value) {
