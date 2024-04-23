@@ -891,12 +891,14 @@ $(document).ready(function () {ldelim}
     };
 
     var reset = function(){
+        currentPage = 0;
         form[0].reset();
         form.find('.select, .remote-select').val(null).trigger('change');
         viewContainer.html(spinner);
         buildDashboard();
     };
     form.find('[type="submit"]').on('click', function(e){
+        currentPage = 0;
         form.find('[type="reset"]').removeClass('hide');
         viewContainer.html(spinner);
         buildDashboard();

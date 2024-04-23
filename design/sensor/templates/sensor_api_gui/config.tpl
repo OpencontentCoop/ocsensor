@@ -26,7 +26,9 @@
   'fields/Recaptcha.js',
   'fields/Ezxml.js',
   'jquery.opendataform.js',
-  'bootstrap-toggle.min.js'
+  'bootstrap-toggle.min.js',
+  'select2.full.min.js', concat('select2-i18n/', fetch( 'content', 'locale' ).country_code|downcase, '.js'),
+  'jquery.dataTables.js', 'jquery.opendataDataTable.js', 'dataTables.bootstrap.js'
 ))}
 {def $plugin_list = ezini('EditorSettings', 'Plugins', 'ezoe.ini',,true() )
      $ez_locale = ezini( 'RegionalSettings', 'Locale', 'site.ini')
@@ -46,11 +48,16 @@
   'jquery.fileupload.css',
   'leaflet.draw.css',
   'alpaca-custom.css',
-  'bootstrap-toggle.min.css'
+  'bootstrap-toggle.min.css',
+  'select2.min.css',
+  'dataTables.bootstrap.css'
 ))}
 <script>
   $.opendataTools.settings('endpoint',{ldelim}'search': '{'/opendata/api/useraware/search/'|ezurl(no)}/'{rdelim});
+  var datatableLanguage = "{concat("/extension/ocsensor/design/sensor/javascript/datatable/", $ez_locale,".json")}";
 </script>
+
+
 
 <section class="hgroup">
   <h1>{sensor_translate('Settings')}</h1>
