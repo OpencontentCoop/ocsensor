@@ -253,7 +253,7 @@ class OpenPaSensorRepository extends LegacyRepository
                     'TargetOwner' => ParticipantRole::ROLE_OWNER,
                     'TargetObserver' => ParticipantRole::ROLE_OBSERVER,
                 ];
-                if ($this->getInefficiencySettings()->is_enabled) {
+                if ($this->getInefficiencySettings()->disable_user_notifications) {
                     unset($targetsMap['TargetAuthor']);
                     $typeSettings['Group'] = 'operator';
                 }
@@ -1166,6 +1166,7 @@ class OpenPaSensorRepository extends LegacyRepository
     {
         $disabled = (object)[
             'is_enabled' => false,
+            'disable_user_notifications' => false,
             'tenants' => [],
             'api_login' => '',
             'api_password' => '',

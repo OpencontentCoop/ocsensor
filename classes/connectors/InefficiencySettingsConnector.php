@@ -20,6 +20,7 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
     {
         return [
             'is_enabled' => $this->inefficiencySettings->is_enabled,
+            'disable_user_notifications' => $this->inefficiencySettings->disable_user_notifications,
             'base_url' => $this->inefficiencySettings->base_url,
             'api_login' => $this->inefficiencySettings->api_login,
             'api_password' => !empty($this->inefficiencySettings->api_password) ? 'EZ_PASSWORD' : '',
@@ -41,6 +42,9 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
             'title' => 'Segnalazioni disservizio di Area personale',
             'properties' => [
                 'is_enabled' => [
+                    'type' => 'boolean',
+                ],
+                'disable_user_notifications' => [
                     'type' => 'boolean',
                 ],
                 'base_url' => [
@@ -115,6 +119,7 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
                 ],
             ],
             'dependencies' => [
+                'disable_user_notifications' => ['is_enabled'],
                 'base_url' => ['is_enabled'],
                 'api_login' => ['is_enabled'],
                 'api_password' => ['is_enabled'],
@@ -150,6 +155,11 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
                 'is_enabled' => [
                     'type' => 'checkbox',
                     'rightLabel' => 'Abilita il connettore con le Segnalazioni disservizio di Area personale',
+                ],
+                'disable_user_notifications' => [
+                    'type' => 'checkbox',
+                    'rightLabel' => 'Disabilita le notifiche agli utenti segnalatori',
+                    'dependencies' => ['is_enabled' => true],
                 ],
                 'base_url' => [
                     'placeholder' => 'https://servizi.comune.bugliano.pi.it/lang',
@@ -198,6 +208,8 @@ class InefficiencySettingsConnector extends AbstractBaseConnector
                     throw new InvalidArgumentException('Invalid url');
                 }
                 $this->inefficiencySettings->{$key} = $value;
+            } elseif ($key === 'disable_user_notifications') {
+                $this->inefficiencySettings->disable_user_notifications = $value === 'true';
             } elseif (isset($this->inefficiencySettings->{$key})) {
                 $this->inefficiencySettings->{$key} = $value;
             }

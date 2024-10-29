@@ -16,12 +16,13 @@ $script = eZScript::instance([
 $script->startup();
 
 $options = $script->getOptions(
-    '[id:][only-closed][slack-endpoint:][show-config][prod]',
+    '[id:][only-closed][slack-endpoint:][show-config][env][dry-run]',
     '',
     [
         'id' => 'Filter by post id',
         'only-closed' => 'Push only closed',
-        'prod' => 'Prod env'
+        'env' => 'env (prod o dev)',
+        'force' => 'Force repush'
     ]
 );
 $script->initialize();
