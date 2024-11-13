@@ -27,6 +27,9 @@ class SensorWebHookListener extends AbstractListener
         if (!in_array('on_add_attachment', $this->events)) {
             $this->events[] = 'on_add_attachment';
         }
+        if (!in_array('on_moderate', $this->events)) {
+            $this->events[] = 'on_moderate';
+        }
         $this->userBlackList = (array)$this->repository->getSensorSettings()->get('WebhookUserEmailBlackList');
     }
 

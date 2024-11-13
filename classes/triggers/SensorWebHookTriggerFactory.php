@@ -20,6 +20,10 @@ class SensorWebHookTriggerFactory implements OCWebHookTriggerFactoryInterface
             'on_add_attachment',
             SensorTranslationHelper::instance()->translate('Add an attachment')
         );
+        $triggers[] = new SensorWebHookTrigger(
+            'on_moderate',
+            SensorTranslationHelper::instance()->translate('Moderate post')
+        );
 
         return $triggers;
     }
