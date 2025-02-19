@@ -2,6 +2,7 @@
 
 use Opencontent\Sensor\Inefficiency\Listener;
 use Opencontent\Sensor\Api\Values\Event;
+use Opencontent\Sensor\Inefficiency\PostHandlerException;
 
 class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQLIImportHandler
 {
@@ -37,9 +38,13 @@ class InefficiencyRetryHandler extends SQLIImportAbstractHandler implements ISQL
             $event = SQLIImportUtils::safeUnserialize($row->attribute('param'));
             $handler = new Listener(OpenPaSensorRepository::instance());
             if ($event instanceof Event) {
-                $row->remove();
-                $note = $handler->handleSensorEvent($event);
-                if ($note){
+                try {
+                    $handler->handleSensorEvent($event);
+                    $row->remove();
+                }catch (PostHandlerException $e){
+                    $note = '[ERROR] on pending action: ' . $row->attribute('id');
+                    $row->setAttribute('action', $row->attribute('action') . '_error');
+                    $row->store();
                     $this->notes[] = $note;
                 }
             }
