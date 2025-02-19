@@ -682,6 +682,14 @@
                     }
                 })
             })
+        } else {
+          console.log('polling refresh')
+          setInterval(function () {
+            refreshMenu();
+            if (!isRunningContextAction) {
+              body.find('[data-reload]').trigger('click');
+            }
+          }, 120000);
         }
     })
 </script>
