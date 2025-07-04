@@ -9,7 +9,7 @@
                     <span class="text"><i class="fa fa-arrow-left"></i></span>
                 </a>
             </li>
-            <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
+            <li class="page-item"><a href="/sensor/export/?source=posts&query={{url:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
             <li class="page-item {{if !nextPageQuery}}disabled{{/if}}">
                 <a class="page-link nextPage" {{if nextPageQuery}}data-page="{{>nextPage}}"{{/if}} href="#">
                     <span class="text"><i class="fa fa-arrow-right"></i></span>
@@ -20,13 +20,13 @@
 	{{else totalCount == 1}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:~sensorTranslate('One issue')}}</a></li>
+                <li class="page-item"><a href="/sensor/export/?source=posts&query={{url:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:~sensorTranslate('One issue')}}</a></li>
             </ul>
         </div>
 	{{else totalCount > 0}}
 	    <div class="pagination-container text-center">
             <ul class="pagination">
-                <li class="page-item"><a href="/sensor/export/?source=posts&query={{:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
+                <li class="page-item"><a href="/sensor/export/?source=posts&query={{url:query}}" class="text" style="cursor: pointer;"><i class="fa fa-download"></i> {{:totalCount}} {{:~sensorTranslate('issues')}}</a></li>
             </ul>
         </div>
     {{else}}
@@ -53,7 +53,12 @@
                       <li>{{if !(privacy.identifier == 'public' && moderation.identifier != 'waiting')}}<i class="fa fa-lock"></i> {{/if}}
                         <strong>{{:~sensorTranslate(type.identifier, 'type')}}</strong>
                         {/literal}{if sensor_settings('HighlightSuperUserPosts')}{literal}{{if author.isSuperUser}}<span class="label label-info">{{:~sensorTranslate('internal')}}</span>{{/if}}{/literal}{/if}{literal}
-                        &middot; {{if canReadUsers}}<a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}{{/if}}
+                        &middot; {{if canReadUsers}}
+                          {{if meta && meta.application && meta.application.authentication && meta.application.authentication.authentication_method && meta.application.authentication.authentication_method != 'anonymous'}}
+                            <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                          {{/if}}
+                          <a href="/sensor/user/{{:author.id}}">{{:author.name}}</a>{{else}}{{:author.name}}
+                        {{/if}}
                       </li>
                       <li><small><i class="fa fa-clock-o"></i> {{:~sensorTranslate('Created at')}} {{:~formatDate(published, 'DD/MM/YYYY HH:mm')}}</small></li>
                       {{if ~formatDate(modified, 'X') > ~formatDate(published, 'X')}}
