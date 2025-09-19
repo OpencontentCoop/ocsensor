@@ -304,6 +304,7 @@ class HttpClient implements LoggerAwareInterface
             ]);
             $data = file_get_contents($url, false, $context);
             if (!$data) {
+                $this->logger->warning('No data in binary download from ' . $url);
                 return null;
             }
             return $data;

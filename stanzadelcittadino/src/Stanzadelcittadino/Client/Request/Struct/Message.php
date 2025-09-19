@@ -11,4 +11,6 @@ class Message extends AbstractStruct
     public $sent_at;
 
     public $external_id;
+
+    public $attachments;
 }
