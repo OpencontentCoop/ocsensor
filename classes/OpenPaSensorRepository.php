@@ -157,7 +157,9 @@ class OpenPaSensorRepository extends LegacyRepository
                 $this->addListener('after_run_action', new SendMailListener($this));
                 $this->addListener('*', new ScenarioListener($this));
                 $this->addListener('on_new_operator', new WelcomeOperatorListener($this));
-                $this->addListener('on_generate_user', new WelcomeUserListener($this));
+                if (!$this->getInefficiencySettings()->disable_user_notifications) {
+                    $this->addListener('on_generate_user', new WelcomeUserListener($this));
+                }
                 $this->addListener('on_create', new SensorDailyReportListener());
                 $this->addListener('on_close', new SensorDailyReportListener());
                 $this->addListener('on_update_operator', new SensorReindexer());
