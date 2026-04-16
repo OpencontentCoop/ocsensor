@@ -703,6 +703,9 @@ class SensorGuiApiController extends ezpRestMvcController implements SensorOpenA
                 }
                 $filePath = $uploadHandler->getOption('upload_dir') . $file->name;
                 $mime = eZMimeType::findByURL($filePath);
+                if ($mime['name'] === 'image/heic') {
+                    $filePath = SensorBinaryUploadHandler::convertHeicImage($filePath);
+                }
                 eZClusterFileHandler::instance($filePath)->storeContents(file_get_contents($filePath));
 
                 if (strpos($mime['name'], 'image') === false){

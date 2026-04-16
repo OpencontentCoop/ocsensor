@@ -1460,4 +1460,16 @@ class SensorBinaryUploadHandler
     {
         return isset($this->options[$name]) ? $this->options[$name] : null;
     }
+
+    public static function convertHeicImage($filepath)
+    {
+        $img = eZImageManager::factory();
+        $destPath = dirname($filepath) . '/' . md5( mt_rand() ) . '.jpg';
+        $img->convert($filepath, $destPath);
+        if (is_array($destPath)){
+            $destPath = $destPath['url'];
+        }
+        eZDebug::writeError($filepath . ' -> ' . file_exists($destPath), __METHOD__);
+        return $destPath;
+    }
 }
